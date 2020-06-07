@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 /// <p>A block of data in an Amazon Elastic Block Store snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Block {
     /// <p>The block index.</p>
@@ -39,7 +39,7 @@ pub struct Block {
 }
 
 /// <p>A block of data in an Amazon Elastic Block Store snapshot that is different from another snapshot of the same volume/snapshot lineage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangedBlock {
     /// <p>The block index.</p>
@@ -56,7 +56,7 @@ pub struct ChangedBlock {
     pub second_block_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSnapshotBlockRequest {
     /// <p>The block index of the block from which to get data.</p> <p>Obtain the <code>BlockIndex</code> by running the <code>ListChangedBlocks</code> or <code>ListSnapshotBlocks</code> operations.</p>
@@ -70,7 +70,7 @@ pub struct GetSnapshotBlockRequest {
     pub snapshot_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetSnapshotBlockResponse {
     /// <p>The data content of the block.</p>
     pub block_data: Option<bytes::Bytes>,
@@ -82,7 +82,7 @@ pub struct GetSnapshotBlockResponse {
     pub data_length: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangedBlocksRequest {
     /// <p><p>The ID of the first snapshot to use for the comparison.</p> <important> <p>The <code>FirstSnapshotID</code> parameter must be specified with a <code>SecondSnapshotId</code> parameter; otherwise, an error occurs.</p> </important></p>
@@ -106,7 +106,7 @@ pub struct ListChangedBlocksRequest {
     pub starting_block_index: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChangedBlocksResponse {
     /// <p>The size of the block.</p>
@@ -131,7 +131,7 @@ pub struct ListChangedBlocksResponse {
     pub volume_size: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSnapshotBlocksRequest {
     /// <p>The number of results to return.</p>
@@ -151,7 +151,7 @@ pub struct ListSnapshotBlocksRequest {
     pub starting_block_index: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSnapshotBlocksResponse {
     /// <p>The size of the block.</p>

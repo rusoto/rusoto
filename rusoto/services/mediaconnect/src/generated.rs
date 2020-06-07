@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A request to add outputs to the specified flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowOutputsRequest {
     /// <p>The flow that you want to add outputs to.</p>
@@ -37,7 +37,7 @@ pub struct AddFlowOutputsRequest {
     pub outputs: Vec<AddOutputRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowOutputsResponse {
     /// <p>The ARN of the flow that these outputs were added to.</p>
@@ -51,7 +51,7 @@ pub struct AddFlowOutputsResponse {
 }
 
 /// <p>A request to add sources to the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowSourcesRequest {
     /// <p>The flow that you want to mutate.</p>
@@ -62,7 +62,7 @@ pub struct AddFlowSourcesRequest {
     pub sources: Vec<SetSourceRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowSourcesResponse {
     /// <p>The ARN of the flow that these sources were added to.</p>
@@ -76,7 +76,7 @@ pub struct AddFlowSourcesResponse {
 }
 
 /// <p>A request to add VPC interfaces to the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFlowVpcInterfacesRequest {
     /// <p>The flow that you want to mutate.</p>
@@ -87,7 +87,7 @@ pub struct AddFlowVpcInterfacesRequest {
     pub vpc_interfaces: Vec<VpcInterfaceRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFlowVpcInterfacesResponse {
     /// <p>The ARN of the flow that these VPC interfaces were added to.</p>
@@ -101,7 +101,7 @@ pub struct AddFlowVpcInterfacesResponse {
 }
 
 /// <p>The output that you want to add to this flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddOutputRequest {
     /// <p>The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
@@ -154,7 +154,7 @@ pub struct AddOutputRequest {
 }
 
 /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowRequest {
     /// <p>The Availability Zone that you want to create the flow in. These options are limited to the Availability Zones within the current AWS Region.</p>
@@ -187,7 +187,7 @@ pub struct CreateFlowRequest {
     pub vpc_interfaces: Option<Vec<VpcInterfaceRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowResponse {
     #[serde(rename = "Flow")]
@@ -195,7 +195,7 @@ pub struct CreateFlowResponse {
     pub flow: Option<Flow>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowRequest {
     /// <p>The ARN of the flow that you want to delete.</p>
@@ -203,7 +203,7 @@ pub struct DeleteFlowRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowResponse {
     /// <p>The ARN of the flow that was deleted.</p>
@@ -216,7 +216,7 @@ pub struct DeleteFlowResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFlowRequest {
     /// <p>The ARN of the flow that you want to describe.</p>
@@ -224,7 +224,7 @@ pub struct DescribeFlowRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFlowResponse {
     #[serde(rename = "Flow")]
@@ -236,7 +236,7 @@ pub struct DescribeFlowResponse {
 }
 
 /// <p>Information about the encryption of the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Encryption {
     /// <p>The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).</p>
     #[serde(rename = "Algorithm")]
@@ -275,7 +275,7 @@ pub struct Encryption {
 }
 
 /// <p>The settings for a flow entitlement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Entitlement {
     /// <p>Percentage from 0-100 of the data transfer cost to be billed to the subscriber.</p>
@@ -302,7 +302,7 @@ pub struct Entitlement {
 }
 
 /// <p>The settings for source failover</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FailoverConfig {
     /// <p>Search window time to look for dash-7 packets</p>
     #[serde(rename = "RecoveryWindow")]
@@ -314,7 +314,7 @@ pub struct FailoverConfig {
 }
 
 /// <p>The settings for a flow, including its source, outputs, and entitlements.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Flow {
     /// <p>The Availability Zone that you want to create the flow in. These options are limited to the Availability Zones within the current AWS.</p>
@@ -358,7 +358,7 @@ pub struct Flow {
 }
 
 /// <p>The entitlements that you want to grant on a flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantEntitlementRequest {
     /// <p>Percentage from 0-100 of the data transfer cost to be billed to the subscriber.</p>
@@ -383,7 +383,7 @@ pub struct GrantEntitlementRequest {
 }
 
 /// <p>A request to grant entitlements on a flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantFlowEntitlementsRequest {
     /// <p>The list of entitlements that you want to grant.</p>
@@ -394,7 +394,7 @@ pub struct GrantFlowEntitlementsRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantFlowEntitlementsResponse {
     /// <p>The entitlements that were just granted.</p>
@@ -407,7 +407,7 @@ pub struct GrantFlowEntitlementsResponse {
     pub flow_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitlementsRequest {
     /// <p>The maximum number of results to return per API request. For example, you submit a ListEntitlements request with MaxResults set at 5. Although 20 items match your request, the service returns no more than the first 5 items. (The service also returns a NextToken value that you can use to fetch the next batch of results.) The service might return fewer results than the MaxResults value. If MaxResults is not included in the request, the service defaults to pagination with a maximum of 20 results per page.</p>
@@ -420,7 +420,7 @@ pub struct ListEntitlementsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitlementsResponse {
     /// <p>A list of entitlements that have been granted to you from other AWS accounts.</p>
@@ -433,7 +433,7 @@ pub struct ListEntitlementsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowsRequest {
     /// <p>The maximum number of results to return per API request. For example, you submit a ListFlows request with MaxResults set at 5. Although 20 items match your request, the service returns no more than the first 5 items. (The service also returns a NextToken value that you can use to fetch the next batch of results.) The service might return fewer results than the MaxResults value. If MaxResults is not included in the request, the service defaults to pagination with a maximum of 10 results per page.</p>
@@ -446,7 +446,7 @@ pub struct ListFlowsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowsResponse {
     /// <p>A list of flow summaries.</p>
@@ -459,7 +459,7 @@ pub struct ListFlowsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the AWS Elemental MediaConnect resource for which to list the tags.</p>
@@ -467,7 +467,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A map from tag keys to values. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
@@ -477,7 +477,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>An entitlement that has been granted to you from other AWS accounts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListedEntitlement {
     /// <p>Percentage from 0-100 of the data transfer cost to be billed to the subscriber.</p>
@@ -493,7 +493,7 @@ pub struct ListedEntitlement {
 }
 
 /// <p>Provides a summary of a flow, including its ARN, Availability Zone, and source type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListedFlow {
     /// <p>The Availability Zone that the flow was created in.</p>
@@ -517,7 +517,7 @@ pub struct ListedFlow {
 }
 
 /// <p>Messages that provide the state of the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Messages {
     /// <p>A list of errors that might have been generated from processes on this flow.</p>
@@ -526,7 +526,7 @@ pub struct Messages {
 }
 
 /// <p>The settings for an output.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Output {
     /// <p>Percentage from 0-100 of the data transfer cost to be billed to the subscriber.</p>
@@ -573,7 +573,7 @@ pub struct Output {
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowOutputRequest {
     /// <p>The flow that you want to remove an output from.</p>
@@ -584,7 +584,7 @@ pub struct RemoveFlowOutputRequest {
     pub output_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowOutputResponse {
     /// <p>The ARN of the flow that is associated with the output you removed.</p>
@@ -597,7 +597,7 @@ pub struct RemoveFlowOutputResponse {
     pub output_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowSourceRequest {
     /// <p>The flow that you want to remove a source from.</p>
@@ -608,7 +608,7 @@ pub struct RemoveFlowSourceRequest {
     pub source_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowSourceResponse {
     /// <p>The ARN of the flow that is associated with the source you removed.</p>
@@ -621,7 +621,7 @@ pub struct RemoveFlowSourceResponse {
     pub source_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFlowVpcInterfaceRequest {
     /// <p>The flow that you want to remove a VPC interface from.</p>
@@ -632,7 +632,7 @@ pub struct RemoveFlowVpcInterfaceRequest {
     pub vpc_interface_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFlowVpcInterfaceResponse {
     /// <p>The ARN of the flow that is associated with the VPC interface you removed.</p>
@@ -649,7 +649,7 @@ pub struct RemoveFlowVpcInterfaceResponse {
     pub vpc_interface_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeFlowEntitlementRequest {
     /// <p>The ARN of the entitlement that you want to revoke.</p>
@@ -660,7 +660,7 @@ pub struct RevokeFlowEntitlementRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeFlowEntitlementResponse {
     /// <p>The ARN of the entitlement that was revoked.</p>
@@ -674,7 +674,7 @@ pub struct RevokeFlowEntitlementResponse {
 }
 
 /// <p>The settings for the source of the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSourceRequest {
     /// <p>The type of encryption that is used on the content ingested from this source.</p>
@@ -724,7 +724,7 @@ pub struct SetSourceRequest {
 }
 
 /// <p>The settings for the source of the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Source {
     /// <p>Percentage from 0-100 of the data transfer cost to be billed to the subscriber.</p>
@@ -771,7 +771,7 @@ pub struct Source {
     pub whitelist_cidr: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFlowRequest {
     /// <p>The ARN of the flow that you want to start.</p>
@@ -779,7 +779,7 @@ pub struct StartFlowRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFlowResponse {
     /// <p>The ARN of the flow that you started.</p>
@@ -792,7 +792,7 @@ pub struct StartFlowResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopFlowRequest {
     /// <p>The ARN of the flow that you want to stop.</p>
@@ -800,7 +800,7 @@ pub struct StopFlowRequest {
     pub flow_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopFlowResponse {
     /// <p>The ARN of the flow that you stopped.</p>
@@ -814,7 +814,7 @@ pub struct StopFlowResponse {
 }
 
 /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the AWS Elemental MediaConnect resource to which to add tags.</p>
@@ -826,7 +826,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>Attributes related to the transport stream that are used in a source or output.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Transport {
     /// <p>The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
@@ -858,7 +858,7 @@ pub struct Transport {
     pub stream_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the AWS Elemental MediaConnect resource from which to delete tags.</p>
@@ -870,7 +870,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Information about the encryption of the flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEncryption {
     /// <p>The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).</p>
@@ -912,7 +912,7 @@ pub struct UpdateEncryption {
 }
 
 /// <p>The settings for source failover</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFailoverConfig {
     /// <p>Recovery window time to look for dash-7 packets</p>
@@ -925,7 +925,7 @@ pub struct UpdateFailoverConfig {
 }
 
 /// <p>The entitlement fields that you want to update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowEntitlementRequest {
     /// <p>A description of the entitlement. This description appears only on the AWS Elemental MediaConnect console and will not be seen by the subscriber or end user.</p>
@@ -948,7 +948,7 @@ pub struct UpdateFlowEntitlementRequest {
     pub subscribers: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowEntitlementResponse {
     #[serde(rename = "Entitlement")]
@@ -961,7 +961,7 @@ pub struct UpdateFlowEntitlementResponse {
 }
 
 /// <p>The fields that you want to update in the output.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowOutputRequest {
     /// <p>The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.</p>
@@ -1016,7 +1016,7 @@ pub struct UpdateFlowOutputRequest {
     pub vpc_interface_attachment: Option<VpcInterfaceAttachment>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowOutputResponse {
     /// <p>The ARN of the flow that is associated with the updated output.</p>
@@ -1029,7 +1029,7 @@ pub struct UpdateFlowOutputResponse {
 }
 
 /// <p>A request to update flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowRequest {
     /// <p>The flow that you want to update.</p>
@@ -1040,7 +1040,7 @@ pub struct UpdateFlowRequest {
     pub source_failover_config: Option<UpdateFailoverConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowResponse {
     #[serde(rename = "Flow")]
@@ -1049,7 +1049,7 @@ pub struct UpdateFlowResponse {
 }
 
 /// <p>A request to update the source of a flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowSourceRequest {
     /// <p>The type of encryption used on the content ingested from this source.</p>
@@ -1100,7 +1100,7 @@ pub struct UpdateFlowSourceRequest {
     pub whitelist_cidr: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowSourceResponse {
     /// <p>The ARN of the flow that you want to update.</p>
@@ -1114,7 +1114,7 @@ pub struct UpdateFlowSourceResponse {
 }
 
 /// <p>The settings for a VPC Source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcInterface {
     /// <p>Immutable and has to be a unique against other VpcInterfaces in this Flow</p>
@@ -1135,7 +1135,7 @@ pub struct VpcInterface {
 }
 
 /// <p>The settings for attaching a VPC interface to an output.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VpcInterfaceAttachment {
     /// <p>The name of the VPC interface to use for this output.</p>
     #[serde(rename = "VpcInterfaceName")]
@@ -1144,7 +1144,7 @@ pub struct VpcInterfaceAttachment {
 }
 
 /// <p>Desired VPC Interface for a Flow</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcInterfaceRequest {
     /// <p>The name of the VPC Interface. This value must be unique within the current flow.</p>

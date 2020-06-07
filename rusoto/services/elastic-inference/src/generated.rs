@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p> The details of an Elastic Inference Accelerator type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceleratorType {
     /// <p> The name of the Elastic Inference Accelerator type. </p>
@@ -44,7 +44,7 @@ pub struct AcceleratorType {
 }
 
 /// <p> The offering for an Elastic Inference Accelerator type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceleratorTypeOffering {
     /// <p> The name of the Elastic Inference Accelerator type. </p>
@@ -61,7 +61,7 @@ pub struct AcceleratorTypeOffering {
     pub location_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorOfferingsRequest {
     /// <p> The list of accelerator types to describe. </p>
@@ -73,7 +73,7 @@ pub struct DescribeAcceleratorOfferingsRequest {
     pub location_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorOfferingsResponse {
     /// <p> The list of accelerator type offerings for a specific location. </p>
@@ -82,11 +82,11 @@ pub struct DescribeAcceleratorOfferingsResponse {
     pub accelerator_type_offerings: Option<Vec<AcceleratorTypeOffering>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorTypesRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorTypesResponse {
     /// <p> The available accelerator types. </p>
@@ -95,7 +95,7 @@ pub struct DescribeAcceleratorTypesResponse {
     pub accelerator_types: Option<Vec<AcceleratorType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAcceleratorsRequest {
     /// <p> The IDs of the accelerators to describe. </p>
@@ -116,7 +116,7 @@ pub struct DescribeAcceleratorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAcceleratorsResponse {
     /// <p> The details of the Elastic Inference Accelerators. </p>
@@ -130,7 +130,7 @@ pub struct DescribeAcceleratorsResponse {
 }
 
 /// <p> The details of an Elastic Inference Accelerator. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticInferenceAccelerator {
     /// <p> The health of the Elastic Inference Accelerator. </p>
@@ -156,7 +156,7 @@ pub struct ElasticInferenceAccelerator {
 }
 
 /// <p> The health details of an Elastic Inference Accelerator. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticInferenceAcceleratorHealth {
     /// <p> The health status of the Elastic Inference Accelerator. </p>
@@ -166,7 +166,7 @@ pub struct ElasticInferenceAcceleratorHealth {
 }
 
 /// <p> A filter expression for the Elastic Inference Accelerator list. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p> The filter name for the Elastic Inference Accelerator list. It can assume the following values: accelerator-type: the type of Elastic Inference Accelerator to filter for. instance-id: an EC2 instance id to filter for. </p>
@@ -180,7 +180,7 @@ pub struct Filter {
 }
 
 /// <p> A throughput entry for an Elastic Inference Accelerator type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyValuePair {
     /// <p> The throughput value of the Elastic Inference Accelerator type. It can assume the following values: TFLOPS16bit: the throughput expressed in 16bit TeraFLOPS. TFLOPS32bit: the throughput expressed in 32bit TeraFLOPS. </p>
@@ -193,7 +193,7 @@ pub struct KeyValuePair {
     pub value: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> The ARN of the Elastic Inference Accelerator to list the tags for. </p>
@@ -201,7 +201,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p> The tags of the Elastic Inference Accelerator. </p>
@@ -211,7 +211,7 @@ pub struct ListTagsForResourceResult {
 }
 
 /// <p> The memory information of an Elastic Inference Accelerator type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemoryInfo {
     /// <p> The size in mebibytes of the Elastic Inference Accelerator type. </p>
@@ -220,7 +220,7 @@ pub struct MemoryInfo {
     pub size_in_mi_b: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> The ARN of the Elastic Inference Accelerator to tag. </p>
@@ -231,11 +231,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> The ARN of the Elastic Inference Accelerator to untag. </p>
@@ -246,7 +246,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResult {}
 

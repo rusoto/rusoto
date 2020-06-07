@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Data Analytics application name.</p>
@@ -38,7 +38,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
     pub current_application_version_id: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationCloudWatchLoggingOptionResponse {
     /// <p>The application's ARN.</p>
@@ -55,7 +55,7 @@ pub struct AddApplicationCloudWatchLoggingOptionResponse {
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputProcessingConfigurationRequest {
     /// <p>The name of the application to which you want to add the input processing configuration.</p>
@@ -72,7 +72,7 @@ pub struct AddApplicationInputProcessingConfigurationRequest {
     pub input_processing_configuration: InputProcessingConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationInputProcessingConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -93,7 +93,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {
     pub input_processing_configuration_description: Option<InputProcessingConfigurationDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationInputRequest {
     /// <p>The name of your existing application to which you want to add the streaming source.</p>
@@ -107,7 +107,7 @@ pub struct AddApplicationInputRequest {
     pub input: Input,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationInputResponse {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -124,7 +124,7 @@ pub struct AddApplicationInputResponse {
     pub input_descriptions: Option<Vec<InputDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationOutputRequest {
     /// <p>The name of the application to which you want to add the output configuration.</p>
@@ -138,7 +138,7 @@ pub struct AddApplicationOutputRequest {
     pub output: Output,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationOutputResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -155,7 +155,7 @@ pub struct AddApplicationOutputResponse {
     pub output_descriptions: Option<Vec<OutputDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationReferenceDataSourceRequest {
     /// <p>The name of an existing application.</p>
@@ -169,7 +169,7 @@ pub struct AddApplicationReferenceDataSourceRequest {
     pub reference_data_source: ReferenceDataSource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationReferenceDataSourceResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -186,7 +186,7 @@ pub struct AddApplicationReferenceDataSourceResponse {
     pub reference_data_source_descriptions: Option<Vec<ReferenceDataSourceDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddApplicationVpcConfigurationRequest {
     /// <p>The name of an existing application.</p>
@@ -200,7 +200,7 @@ pub struct AddApplicationVpcConfigurationRequest {
     pub vpc_configuration: VpcConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddApplicationVpcConfigurationResponse {
     /// <p>The ARN of the application.</p>
@@ -218,7 +218,7 @@ pub struct AddApplicationVpcConfigurationResponse {
 }
 
 /// <p>Describes code configuration for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfiguration {
     /// <p>The location and type of the application code.</p>
@@ -231,7 +231,7 @@ pub struct ApplicationCodeConfiguration {
 }
 
 /// <p>Describes code configuration for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationCodeConfigurationDescription {
     /// <p>Describes details about the location and format of the application code.</p>
@@ -244,7 +244,7 @@ pub struct ApplicationCodeConfigurationDescription {
 }
 
 /// <p>Describes updates to a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfigurationUpdate {
     /// <p>Describes updates to the code content type.</p>
@@ -258,7 +258,7 @@ pub struct ApplicationCodeConfigurationUpdate {
 }
 
 /// <p>Specifies the creation parameters for an Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationConfiguration {
     /// <p>The code location and type parameters for a Java-based Kinesis Data Analytics application.</p>
@@ -287,7 +287,7 @@ pub struct ApplicationConfiguration {
 }
 
 /// <p>Describes details about the application code and starting parameters for an Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationConfigurationDescription {
     /// <p>The details about the application code for a Java-based Kinesis Data Analytics application.</p>
@@ -323,7 +323,7 @@ pub struct ApplicationConfigurationDescription {
 }
 
 /// <p>Describes updates to an application's configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationConfigurationUpdate {
     /// <p>Describes updates to a Java-based Kinesis Data Analytics application's code configuration.</p>
@@ -353,7 +353,7 @@ pub struct ApplicationConfigurationUpdate {
 }
 
 /// <p>Describes the application, including the application Amazon Resource Name (ARN), status, latest version, and input and output configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationDetail {
     /// <p>The ARN of the application.</p>
@@ -398,7 +398,7 @@ pub struct ApplicationDetail {
 }
 
 /// <p>Specifies the method and snapshot to use when restarting an application using previously saved application state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApplicationRestoreConfiguration {
     /// <p>Specifies how the application should be restored.</p>
     #[serde(rename = "ApplicationRestoreType")]
@@ -410,7 +410,7 @@ pub struct ApplicationRestoreConfiguration {
 }
 
 /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationSnapshotConfiguration {
     /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
@@ -419,7 +419,7 @@ pub struct ApplicationSnapshotConfiguration {
 }
 
 /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationSnapshotConfigurationDescription {
     /// <p>Describes whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
@@ -428,7 +428,7 @@ pub struct ApplicationSnapshotConfigurationDescription {
 }
 
 /// <p>Describes updates to whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationSnapshotConfigurationUpdate {
     /// <p>Describes updates to whether snapshots are enabled for a Java-based Kinesis Data Analytics application.</p>
@@ -437,7 +437,7 @@ pub struct ApplicationSnapshotConfigurationUpdate {
 }
 
 /// <p>Provides application summary information, including the application Amazon Resource Name (ARN), name, and status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationSummary {
     /// <p>The ARN of the application.</p>
@@ -458,7 +458,7 @@ pub struct ApplicationSummary {
 }
 
 /// <p>For an SQL-based application, provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CSVMappingParameters {
     /// <p>The column delimiter. For example, in a CSV format, a comma (",") is the typical column delimiter.</p>
     #[serde(rename = "RecordColumnDelimiter")]
@@ -469,7 +469,7 @@ pub struct CSVMappingParameters {
 }
 
 /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfiguration {
     /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
@@ -490,7 +490,7 @@ pub struct CheckpointConfiguration {
 }
 
 /// <p>Describes checkpointing parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckpointConfigurationDescription {
     /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
@@ -512,7 +512,7 @@ pub struct CheckpointConfigurationDescription {
 }
 
 /// <p>Describes updates to the checkpointing parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfigurationUpdate {
     /// <p><p>Describes updates to the interval in milliseconds between checkpoint operations.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
@@ -534,7 +534,7 @@ pub struct CheckpointConfigurationUpdate {
 }
 
 /// <p>Provides a description of Amazon CloudWatch logging options, including the log stream Amazon Resource Name (ARN). </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOption {
     /// <p>The ARN of the CloudWatch log to receive application messages.</p>
@@ -543,7 +543,7 @@ pub struct CloudWatchLoggingOption {
 }
 
 /// <p>Describes the Amazon CloudWatch logging option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloudWatchLoggingOptionDescription {
     /// <p>The ID of the CloudWatch logging option description.</p>
@@ -560,7 +560,7 @@ pub struct CloudWatchLoggingOptionDescription {
 }
 
 /// <p>Describes the Amazon CloudWatch logging option updates.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudWatchLoggingOptionUpdate {
     /// <p>The ID of the CloudWatch logging option to update</p>
@@ -573,7 +573,7 @@ pub struct CloudWatchLoggingOptionUpdate {
 }
 
 /// <p>Specifies either the application code, or the location of the application code, for a Java-based Amazon Kinesis Data Analytics application. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContent {
     /// <p>Information about the Amazon S3 bucket containing the application code.</p>
@@ -596,7 +596,7 @@ pub struct CodeContent {
 }
 
 /// <p>Describes details about the application code for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeContentDescription {
     /// <p>The checksum that can be used to validate zip-format code.</p>
@@ -618,7 +618,7 @@ pub struct CodeContentDescription {
 }
 
 /// <p>Describes an update to the code of a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContentUpdate {
     /// <p>Describes an update to the location of code for an application.</p>
@@ -640,7 +640,7 @@ pub struct CodeContentUpdate {
     pub zip_file_content_update: Option<bytes::Bytes>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>Use this parameter to configure the application.</p>
@@ -670,7 +670,7 @@ pub struct CreateApplicationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>In response to your <code>CreateApplication</code> request, Kinesis Data Analytics returns a response with details of the application it created.</p>
@@ -678,7 +678,7 @@ pub struct CreateApplicationResponse {
     pub application_detail: ApplicationDetail,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationSnapshotRequest {
     /// <p>The name of an existing application</p>
@@ -689,11 +689,11 @@ pub struct CreateApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationSnapshotResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     /// <p>The application name.</p>
@@ -707,7 +707,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     pub current_application_version_id: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse {
     /// <p>The application's Amazon Resource Name (ARN).</p>
@@ -724,7 +724,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionResponse {
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInputProcessingConfigurationRequest {
     /// <p>The name of the application.</p>
@@ -738,7 +738,7 @@ pub struct DeleteApplicationInputProcessingConfigurationRequest {
     pub input_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationInputProcessingConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -751,7 +751,7 @@ pub struct DeleteApplicationInputProcessingConfigurationResponse {
     pub application_version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationOutputRequest {
     /// <p>The application name.</p>
@@ -765,7 +765,7 @@ pub struct DeleteApplicationOutputRequest {
     pub output_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationOutputResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -778,7 +778,7 @@ pub struct DeleteApplicationOutputResponse {
     pub application_version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationReferenceDataSourceRequest {
     /// <p>The name of an existing application.</p>
@@ -792,7 +792,7 @@ pub struct DeleteApplicationReferenceDataSourceRequest {
     pub reference_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationReferenceDataSourceResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -805,7 +805,7 @@ pub struct DeleteApplicationReferenceDataSourceResponse {
     pub application_version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The name of the application to delete.</p>
@@ -816,11 +816,11 @@ pub struct DeleteApplicationRequest {
     pub create_timestamp: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationSnapshotRequest {
     /// <p>The name of an existing application.</p>
@@ -834,11 +834,11 @@ pub struct DeleteApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationSnapshotResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationVpcConfigurationRequest {
     /// <p>The name of an existing application.</p>
@@ -852,7 +852,7 @@ pub struct DeleteApplicationVpcConfigurationRequest {
     pub vpc_configuration_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApplicationVpcConfigurationResponse {
     /// <p>The ARN of the Kinesis Data Analytics application.</p>
@@ -865,7 +865,7 @@ pub struct DeleteApplicationVpcConfigurationResponse {
     pub application_version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationRequest {
     /// <p>The name of the application.</p>
@@ -877,7 +877,7 @@ pub struct DescribeApplicationRequest {
     pub include_additional_details: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationResponse {
     /// <p>Provides a description of the application, such as the application's Amazon Resource Name (ARN), status, and latest version.</p>
@@ -885,7 +885,7 @@ pub struct DescribeApplicationResponse {
     pub application_detail: ApplicationDetail,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationSnapshotRequest {
     /// <p>The name of an existing application.</p>
@@ -896,7 +896,7 @@ pub struct DescribeApplicationSnapshotRequest {
     pub snapshot_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeApplicationSnapshotResponse {
     /// <p>An object containing information about the application snapshot.</p>
@@ -905,14 +905,14 @@ pub struct DescribeApplicationSnapshotResponse {
 }
 
 /// <p>Describes the data format when records are written to the destination in an SQL-based Amazon Kinesis Data Analytics application. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationSchema {
     /// <p>Specifies the format of the records on the output stream.</p>
     #[serde(rename = "RecordFormatType")]
     pub record_format_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DiscoverInputSchemaRequest {
     /// <p>The <a>InputProcessingConfiguration</a> to use to preprocess the records before discovering the schema of the records.</p>
@@ -936,7 +936,7 @@ pub struct DiscoverInputSchemaRequest {
     pub service_execution_role: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscoverInputSchemaResponse {
     /// <p>The schema inferred from the streaming source. It identifies the format of the data in the streaming source and how each data element maps to corresponding columns in the in-application stream that you can create.</p>
@@ -958,7 +958,7 @@ pub struct DiscoverInputSchemaResponse {
 }
 
 /// <p>Describes execution properties for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentProperties {
     /// <p>Describes the execution property groups.</p>
@@ -967,7 +967,7 @@ pub struct EnvironmentProperties {
 }
 
 /// <p>Describes the execution properties for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentPropertyDescriptions {
     /// <p>Describes the execution property groups.</p>
@@ -977,7 +977,7 @@ pub struct EnvironmentPropertyDescriptions {
 }
 
 /// <p>Describes updates to the execution property groups for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentPropertyUpdates {
     /// <p>Describes updates to the execution property groups.</p>
@@ -986,7 +986,7 @@ pub struct EnvironmentPropertyUpdates {
 }
 
 /// <p>Describes configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkApplicationConfiguration {
     /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>. </p>
@@ -1004,7 +1004,7 @@ pub struct FlinkApplicationConfiguration {
 }
 
 /// <p>Describes configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlinkApplicationConfigurationDescription {
     /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance.</p>
@@ -1026,7 +1026,7 @@ pub struct FlinkApplicationConfigurationDescription {
 }
 
 /// <p>Describes updates to the configuration parameters for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkApplicationConfigurationUpdate {
     /// <p>Describes updates to an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance.</p>
@@ -1044,7 +1044,7 @@ pub struct FlinkApplicationConfigurationUpdate {
 }
 
 /// <p>Describes the starting parameters for an Apache Flink-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkRunConfiguration {
     /// <p>When restoring from a savepoint, specifies whether the runtime is allowed to skip a state that cannot be mapped to the new program. This will happen if the program is updated between savepoints to remove stateful parameters, and state data in the savepoint no longer corresponds to valid application data. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/ops/state/savepoints.html#allowing-non-restored-state"> Allowing Non-Restored State</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink documentation</a>.</p>
@@ -1054,7 +1054,7 @@ pub struct FlinkRunConfiguration {
 }
 
 /// <p>When you configure the application input for an SQL-based Amazon Kinesis Data Analytics application, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Input {
     /// <p>Describes the number of in-application streams to create. </p>
@@ -1082,7 +1082,7 @@ pub struct Input {
 }
 
 /// <p>Describes the application input configuration for an SQL-based Amazon Kinesis Data Analytics application. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDescription {
     /// <p>Returns the in-application stream names that are mapped to the stream source. </p>
@@ -1124,7 +1124,7 @@ pub struct InputDescription {
 }
 
 /// <p>An object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream in an SQL-based Amazon Kinesis Data Analytics application. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessor {
     /// <p><p>The ARN of the AWS Lambda function that operates on records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
@@ -1133,7 +1133,7 @@ pub struct InputLambdaProcessor {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, an object that contains the Amazon Resource Name (ARN) of the AWS Lambda function that is used to preprocess records in the stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputLambdaProcessorDescription {
     /// <p><p>The ARN of the AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
@@ -1146,7 +1146,7 @@ pub struct InputLambdaProcessorDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, represents an update to the <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLambdaProcessorUpdate {
     /// <p><p>The Amazon Resource Name (ARN) of the new AWS Lambda function that is used to preprocess the records in the stream.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
@@ -1155,7 +1155,7 @@ pub struct InputLambdaProcessorUpdate {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the number of in-application streams to create for a given streaming source. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputParallelism {
     /// <p>The number of in-application streams to create.</p>
     #[serde(rename = "Count")]
@@ -1164,7 +1164,7 @@ pub struct InputParallelism {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides updates to the parallelism count.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputParallelismUpdate {
     /// <p>The number of in-application streams to create for the specified streaming source.</p>
@@ -1173,7 +1173,7 @@ pub struct InputParallelismUpdate {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfiguration {
     /// <p>The <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream before being processed by your application code.</p>
@@ -1182,7 +1182,7 @@ pub struct InputProcessingConfiguration {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides the configuration information about an input processor. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputProcessingConfigurationDescription {
     /// <p>Provides configuration information about the associated <a>InputLambdaProcessorDescription</a> </p>
@@ -1192,7 +1192,7 @@ pub struct InputProcessingConfigurationDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes updates to an <a>InputProcessingConfiguration</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputProcessingConfigurationUpdate {
     /// <p>Provides update information for an <a>InputLambdaProcessor</a>.</p>
@@ -1201,7 +1201,7 @@ pub struct InputProcessingConfigurationUpdate {
 }
 
 /// <p>Describes updates for an SQL-based Amazon Kinesis Data Analytics application's input schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSchemaUpdate {
     /// <p>A list of <code>RecordColumn</code> objects. Each object describes the mapping of the streaming source element to the corresponding column in the in-application stream.</p>
@@ -1219,7 +1219,7 @@ pub struct InputSchemaUpdate {
 }
 
 /// <p>Describes the point at which the application reads from the streaming source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputStartingPositionConfiguration {
     /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, and start at the request timestamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Data Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
     #[serde(rename = "InputStartingPosition")]
@@ -1228,7 +1228,7 @@ pub struct InputStartingPositionConfiguration {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes updates to a specific input configuration (identified by the <code>InputId</code> of an application). </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputUpdate {
     /// <p>The input ID of the application input to be updated.</p>
@@ -1261,7 +1261,7 @@ pub struct InputUpdate {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides additional mapping information when JSON is the record format on the streaming source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JSONMappingParameters {
     /// <p>The path to the top-level parent that contains the records.</p>
     #[serde(rename = "RecordRowPath")]
@@ -1269,7 +1269,7 @@ pub struct JSONMappingParameters {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, identifies a Kinesis Data Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInput {
     /// <p>The Amazon Resource Name (ARN) of the delivery stream.</p>
@@ -1278,7 +1278,7 @@ pub struct KinesisFirehoseInput {
 }
 
 /// <p>Describes the Amazon Kinesis Data Firehose delivery stream that is configured as the streaming source in the application input configuration. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisFirehoseInputDescription {
     /// <p>The Amazon Resource Name (ARN) of the delivery stream.</p>
@@ -1291,7 +1291,7 @@ pub struct KinesisFirehoseInputDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, when updating application input configuration, provides information about a Kinesis Data Firehose delivery stream as the streaming source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseInputUpdate {
     /// <p>The Amazon Resource Name (ARN) of the input delivery stream to read.</p>
@@ -1300,7 +1300,7 @@ pub struct KinesisFirehoseInputUpdate {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, when configuring application output, identifies a Kinesis Data Firehose delivery stream as the destination. You provide the stream Amazon Resource Name (ARN) of the delivery stream. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutput {
     /// <p>The ARN of the destination delivery stream to write to.</p>
@@ -1309,7 +1309,7 @@ pub struct KinesisFirehoseOutput {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application's output, describes the Kinesis Data Firehose delivery stream that is configured as its destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisFirehoseOutputDescription {
     /// <p>The Amazon Resource Name (ARN) of the delivery stream.</p>
@@ -1322,7 +1322,7 @@ pub struct KinesisFirehoseOutputDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, when updating an output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis Data Firehose delivery stream that is configured as the destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisFirehoseOutputUpdate {
     /// <p>The Amazon Resource Name (ARN) of the delivery stream to write to. </p>
@@ -1331,7 +1331,7 @@ pub struct KinesisFirehoseOutputUpdate {
 }
 
 /// <p> Identifies an Amazon Kinesis data stream as the streaming source. You provide the stream's Amazon Resource Name (ARN).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInput {
     /// <p>The ARN of the input Kinesis data stream to read.</p>
@@ -1340,7 +1340,7 @@ pub struct KinesisStreamsInput {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the Kinesis data stream that is configured as the streaming source in the application input configuration. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisStreamsInputDescription {
     /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream.</p>
@@ -1353,7 +1353,7 @@ pub struct KinesisStreamsInputDescription {
 }
 
 /// <p>When you update the input configuration for an SQL-based Amazon Kinesis Data Analytics application, provides information about an Amazon Kinesis stream as the streaming source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsInputUpdate {
     /// <p>The Amazon Resource Name (ARN) of the input Kinesis data stream to read.</p>
@@ -1362,7 +1362,7 @@ pub struct KinesisStreamsInputUpdate {
 }
 
 /// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's output, identifies a Kinesis data stream as the destination. You provide the stream Amazon Resource Name (ARN). </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutput {
     /// <p>The ARN of the destination Kinesis data stream to write to.</p>
@@ -1371,7 +1371,7 @@ pub struct KinesisStreamsOutput {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application's output, describes the Kinesis data stream that is configured as its destination. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KinesisStreamsOutputDescription {
     /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream.</p>
@@ -1384,7 +1384,7 @@ pub struct KinesisStreamsOutputDescription {
 }
 
 /// <p>When you update an SQL-based Amazon Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about a Kinesis data stream that is configured as the destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KinesisStreamsOutputUpdate {
     /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream where you want to write the output.</p>
@@ -1393,7 +1393,7 @@ pub struct KinesisStreamsOutputUpdate {
 }
 
 /// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) of the Lambda function. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutput {
     /// <p><p>The Amazon Resource Name (ARN) of the destination Lambda function to write to.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
@@ -1402,7 +1402,7 @@ pub struct LambdaOutput {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application output, describes the AWS Lambda function that is configured as its destination. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaOutputDescription {
     /// <p>The Amazon Resource Name (ARN) of the destination Lambda function.</p>
@@ -1415,7 +1415,7 @@ pub struct LambdaOutputDescription {
 }
 
 /// <p>When you update an SQL-based Amazon Kinesis Data Analytics application's output configuration using the <a>UpdateApplication</a> operation, provides information about an AWS Lambda function that is configured as the destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaOutputUpdate {
     /// <p><p>The Amazon Resource Name (ARN) of the destination AWS Lambda function.</p> <note> <p>To specify an earlier version of the Lambda function than the latest, include the Lambda function version in the Lambda function ARN. For more information about Lambda ARNs, see <a href="/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-lambda">Example ARNs: AWS Lambda</a> </p> </note></p>
@@ -1423,7 +1423,7 @@ pub struct LambdaOutputUpdate {
     pub resource_arn_update: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationSnapshotsRequest {
     /// <p>The name of an existing application.</p>
@@ -1439,7 +1439,7 @@ pub struct ListApplicationSnapshotsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationSnapshotsResponse {
     /// <p>The token for the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -1452,7 +1452,7 @@ pub struct ListApplicationSnapshotsResponse {
     pub snapshot_summaries: Option<Vec<SnapshotDetails>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The maximum number of applications to list.</p>
@@ -1465,7 +1465,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
     /// <p>A list of <code>ApplicationSummary</code> objects.</p>
@@ -1477,7 +1477,7 @@ pub struct ListApplicationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the application for which to retrieve tags.</p>
@@ -1485,7 +1485,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The key-value tags assigned to the application.</p>
@@ -1495,7 +1495,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>When you configure an SQL-based Amazon Kinesis Data Analytics application's input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MappingParameters {
     /// <p>Provides additional mapping information when the record format uses delimiters (for example, CSV).</p>
     #[serde(rename = "CSVMappingParameters")]
@@ -1508,7 +1508,7 @@ pub struct MappingParameters {
 }
 
 /// <p>Describes configuration parameters for Amazon CloudWatch logging for a Java-based Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfiguration {
     /// <p>Describes whether to use the default CloudWatch logging configuration for an application. You must set this property to <code>CUSTOM</code> in order to set the <code>LogLevel</code> or <code>MetricsLevel</code> parameters.</p>
@@ -1525,7 +1525,7 @@ pub struct MonitoringConfiguration {
 }
 
 /// <p>Describes configuration parameters for CloudWatch logging for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MonitoringConfigurationDescription {
     /// <p>Describes whether to use the default CloudWatch logging configuration for an application.</p>
@@ -1543,7 +1543,7 @@ pub struct MonitoringConfigurationDescription {
 }
 
 /// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfigurationUpdate {
     /// <p>Describes updates to whether to use the default CloudWatch logging configuration for an application. You must set this property to <code>CUSTOM</code> in order to set the <code>LogLevel</code> or <code>MetricsLevel</code> parameters.</p>
@@ -1561,7 +1561,7 @@ pub struct MonitoringConfigurationUpdate {
 }
 
 /// <p><p> Describes an SQL-based Amazon Kinesis Data Analytics application&#39;s output configuration, in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p> <p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Output {
     /// <p>Describes the data format when records are written to the destination. </p>
@@ -1585,7 +1585,7 @@ pub struct Output {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the application output configuration, which includes the in-application stream name and the destination where the stream data is written. The destination can be a Kinesis data stream or a Kinesis Data Firehose delivery stream. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputDescription {
     /// <p>The data format used for writing data to the destination.</p>
@@ -1615,7 +1615,7 @@ pub struct OutputDescription {
 }
 
 /// <p> For an SQL-based Amazon Kinesis Data Analytics application, describes updates to the output configuration identified by the <code>OutputId</code>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputUpdate {
     /// <p>Describes the data format when records are written to the destination. </p>
@@ -1644,7 +1644,7 @@ pub struct OutputUpdate {
 }
 
 /// <p>Describes parameters for how a Java-based Amazon Kinesis Data Analytics application executes multiple tasks simultaneously. For more information about parallelism, see <a href="https://ci.apache.org/projects/flink/flink-docs-stable/dev/parallel.html">Parallel Execution</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.6/">Apache Flink Documentation</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfiguration {
     /// <p>Describes whether the Kinesis Data Analytics service can increase the parallelism of the application in response to increased throughput.</p>
@@ -1665,7 +1665,7 @@ pub struct ParallelismConfiguration {
 }
 
 /// <p>Describes parameters for how a Java-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParallelismConfigurationDescription {
     /// <p>Describes whether the Kinesis Data Analytics service can increase the parallelism of the application in response to increased throughput.</p>
@@ -1691,7 +1691,7 @@ pub struct ParallelismConfigurationDescription {
 }
 
 /// <p>Describes updates to parameters for how a Java-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfigurationUpdate {
     /// <p>Describes updates to whether the Kinesis Data Analytics service can increase the parallelism of the application in response to increased throughput.</p>
@@ -1713,7 +1713,7 @@ pub struct ParallelismConfigurationUpdate {
 }
 
 /// <p>Property key-value pairs passed into a Java-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PropertyGroup {
     /// <p>Describes the key of an application execution property key-value pair.</p>
     #[serde(rename = "PropertyGroupId")]
@@ -1724,7 +1724,7 @@ pub struct PropertyGroup {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the mapping of each data element in the streaming source to the corresponding column in the in-application stream.</p> <p>Also used to describe the format of the reference data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordColumn {
     /// <p>A reference to the data element in the streaming input or the reference data source.</p>
     #[serde(rename = "Mapping")]
@@ -1739,7 +1739,7 @@ pub struct RecordColumn {
 }
 
 /// <p> For an SQL-based Amazon Kinesis Data Analytics application, describes the record format and relevant mapping information that should be applied to schematize the records on the stream. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordFormat {
     /// <p>When you configure application input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
     #[serde(rename = "MappingParameters")]
@@ -1751,7 +1751,7 @@ pub struct RecordFormat {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the reference data source by providing the source information (Amazon S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSource {
     /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
@@ -1767,7 +1767,7 @@ pub struct ReferenceDataSource {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the reference data source configured for an application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReferenceDataSourceDescription {
     /// <p>The ID of the reference data source. This is the ID that Kinesis Data Analytics assigns when you add the reference data source to your application using the <a>CreateApplication</a> or <a>UpdateApplication</a> operation.</p>
@@ -1786,7 +1786,7 @@ pub struct ReferenceDataSourceDescription {
 }
 
 /// <p>When you update a reference data source configuration for a SQL-based Amazon Kinesis Data Analytics application, this object provides all the updated values (such as the source bucket name and object key name), the in-application table name that is created, and updated mapping information that maps the data in the Amazon S3 object to the in-application reference table that is created.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReferenceDataSourceUpdate {
     /// <p>The ID of the reference data source that is being updated. You can use the <a>DescribeApplication</a> operation to get this value.</p>
@@ -1807,7 +1807,7 @@ pub struct ReferenceDataSourceUpdate {
 }
 
 /// <p>Describes the starting parameters for an Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunConfiguration {
     /// <p>Describes the restore behavior of a restarting application.</p>
@@ -1825,7 +1825,7 @@ pub struct RunConfiguration {
 }
 
 /// <p>Describes the starting properties for a Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunConfigurationDescription {
     /// <p>Describes the restore behavior of a restarting application.</p>
@@ -1835,7 +1835,7 @@ pub struct RunConfigurationDescription {
 }
 
 /// <p>Describes the updates to the starting parameters for a Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunConfigurationUpdate {
     /// <p>Describes updates to the restore behavior of a restarting application.</p>
@@ -1849,7 +1849,7 @@ pub struct RunConfigurationUpdate {
 }
 
 /// <p>Describes the location of a Java-based Amazon Kinesis Data Analytics application's code stored in an S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ApplicationCodeLocationDescription {
     /// <p>The Amazon Resource Name (ARN) for the S3 bucket containing the application code.</p>
@@ -1865,7 +1865,7 @@ pub struct S3ApplicationCodeLocationDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket and the name of the Amazon S3 object that contains the data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Configuration {
     /// <p>The ARN of the S3 bucket that contains the data.</p>
@@ -1877,7 +1877,7 @@ pub struct S3Configuration {
 }
 
 /// <p>For a Java-based Amazon Kinesis Data Analytics application, provides a description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ContentLocation {
     /// <p>The Amazon Resource Name (ARN) for the S3 bucket containing the application code.</p>
@@ -1893,7 +1893,7 @@ pub struct S3ContentLocation {
 }
 
 /// <p>Describes an update for the Amazon S3 code content location for a Java-based Amazon Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ContentLocationUpdate {
     /// <p>The new Amazon Resource Name (ARN) for the S3 bucket containing the application code.</p>
@@ -1911,7 +1911,7 @@ pub struct S3ContentLocationUpdate {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, identifies the Amazon S3 bucket and object that contains the reference data.</p> <p>A Kinesis Data Analytics application loads reference data only once. If the data changes, you call the <a>UpdateApplication</a> operation to trigger reloading of data into your application. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSource {
     /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
@@ -1925,7 +1925,7 @@ pub struct S3ReferenceDataSource {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, provides the bucket name and object key name that stores the reference data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ReferenceDataSourceDescription {
     /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
@@ -1941,7 +1941,7 @@ pub struct S3ReferenceDataSourceDescription {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the Amazon S3 bucket name and object key name for an in-application reference table. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ReferenceDataSourceUpdate {
     /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
@@ -1955,7 +1955,7 @@ pub struct S3ReferenceDataSourceUpdate {
 }
 
 /// <p>Provides details about a snapshot of application state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SnapshotDetails {
     /// <p>The current application version ID when the snapshot was created.</p>
@@ -1974,7 +1974,7 @@ pub struct SnapshotDetails {
 }
 
 /// <p>For an SQL-based Amazon Kinesis Data Analytics application, describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceSchema {
     /// <p>A list of <code>RecordColumn</code> objects. </p>
     #[serde(rename = "RecordColumns")]
@@ -1989,7 +1989,7 @@ pub struct SourceSchema {
 }
 
 /// <p>Describes the inputs, outputs, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlApplicationConfiguration {
     /// <p>The array of <a>Input</a> objects describing the input streams used by the application.</p>
@@ -2007,7 +2007,7 @@ pub struct SqlApplicationConfiguration {
 }
 
 /// <p>Describes the inputs, outputs, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SqlApplicationConfigurationDescription {
     /// <p>The array of <a>InputDescription</a> objects describing the input streams used by the application.</p>
@@ -2025,7 +2025,7 @@ pub struct SqlApplicationConfigurationDescription {
 }
 
 /// <p>Describes updates to the input streams, destination streams, and reference data sources for an SQL-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlApplicationConfigurationUpdate {
     /// <p>The array of <a>InputUpdate</a> objects describing the new input streams used by the application.</p>
@@ -2043,7 +2043,7 @@ pub struct SqlApplicationConfigurationUpdate {
 }
 
 /// <p>Describes the starting parameters for an SQL-based Kinesis Data Analytics application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlRunConfiguration {
     /// <p>The input source ID. You can get this ID by calling the <a>DescribeApplication</a> operation. </p>
@@ -2054,7 +2054,7 @@ pub struct SqlRunConfiguration {
     pub input_starting_position_configuration: InputStartingPositionConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartApplicationRequest {
     /// <p>The name of the application.</p>
@@ -2065,11 +2065,11 @@ pub struct StartApplicationRequest {
     pub run_configuration: RunConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartApplicationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopApplicationRequest {
     /// <p>The name of the running application to stop.</p>
@@ -2077,12 +2077,12 @@ pub struct StopApplicationRequest {
     pub application_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopApplicationResponse {}
 
 /// <p>A key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. Note that the maximum number of application tags includes system tags. The maximum number of user-defined application tags is 50. For more information, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/how-tagging.html">Using Tagging</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key of the key-value tag.</p>
     #[serde(rename = "Key")]
@@ -2093,7 +2093,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the application to assign the tags.</p>
@@ -2104,11 +2104,11 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the Kinesis Analytics application from which to remove the tags.</p>
@@ -2119,11 +2119,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Describes application configuration updates.</p>
@@ -2150,7 +2150,7 @@ pub struct UpdateApplicationRequest {
     pub service_execution_role_update: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
     /// <p>Describes application updates.</p>
@@ -2159,7 +2159,7 @@ pub struct UpdateApplicationResponse {
 }
 
 /// <p>Describes the parameters of a VPC used by the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcConfiguration {
     /// <p>The array of <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SecurityGroup.html">SecurityGroup</a> IDs used by the VPC configuration.</p>
@@ -2171,7 +2171,7 @@ pub struct VpcConfiguration {
 }
 
 /// <p>Describes the parameters of a VPC used by the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcConfigurationDescription {
     /// <p>The array of <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SecurityGroup.html">SecurityGroup</a> IDs used by the VPC configuration.</p>
@@ -2189,7 +2189,7 @@ pub struct VpcConfigurationDescription {
 }
 
 /// <p>Describes updates to the VPC configuration used by the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcConfigurationUpdate {
     /// <p>Describes updates to the array of <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SecurityGroup.html">SecurityGroup</a> IDs used by the VPC configuration.</p>

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attribute {
     /// <p>The attribute key.</p>
@@ -38,7 +38,7 @@ pub struct Attribute {
 }
 
 /// <p>An object representing authorization data for an Amazon ECR registry.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizationData {
     /// <p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>
@@ -55,7 +55,7 @@ pub struct AuthorizationData {
     pub proxy_endpoint: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCheckLayerAvailabilityRequest {
     /// <p>The digests of the image layers to check.</p>
@@ -70,7 +70,7 @@ pub struct BatchCheckLayerAvailabilityRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCheckLayerAvailabilityResponse {
     /// <p>Any failures associated with the call.</p>
@@ -84,7 +84,7 @@ pub struct BatchCheckLayerAvailabilityResponse {
 }
 
 /// <p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteImageRequest {
     /// <p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>
@@ -99,7 +99,7 @@ pub struct BatchDeleteImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteImageResponse {
     /// <p>Any failures associated with the call.</p>
@@ -112,7 +112,7 @@ pub struct BatchDeleteImageResponse {
     pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetImageRequest {
     /// <p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>
@@ -131,7 +131,7 @@ pub struct BatchGetImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetImageResponse {
     /// <p>Any failures associated with the call.</p>
@@ -144,7 +144,7 @@ pub struct BatchGetImageResponse {
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteLayerUploadRequest {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
@@ -162,7 +162,7 @@ pub struct CompleteLayerUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompleteLayerUploadResponse {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
@@ -183,7 +183,7 @@ pub struct CompleteLayerUploadResponse {
     pub upload_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryRequest {
     /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
@@ -203,7 +203,7 @@ pub struct CreateRepositoryRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRepositoryResponse {
     /// <p>The repository that was created.</p>
@@ -212,7 +212,7 @@ pub struct CreateRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
@@ -224,7 +224,7 @@ pub struct DeleteLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
@@ -245,7 +245,7 @@ pub struct DeleteLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>
@@ -257,7 +257,7 @@ pub struct DeleteRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryPolicyResponse {
     /// <p>The JSON repository policy that was deleted from the repository.</p>
@@ -274,7 +274,7 @@ pub struct DeleteRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryRequest {
     /// <p> If a repository contains images, forces the deletion.</p>
@@ -290,7 +290,7 @@ pub struct DeleteRepositoryRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryResponse {
     /// <p>The repository that was deleted.</p>
@@ -299,7 +299,7 @@ pub struct DeleteRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImageScanFindingsRequest {
     #[serde(rename = "imageId")]
@@ -321,7 +321,7 @@ pub struct DescribeImageScanFindingsRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImageScanFindingsResponse {
     #[serde(rename = "imageId")]
@@ -350,7 +350,7 @@ pub struct DescribeImageScanFindingsResponse {
 }
 
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesFilter {
     /// <p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
@@ -359,7 +359,7 @@ pub struct DescribeImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeImagesRequest {
     /// <p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>
@@ -387,7 +387,7 @@ pub struct DescribeImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeImagesResponse {
     /// <p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>
@@ -400,7 +400,7 @@ pub struct DescribeImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoriesRequest {
     /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
@@ -421,7 +421,7 @@ pub struct DescribeRepositoriesRequest {
     pub repository_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRepositoriesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -434,7 +434,7 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizationTokenRequest {
     /// <p>A list of AWS account IDs that are associated with the registries for which to get AuthorizationData objects. If you do not specify a registry, the default registry is assumed.</p>
@@ -443,7 +443,7 @@ pub struct GetAuthorizationTokenRequest {
     pub registry_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizationTokenResponse {
     /// <p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>
@@ -452,7 +452,7 @@ pub struct GetAuthorizationTokenResponse {
     pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDownloadUrlForLayerRequest {
     /// <p>The digest of the image layer to download.</p>
@@ -467,7 +467,7 @@ pub struct GetDownloadUrlForLayerRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDownloadUrlForLayerResponse {
     /// <p>The pre-signed Amazon S3 download URL for the requested layer.</p>
@@ -480,7 +480,7 @@ pub struct GetDownloadUrlForLayerResponse {
     pub layer_digest: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyPreviewRequest {
     /// <p>An optional parameter that filters results based on image tag status and all tags, if tagged.</p>
@@ -508,7 +508,7 @@ pub struct GetLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyPreviewResponse {
     /// <p>The JSON lifecycle policy text.</p>
@@ -541,7 +541,7 @@ pub struct GetLifecyclePolicyPreviewResponse {
     pub summary: Option<LifecyclePolicyPreviewSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
@@ -553,7 +553,7 @@ pub struct GetLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
@@ -574,7 +574,7 @@ pub struct GetLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
@@ -586,7 +586,7 @@ pub struct GetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text associated with the repository.</p>
@@ -604,7 +604,7 @@ pub struct GetRepositoryPolicyResponse {
 }
 
 /// <p>An object representing an Amazon ECR image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Image {
     /// <p>An object containing the image tag and image digest associated with an image.</p>
@@ -630,7 +630,7 @@ pub struct Image {
 }
 
 /// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageDetail {
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
@@ -668,7 +668,7 @@ pub struct ImageDetail {
 }
 
 /// <p>An object representing an Amazon ECR image failure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageFailure {
     /// <p>The code associated with the failure.</p>
@@ -686,7 +686,7 @@ pub struct ImageFailure {
 }
 
 /// <p>An object with identifying information for an Amazon ECR image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageIdentifier {
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
@@ -699,7 +699,7 @@ pub struct ImageIdentifier {
 }
 
 /// <p>Contains information about an image scan finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageScanFinding {
     /// <p>A collection of attributes of the host from which the finding is generated.</p>
@@ -725,7 +725,7 @@ pub struct ImageScanFinding {
 }
 
 /// <p>The details of an image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageScanFindings {
     /// <p>The image vulnerability counts, sorted by severity.</p>
@@ -747,7 +747,7 @@ pub struct ImageScanFindings {
 }
 
 /// <p>A summary of the last completed image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageScanFindingsSummary {
     /// <p>The image vulnerability counts, sorted by severity.</p>
@@ -765,7 +765,7 @@ pub struct ImageScanFindingsSummary {
 }
 
 /// <p>The current status of an image scan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageScanStatus {
     /// <p>The description of the image scan status.</p>
@@ -779,7 +779,7 @@ pub struct ImageScanStatus {
 }
 
 /// <p>The image scanning configuration for a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageScanningConfiguration {
     /// <p>The setting that determines whether images are scanned after being pushed to a repository. If set to <code>true</code>, images will be scanned after being pushed. If this parameter is not specified, it will default to <code>false</code> and images will not be scanned unless a scan is manually started with the <a>StartImageScan</a> API.</p>
     #[serde(rename = "scanOnPush")]
@@ -787,7 +787,7 @@ pub struct ImageScanningConfiguration {
     pub scan_on_push: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateLayerUploadRequest {
     /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
@@ -799,7 +799,7 @@ pub struct InitiateLayerUploadRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateLayerUploadResponse {
     /// <p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>
@@ -813,7 +813,7 @@ pub struct InitiateLayerUploadResponse {
 }
 
 /// <p>An object representing an Amazon ECR image layer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Layer {
     /// <p>The availability status of the image layer.</p>
@@ -835,7 +835,7 @@ pub struct Layer {
 }
 
 /// <p>An object representing an Amazon ECR image layer failure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LayerFailure {
     /// <p>The failure code associated with the failure.</p>
@@ -853,7 +853,7 @@ pub struct LayerFailure {
 }
 
 /// <p>The filter for the lifecycle policy preview.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecyclePolicyPreviewFilter {
     /// <p>The tag status of the image.</p>
@@ -863,7 +863,7 @@ pub struct LifecyclePolicyPreviewFilter {
 }
 
 /// <p>The result of the lifecycle policy preview.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecyclePolicyPreviewResult {
     /// <p>The type of action to be taken.</p>
@@ -889,7 +889,7 @@ pub struct LifecyclePolicyPreviewResult {
 }
 
 /// <p>The summary of the lifecycle policy preview request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecyclePolicyPreviewSummary {
     /// <p>The number of expiring images.</p>
@@ -899,7 +899,7 @@ pub struct LifecyclePolicyPreviewSummary {
 }
 
 /// <p>The type of action to be taken.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecyclePolicyRuleAction {
     /// <p>The type of action to be taken.</p>
@@ -909,7 +909,7 @@ pub struct LifecyclePolicyRuleAction {
 }
 
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesFilter {
     /// <p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
@@ -918,7 +918,7 @@ pub struct ListImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
     /// <p>The filter key and value with which to filter your <code>ListImages</code> results.</p>
@@ -942,7 +942,7 @@ pub struct ListImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
     /// <p>The list of image IDs for the requested repository.</p>
@@ -955,7 +955,7 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the only supported resource is an Amazon ECR repository.</p>
@@ -963,7 +963,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags for the resource.</p>
@@ -972,7 +972,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRequest {
     /// <p>The image manifest corresponding to the image to be uploaded.</p>
@@ -995,7 +995,7 @@ pub struct PutImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageResponse {
     /// <p>Details of the image uploaded.</p>
@@ -1004,7 +1004,7 @@ pub struct PutImageResponse {
     pub image: Option<Image>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageScanningConfigurationRequest {
     /// <p>The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.</p>
@@ -1019,7 +1019,7 @@ pub struct PutImageScanningConfigurationRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageScanningConfigurationResponse {
     /// <p>The image scanning configuration setting for the repository.</p>
@@ -1036,7 +1036,7 @@ pub struct PutImageScanningConfigurationResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageTagMutabilityRequest {
     /// <p>The tag mutability setting for the repository. If <code>MUTABLE</code> is specified, image tags can be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
@@ -1051,7 +1051,7 @@ pub struct PutImageTagMutabilityRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageTagMutabilityResponse {
     /// <p>The image tag mutability setting for the repository.</p>
@@ -1068,7 +1068,7 @@ pub struct PutImageTagMutabilityResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecyclePolicyRequest {
     /// <p>The JSON repository policy text to apply to the repository.</p>
@@ -1083,7 +1083,7 @@ pub struct PutLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecyclePolicyResponse {
     /// <p>The JSON repository policy text.</p>
@@ -1101,7 +1101,7 @@ pub struct PutLifecyclePolicyResponse {
 }
 
 /// <p>An object representing a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Repository {
     /// <p>The date and time, in JavaScript date format, when the repository was created.</p>
@@ -1133,7 +1133,7 @@ pub struct Repository {
     pub repository_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRepositoryPolicyRequest {
     /// <p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>
@@ -1152,7 +1152,7 @@ pub struct SetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text applied to the repository.</p>
@@ -1169,7 +1169,7 @@ pub struct SetRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImageScanRequest {
     #[serde(rename = "imageId")]
@@ -1183,7 +1183,7 @@ pub struct StartImageScanRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImageScanResponse {
     #[serde(rename = "imageId")]
@@ -1203,7 +1203,7 @@ pub struct StartImageScanResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartLifecyclePolicyPreviewRequest {
     /// <p>The policy to be evaluated against. If you do not specify a policy, the current policy for the repository is used.</p>
@@ -1219,7 +1219,7 @@ pub struct StartLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartLifecyclePolicyPreviewResponse {
     /// <p>The JSON repository policy text.</p>
@@ -1241,7 +1241,7 @@ pub struct StartLifecyclePolicyPreviewResponse {
 }
 
 /// <p>The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -1253,7 +1253,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the the resource to which to add tags. Currently, the only supported resource is an Amazon ECR repository.</p>
@@ -1264,11 +1264,11 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which to remove tags. Currently, the only supported resource is an Amazon ECR repository.</p>
@@ -1279,11 +1279,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadLayerPartRequest {
     /// <p>The base64-encoded layer part payload.</p>
@@ -1312,7 +1312,7 @@ pub struct UploadLayerPartRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadLayerPartResponse {
     /// <p>The integer value of the last byte received in the request.</p>

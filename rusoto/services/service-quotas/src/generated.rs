@@ -24,15 +24,15 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceQuotaTemplateRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceQuotaTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteServiceQuotaIncreaseRequestFromTemplateRequest {
     /// <p>Specifies the AWS Region for the quota that you want to delete.</p>
@@ -46,20 +46,20 @@ pub struct DeleteServiceQuotaIncreaseRequestFromTemplateRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceQuotaIncreaseRequestFromTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceQuotaTemplateRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceQuotaTemplateResponse {}
 
 /// <p>Returns an error that explains why the action did not succeed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorReason {
     /// <p>Service Quotas returns the following error values. </p> <p> <code>DEPENDENCY_ACCESS_DENIED_ERROR</code> is returned when the caller does not have permission to call the service or service quota. To resolve the error, you need permission to access the service or service quota.</p> <p> <code>DEPENDENCY_THROTTLING_ERROR</code> is returned when the service being called is throttling Service Quotas.</p> <p> <code>DEPENDENCY_SERVICE_ERROR</code> is returned when the service being called has availability issues.</p> <p> <code>SERVICE_QUOTA_NOT_AVAILABLE_ERROR</code> is returned when there was an error in Service Quotas.</p>
@@ -72,7 +72,7 @@ pub struct ErrorReason {
     pub error_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAWSDefaultServiceQuotaRequest {
     /// <p>Identifies the service quota you want to select.</p>
@@ -83,7 +83,7 @@ pub struct GetAWSDefaultServiceQuotaRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAWSDefaultServiceQuotaResponse {
     /// <p>Returns the <a>ServiceQuota</a> object which contains all values for a quota.</p>
@@ -92,11 +92,11 @@ pub struct GetAWSDefaultServiceQuotaResponse {
     pub quota: Option<ServiceQuota>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssociationForServiceQuotaTemplateRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociationForServiceQuotaTemplateResponse {
     /// <p>Specifies whether the template is <code>ASSOCIATED</code> or <code>DISASSOCIATED</code>. If the template is <code>ASSOCIATED</code>, then it requests service quota increases for all new accounts created in your organization. </p>
@@ -105,7 +105,7 @@ pub struct GetAssociationForServiceQuotaTemplateResponse {
     pub service_quota_template_association_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestedServiceQuotaChangeRequest {
     /// <p>Identifies the quota increase request.</p>
@@ -113,7 +113,7 @@ pub struct GetRequestedServiceQuotaChangeRequest {
     pub request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRequestedServiceQuotaChangeResponse {
     /// <p>Returns the <code>RequestedServiceQuotaChange</code> object for the specific increase request.</p>
@@ -122,7 +122,7 @@ pub struct GetRequestedServiceQuotaChangeResponse {
     pub requested_quota: Option<RequestedServiceQuotaChange>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
     /// <p>Specifies the AWS Region for the quota that you want to use.</p>
@@ -136,7 +136,7 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
     /// <p>This object contains the details about the quota increase request.</p>
@@ -145,7 +145,7 @@ pub struct GetServiceQuotaIncreaseRequestFromTemplateResponse {
     pub service_quota_increase_request_in_template: Option<ServiceQuotaIncreaseRequestInTemplate>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceQuotaRequest {
     /// <p>Identifies the service quota you want to select.</p>
@@ -156,7 +156,7 @@ pub struct GetServiceQuotaRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceQuotaResponse {
     /// <p>Returns the <a>ServiceQuota</a> object which contains all values for a quota.</p>
@@ -165,7 +165,7 @@ pub struct GetServiceQuotaResponse {
     pub quota: Option<ServiceQuota>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAWSDefaultServiceQuotasRequest {
     /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
@@ -181,7 +181,7 @@ pub struct ListAWSDefaultServiceQuotasRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAWSDefaultServiceQuotasResponse {
     /// <p>(Optional) Use this parameter in a request if you receive a <code>NextToken</code> response in a previous request that indicates that there's more output available. In a subsequent call, set it to the value of the previous call's <code>NextToken</code> response to indicate where the output should continue from.</p>
@@ -194,7 +194,7 @@ pub struct ListAWSDefaultServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
@@ -217,7 +217,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
     /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
@@ -230,7 +230,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryRequest {
     /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
@@ -251,7 +251,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRequestedServiceQuotaChangeHistoryResponse {
     /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
@@ -264,7 +264,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryResponse {
     pub requested_quotas: Option<Vec<RequestedServiceQuotaChange>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
     /// <p>Specifies the AWS Region for the quota that you want to use.</p>
@@ -285,7 +285,7 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateRequest {
     pub service_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
     /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
@@ -299,7 +299,7 @@ pub struct ListServiceQuotaIncreaseRequestsInTemplateResponse {
         Option<Vec<ServiceQuotaIncreaseRequestInTemplate>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServiceQuotasRequest {
     /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
@@ -315,7 +315,7 @@ pub struct ListServiceQuotasRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceQuotasResponse {
     /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
@@ -328,7 +328,7 @@ pub struct ListServiceQuotasResponse {
     pub quotas: Option<Vec<ServiceQuota>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
     /// <p>(Optional) Limits the number of results that you want to include in the response. If you don't include this parameter, the response defaults to a value that's specific to the operation. If additional items exist beyond the specified maximum, the <code>NextToken</code> element is present and has a value (isn't null). Include that value as the <code>NextToken</code> request parameter in the call to the operation to get the next part of the results. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
@@ -341,7 +341,7 @@ pub struct ListServicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServicesResponse {
     /// <p>If present in the response, this value indicates there's more output available that what's included in the current response. This can occur even when the response includes no values at all, such as when you ask for a filtered view of a very long list. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to continue processing and get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back empty (as <code>null</code>).</p>
@@ -355,7 +355,7 @@ pub struct ListServicesResponse {
 }
 
 /// <p>A structure that uses CloudWatch metrics to gather data about the service quota.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricInfo {
     /// <p>A dimension is a name/value pair that is part of the identity of a metric. Every metric has specific characteristics that describe it, and you can think of dimensions as categories for those characteristics. These dimensions are part of the CloudWatch Metric Identity that measures usage against a particular service quota.</p>
@@ -376,7 +376,7 @@ pub struct MetricInfo {
     pub metric_statistic_recommendation: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
     /// <p>Specifies the AWS Region for the quota. </p>
@@ -393,7 +393,7 @@ pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateResponse {
     /// <p>A structure that contains information about one service quota increase request.</p>
@@ -403,7 +403,7 @@ pub struct PutServiceQuotaIncreaseRequestIntoTemplateResponse {
 }
 
 /// <p>A structure that contains information about the quota period.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QuotaPeriod {
     /// <p>The time unit of a period.</p>
@@ -416,7 +416,7 @@ pub struct QuotaPeriod {
     pub period_value: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestServiceQuotaIncreaseRequest {
     /// <p>Specifies the value submitted in the service quota increase request. </p>
@@ -430,7 +430,7 @@ pub struct RequestServiceQuotaIncreaseRequest {
     pub service_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestServiceQuotaIncreaseResponse {
     /// <p>Returns a list of service quota requests.</p>
@@ -440,7 +440,7 @@ pub struct RequestServiceQuotaIncreaseResponse {
 }
 
 /// <p>A structure that contains information about a requested change for a quota.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestedServiceQuotaChange {
     /// <p>The case Id for the service quota increase request.</p>
@@ -502,7 +502,7 @@ pub struct RequestedServiceQuotaChange {
 }
 
 /// <p>A structure that contains the <code>ServiceName</code> and <code>ServiceCode</code>. It does not include all details of the service quota. To get those values, use the <a>ListServiceQuotas</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceInfo {
     /// <p>Specifies the service that you want to use.</p>
@@ -516,7 +516,7 @@ pub struct ServiceInfo {
 }
 
 /// <p>A structure that contains the full set of details that define the service quota.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceQuota {
     /// <p>Specifies if the quota value can be increased.</p>
@@ -570,7 +570,7 @@ pub struct ServiceQuota {
 }
 
 /// <p>A structure that contains information about one service quota increase request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceQuotaIncreaseRequestInTemplate {
     /// <p>The AWS Region where the increase request occurs.</p>

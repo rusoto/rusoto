@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEntityToThingRequest {
     /// <p>The ID of the device to be associated with the thing.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -39,11 +39,11 @@ pub struct AssociateEntityToThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateEntityToThingResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowTemplateRequest {
     /// <p>The namespace version in which the workflow is to be created.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -55,7 +55,7 @@ pub struct CreateFlowTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowTemplateResponse {
     /// <p>The summary object that describes the created workflow.</p>
@@ -64,7 +64,7 @@ pub struct CreateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemInstanceRequest {
     #[serde(rename = "definition")]
@@ -93,7 +93,7 @@ pub struct CreateSystemInstanceRequest {
     pub target: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemInstanceResponse {
     /// <p>The summary object that describes the new system instance.</p>
@@ -102,7 +102,7 @@ pub struct CreateSystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemTemplateRequest {
     /// <p>The namespace version in which the system is to be created.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -114,7 +114,7 @@ pub struct CreateSystemTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemTemplateResponse {
     /// <p>The summary object that describes the created system.</p>
@@ -124,7 +124,7 @@ pub struct CreateSystemTemplateResponse {
 }
 
 /// <p>A document that defines an entity. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DefinitionDocument {
     /// <p>The language used to define the entity. <code>GRAPHQL</code> is the only valid value.</p>
     #[serde(rename = "language")]
@@ -134,7 +134,7 @@ pub struct DefinitionDocument {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowTemplateRequest {
     /// <p>The ID of the workflow to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -142,15 +142,15 @@ pub struct DeleteFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamespaceResponse {
     /// <p>The ARN of the namespace to be deleted.</p>
@@ -163,7 +163,7 @@ pub struct DeleteNamespaceResponse {
     pub namespace_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemInstanceRequest {
     /// <p>The ID of the system instance to be deleted.</p>
@@ -172,11 +172,11 @@ pub struct DeleteSystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemInstanceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemTemplateRequest {
     /// <p>The ID of the system to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -184,12 +184,12 @@ pub struct DeleteSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemTemplateResponse {}
 
 /// <p>An object that contains the ID and revision number of a workflow or system that is part of a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DependencyRevision {
     /// <p>The ID of the workflow or system.</p>
@@ -202,7 +202,7 @@ pub struct DependencyRevision {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeploySystemInstanceRequest {
     /// <p>The ID of the system instance. This value is returned by the <code>CreateSystemInstance</code> action.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:deployment:DEPLOYMENTNAME</code> </p>
@@ -211,7 +211,7 @@ pub struct DeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploySystemInstanceResponse {
     /// <p>The ID of the Greengrass deployment used to deploy the system instance.</p>
@@ -223,7 +223,7 @@ pub struct DeploySystemInstanceResponse {
     pub summary: SystemInstanceSummary,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateFlowTemplateRequest {
     /// <p>The ID of the workflow to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -231,11 +231,11 @@ pub struct DeprecateFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateFlowTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateSystemTemplateRequest {
     /// <p>The ID of the system to delete.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -243,11 +243,11 @@ pub struct DeprecateSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateSystemTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNamespaceRequest {
     /// <p>The name of the user's namespace. Set this to <code>aws</code> to get the public namespace.</p>
@@ -256,7 +256,7 @@ pub struct DescribeNamespaceRequest {
     pub namespace_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNamespaceResponse {
     /// <p>The ARN of the namespace.</p>
@@ -281,7 +281,7 @@ pub struct DescribeNamespaceResponse {
     pub tracking_namespace_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DissociateEntityFromThingRequest {
     /// <p>The entity type from which to disassociate the thing.</p>
@@ -292,12 +292,12 @@ pub struct DissociateEntityFromThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DissociateEntityFromThingResponse {}
 
 /// <p>Describes the properties of an entity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityDescription {
     /// <p>The entity ARN.</p>
@@ -323,7 +323,7 @@ pub struct EntityDescription {
 }
 
 /// <p>An object that filters an entity search. Multiple filters function as OR criteria in the search. For example a search that includes a <code>NAMESPACE</code> and a <code>REFERENCED_ENTITY_ID</code> filter searches for entities in the specified namespace that use the entity specified by the value of <code>REFERENCED_ENTITY_ID</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityFilter {
     /// <p>The name of the entity search filter field. <code>REFERENCED_ENTITY_ID</code> filters on entities that are used by the entity in the result set. For example, you can filter on the ID of a property that is used in a state.</p>
@@ -337,7 +337,7 @@ pub struct EntityFilter {
 }
 
 /// <p>An object that contains information about a flow event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowExecutionMessage {
     /// <p>The type of flow event .</p>
@@ -359,7 +359,7 @@ pub struct FlowExecutionMessage {
 }
 
 /// <p>An object that contains summary information about a flow execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowExecutionSummary {
     /// <p>The date and time when the flow execution summary was created.</p>
@@ -389,7 +389,7 @@ pub struct FlowExecutionSummary {
 }
 
 /// <p>An object that contains a workflow's definition and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowTemplateDescription {
     /// <p>A workflow's definition document.</p>
@@ -407,7 +407,7 @@ pub struct FlowTemplateDescription {
 }
 
 /// <p>An object that filters a workflow search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlowTemplateFilter {
     /// <p>The name of the search filter field.</p>
@@ -419,7 +419,7 @@ pub struct FlowTemplateFilter {
 }
 
 /// <p>An object that contains summary information about a workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowTemplateSummary {
     /// <p>The ARN of the workflow.</p>
@@ -440,7 +440,7 @@ pub struct FlowTemplateSummary {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitiesRequest {
     /// <p>An array of entity IDs.</p> <p>The IDs should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -452,7 +452,7 @@ pub struct GetEntitiesRequest {
     pub namespace_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEntitiesResponse {
     /// <p>An array of descriptions for the specified entities.</p>
@@ -461,7 +461,7 @@ pub struct GetEntitiesResponse {
     pub descriptions: Option<Vec<EntityDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRequest {
     /// <p>The ID of the workflow.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -473,7 +473,7 @@ pub struct GetFlowTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateResponse {
     /// <p>The object that describes the specified workflow.</p>
@@ -482,7 +482,7 @@ pub struct GetFlowTemplateResponse {
     pub description: Option<FlowTemplateDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRevisionsRequest {
     /// <p>The ID of the workflow.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -498,7 +498,7 @@ pub struct GetFlowTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateRevisionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -511,11 +511,11 @@ pub struct GetFlowTemplateRevisionsResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamespaceDeletionStatusRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNamespaceDeletionStatusResponse {
     /// <p>An error code returned by the namespace deletion task.</p>
@@ -540,7 +540,7 @@ pub struct GetNamespaceDeletionStatusResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemInstanceRequest {
     /// <p>The ID of the system deployment instance. This value is returned by <code>CreateSystemInstance</code>.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:deployment:DEPLOYMENTNAME</code> </p>
@@ -548,7 +548,7 @@ pub struct GetSystemInstanceRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemInstanceResponse {
     /// <p>An object that describes the system instance.</p>
@@ -557,7 +557,7 @@ pub struct GetSystemInstanceResponse {
     pub description: Option<SystemInstanceDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRequest {
     /// <p>The ID of the system to get. This ID must be in the user's namespace.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -569,7 +569,7 @@ pub struct GetSystemTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateResponse {
     /// <p>An object that contains summary data about the system.</p>
@@ -578,7 +578,7 @@ pub struct GetSystemTemplateResponse {
     pub description: Option<SystemTemplateDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRevisionsRequest {
     /// <p>The ID of the system template.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -594,7 +594,7 @@ pub struct GetSystemTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateRevisionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results. </p>
@@ -607,7 +607,7 @@ pub struct GetSystemTemplateRevisionsResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadStatusRequest {
     /// <p>The ID of the upload. This value is returned by the <code>UploadEntityDefinitions</code> action.</p>
@@ -615,7 +615,7 @@ pub struct GetUploadStatusRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadStatusResponse {
     /// <p>The date at which the upload was created.</p>
@@ -645,7 +645,7 @@ pub struct GetUploadStatusResponse {
     pub upload_status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowExecutionMessagesRequest {
     /// <p>The ID of the flow execution.</p>
@@ -661,7 +661,7 @@ pub struct ListFlowExecutionMessagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowExecutionMessagesResponse {
     /// <p>A list of objects that contain information about events in the specified flow execution.</p>
@@ -674,7 +674,7 @@ pub struct ListFlowExecutionMessagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of tags to return.</p>
@@ -690,7 +690,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token that specifies the next page of results to return.</p>
@@ -704,7 +704,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>An object that specifies whether cloud metrics are collected in a deployment and, if so, what role is used to collect metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricsConfiguration {
     /// <p>A Boolean that specifies whether cloud metrics are collected.</p>
     #[serde(rename = "cloudMetricEnabled")]
@@ -716,7 +716,7 @@ pub struct MetricsConfiguration {
     pub metric_rule_role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchEntitiesRequest {
     /// <p>The entity types for which to search.</p>
@@ -740,7 +740,7 @@ pub struct SearchEntitiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchEntitiesResponse {
     /// <p>An array of descriptions for each entity returned in the search result.</p>
@@ -753,7 +753,7 @@ pub struct SearchEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowExecutionsRequest {
     /// <p>The date and time of the latest flow execution to return.</p>
@@ -781,7 +781,7 @@ pub struct SearchFlowExecutionsRequest {
     pub system_instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowExecutionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -794,7 +794,7 @@ pub struct SearchFlowExecutionsResponse {
     pub summaries: Option<Vec<FlowExecutionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowTemplatesRequest {
     /// <p>An array of objects that limit the result set. The only valid filter is <code>DEVICE_MODEL_ID</code>.</p>
@@ -811,7 +811,7 @@ pub struct SearchFlowTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowTemplatesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -824,7 +824,7 @@ pub struct SearchFlowTemplatesResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemInstancesRequest {
     /// <p>Optional filter to apply to the search. Valid filters are <code>SYSTEM_TEMPLATE_ID</code>, <code>STATUS</code>, and <code>GREENGRASS_GROUP_NAME</code>.</p> <p>Multiple filters function as OR criteria in the query. Multiple values passed inside the filter function as AND criteria.</p>
@@ -841,7 +841,7 @@ pub struct SearchSystemInstancesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemInstancesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results. </p>
@@ -854,7 +854,7 @@ pub struct SearchSystemInstancesResponse {
     pub summaries: Option<Vec<SystemInstanceSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemTemplatesRequest {
     /// <p>An array of filters that limit the result set. The only valid filter is <code>FLOW_TEMPLATE_ID</code>.</p>
@@ -871,7 +871,7 @@ pub struct SearchSystemTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemTemplatesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -884,7 +884,7 @@ pub struct SearchSystemTemplatesResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchThingsRequest {
     /// <p>The ID of the entity to which the things are associated.</p> <p>The IDs should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -904,7 +904,7 @@ pub struct SearchThingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchThingsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -918,7 +918,7 @@ pub struct SearchThingsResponse {
 }
 
 /// <p>An object that contains a system instance definition and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemInstanceDescription {
     #[serde(rename = "definition")]
@@ -950,7 +950,7 @@ pub struct SystemInstanceDescription {
 }
 
 /// <p>An object that filters a system instance search. Multiple filters function as OR criteria in the search. For example a search that includes a GREENGRASS_GROUP_NAME and a STATUS filter searches for system instances in the specified Greengrass group that have the specified status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SystemInstanceFilter {
     /// <p>The name of the search filter field.</p>
@@ -964,7 +964,7 @@ pub struct SystemInstanceFilter {
 }
 
 /// <p>An object that contains summary information about a system instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemInstanceSummary {
     /// <p>The ARN of the system instance.</p>
@@ -1006,7 +1006,7 @@ pub struct SystemInstanceSummary {
 }
 
 /// <p>An object that contains a system's definition document and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemTemplateDescription {
     /// <p>The definition document of a system.</p>
@@ -1024,7 +1024,7 @@ pub struct SystemTemplateDescription {
 }
 
 /// <p>An object that filters a system search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SystemTemplateFilter {
     /// <p>The name of the system search filter field.</p>
@@ -1036,7 +1036,7 @@ pub struct SystemTemplateFilter {
 }
 
 /// <p>An object that contains information about a system.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemTemplateSummary {
     /// <p>The ARN of the system.</p>
@@ -1058,7 +1058,7 @@ pub struct SystemTemplateSummary {
 }
 
 /// <p>Metadata assigned to an AWS IoT Things Graph resource consisting of a key-value pair.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The required name of the tag. The string value can be from 1 to 128 Unicode characters in length.</p>
     #[serde(rename = "key")]
@@ -1068,7 +1068,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags are returned.</p>
@@ -1079,12 +1079,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>An AWS IoT thing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Thing {
     /// <p>The ARN of the thing.</p>
@@ -1097,7 +1097,7 @@ pub struct Thing {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeploySystemInstanceRequest {
     /// <p>The ID of the system instance to remove from its target.</p>
@@ -1106,7 +1106,7 @@ pub struct UndeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UndeploySystemInstanceResponse {
     /// <p>An object that contains summary information about the system instance that was removed from its target.</p>
@@ -1115,7 +1115,7 @@ pub struct UndeploySystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags are to be removed.</p>
@@ -1126,11 +1126,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowTemplateRequest {
     /// <p>The version of the user's namespace.</p> <p>If no value is specified, the latest version is used by default. Use the <code>GetFlowTemplateRevisions</code> if you want to find earlier revisions of the flow to update.</p>
@@ -1145,7 +1145,7 @@ pub struct UpdateFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowTemplateResponse {
     /// <p>An object containing summary information about the updated workflow.</p>
@@ -1154,7 +1154,7 @@ pub struct UpdateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSystemTemplateRequest {
     /// <p>The version of the user's namespace. Defaults to the latest version of the user's namespace.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -1169,7 +1169,7 @@ pub struct UpdateSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSystemTemplateResponse {
     /// <p>An object containing summary information about the updated system.</p>
@@ -1178,7 +1178,7 @@ pub struct UpdateSystemTemplateResponse {
     pub summary: Option<SystemTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadEntityDefinitionsRequest {
     /// <p>A Boolean that specifies whether to deprecate all entities in the latest version before uploading the new <code>DefinitionDocument</code>. If set to <code>true</code>, the upload will create a new namespace version.</p>
@@ -1195,7 +1195,7 @@ pub struct UploadEntityDefinitionsRequest {
     pub sync_with_public_namespace: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadEntityDefinitionsResponse {
     /// <p>The ID that specifies the upload action. You can use this to track the status of the upload.</p>

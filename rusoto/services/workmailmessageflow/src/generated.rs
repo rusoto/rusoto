@@ -23,7 +23,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRawMessageContentRequest {
     /// <p>The identifier of the email message to retrieve.</p>
@@ -31,7 +31,7 @@ pub struct GetRawMessageContentRequest {
     pub message_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetRawMessageContentResponse {
     /// <p>The raw content of the email message, in MIME format.</p>
     pub message_content: bytes::Bytes,

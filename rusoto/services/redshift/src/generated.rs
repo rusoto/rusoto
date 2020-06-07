@@ -36,7 +36,7 @@ use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptReservedNodeExchangeInputMessage {
     /// <p>A string representing the node identifier of the DC1 Reserved Node to be exchanged.</p>
@@ -65,7 +65,7 @@ impl AcceptReservedNodeExchangeInputMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AcceptReservedNodeExchangeOutputMessage {
     /// <p><p/></p>
@@ -99,7 +99,7 @@ impl AcceptReservedNodeExchangeOutputMessageDeserializer {
     }
 }
 /// <p>A name value pair that describes an aspect of an account. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttribute {
     /// <p>The name of the attribute.</p>
@@ -133,7 +133,7 @@ impl AccountAttributeDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountAttributeList {
     /// <p>A list of attributes assigned to an account.</p>
@@ -162,7 +162,7 @@ impl AccountAttributeListDeserializer {
     }
 }
 /// <p>Describes an AWS customer account authorized to restore a snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AccountWithRestoreAccess {
     /// <p>The identifier of an AWS support account authorized to restore a snapshot. For AWS support, the identifier is <code>amazon-redshift-support</code>. </p>
@@ -295,7 +295,7 @@ impl AttributeValueListDeserializer {
     }
 }
 /// <p>Describes an attribute value.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AttributeValueTarget {
     /// <p>The value of the attribute.</p>
@@ -323,7 +323,7 @@ impl AttributeValueTargetDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeClusterSecurityGroupIngressMessage {
     /// <p>The IP range to be added the Amazon Redshift security group.</p>
@@ -371,7 +371,7 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeClusterSecurityGroupIngressResult {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
@@ -405,7 +405,7 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeSnapshotAccessMessage {
     /// <p>The identifier of the AWS customer account authorized to restore the specified snapshot.</p> <p>To share a snapshot with AWS support, specify amazon-redshift-support.</p>
@@ -442,7 +442,7 @@ impl AuthorizeSnapshotAccessMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AuthorizeSnapshotAccessResult {
     pub snapshot: Option<Snapshot>,
@@ -472,7 +472,7 @@ impl AuthorizeSnapshotAccessResultDeserializer {
     }
 }
 /// <p>Describes an availability zone.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
@@ -529,7 +529,7 @@ impl AvailabilityZoneListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteClusterSnapshotsRequest {
     /// <p>A list of identifiers for the snapshots that you want to delete.</p>
@@ -553,7 +553,7 @@ impl BatchDeleteClusterSnapshotsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchDeleteClusterSnapshotsResult {
     /// <p>A list of any errors returned.</p>
@@ -594,7 +594,7 @@ impl BatchDeleteClusterSnapshotsResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchModifyClusterSnapshotsMessage {
     /// <p>A boolean value indicating whether to override an exception if the retention period has passed. </p>
@@ -631,7 +631,7 @@ impl BatchModifyClusterSnapshotsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct BatchModifyClusterSnapshotsOutputMessage {
     /// <p>A list of any errors returned.</p>
@@ -736,7 +736,7 @@ impl BooleanOptionalDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelResizeMessage {
     /// <p>The unique identifier for the cluster that you want to cancel a resize operation for.</p>
@@ -760,7 +760,7 @@ impl CancelResizeMessageSerializer {
 }
 
 /// <p>Describes a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Cluster {
     /// <p>A boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>
@@ -1116,7 +1116,7 @@ impl ClusterDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterAssociatedToSchedule {
     /// <p><p/></p>
@@ -1157,7 +1157,7 @@ impl ClusterAssociatedToScheduleDeserializer {
     }
 }
 /// <p>Temporary credentials with authorization to log on to an Amazon Redshift database. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterCredentials {
     /// <p>A temporary password that authorizes the user name returned by <code>DbUser</code> to log on to the database <code>DbName</code>. </p>
@@ -1197,7 +1197,7 @@ impl ClusterCredentialsDeserializer {
     }
 }
 /// <p>Describes a <code>ClusterDbRevision</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterDbRevision {
     /// <p>The unique identifier of the cluster.</p>
@@ -1268,7 +1268,7 @@ impl ClusterDbRevisionsListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterDbRevisionsMessage {
     /// <p>A list of revisions.</p>
@@ -1309,7 +1309,7 @@ impl ClusterDbRevisionsMessageDeserializer {
     }
 }
 /// <p>An AWS Identity and Access Management (IAM) role that can be used by the associated Amazon Redshift cluster to access other AWS services.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterIamRole {
     /// <p><p>A value that describes the status of the IAM role&#39;s association with an Amazon Redshift cluster.</p> <p>The following are possible statuses and descriptions.</p> <ul> <li> <p> <code>in-sync</code>: The role is available for use by the cluster.</p> </li> <li> <p> <code>adding</code>: The role is in the process of being associated with the cluster.</p> </li> <li> <p> <code>removing</code>: The role is in the process of being disassociated with the cluster.</p> </li> </ul></p>
@@ -1380,7 +1380,7 @@ impl ClusterListDeserializer {
     }
 }
 /// <p>The identifier of a node in a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterNode {
     /// <p>Whether the node is a leader node or a compute node.</p>
@@ -1437,7 +1437,7 @@ impl ClusterNodesListDeserializer {
     }
 }
 /// <p>Describes a parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroup {
     /// <p>The description of the parameter group.</p>
@@ -1487,7 +1487,7 @@ impl ClusterParameterGroupDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterParameters</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupDetails {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -1525,7 +1525,7 @@ impl ClusterParameterGroupDetailsDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupNameMessage {
     /// <p>The name of the cluster parameter group.</p>
@@ -1567,7 +1567,7 @@ impl ClusterParameterGroupNameMessageDeserializer {
     }
 }
 /// <p>Describes the status of a parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupStatus {
     /// <p>The list of parameter statuses.</p> <p> For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
@@ -1640,7 +1640,7 @@ impl ClusterParameterGroupStatusListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterParameterGroups</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterGroupsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -1678,7 +1678,7 @@ impl ClusterParameterGroupsMessageDeserializer {
     }
 }
 /// <p>Describes the status of a parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterParameterStatus {
     /// <p>The error that prevented the parameter from being applied to the database.</p>
@@ -1742,7 +1742,7 @@ impl ClusterParameterStatusListDeserializer {
     }
 }
 /// <p>Describes a security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSecurityGroup {
     /// <p>The name of the cluster security group to which the operation was applied.</p>
@@ -1798,7 +1798,7 @@ impl ClusterSecurityGroupDeserializer {
     }
 }
 /// <p>Describes a cluster security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSecurityGroupMembership {
     /// <p>The name of the cluster security group.</p>
@@ -1858,7 +1858,7 @@ impl ClusterSecurityGroupMembershipListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSecurityGroupMessage {
     /// <p>A list of <a>ClusterSecurityGroup</a> instances. </p>
@@ -1932,7 +1932,7 @@ impl ClusterSecurityGroupsDeserializer {
     }
 }
 /// <p>Returns the destination region and retention period that are configured for cross-region snapshot copy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSnapshotCopyStatus {
     /// <p>The destination region that snapshots are automatically copied to when cross-region snapshot copy is enabled.</p>
@@ -1987,7 +1987,7 @@ impl ClusterSnapshotCopyStatusDeserializer {
     }
 }
 /// <p>Describes a subnet group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSubnetGroup {
     /// <p>The name of the cluster subnet group.</p>
@@ -2047,7 +2047,7 @@ impl ClusterSubnetGroupDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterSubnetGroups</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterSubnetGroupMessage {
     /// <p>A list of <a>ClusterSubnetGroup</a> instances. </p>
@@ -2109,7 +2109,7 @@ impl ClusterSubnetGroupsDeserializer {
     }
 }
 /// <p>Describes a cluster version, including the parameter group family and description of the version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterVersion {
     /// <p>The name of the cluster parameter group family for the cluster.</p>
@@ -2171,7 +2171,7 @@ impl ClusterVersionListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterVersions</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClusterVersionsMessage {
     /// <p>A list of <code>Version</code> elements. </p>
@@ -2205,7 +2205,7 @@ impl ClusterVersionsMessageDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusters</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ClustersMessage {
     /// <p>A list of <code>Cluster</code> objects, where each object describes one cluster. </p>
@@ -2239,7 +2239,7 @@ impl ClustersMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyClusterSnapshotMessage {
     /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
@@ -2284,7 +2284,7 @@ impl CopyClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyClusterSnapshotResult {
     pub snapshot: Option<Snapshot>,
@@ -2314,7 +2314,7 @@ impl CopyClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterMessage {
     /// <p>Reserved.</p>
@@ -2525,7 +2525,7 @@ impl CreateClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterParameterGroupMessage {
     /// <p>A description of the parameter group.</p>
@@ -2562,7 +2562,7 @@ impl CreateClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterParameterGroupResult {
     pub cluster_parameter_group: Option<ClusterParameterGroup>,
@@ -2595,7 +2595,7 @@ impl CreateClusterParameterGroupResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterResult {
     pub cluster: Option<Cluster>,
@@ -2621,7 +2621,7 @@ impl CreateClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSecurityGroupMessage {
     /// <p>The name for the security group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all security groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesecuritygroup</code> </p>
@@ -2652,7 +2652,7 @@ impl CreateClusterSecurityGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSecurityGroupResult {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
@@ -2686,7 +2686,7 @@ impl CreateClusterSecurityGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSnapshotMessage {
     /// <p>The cluster identifier for which you want a snapshot.</p>
@@ -2728,7 +2728,7 @@ impl CreateClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSnapshotResult {
     pub snapshot: Option<Snapshot>,
@@ -2758,7 +2758,7 @@ impl CreateClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterSubnetGroupMessage {
     /// <p>The name for the subnet group. Amazon Redshift stores the value as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain no more than 255 alphanumeric characters or hyphens.</p> </li> <li> <p>Must not be "Default".</p> </li> <li> <p>Must be unique for all subnet groups that are created by your AWS account.</p> </li> </ul> <p>Example: <code>examplesubnetgroup</code> </p>
@@ -2796,7 +2796,7 @@ impl CreateClusterSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateClusterSubnetGroupResult {
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
@@ -2830,7 +2830,7 @@ impl CreateClusterSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
     /// <p>A boolean value; set to <code>true</code> to activate the subscription, and set to <code>false</code> to create the subscription but not activate it. </p>
@@ -2894,7 +2894,7 @@ impl CreateEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
@@ -2927,7 +2927,7 @@ impl CreateEventSubscriptionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmClientCertificateMessage {
     /// <p>The identifier to be assigned to the new HSM client certificate that the cluster will use to connect to the HSM to use the database encryption keys.</p>
@@ -2955,7 +2955,7 @@ impl CreateHsmClientCertificateMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHsmClientCertificateResult {
     pub hsm_client_certificate: Option<HsmClientCertificate>,
@@ -2989,7 +2989,7 @@ impl CreateHsmClientCertificateResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHsmConfigurationMessage {
     /// <p>A text description of the HSM configuration to be created.</p>
@@ -3044,7 +3044,7 @@ impl CreateHsmConfigurationMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateHsmConfigurationResult {
     pub hsm_configuration: Option<HsmConfiguration>,
@@ -3076,7 +3076,7 @@ impl CreateHsmConfigurationResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledActionMessage {
     /// <p>If true, the schedule is enabled. If false, the scheduled action does not trigger. For more information about <code>state</code> of the scheduled action, see <a>ScheduledAction</a>. </p>
@@ -3136,7 +3136,7 @@ impl CreateScheduledActionMessageSerializer {
 }
 
 /// <p>The result of the <code>CreateSnapshotCopyGrant</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotCopyGrantMessage {
     /// <p>The unique identifier of the customer master key (CMK) to which to grant Amazon Redshift permission. If no key is specified, the default key is used.</p>
@@ -3169,7 +3169,7 @@ impl CreateSnapshotCopyGrantMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateSnapshotCopyGrantResult {
     pub snapshot_copy_grant: Option<SnapshotCopyGrant>,
@@ -3201,7 +3201,7 @@ impl CreateSnapshotCopyGrantResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSnapshotScheduleMessage {
     /// <p><p/></p>
@@ -3256,7 +3256,7 @@ impl CreateSnapshotScheduleMessageSerializer {
 }
 
 /// <p>Contains the output from the <code>CreateTags</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsMessage {
     /// <p>The Amazon Resource Name (ARN) to which you want to add the tag or tags. For example, <code>arn:aws:redshift:us-east-2:123456789:cluster:t1</code>. </p>
@@ -3279,7 +3279,7 @@ impl CreateTagsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsageLimitMessage {
     /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB). The value must be a positive number. </p>
@@ -3326,7 +3326,7 @@ impl CreateUsageLimitMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomerStorageMessage {
     /// <p>The total amount of storage currently used for snapshots.</p>
@@ -3365,7 +3365,7 @@ impl CustomerStorageMessageDeserializer {
     }
 }
 /// <p>Describes the status of a cluster while it is in the process of resizing with an incremental resize.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DataTransferProgress {
     /// <p>Describes the data transfer rate in MB's per second.</p>
@@ -3446,7 +3446,7 @@ impl DbGroupListSerializer {
 }
 
 /// <p>Describes the default cluster parameters for a parameter group family.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DefaultClusterParameters {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -3492,7 +3492,7 @@ impl DefaultClusterParametersDeserializer {
     }
 }
 /// <p>Describes a deferred maintenance window</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeferredMaintenanceWindow {
     /// <p> A timestamp for the end of the time period when we defer maintenance.</p>
@@ -3563,7 +3563,7 @@ impl DeferredMaintenanceWindowsListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterMessage {
     /// <p><p>The identifier of the cluster to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must contain lowercase characters.</p> </li> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
@@ -3611,7 +3611,7 @@ impl DeleteClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterParameterGroupMessage {
     /// <p><p>The name of the parameter group to be deleted.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing cluster parameter group.</p> </li> <li> <p>Cannot delete a default cluster parameter group.</p> </li> </ul></p>
@@ -3634,7 +3634,7 @@ impl DeleteClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClusterResult {
     pub cluster: Option<Cluster>,
@@ -3660,7 +3660,7 @@ impl DeleteClusterResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSecurityGroupMessage {
     /// <p>The name of the cluster security group to be deleted.</p>
@@ -3684,7 +3684,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSnapshotMessage {
     /// <p>The unique identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints: Must be the name of valid cluster.</p>
@@ -3726,7 +3726,7 @@ impl DeleteClusterSnapshotMessageListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteClusterSnapshotResult {
     pub snapshot: Option<Snapshot>,
@@ -3756,7 +3756,7 @@ impl DeleteClusterSnapshotResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterSubnetGroupMessage {
     /// <p>The name of the cluster subnet group name to be deleted.</p>
@@ -3780,7 +3780,7 @@ impl DeleteClusterSubnetGroupMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the Amazon Redshift event notification subscription to be deleted.</p>
@@ -3804,7 +3804,7 @@ impl DeleteEventSubscriptionMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmClientCertificateMessage {
     /// <p>The identifier of the HSM client certificate to be deleted.</p>
@@ -3828,7 +3828,7 @@ impl DeleteHsmClientCertificateMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHsmConfigurationMessage {
     /// <p>The identifier of the Amazon Redshift HSM configuration to be deleted.</p>
@@ -3851,7 +3851,7 @@ impl DeleteHsmConfigurationMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledActionMessage {
     /// <p>The name of the scheduled action to delete. </p>
@@ -3875,7 +3875,7 @@ impl DeleteScheduledActionMessageSerializer {
 }
 
 /// <p>The result of the <code>DeleteSnapshotCopyGrant</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotCopyGrantMessage {
     /// <p>The name of the snapshot copy grant to delete.</p>
@@ -3898,7 +3898,7 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSnapshotScheduleMessage {
     /// <p>A unique identifier of the snapshot schedule to delete.</p>
@@ -3922,7 +3922,7 @@ impl DeleteSnapshotScheduleMessageSerializer {
 }
 
 /// <p>Contains the output from the <code>DeleteTags</code> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsMessage {
     /// <p>The Amazon Resource Name (ARN) from which you want to remove the tag or tags. For example, <code>arn:aws:redshift:us-east-2:123456789:cluster:t1</code>. </p>
@@ -3945,7 +3945,7 @@ impl DeleteTagsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsageLimitMessage {
     /// <p>The identifier of the usage limit to delete.</p>
@@ -3968,7 +3968,7 @@ impl DeleteUsageLimitMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {
     /// <p>A list of attribute names.</p>
@@ -3994,7 +3994,7 @@ impl DescribeAccountAttributesMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterDbRevisionsMessage {
     /// <p>A unique identifier for a cluster whose <code>ClusterDbRevisions</code> you are requesting. This parameter is case sensitive. All clusters defined for an account are returned by default.</p>
@@ -4027,7 +4027,7 @@ impl DescribeClusterDbRevisionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterParameterGroupsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameterGroups</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4078,7 +4078,7 @@ impl DescribeClusterParameterGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterParametersMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4117,7 +4117,7 @@ impl DescribeClusterParametersMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSecurityGroupsMessage {
     /// <p>The name of a cluster security group for which you are requesting details. You can specify either the <b>Marker</b> parameter or a <b>ClusterSecurityGroupName</b> parameter, but not both. </p> <p> Example: <code>securitygroup1</code> </p>
@@ -4171,7 +4171,7 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSnapshotsMessage {
     /// <p><p>A value that indicates whether to return snapshots only for an existing cluster. You can perform table-level restore only by using a snapshot of an existing cluster, that is, a cluster that has not been deleted. Values for this parameter work as follows: </p> <ul> <li> <p>If <code>ClusterExists</code> is set to <code>true</code>, <code>ClusterIdentifier</code> is required.</p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> isn&#39;t specified, all snapshots associated with deleted clusters (orphaned snapshots) are returned. </p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> is specified for a deleted cluster, snapshots associated with that cluster are returned.</p> </li> <li> <p>If <code>ClusterExists</code> is set to <code>false</code> and <code>ClusterIdentifier</code> is specified for an existing cluster, no snapshots are returned. </p> </li> </ul></p>
@@ -4261,7 +4261,7 @@ impl DescribeClusterSnapshotsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterSubnetGroupsMessage {
     /// <p>The name of the cluster subnet group for which information is requested.</p>
@@ -4314,7 +4314,7 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterTracksMessage {
     /// <p>The name of the maintenance track. </p>
@@ -4350,7 +4350,7 @@ impl DescribeClusterTracksMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterVersionsMessage {
     /// <p><p>The name of a specific cluster parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
@@ -4391,7 +4391,7 @@ impl DescribeClusterVersionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClustersMessage {
     /// <p>The unique identifier of a cluster whose properties you are requesting. This parameter is case sensitive.</p> <p>The default is that all clusters defined for an account are returned.</p>
@@ -4442,7 +4442,7 @@ impl DescribeClustersMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultClusterParametersMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeDefaultClusterParameters</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4475,7 +4475,7 @@ impl DescribeDefaultClusterParametersMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeDefaultClusterParametersResult {
     pub default_cluster_parameters: Option<DefaultClusterParameters>,
@@ -4509,7 +4509,7 @@ impl DescribeDefaultClusterParametersResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
     /// <p>The source type, such as cluster or parameter group, to which the described event categories apply.</p> <p>Valid values: cluster, cluster-snapshot, cluster-parameter-group, cluster-security-group, and scheduled-action.</p>
@@ -4532,7 +4532,7 @@ impl DescribeEventCategoriesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a DescribeEventSubscriptions request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4583,7 +4583,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes prior to the time of the request for which to retrieve events. For example, if the request is sent at 18:00 and you specify a duration of 60, then only events which have occurred after 17:00 will be returned.</p> <p>Default: <code>60</code> </p>
@@ -4636,7 +4636,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHsmClientCertificatesMessage {
     /// <p>The identifier of a specific HSM client certificate for which you want information. If no identifier is specified, information is returned for all HSM client certificates owned by your AWS customer account.</p>
@@ -4690,7 +4690,7 @@ impl DescribeHsmClientCertificatesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHsmConfigurationsMessage {
     /// <p>The identifier of a specific Amazon Redshift HSM configuration to be described. If no identifier is specified, information is returned for all HSM configurations owned by your AWS customer account.</p>
@@ -4744,7 +4744,7 @@ impl DescribeHsmConfigurationsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingStatusMessage {
     /// <p>The identifier of the cluster from which to get the logging status.</p> <p>Example: <code>examplecluster</code> </p>
@@ -4767,7 +4767,7 @@ impl DescribeLoggingStatusMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeConfigurationOptionsMessage {
     /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. Specify "resize-cluster" to get configuration combinations for elastic resize based on an existing cluster. </p>
@@ -4822,7 +4822,7 @@ impl DescribeNodeConfigurationOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableClusterOptionsMessage {
     /// <p>The version filter value. Specify this parameter to show only the available offerings matching the specified version.</p> <p>Default: All versions.</p> <p>Constraints: Must be one of the version returned from <a>DescribeClusterVersions</a>.</p>
@@ -4860,7 +4860,7 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedNodeOfferingsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodeOfferings</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4896,7 +4896,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedNodesMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeReservedNodes</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -4929,7 +4929,7 @@ impl DescribeReservedNodesMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResizeMessage {
     /// <p>The unique identifier of a cluster whose resize progress you are requesting. This parameter is case-sensitive.</p> <p>By default, resize operations for all clusters defined for an AWS account are returned.</p>
@@ -4952,7 +4952,7 @@ impl DescribeResizeMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledActionsMessage {
     /// <p>If true, retrieve only active scheduled actions. If false, retrieve only disabled scheduled actions. </p>
@@ -5017,7 +5017,7 @@ impl DescribeScheduledActionsMessageSerializer {
 }
 
 /// <p>The result of the <code>DescribeSnapshotCopyGrants</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotCopyGrantsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
@@ -5070,7 +5070,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSnapshotSchedulesMessage {
     /// <p>The unique identifier for the cluster whose snapshot schedules you want to view.</p>
@@ -5125,7 +5125,7 @@ impl DescribeSnapshotSchedulesMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeSnapshotSchedulesOutputMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request.</p>
@@ -5166,7 +5166,7 @@ impl DescribeSnapshotSchedulesOutputMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableRestoreStatusMessage {
     /// <p>The Amazon Redshift cluster that the table is being restored to.</p>
@@ -5207,7 +5207,7 @@ impl DescribeTableRestoreStatusMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -5262,7 +5262,7 @@ impl DescribeTagsMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUsageLimitsMessage {
     /// <p>The identifier of the cluster for which you want to describe usage limits.</p>
@@ -5323,7 +5323,7 @@ impl DescribeUsageLimitsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableLoggingMessage {
     /// <p>The identifier of the cluster on which logging is to be stopped.</p> <p>Example: <code>examplecluster</code> </p>
@@ -5347,7 +5347,7 @@ impl DisableLoggingMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSnapshotCopyMessage {
     /// <p>The unique identifier of the source cluster that you want to disable copying of snapshots to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
@@ -5370,7 +5370,7 @@ impl DisableSnapshotCopyMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DisableSnapshotCopyResult {
     pub cluster: Option<Cluster>,
@@ -5424,7 +5424,7 @@ impl DoubleOptionalDeserializer {
     }
 }
 /// <p>Describes an Amazon EC2 security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EC2SecurityGroup {
     /// <p>The name of the EC2 Security Group.</p>
@@ -5495,7 +5495,7 @@ impl EC2SecurityGroupListDeserializer {
     }
 }
 /// <p>Describes the status of the elastic IP (EIP) address.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ElasticIpStatus {
     /// <p>The elastic IP (EIP) address for the cluster.</p>
@@ -5548,7 +5548,7 @@ impl EligibleTracksToUpdateListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableLoggingMessage {
     /// <p><p>The name of an existing S3 bucket where the log files are to be stored.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the same region as the cluster</p> </li> <li> <p>The cluster must have read bucket and put object permissions</p> </li> </ul></p>
@@ -5580,7 +5580,7 @@ impl EnableLoggingMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSnapshotCopyMessage {
     /// <p>The unique identifier of the source cluster to copy snapshots from.</p> <p>Constraints: Must be the valid name of an existing cluster that does not already have cross-region snapshot copy enabled.</p>
@@ -5630,7 +5630,7 @@ impl EnableSnapshotCopyMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnableSnapshotCopyResult {
     pub cluster: Option<Cluster>,
@@ -5660,7 +5660,7 @@ impl EnableSnapshotCopyResultDeserializer {
     }
 }
 /// <p>Describes a connection endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Endpoint {
     /// <p>The DNS address of the Cluster.</p>
@@ -5692,7 +5692,7 @@ impl EndpointDeserializer {
     }
 }
 /// <p>Describes an event.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Event {
     /// <p>The date and time of the event.</p>
@@ -5780,7 +5780,7 @@ impl EventCategoriesListSerializer {
 }
 
 /// <p>Describes event categories.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMap {
     /// <p>The events in the event category.</p>
@@ -5835,7 +5835,7 @@ impl EventCategoriesMapListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventCategoriesMessage {
     /// <p>A list of event categories descriptions.</p>
@@ -5867,7 +5867,7 @@ impl EventCategoriesMessageDeserializer {
     }
 }
 /// <p>Describes event information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventInfoMap {
     /// <p>The category of an Amazon Redshift event.</p>
@@ -5951,7 +5951,7 @@ impl EventListDeserializer {
     }
 }
 /// <p>Describes event subscriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The name of the Amazon Redshift event notification subscription.</p>
@@ -6063,7 +6063,7 @@ impl EventSubscriptionsListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventSubscriptionsMessage {
     /// <p>A list of event subscriptions.</p>
@@ -6104,7 +6104,7 @@ impl EventSubscriptionsMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventsMessage {
     /// <p>A list of <code>Event</code> instances. </p>
@@ -6138,7 +6138,7 @@ impl EventsMessageDeserializer {
     }
 }
 /// <p>The request parameters to get cluster credentials.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClusterCredentialsMessage {
     /// <p>Create a database user with the name specified for the user named in <code>DbUser</code> if one does not exist.</p>
@@ -6189,7 +6189,7 @@ impl GetClusterCredentialsMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReservedNodeExchangeOfferingsInputMessage {
     /// <p>A value that indicates the starting point for the next set of ReservedNodeOfferings.</p>
@@ -6226,7 +6226,7 @@ impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetReservedNodeExchangeOfferingsOutputMessage {
     /// <p>An optional parameter that specifies the starting point for returning a set of response records. When the results of a <code>GetReservedNodeExchangeOfferings</code> request exceed the value specified in MaxRecords, Amazon Redshift returns a value in the marker field of the response. You can retrieve the next set of response records by providing the returned marker value in the marker parameter and retrying the request. </p>
@@ -6267,7 +6267,7 @@ impl GetReservedNodeExchangeOfferingsOutputMessageDeserializer {
     }
 }
 /// <p>Returns information about an HSM client certificate. The certificate is stored in a secure Hardware Storage Module (HSM), and used by the Amazon Redshift cluster to encrypt data files.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmClientCertificate {
     /// <p>The identifier of the HSM client certificate.</p>
@@ -6333,7 +6333,7 @@ impl HsmClientCertificateListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmClientCertificateMessage {
     /// <p>A list of the identifiers for one or more HSM client certificates used by Amazon Redshift clusters to store and retrieve database encryption keys in an HSM.</p>
@@ -6374,7 +6374,7 @@ impl HsmClientCertificateMessageDeserializer {
     }
 }
 /// <p>Returns information about an HSM configuration, which is an object that describes to Amazon Redshift clusters the information they require to connect to an HSM where they can store database encryption keys.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmConfiguration {
     /// <p>A text description of the HSM configuration.</p>
@@ -6449,7 +6449,7 @@ impl HsmConfigurationListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmConfigurationMessage {
     /// <p>A list of <code>HsmConfiguration</code> objects.</p>
@@ -6490,7 +6490,7 @@ impl HsmConfigurationMessageDeserializer {
     }
 }
 /// <p>Describes the status of changes to HSM settings.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HsmStatus {
     /// <p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>
@@ -6533,7 +6533,7 @@ impl HsmStatusDeserializer {
     }
 }
 /// <p>Describes an IP range used in a security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IPRange {
     /// <p>The IP range in Classless Inter-Domain Routing (CIDR) notation.</p>
@@ -6680,7 +6680,7 @@ impl IntegerOptionalDeserializer {
     }
 }
 /// <p>Describes the status of logging for a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoggingStatus {
     /// <p>The name of the S3 bucket where the log files are stored.</p>
@@ -6765,7 +6765,7 @@ impl LongOptionalDeserializer {
     }
 }
 /// <p>Defines a maintenance track that determines which Amazon Redshift version to apply during a maintenance window. If the value for <code>MaintenanceTrack</code> is <code>current</code>, the cluster is updated to the most recently certified maintenance release. If the value is <code>trailing</code>, the cluster is updated to the previously certified maintenance release. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MaintenanceTrack {
     /// <p>The version number for the cluster release.</p>
@@ -6822,7 +6822,7 @@ impl ModeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterDbRevisionMessage {
     /// <p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>
@@ -6851,7 +6851,7 @@ impl ModifyClusterDbRevisionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterDbRevisionResult {
     pub cluster: Option<Cluster>,
@@ -6881,7 +6881,7 @@ impl ModifyClusterDbRevisionResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterIamRolesMessage {
     /// <p>Zero or more IAM roles to associate with the cluster. The roles must be in their Amazon Resource Name (ARN) format. You can associate up to 10 IAM roles with a single cluster in a single request.</p>
@@ -6922,7 +6922,7 @@ impl ModifyClusterIamRolesMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterIamRolesResult {
     pub cluster: Option<Cluster>,
@@ -6951,7 +6951,7 @@ impl ModifyClusterIamRolesResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterMaintenanceMessage {
     /// <p>A unique identifier for the cluster.</p>
@@ -7011,7 +7011,7 @@ impl ModifyClusterMaintenanceMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterMaintenanceResult {
     pub cluster: Option<Cluster>,
@@ -7041,7 +7041,7 @@ impl ModifyClusterMaintenanceResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterMessage {
     /// <p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>
@@ -7205,7 +7205,7 @@ impl ModifyClusterMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterParameterGroupMessage {
     /// <p>The name of the parameter group to be modified.</p>
@@ -7235,7 +7235,7 @@ impl ModifyClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterResult {
     pub cluster: Option<Cluster>,
@@ -7260,7 +7260,7 @@ impl ModifyClusterResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSnapshotMessage {
     /// <p>A Boolean option to override an exception if the retention period has already passed.</p>
@@ -7296,7 +7296,7 @@ impl ModifyClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterSnapshotResult {
     pub snapshot: Option<Snapshot>,
@@ -7325,7 +7325,7 @@ impl ModifyClusterSnapshotResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSnapshotScheduleMessage {
     /// <p>A unique identifier for the cluster whose snapshot schedule you want to modify. </p>
@@ -7362,7 +7362,7 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterSubnetGroupMessage {
     /// <p>The name of the subnet group to be modified.</p>
@@ -7397,7 +7397,7 @@ impl ModifyClusterSubnetGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyClusterSubnetGroupResult {
     pub cluster_subnet_group: Option<ClusterSubnetGroup>,
@@ -7431,7 +7431,7 @@ impl ModifyClusterSubnetGroupResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
     /// <p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>
@@ -7492,7 +7492,7 @@ impl ModifyEventSubscriptionMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifyEventSubscriptionResult {
     pub event_subscription: Option<EventSubscription>,
@@ -7524,7 +7524,7 @@ impl ModifyEventSubscriptionResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyScheduledActionMessage {
     /// <p>A modified enable flag of the scheduled action. If true, the scheduled action is active. If false, the scheduled action is disabled. </p>
@@ -7590,7 +7590,7 @@ impl ModifyScheduledActionMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
     /// <p>The unique identifier of the cluster for which you want to change the retention period for either automated or manual snapshots that are copied to a destination AWS Region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
@@ -7624,7 +7624,7 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ModifySnapshotCopyRetentionPeriodResult {
     pub cluster: Option<Cluster>,
@@ -7653,7 +7653,7 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySnapshotScheduleMessage {
     /// <p>An updated list of schedule definitions. A schedule definition is made up of schedule expressions, for example, "cron(30 12 *)" or "rate(12 hours)".</p>
@@ -7683,7 +7683,7 @@ impl ModifySnapshotScheduleMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyUsageLimitMessage {
     /// <p>The new limit amount. For more information about this parameter, see <a>UsageLimit</a>. </p>
@@ -7717,7 +7717,7 @@ impl ModifyUsageLimitMessageSerializer {
 }
 
 /// <p>A list of node configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NodeConfigurationOption {
     /// <p>The estimated disk utilizaton percentage.</p>
@@ -7789,7 +7789,7 @@ impl NodeConfigurationOptionListDeserializer {
     }
 }
 /// <p>A set of elements to filter the returned node configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeConfigurationOptionsFilter {
     /// <p>The name of the element to filter.</p>
@@ -7836,7 +7836,7 @@ impl NodeConfigurationOptionsFilterListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct NodeConfigurationOptionsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -7877,7 +7877,7 @@ impl NodeConfigurationOptionsMessageDeserializer {
     }
 }
 /// <p>Describes an orderable cluster option.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableClusterOption {
     /// <p>A list of availability zones for the orderable cluster.</p>
@@ -7943,7 +7943,7 @@ impl OrderableClusterOptionsListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeOrderableClusterOptions</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OrderableClusterOptionsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -7984,7 +7984,7 @@ impl OrderableClusterOptionsMessageDeserializer {
     }
 }
 /// <p>Describes a parameter in a cluster parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameter {
@@ -8167,7 +8167,7 @@ impl ParametersListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PauseClusterMessage {
@@ -8212,7 +8212,7 @@ impl PauseClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PauseClusterResult {
     pub cluster: Option<Cluster>,
@@ -8256,7 +8256,7 @@ impl PendingActionsListDeserializer {
     }
 }
 /// <p>Describes cluster attributes that are in a pending state. A change to one or more the attributes was requested and is in progress or will be applied.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PendingModifiedValues {
     /// <p>The pending or in-progress change of the automated snapshot retention period.</p>
@@ -8355,7 +8355,7 @@ impl PendingModifiedValuesDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedNodeOfferingMessage {
     /// <p>The number of reserved nodes that you want to purchase.</p> <p>Default: <code>1</code> </p>
@@ -8383,7 +8383,7 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PurchaseReservedNodeOfferingResult {
     pub reserved_node: Option<ReservedNode>,
@@ -8416,7 +8416,7 @@ impl PurchaseReservedNodeOfferingResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootClusterMessage {
     /// <p>The cluster identifier.</p>
@@ -8439,7 +8439,7 @@ impl RebootClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RebootClusterResult {
     pub cluster: Option<Cluster>,
@@ -8465,7 +8465,7 @@ impl RebootClusterResultDeserializer {
     }
 }
 /// <p>Describes a recurring charge.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The amount charged per the period of time specified by the recurring charge frequency.</p>
@@ -8524,7 +8524,7 @@ impl RecurringChargeListDeserializer {
     }
 }
 /// <p>Describes a reserved node. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNode {
     /// <p>The currency code for the reserved cluster.</p>
@@ -8644,7 +8644,7 @@ impl ReservedNodeListDeserializer {
     }
 }
 /// <p>Describes a reserved node offering.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNodeOffering {
     /// <p>The currency code for the compute nodes offering.</p>
@@ -8755,7 +8755,7 @@ impl ReservedNodeOfferingTypeDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNodeOfferingsMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -8796,7 +8796,7 @@ impl ReservedNodeOfferingsMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReservedNodesMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -8830,7 +8830,7 @@ impl ReservedNodesMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetClusterParameterGroupMessage {
     /// <p>The name of the cluster parameter group to be reset.</p>
@@ -8867,7 +8867,7 @@ impl ResetClusterParameterGroupMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResizeClusterMessage {
@@ -8945,7 +8945,7 @@ impl ResizeClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResizeClusterResult {
     pub cluster: Option<Cluster>,
@@ -8971,7 +8971,7 @@ impl ResizeClusterResultDeserializer {
     }
 }
 /// <p>Describes a resize operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResizeInfo {
     /// <p>A boolean value indicating if the resize operation can be cancelled.</p>
@@ -9006,7 +9006,7 @@ impl ResizeInfoDeserializer {
     }
 }
 /// <p>Describes the result of a cluster resize operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResizeProgressMessage {
     /// <p>The average rate of the resize operation over the last few minutes, measured in megabytes per second. After the resize operation completes, this value shows the average rate of the entire resize operation.</p>
@@ -9169,7 +9169,7 @@ impl RestorableNodeTypeListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreFromClusterSnapshotMessage {
     /// <p>Reserved.</p>
@@ -9363,7 +9363,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreFromClusterSnapshotResult {
     pub cluster: Option<Cluster>,
@@ -9393,7 +9393,7 @@ impl RestoreFromClusterSnapshotResultDeserializer {
     }
 }
 /// <p>Describes the status of a cluster restore action. Returns null if the cluster was not created by restoring a snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreStatus {
     /// <p>The number of megabytes per second being transferred from the backup storage. Returns the average rate for a completed backup. This field is only updated when you restore to DC2 and DS2 node types. </p>
@@ -9458,7 +9458,7 @@ impl RestoreStatusDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreTableFromClusterSnapshotMessage {
     /// <p>The identifier of the Amazon Redshift cluster to restore the table to.</p>
@@ -9520,7 +9520,7 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreTableFromClusterSnapshotResult {
     pub table_restore_status: Option<TableRestoreStatus>,
@@ -9553,7 +9553,7 @@ impl RestoreTableFromClusterSnapshotResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResumeClusterMessage {
@@ -9598,7 +9598,7 @@ impl ResumeClusterMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResumeClusterResult {
     pub cluster: Option<Cluster>,
@@ -9624,7 +9624,7 @@ impl ResumeClusterResultDeserializer {
     }
 }
 /// <p>Describes a <code>RevisionTarget</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevisionTarget {
     /// <p>A unique string that identifies the version to update the cluster to. You can use this value in <a>ModifyClusterDbRevision</a>.</p>
@@ -9686,7 +9686,7 @@ impl RevisionTargetsListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeClusterSecurityGroupIngressMessage {
     /// <p>The IP range for which to revoke access. This range must be a valid Classless Inter-Domain Routing (CIDR) block of IP addresses. If <code>CIDRIP</code> is specified, <code>EC2SecurityGroupName</code> and <code>EC2SecurityGroupOwnerId</code> cannot be provided. </p>
@@ -9730,7 +9730,7 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeClusterSecurityGroupIngressResult {
     pub cluster_security_group: Option<ClusterSecurityGroup>,
@@ -9764,7 +9764,7 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeSnapshotAccessMessage {
     /// <p>The identifier of the AWS customer account that can no longer restore the specified snapshot.</p>
@@ -9801,7 +9801,7 @@ impl RevokeSnapshotAccessMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RevokeSnapshotAccessResult {
     pub snapshot: Option<Snapshot>,
@@ -9831,7 +9831,7 @@ impl RevokeSnapshotAccessResultDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateEncryptionKeyMessage {
     /// <p>The unique identifier of the cluster that you want to rotate the encryption keys for.</p> <p>Constraints: Must be the name of valid cluster that has encryption enabled.</p>
@@ -9854,7 +9854,7 @@ impl RotateEncryptionKeyMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RotateEncryptionKeyResult {
     pub cluster: Option<Cluster>,
@@ -9929,7 +9929,7 @@ impl ScheduleStateDeserializer {
     }
 }
 /// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledAction {
     /// <p>The end time in UTC when the schedule is no longer active. After this time, the scheduled action does not trigger. </p>
@@ -10009,7 +10009,7 @@ impl ScheduledActionDeserializer {
     }
 }
 /// <p>A set of elements to filter the returned scheduled actions. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledActionFilter {
     /// <p>The type of element to filter. </p>
@@ -10098,7 +10098,7 @@ impl ScheduledActionTimeListDeserializer {
     }
 }
 /// <p>The action type that specifies an Amazon Redshift API operation that is supported by the Amazon Redshift scheduler. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledActionType {
@@ -10178,7 +10178,7 @@ impl ScheduledActionTypeSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ScheduledActionsMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeScheduledActions</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
@@ -10249,7 +10249,7 @@ impl SensitiveStringDeserializer {
     }
 }
 /// <p>Describes a snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Snapshot {
     /// <p>A list of the AWS customer accounts authorized to restore the snapshot. Returns <code>null</code> if no accounts are authorized. Visible only to the snapshot owner. </p>
@@ -10501,7 +10501,7 @@ impl SnapshotDeserializer {
     }
 }
 /// <p>The snapshot copy grant that grants Amazon Redshift permission to encrypt copied snapshots with the specified customer master key (CMK) from AWS KMS in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotCopyGrant {
     /// <p>The unique identifier of the customer master key (CMK) in AWS KMS to which Amazon Redshift is granted permission.</p>
@@ -10564,7 +10564,7 @@ impl SnapshotCopyGrantListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotCopyGrantMessage {
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <code>DescribeSnapshotCopyGrant</code> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p> <p>Constraints: You can specify either the <b>SnapshotCopyGrantName</b> parameter or the <b>Marker</b> parameter, but not both. </p>
@@ -10605,7 +10605,7 @@ impl SnapshotCopyGrantMessageDeserializer {
     }
 }
 /// <p>Describes the errors returned by a snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotErrorMessage {
     /// <p>The failure code for the error.</p>
@@ -10702,7 +10702,7 @@ impl SnapshotListDeserializer {
     }
 }
 /// <p>Contains the output from the <a>DescribeClusterSnapshots</a> action. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -10736,7 +10736,7 @@ impl SnapshotMessageDeserializer {
     }
 }
 /// <p>Describes a snapshot schedule. You can set a regular interval for creating snapshots of a cluster. You can also schedule snapshots for specific dates. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SnapshotSchedule {
     /// <p>The number of clusters associated with the schedule.</p>
@@ -10840,7 +10840,7 @@ impl SnapshotScheduleListDeserializer {
     }
 }
 /// <p>Describes a sorting entity</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SnapshotSortingEntity {
     /// <p>The category for sorting the snapshots.</p>
@@ -10931,7 +10931,7 @@ impl StringDeserializer {
     }
 }
 /// <p>Describes a subnet.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subnet {
     /// <p><p/></p>
@@ -11000,7 +11000,7 @@ impl SubnetListDeserializer {
     }
 }
 /// <p>Describes the operations that are allowed on a maintenance track.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SupportedOperation {
     /// <p>A list of the supported operations.</p>
@@ -11049,7 +11049,7 @@ impl SupportedOperationListDeserializer {
     }
 }
 /// <p>A list of supported platforms for orderable clusters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SupportedPlatform {
     /// <p><p/></p>
@@ -11109,7 +11109,7 @@ impl TStampDeserializer {
     }
 }
 /// <p>Describes the status of a <a>RestoreTableFromClusterSnapshot</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TableRestoreStatus {
     /// <p>The identifier of the Amazon Redshift cluster that the table is being restored to.</p>
@@ -11247,7 +11247,7 @@ impl TableRestoreStatusListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TableRestoreStatusMessage {
     /// <p>A pagination token that can be used in a subsequent <a>DescribeTableRestoreStatus</a> request.</p>
@@ -11300,7 +11300,7 @@ impl TableRestoreStatusTypeDeserializer {
     }
 }
 /// <p>A tag consisting of a name/value pair for a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
@@ -11401,7 +11401,7 @@ impl TagValueListSerializer {
 }
 
 /// <p>A tag and its associated resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TaggedResource {
     /// <p>The Amazon Resource Name (ARN) with which the tag is associated, for example: <code>arn:aws:redshift:us-east-2:123456789:cluster:t1</code>.</p>
@@ -11461,7 +11461,7 @@ impl TaggedResourceListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TaggedResourceListMessage {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -11519,7 +11519,7 @@ impl TrackListDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TrackListMessage {
     /// <p>A list of maintenance tracks output by the <code>DescribeClusterTracks</code> operation. </p>
@@ -11553,7 +11553,7 @@ impl TrackListMessageDeserializer {
     }
 }
 /// <p>A maintenance track that you can switch the current track to.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateTarget {
     /// <p>The cluster version for the new maintenance track.</p>
@@ -11599,7 +11599,7 @@ impl UpdateTargetDeserializer {
     }
 }
 /// <p>Describes a usage limit object for a cluster. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UsageLimit {
     /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB).</p>
@@ -11709,7 +11709,7 @@ impl UsageLimitLimitTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UsageLimitList {
     /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>Marker</code> parameter and retrying the command. If the <code>Marker</code> field is empty, all response records have been retrieved for the request. </p>
@@ -11796,7 +11796,7 @@ impl VpcSecurityGroupIdListSerializer {
 }
 
 /// <p>Describes the members of a VPC security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>

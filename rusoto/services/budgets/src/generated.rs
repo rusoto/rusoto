@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code> object.</p> <p>This is the ARN pattern for a budget: </p> <p> <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Budget {
     /// <p>The total amount of cost, usage, RI utilization, RI coverage, Savings Plans utilization, or Savings Plans coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI or Savings Plans utilization or coverage budgets. RI and Savings Plans utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI or Savings Plans utilization or coverage budgets. You can't use <code>BudgetLimit</code> with <code>PlannedBudgetLimits</code> for <code>CreateBudget</code> and <code>UpdateBudget</code> actions. </p>
     #[serde(rename = "BudgetLimit")]
@@ -67,7 +67,7 @@ pub struct Budget {
 }
 
 /// <p>A history of the state of a budget at the end of the budget's specified time period.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BudgetPerformanceHistory {
     #[serde(rename = "BudgetName")]
@@ -94,7 +94,7 @@ pub struct BudgetPerformanceHistory {
 }
 
 /// <p>The amount of cost or usage that you created the budget for, compared to your actual costs or usage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BudgetedAndActualAmounts {
     /// <p>Your actual costs or usage for a budget period.</p>
@@ -112,7 +112,7 @@ pub struct BudgetedAndActualAmounts {
 }
 
 /// <p>The spend objects that are associated with this budget. The <code>actualSpend</code> tracks how much you've used, cost, usage, or RI units, and the <code>forecastedSpend</code> tracks how much you are predicted to spend if your current usage remains steady.</p> <p>For example, if it is the 20th of the month and you have spent <code>50</code> dollars on Amazon EC2, your <code>actualSpend</code> is <code>50 USD</code>, and your <code>forecastedSpend</code> is <code>75 USD</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CalculatedSpend {
     /// <p>The amount of cost, usage, or RI units that you have used.</p>
     #[serde(rename = "ActualSpend")]
@@ -124,7 +124,7 @@ pub struct CalculatedSpend {
 }
 
 /// <p>The types of cost that are included in a <code>COST</code> budget, such as tax and subscriptions.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, and <code>RI_COVERAGE</code> budgets do not have <code>CostTypes</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CostTypes {
     /// <p>Specifies whether a budget includes credits.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeCredit")]
@@ -173,7 +173,7 @@ pub struct CostTypes {
 }
 
 /// <p> Request of CreateBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget.</p>
@@ -189,12 +189,12 @@ pub struct CreateBudgetRequest {
 }
 
 /// <p> Response of CreateBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
@@ -212,12 +212,12 @@ pub struct CreateNotificationRequest {
 }
 
 /// <p> Response of CreateNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a subscriber for.</p>
@@ -235,12 +235,12 @@ pub struct CreateSubscriberRequest {
 }
 
 /// <p> Response of CreateSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to delete.</p>
@@ -252,12 +252,12 @@ pub struct DeleteBudgetRequest {
 }
 
 /// <p> Response of DeleteBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to delete.</p>
@@ -272,12 +272,12 @@ pub struct DeleteNotificationRequest {
 }
 
 /// <p> Response of DeleteNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to delete.</p>
@@ -295,11 +295,11 @@ pub struct DeleteSubscriberRequest {
 }
 
 /// <p> Response of DeleteSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriberResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetPerformanceHistoryRequest {
     #[serde(rename = "AccountId")]
@@ -318,7 +318,7 @@ pub struct DescribeBudgetPerformanceHistoryRequest {
     pub time_period: Option<TimePeriod>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetPerformanceHistoryResponse {
     /// <p>The history of how often the budget has gone into an <code>ALARM</code> state.</p> <p>For <code>DAILY</code> budgets, the history saves the state of the budget for the last 60 days. For <code>MONTHLY</code> budgets, the history saves the state of the budget for the current month plus the last 12 months. For <code>QUARTERLY</code> budgets, the history saves the state of the budget for the last four quarters.</p>
@@ -331,7 +331,7 @@ pub struct DescribeBudgetPerformanceHistoryResponse {
 }
 
 /// <p> Request of DescribeBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want a description of.</p>
@@ -343,7 +343,7 @@ pub struct DescribeBudgetRequest {
 }
 
 /// <p> Response of DescribeBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetResponse {
     /// <p>The description of the budget.</p>
@@ -353,7 +353,7 @@ pub struct DescribeBudgetResponse {
 }
 
 /// <p> Request of DescribeBudgets </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBudgetsRequest {
     /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
@@ -370,7 +370,7 @@ pub struct DescribeBudgetsRequest {
 }
 
 /// <p> Response of DescribeBudgets </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBudgetsResponse {
     /// <p>A list of budgets.</p>
@@ -384,7 +384,7 @@ pub struct DescribeBudgetsResponse {
 }
 
 /// <p> Request of DescribeNotificationsForBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNotificationsForBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notifications you want descriptions of.</p>
@@ -404,7 +404,7 @@ pub struct DescribeNotificationsForBudgetRequest {
 }
 
 /// <p> Response of GetNotificationsForBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotificationsForBudgetResponse {
     /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
@@ -418,7 +418,7 @@ pub struct DescribeNotificationsForBudgetResponse {
 }
 
 /// <p> Request of DescribeSubscribersForNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscribersForNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscribers you want descriptions of.</p>
@@ -441,7 +441,7 @@ pub struct DescribeSubscribersForNotificationRequest {
 }
 
 /// <p> Response of DescribeSubscribersForNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscribersForNotificationResponse {
     /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
@@ -455,7 +455,7 @@ pub struct DescribeSubscribersForNotificationResponse {
 }
 
 /// <p><p>A notification that is associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A <code>thresholdType</code> of <code>PERCENTAGE</code> </p> </li> <li> <p>A <code>comparisonOperator</code> of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification <code>threshold</code> of <code>80</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Notification {
     /// <p>The comparison that is used for this notification.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -477,7 +477,7 @@ pub struct Notification {
 }
 
 /// <p>A notification with subscribers. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationWithSubscribers {
     /// <p>The notification that is associated with a budget.</p>
@@ -489,7 +489,7 @@ pub struct NotificationWithSubscribers {
 }
 
 /// <p><p>The amount of cost or usage that is measured for a budget.</p> <p>For example, a <code>Spend</code> for <code>3 GB</code> of S3 usage would have the following parameters:</p> <ul> <li> <p>An <code>Amount</code> of <code>3</code> </p> </li> <li> <p>A <code>unit</code> of <code>GB</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Spend {
     /// <p>The cost or usage amount that is associated with a budget forecast, actual spend, or budget threshold.</p>
     #[serde(rename = "Amount")]
@@ -500,7 +500,7 @@ pub struct Spend {
 }
 
 /// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon SNS topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Subscriber {
     /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p> <p>When you create a subscriber, the value of <code>Address</code> can't contain line breaks.</p>
     #[serde(rename = "Address")]
@@ -511,7 +511,7 @@ pub struct Subscriber {
 }
 
 /// <p>The period of time that is covered by a budget. The period has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimePeriod {
     /// <p>The end date for a budget. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers. You can change your end date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "End")]
@@ -524,7 +524,7 @@ pub struct TimePeriod {
 }
 
 /// <p> Request of UpdateBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to update.</p>
@@ -536,12 +536,12 @@ pub struct UpdateBudgetRequest {
 }
 
 /// <p> Response of UpdateBudget </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to update.</p>
@@ -559,12 +559,12 @@ pub struct UpdateNotificationRequest {
 }
 
 /// <p> Response of UpdateNotification </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to update.</p>
@@ -585,7 +585,7 @@ pub struct UpdateSubscriberRequest {
 }
 
 /// <p> Response of UpdateSubscriber </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriberResponse {}
 

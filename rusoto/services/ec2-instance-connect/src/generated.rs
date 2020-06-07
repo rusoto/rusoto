@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendSSHPublicKeyRequest {
     /// <p>The availability zone the EC2 instance was launched in.</p>
@@ -41,7 +41,7 @@ pub struct SendSSHPublicKeyRequest {
     pub ssh_public_key: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendSSHPublicKeyResponse {
     /// <p>The request ID as logged by EC2 Connect. Please provide this when contacting AWS Support.</p>

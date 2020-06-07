@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes an agent version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentVersion {
     /// <p>The configuration manager.</p>
@@ -39,7 +39,7 @@ pub struct AgentVersion {
 }
 
 /// <p>A description of the app.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct App {
     /// <p>The app ID.</p>
@@ -100,7 +100,7 @@ pub struct App {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignInstanceRequest {
     /// <p>The instance ID.</p>
@@ -111,7 +111,7 @@ pub struct AssignInstanceRequest {
     pub layer_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssignVolumeRequest {
     /// <p>The instance ID.</p>
@@ -123,7 +123,7 @@ pub struct AssignVolumeRequest {
     pub volume_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateElasticIpRequest {
     /// <p>The Elastic IP address.</p>
@@ -135,7 +135,7 @@ pub struct AssociateElasticIpRequest {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachElasticLoadBalancerRequest {
     /// <p>The Elastic Load Balancing instance's name.</p>
@@ -147,7 +147,7 @@ pub struct AttachElasticLoadBalancerRequest {
 }
 
 /// <p>Describes a load-based auto scaling upscaling or downscaling threshold configuration, which specifies when AWS OpsWorks Stacks starts or stops load-based instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoScalingThresholds {
     /// <p><p>Custom Cloudwatch auto scaling alarms, to be used as thresholds. This parameter takes a list of up to five alarm names, which are case sensitive and must be in the same region as the stack.</p> <note> <p>To use custom alarms, you must update your service role to allow <code>cloudwatch:DescribeAlarms</code>. You can either have AWS OpsWorks Stacks update the role for you when you first use this feature or you can edit the role manually. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-servicerole.html">Allowing AWS OpsWorks Stacks to Act on Your Behalf</a>.</p> </note></p>
     #[serde(rename = "Alarms")]
@@ -180,7 +180,7 @@ pub struct AutoScalingThresholds {
 }
 
 /// <p>Describes a block device mapping. This data type maps directly to the Amazon EC2 <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_BlockDeviceMapping.html">BlockDeviceMapping</a> data type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlockDeviceMapping {
     /// <p>The device name that is exposed to the instance, such as <code>/dev/sdh</code>. For the root device, you can use the explicit device name or you can set this parameter to <code>ROOT_DEVICE</code> and AWS OpsWorks Stacks will provide the correct device name.</p>
     #[serde(rename = "DeviceName")]
@@ -201,7 +201,7 @@ pub struct BlockDeviceMapping {
 }
 
 /// <p>Describes the Chef configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ChefConfiguration {
     /// <p>The Berkshelf version.</p>
     #[serde(rename = "BerkshelfVersion")]
@@ -213,7 +213,7 @@ pub struct ChefConfiguration {
     pub manage_berkshelf: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloneStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
@@ -305,7 +305,7 @@ pub struct CloneStackRequest {
 }
 
 /// <p>Contains the response to a <code>CloneStack</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloneStackResult {
     /// <p>The cloned stack ID.</p>
@@ -315,7 +315,7 @@ pub struct CloneStackResult {
 }
 
 /// <p>Describes the Amazon CloudWatch logs configuration for a layer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsConfiguration {
     /// <p>Whether CloudWatch Logs is enabled for a layer.</p>
     #[serde(rename = "Enabled")]
@@ -328,7 +328,7 @@ pub struct CloudWatchLogsConfiguration {
 }
 
 /// <p>Describes the Amazon CloudWatch logs configuration for a layer. For detailed information about members of this data type, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html">CloudWatch Logs Agent Reference</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsLogStream {
     /// <p>Specifies the max number of log events in a batch, up to 10000. The default value is 1000.</p>
     #[serde(rename = "BatchCount")]
@@ -377,7 +377,7 @@ pub struct CloudWatchLogsLogStream {
 }
 
 /// <p>Describes a command.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Command {
     /// <p>Date and time when the command was acknowledged.</p>
@@ -422,7 +422,7 @@ pub struct Command {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
     /// <p>A <code>Source</code> object that specifies the app repository.</p>
@@ -473,7 +473,7 @@ pub struct CreateAppRequest {
 }
 
 /// <p>Contains the response to a <code>CreateApp</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResult {
     /// <p>The app ID.</p>
@@ -482,7 +482,7 @@ pub struct CreateAppResult {
     pub app_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>The app ID. This parameter is required for app deployments, but not for other deployment commands.</p>
@@ -514,7 +514,7 @@ pub struct CreateDeploymentRequest {
 }
 
 /// <p>Contains the response to a <code>CreateDeployment</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResult {
     /// <p>The deployment ID, which can be used with other requests to identify the deployment.</p>
@@ -523,7 +523,7 @@ pub struct CreateDeploymentResult {
     pub deployment_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceRequest {
     /// <p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p>
@@ -598,7 +598,7 @@ pub struct CreateInstanceRequest {
 }
 
 /// <p>Contains the response to a <code>CreateInstance</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceResult {
     /// <p>The instance ID.</p>
@@ -607,7 +607,7 @@ pub struct CreateInstanceResult {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLayerRequest {
     /// <p>One or more user-defined key-value pairs to be added to the stack attributes.</p> <p>To create a cluster layer, set the <code>EcsClusterArn</code> attribute to the cluster's ARN.</p>
@@ -681,7 +681,7 @@ pub struct CreateLayerRequest {
 }
 
 /// <p>Contains the response to a <code>CreateLayer</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLayerResult {
     /// <p>The layer ID.</p>
@@ -690,7 +690,7 @@ pub struct CreateLayerResult {
     pub layer_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is the most recent release of the agent. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
@@ -768,7 +768,7 @@ pub struct CreateStackRequest {
 }
 
 /// <p>Contains the response to a <code>CreateStack</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStackResult {
     /// <p>The stack ID, which is an opaque string that you use to identify the stack when performing actions such as <code>DescribeStacks</code>.</p>
@@ -777,7 +777,7 @@ pub struct CreateStackResult {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserProfileRequest {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Setting an IAM User's Public SSH Key</a>.</p>
@@ -798,7 +798,7 @@ pub struct CreateUserProfileRequest {
 }
 
 /// <p>Contains the response to a <code>CreateUserProfile</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserProfileResult {
     /// <p>The user's IAM ARN.</p>
@@ -808,7 +808,7 @@ pub struct CreateUserProfileResult {
 }
 
 /// <p>Describes an app's data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSource {
     /// <p>The data source's ARN.</p>
     #[serde(rename = "Arn")]
@@ -824,7 +824,7 @@ pub struct DataSource {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
     /// <p>The app ID.</p>
@@ -832,7 +832,7 @@ pub struct DeleteAppRequest {
     pub app_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
     /// <p>Whether to delete the instance Elastic IP address.</p>
@@ -848,7 +848,7 @@ pub struct DeleteInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLayerRequest {
     /// <p>The layer ID.</p>
@@ -856,7 +856,7 @@ pub struct DeleteLayerRequest {
     pub layer_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStackRequest {
     /// <p>The stack ID.</p>
@@ -864,7 +864,7 @@ pub struct DeleteStackRequest {
     pub stack_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserProfileRequest {
     /// <p>The user's IAM ARN. This can also be a federated user's ARN.</p>
@@ -873,7 +873,7 @@ pub struct DeleteUserProfileRequest {
 }
 
 /// <p>Describes a deployment of a stack or app.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>The app ID.</p>
@@ -927,7 +927,7 @@ pub struct Deployment {
 }
 
 /// <p>Used to specify a stack or deployment command.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentCommand {
     /// <p>The arguments of those commands that take arguments. It should be set to a JSON object with the following format:</p> <p> <code>{"arg_name1" : ["value1", "value2", ...], "arg_name2" : ["value1", "value2", ...], ...}</code> </p> <p>The <code>update_dependencies</code> command takes two arguments:</p> <ul> <li> <p> <code>upgrade_os_to</code> - Specifies the desired Amazon Linux version for instances whose OS you want to upgrade, such as <code>Amazon Linux 2016.09</code>. You must also set the <code>allow_reboot</code> argument to true.</p> </li> <li> <p> <code>allow_reboot</code> - Specifies whether to allow AWS OpsWorks Stacks to reboot the instances if necessary, after installing the updates. This argument can be set to either <code>true</code> or <code>false</code>. The default value is <code>false</code>.</p> </li> </ul> <p>For example, to upgrade an instance to Amazon Linux 2016.09, set <code>Args</code> to the following.</p> <p> <code> { "upgrade_os_to":["Amazon Linux 2016.09"], "allow_reboot":["true"] } </code> </p>
     #[serde(rename = "Args")]
@@ -938,7 +938,7 @@ pub struct DeploymentCommand {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterEcsClusterRequest {
     /// <p>The cluster's Amazon Resource Number (ARN).</p>
@@ -946,7 +946,7 @@ pub struct DeregisterEcsClusterRequest {
     pub ecs_cluster_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterElasticIpRequest {
     /// <p>The Elastic IP address.</p>
@@ -954,7 +954,7 @@ pub struct DeregisterElasticIpRequest {
     pub elastic_ip: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterInstanceRequest {
     /// <p>The instance ID.</p>
@@ -962,7 +962,7 @@ pub struct DeregisterInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterRdsDbInstanceRequest {
     /// <p>The Amazon RDS instance's ARN.</p>
@@ -970,7 +970,7 @@ pub struct DeregisterRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterVolumeRequest {
     /// <p>The AWS OpsWorks Stacks volume ID, which is the GUID that AWS OpsWorks Stacks assigned to the instance when you registered the volume with the stack, not the Amazon EC2 volume ID.</p>
@@ -978,7 +978,7 @@ pub struct DeregisterVolumeRequest {
     pub volume_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentVersionsRequest {
     /// <p>The configuration manager.</p>
@@ -992,7 +992,7 @@ pub struct DescribeAgentVersionsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeAgentVersions</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentVersionsResult {
     /// <p>The agent versions for the specified stack or configuration manager. Note that this value is the complete version number, not the abbreviated number used by the console.</p>
@@ -1001,7 +1001,7 @@ pub struct DescribeAgentVersionsResult {
     pub agent_versions: Option<Vec<AgentVersion>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppsRequest {
     /// <p>An array of app IDs for the apps to be described. If you use this parameter, <code>DescribeApps</code> returns a description of the specified apps. Otherwise, it returns a description of every app.</p>
@@ -1015,7 +1015,7 @@ pub struct DescribeAppsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeApps</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppsResult {
     /// <p>An array of <code>App</code> objects that describe the specified apps. </p>
@@ -1024,7 +1024,7 @@ pub struct DescribeAppsResult {
     pub apps: Option<Vec<App>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCommandsRequest {
     /// <p>An array of command IDs. If you include this parameter, <code>DescribeCommands</code> returns a description of the specified commands. Otherwise, it returns a description of every command.</p>
@@ -1042,7 +1042,7 @@ pub struct DescribeCommandsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeCommands</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCommandsResult {
     /// <p>An array of <code>Command</code> objects that describe each of the specified commands.</p>
@@ -1051,7 +1051,7 @@ pub struct DescribeCommandsResult {
     pub commands: Option<Vec<Command>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeploymentsRequest {
     /// <p>The app ID. If you include this parameter, the command returns a description of the commands associated with the specified app.</p>
@@ -1069,7 +1069,7 @@ pub struct DescribeDeploymentsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeDeployments</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeploymentsResult {
     /// <p>An array of <code>Deployment</code> objects that describe the deployments.</p>
@@ -1078,7 +1078,7 @@ pub struct DescribeDeploymentsResult {
     pub deployments: Option<Vec<Deployment>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEcsClustersRequest {
     /// <p>A list of ARNs, one for each cluster to be described.</p>
@@ -1100,7 +1100,7 @@ pub struct DescribeEcsClustersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeEcsClusters</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEcsClustersResult {
     /// <p>A list of <code>EcsCluster</code> objects containing the cluster descriptions.</p>
@@ -1113,7 +1113,7 @@ pub struct DescribeEcsClustersResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticIpsRequest {
     /// <p>The instance ID. If you include this parameter, <code>DescribeElasticIps</code> returns a description of the Elastic IP addresses associated with the specified instance.</p>
@@ -1131,7 +1131,7 @@ pub struct DescribeElasticIpsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeElasticIps</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticIpsResult {
     /// <p>An <code>ElasticIps</code> object that describes the specified Elastic IP addresses.</p>
@@ -1140,7 +1140,7 @@ pub struct DescribeElasticIpsResult {
     pub elastic_ips: Option<Vec<ElasticIp>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticLoadBalancersRequest {
     /// <p>A list of layer IDs. The action describes the Elastic Load Balancing instances for the specified layers.</p>
@@ -1154,7 +1154,7 @@ pub struct DescribeElasticLoadBalancersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeElasticLoadBalancers</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticLoadBalancersResult {
     /// <p>A list of <code>ElasticLoadBalancer</code> objects that describe the specified Elastic Load Balancing instances.</p>
@@ -1163,7 +1163,7 @@ pub struct DescribeElasticLoadBalancersResult {
     pub elastic_load_balancers: Option<Vec<ElasticLoadBalancer>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesRequest {
     /// <p>An array of instance IDs to be described. If you use this parameter, <code>DescribeInstances</code> returns a description of the specified instances. Otherwise, it returns a description of every instance.</p>
@@ -1181,7 +1181,7 @@ pub struct DescribeInstancesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeInstances</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancesResult {
     /// <p>An array of <code>Instance</code> objects that describe the instances.</p>
@@ -1190,7 +1190,7 @@ pub struct DescribeInstancesResult {
     pub instances: Option<Vec<Instance>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLayersRequest {
     /// <p>An array of layer IDs that specify the layers to be described. If you omit this parameter, <code>DescribeLayers</code> returns a description of every layer in the specified stack.</p>
@@ -1204,7 +1204,7 @@ pub struct DescribeLayersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeLayers</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLayersResult {
     /// <p>An array of <code>Layer</code> objects that describe the layers.</p>
@@ -1213,7 +1213,7 @@ pub struct DescribeLayersResult {
     pub layers: Option<Vec<Layer>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoadBasedAutoScalingRequest {
     /// <p>An array of layer IDs.</p>
@@ -1222,7 +1222,7 @@ pub struct DescribeLoadBasedAutoScalingRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeLoadBasedAutoScaling</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoadBasedAutoScalingResult {
     /// <p>An array of <code>LoadBasedAutoScalingConfiguration</code> objects that describe each layer's configuration.</p>
@@ -1232,7 +1232,7 @@ pub struct DescribeLoadBasedAutoScalingResult {
 }
 
 /// <p>Contains the response to a <code>DescribeMyUserProfile</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMyUserProfileResult {
     /// <p>A <code>UserProfile</code> object that describes the user's SSH information.</p>
@@ -1242,7 +1242,7 @@ pub struct DescribeMyUserProfileResult {
 }
 
 /// <p>The response to a <code>DescribeOperatingSystems</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOperatingSystemsResponse {
     /// <p>Contains information in response to a <code>DescribeOperatingSystems</code> request.</p>
@@ -1251,7 +1251,7 @@ pub struct DescribeOperatingSystemsResponse {
     pub operating_systems: Option<Vec<OperatingSystem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePermissionsRequest {
     /// <p>The user's IAM ARN. This can also be a federated user's ARN. For more information about IAM ARNs, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">Using Identifiers</a>.</p>
@@ -1265,7 +1265,7 @@ pub struct DescribePermissionsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribePermissions</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePermissionsResult {
     /// <p><p>An array of <code>Permission</code> objects that describe the stack permissions.</p> <ul> <li> <p>If the request object contains only a stack ID, the array contains a <code>Permission</code> object with permissions for each of the stack IAM ARNs.</p> </li> <li> <p>If the request object contains only an IAM ARN, the array contains a <code>Permission</code> object with permissions for each of the user&#39;s stack IDs.</p> </li> <li> <p>If the request contains a stack ID and an IAM ARN, the array contains a single <code>Permission</code> object with permissions for the specified stack and IAM ARN.</p> </li> </ul></p>
@@ -1274,7 +1274,7 @@ pub struct DescribePermissionsResult {
     pub permissions: Option<Vec<Permission>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRaidArraysRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeRaidArrays</code> returns descriptions of the RAID arrays associated with the specified instance. </p>
@@ -1292,7 +1292,7 @@ pub struct DescribeRaidArraysRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeRaidArrays</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRaidArraysResult {
     /// <p>A <code>RaidArrays</code> object that describes the specified RAID arrays.</p>
@@ -1301,7 +1301,7 @@ pub struct DescribeRaidArraysResult {
     pub raid_arrays: Option<Vec<RaidArray>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRdsDbInstancesRequest {
     /// <p>An array containing the ARNs of the instances to be described.</p>
@@ -1314,7 +1314,7 @@ pub struct DescribeRdsDbInstancesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeRdsDbInstances</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRdsDbInstancesResult {
     /// <p>An a array of <code>RdsDbInstance</code> objects that describe the instances.</p>
@@ -1323,7 +1323,7 @@ pub struct DescribeRdsDbInstancesResult {
     pub rds_db_instances: Option<Vec<RdsDbInstance>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeServiceErrorsRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeServiceErrors</code> returns descriptions of the errors associated with the specified instance.</p>
@@ -1341,7 +1341,7 @@ pub struct DescribeServiceErrorsRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeServiceErrors</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceErrorsResult {
     /// <p>An array of <code>ServiceError</code> objects that describe the specified service errors.</p>
@@ -1350,7 +1350,7 @@ pub struct DescribeServiceErrorsResult {
     pub service_errors: Option<Vec<ServiceError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackProvisioningParametersRequest {
     /// <p>The stack ID.</p>
@@ -1359,7 +1359,7 @@ pub struct DescribeStackProvisioningParametersRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStackProvisioningParameters</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStackProvisioningParametersResult {
     /// <p>The AWS OpsWorks Stacks agent installer's URL.</p>
@@ -1372,7 +1372,7 @@ pub struct DescribeStackProvisioningParametersResult {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStackSummaryRequest {
     /// <p>The stack ID.</p>
@@ -1381,7 +1381,7 @@ pub struct DescribeStackSummaryRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStackSummary</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStackSummaryResult {
     /// <p>A <code>StackSummary</code> object that contains the results.</p>
@@ -1390,7 +1390,7 @@ pub struct DescribeStackSummaryResult {
     pub stack_summary: Option<StackSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStacksRequest {
     /// <p>An array of stack IDs that specify the stacks to be described. If you omit this parameter, <code>DescribeStacks</code> returns a description of every stack.</p>
@@ -1400,7 +1400,7 @@ pub struct DescribeStacksRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeStacks</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStacksResult {
     /// <p>An array of <code>Stack</code> objects that describe the stacks.</p>
@@ -1409,7 +1409,7 @@ pub struct DescribeStacksResult {
     pub stacks: Option<Vec<Stack>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTimeBasedAutoScalingRequest {
     /// <p>An array of instance IDs.</p>
@@ -1418,7 +1418,7 @@ pub struct DescribeTimeBasedAutoScalingRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeTimeBasedAutoScaling</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTimeBasedAutoScalingResult {
     /// <p>An array of <code>TimeBasedAutoScalingConfiguration</code> objects that describe the configuration for the specified instances.</p>
@@ -1427,7 +1427,7 @@ pub struct DescribeTimeBasedAutoScalingResult {
     pub time_based_auto_scaling_configurations: Option<Vec<TimeBasedAutoScalingConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserProfilesRequest {
     /// <p>An array of IAM or federated user ARNs that identify the users to be described.</p>
@@ -1437,7 +1437,7 @@ pub struct DescribeUserProfilesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeUserProfiles</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserProfilesResult {
     /// <p>A <code>Users</code> object that describes the specified users.</p>
@@ -1446,7 +1446,7 @@ pub struct DescribeUserProfilesResult {
     pub user_profiles: Option<Vec<UserProfile>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVolumesRequest {
     /// <p>The instance ID. If you use this parameter, <code>DescribeVolumes</code> returns descriptions of the volumes associated with the specified instance.</p>
@@ -1468,7 +1468,7 @@ pub struct DescribeVolumesRequest {
 }
 
 /// <p>Contains the response to a <code>DescribeVolumes</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVolumesResult {
     /// <p>An array of volume IDs.</p>
@@ -1477,7 +1477,7 @@ pub struct DescribeVolumesResult {
     pub volumes: Option<Vec<Volume>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachElasticLoadBalancerRequest {
     /// <p>The Elastic Load Balancing instance's name.</p>
@@ -1488,7 +1488,7 @@ pub struct DetachElasticLoadBalancerRequest {
     pub layer_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateElasticIpRequest {
     /// <p>The Elastic IP address.</p>
@@ -1497,7 +1497,7 @@ pub struct DisassociateElasticIpRequest {
 }
 
 /// <p>Describes an Amazon EBS volume. This data type maps directly to the Amazon EC2 <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_EbsBlockDevice.html">EbsBlockDevice</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EbsBlockDevice {
     /// <p>Whether the volume is deleted on instance termination.</p>
     #[serde(rename = "DeleteOnTermination")]
@@ -1522,7 +1522,7 @@ pub struct EbsBlockDevice {
 }
 
 /// <p>Describes a registered Amazon ECS cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EcsCluster {
     /// <p>The cluster's ARN.</p>
@@ -1544,7 +1544,7 @@ pub struct EcsCluster {
 }
 
 /// <p>Describes an Elastic IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticIp {
     /// <p>The domain.</p>
@@ -1570,7 +1570,7 @@ pub struct ElasticIp {
 }
 
 /// <p>Describes an Elastic Load Balancing instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticLoadBalancer {
     /// <p>A list of Availability Zones.</p>
@@ -1612,7 +1612,7 @@ pub struct ElasticLoadBalancer {
 }
 
 /// <p>Represents an app's environment variable.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EnvironmentVariable {
     /// <p>(Required) The environment variable's name, which can consist of up to 64 characters and must be specified. The name can contain upper- and lowercase letters, numbers, and underscores (_), but it must start with a letter or underscore.</p>
     #[serde(rename = "Key")]
@@ -1626,7 +1626,7 @@ pub struct EnvironmentVariable {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHostnameSuggestionRequest {
     /// <p>The layer ID.</p>
@@ -1635,7 +1635,7 @@ pub struct GetHostnameSuggestionRequest {
 }
 
 /// <p>Contains the response to a <code>GetHostnameSuggestion</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHostnameSuggestionResult {
     /// <p>The generated host name.</p>
@@ -1648,7 +1648,7 @@ pub struct GetHostnameSuggestionResult {
     pub layer_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantAccessRequest {
     /// <p>The instance's AWS OpsWorks Stacks ID.</p>
@@ -1661,7 +1661,7 @@ pub struct GrantAccessRequest {
 }
 
 /// <p>Contains the response to a <code>GrantAccess</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantAccessResult {
     /// <p>A <code>TemporaryCredential</code> object that contains the data needed to log in to the instance by RDP clients, such as the Microsoft Remote Desktop Connection.</p>
@@ -1671,7 +1671,7 @@ pub struct GrantAccessResult {
 }
 
 /// <p>Describes an instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Instance {
     /// <p>The agent version. This parameter is set to <code>INHERIT</code> if the instance inherits the default stack setting or to a a version number for a fixed agent version.</p>
@@ -1841,7 +1841,7 @@ pub struct Instance {
 }
 
 /// <p>Contains a description of an Amazon EC2 instance from the Amazon EC2 metadata service. For more information, see <a href="https://docs.aws.amazon.com/sdkfornet/latest/apidocs/Index.html">Instance Metadata and User Data</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceIdentity {
     /// <p>A JSON document that contains the metadata.</p>
@@ -1855,7 +1855,7 @@ pub struct InstanceIdentity {
 }
 
 /// <p>Describes how many instances a stack has for each status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstancesCount {
     /// <p>The number of instances in the Assigning state.</p>
@@ -1941,7 +1941,7 @@ pub struct InstancesCount {
 }
 
 /// <p>Describes a layer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Layer {
     /// <p>The Amazon Resource Number (ARN) of a layer.</p>
@@ -2039,7 +2039,7 @@ pub struct Layer {
 }
 
 /// <p>Specifies the lifecycle event configuration</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LifecycleEventConfiguration {
     /// <p>A <code>ShutdownEventConfiguration</code> object that specifies the Shutdown event configuration.</p>
     #[serde(rename = "Shutdown")]
@@ -2047,7 +2047,7 @@ pub struct LifecycleEventConfiguration {
     pub shutdown: Option<ShutdownEventConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p>Do not use. A validation exception occurs if you add a <code>MaxResults</code> parameter to a <code>ListTagsRequest</code> call. </p>
@@ -2064,7 +2064,7 @@ pub struct ListTagsRequest {
 }
 
 /// <p>Contains the response to a <code>ListTags</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResult {
     /// <p>If a paginated request does not return all of the remaining results, this parameter is set to a token that you can assign to the request object's <code>NextToken</code> parameter to get the next set of results. If the previous paginated request returned all of the remaining results, this parameter is set to <code>null</code>. </p>
@@ -2078,7 +2078,7 @@ pub struct ListTagsResult {
 }
 
 /// <p>Describes a layer's load-based auto scaling configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LoadBasedAutoScalingConfiguration {
     /// <p>An <code>AutoScalingThresholds</code> object that describes the downscaling configuration, which defines how and when AWS OpsWorks Stacks reduces the number of instances.</p>
@@ -2100,7 +2100,7 @@ pub struct LoadBasedAutoScalingConfiguration {
 }
 
 /// <p>Describes supported operating systems in AWS OpsWorks Stacks.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OperatingSystem {
     /// <p>Supported configuration manager name and versions for an AWS OpsWorks Stacks operating system.</p>
@@ -2134,7 +2134,7 @@ pub struct OperatingSystem {
 }
 
 /// <p>A block that contains information about the configuration manager (Chef) and the versions of the configuration manager that are supported for an operating system.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OperatingSystemConfigurationManager {
     /// <p>The name of the configuration manager, which is Chef.</p>
@@ -2148,7 +2148,7 @@ pub struct OperatingSystemConfigurationManager {
 }
 
 /// <p>Describes stack or user permissions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Permission {
     /// <p>Whether the user can use SSH.</p>
@@ -2174,7 +2174,7 @@ pub struct Permission {
 }
 
 /// <p>Describes an instance's RAID array.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RaidArray {
     /// <p>The array's Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
@@ -2232,7 +2232,7 @@ pub struct RaidArray {
 }
 
 /// <p>Describes an Amazon RDS instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RdsDbInstance {
     /// <p>The instance's address.</p>
@@ -2273,7 +2273,7 @@ pub struct RdsDbInstance {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootInstanceRequest {
     /// <p>The instance ID.</p>
@@ -2282,7 +2282,7 @@ pub struct RebootInstanceRequest {
 }
 
 /// <p>AWS OpsWorks Stacks supports five lifecycle events: <b>setup</b>, <b>configuration</b>, <b>deploy</b>, <b>undeploy</b>, and <b>shutdown</b>. For each layer, AWS OpsWorks Stacks runs a set of standard recipes for each event. In addition, you can provide custom recipes for any or all layers and events. AWS OpsWorks Stacks runs custom event recipes after the standard recipes. <code>LayerCustomRecipes</code> specifies the custom recipes for a particular layer to be run in response to each of the five events. </p> <p>To specify a recipe, use the cookbook's directory name in the repository followed by two colons and the recipe name, which is the recipe's file name without the .rb extension. For example: phpapp2::dbsetup specifies the dbsetup.rb recipe in the repository's phpapp2 folder.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Recipes {
     /// <p>An array of custom recipe names to be run following a <code>configure</code> event.</p>
     #[serde(rename = "Configure")]
@@ -2306,7 +2306,7 @@ pub struct Recipes {
     pub undeploy: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterEcsClusterRequest {
     /// <p>The cluster's ARN.</p>
@@ -2318,7 +2318,7 @@ pub struct RegisterEcsClusterRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterEcsCluster</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterEcsClusterResult {
     /// <p>The cluster's ARN.</p>
@@ -2327,7 +2327,7 @@ pub struct RegisterEcsClusterResult {
     pub ecs_cluster_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterElasticIpRequest {
     /// <p>The Elastic IP address.</p>
@@ -2339,7 +2339,7 @@ pub struct RegisterElasticIpRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterElasticIp</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterElasticIpResult {
     /// <p>The Elastic IP address.</p>
@@ -2348,7 +2348,7 @@ pub struct RegisterElasticIpResult {
     pub elastic_ip: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
     /// <p>The instance's hostname.</p>
@@ -2381,7 +2381,7 @@ pub struct RegisterInstanceRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterInstanceResult</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterInstanceResult {
     /// <p>The registered instance's AWS OpsWorks Stacks ID.</p>
@@ -2390,7 +2390,7 @@ pub struct RegisterInstanceResult {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterRdsDbInstanceRequest {
     /// <p>The database password.</p>
@@ -2407,7 +2407,7 @@ pub struct RegisterRdsDbInstanceRequest {
     pub stack_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterVolumeRequest {
     /// <p>The Amazon EBS volume ID.</p>
@@ -2420,7 +2420,7 @@ pub struct RegisterVolumeRequest {
 }
 
 /// <p>Contains the response to a <code>RegisterVolume</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterVolumeResult {
     /// <p>The volume ID.</p>
@@ -2430,7 +2430,7 @@ pub struct RegisterVolumeResult {
 }
 
 /// <p>A registered instance's reported operating system.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReportedOs {
     /// <p>The operating system family.</p>
@@ -2448,7 +2448,7 @@ pub struct ReportedOs {
 }
 
 /// <p>Describes a user's SSH information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelfUserProfile {
     /// <p>The user's IAM ARN.</p>
@@ -2470,7 +2470,7 @@ pub struct SelfUserProfile {
 }
 
 /// <p>Describes an AWS OpsWorks Stacks service error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceError {
     /// <p>When the error occurred.</p>
@@ -2499,7 +2499,7 @@ pub struct ServiceError {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoadBasedAutoScalingRequest {
     /// <p>An <code>AutoScalingThresholds</code> object with the downscaling threshold configuration. If the load falls below these thresholds for a specified amount of time, AWS OpsWorks Stacks stops a specified number of instances.</p>
@@ -2519,7 +2519,7 @@ pub struct SetLoadBasedAutoScalingRequest {
     pub up_scaling: Option<AutoScalingThresholds>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetPermissionRequest {
     /// <p>The user is allowed to use SSH to communicate with the instance.</p>
@@ -2542,7 +2542,7 @@ pub struct SetPermissionRequest {
     pub stack_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTimeBasedAutoScalingRequest {
     /// <p>An <code>AutoScalingSchedule</code> with the instance schedule.</p>
@@ -2555,7 +2555,7 @@ pub struct SetTimeBasedAutoScalingRequest {
 }
 
 /// <p>The Shutdown event configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ShutdownEventConfiguration {
     /// <p>Whether to enable Elastic Load Balancing connection draining. For more information, see <a href="https://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/TerminologyandKeyConcepts.html#conn-drain">Connection Draining</a> </p>
     #[serde(rename = "DelayUntilElbConnectionsDrained")]
@@ -2568,7 +2568,7 @@ pub struct ShutdownEventConfiguration {
 }
 
 /// <p>Contains the information required to retrieve an app or cookbook from a repository. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a> or <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/workingcookbook.html">Custom Recipes and Cookbooks</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Source {
     /// <p>When included in a request, the parameter depends on the repository type.</p> <ul> <li> <p>For Amazon S3 bundles, set <code>Password</code> to the appropriate IAM secret access key.</p> </li> <li> <p>For HTTP bundles and Subversion repositories, set <code>Password</code> to the password.</p> </li> </ul> <p>For more information on how to safely handle IAM credentials, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html">https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html</a>.</p> <p>In responses, AWS OpsWorks Stacks returns <code>*****FILTERED*****</code> instead of the actual value.</p>
     #[serde(rename = "Password")]
@@ -2597,7 +2597,7 @@ pub struct Source {
 }
 
 /// <p>Describes an app's SSL configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SslConfiguration {
     /// <p>The contents of the certificate's domain.crt file.</p>
     #[serde(rename = "Certificate")]
@@ -2612,7 +2612,7 @@ pub struct SslConfiguration {
 }
 
 /// <p>Describes a stack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stack {
     /// <p>The agent version. This parameter is set to <code>LATEST</code> for auto-update. or a version number for a fixed agent version.</p>
@@ -2706,7 +2706,7 @@ pub struct Stack {
 }
 
 /// <p>Describes the configuration manager.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StackConfigurationManager {
     /// <p>The name. This parameter must be set to "Chef".</p>
     #[serde(rename = "Name")]
@@ -2719,7 +2719,7 @@ pub struct StackConfigurationManager {
 }
 
 /// <p>Summarizes the number of layers, instances, and apps in a stack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StackSummary {
     /// <p>The number of apps.</p>
@@ -2748,7 +2748,7 @@ pub struct StackSummary {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartInstanceRequest {
     /// <p>The instance ID.</p>
@@ -2756,7 +2756,7 @@ pub struct StartInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStackRequest {
     /// <p>The stack ID.</p>
@@ -2764,7 +2764,7 @@ pub struct StartStackRequest {
     pub stack_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopInstanceRequest {
     /// <p>Specifies whether to force an instance to stop. If the instance's root device type is <code>ebs</code>, or EBS-backed, adding the <code>Force</code> parameter to the <code>StopInstances</code> API call disassociates the AWS OpsWorks Stacks instance from EC2, and forces deletion of <i>only</i> the OpsWorks Stacks instance. You must also delete the formerly-associated instance in EC2 after troubleshooting and replacing the AWS OpsWorks Stacks instance with a new one.</p>
@@ -2776,7 +2776,7 @@ pub struct StopInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStackRequest {
     /// <p>The stack ID.</p>
@@ -2784,7 +2784,7 @@ pub struct StopStackRequest {
     pub stack_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The stack or layer's Amazon Resource Number (ARN).</p>
@@ -2796,7 +2796,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>Contains the data needed by RDP clients such as the Microsoft Remote Desktop Connection to log in to the instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemporaryCredential {
     /// <p>The instance's AWS OpsWorks Stacks ID.</p>
@@ -2818,7 +2818,7 @@ pub struct TemporaryCredential {
 }
 
 /// <p>Describes an instance's time-based auto scaling configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TimeBasedAutoScalingConfiguration {
     /// <p>A <code>WeeklyAutoScalingSchedule</code> object with the instance schedule.</p>
@@ -2831,7 +2831,7 @@ pub struct TimeBasedAutoScalingConfiguration {
     pub instance_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignInstanceRequest {
     /// <p>The instance ID.</p>
@@ -2839,7 +2839,7 @@ pub struct UnassignInstanceRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnassignVolumeRequest {
     /// <p>The volume ID.</p>
@@ -2847,7 +2847,7 @@ pub struct UnassignVolumeRequest {
     pub volume_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The stack or layer's Amazon Resource Number (ARN).</p>
@@ -2858,7 +2858,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
     /// <p>The app ID.</p>
@@ -2906,7 +2906,7 @@ pub struct UpdateAppRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateElasticIpRequest {
     /// <p>The IP address for which you want to update the name.</p>
@@ -2918,7 +2918,7 @@ pub struct UpdateElasticIpRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceRequest {
     /// <p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p> <code>INHERIT</code> - Use the stack's default agent version setting.</p> </li> <li> <p> <i>version_number</i> - Use the specified agent version. This value overrides the stack's default setting. To update the agent version, you must edit the instance configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the instance.</p> </li> </ul> <p>The default setting is <code>INHERIT</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>.</p> <p>AgentVersion cannot be set to Chef 12.2.</p>
@@ -2970,7 +2970,7 @@ pub struct UpdateInstanceRequest {
     pub ssh_key_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLayerRequest {
     /// <p>One or more user-defined key/value pairs to be added to the stack attributes.</p>
@@ -3042,7 +3042,7 @@ pub struct UpdateLayerRequest {
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMyUserProfileRequest {
     /// <p>The user's SSH public key.</p>
@@ -3051,7 +3051,7 @@ pub struct UpdateMyUserProfileRequest {
     pub ssh_public_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRdsDbInstanceRequest {
     /// <p>The database password.</p>
@@ -3067,7 +3067,7 @@ pub struct UpdateRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStackRequest {
     /// <p><p>The default AWS OpsWorks Stacks agent version. You have the following options:</p> <ul> <li> <p>Auto-update - Set this parameter to <code>LATEST</code>. AWS OpsWorks Stacks automatically installs new agent versions on the stack&#39;s instances as soon as they are available.</p> </li> <li> <p>Fixed version - Set this parameter to your preferred agent version. To update the agent version, you must edit the stack configuration and specify a new version. AWS OpsWorks Stacks then automatically installs that version on the stack&#39;s instances.</p> </li> </ul> <p>The default setting is <code>LATEST</code>. To specify an agent version, you must use the complete version number, not the abbreviated number shown on the console. For a list of available agent version numbers, call <a>DescribeAgentVersions</a>. AgentVersion cannot be set to Chef 12.2.</p> <note> <p>You can also specify an agent version when you create or update an instance, which overrides the stack&#39;s default setting.</p> </note></p>
@@ -3143,7 +3143,7 @@ pub struct UpdateStackRequest {
     pub use_opsworks_security_groups: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserProfileRequest {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Managing User Permissions</a>.</p>
@@ -3163,7 +3163,7 @@ pub struct UpdateUserProfileRequest {
     pub ssh_username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVolumeRequest {
     /// <p>The new mount point.</p>
@@ -3180,7 +3180,7 @@ pub struct UpdateVolumeRequest {
 }
 
 /// <p>Describes a user's SSH information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserProfile {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="https://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Managing User Permissions</a>.</p>
@@ -3206,7 +3206,7 @@ pub struct UserProfile {
 }
 
 /// <p>Describes an instance's Amazon EBS volume.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Volume {
     /// <p>The volume Availability Zone. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
@@ -3268,7 +3268,7 @@ pub struct Volume {
 }
 
 /// <p>Describes an Amazon EBS volume configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VolumeConfiguration {
     /// <p>Specifies whether an Amazon EBS volume is encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a>.</p>
     #[serde(rename = "Encrypted")]
@@ -3298,7 +3298,7 @@ pub struct VolumeConfiguration {
 }
 
 /// <p>Describes a time-based instance's auto scaling schedule. The schedule consists of a set of key-value pairs.</p> <ul> <li> <p>The key is the time period (a UTC hour) and must be an integer from 0 - 23.</p> </li> <li> <p>The value indicates whether the instance should be online or offline for the specified period, and must be set to "on" or "off"</p> </li> </ul> <p>The default setting for all time periods is off, so you use the following parameters primarily to specify the online periods. You don't have to explicitly specify offline periods unless you want to change an online period to an offline period.</p> <p>The following example specifies that the instance should be online for four hours, from UTC 1200 - 1600. It will be off for the remainder of the day.</p> <p> <code> { "12":"on", "13":"on", "14":"on", "15":"on" } </code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WeeklyAutoScalingSchedule {
     /// <p>The schedule for Friday.</p>
     #[serde(rename = "Friday")]

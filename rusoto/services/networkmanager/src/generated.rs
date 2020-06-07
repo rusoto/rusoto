@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCustomerGatewayRequest {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>.</p>
@@ -43,7 +43,7 @@ pub struct AssociateCustomerGatewayRequest {
     pub link_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCustomerGatewayResponse {
     /// <p>The customer gateway association.</p>
@@ -52,7 +52,7 @@ pub struct AssociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLinkRequest {
     /// <p>The ID of the device.</p>
@@ -66,7 +66,7 @@ pub struct AssociateLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateLinkResponse {
     /// <p>The link association.</p>
@@ -76,7 +76,7 @@ pub struct AssociateLinkResponse {
 }
 
 /// <p>Describes bandwidth information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Bandwidth {
     /// <p>Download speed in Mbps.</p>
     #[serde(rename = "DownloadSpeed")]
@@ -88,7 +88,7 @@ pub struct Bandwidth {
     pub upload_speed: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceRequest {
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -128,7 +128,7 @@ pub struct CreateDeviceRequest {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceResponse {
     /// <p>Information about the device.</p>
@@ -137,7 +137,7 @@ pub struct CreateDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalNetworkRequest {
     /// <p>A description of the global network.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -150,7 +150,7 @@ pub struct CreateGlobalNetworkRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGlobalNetworkResponse {
     /// <p>Information about the global network object.</p>
@@ -159,7 +159,7 @@ pub struct CreateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLinkRequest {
     /// <p> The upload speed and download speed in Mbps. </p>
@@ -189,7 +189,7 @@ pub struct CreateLinkRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLinkResponse {
     /// <p>Information about the link.</p>
@@ -198,7 +198,7 @@ pub struct CreateLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSiteRequest {
     /// <p>A description of your site.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -218,7 +218,7 @@ pub struct CreateSiteRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSiteResponse {
     /// <p>Information about the site.</p>
@@ -228,7 +228,7 @@ pub struct CreateSiteResponse {
 }
 
 /// <p>Describes the association between a customer gateway, a device, and a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerGatewayAssociation {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway.</p>
@@ -253,7 +253,7 @@ pub struct CustomerGatewayAssociation {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
     /// <p>The ID of the device.</p>
@@ -264,7 +264,7 @@ pub struct DeleteDeviceRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceResponse {
     /// <p>Information about the device.</p>
@@ -273,7 +273,7 @@ pub struct DeleteDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGlobalNetworkRequest {
     /// <p>The ID of the global network.</p>
@@ -281,7 +281,7 @@ pub struct DeleteGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGlobalNetworkResponse {
     /// <p>Information about the global network.</p>
@@ -290,7 +290,7 @@ pub struct DeleteGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLinkRequest {
     /// <p>The ID of the global network.</p>
@@ -301,7 +301,7 @@ pub struct DeleteLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLinkResponse {
     /// <p>Information about the link.</p>
@@ -310,7 +310,7 @@ pub struct DeleteLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSiteRequest {
     /// <p>The ID of the global network.</p>
@@ -321,7 +321,7 @@ pub struct DeleteSiteRequest {
     pub site_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSiteResponse {
     /// <p>Information about the site.</p>
@@ -330,7 +330,7 @@ pub struct DeleteSiteResponse {
     pub site: Option<Site>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTransitGatewayRequest {
     /// <p>The ID of the global network.</p>
@@ -341,7 +341,7 @@ pub struct DeregisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTransitGatewayResponse {
     /// <p>The transit gateway registration information.</p>
@@ -350,7 +350,7 @@ pub struct DeregisterTransitGatewayResponse {
     pub transit_gateway_registration: Option<TransitGatewayRegistration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalNetworksRequest {
     /// <p>The IDs of one or more global networks. The maximum is 10.</p>
@@ -367,7 +367,7 @@ pub struct DescribeGlobalNetworksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalNetworksResponse {
     /// <p>Information about the global networks.</p>
@@ -381,7 +381,7 @@ pub struct DescribeGlobalNetworksResponse {
 }
 
 /// <p>Describes a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The date and time that the site was created.</p>
@@ -438,7 +438,7 @@ pub struct Device {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCustomerGatewayRequest {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>.</p>
@@ -449,7 +449,7 @@ pub struct DisassociateCustomerGatewayRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCustomerGatewayResponse {
     /// <p>Information about the customer gateway association.</p>
@@ -458,7 +458,7 @@ pub struct DisassociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateLinkRequest {
     /// <p>The ID of the device.</p>
@@ -472,7 +472,7 @@ pub struct DisassociateLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateLinkResponse {
     /// <p>Information about the link association.</p>
@@ -481,7 +481,7 @@ pub struct DisassociateLinkResponse {
     pub link_association: Option<LinkAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCustomerGatewayAssociationsRequest {
     /// <p>One or more customer gateway Amazon Resource Names (ARNs). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>. The maximum is 10.</p>
@@ -501,7 +501,7 @@ pub struct GetCustomerGatewayAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCustomerGatewayAssociationsResponse {
     /// <p>The customer gateway associations.</p>
@@ -514,7 +514,7 @@ pub struct GetCustomerGatewayAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicesRequest {
     /// <p>One or more device IDs. The maximum is 10.</p>
@@ -538,7 +538,7 @@ pub struct GetDevicesRequest {
     pub site_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicesResponse {
     /// <p>The devices.</p>
@@ -551,7 +551,7 @@ pub struct GetDevicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinkAssociationsRequest {
     /// <p>The ID of the device.</p>
@@ -575,7 +575,7 @@ pub struct GetLinkAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAssociationsResponse {
     /// <p>The link associations.</p>
@@ -588,7 +588,7 @@ pub struct GetLinkAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinksRequest {
     /// <p>The ID of the global network.</p>
@@ -620,7 +620,7 @@ pub struct GetLinksRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinksResponse {
     /// <p>The links.</p>
@@ -633,7 +633,7 @@ pub struct GetLinksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSitesRequest {
     /// <p>The ID of the global network.</p>
@@ -653,7 +653,7 @@ pub struct GetSitesRequest {
     pub site_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSitesResponse {
     /// <p>The token for the next page of results.</p>
@@ -666,7 +666,7 @@ pub struct GetSitesResponse {
     pub sites: Option<Vec<Site>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayRegistrationsRequest {
     /// <p>The ID of the global network.</p>
@@ -686,7 +686,7 @@ pub struct GetTransitGatewayRegistrationsRequest {
     pub transit_gateway_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTransitGatewayRegistrationsResponse {
     /// <p>The token for the next page of results.</p>
@@ -700,7 +700,7 @@ pub struct GetTransitGatewayRegistrationsResponse {
 }
 
 /// <p>Describes a global network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlobalNetwork {
     /// <p>The date and time that the global network was created.</p>
@@ -730,7 +730,7 @@ pub struct GlobalNetwork {
 }
 
 /// <p>Describes a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Link {
     /// <p>The bandwidth for the link.</p>
@@ -780,7 +780,7 @@ pub struct Link {
 }
 
 /// <p>Describes the association between a device and a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LinkAssociation {
     /// <p>The device ID for the link association.</p>
@@ -801,7 +801,7 @@ pub struct LinkAssociation {
     pub link_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -809,7 +809,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The list of tags.</p>
@@ -819,7 +819,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Describes a location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Location {
     /// <p>The physical address.</p>
     #[serde(rename = "Address")]
@@ -835,7 +835,7 @@ pub struct Location {
     pub longitude: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTransitGatewayRequest {
     /// <p>The ID of the global network.</p>
@@ -846,7 +846,7 @@ pub struct RegisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTransitGatewayResponse {
     /// <p>Information about the transit gateway registration.</p>
@@ -856,7 +856,7 @@ pub struct RegisterTransitGatewayResponse {
 }
 
 /// <p>Describes a site.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Site {
     /// <p>The date and time that the site was created.</p>
@@ -894,7 +894,7 @@ pub struct Site {
 }
 
 /// <p>Describes a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag key.</p> <p>Length Constraints: Maximum length of 128 characters.</p>
     #[serde(rename = "Key")]
@@ -906,7 +906,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -917,12 +917,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Describes the registration of a transit gateway to a global network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransitGatewayRegistration {
     /// <p>The ID of the global network.</p>
@@ -940,7 +940,7 @@ pub struct TransitGatewayRegistration {
 }
 
 /// <p>Describes the status of a transit gateway registration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransitGatewayRegistrationStateReason {
     /// <p>The code for the state reason.</p>
@@ -953,7 +953,7 @@ pub struct TransitGatewayRegistrationStateReason {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -964,11 +964,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1006,7 +1006,7 @@ pub struct UpdateDeviceRequest {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceResponse {
     /// <p>Information about the device.</p>
@@ -1015,7 +1015,7 @@ pub struct UpdateDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalNetworkRequest {
     /// <p>A description of the global network.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1027,7 +1027,7 @@ pub struct UpdateGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGlobalNetworkResponse {
     /// <p>Information about the global network object.</p>
@@ -1036,7 +1036,7 @@ pub struct UpdateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLinkRequest {
     /// <p>The upload and download speed in Mbps. </p>
@@ -1063,7 +1063,7 @@ pub struct UpdateLinkRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkResponse {
     /// <p>Information about the link.</p>
@@ -1072,7 +1072,7 @@ pub struct UpdateLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSiteRequest {
     /// <p>A description of your site.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1091,7 +1091,7 @@ pub struct UpdateSiteRequest {
     pub site_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSiteResponse {
     /// <p>Information about the site.</p>
@@ -1101,7 +1101,7 @@ pub struct UpdateSiteResponse {
 }
 
 /// <p>Describes a validation exception for a field.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ValidationExceptionField {
     /// <p>The message for the field.</p>
     pub message: String,

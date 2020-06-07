@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An object that represents the access logging information for a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessLog {
     /// <p>The file object to send virtual node access logs to.</p>
     #[serde(rename = "file")]
@@ -36,7 +36,7 @@ pub struct AccessLog {
 
 /// <p>An object that represents the AWS Cloud Map attribute information for your virtual
 /// node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapInstanceAttribute {
     /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service
     /// instance that contains the specified key and value is returned.</p>
@@ -50,7 +50,7 @@ pub struct AwsCloudMapInstanceAttribute {
 
 /// <p>An object that represents the AWS Cloud Map service discovery information for your virtual
 /// node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapServiceDiscovery {
     /// <p>A string map that contains attributes with values that you can use to filter instances
     /// by any custom attribute that you specified when you registered the instance. Only instances
@@ -68,7 +68,7 @@ pub struct AwsCloudMapServiceDiscovery {
 
 /// <p>An object that represents the backends that a virtual node is expected to send outbound
 /// traffic to. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Backend {
     /// <p>Specifies a virtual service to use as a backend for a virtual node. </p>
     #[serde(rename = "virtualService")]
@@ -77,7 +77,7 @@ pub struct Backend {
 }
 
 /// <p>An object that represents the default properties for a backend.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackendDefaults {
     /// <p>A reference to an object that represents a client policy.</p>
     #[serde(rename = "clientPolicy")]
@@ -86,7 +86,7 @@ pub struct BackendDefaults {
 }
 
 /// <p>An object that represents a client policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientPolicy {
     /// <p>A reference to an object that represents a Transport Layer Security (TLS) client policy.</p>
     #[serde(rename = "tls")]
@@ -95,7 +95,7 @@ pub struct ClientPolicy {
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientPolicyTls {
     /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't
     /// specified.</p>
@@ -111,7 +111,7 @@ pub struct ClientPolicyTls {
     pub validation: TlsValidationContext,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -135,7 +135,7 @@ pub struct CreateMeshInput {
     pub tags: Option<Vec<TagRef>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeshOutput {
     /// <p>The full description of your service mesh following the create call.</p>
@@ -143,7 +143,7 @@ pub struct CreateMeshOutput {
     pub mesh: MeshData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -179,7 +179,7 @@ pub struct CreateRouteInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteOutput {
     /// <p>The full description of your mesh following the create call.</p>
@@ -187,7 +187,7 @@ pub struct CreateRouteOutput {
     pub route: RouteData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -219,7 +219,7 @@ pub struct CreateVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualNodeOutput {
     /// <p>The full description of your virtual node following the create call.</p>
@@ -227,7 +227,7 @@ pub struct CreateVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -259,7 +259,7 @@ pub struct CreateVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualRouterOutput {
     /// <p>The full description of your virtual router following the create call.</p>
@@ -267,7 +267,7 @@ pub struct CreateVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -299,7 +299,7 @@ pub struct CreateVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVirtualServiceOutput {
     /// <p>The full description of your virtual service following the create call.</p>
@@ -307,7 +307,7 @@ pub struct CreateVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
     /// <p>The name of the service mesh to delete.</p>
@@ -315,7 +315,7 @@ pub struct DeleteMeshInput {
     pub mesh_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMeshOutput {
     /// <p>The service mesh that was deleted.</p>
@@ -323,7 +323,7 @@ pub struct DeleteMeshOutput {
     pub mesh: MeshData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteInput {
     /// <p>The name of the service mesh to delete the route in.</p>
@@ -342,7 +342,7 @@ pub struct DeleteRouteInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRouteOutput {
     /// <p>The route that was deleted.</p>
@@ -350,7 +350,7 @@ pub struct DeleteRouteOutput {
     pub route: RouteData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
@@ -366,7 +366,7 @@ pub struct DeleteVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualNodeOutput {
     /// <p>The virtual node that was deleted.</p>
@@ -374,7 +374,7 @@ pub struct DeleteVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualRouterInput {
     /// <p>The name of the service mesh to delete the virtual router in.</p>
@@ -390,7 +390,7 @@ pub struct DeleteVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualRouterOutput {
     /// <p>The virtual router that was deleted.</p>
@@ -398,7 +398,7 @@ pub struct DeleteVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualServiceInput {
     /// <p>The name of the service mesh to delete the virtual service in.</p>
@@ -414,7 +414,7 @@ pub struct DeleteVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualServiceOutput {
     /// <p>The virtual service that was deleted.</p>
@@ -422,7 +422,7 @@ pub struct DeleteVirtualServiceOutput {
     pub virtual_service: VirtualServiceData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
@@ -435,7 +435,7 @@ pub struct DescribeMeshInput {
     pub mesh_owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMeshOutput {
     /// <p>The full description of your service mesh.</p>
@@ -443,7 +443,7 @@ pub struct DescribeMeshOutput {
     pub mesh: MeshData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRouteInput {
     /// <p>The name of the service mesh that the route resides in.</p>
@@ -462,7 +462,7 @@ pub struct DescribeRouteInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRouteOutput {
     /// <p>The full description of your route.</p>
@@ -470,7 +470,7 @@ pub struct DescribeRouteOutput {
     pub route: RouteData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
@@ -486,7 +486,7 @@ pub struct DescribeVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualNodeOutput {
     /// <p>The full description of your virtual node.</p>
@@ -494,7 +494,7 @@ pub struct DescribeVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualRouterInput {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
@@ -510,7 +510,7 @@ pub struct DescribeVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualRouterOutput {
     /// <p>The full description of your virtual router.</p>
@@ -518,7 +518,7 @@ pub struct DescribeVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualServiceInput {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
@@ -534,7 +534,7 @@ pub struct DescribeVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVirtualServiceOutput {
     /// <p>The full description of your virtual service.</p>
@@ -544,7 +544,7 @@ pub struct DescribeVirtualServiceOutput {
 
 /// <p>An object that represents the DNS service discovery information for your virtual
 /// node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DnsServiceDiscovery {
     /// <p>Specifies the DNS service discovery hostname for the virtual node. </p>
     #[serde(rename = "hostname")]
@@ -552,7 +552,7 @@ pub struct DnsServiceDiscovery {
 }
 
 /// <p>An object that represents a duration of time.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Duration {
     /// <p>A unit of time.</p>
     #[serde(rename = "unit")]
@@ -565,7 +565,7 @@ pub struct Duration {
 }
 
 /// <p>An object that represents the egress filter rules for a service mesh.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EgressFilter {
     /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows
     /// egress only from virtual nodes to other defined resources in the service mesh (and any
@@ -577,7 +577,7 @@ pub struct EgressFilter {
 }
 
 /// <p>An object that represents an access log file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileAccessLog {
     /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
     /// access logs to standard out and configure your Envoy container to use a log driver, such as
@@ -595,7 +595,7 @@ pub struct FileAccessLog {
 }
 
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRetryPolicy {
     /// <p>Specify at least one of the valid values.</p>
     #[serde(rename = "grpcRetryEvents")]
@@ -641,7 +641,7 @@ pub struct GrpcRetryPolicy {
 }
 
 /// <p>An object that represents a gRPC route type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRoute {
     /// <p>An object that represents the action to take if a match is determined.</p>
     #[serde(rename = "action")]
@@ -656,7 +656,7 @@ pub struct GrpcRoute {
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRouteAction {
     /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
@@ -664,7 +664,7 @@ pub struct GrpcRouteAction {
 }
 
 /// <p>An object that represents the criteria for determining a request match.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRouteMatch {
     /// <p>An object that represents the data to match from the request.</p>
     #[serde(rename = "metadata")]
@@ -682,7 +682,7 @@ pub struct GrpcRouteMatch {
 }
 
 /// <p>An object that represents the match metadata for the route.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRouteMetadata {
     /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
     #[serde(rename = "invert")]
@@ -698,7 +698,7 @@ pub struct GrpcRouteMetadata {
 }
 
 /// <p>An object that represents the match method. Specify one of the match values.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRouteMetadataMatchMethod {
     /// <p>The value sent by the client must match the specified value exactly.</p>
     #[serde(rename = "exact")]
@@ -724,7 +724,7 @@ pub struct GrpcRouteMetadataMatchMethod {
 
 /// <p>An object that represents the method and value to match with the header value sent in a
 /// request. Specify one match method.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HeaderMatchMethod {
     /// <p>The value sent by the client must match the specified value exactly.</p>
     #[serde(rename = "exact")]
@@ -749,7 +749,7 @@ pub struct HeaderMatchMethod {
 }
 
 /// <p>An object that represents the health check policy for a virtual node's listener.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HealthCheckPolicy {
     /// <p>The number of consecutive successful health checks that must occur before declaring
     /// listener healthy.</p>
@@ -784,7 +784,7 @@ pub struct HealthCheckPolicy {
 }
 
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRetryPolicy {
     /// <p>Specify at least one of the following values.</p>
     ///
@@ -826,7 +826,7 @@ pub struct HttpRetryPolicy {
 }
 
 /// <p>An object that represents an HTTP or HTTP/2 route type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRoute {
     /// <p>An object that represents the action to take if a match is determined.</p>
     #[serde(rename = "action")]
@@ -841,7 +841,7 @@ pub struct HttpRoute {
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRouteAction {
     /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
@@ -849,7 +849,7 @@ pub struct HttpRouteAction {
 }
 
 /// <p>An object that represents the HTTP header in the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRouteHeader {
     /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
     #[serde(rename = "invert")]
@@ -866,7 +866,7 @@ pub struct HttpRouteHeader {
 
 /// <p>An object that represents the requirements for a route to match HTTP requests for a
 /// virtual router.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRouteMatch {
     /// <p>An object that represents the client request headers to match on.</p>
     #[serde(rename = "headers")]
@@ -890,7 +890,7 @@ pub struct HttpRouteMatch {
     pub scheme: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeshesInput {
     /// <p>The maximum number of results returned by <code>ListMeshes</code> in paginated output.
@@ -919,7 +919,7 @@ pub struct ListMeshesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeshesOutput {
     /// <p>The list of existing service meshes.</p>
@@ -934,7 +934,7 @@ pub struct ListMeshesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutesInput {
     /// <p>The maximum number of results returned by <code>ListRoutes</code> in paginated output.
@@ -968,7 +968,7 @@ pub struct ListRoutesInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutesOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListRoutes</code> request.
@@ -983,7 +983,7 @@ pub struct ListRoutesOutput {
     pub routes: Vec<RouteRef>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of tag results returned by <code>ListTagsForResource</code> in
@@ -1009,7 +1009,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTagsForResource</code>
@@ -1024,7 +1024,7 @@ pub struct ListTagsForResourceOutput {
     pub tags: Vec<TagRef>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated
@@ -1055,7 +1055,7 @@ pub struct ListVirtualNodesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualNodesOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualNodes</code>
@@ -1070,7 +1070,7 @@ pub struct ListVirtualNodesOutput {
     pub virtual_nodes: Vec<VirtualNodeRef>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualRoutersInput {
     /// <p>The maximum number of results returned by <code>ListVirtualRouters</code> in paginated
@@ -1101,7 +1101,7 @@ pub struct ListVirtualRoutersInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualRoutersOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualRouters</code>
@@ -1116,7 +1116,7 @@ pub struct ListVirtualRoutersOutput {
     pub virtual_routers: Vec<VirtualRouterRef>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualServicesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualServices</code> in paginated
@@ -1147,7 +1147,7 @@ pub struct ListVirtualServicesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVirtualServicesOutput {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualServices</code>
@@ -1163,7 +1163,7 @@ pub struct ListVirtualServicesOutput {
 }
 
 /// <p>An object that represents a listener for a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Listener {
     /// <p>The health check information for the listener.</p>
     #[serde(rename = "healthCheck")]
@@ -1179,7 +1179,7 @@ pub struct Listener {
 }
 
 /// <p>An object that represents the Transport Layer Security (TLS) properties for a listener.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTls {
     /// <p>A reference to an object that represents a listener's TLS certificate.</p>
     #[serde(rename = "certificate")]
@@ -1209,7 +1209,7 @@ pub struct ListenerTls {
 }
 
 /// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTlsAcmCertificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
     #[serde(rename = "certificateArn")]
@@ -1217,7 +1217,7 @@ pub struct ListenerTlsAcmCertificate {
 }
 
 /// <p>An object that represents a listener's Transport Layer Security (TLS) certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTlsCertificate {
     /// <p>A reference to an object that represents an AWS Certicate Manager (ACM) certificate.</p>
     #[serde(rename = "acm")]
@@ -1231,7 +1231,7 @@ pub struct ListenerTlsCertificate {
 
 /// <p>An object that represents a local file certificate.
 /// The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTlsFileCertificate {
     /// <p>The certificate chain for the certificate.</p>
     #[serde(rename = "certificateChain")]
@@ -1243,7 +1243,7 @@ pub struct ListenerTlsFileCertificate {
 }
 
 /// <p>An object that represents the logging information for a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Logging {
     /// <p>The access log configuration for a virtual node.</p>
     #[serde(rename = "accessLog")]
@@ -1252,7 +1252,7 @@ pub struct Logging {
 }
 
 /// <p>An object that represents the range of values to match on. The first character of the range is included in the range, though the last character is not. For example, if the range specified were 1-100, only values 1-99 would be matched.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MatchRange {
     /// <p>The end of the range.</p>
     #[serde(rename = "end")]
@@ -1263,7 +1263,7 @@ pub struct MatchRange {
 }
 
 /// <p>An object that represents a service mesh returned by a describe operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshData {
     /// <p>The name of the service mesh.</p>
@@ -1281,7 +1281,7 @@ pub struct MeshData {
 }
 
 /// <p>An object that represents a service mesh returned by a list operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshRef {
     /// <p>The full Amazon Resource Name (ARN) of the service mesh.</p>
@@ -1307,7 +1307,7 @@ pub struct MeshRef {
 }
 
 /// <p>An object that represents the specification of a service mesh.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MeshSpec {
     /// <p>The egress filter rules for the service mesh.</p>
     #[serde(rename = "egressFilter")]
@@ -1316,7 +1316,7 @@ pub struct MeshSpec {
 }
 
 /// <p>An object that represents the status of a service mesh.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MeshStatus {
     /// <p>The current mesh status.</p>
@@ -1326,7 +1326,7 @@ pub struct MeshStatus {
 }
 
 /// <p>An object that represents a port mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortMapping {
     /// <p>The port used for the port mapping.</p>
     #[serde(rename = "port")]
@@ -1337,7 +1337,7 @@ pub struct PortMapping {
 }
 
 /// <p>An object that represents metadata for a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceMetadata {
     /// <p>The full Amazon Resource Name (ARN) for the resource.</p>
@@ -1367,7 +1367,7 @@ pub struct ResourceMetadata {
 }
 
 /// <p>An object that represents a route returned by a describe operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteData {
     /// <p>The name of the service mesh that the route resides in.</p>
@@ -1391,7 +1391,7 @@ pub struct RouteData {
 }
 
 /// <p>An object that represents a route returned by a list operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteRef {
     /// <p>The full Amazon Resource Name (ARN) for the route.</p>
@@ -1423,7 +1423,7 @@ pub struct RouteRef {
 }
 
 /// <p>An object that represents a route specification. Specify one route type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RouteSpec {
     /// <p>An object that represents the specification of a gRPC route.</p>
     #[serde(rename = "grpcRoute")]
@@ -1449,7 +1449,7 @@ pub struct RouteSpec {
 }
 
 /// <p>An object that represents the current status of a route.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteStatus {
     /// <p>The current status for the route.</p>
@@ -1458,7 +1458,7 @@ pub struct RouteStatus {
 }
 
 /// <p>An object that represents the service discovery information for a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceDiscovery {
     /// <p>Specifies any AWS Cloud Map information for the virtual node.</p>
     #[serde(rename = "awsCloudMap")]
@@ -1474,7 +1474,7 @@ pub struct ServiceDiscovery {
 /// organization. Each tag consists of a key and an optional value, both of which you define.
 /// Tag keys can have a maximum character length of 128 characters, and tag values can have
 /// a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagRef {
     /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label
     /// that acts like a category for more specific tag values.</p>
@@ -1487,7 +1487,7 @@ pub struct TagRef {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to add tags to.</p>
@@ -1500,12 +1500,12 @@ pub struct TagResourceInput {
     pub tags: Vec<TagRef>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>An object that represents a TCP route type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TcpRoute {
     /// <p>The action to take if a match is determined.</p>
     #[serde(rename = "action")]
@@ -1513,7 +1513,7 @@ pub struct TcpRoute {
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TcpRouteAction {
     /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
@@ -1521,7 +1521,7 @@ pub struct TcpRouteAction {
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContext {
     /// <p>A reference to an object that represents a TLS validation context trust.</p>
     #[serde(rename = "trust")]
@@ -1530,7 +1530,7 @@ pub struct TlsValidationContext {
 
 /// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
 /// certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextAcmTrust {
     /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
     #[serde(rename = "certificateAuthorityArns")]
@@ -1538,7 +1538,7 @@ pub struct TlsValidationContextAcmTrust {
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextFileTrust {
     /// <p>The certificate trust chain for a certificate stored on the file system of the virtual
     /// node that the proxy is running on.</p>
@@ -1547,7 +1547,7 @@ pub struct TlsValidationContextFileTrust {
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextTrust {
     /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
     /// certificate.</p>
@@ -1560,7 +1560,7 @@ pub struct TlsValidationContextTrust {
     pub file: Option<TlsValidationContextFileTrust>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to delete tags from.</p>
@@ -1571,11 +1571,11 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -1592,14 +1592,14 @@ pub struct UpdateMeshInput {
     pub spec: Option<MeshSpec>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMeshOutput {
     #[serde(rename = "mesh")]
     pub mesh: MeshData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -1626,7 +1626,7 @@ pub struct UpdateRouteInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteOutput {
     /// <p>A full description of the route that was updated.</p>
@@ -1634,7 +1634,7 @@ pub struct UpdateRouteOutput {
     pub route: RouteData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -1658,7 +1658,7 @@ pub struct UpdateVirtualNodeInput {
     pub virtual_node_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualNodeOutput {
     /// <p>A full description of the virtual node that was updated.</p>
@@ -1666,7 +1666,7 @@ pub struct UpdateVirtualNodeOutput {
     pub virtual_node: VirtualNodeData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualRouterInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -1690,7 +1690,7 @@ pub struct UpdateVirtualRouterInput {
     pub virtual_router_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualRouterOutput {
     /// <p>A full description of the virtual router that was updated.</p>
@@ -1698,7 +1698,7 @@ pub struct UpdateVirtualRouterOutput {
     pub virtual_router: VirtualRouterData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualServiceInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
@@ -1723,7 +1723,7 @@ pub struct UpdateVirtualServiceInput {
     pub virtual_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVirtualServiceOutput {
     /// <p>A full description of the virtual service that was updated.</p>
@@ -1732,7 +1732,7 @@ pub struct UpdateVirtualServiceOutput {
 }
 
 /// <p>An object that represents a virtual node returned by a describe operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeData {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
@@ -1753,7 +1753,7 @@ pub struct VirtualNodeData {
 }
 
 /// <p>An object that represents a virtual node returned by a list operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual node.</p>
@@ -1782,7 +1782,7 @@ pub struct VirtualNodeRef {
 }
 
 /// <p>An object that represents a virtual node service provider.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualNodeServiceProvider {
     /// <p>The name of the virtual node that is acting as a service provider.</p>
     #[serde(rename = "virtualNodeName")]
@@ -1790,7 +1790,7 @@ pub struct VirtualNodeServiceProvider {
 }
 
 /// <p>An object that represents the specification of a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualNodeSpec {
     /// <p>A reference to an object that represents the defaults for backends.</p>
     #[serde(rename = "backendDefaults")]
@@ -1818,7 +1818,7 @@ pub struct VirtualNodeSpec {
 }
 
 /// <p>An object that represents the current status of the virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualNodeStatus {
     /// <p>The current status of the virtual node.</p>
@@ -1827,7 +1827,7 @@ pub struct VirtualNodeStatus {
 }
 
 /// <p>An object that represents a virtual router returned by a describe operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterData {
     /// <p>The name of the service mesh that the virtual router resides in.</p>
@@ -1848,14 +1848,14 @@ pub struct VirtualRouterData {
 }
 
 /// <p>An object that represents a virtual router listener.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualRouterListener {
     #[serde(rename = "portMapping")]
     pub port_mapping: PortMapping,
 }
 
 /// <p>An object that represents a virtual router returned by a list operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual router.</p>
@@ -1884,7 +1884,7 @@ pub struct VirtualRouterRef {
 }
 
 /// <p>An object that represents a virtual node service provider.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualRouterServiceProvider {
     /// <p>The name of the virtual router that is acting as a service provider.</p>
     #[serde(rename = "virtualRouterName")]
@@ -1892,7 +1892,7 @@ pub struct VirtualRouterServiceProvider {
 }
 
 /// <p>An object that represents the specification of a virtual router.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualRouterSpec {
     /// <p>The listeners that the virtual router is expected to receive inbound traffic from. You
     /// can specify one listener.</p>
@@ -1902,7 +1902,7 @@ pub struct VirtualRouterSpec {
 }
 
 /// <p>An object that represents the status of a virtual router. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualRouterStatus {
     /// <p>The current status of the virtual router.</p>
@@ -1911,7 +1911,7 @@ pub struct VirtualRouterStatus {
 }
 
 /// <p>An object that represents a virtual service backend for a virtual node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualServiceBackend {
     /// <p>A reference to an object that represents the client policy for a backend.</p>
     #[serde(rename = "clientPolicy")]
@@ -1923,7 +1923,7 @@ pub struct VirtualServiceBackend {
 }
 
 /// <p>An object that represents a virtual service returned by a describe operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceData {
     /// <p>The name of the service mesh that the virtual service resides in.</p>
@@ -1943,7 +1943,7 @@ pub struct VirtualServiceData {
 }
 
 /// <p>An object that represents the provider for a virtual service.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualServiceProvider {
     /// <p>The virtual node associated with a virtual service.</p>
     #[serde(rename = "virtualNode")]
@@ -1956,7 +1956,7 @@ pub struct VirtualServiceProvider {
 }
 
 /// <p>An object that represents a virtual service returned by a list operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual service.</p>
@@ -1985,7 +1985,7 @@ pub struct VirtualServiceRef {
 }
 
 /// <p>An object that represents the specification of a virtual service.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualServiceSpec {
     /// <p>The App Mesh object that is acting as the provider for a virtual service. You can specify
     /// a single virtual node or virtual router.</p>
@@ -1995,7 +1995,7 @@ pub struct VirtualServiceSpec {
 }
 
 /// <p>An object that represents the status of a virtual service.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualServiceStatus {
     /// <p>The current status of the virtual service.</p>
@@ -2007,7 +2007,7 @@ pub struct VirtualServiceStatus {
 /// across targets according to their relative weight. For example, a weighted target with a
 /// relative weight of 50 receives five times as much traffic as one with a relative weight of
 /// 10. The total weight for all targets combined must be less than or equal to 100.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WeightedTarget {
     /// <p>The virtual node to associate with the weighted target.</p>
     #[serde(rename = "virtualNode")]

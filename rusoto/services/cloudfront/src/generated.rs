@@ -39,7 +39,7 @@ use xml::EventReader;
 use xml::EventWriter;
 
 /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActiveTrustedSigners {
     /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p>
@@ -78,7 +78,7 @@ impl ActiveTrustedSignersDeserializer {
     }
 }
 /// <p>AWS services in China customers must file for an Internet Content Provider (ICP) recordal if they want to serve content publicly on an alternate domain name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal provides the ICP recordal status for CNAMEs associated with distributions. The status is returned in the CloudFront response; you can't configure it yourself.</p> <p>For more information about ICP recordals, see <a href="https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html"> Signup, Accounts, and Credentials</a> in <i>Getting Started with AWS services in China</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AliasICPRecordal {
     /// <p>A domain name associated with a distribution. </p>
@@ -173,7 +173,7 @@ impl AliasListSerializer {
 }
 
 /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Aliases {
@@ -234,7 +234,7 @@ impl AliasesSerializer {
 }
 
 /// <p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllowedMethods {
@@ -374,7 +374,7 @@ impl BooleanSerializer {
 }
 
 /// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehavior {
@@ -619,7 +619,7 @@ impl CacheBehaviorListSerializer {
 }
 
 /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehaviors {
@@ -680,7 +680,7 @@ impl CacheBehaviorsSerializer {
 }
 
 /// <p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachedMethods {
@@ -738,7 +738,7 @@ impl CachedMethodsSerializer {
 }
 
 /// <p>CloudFront origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentity {
     /// <p>The current configuration information for the identity. </p>
@@ -785,7 +785,7 @@ impl CloudFrontOriginAccessIdentityDeserializer {
     }
 }
 /// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudFrontOriginAccessIdentityConfig {
@@ -852,7 +852,7 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
 }
 
 /// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentityList {
     /// <p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>
@@ -913,7 +913,7 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
     }
 }
 /// <p>Summary of the information about a CloudFront origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentitySummary {
     /// <p>The comment for this origin access identity, as originally specified when created.</p>
@@ -1011,7 +1011,7 @@ impl CommentTypeSerializer {
 }
 
 /// <p>A field-level encryption content type profile. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfile {
@@ -1086,7 +1086,7 @@ impl ContentTypeProfileSerializer {
 }
 
 /// <p>The configuration for a field-level encryption content type-profile mapping. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfileConfig {
@@ -1201,7 +1201,7 @@ impl ContentTypeProfileListSerializer {
 }
 
 /// <p>Field-level encryption content type-profile. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfiles {
@@ -1301,7 +1301,7 @@ impl CookieNameListSerializer {
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html"> Caching Content Based on Request Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookieNames {
@@ -1362,7 +1362,7 @@ impl CookieNamesSerializer {
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">Caching Content Based on Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookiePreference {
@@ -1424,7 +1424,7 @@ impl CookiePreferenceSerializer {
 }
 
 /// <p>The request to create a new origin access identity (OAI). An origin access identity is a special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all or just some of your Amazon S3 content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
     /// <p>The current configuration information for the identity.</p>
@@ -1432,7 +1432,7 @@ pub struct CreateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
@@ -1463,7 +1463,7 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
@@ -1471,7 +1471,7 @@ pub struct CreateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionResult {
     /// <p>The distribution's information.</p>
@@ -1500,7 +1500,7 @@ impl CreateDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution with tags. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionWithTagsRequest {
     /// <p>The distribution's configuration information. </p>
@@ -1508,7 +1508,7 @@ pub struct CreateDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionWithTagsResult {
     /// <p>The distribution's information. </p>
@@ -1536,14 +1536,14 @@ impl CreateDistributionWithTagsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionConfigRequest {
     /// <p>The request to create a new field-level encryption configuration.</p>
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -1571,14 +1571,14 @@ impl CreateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionProfileRequest {
     /// <p>The request to create a field-level encryption profile.</p>
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -1609,7 +1609,7 @@ impl CreateFieldLevelEncryptionProfileResultDeserializer {
     }
 }
 /// <p>The request to create an invalidation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInvalidationRequest {
     /// <p>The distribution's id.</p>
@@ -1619,7 +1619,7 @@ pub struct CreateInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInvalidationResult {
     /// <p>The invalidation's information.</p>
@@ -1645,14 +1645,14 @@ impl CreateInvalidationResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicKeyRequest {
     /// <p>The request to add a public key to CloudFront.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -1678,7 +1678,7 @@ impl CreatePublicKeyResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionRequest {
     /// <p>The streaming distribution's configuration information.</p>
@@ -1686,7 +1686,7 @@ pub struct CreateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionResult {
     /// <p>The current version of the streaming distribution created.</p>
@@ -1715,7 +1715,7 @@ impl CreateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionWithTagsRequest {
     /// <p> The streaming distribution's configuration information. </p>
@@ -1723,7 +1723,7 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionWithTagsResult {
     /// <p>The current version of the distribution created.</p>
@@ -1752,7 +1752,7 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
     }
 }
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponse {
@@ -1887,7 +1887,7 @@ impl CustomErrorResponseListSerializer {
 }
 
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponses {
@@ -1948,7 +1948,7 @@ impl CustomErrorResponsesSerializer {
 }
 
 /// <p>A complex type that contains the list of Custom Headers for each origin. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomHeaders {
@@ -2009,7 +2009,7 @@ impl CustomHeadersSerializer {
 }
 
 /// <p>A custom origin or an Amazon S3 bucket configured as a website endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomOriginConfig {
@@ -2130,7 +2130,7 @@ impl CustomOriginConfigSerializer {
 }
 
 /// <p>A complex type that describes the default cache behavior if you don't specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultCacheBehavior {
@@ -2322,7 +2322,7 @@ impl DefaultCacheBehaviorSerializer {
 }
 
 /// <p>Deletes a origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     /// <p>The origin access identity's ID.</p>
@@ -2332,7 +2332,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionRequest {
     /// <p>The distribution ID. </p>
@@ -2341,7 +2341,7 @@ pub struct DeleteDistributionRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionConfigRequest {
     /// <p>The ID of the configuration you want to delete from CloudFront.</p>
@@ -2350,7 +2350,7 @@ pub struct DeleteFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionProfileRequest {
     /// <p>Request the ID of the profile you want to delete from CloudFront.</p>
@@ -2359,7 +2359,7 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicKeyRequest {
     /// <p>The ID of the public key you want to remove from CloudFront.</p>
@@ -2369,7 +2369,7 @@ pub struct DeletePublicKeyRequest {
 }
 
 /// <p>The request to delete a streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamingDistributionRequest {
     /// <p>The distribution ID. </p>
@@ -2379,7 +2379,7 @@ pub struct DeleteStreamingDistributionRequest {
 }
 
 /// <p>A distribution tells CloudFront where you want content to be delivered from, and the details about how to track and manage content delivery.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Distribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -2454,7 +2454,7 @@ impl DistributionDeserializer {
     }
 }
 /// <p>A distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfig {
@@ -2688,7 +2688,7 @@ impl DistributionConfigSerializer {
 }
 
 /// <p>A distribution Configuration and a list of tags to be associated with the distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfigWithTags {
     /// <p>A distribution configuration.</p>
@@ -2720,7 +2720,7 @@ impl DistributionConfigWithTagsSerializer {
 }
 
 /// <p>A distribution list.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionList {
     /// <p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>
@@ -2774,7 +2774,7 @@ impl DistributionListDeserializer {
     }
 }
 /// <p>A summary of the information about a CloudFront distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionSummary {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -2932,7 +2932,7 @@ impl DistributionSummaryListDeserializer {
     }
 }
 /// <p>Complex data type for field-level encryption profiles that includes all of the encryption entities. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntities {
@@ -2993,7 +2993,7 @@ impl EncryptionEntitiesSerializer {
 }
 
 /// <p>Complex data type for field-level encryption profiles that includes the encryption key and field pattern specifications. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntity {
@@ -3137,7 +3137,7 @@ impl EventTypeSerializer {
 }
 
 /// <p>A complex data type that includes the profile configurations and other options specified for field-level encryption. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryption {
     /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
@@ -3179,7 +3179,7 @@ impl FieldLevelEncryptionDeserializer {
     }
 }
 /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionConfig {
@@ -3280,7 +3280,7 @@ impl FieldLevelEncryptionConfigSerializer {
 }
 
 /// <p>List of field-level encrpytion configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionList {
     /// <p>An array of field-level encryption items.</p>
@@ -3331,7 +3331,7 @@ impl FieldLevelEncryptionListDeserializer {
     }
 }
 /// <p>A complex data type for field-level encryption profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfile {
     /// <p>A complex data type that includes the profile name and the encryption entities for the field-level encryption profile.</p>
@@ -3377,7 +3377,7 @@ impl FieldLevelEncryptionProfileDeserializer {
     }
 }
 /// <p>A complex data type of profiles for the field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionProfileConfig {
@@ -3470,7 +3470,7 @@ impl FieldLevelEncryptionProfileConfigSerializer {
 }
 
 /// <p>List of field-level encryption profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileList {
     /// <p>The field-level encryption profile items.</p>
@@ -3521,7 +3521,7 @@ impl FieldLevelEncryptionProfileListDeserializer {
     }
 }
 /// <p>The field-level encryption profile summary.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileSummary {
     /// <p>An optional comment for the field-level encryption profile summary.</p>
@@ -3597,7 +3597,7 @@ impl FieldLevelEncryptionProfileSummaryListDeserializer {
     }
 }
 /// <p>A summary of a field-level encryption item.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionSummary {
     /// <p>An optional comment about the field-level encryption item.</p>
@@ -3717,7 +3717,7 @@ impl FieldPatternListSerializer {
 }
 
 /// <p>A complex data type that includes the field patterns to match for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldPatterns {
@@ -3811,7 +3811,7 @@ impl FormatSerializer {
 }
 
 /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForwardedValues {
@@ -3888,7 +3888,7 @@ impl ForwardedValuesSerializer {
 }
 
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GeoRestriction {
@@ -3994,7 +3994,7 @@ impl GeoRestrictionTypeSerializer {
 }
 
 /// <p>The origin access identity's configuration information. For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html">CloudFrontOriginAccessIdentityConfig</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
     /// <p>The identity's ID. </p>
@@ -4002,7 +4002,7 @@ pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
     /// <p>The origin access identity's configuration information. </p>
@@ -4031,7 +4031,7 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     }
 }
 /// <p>The request to get an origin access identity's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's ID.</p>
@@ -4039,7 +4039,7 @@ pub struct GetCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
@@ -4068,7 +4068,7 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to get a distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigRequest {
     /// <p>The distribution's ID. If the ID is empty, an empty distribution configuration is returned.</p>
@@ -4076,7 +4076,7 @@ pub struct GetDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionConfigResult {
     /// <p>The distribution's configuration information.</p>
@@ -4103,7 +4103,7 @@ impl GetDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a distribution's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionRequest {
     /// <p>The distribution's ID. If the ID is empty, an empty distribution configuration is returned.</p>
@@ -4111,7 +4111,7 @@ pub struct GetDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionResult {
     /// <p>The distribution's information.</p>
@@ -4137,14 +4137,14 @@ impl GetDistributionResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionConfigRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4172,14 +4172,14 @@ impl GetFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileConfigRequest {
     /// <p>Get the ID for the field-level encryption profile configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileConfigResult {
     /// <p>The current version of the field-level encryption profile configuration result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4207,14 +4207,14 @@ impl GetFieldLevelEncryptionProfileConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileRequest {
     /// <p>Get the ID for the field-level encryption profile information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4242,14 +4242,14 @@ impl GetFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4276,7 +4276,7 @@ impl GetFieldLevelEncryptionResultDeserializer {
     }
 }
 /// <p>The request to get an invalidation's information. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvalidationRequest {
     /// <p>The distribution's ID.</p>
@@ -4286,7 +4286,7 @@ pub struct GetInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInvalidationResult {
     /// <p>The invalidation's information. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
@@ -4310,14 +4310,14 @@ impl GetInvalidationResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyConfigRequest {
     /// <p>Request the ID for the public key configuration.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyConfigResult {
     /// <p>The current version of the public key configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4343,14 +4343,14 @@ impl GetPublicKeyConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
     /// <p>Request the ID for the public key.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4374,7 +4374,7 @@ impl GetPublicKeyResultDeserializer {
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionConfigRequest {
     /// <p>The streaming distribution's ID.</p>
@@ -4382,7 +4382,7 @@ pub struct GetStreamingDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionConfigResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
@@ -4411,7 +4411,7 @@ impl GetStreamingDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a streaming distribution's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionRequest {
     /// <p>The streaming distribution's ID.</p>
@@ -4419,7 +4419,7 @@ pub struct GetStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionResult {
     /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4485,7 +4485,7 @@ impl HeaderListSerializer {
 }
 
 /// <p>A complex type that specifies the request headers, if any, that you want CloudFront to base caching on for this cache behavior. </p> <p>For the headers that you specify, CloudFront caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure CloudFront to cache your content based on values in the <code>product</code> header. CloudFront forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Headers {
@@ -4624,7 +4624,7 @@ impl IntegerSerializer {
 }
 
 /// <p>An invalidation. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Invalidation {
     /// <p>The date and time the invalidation request was first made. </p>
@@ -4667,7 +4667,7 @@ impl InvalidationDeserializer {
     }
 }
 /// <p>An invalidation batch.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvalidationBatch {
@@ -4725,7 +4725,7 @@ impl InvalidationBatchSerializer {
 }
 
 /// <p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationList {
     /// <p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>
@@ -4779,7 +4779,7 @@ impl InvalidationListDeserializer {
     }
 }
 /// <p>A summary of an invalidation request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationSummary {
     /// <p>The time that an invalidation request was created.</p>
@@ -4888,7 +4888,7 @@ impl KeyPairIdListDeserializer {
     }
 }
 /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPairIds {
     /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
@@ -4955,7 +4955,7 @@ impl LambdaFunctionARNSerializer {
 }
 
 /// <p>A complex type that contains a Lambda function association.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociation {
@@ -5082,7 +5082,7 @@ impl LambdaFunctionAssociationListSerializer {
 }
 
 /// <p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociations {
@@ -5147,7 +5147,7 @@ impl LambdaFunctionAssociationsSerializer {
 }
 
 /// <p>The request to list origin access identities. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>
@@ -5157,7 +5157,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
@@ -5184,7 +5184,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     }
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByWebACLIdRequest {
     /// <p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>
@@ -5196,7 +5196,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 }
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByWebACLIdResult {
     /// <p>The <code>DistributionList</code> type. </p>
@@ -5221,7 +5221,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
     }
 }
 /// <p>The request to list your distributions. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>
@@ -5231,7 +5231,7 @@ pub struct ListDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsResult {
     /// <p>The <code>DistributionList</code> type. </p>
@@ -5255,7 +5255,7 @@ impl ListDistributionsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionConfigsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of configurations. The results include configurations in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last configuration on that page). </p>
@@ -5264,7 +5264,7 @@ pub struct ListFieldLevelEncryptionConfigsRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionConfigsResult {
     /// <p>Returns a list of all field-level encryption configurations that have been created in CloudFront for this account.</p>
@@ -5288,7 +5288,7 @@ impl ListFieldLevelEncryptionConfigsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionProfilesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of profiles. The results include profiles in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last profile on that page). </p>
@@ -5297,7 +5297,7 @@ pub struct ListFieldLevelEncryptionProfilesRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionProfilesResult {
     /// <p>Returns a list of the field-level encryption profiles that have been created in CloudFront for this account.</p>
@@ -5324,7 +5324,7 @@ impl ListFieldLevelEncryptionProfilesResultDeserializer {
     }
 }
 /// <p>The request to list invalidations. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvalidationsRequest {
     /// <p>The distribution's ID.</p>
@@ -5336,7 +5336,7 @@ pub struct ListInvalidationsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInvalidationsResult {
     /// <p>Information about invalidation batches. </p>
@@ -5360,7 +5360,7 @@ impl ListInvalidationsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of public keys. The results include public keys in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last public key on that page). </p>
@@ -5369,7 +5369,7 @@ pub struct ListPublicKeysRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPublicKeysResult {
     /// <p>Returns a list of all public keys that have been added to CloudFront for this account.</p>
@@ -5394,7 +5394,7 @@ impl ListPublicKeysResultDeserializer {
     }
 }
 /// <p>The request to list your streaming distributions. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamingDistributionsRequest {
     /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
@@ -5404,7 +5404,7 @@ pub struct ListStreamingDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStreamingDistributionsResult {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
@@ -5429,7 +5429,7 @@ impl ListStreamingDistributionsResultDeserializer {
     }
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -5437,7 +5437,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p> The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
@@ -5498,7 +5498,7 @@ impl LocationListSerializer {
 }
 
 /// <p>A complex type that controls whether access logs are written for the distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingConfig {
@@ -5721,7 +5721,7 @@ impl MinimumProtocolVersionSerializer {
 }
 
 /// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files. This can also be an origin group, if you've created an origin group. You must specify at least one origin or origin group.</p> <p>For the current limit on the number of origins or origin groups that you can specify for a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origin {
@@ -5826,7 +5826,7 @@ impl OriginSerializer {
 }
 
 /// <p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginCustomHeader {
@@ -5930,7 +5930,7 @@ impl OriginCustomHeadersListSerializer {
 }
 
 /// <p>An origin group includes two origins (a primary origin and a second origin to failover to) and a failover criteria that you specify. You create an origin group to support origin failover in CloudFront. When you create or update a distribution, you can specifiy the origin group instead of a single origin, and CloudFront will failover from the primary origin to the second origin under the failover conditions that you've chosen.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroup {
@@ -6000,7 +6000,7 @@ impl OriginGroupSerializer {
 }
 
 /// <p>A complex data type that includes information about the failover criteria for an origin group, including the status codes for which CloudFront will failover from the primary origin to the second origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupFailoverCriteria {
@@ -6090,7 +6090,7 @@ impl OriginGroupListSerializer {
 }
 
 /// <p>An origin in an origin group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMember {
@@ -6183,7 +6183,7 @@ impl OriginGroupMemberListSerializer {
 }
 
 /// <p>A complex data type for the origins included in an origin group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMembers {
@@ -6243,7 +6243,7 @@ impl OriginGroupMembersSerializer {
 }
 
 /// <p>A complex data type for the origin groups specified for a distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroups {
@@ -6376,7 +6376,7 @@ impl OriginProtocolPolicySerializer {
 }
 
 /// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginSslProtocols {
@@ -6434,7 +6434,7 @@ impl OriginSslProtocolsSerializer {
 }
 
 /// <p>A complex type that contains information about origins and origin groups for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origins {
@@ -6531,7 +6531,7 @@ impl PathListSerializer {
 }
 
 /// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Paths {
@@ -6622,7 +6622,7 @@ impl PriceClassSerializer {
 }
 
 /// <p>A complex data type of public keys you add to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKey {
     /// <p>A time you added a public key to CloudFront.</p>
@@ -6660,7 +6660,7 @@ impl PublicKeyDeserializer {
     }
 }
 /// <p>Information about a public key you add to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicKeyConfig {
@@ -6747,7 +6747,7 @@ impl PublicKeyConfigSerializer {
 }
 
 /// <p>A list of public keys you've added to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeyList {
     /// <p>An array of information about a public key you add to CloudFront to use with features like field-level encryption.</p>
@@ -6791,7 +6791,7 @@ impl PublicKeyListDeserializer {
     }
 }
 /// <p>A complex data type for public key information. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeySummary {
     /// <p> Comment for public key information summary. </p>
@@ -6859,7 +6859,7 @@ impl PublicKeySummaryListDeserializer {
     }
 }
 /// <p>Query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfile {
@@ -6921,7 +6921,7 @@ impl QueryArgProfileSerializer {
 }
 
 /// <p>Configuration for query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfileConfig {
@@ -7031,7 +7031,7 @@ impl QueryArgProfileListSerializer {
 }
 
 /// <p>Query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfiles {
@@ -7092,7 +7092,7 @@ impl QueryArgProfilesSerializer {
 }
 
 /// <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for a cache behavior. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringCacheKeys {
@@ -7212,7 +7212,7 @@ impl ResourceARNSerializer {
 }
 
 /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Restrictions {
@@ -7259,7 +7259,7 @@ impl RestrictionsSerializer {
 }
 
 /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Origin {
@@ -7322,7 +7322,7 @@ impl S3OriginSerializer {
 }
 
 /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3OriginConfig {
@@ -7407,7 +7407,7 @@ impl SSLSupportMethodSerializer {
 }
 
 /// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Signer {
     /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
@@ -7567,7 +7567,7 @@ impl StatusCodeListSerializer {
 }
 
 /// <p>A complex data type for the status codes that you specify that, when returned by a primary origin, trigger CloudFront to failover to a second origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatusCodes {
@@ -7625,7 +7625,7 @@ impl StatusCodesSerializer {
 }
 
 /// <p>A streaming distribution tells CloudFront where you want RTMP content to be delivered from, and the details about how to track and manage content delivery.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -7692,7 +7692,7 @@ impl StreamingDistributionDeserializer {
     }
 }
 /// <p>The RTMP distribution's configuration information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfig {
@@ -7815,7 +7815,7 @@ impl StreamingDistributionConfigSerializer {
 }
 
 /// <p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfigWithTags {
     /// <p>A streaming distribution Configuration.</p>
@@ -7847,7 +7847,7 @@ impl StreamingDistributionConfigWithTagsSerializer {
 }
 
 /// <p>A streaming distribution list. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionList {
     /// <p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>
@@ -7908,7 +7908,7 @@ impl StreamingDistributionListDeserializer {
     }
 }
 /// <p> A summary of the information for a CloudFront streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionSummary {
     /// <p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -8012,7 +8012,7 @@ impl StreamingDistributionSummaryListDeserializer {
     }
 }
 /// <p>A complex type that controls whether access logs are written for this streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingLoggingConfig {
@@ -8118,7 +8118,7 @@ impl StringSerializer {
 }
 
 /// <p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
@@ -8232,7 +8232,7 @@ impl TagKeyListSerializer {
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagKeys {
     /// <p> A complex type that contains <code>Tag</code> key elements.</p>
@@ -8298,7 +8298,7 @@ impl TagListSerializer {
 }
 
 /// <p> The request to add tags to a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -8341,7 +8341,7 @@ impl TagValueSerializer {
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tags {
@@ -8400,7 +8400,7 @@ impl TimestampDeserializer {
     }
 }
 /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/DistributionConfig.html">DistributionConfig</a> in the <i>Amazon CloudFront API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TrustedSigners {
@@ -8472,7 +8472,7 @@ impl TrustedSignersSerializer {
 }
 
 /// <p> The request to remove tags from a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -8482,7 +8482,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The request to update an origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's configuration information.</p>
@@ -8494,7 +8494,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
@@ -8523,7 +8523,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to update a distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
@@ -8535,7 +8535,7 @@ pub struct UpdateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDistributionResult {
     /// <p>The distribution's information.</p>
@@ -8561,7 +8561,7 @@ impl UpdateDistributionResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionConfigRequest {
     /// <p>Request to update a field-level encryption configuration. </p>
@@ -8572,7 +8572,7 @@ pub struct UpdateFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionConfigResult {
     /// <p>The value of the <code>ETag</code> header that you received when updating the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8598,7 +8598,7 @@ impl UpdateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionProfileRequest {
     /// <p>Request to update a field-level encryption profile. </p>
@@ -8609,7 +8609,7 @@ pub struct UpdateFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionProfileResult {
     /// <p>The result of the field-level encryption profile request. </p>
@@ -8637,7 +8637,7 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublicKeyRequest {
     /// <p>ID of the public key to be updated.</p>
@@ -8648,7 +8648,7 @@ pub struct UpdatePublicKeyRequest {
     pub public_key_config: PublicKeyConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdatePublicKeyResult {
     /// <p>The current version of the update public key result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8672,7 +8672,7 @@ impl UpdatePublicKeyResultDeserializer {
     }
 }
 /// <p>The request to update a streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamingDistributionRequest {
     /// <p>The streaming distribution's id.</p>
@@ -8684,7 +8684,7 @@ pub struct UpdateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStreamingDistributionResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8711,7 +8711,7 @@ impl UpdateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p> <p>If the distribution doesn’t use <code>Aliases</code> (also known as alternate domain names or CNAMEs)—that is, if the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>—set <code>CloudFrontDefaultCertificate</code> to <code>true</code> and leave all other fields empty.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), use the fields in this type to specify the following settings:</p> <ul> <li> <p>Which viewers the distribution accepts HTTPS connections from: only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a> (recommended), or all viewers including those that don’t support SNI.</p> <ul> <li> <p>To accept HTTPS connections from only viewers that support SNI, set <code>SSLSupportMethod</code> to <code>sni-only</code>. This is recommended. Most browsers and clients released after 2010 support SNI. </p> </li> <li> <p>To accept HTTPS connections from all viewers, including those that don’t support SNI, set <code>SSLSupportMethod</code> to <code>vip</code>. This is not recommended, and results in additional monthly charges from CloudFront. </p> </li> </ul> </li> <li> <p>The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for <code>MinimumProtocolVersion</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p>The location of the SSL/TLS certificate, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a> (recommended) or <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>. You specify the location by setting a value in one of the following fields (not both):</p> <ul> <li> <p> <code>ACMCertificateArn</code> </p> </li> <li> <p> <code>IAMCertificateId</code> </p> </li> </ul> </li> </ul> <p>All distributions support HTTPS connections from viewers. To require viewers to use HTTPS only, or to redirect them from HTTP to HTTPS, use <code>ViewerProtocolPolicy</code> in the <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>. To specify how CloudFront should use SSL/TLS to communicate with your custom origin, use <code>CustomOriginConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html">Using HTTPS with CloudFront</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html"> Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewerCertificate {

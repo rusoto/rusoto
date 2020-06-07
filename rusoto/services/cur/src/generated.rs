@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Deletes the specified report.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
@@ -34,7 +34,7 @@ pub struct DeleteReportDefinitionRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
@@ -43,7 +43,7 @@ pub struct DeleteReportDefinitionResponse {
 }
 
 /// <p>Requests a list of AWS Cost and Usage reports owned by the account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
@@ -55,7 +55,7 @@ pub struct DescribeReportDefinitionsRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
@@ -67,7 +67,7 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReportDefinitionRequest {
     #[serde(rename = "ReportDefinition")]
@@ -76,12 +76,12 @@ pub struct ModifyReportDefinitionRequest {
     pub report_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutReportDefinitionRequest {
     /// <p>Represents the output of the PutReportDefinition operation. The content consists of the detailed metadata and data file information. </p>
@@ -90,12 +90,12 @@ pub struct PutReportDefinitionRequest {
 }
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. You can specify the report name, time unit, report format, compression format, S3 bucket, additional artifacts, and schema elements in the definition. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReportDefinition {
     /// <p>A list of manifests that you want Amazon Web Services to create for this report.</p>
     #[serde(rename = "AdditionalArtifacts")]

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents a single entry in a list of agents. <code>AgentListEntry</code> returns an array that contains a list of agents when the <a>ListAgents</a> operation is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentListEntry {
     /// <p>The Amazon Resource Name (ARN) of the agent.</p>
@@ -43,7 +43,7 @@ pub struct AgentListEntry {
 }
 
 /// <p>CancelTaskExecutionRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelTaskExecutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the task execution to cancel.</p>
@@ -51,12 +51,12 @@ pub struct CancelTaskExecutionRequest {
     pub task_execution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelTaskExecutionResponse {}
 
 /// <p>CreateAgentRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAgentRequest {
     /// <p>Your agent activation key. You can get the activation key either by sending an HTTP GET request with redirects that enable you to get the agent IP address (port 80). Alternatively, you can get it from the AWS DataSync console.</p> <p>The redirect URL returned in the response provides you the activation key for your agent in the query string parameter <code>activationKey</code>. It might also include other activation-related parameters; however, these are merely defaults. The arguments you pass to this API call determine the actual configuration of your agent.</p> <p>For more information, see Activating an Agent in the <i>AWS DataSync User Guide.</i> </p>
@@ -85,7 +85,7 @@ pub struct CreateAgentRequest {
 }
 
 /// <p>CreateAgentResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAgentResponse {
     /// <p>The Amazon Resource Name (ARN) of the agent. Use the <code>ListAgents</code> operation to return a list of agents for your account and AWS Region.</p>
@@ -95,7 +95,7 @@ pub struct CreateAgentResponse {
 }
 
 /// <p>CreateLocationEfsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationEfsRequest {
     /// <p><p>The subnet and security group that the Amazon EFS file system uses. The security group that you provide needs to be able to communicate with the security group on the mount target in the subnet specified.</p> <p>The exact relationship between security group M (of the mount target) and security group S (which you provide for DataSync to use at this stage) is as follows: </p> <ul> <li> <p> Security group M (which you associate with the mount target) must allow inbound access for the Transmission Control Protocol (TCP) on the NFS port (2049) from security group S. You can enable inbound connections either by IP address (CIDR range) or security group. </p> </li> <li> <p>Security group S (provided to DataSync to access EFS) should have a rule that enables outbound connections to the NFS port on one of the file system’s mount targets. You can enable outbound connections either by IP address (CIDR range) or security group.</p> <p>For information about security groups and mount targets, see Security Groups for Amazon EC2 Instances and Mount Targets in the <i>Amazon EFS User Guide.</i> </p> </li> </ul></p>
@@ -115,7 +115,7 @@ pub struct CreateLocationEfsRequest {
 }
 
 /// <p>CreateLocationEfs</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationEfsResponse {
     /// <p>The Amazon Resource Name (ARN) of the Amazon EFS file system location that is created.</p>
@@ -124,7 +124,7 @@ pub struct CreateLocationEfsResponse {
     pub location_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationFsxWindowsRequest {
     /// <p>The name of the Windows domain that the FSx for Windows server belongs to.</p>
@@ -153,7 +153,7 @@ pub struct CreateLocationFsxWindowsRequest {
     pub user: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationFsxWindowsResponse {
     /// <p>The Amazon Resource Name (ARN) of the FSx for Windows file system location that is created.</p>
@@ -163,7 +163,7 @@ pub struct CreateLocationFsxWindowsResponse {
 }
 
 /// <p>CreateLocationNfsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationNfsRequest {
     /// <p>The NFS mount options that DataSync can use to mount your NFS share.</p>
@@ -186,7 +186,7 @@ pub struct CreateLocationNfsRequest {
 }
 
 /// <p>CreateLocationNfsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationNfsResponse {
     /// <p>The Amazon Resource Name (ARN) of the source NFS file system location that is created.</p>
@@ -196,7 +196,7 @@ pub struct CreateLocationNfsResponse {
 }
 
 /// <p>CreateLocationS3Request</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationS3Request {
     /// <p>The Amazon Resource Name (ARN) of the Amazon S3 bucket.</p>
@@ -219,7 +219,7 @@ pub struct CreateLocationS3Request {
 }
 
 /// <p>CreateLocationS3Response</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationS3Response {
     /// <p>The Amazon Resource Name (ARN) of the source Amazon S3 bucket location that is created.</p>
@@ -229,7 +229,7 @@ pub struct CreateLocationS3Response {
 }
 
 /// <p>CreateLocationSmbRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLocationSmbRequest {
     /// <p>The Amazon Resource Names (ARNs) of agents to use for a Simple Message Block (SMB) location. </p>
@@ -262,7 +262,7 @@ pub struct CreateLocationSmbRequest {
 }
 
 /// <p>CreateLocationSmbResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLocationSmbResponse {
     /// <p>The Amazon Resource Name (ARN) of the source SMB file system location that is created.</p>
@@ -272,7 +272,7 @@ pub struct CreateLocationSmbResponse {
 }
 
 /// <p>CreateTaskRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that is used to monitor and log events in the task. </p> <p>For more information on these groups, see Working with Log Groups and Log Streams in the <i>Amazon CloudWatch User Guide.</i> </p> <p>For more information about how to use CloudWatch Logs with DataSync, see Monitoring Your Task in the <i>AWS DataSync User Guide.</i> </p>
@@ -308,7 +308,7 @@ pub struct CreateTaskRequest {
 }
 
 /// <p>CreateTaskResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTaskResponse {
     /// <p>The Amazon Resource Name (ARN) of the task.</p>
@@ -318,7 +318,7 @@ pub struct CreateTaskResponse {
 }
 
 /// <p>DeleteAgentRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAgentRequest {
     /// <p>The Amazon Resource Name (ARN) of the agent to delete. Use the <code>ListAgents</code> operation to return a list of agents for your account and AWS Region.</p>
@@ -326,12 +326,12 @@ pub struct DeleteAgentRequest {
     pub agent_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAgentResponse {}
 
 /// <p>DeleteLocation</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLocationRequest {
     /// <p>The Amazon Resource Name (ARN) of the location to delete.</p>
@@ -339,12 +339,12 @@ pub struct DeleteLocationRequest {
     pub location_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLocationResponse {}
 
 /// <p>DeleteTask</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the task to delete.</p>
@@ -352,12 +352,12 @@ pub struct DeleteTaskRequest {
     pub task_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTaskResponse {}
 
 /// <p>DescribeAgent</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAgentRequest {
     /// <p>The Amazon Resource Name (ARN) of the agent to describe.</p>
@@ -366,7 +366,7 @@ pub struct DescribeAgentRequest {
 }
 
 /// <p>DescribeAgentResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAgentResponse {
     /// <p>The Amazon Resource Name (ARN) of the agent.</p>
@@ -400,7 +400,7 @@ pub struct DescribeAgentResponse {
 }
 
 /// <p>DescribeLocationEfsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationEfsRequest {
     /// <p>The Amazon Resource Name (ARN) of the EFS location to describe.</p>
@@ -409,7 +409,7 @@ pub struct DescribeLocationEfsRequest {
 }
 
 /// <p>DescribeLocationEfsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationEfsResponse {
     /// <p>The time that the EFS location was created.</p>
@@ -429,7 +429,7 @@ pub struct DescribeLocationEfsResponse {
     pub location_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationFsxWindowsRequest {
     /// <p>The Amazon Resource Name (ARN) of the FSx for Windows location to describe.</p>
@@ -437,7 +437,7 @@ pub struct DescribeLocationFsxWindowsRequest {
     pub location_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationFsxWindowsResponse {
     /// <p>The time that the FSx for Windows location was created.</p>
@@ -467,7 +467,7 @@ pub struct DescribeLocationFsxWindowsResponse {
 }
 
 /// <p>DescribeLocationNfsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationNfsRequest {
     /// <p>The Amazon resource Name (ARN) of the NFS location to describe.</p>
@@ -476,7 +476,7 @@ pub struct DescribeLocationNfsRequest {
 }
 
 /// <p>DescribeLocationNfsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationNfsResponse {
     /// <p>The time that the NFS location was created.</p>
@@ -501,7 +501,7 @@ pub struct DescribeLocationNfsResponse {
 }
 
 /// <p>DescribeLocationS3Request</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationS3Request {
     /// <p>The Amazon Resource Name (ARN) of the Amazon S3 bucket location to describe.</p>
@@ -510,7 +510,7 @@ pub struct DescribeLocationS3Request {
 }
 
 /// <p>DescribeLocationS3Response</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationS3Response {
     /// <p>The time that the Amazon S3 bucket location was created.</p>
@@ -535,7 +535,7 @@ pub struct DescribeLocationS3Response {
 }
 
 /// <p>DescribeLocationSmbRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLocationSmbRequest {
     /// <p>The Amazon resource Name (ARN) of the SMB location to describe.</p>
@@ -544,7 +544,7 @@ pub struct DescribeLocationSmbRequest {
 }
 
 /// <p>DescribeLocationSmbResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLocationSmbResponse {
     /// <p>The Amazon Resource Name (ARN) of the source SMB file system location that is created.</p>
@@ -578,7 +578,7 @@ pub struct DescribeLocationSmbResponse {
 }
 
 /// <p>DescribeTaskExecutionRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskExecutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the task that is being executed.</p>
@@ -587,7 +587,7 @@ pub struct DescribeTaskExecutionRequest {
 }
 
 /// <p>DescribeTaskExecutionResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskExecutionResponse {
     /// <p>The physical number of bytes transferred over the network.</p>
@@ -640,7 +640,7 @@ pub struct DescribeTaskExecutionResponse {
 }
 
 /// <p>DescribeTaskRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the task to describe.</p>
@@ -649,7 +649,7 @@ pub struct DescribeTaskRequest {
 }
 
 /// <p>DescribeTaskResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTaskResponse {
     /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that was used to monitor and log events in the task.</p> <p>For more information on these groups, see Working with Log Groups and Log Streams in the <i>Amazon CloudWatch User Guide</i>.</p>
@@ -715,7 +715,7 @@ pub struct DescribeTaskResponse {
 }
 
 /// <p>The subnet and the security group that DataSync uses to access target EFS file system. The subnet must have at least one mount target for that file system. The security group that you provide needs to be able to communicate with the security group on the mount target in the subnet specified. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Ec2Config {
     /// <p>The Amazon Resource Names (ARNs) of the security groups that are configured for the Amazon EC2 resource.</p>
     #[serde(rename = "SecurityGroupArns")]
@@ -726,7 +726,7 @@ pub struct Ec2Config {
 }
 
 /// <p>Specifies which files, folders and objects to include or exclude when transferring files from source to destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FilterRule {
     /// <p>The type of filter rule to apply. AWS DataSync only supports the SIMPLE_PATTERN rule type.</p>
     #[serde(rename = "FilterType")]
@@ -739,7 +739,7 @@ pub struct FilterRule {
 }
 
 /// <p>ListAgentsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAgentsRequest {
     /// <p>The maximum number of agents to list.</p>
@@ -753,7 +753,7 @@ pub struct ListAgentsRequest {
 }
 
 /// <p>ListAgentsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAgentsResponse {
     /// <p>A list of agents in your account.</p>
@@ -767,7 +767,7 @@ pub struct ListAgentsResponse {
 }
 
 /// <p>ListLocationsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLocationsRequest {
     /// <p>The maximum number of locations to return.</p>
@@ -781,7 +781,7 @@ pub struct ListLocationsRequest {
 }
 
 /// <p>ListLocationsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLocationsResponse {
     /// <p>An array that contains a list of locations.</p>
@@ -795,7 +795,7 @@ pub struct ListLocationsResponse {
 }
 
 /// <p>ListTagsForResourceRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of locations to return.</p>
@@ -812,7 +812,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>ListTagsForResourceResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>An opaque string that indicates the position at which to begin returning the next list of resource tags.</p>
@@ -826,7 +826,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>ListTaskExecutions</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTaskExecutionsRequest {
     /// <p>The maximum number of executed tasks to list.</p>
@@ -844,7 +844,7 @@ pub struct ListTaskExecutionsRequest {
 }
 
 /// <p>ListTaskExecutionsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTaskExecutionsResponse {
     /// <p>An opaque string that indicates the position at which to begin returning the next list of executed tasks.</p>
@@ -858,7 +858,7 @@ pub struct ListTaskExecutionsResponse {
 }
 
 /// <p>ListTasksRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
     /// <p>The maximum number of tasks to return.</p>
@@ -872,7 +872,7 @@ pub struct ListTasksRequest {
 }
 
 /// <p>ListTasksResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTasksResponse {
     /// <p>An opaque string that indicates the position at which to begin returning the next list of tasks.</p>
@@ -886,7 +886,7 @@ pub struct ListTasksResponse {
 }
 
 /// <p>Represents a single entry in a list of locations. <code>LocationListEntry</code> returns an array that contains a list of locations when the <a>ListLocations</a> operation is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocationListEntry {
     /// <p>The Amazon Resource Name (ARN) of the location. For Network File System (NFS) or Amazon EFS, the location is the export path. For Amazon S3, the location is the prefix path that you want to mount and use as the root of the location.</p>
@@ -900,7 +900,7 @@ pub struct LocationListEntry {
 }
 
 /// <p>Represents the mount options that are available for DataSync to access an NFS location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NfsMountOptions {
     /// <p><p>The specific NFS version that you want DataSync to use to mount your NFS share. If the server refuses to use the version specified, the sync will fail. If you don&#39;t specify a version, DataSync defaults to <code>AUTOMATIC</code>. That is, DataSync automatically selects a version based on negotiation with the NFS server.</p> <p>You can specify the following NFS versions:</p> <ul> <li> <p> <b> <a href="https://tools.ietf.org/html/rfc1813">NFSv3</a> </b> - stateless protocol version that allows for asynchronous writes on the server.</p> </li> <li> <p> <b> <a href="https://tools.ietf.org/html/rfc3530">NFSv4.0</a> </b> - stateful, firewall-friendly protocol version that supports delegations and pseudo filesystems.</p> </li> <li> <p> <b> <a href="https://tools.ietf.org/html/rfc5661">NFSv4.1</a> </b> - stateful protocol version that supports sessions, directory delegations, and parallel data processing. Version 4.1 also includes all features available in version 4.0.</p> </li> </ul></p>
     #[serde(rename = "Version")]
@@ -909,7 +909,7 @@ pub struct NfsMountOptions {
 }
 
 /// <p>A list of Amazon Resource Names (ARNs) of agents to use for a Network File System (NFS) location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnPremConfig {
     /// <p>ARNs)of the agents to use for an NFS location.</p>
     #[serde(rename = "AgentArns")]
@@ -917,7 +917,7 @@ pub struct OnPremConfig {
 }
 
 /// <p>Represents the options that are available to control the behavior of a <a>StartTaskExecution</a> operation. Behavior includes preserving metadata such as user ID (UID), group ID (GID), and file permissions, and also overwriting files in the destination, data integrity verification, and so on.</p> <p>A task has a set of default options associated with it. If you don't specify an option in <a>StartTaskExecution</a>, the default value is used. You can override the defaults options on each task execution by specifying an overriding <code>Options</code> value to <a>StartTaskExecution</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Options {
     /// <p><p>A file metadata value that shows the last time a file was accessed (that is, when the file was read or written to). If you set <code>Atime</code> to BEST<em>EFFORT, DataSync attempts to preserve the original <code>Atime</code> attribute on all source files (that is, the version before the PREPARING phase). However, <code>Atime</code>&#39;s behavior is not fully standard across platforms, so AWS DataSync can only do this on a best-effort basis. </p> <p>Default value: BEST</em>EFFORT.</p> <p>BEST<em>EFFORT: Attempt to preserve the per-file <code>Atime</code> value (recommended).</p> <p>NONE: Ignore <code>Atime</code>.</p> <note> <p>If <code>Atime</code> is set to BEST</em>EFFORT, <code>Mtime</code> must be set to PRESERVE. </p> <p>If <code>Atime</code> is set to NONE, <code>Mtime</code> must also be NONE. </p> </note></p>
     #[serde(rename = "Atime")]
@@ -970,7 +970,7 @@ pub struct Options {
 }
 
 /// <p>The VPC endpoint, subnet and security group that an agent uses to access IP addresses in a VPC (Virtual Private Cloud).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateLinkConfig {
     /// <p>The private endpoint that is configured for an agent that has access to IP addresses in a <a href="https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html">PrivateLink</a>. An agent that is configured with this endpoint will not be accessible over the public Internet.</p>
@@ -992,7 +992,7 @@ pub struct PrivateLinkConfig {
 }
 
 /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that is used to access an Amazon S3 bucket.</p> <p>For detailed information about using such a role, see Creating a Location for Amazon S3 in the <i>AWS DataSync User Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Config {
     /// <p>The Amazon S3 bucket to access. This bucket is used as a parameter in the <a>CreateLocationS3</a> operation. </p>
     #[serde(rename = "BucketAccessRoleArn")]
@@ -1000,7 +1000,7 @@ pub struct S3Config {
 }
 
 /// <p>Represents the mount options that are available for DataSync to access an SMB location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SmbMountOptions {
     /// <p>The specific SMB version that you want DataSync to use to mount your SMB share. If you don't specify a version, DataSync defaults to <code>AUTOMATIC</code>. That is, DataSync automatically selects a version based on negotiation with the SMB server.</p>
     #[serde(rename = "Version")]
@@ -1009,7 +1009,7 @@ pub struct SmbMountOptions {
 }
 
 /// <p>StartTaskExecutionRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTaskExecutionRequest {
     /// <p>A list of filter rules that determines which files to include when running a task. The pattern should contain a single filter string that consists of the patterns to include. The patterns are delimited by "|" (that is, a pipe). For example: <code>"/folder1|/folder2"</code> </p> <p> </p>
@@ -1025,7 +1025,7 @@ pub struct StartTaskExecutionRequest {
 }
 
 /// <p>StartTaskExecutionResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTaskExecutionResponse {
     /// <p>The Amazon Resource Name (ARN) of the specific task execution that was started.</p>
@@ -1035,7 +1035,7 @@ pub struct StartTaskExecutionResponse {
 }
 
 /// <p>Represents a single entry in a list of AWS resource tags. <code>TagListEntry</code> returns an array that contains a list of tasks when the <a>ListTagsForResource</a> operation is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagListEntry {
     /// <p>The key for an AWS resource tag.</p>
     #[serde(rename = "Key")]
@@ -1047,7 +1047,7 @@ pub struct TagListEntry {
 }
 
 /// <p>TagResourceRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource to apply the tag to.</p>
@@ -1058,12 +1058,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<TagListEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Represents a single entry in a list of task executions. <code>TaskExecutionListEntry</code> returns an array that contains a list of specific invocations of a task when <a>ListTaskExecutions</a> operation is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskExecutionListEntry {
     /// <p>The status of a task execution.</p>
@@ -1077,7 +1077,7 @@ pub struct TaskExecutionListEntry {
 }
 
 /// <p>Describes the detailed result of a <code>TaskExecution</code> operation. This result includes the time in milliseconds spent in each phase, the status of the task execution, and the errors encountered.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskExecutionResultDetail {
     /// <p>Errors that AWS DataSync encountered during execution of the task. You can use this error code to help troubleshoot issues.</p>
@@ -1119,7 +1119,7 @@ pub struct TaskExecutionResultDetail {
 }
 
 /// <p>Represents a single entry in a list of tasks. <code>TaskListEntry</code> returns an array that contains a list of tasks when the <a>ListTasks</a> operation is called. A task includes the source and destination file systems to sync and the options to use for the tasks.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskListEntry {
     /// <p>The name of the task.</p>
@@ -1137,7 +1137,7 @@ pub struct TaskListEntry {
 }
 
 /// <p>Specifies the schedule you want your task to use for repeated executions. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Schedule Expressions for Rules</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TaskSchedule {
     /// <p>A cron expression that specifies when AWS DataSync initiates a scheduled transfer from a source to a destination location. </p>
     #[serde(rename = "ScheduleExpression")]
@@ -1145,7 +1145,7 @@ pub struct TaskSchedule {
 }
 
 /// <p>UntagResourceRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The keys in the key-value pair in the tag to remove.</p>
@@ -1156,12 +1156,12 @@ pub struct UntagResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>UpdateAgentRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAgentRequest {
     /// <p>The Amazon Resource Name (ARN) of the agent to update.</p>
@@ -1173,12 +1173,12 @@ pub struct UpdateAgentRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAgentResponse {}
 
 /// <p>UpdateTaskResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource name of the CloudWatch LogGroup.</p>
@@ -1205,7 +1205,7 @@ pub struct UpdateTaskRequest {
     pub task_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTaskResponse {}
 

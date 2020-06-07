@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains details about the analyzed resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnalyzedResource {
     /// <p>The actions that an external principal is granted permission to use by the policy that generated the finding.</p>
@@ -69,7 +69,7 @@ pub struct AnalyzedResource {
 }
 
 /// <p>Contains the ARN of the analyzed resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnalyzedResourceSummary {
     /// <p>The ARN of the analyzed resource.</p>
@@ -84,7 +84,7 @@ pub struct AnalyzedResourceSummary {
 }
 
 /// <p>Contains information about the analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnalyzerSummary {
     /// <p>The ARN of the analyzer.</p>
@@ -121,7 +121,7 @@ pub struct AnalyzerSummary {
 }
 
 /// <p>Contains information about an archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveRuleSummary {
     /// <p>The time at which the archive rule was created.</p>
@@ -139,7 +139,7 @@ pub struct ArchiveRuleSummary {
 }
 
 /// <p>Creates an analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAnalyzerRequest {
     /// <p>The name of the analyzer to create.</p>
@@ -163,7 +163,7 @@ pub struct CreateAnalyzerRequest {
 }
 
 /// <p>The response to the request to create an analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAnalyzerResponse {
     /// <p>The ARN of the analyzer that was created by the request.</p>
@@ -173,7 +173,7 @@ pub struct CreateAnalyzerResponse {
 }
 
 /// <p>Creates an archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateArchiveRuleRequest {
     /// <p>The name of the created analyzer.</p>
@@ -192,7 +192,7 @@ pub struct CreateArchiveRuleRequest {
 }
 
 /// <p>The criteria to use in the filter that defines the archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Criterion {
     /// <p>A "contains" operator to match for the filter used to create the rule.</p>
     #[serde(rename = "contains")]
@@ -213,7 +213,7 @@ pub struct Criterion {
 }
 
 /// <p>Deletes an analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAnalyzerRequest {
     /// <p>The name of the analyzer to delete.</p>
@@ -226,7 +226,7 @@ pub struct DeleteAnalyzerRequest {
 }
 
 /// <p>Deletes an archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArchiveRuleRequest {
     /// <p>The name of the analyzer that associated with the archive rule to delete.</p>
@@ -242,7 +242,7 @@ pub struct DeleteArchiveRuleRequest {
 }
 
 /// <p>Contains information about a finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The action in the analyzed policy statement that an external principal has permission to use.</p>
@@ -296,7 +296,7 @@ pub struct Finding {
 }
 
 /// <p>The source of the finding. This indicates how the access that generated the finding is granted. It is populated for Amazon S3 bucket findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingSource {
     /// <p>Includes details about how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
@@ -309,7 +309,7 @@ pub struct FindingSource {
 }
 
 /// <p>Includes details about how the access that generated the finding is granted. This is populated for Amazon S3 bucket findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingSourceDetail {
     /// <p>The ARN of the access point that generated the finding.</p>
@@ -319,7 +319,7 @@ pub struct FindingSourceDetail {
 }
 
 /// <p>Contains information about a finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingSummary {
     /// <p>The action in the analyzed policy statement that an external principal has permission to use.</p>
@@ -373,7 +373,7 @@ pub struct FindingSummary {
 }
 
 /// <p>Retrieves an analyzed resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnalyzedResourceRequest {
     /// <p>The ARN of the analyzer to retrieve information from.</p>
@@ -385,7 +385,7 @@ pub struct GetAnalyzedResourceRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnalyzedResourceResponse {
     /// <p>An <code>AnalyedResource</code> object that contains information that Access Analyzer found when it analyzed the resource.</p>
@@ -395,7 +395,7 @@ pub struct GetAnalyzedResourceResponse {
 }
 
 /// <p>Retrieves an analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAnalyzerRequest {
     /// <p>The name of the analyzer retrieved.</p>
@@ -404,7 +404,7 @@ pub struct GetAnalyzerRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAnalyzerResponse {
     /// <p>An <code>AnalyzerSummary</code> object that contains information about the analyzer.</p>
@@ -413,7 +413,7 @@ pub struct GetAnalyzerResponse {
 }
 
 /// <p>Retrieves an archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArchiveRuleRequest {
     /// <p>The name of the analyzer to retrieve rules from.</p>
@@ -425,7 +425,7 @@ pub struct GetArchiveRuleRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetArchiveRuleResponse {
     #[serde(rename = "archiveRule")]
@@ -433,7 +433,7 @@ pub struct GetArchiveRuleResponse {
 }
 
 /// <p>Retrieves a finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingRequest {
     /// <p>The ARN of the analyzer that generated the finding.</p>
@@ -445,7 +445,7 @@ pub struct GetFindingRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingResponse {
     /// <p>A <code>finding</code> object that contains finding details.</p>
@@ -455,7 +455,7 @@ pub struct GetFindingResponse {
 }
 
 /// <p>An criterion statement in an archive rule. Each archive rule may have multiple criteria.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InlineArchiveRule {
     /// <p>The condition and values for a criterion.</p>
@@ -467,7 +467,7 @@ pub struct InlineArchiveRule {
 }
 
 /// <p>Retrieves a list of resources that have been analyzed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAnalyzedResourcesRequest {
     /// <p>The ARN of the analyzer to retrieve a list of analyzed resources from.</p>
@@ -488,7 +488,7 @@ pub struct ListAnalyzedResourcesRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAnalyzedResourcesResponse {
     /// <p>A list of resources that were analyzed.</p>
@@ -501,7 +501,7 @@ pub struct ListAnalyzedResourcesResponse {
 }
 
 /// <p>Retrieves a list of analyzers.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAnalyzersRequest {
     /// <p>The maximum number of results to return in the response.</p>
@@ -519,7 +519,7 @@ pub struct ListAnalyzersRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAnalyzersResponse {
     /// <p>The analyzers retrieved.</p>
@@ -532,7 +532,7 @@ pub struct ListAnalyzersResponse {
 }
 
 /// <p>Retrieves a list of archive rules created for the specified analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArchiveRulesRequest {
     /// <p>The name of the analyzer to retrieve rules from.</p>
@@ -549,7 +549,7 @@ pub struct ListArchiveRulesRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArchiveRulesResponse {
     /// <p>A list of archive rules created for the specified analyzer.</p>
@@ -562,7 +562,7 @@ pub struct ListArchiveRulesResponse {
 }
 
 /// <p>Retrieves a list of findings generated by the specified analyzer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ARN of the analyzer to retrieve findings from.</p>
@@ -587,7 +587,7 @@ pub struct ListFindingsRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>A list of findings retrieved from the analyzer that match the filter criteria specified, if any.</p>
@@ -600,7 +600,7 @@ pub struct ListFindingsResponse {
 }
 
 /// <p>Retrieves a list of tags applied to the specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource to retrieve tags from.</p>
@@ -609,7 +609,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags that are applied to the specified resource.</p>
@@ -619,7 +619,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>The criteria used to sort.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriteria {
     /// <p>The name of the attribute to sort on.</p>
@@ -633,7 +633,7 @@ pub struct SortCriteria {
 }
 
 /// <p>Starts a scan of the policies applied to the specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartResourceScanRequest {
     /// <p>The ARN of the analyzer to use to scan the policies applied to the specified resource.</p>
@@ -645,7 +645,7 @@ pub struct StartResourceScanRequest {
 }
 
 /// <p>Provides more details about the current status of the analyzer. For example, if the creation for the analyzer fails, a <code>Failed</code> status is displayed. For an analyzer with organization as the type, this failure can be due to an issue with creating the service-linked roles required in the member accounts of the AWS organization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StatusReason {
     /// <p>The reason code for the current status of the analyzer.</p>
@@ -654,7 +654,7 @@ pub struct StatusReason {
 }
 
 /// <p>Adds a tag to the specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource to add the tag to.</p>
@@ -666,12 +666,12 @@ pub struct TagResourceRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Removes a tag from the specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource to remove the tag from.</p>
@@ -683,12 +683,12 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The response to the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Updates the specified archive rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateArchiveRuleRequest {
     /// <p>The name of the analyzer to update the archive rules for.</p>
@@ -707,7 +707,7 @@ pub struct UpdateArchiveRuleRequest {
 }
 
 /// <p>Updates findings with the new values provided in the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsRequest {
     /// <p>The ARN of the analyzer that generated the findings to update.</p>
@@ -731,7 +731,7 @@ pub struct UpdateFindingsRequest {
 }
 
 /// <p>Contains information about a validation exception.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ValidationExceptionField {
     /// <p>A message about the validation exception.</p>
     pub message: String,

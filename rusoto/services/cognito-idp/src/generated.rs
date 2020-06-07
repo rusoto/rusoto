@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The data type for <code>AccountRecoverySetting</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountRecoverySettingType {
     /// <p>The list of <code>RecoveryOptionTypes</code>.</p>
     #[serde(rename = "RecoveryMechanisms")]
@@ -34,7 +34,7 @@ pub struct AccountRecoverySettingType {
 }
 
 /// <p>Account takeover action type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountTakeoverActionType {
     /// <p><p>The event action.</p> <ul> <li> <p> <code>BLOCK</code> Choosing this action will block the request.</p> </li> <li> <p> <code>MFA<em>IF</em>CONFIGURED</code> Throw MFA challenge if user has configured it, else allow the request.</p> </li> <li> <p> <code>MFA<em>REQUIRED</code> Throw MFA challenge if user has configured it, else block the request.</p> </li> <li> <p> <code>NO</em>ACTION</code> Allow the user sign-in.</p> </li> </ul></p>
     #[serde(rename = "EventAction")]
@@ -45,7 +45,7 @@ pub struct AccountTakeoverActionType {
 }
 
 /// <p>Account takeover actions type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountTakeoverActionsType {
     /// <p>Action to take for a high risk.</p>
     #[serde(rename = "HighAction")]
@@ -62,7 +62,7 @@ pub struct AccountTakeoverActionsType {
 }
 
 /// <p>Configuration for mitigation actions and notification for different levels of risk detected for a potential account takeover.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountTakeoverRiskConfigurationType {
     /// <p>Account takeover risk configuration actions</p>
     #[serde(rename = "Actions")]
@@ -74,7 +74,7 @@ pub struct AccountTakeoverRiskConfigurationType {
 }
 
 /// <p>Represents the request to add custom attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCustomAttributesRequest {
     /// <p>An array of custom attributes, such as Mutable and Name.</p>
@@ -86,11 +86,11 @@ pub struct AddCustomAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to add custom attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddCustomAttributesResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminAddUserToGroupRequest {
     /// <p>The group name.</p>
@@ -105,7 +105,7 @@ pub struct AdminAddUserToGroupRequest {
 }
 
 /// <p>Represents the request to confirm user registration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminConfirmSignUpRequest {
     /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>If your user pool configuration includes triggers, the AdminConfirmSignUp API action invokes the AWS Lambda function that is specified for the <i>post confirmation</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. In this payload, the <code>clientMetadata</code> attribute provides the data that you assigned to the ClientMetadata parameter in your AdminConfirmSignUp request. In your function code in AWS Lambda, you can process the ClientMetadata value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
@@ -121,12 +121,12 @@ pub struct AdminConfirmSignUpRequest {
 }
 
 /// <p>Represents the response from the server for the request to confirm registration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminConfirmSignUpResponse {}
 
 /// <p>The configuration for creating a new user profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AdminCreateUserConfigType {
     /// <p>Set to <code>True</code> if only the administrator is allowed to create user profiles. Set to <code>False</code> if users can sign themselves up via an app.</p>
     #[serde(rename = "AllowAdminCreateUserOnly")]
@@ -143,7 +143,7 @@ pub struct AdminCreateUserConfigType {
 }
 
 /// <p>Represents the request to create a user in the specified user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminCreateUserRequest {
     /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminCreateUser API action, Amazon Cognito invokes the function that is assigned to the <i>pre sign-up</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminCreateUser request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
@@ -183,7 +183,7 @@ pub struct AdminCreateUserRequest {
 }
 
 /// <p>Represents the response from the server to the request to create the user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminCreateUserResponse {
     /// <p>The newly created user.</p>
@@ -193,7 +193,7 @@ pub struct AdminCreateUserResponse {
 }
 
 /// <p>Represents the request to delete user attributes as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDeleteUserAttributesRequest {
     /// <p>An array of strings representing the user attribute names you wish to delete.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
@@ -208,12 +208,12 @@ pub struct AdminDeleteUserAttributesRequest {
 }
 
 /// <p>Represents the response received from the server for a request to delete user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDeleteUserRequest {
     /// <p>The user pool ID for the user pool where you want to delete the user.</p>
@@ -224,7 +224,7 @@ pub struct AdminDeleteUserRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDisableProviderForUserRequest {
     /// <p>The user to be disabled.</p>
@@ -235,12 +235,12 @@ pub struct AdminDisableProviderForUserRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDisableProviderForUserResponse {}
 
 /// <p>Represents the request to disable any user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminDisableUserRequest {
     /// <p>The user pool ID for the user pool where you want to disable the user.</p>
@@ -252,12 +252,12 @@ pub struct AdminDisableUserRequest {
 }
 
 /// <p>Represents the response received from the server to disable the user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminDisableUserResponse {}
 
 /// <p>Represents the request that enables the user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminEnableUserRequest {
     /// <p>The user pool ID for the user pool where you want to enable the user.</p>
@@ -269,12 +269,12 @@ pub struct AdminEnableUserRequest {
 }
 
 /// <p>Represents the response from the server for the request to enable a user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminEnableUserResponse {}
 
 /// <p>Sends the forgot device request, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminForgetDeviceRequest {
     /// <p>The device key.</p>
@@ -289,7 +289,7 @@ pub struct AdminForgetDeviceRequest {
 }
 
 /// <p>Represents the request to get the device, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminGetDeviceRequest {
     /// <p>The device key.</p>
@@ -304,7 +304,7 @@ pub struct AdminGetDeviceRequest {
 }
 
 /// <p>Gets the device response, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminGetDeviceResponse {
     /// <p>The device.</p>
@@ -313,7 +313,7 @@ pub struct AdminGetDeviceResponse {
 }
 
 /// <p>Represents the request to get the specified user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminGetUserRequest {
     /// <p>The user pool ID for the user pool where you want to get information about the user.</p>
@@ -325,7 +325,7 @@ pub struct AdminGetUserRequest {
 }
 
 /// <p>Represents the response from the server from the request to get the specified user as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminGetUserResponse {
     /// <p>Indicates that the status is enabled.</p>
@@ -366,7 +366,7 @@ pub struct AdminGetUserResponse {
 }
 
 /// <p>Initiates the authorization request, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminInitiateAuthRequest {
     /// <p>The analytics metadata for collecting Amazon Pinpoint metrics for <code>AdminInitiateAuth</code> calls.</p>
@@ -397,7 +397,7 @@ pub struct AdminInitiateAuthRequest {
 }
 
 /// <p>Initiates the authentication response, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminInitiateAuthResponse {
     /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
@@ -418,7 +418,7 @@ pub struct AdminInitiateAuthResponse {
     pub session: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminLinkProviderForUserRequest {
     /// <p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>For a native username + password user, the <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> should be the username in the user pool. For a federated user, it should be the provider-specific <code>user_id</code>.</p> <p>The <code>ProviderAttributeName</code> of the <code>DestinationUser</code> is ignored.</p> <p>The <code>ProviderName</code> should be set to <code>Cognito</code> for users in Cognito user pools.</p>
@@ -432,12 +432,12 @@ pub struct AdminLinkProviderForUserRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminLinkProviderForUserResponse {}
 
 /// <p>Represents the request to list devices, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListDevicesRequest {
     /// <p>The limit of the devices request.</p>
@@ -457,7 +457,7 @@ pub struct AdminListDevicesRequest {
 }
 
 /// <p>Lists the device's response, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListDevicesResponse {
     /// <p>The devices in the list of devices response.</p>
@@ -470,7 +470,7 @@ pub struct AdminListDevicesResponse {
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListGroupsForUserRequest {
     /// <p>The limit of the request to list groups.</p>
@@ -489,7 +489,7 @@ pub struct AdminListGroupsForUserRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListGroupsForUserResponse {
     /// <p>The groups that the user belongs to.</p>
@@ -502,7 +502,7 @@ pub struct AdminListGroupsForUserResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminListUserAuthEventsRequest {
     /// <p>The maximum number of authentication events to return.</p>
@@ -521,7 +521,7 @@ pub struct AdminListUserAuthEventsRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminListUserAuthEventsResponse {
     /// <p>The response object. It includes the <code>EventID</code>, <code>EventType</code>, <code>CreationDate</code>, <code>EventRisk</code>, and <code>EventResponse</code>.</p>
@@ -534,7 +534,7 @@ pub struct AdminListUserAuthEventsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminRemoveUserFromGroupRequest {
     /// <p>The group name.</p>
@@ -549,7 +549,7 @@ pub struct AdminRemoveUserFromGroupRequest {
 }
 
 /// <p>Represents the request to reset a user's password as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminResetUserPasswordRequest {
     /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminResetUserPassword API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminResetUserPassword request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
@@ -565,12 +565,12 @@ pub struct AdminResetUserPasswordRequest {
 }
 
 /// <p>Represents the response from the server to reset a user password as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminResetUserPasswordResponse {}
 
 /// <p>The request to respond to the authentication challenge, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminRespondToAuthChallengeRequest {
     /// <p>The analytics metadata for collecting Amazon Pinpoint metrics for <code>AdminRespondToAuthChallenge</code> calls.</p>
@@ -605,7 +605,7 @@ pub struct AdminRespondToAuthChallengeRequest {
 }
 
 /// <p>Responds to the authentication challenge, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminRespondToAuthChallengeResponse {
     /// <p>The result returned by the server in response to the authentication request.</p>
@@ -626,7 +626,7 @@ pub struct AdminRespondToAuthChallengeResponse {
     pub session: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserMFAPreferenceRequest {
     /// <p>The SMS text message MFA settings.</p>
@@ -645,11 +645,11 @@ pub struct AdminSetUserMFAPreferenceRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserMFAPreferenceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserPasswordRequest {
     /// <p>The password for the user.</p>
@@ -667,12 +667,12 @@ pub struct AdminSetUserPasswordRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserPasswordResponse {}
 
 /// <p>You can use this parameter to set an MFA configuration that uses the SMS delivery medium.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminSetUserSettingsRequest {
     /// <p>You can use this parameter only to set an SMS configuration that uses SMS for delivery.</p>
@@ -687,11 +687,11 @@ pub struct AdminSetUserSettingsRequest {
 }
 
 /// <p>Represents the response from the server to set user settings as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminSetUserSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateAuthEventFeedbackRequest {
     /// <p>The authentication event ID.</p>
@@ -708,12 +708,12 @@ pub struct AdminUpdateAuthEventFeedbackRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateAuthEventFeedbackResponse {}
 
 /// <p>The request to update the device status, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateDeviceStatusRequest {
     /// <p>The device key.</p>
@@ -732,12 +732,12 @@ pub struct AdminUpdateDeviceStatusRequest {
 }
 
 /// <p>The status response from the request to update the device, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateDeviceStatusResponse {}
 
 /// <p>Represents the request to update the user's attributes as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUpdateUserAttributesRequest {
     /// <p><p>A map of custom key-value pairs that you can provide as input for any custom workflows that this action triggers. </p> <p>You create custom workflows by assigning AWS Lambda functions to user pool triggers. When you use the AdminUpdateUserAttributes API action, Amazon Cognito invokes the function that is assigned to the <i>custom message</i> trigger. When Amazon Cognito invokes this function, it passes a JSON payload, which the function receives as input. This payload contains a <code>clientMetadata</code> attribute, which provides the data that you assigned to the ClientMetadata parameter in your AdminUpdateUserAttributes request. In your function code in AWS Lambda, you can process the <code>clientMetadata</code> value to enhance your workflow for your specific needs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">Customizing User Pool Workflows with Lambda Triggers</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <note> <p>Take the following limitations into consideration when you use the ClientMetadata parameter:</p> <ul> <li> <p>Amazon Cognito does not store the ClientMetadata value. This data is available only to AWS Lambda triggers that are assigned to a user pool to support custom workflows. If your user pool configuration does not include triggers, the ClientMetadata parameter serves no purpose.</p> </li> <li> <p>Amazon Cognito does not validate the ClientMetadata value.</p> </li> <li> <p>Amazon Cognito does not encrypt the the ClientMetadata value, so don&#39;t use it to provide sensitive information.</p> </li> </ul> </note></p>
@@ -756,12 +756,12 @@ pub struct AdminUpdateUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to update user attributes as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUpdateUserAttributesResponse {}
 
 /// <p>The request to sign out of all devices, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdminUserGlobalSignOutRequest {
     /// <p>The user pool ID.</p>
@@ -773,12 +773,12 @@ pub struct AdminUserGlobalSignOutRequest {
 }
 
 /// <p>The global sign-out response, as an administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
 
 /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AnalyticsConfigurationType {
     /// <p>The application ID for an Amazon Pinpoint application.</p>
     #[serde(rename = "ApplicationId")]
@@ -796,7 +796,7 @@ pub struct AnalyticsConfigurationType {
 }
 
 /// <p><p>An Amazon Pinpoint analytics endpoint.</p> <p>An endpoint uniquely identifies a mobile device, email address, or phone number that can receive messages from Amazon Pinpoint analytics.</p> <note> <p>Cognito User Pools only supports sending events to Amazon Pinpoint projects in the US East (N. Virginia) us-east-1 Region, regardless of the region in which the user pool resides.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsMetadataType {
     /// <p>The endpoint ID.</p>
@@ -805,7 +805,7 @@ pub struct AnalyticsMetadataType {
     pub analytics_endpoint_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSoftwareTokenRequest {
     /// <p>The access token.</p>
@@ -818,7 +818,7 @@ pub struct AssociateSoftwareTokenRequest {
     pub session: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSoftwareTokenResponse {
     /// <p>A unique generated shared secret code that is used in the TOTP algorithm to generate a one time code.</p>
@@ -832,7 +832,7 @@ pub struct AssociateSoftwareTokenResponse {
 }
 
 /// <p>Specifies whether the attribute is standard or custom.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeType {
     /// <p>The name of the attribute.</p>
     #[serde(rename = "Name")]
@@ -844,7 +844,7 @@ pub struct AttributeType {
 }
 
 /// <p>The authentication event type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthEventType {
     /// <p>The challenge responses.</p>
@@ -882,7 +882,7 @@ pub struct AuthEventType {
 }
 
 /// <p>The authentication result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthenticationResultType {
     /// <p>The access token.</p>
@@ -912,7 +912,7 @@ pub struct AuthenticationResultType {
 }
 
 /// <p>The challenge response type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChallengeResponseType {
     /// <p>The challenge name</p>
@@ -926,7 +926,7 @@ pub struct ChallengeResponseType {
 }
 
 /// <p>Represents the request to change a user password.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChangePasswordRequest {
     /// <p>The access token.</p>
@@ -941,12 +941,12 @@ pub struct ChangePasswordRequest {
 }
 
 /// <p>The response from the server to the change password request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangePasswordResponse {}
 
 /// <p>The code delivery details being returned from the server.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeDeliveryDetailsType {
     /// <p>The attribute name.</p>
@@ -964,7 +964,7 @@ pub struct CodeDeliveryDetailsType {
 }
 
 /// <p>The compromised credentials actions type</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CompromisedCredentialsActionsType {
     /// <p>The event action.</p>
     #[serde(rename = "EventAction")]
@@ -972,7 +972,7 @@ pub struct CompromisedCredentialsActionsType {
 }
 
 /// <p>The compromised credentials risk configuration type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CompromisedCredentialsRiskConfigurationType {
     /// <p>The compromised credentials risk configuration actions.</p>
     #[serde(rename = "Actions")]
@@ -984,7 +984,7 @@ pub struct CompromisedCredentialsRiskConfigurationType {
 }
 
 /// <p>Confirms the device request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmDeviceRequest {
     /// <p>The access token.</p>
@@ -1004,7 +1004,7 @@ pub struct ConfirmDeviceRequest {
 }
 
 /// <p>Confirms the device response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmDeviceResponse {
     /// <p>Indicates whether the user confirmation is necessary to confirm the device response.</p>
@@ -1014,7 +1014,7 @@ pub struct ConfirmDeviceResponse {
 }
 
 /// <p>The request representing the confirmation for a password reset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmForgotPasswordRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ConfirmForgotPassword</code> calls.</p>
@@ -1048,12 +1048,12 @@ pub struct ConfirmForgotPasswordRequest {
 }
 
 /// <p>The response from the server that results from a user's request to retrieve a forgotten password.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmForgotPasswordResponse {}
 
 /// <p>Represents the request to confirm registration of a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmSignUpRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ConfirmSignUp</code> calls.</p>
@@ -1088,12 +1088,12 @@ pub struct ConfirmSignUpRequest {
 }
 
 /// <p>Represents the response from the server for the registration confirmation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmSignUpResponse {}
 
 /// <p>Contextual user data type used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContextDataType {
     /// <p>Encoded data containing device fingerprinting details, collected using the Amazon Cognito context data collection library.</p>
@@ -1114,7 +1114,7 @@ pub struct ContextDataType {
     pub server_path: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>A string containing the description of the group.</p>
@@ -1137,7 +1137,7 @@ pub struct CreateGroupRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The group object for the group.</p>
@@ -1146,7 +1146,7 @@ pub struct CreateGroupResponse {
     pub group: Option<GroupType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIdentityProviderRequest {
     /// <p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>
@@ -1171,7 +1171,7 @@ pub struct CreateIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIdentityProviderResponse {
     /// <p>The newly created identity provider object.</p>
@@ -1179,7 +1179,7 @@ pub struct CreateIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceServerRequest {
     /// <p>A unique resource server identifier for the resource server. This could be an HTTPS endpoint where the resource server is located. For example, <code>https://my-weather-api.example.com</code>.</p>
@@ -1197,7 +1197,7 @@ pub struct CreateResourceServerRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceServerResponse {
     /// <p>The newly created resource server.</p>
@@ -1206,7 +1206,7 @@ pub struct CreateResourceServerResponse {
 }
 
 /// <p>Represents the request to create the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserImportJobRequest {
     /// <p>The role ARN for the Amazon CloudWatch Logging role for the user import job.</p>
@@ -1221,7 +1221,7 @@ pub struct CreateUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to create the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
@@ -1231,7 +1231,7 @@ pub struct CreateUserImportJobResponse {
 }
 
 /// <p>Represents the request to create a user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolClientRequest {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
@@ -1299,7 +1299,7 @@ pub struct CreateUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server to create a user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolClientResponse {
     /// <p>The user pool client that was just created.</p>
@@ -1308,7 +1308,7 @@ pub struct CreateUserPoolClientResponse {
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolDomainRequest {
     /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use a custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html">Configuring a User Pool Domain</a>.</p>
@@ -1323,7 +1323,7 @@ pub struct CreateUserPoolDomainRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolDomainResponse {
     /// <p>The Amazon CloudFront endpoint that you use as the target of the alias that you set up with your Domain Name Service (DNS) provider.</p>
@@ -1333,7 +1333,7 @@ pub struct CreateUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to create a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserPoolRequest {
     /// <p><p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p> <note> <p>Starting February 1, 2020, the value of <code>AccountRecoverySetting</code> will default to <code>verified<em>email</code> first and <code>verified</em>phone_number</code> as the second option for newly created user pools if no value is provided.</p> </note></p>
@@ -1422,7 +1422,7 @@ pub struct CreateUserPoolRequest {
 }
 
 /// <p>Represents the response from the server for the request to create a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserPoolResponse {
     /// <p>A container for the user pool details.</p>
@@ -1432,14 +1432,14 @@ pub struct CreateUserPoolResponse {
 }
 
 /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomDomainConfigType {
     /// <p>The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The name of the group.</p>
@@ -1450,7 +1450,7 @@ pub struct DeleteGroupRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityProviderRequest {
     /// <p>The identity provider name.</p>
@@ -1461,7 +1461,7 @@ pub struct DeleteIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceServerRequest {
     /// <p>The identifier for the resource server.</p>
@@ -1473,7 +1473,7 @@ pub struct DeleteResourceServerRequest {
 }
 
 /// <p>Represents the request to delete user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserAttributesRequest {
     /// <p>The access token used in the request to delete user attributes.</p>
@@ -1485,12 +1485,12 @@ pub struct DeleteUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server to delete user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolClientRequest {
     /// <p>The app client ID of the app associated with the user pool.</p>
@@ -1501,7 +1501,7 @@ pub struct DeleteUserPoolClientRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolDomainRequest {
     /// <p>The domain string.</p>
@@ -1512,12 +1512,12 @@ pub struct DeleteUserPoolDomainRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserPoolDomainResponse {}
 
 /// <p>Represents the request to delete a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserPoolRequest {
     /// <p>The user pool ID for the user pool you want to delete.</p>
@@ -1526,7 +1526,7 @@ pub struct DeleteUserPoolRequest {
 }
 
 /// <p>Represents the request to delete a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The access token from a request to delete a user.</p>
@@ -1534,7 +1534,7 @@ pub struct DeleteUserRequest {
     pub access_token: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityProviderRequest {
     /// <p>The identity provider name.</p>
@@ -1545,7 +1545,7 @@ pub struct DescribeIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityProviderResponse {
     /// <p>The identity provider that was deleted.</p>
@@ -1553,7 +1553,7 @@ pub struct DescribeIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceServerRequest {
     /// <p>The identifier for the resource server</p>
@@ -1564,7 +1564,7 @@ pub struct DescribeResourceServerRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceServerResponse {
     /// <p>The resource server.</p>
@@ -1572,7 +1572,7 @@ pub struct DescribeResourceServerResponse {
     pub resource_server: ResourceServerType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRiskConfigurationRequest {
     /// <p>The app client ID.</p>
@@ -1584,7 +1584,7 @@ pub struct DescribeRiskConfigurationRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRiskConfigurationResponse {
     /// <p>The risk configuration.</p>
@@ -1593,7 +1593,7 @@ pub struct DescribeRiskConfigurationResponse {
 }
 
 /// <p>Represents the request to describe the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserImportJobRequest {
     /// <p>The job ID for the user import job.</p>
@@ -1605,7 +1605,7 @@ pub struct DescribeUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to describe the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
@@ -1615,7 +1615,7 @@ pub struct DescribeUserImportJobResponse {
 }
 
 /// <p>Represents the request to describe a user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolClientRequest {
     /// <p>The app client ID of the app associated with the user pool.</p>
@@ -1627,7 +1627,7 @@ pub struct DescribeUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server from a request to describe the user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolClientResponse {
     /// <p>The user pool client from a server response to describe the user pool client.</p>
@@ -1636,7 +1636,7 @@ pub struct DescribeUserPoolClientResponse {
     pub user_pool_client: Option<UserPoolClientType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolDomainRequest {
     /// <p>The domain string.</p>
@@ -1644,7 +1644,7 @@ pub struct DescribeUserPoolDomainRequest {
     pub domain: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolDomainResponse {
     /// <p>A domain description object containing information about the domain.</p>
@@ -1654,7 +1654,7 @@ pub struct DescribeUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to describe the user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserPoolRequest {
     /// <p>The user pool ID for the user pool you want to describe.</p>
@@ -1663,7 +1663,7 @@ pub struct DescribeUserPoolRequest {
 }
 
 /// <p>Represents the response to describe the user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserPoolResponse {
     /// <p>The container of metadata returned by the server to describe the pool.</p>
@@ -1673,7 +1673,7 @@ pub struct DescribeUserPoolResponse {
 }
 
 /// <p>The configuration for the user pool's device tracking.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceConfigurationType {
     /// <p>Indicates whether a challenge is required on a new device. Only applicable to a new device.</p>
     #[serde(rename = "ChallengeRequiredOnNewDevice")]
@@ -1686,7 +1686,7 @@ pub struct DeviceConfigurationType {
 }
 
 /// <p>The device verifier against which it will be authenticated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeviceSecretVerifierConfigType {
     /// <p>The password verifier.</p>
@@ -1700,7 +1700,7 @@ pub struct DeviceSecretVerifierConfigType {
 }
 
 /// <p>The device type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceType {
     /// <p>The device attributes.</p>
@@ -1726,7 +1726,7 @@ pub struct DeviceType {
 }
 
 /// <p>A container for information about a domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDescriptionType {
     /// <p>The AWS account ID for the user pool owner.</p>
@@ -1764,7 +1764,7 @@ pub struct DomainDescriptionType {
 }
 
 /// <p>The email configuration type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmailConfigurationType {
     /// <p><p>The set of configuration rules that can be applied to emails sent using Amazon SES. A configuration set is applied to an email by including a reference to the configuration set in the headers of the email. Once applied, all of the rules in that configuration set are applied to the email. Configuration sets can be used to apply the following types of rules to emails: </p> <ul> <li> <p>Event publishing – Amazon SES can track the number of send, delivery, open, click, bounce, and complaint events for each email sent. Use event publishing to send information about these events to other AWS services such as SNS and CloudWatch.</p> </li> <li> <p>IP pool management – When leasing dedicated IP addresses with Amazon SES, you can create groups of IP addresses, called dedicated IP pools. You can then associate the dedicated IP pools with configuration sets.</p> </li> </ul></p>
     #[serde(rename = "ConfigurationSet")]
@@ -1789,7 +1789,7 @@ pub struct EmailConfigurationType {
 }
 
 /// <p>Specifies the user context data captured at the time of an event request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventContextDataType {
     /// <p>The user's city.</p>
@@ -1815,7 +1815,7 @@ pub struct EventContextDataType {
 }
 
 /// <p>Specifies the event feedback type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventFeedbackType {
     /// <p>The event feedback date.</p>
@@ -1831,7 +1831,7 @@ pub struct EventFeedbackType {
 }
 
 /// <p>The event risk type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventRiskType {
     /// <p>Indicates whether compromised credentials were detected during an authentication event.</p>
@@ -1849,7 +1849,7 @@ pub struct EventRiskType {
 }
 
 /// <p>Represents the request to forget the device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgetDeviceRequest {
     /// <p>The access token for the forgotten device request.</p>
@@ -1862,7 +1862,7 @@ pub struct ForgetDeviceRequest {
 }
 
 /// <p>Represents the request to reset a user's password.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForgotPasswordRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ForgotPassword</code> calls.</p>
@@ -1890,7 +1890,7 @@ pub struct ForgotPasswordRequest {
 }
 
 /// <p>Respresents the response from the server regarding the request to reset a password.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ForgotPasswordResponse {
     /// <p>The code delivery details returned by the server in response to the request to reset a password.</p>
@@ -1900,7 +1900,7 @@ pub struct ForgotPasswordResponse {
 }
 
 /// <p>Represents the request to get the header information for the .csv file for the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCSVHeaderRequest {
     /// <p>The user pool ID for the user pool that the users are to be imported into.</p>
@@ -1909,7 +1909,7 @@ pub struct GetCSVHeaderRequest {
 }
 
 /// <p>Represents the response from the server to the request to get the header information for the .csv file for the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCSVHeaderResponse {
     /// <p>The header information for the .csv file for the user import job.</p>
@@ -1923,7 +1923,7 @@ pub struct GetCSVHeaderResponse {
 }
 
 /// <p>Represents the request to get the device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The access token.</p>
@@ -1936,7 +1936,7 @@ pub struct GetDeviceRequest {
 }
 
 /// <p>Gets the device response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResponse {
     /// <p>The device.</p>
@@ -1944,7 +1944,7 @@ pub struct GetDeviceResponse {
     pub device: DeviceType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The name of the group.</p>
@@ -1955,7 +1955,7 @@ pub struct GetGroupRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>The group object for the group.</p>
@@ -1964,7 +1964,7 @@ pub struct GetGroupResponse {
     pub group: Option<GroupType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityProviderByIdentifierRequest {
     /// <p>The identity provider ID.</p>
@@ -1975,7 +1975,7 @@ pub struct GetIdentityProviderByIdentifierRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityProviderByIdentifierResponse {
     /// <p>The identity provider object.</p>
@@ -1984,7 +1984,7 @@ pub struct GetIdentityProviderByIdentifierResponse {
 }
 
 /// <p>Request to get a signing certificate from Cognito.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningCertificateRequest {
     /// <p>The user pool ID.</p>
@@ -1993,7 +1993,7 @@ pub struct GetSigningCertificateRequest {
 }
 
 /// <p>Response from Cognito for a signing certificate request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningCertificateResponse {
     /// <p>The signing certificate.</p>
@@ -2002,7 +2002,7 @@ pub struct GetSigningCertificateResponse {
     pub certificate: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUICustomizationRequest {
     /// <p>The client ID for the client app.</p>
@@ -2014,7 +2014,7 @@ pub struct GetUICustomizationRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUICustomizationResponse {
     /// <p>The UI customization information.</p>
@@ -2023,7 +2023,7 @@ pub struct GetUICustomizationResponse {
 }
 
 /// <p>Represents the request to get user attribute verification.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserAttributeVerificationCodeRequest {
     /// <p>The access token returned by the server response to get the user attribute verification code.</p>
@@ -2039,7 +2039,7 @@ pub struct GetUserAttributeVerificationCodeRequest {
 }
 
 /// <p>The verification code response returned by the server response to get the user attribute verification code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserAttributeVerificationCodeResponse {
     /// <p>The code delivery details returned by the server in response to the request to get the user attribute verification code.</p>
@@ -2048,7 +2048,7 @@ pub struct GetUserAttributeVerificationCodeResponse {
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserPoolMfaConfigRequest {
     /// <p>The user pool ID.</p>
@@ -2056,7 +2056,7 @@ pub struct GetUserPoolMfaConfigRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserPoolMfaConfigResponse {
     /// <p><p>The multi-factor (MFA) configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
@@ -2074,7 +2074,7 @@ pub struct GetUserPoolMfaConfigResponse {
 }
 
 /// <p>Represents the request to get information about the user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
     /// <p>The access token returned by the server response to get information about the user.</p>
@@ -2083,7 +2083,7 @@ pub struct GetUserRequest {
 }
 
 /// <p>Represents the response from the server from the request to get information about the user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
     /// <p> <i>This response parameter is no longer supported.</i> It provides information only about SMS MFA configurations. It doesn't provide information about TOTP software token MFA configurations. To look up information about either type of MFA configuration, use the use the <a>GetUserResponse$UserMFASettingList</a> response instead.</p>
@@ -2107,7 +2107,7 @@ pub struct GetUserResponse {
 }
 
 /// <p>Represents the request to sign out all devices.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GlobalSignOutRequest {
     /// <p>The access token.</p>
@@ -2116,12 +2116,12 @@ pub struct GlobalSignOutRequest {
 }
 
 /// <p>The response to the request to sign out all devices.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlobalSignOutResponse {}
 
 /// <p>The group type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupType {
     /// <p>The date the group was created.</p>
@@ -2155,7 +2155,7 @@ pub struct GroupType {
 }
 
 /// <p>The HTTP header.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpHeader {
     /// <p>The header name</p>
@@ -2169,7 +2169,7 @@ pub struct HttpHeader {
 }
 
 /// <p>A container for information about an identity provider.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityProviderType {
     /// <p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>
@@ -2207,7 +2207,7 @@ pub struct IdentityProviderType {
 }
 
 /// <p>Initiates the authentication request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateAuthRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>InitiateAuth</code> calls.</p>
@@ -2235,7 +2235,7 @@ pub struct InitiateAuthRequest {
 }
 
 /// <p>Initiates the authentication response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateAuthResponse {
     /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
@@ -2257,7 +2257,7 @@ pub struct InitiateAuthResponse {
 }
 
 /// <p>Specifies the configuration for AWS Lambda triggers.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LambdaConfigType {
     /// <p>Creates an authentication challenge.</p>
     #[serde(rename = "CreateAuthChallenge")]
@@ -2302,7 +2302,7 @@ pub struct LambdaConfigType {
 }
 
 /// <p>Represents the request to list the devices.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The access tokens for the request to list devices.</p>
@@ -2319,7 +2319,7 @@ pub struct ListDevicesRequest {
 }
 
 /// <p>Represents the response to list devices.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>The devices returned in the list devices response.</p>
@@ -2332,7 +2332,7 @@ pub struct ListDevicesResponse {
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The limit of the request to list groups.</p>
@@ -2348,7 +2348,7 @@ pub struct ListGroupsRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>The group objects for the groups.</p>
@@ -2361,7 +2361,7 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityProvidersRequest {
     /// <p>The maximum number of identity providers to return.</p>
@@ -2377,7 +2377,7 @@ pub struct ListIdentityProvidersRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityProvidersResponse {
     /// <p>A pagination token.</p>
@@ -2389,7 +2389,7 @@ pub struct ListIdentityProvidersResponse {
     pub providers: Vec<ProviderDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceServersRequest {
     /// <p>The maximum number of resource servers to return.</p>
@@ -2405,7 +2405,7 @@ pub struct ListResourceServersRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceServersResponse {
     /// <p>A pagination token.</p>
@@ -2417,7 +2417,7 @@ pub struct ListResourceServersResponse {
     pub resource_servers: Vec<ResourceServerType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>
@@ -2425,7 +2425,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags that are assigned to the user pool.</p>
@@ -2435,7 +2435,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Represents the request to list the user import jobs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserImportJobsRequest {
     /// <p>The maximum number of import jobs you want the request to return.</p>
@@ -2451,7 +2451,7 @@ pub struct ListUserImportJobsRequest {
 }
 
 /// <p>Represents the response from the server to the request to list the user import jobs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserImportJobsResponse {
     /// <p>An identifier that can be used to return the next set of user import jobs in the list.</p>
@@ -2465,7 +2465,7 @@ pub struct ListUserImportJobsResponse {
 }
 
 /// <p>Represents the request to list the user pool clients.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoolClientsRequest {
     /// <p>The maximum number of results you want the request to return when listing the user pool clients.</p>
@@ -2482,7 +2482,7 @@ pub struct ListUserPoolClientsRequest {
 }
 
 /// <p>Represents the response from the server that lists user pool clients.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserPoolClientsResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2496,7 +2496,7 @@ pub struct ListUserPoolClientsResponse {
 }
 
 /// <p>Represents the request to list user pools.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserPoolsRequest {
     /// <p>The maximum number of results you want the request to return when listing the user pools.</p>
@@ -2509,7 +2509,7 @@ pub struct ListUserPoolsRequest {
 }
 
 /// <p>Represents the response to list user pools.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserPoolsResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2522,7 +2522,7 @@ pub struct ListUserPoolsResponse {
     pub user_pools: Option<Vec<UserPoolDescriptionType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersInGroupRequest {
     /// <p>The name of the group.</p>
@@ -2541,7 +2541,7 @@ pub struct ListUsersInGroupRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersInGroupResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2555,7 +2555,7 @@ pub struct ListUsersInGroupResponse {
 }
 
 /// <p>Represents the request to list users.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>An array of strings, where each string is the name of a user attribute to be returned for each user in the search results. If the array is null, all attributes are returned.</p>
@@ -2580,7 +2580,7 @@ pub struct ListUsersRequest {
 }
 
 /// <p>The response from the request to list users.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2594,7 +2594,7 @@ pub struct ListUsersResponse {
 }
 
 /// <p> <i>This data type is no longer supported.</i> You can use it only for SMS MFA configurations. You can't use it for TOTP software token MFA configurations.</p> <p>To set either type of MFA configuration, use the <a>AdminSetUserMFAPreference</a> or <a>SetUserMFAPreference</a> actions.</p> <p>To look up information about either type of MFA configuration, use the <a>AdminGetUserResponse$UserMFASettingList</a> or <a>GetUserResponse$UserMFASettingList</a> responses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MFAOptionType {
     /// <p>The attribute name of the MFA option type. The only valid value is <code>phone_number</code>.</p>
     #[serde(rename = "AttributeName")]
@@ -2607,7 +2607,7 @@ pub struct MFAOptionType {
 }
 
 /// <p>The message template structure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MessageTemplateType {
     /// <p>The message template for email messages.</p>
     #[serde(rename = "EmailMessage")]
@@ -2624,7 +2624,7 @@ pub struct MessageTemplateType {
 }
 
 /// <p>The new device metadata type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NewDeviceMetadataType {
     /// <p>The device group key.</p>
@@ -2638,7 +2638,7 @@ pub struct NewDeviceMetadataType {
 }
 
 /// <p>The notify configuration type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NotifyConfigurationType {
     /// <p>Email template used when a detected risk event is blocked.</p>
     #[serde(rename = "BlockEmail")]
@@ -2666,7 +2666,7 @@ pub struct NotifyConfigurationType {
 }
 
 /// <p>The notify email type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NotifyEmailType {
     /// <p>The HTML body.</p>
     #[serde(rename = "HtmlBody")]
@@ -2682,7 +2682,7 @@ pub struct NotifyEmailType {
 }
 
 /// <p>The minimum and maximum value of an attribute that is of the number data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NumberAttributeConstraintsType {
     /// <p>The maximum value of an attribute that is of the number data type.</p>
     #[serde(rename = "MaxValue")]
@@ -2695,7 +2695,7 @@ pub struct NumberAttributeConstraintsType {
 }
 
 /// <p>The password policy type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PasswordPolicyType {
     /// <p>The minimum length of the password policy that you have set. Cannot be less than 6.</p>
     #[serde(rename = "MinimumLength")]
@@ -2724,7 +2724,7 @@ pub struct PasswordPolicyType {
 }
 
 /// <p>A container for identity provider details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProviderDescription {
     /// <p>The date the provider was added to the user pool.</p>
@@ -2746,7 +2746,7 @@ pub struct ProviderDescription {
 }
 
 /// <p>A container for information about an identity provider for a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProviderUserIdentifierType {
     /// <p>The name of the provider attribute to link to, for example, <code>NameID</code>.</p>
@@ -2764,7 +2764,7 @@ pub struct ProviderUserIdentifierType {
 }
 
 /// <p>A map containing a priority as a key, and recovery method name as a value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecoveryOptionType {
     /// <p>Specifies the recovery method for a user.</p>
     #[serde(rename = "Name")]
@@ -2775,7 +2775,7 @@ pub struct RecoveryOptionType {
 }
 
 /// <p>Represents the request to resend the confirmation code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResendConfirmationCodeRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ResendConfirmationCode</code> calls.</p>
@@ -2803,7 +2803,7 @@ pub struct ResendConfirmationCodeRequest {
 }
 
 /// <p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResendConfirmationCodeResponse {
     /// <p>The code delivery details returned by the server in response to the request to resend the confirmation code.</p>
@@ -2813,7 +2813,7 @@ pub struct ResendConfirmationCodeResponse {
 }
 
 /// <p>A resource server scope.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceServerScopeType {
     /// <p>A description of the scope.</p>
     #[serde(rename = "ScopeDescription")]
@@ -2824,7 +2824,7 @@ pub struct ResourceServerScopeType {
 }
 
 /// <p>A container for information about a resource server for a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceServerType {
     /// <p>The identifier for the resource server.</p>
@@ -2846,7 +2846,7 @@ pub struct ResourceServerType {
 }
 
 /// <p>The request to respond to an authentication challenge.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RespondToAuthChallengeRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>RespondToAuthChallenge</code> calls.</p>
@@ -2878,7 +2878,7 @@ pub struct RespondToAuthChallengeRequest {
 }
 
 /// <p>The response to respond to the authentication challenge.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RespondToAuthChallengeResponse {
     /// <p>The result returned by the server in response to the request to respond to the authentication challenge.</p>
@@ -2900,7 +2900,7 @@ pub struct RespondToAuthChallengeResponse {
 }
 
 /// <p>The risk configuration type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RiskConfigurationType {
     /// <p>The account takeover risk configuration object including the <code>NotifyConfiguration</code> object and <code>Actions</code> to take in the case of an account takeover.</p>
@@ -2931,7 +2931,7 @@ pub struct RiskConfigurationType {
 }
 
 /// <p>The type of the configuration to override the risk decision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RiskExceptionConfigurationType {
     /// <p>Overrides the risk decision to always block the pre-authentication requests. The IP range is in CIDR notation: a compact representation of an IP address and its associated routing prefix.</p>
     #[serde(rename = "BlockedIPRangeList")]
@@ -2944,7 +2944,7 @@ pub struct RiskExceptionConfigurationType {
 }
 
 /// <p>The type used for enabling SMS MFA at the user level.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SMSMfaSettingsType {
     /// <p>Specifies whether SMS text message MFA is enabled.</p>
@@ -2958,7 +2958,7 @@ pub struct SMSMfaSettingsType {
 }
 
 /// <p>Contains information about the schema attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SchemaAttributeType {
     /// <p>The attribute data type.</p>
     #[serde(rename = "AttributeDataType")]
@@ -2990,7 +2990,7 @@ pub struct SchemaAttributeType {
     pub string_attribute_constraints: Option<StringAttributeConstraintsType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetRiskConfigurationRequest {
     /// <p>The account takeover risk configuration.</p>
@@ -3015,7 +3015,7 @@ pub struct SetRiskConfigurationRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetRiskConfigurationResponse {
     /// <p>The risk configuration.</p>
@@ -3023,7 +3023,7 @@ pub struct SetRiskConfigurationResponse {
     pub risk_configuration: RiskConfigurationType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUICustomizationRequest {
     /// <p>The CSS values in the UI customization.</p>
@@ -3048,7 +3048,7 @@ pub struct SetUICustomizationRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUICustomizationResponse {
     /// <p>The UI customization information.</p>
@@ -3056,7 +3056,7 @@ pub struct SetUICustomizationResponse {
     pub ui_customization: UICustomizationType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserMFAPreferenceRequest {
     /// <p>The access token for the user.</p>
@@ -3072,11 +3072,11 @@ pub struct SetUserMFAPreferenceRequest {
     pub software_token_mfa_settings: Option<SoftwareTokenMfaSettingsType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserMFAPreferenceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserPoolMfaConfigRequest {
     /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
@@ -3096,7 +3096,7 @@ pub struct SetUserPoolMfaConfigRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserPoolMfaConfigResponse {
     /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
@@ -3114,7 +3114,7 @@ pub struct SetUserPoolMfaConfigResponse {
 }
 
 /// <p>Represents the request to set user settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetUserSettingsRequest {
     /// <p>The access token for the set user settings request.</p>
@@ -3126,12 +3126,12 @@ pub struct SetUserSettingsRequest {
 }
 
 /// <p>The response from the server for a set user settings request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetUserSettingsResponse {}
 
 /// <p>Represents the request to register a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignUpRequest {
     /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>SignUp</code> calls.</p>
@@ -3170,7 +3170,7 @@ pub struct SignUpRequest {
 }
 
 /// <p>The response from the server for a registration request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignUpResponse {
     /// <p>The code delivery details returned by the server response to the user registration request.</p>
@@ -3186,7 +3186,7 @@ pub struct SignUpResponse {
 }
 
 /// <p>The SMS configuration type that includes the settings the Cognito User Pool needs to call for the Amazon SNS service to send an SMS message from your AWS account. The Cognito User Pool makes the request to the Amazon SNS Service by using an AWS IAM role that you provide for your AWS account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SmsConfigurationType {
     /// <p>The external ID is a value that we recommend you use to add security to your IAM role which is used to call Amazon SNS to send SMS messages for your user pool. If you provide an <code>ExternalId</code>, the Cognito User Pool will include it when attempting to assume your IAM role, so that you can set your roles trust policy to require the <code>ExternalID</code>. If you use the Cognito Management Console to create a role for SMS MFA, Cognito will create a role with the required permissions and a trust policy that demonstrates use of the <code>ExternalId</code>.</p>
     #[serde(rename = "ExternalId")]
@@ -3198,7 +3198,7 @@ pub struct SmsConfigurationType {
 }
 
 /// <p>The SMS text message multi-factor authentication (MFA) configuration type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SmsMfaConfigType {
     /// <p>The SMS authentication message that will be sent to users with the code they need to sign in. The message must contain the ‘{####}’ placeholder, which will be replaced with the code. If the message is not included, and default message will be used.</p>
     #[serde(rename = "SmsAuthenticationMessage")]
@@ -3211,7 +3211,7 @@ pub struct SmsMfaConfigType {
 }
 
 /// <p>The type used for enabling software token MFA at the user pool level.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SoftwareTokenMfaConfigType {
     /// <p>Specifies whether software token MFA is enabled.</p>
     #[serde(rename = "Enabled")]
@@ -3220,7 +3220,7 @@ pub struct SoftwareTokenMfaConfigType {
 }
 
 /// <p>The type used for enabling software token MFA at the user level.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SoftwareTokenMfaSettingsType {
     /// <p>Specifies whether software token MFA is enabled.</p>
@@ -3234,7 +3234,7 @@ pub struct SoftwareTokenMfaSettingsType {
 }
 
 /// <p>Represents the request to start the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartUserImportJobRequest {
     /// <p>The job ID for the user import job.</p>
@@ -3246,7 +3246,7 @@ pub struct StartUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to start the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
@@ -3256,7 +3256,7 @@ pub struct StartUserImportJobResponse {
 }
 
 /// <p>Represents the request to stop the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopUserImportJobRequest {
     /// <p>The job ID for the user import job.</p>
@@ -3268,7 +3268,7 @@ pub struct StopUserImportJobRequest {
 }
 
 /// <p>Represents the response from the server to the request to stop the user import job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
@@ -3278,7 +3278,7 @@ pub struct StopUserImportJobResponse {
 }
 
 /// <p>The constraints associated with a string attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StringAttributeConstraintsType {
     /// <p>The maximum length.</p>
     #[serde(rename = "MaxLength")]
@@ -3290,7 +3290,7 @@ pub struct StringAttributeConstraintsType {
     pub min_length: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the user pool to assign the tags to.</p>
@@ -3301,12 +3301,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UICustomizationType {
     /// <p>The CSS values in the UI customization.</p>
@@ -3339,7 +3339,7 @@ pub struct UICustomizationType {
     pub user_pool_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>
@@ -3350,11 +3350,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthEventFeedbackRequest {
     /// <p>The event ID.</p>
@@ -3374,12 +3374,12 @@ pub struct UpdateAuthEventFeedbackRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthEventFeedbackResponse {}
 
 /// <p>Represents the request to update the device status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceStatusRequest {
     /// <p>The access token.</p>
@@ -3395,11 +3395,11 @@ pub struct UpdateDeviceStatusRequest {
 }
 
 /// <p>The response to the request to update the device status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceStatusResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>A string containing the new description of the group.</p>
@@ -3422,7 +3422,7 @@ pub struct UpdateGroupRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {
     /// <p>The group object for the group.</p>
@@ -3431,7 +3431,7 @@ pub struct UpdateGroupResponse {
     pub group: Option<GroupType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIdentityProviderRequest {
     /// <p>The identity provider attribute mapping to be changed.</p>
@@ -3454,7 +3454,7 @@ pub struct UpdateIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIdentityProviderResponse {
     /// <p>The identity provider object.</p>
@@ -3462,7 +3462,7 @@ pub struct UpdateIdentityProviderResponse {
     pub identity_provider: IdentityProviderType,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceServerRequest {
     /// <p>The identifier for the resource server.</p>
@@ -3480,7 +3480,7 @@ pub struct UpdateResourceServerRequest {
     pub user_pool_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceServerResponse {
     /// <p>The resource server.</p>
@@ -3489,7 +3489,7 @@ pub struct UpdateResourceServerResponse {
 }
 
 /// <p>Represents the request to update user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserAttributesRequest {
     /// <p>The access token for the request to update user attributes.</p>
@@ -3505,7 +3505,7 @@ pub struct UpdateUserAttributesRequest {
 }
 
 /// <p>Represents the response from the server for the request to update user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserAttributesResponse {
     /// <p>The code delivery details list from the server for the request to update user attributes.</p>
@@ -3515,7 +3515,7 @@ pub struct UpdateUserAttributesResponse {
 }
 
 /// <p>Represents the request to update the user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolClientRequest {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
@@ -3583,7 +3583,7 @@ pub struct UpdateUserPoolClientRequest {
 }
 
 /// <p>Represents the response from the server to the request to update the user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolClientResponse {
     /// <p>The user pool client value from the response from the server when an update user pool client request is made.</p>
@@ -3593,7 +3593,7 @@ pub struct UpdateUserPoolClientResponse {
 }
 
 /// <p>The UpdateUserPoolDomain request input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolDomainRequest {
     /// <p>The configuration for a custom domain that hosts the sign-up and sign-in pages for your application. Use this object to specify an SSL certificate that is managed by ACM.</p>
@@ -3608,7 +3608,7 @@ pub struct UpdateUserPoolDomainRequest {
 }
 
 /// <p>The UpdateUserPoolDomain response output.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolDomainResponse {
     /// <p>The Amazon CloudFront endpoint that Amazon Cognito set up when you added the custom domain to your user pool.</p>
@@ -3618,7 +3618,7 @@ pub struct UpdateUserPoolDomainResponse {
 }
 
 /// <p>Represents the request to update the user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPoolRequest {
     /// <p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p>
@@ -3691,12 +3691,12 @@ pub struct UpdateUserPoolRequest {
 }
 
 /// <p>Represents the response from the server when you make a request to update the user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserPoolResponse {}
 
 /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserContextDataType {
     /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
@@ -3706,7 +3706,7 @@ pub struct UserContextDataType {
 }
 
 /// <p>The user import job type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserImportJobType {
     /// <p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see "Creating the CloudWatch Logs IAM Role" in the Amazon Cognito Developer Guide.</p>
@@ -3764,7 +3764,7 @@ pub struct UserImportJobType {
 }
 
 /// <p>The user pool add-ons type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserPoolAddOnsType {
     /// <p>The advanced security mode.</p>
     #[serde(rename = "AdvancedSecurityMode")]
@@ -3772,7 +3772,7 @@ pub struct UserPoolAddOnsType {
 }
 
 /// <p>The description of the user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolClientDescription {
     /// <p>The ID of the client associated with the user pool.</p>
@@ -3790,7 +3790,7 @@ pub struct UserPoolClientDescription {
 }
 
 /// <p>Contains information about a user pool client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolClientType {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
@@ -3872,7 +3872,7 @@ pub struct UserPoolClientType {
 }
 
 /// <p>A user pool description.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolDescriptionType {
     /// <p>The date the user pool description was created.</p>
@@ -3902,7 +3902,7 @@ pub struct UserPoolDescriptionType {
 }
 
 /// <p>The policy associated with a user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserPoolPolicyType {
     /// <p>The password policy.</p>
     #[serde(rename = "PasswordPolicy")]
@@ -3911,7 +3911,7 @@ pub struct UserPoolPolicyType {
 }
 
 /// <p>A container for information about the user pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserPoolType {
     /// <p>Use this setting to define which verified available method a user can use to recover their password when they call <code>ForgotPassword</code>. It allows you to define a preferred method when a user has more than one method available. With this setting, SMS does not qualify for a valid password recovery mechanism if the user also has SMS MFA enabled. In the absence of this setting, Cognito uses the legacy behavior to determine the recovery method where SMS is preferred over email.</p>
@@ -4041,7 +4041,7 @@ pub struct UserPoolType {
 }
 
 /// <p>The user type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserType {
     /// <p>A container with information about the user type attributes.</p>
@@ -4075,7 +4075,7 @@ pub struct UserType {
 }
 
 /// <p>The username configuration type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UsernameConfigurationType {
     /// <p><p>Specifies whether username case sensitivity will be applied for all users in the user pool through Cognito APIs.</p> <p>Valid values include:</p> <ul> <li> <p> <b> <code>True</code> </b>: Enables case sensitivity for all username input. When this option is set to <code>True</code>, users must sign in using the exact capitalization of their given username. For example, “UserName”. This is the default value.</p> </li> <li> <p> <b> <code>False</code> </b>: Enables case insensitivity for all username input. For example, when this option is set to <code>False</code>, users will be able to sign in using either &quot;username&quot; or &quot;Username&quot;. This option also enables both <code>preferred_username</code> and <code>email</code> alias to be case insensitive, in addition to the <code>username</code> attribute.</p> </li> </ul></p>
     #[serde(rename = "CaseSensitive")]
@@ -4083,7 +4083,7 @@ pub struct UsernameConfigurationType {
 }
 
 /// <p>The template for verification messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VerificationMessageTemplateType {
     /// <p>The default email option.</p>
     #[serde(rename = "DefaultEmailOption")]
@@ -4111,7 +4111,7 @@ pub struct VerificationMessageTemplateType {
     pub sms_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifySoftwareTokenRequest {
     /// <p>The access token.</p>
@@ -4131,7 +4131,7 @@ pub struct VerifySoftwareTokenRequest {
     pub user_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifySoftwareTokenResponse {
     /// <p>The session which should be passed both ways in challenge-response calls to the service.</p>
@@ -4145,7 +4145,7 @@ pub struct VerifySoftwareTokenResponse {
 }
 
 /// <p>Represents the request to verify user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VerifyUserAttributeRequest {
     /// <p>Represents the access token of the request to verify user attributes.</p>
@@ -4160,7 +4160,7 @@ pub struct VerifyUserAttributeRequest {
 }
 
 /// <p>A container representing the response from the server from the request to verify user attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VerifyUserAttributeResponse {}
 

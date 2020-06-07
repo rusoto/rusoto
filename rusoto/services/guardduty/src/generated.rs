@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -39,12 +39,12 @@ pub struct AcceptInvitationRequest {
     pub master_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
 /// <p>Contains information about the access keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessKeyDetails {
     /// <p>The access key ID of the user.</p>
@@ -66,7 +66,7 @@ pub struct AccessKeyDetails {
 }
 
 /// <p>Contains information about the account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccountDetail {
     /// <p>The member account ID.</p>
@@ -78,7 +78,7 @@ pub struct AccountDetail {
 }
 
 /// <p>Contains information about actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Action {
     /// <p>The GuardDuty finding activity type.</p>
@@ -104,7 +104,7 @@ pub struct Action {
 }
 
 /// <p>The account within the organization specified as the GuardDuty delegated administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminAccount {
     /// <p>The AWS account ID for the account.</p>
@@ -117,7 +117,7 @@ pub struct AdminAccount {
     pub admin_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to archive.</p>
@@ -128,12 +128,12 @@ pub struct ArchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
 /// <p>Contains information about the API operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsApiCallAction {
     /// <p>The AWS API name.</p>
@@ -159,7 +159,7 @@ pub struct AwsApiCallAction {
 }
 
 /// <p>Contains information about the city associated with the IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct City {
     /// <p>The city name of the remote IP address.</p>
@@ -169,7 +169,7 @@ pub struct City {
 }
 
 /// <p>Contains information about the condition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>Represents an <i>equal</i> <b/> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "Equals")]
@@ -198,7 +198,7 @@ pub struct Condition {
 }
 
 /// <p>Contains information about the country where the remote IP address is located.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Country {
     /// <p>The country code of the remote IP address.</p>
@@ -211,7 +211,7 @@ pub struct Country {
     pub country_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorRequest {
     /// <p>The idempotency token for the create request.</p>
@@ -231,7 +231,7 @@ pub struct CreateDetectorRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorResponse {
     /// <p>The unique ID of the created detector.</p>
@@ -240,7 +240,7 @@ pub struct CreateDetectorResponse {
     pub detector_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -274,7 +274,7 @@ pub struct CreateFilterRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFilterResponse {
     /// <p>The name of the successfully created filter.</p>
@@ -282,7 +282,7 @@ pub struct CreateFilterResponse {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
     /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
@@ -310,7 +310,7 @@ pub struct CreateIPSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
     /// <p>The ID of the IPSet resource.</p>
@@ -318,7 +318,7 @@ pub struct CreateIPSetResponse {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
@@ -329,7 +329,7 @@ pub struct CreateMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
     /// <p>A list of objects that include the <code>accountIds</code> of the unprocessed accounts and a result string that explains why each was unprocessed.</p>
@@ -337,7 +337,7 @@ pub struct CreateMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublishingDestinationRequest {
     /// <p>The idempotency token for the request.</p>
@@ -355,7 +355,7 @@ pub struct CreatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePublishingDestinationResponse {
     /// <p>The ID of the publishing destination that is created.</p>
@@ -363,7 +363,7 @@ pub struct CreatePublishingDestinationResponse {
     pub destination_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSampleFindingsRequest {
     /// <p>The ID of the detector to create sample findings for.</p>
@@ -375,11 +375,11 @@ pub struct CreateSampleFindingsRequest {
     pub finding_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThreatIntelSetRequest {
     /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
@@ -407,7 +407,7 @@ pub struct CreateThreatIntelSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
     /// <p>The ID of the ThreatIntelSet resource.</p>
@@ -415,7 +415,7 @@ pub struct CreateThreatIntelSetResponse {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to decline invitations from.</p>
@@ -423,7 +423,7 @@ pub struct DeclineInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -431,7 +431,7 @@ pub struct DeclineInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
     /// <p>The unique ID of the detector that you want to delete.</p>
@@ -439,11 +439,11 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -454,11 +454,11 @@ pub struct DeleteFilterRequest {
     pub filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFilterResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
     /// <p>The unique ID of the detector associated with the IPSet.</p>
@@ -469,11 +469,11 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to delete invitations from.</p>
@@ -481,7 +481,7 @@ pub struct DeleteInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -489,7 +489,7 @@ pub struct DeleteInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to delete.</p>
@@ -500,7 +500,7 @@ pub struct DeleteMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
     /// <p>The accounts that could not be processed.</p>
@@ -508,7 +508,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to delete.</p>
@@ -519,11 +519,11 @@ pub struct DeletePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePublishingDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThreatIntelSetRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -534,11 +534,11 @@ pub struct DeleteThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigurationRequest {
     /// <p>The ID of the detector to retrieve information about the delegated administrator from.</p>
@@ -546,7 +546,7 @@ pub struct DescribeOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigurationResponse {
     /// <p>Indicates whether GuardDuty is automatically enabled for accounts added to the organization.</p>
@@ -557,7 +557,7 @@ pub struct DescribeOrganizationConfigurationResponse {
     pub member_account_limit_reached: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to retrieve.</p>
@@ -568,7 +568,7 @@ pub struct DescribePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePublishingDestinationResponse {
     /// <p>The ID of the publishing destination.</p>
@@ -589,7 +589,7 @@ pub struct DescribePublishingDestinationResponse {
 }
 
 /// <p>Contains information about the publishing destination, including the ID, type, and status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Destination {
     /// <p>The unique ID of the publishing destination.</p>
@@ -604,7 +604,7 @@ pub struct Destination {
 }
 
 /// <p>Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationProperties {
     /// <p>The ARN of the resource to publish to.</p>
     #[serde(rename = "DestinationArn")]
@@ -616,7 +616,7 @@ pub struct DestinationProperties {
     pub kms_key_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableOrganizationAdminAccountRequest {
     /// <p>The AWS Account ID for the organizations account to be disabled as a GuardDuty delegated administrator.</p>
@@ -624,11 +624,11 @@ pub struct DisableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableOrganizationAdminAccountResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -636,11 +636,11 @@ pub struct DisassociateFromMasterAccountRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from the master account.</p>
@@ -651,7 +651,7 @@ pub struct DisassociateMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -660,7 +660,7 @@ pub struct DisassociateMembersResponse {
 }
 
 /// <p>Contains information about the DNS_REQUEST action described in this finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DnsRequestAction {
     /// <p>The domain information for the API request.</p>
@@ -670,7 +670,7 @@ pub struct DnsRequestAction {
 }
 
 /// <p>Contains information about the domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDetails {
     /// <p>The domain information for the AWS API call.</p>
@@ -679,7 +679,7 @@ pub struct DomainDetails {
     pub domain: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableOrganizationAdminAccountRequest {
     /// <p>The AWS Account ID for the organization account to be enabled as a GuardDuty delegated administrator.</p>
@@ -687,12 +687,12 @@ pub struct EnableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableOrganizationAdminAccountResponse {}
 
 /// <p>Contains information about the reason that the finding was generated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Evidence {
     /// <p>A list of threat intelligence details related to the evidence.</p>
@@ -702,7 +702,7 @@ pub struct Evidence {
 }
 
 /// <p>Contains information about the finding, which is generated when abnormal or suspicious activity is detected.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The ID of the account in which the finding was generated.</p>
@@ -756,7 +756,7 @@ pub struct Finding {
 }
 
 /// <p>Contains information about the criteria used for querying findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FindingCriteria {
     /// <p>Represents a map of finding properties that match specified conditions and values when querying findings.</p>
     #[serde(rename = "Criterion")]
@@ -765,7 +765,7 @@ pub struct FindingCriteria {
 }
 
 /// <p>Contains information about finding statistics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingStatistics {
     /// <p>Represents a map of severity to count statistics for a set of findings.</p>
@@ -775,7 +775,7 @@ pub struct FindingStatistics {
 }
 
 /// <p>Contains information about the location of the remote IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GeoLocation {
     /// <p>The latitude information of the remote IP address.</p>
@@ -788,7 +788,7 @@ pub struct GeoLocation {
     pub lon: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorRequest {
     /// <p>The unique ID of the detector that you want to get.</p>
@@ -796,7 +796,7 @@ pub struct GetDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorResponse {
     /// <p>The timestamp of when the detector was created.</p>
@@ -823,7 +823,7 @@ pub struct GetDetectorResponse {
     pub updated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFilterRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -834,7 +834,7 @@ pub struct GetFilterRequest {
     pub filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -860,7 +860,7 @@ pub struct GetFilterResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to retrieve.</p>
@@ -875,7 +875,7 @@ pub struct GetFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsResponse {
     /// <p>A list of findings.</p>
@@ -883,7 +883,7 @@ pub struct GetFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsStatisticsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings' statistics you want to retrieve.</p>
@@ -898,7 +898,7 @@ pub struct GetFindingsStatisticsRequest {
     pub finding_statistic_types: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
     /// <p>The finding statistics object.</p>
@@ -906,7 +906,7 @@ pub struct GetFindingsStatisticsResponse {
     pub finding_statistics: FindingStatistics,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
     /// <p>The unique ID of the detector that the IPSet is associated with.</p>
@@ -917,7 +917,7 @@ pub struct GetIPSetRequest {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
@@ -938,11 +938,11 @@ pub struct GetIPSetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
     /// <p>The number of received invitations.</p>
@@ -951,7 +951,7 @@ pub struct GetInvitationsCountResponse {
     pub invitations_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -959,7 +959,7 @@ pub struct GetMasterAccountRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
     /// <p>The master account details.</p>
@@ -967,7 +967,7 @@ pub struct GetMasterAccountResponse {
     pub master: Master,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
@@ -978,7 +978,7 @@ pub struct GetMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
     /// <p>A list of members.</p>
@@ -989,7 +989,7 @@ pub struct GetMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThreatIntelSetRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -1000,7 +1000,7 @@ pub struct GetThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
@@ -1022,7 +1022,7 @@ pub struct GetThreatIntelSetResponse {
 }
 
 /// <p>Contains information about the EC2 instance profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IamInstanceProfile {
     /// <p>The profile ARN of the EC2 instance.</p>
@@ -1036,7 +1036,7 @@ pub struct IamInstanceProfile {
 }
 
 /// <p>Contains information about the details of an instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceDetails {
     /// <p>The Availability Zone of the EC2 instance.</p>
@@ -1094,7 +1094,7 @@ pub struct InstanceDetails {
 }
 
 /// <p>Contains information about the invitation to become a member account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
     /// <p>The ID of the account that the invitation was sent from.</p>
@@ -1115,7 +1115,7 @@ pub struct Invitation {
     pub relationship_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
@@ -1134,7 +1134,7 @@ pub struct InviteMembersRequest {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -1142,7 +1142,7 @@ pub struct InviteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
@@ -1155,7 +1155,7 @@ pub struct ListDetectorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
     /// <p>A list of detector IDs.</p>
@@ -1167,7 +1167,7 @@ pub struct ListDetectorsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -1183,7 +1183,7 @@ pub struct ListFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
     /// <p>A list of filter names.</p>
@@ -1195,7 +1195,7 @@ pub struct ListFiltersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
@@ -1219,7 +1219,7 @@ pub struct ListFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>The IDs of the findings that you're listing.</p>
@@ -1231,7 +1231,7 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
     /// <p>The unique ID of the detector that the IPSet is associated with.</p>
@@ -1247,7 +1247,7 @@ pub struct ListIPSetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
     /// <p>The IDs of the IPSet resources.</p>
@@ -1259,7 +1259,7 @@ pub struct ListIPSetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
@@ -1272,7 +1272,7 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
     /// <p>A list of invitation descriptions.</p>
@@ -1285,7 +1285,7 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
     /// <p>The unique ID of the detector the member is associated with.</p>
@@ -1305,7 +1305,7 @@ pub struct ListMembersRequest {
     pub only_associated: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
     /// <p>A list of members.</p>
@@ -1318,7 +1318,7 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationAdminAccountsRequest {
     /// <p>The maximum number of results to return in the response.</p>
@@ -1331,7 +1331,7 @@ pub struct ListOrganizationAdminAccountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationAdminAccountsResponse {
     /// <p>An AdminAccounts object that includes a list of accounts configured as GuardDuty delegated administrators.</p>
@@ -1344,7 +1344,7 @@ pub struct ListOrganizationAdminAccountsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublishingDestinationsRequest {
     /// <p>The ID of the detector to retrieve publishing destinations for.</p>
@@ -1360,7 +1360,7 @@ pub struct ListPublishingDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishingDestinationsResponse {
     /// <p>A <code>Destinations</code> object that includes information about each publishing destination returned.</p>
@@ -1372,7 +1372,7 @@ pub struct ListPublishingDestinationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource. </p>
@@ -1380,7 +1380,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags associated with the resource.</p>
@@ -1389,7 +1389,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThreatIntelSetsRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -1405,7 +1405,7 @@ pub struct ListThreatIntelSetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
     /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
@@ -1418,7 +1418,7 @@ pub struct ListThreatIntelSetsResponse {
 }
 
 /// <p>Contains information about the local IP address of the connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalIpDetails {
     /// <p>The IPv4 local address of the connection.</p>
@@ -1428,7 +1428,7 @@ pub struct LocalIpDetails {
 }
 
 /// <p>Contains information about the port for the local connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalPortDetails {
     /// <p>The port number of the local connection.</p>
@@ -1442,7 +1442,7 @@ pub struct LocalPortDetails {
 }
 
 /// <p>Contains information about the master account and invitation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Master {
     /// <p>The ID of the account used as the master account.</p>
@@ -1464,7 +1464,7 @@ pub struct Master {
 }
 
 /// <p>Contains information about the member account. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>The ID of the member account.</p>
@@ -1493,7 +1493,7 @@ pub struct Member {
 }
 
 /// <p>Contains information about the NETWORK_CONNECTION action described in the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkConnectionAction {
     /// <p>Indicates whether EC2 blocked the network connection to your instance.</p>
@@ -1527,7 +1527,7 @@ pub struct NetworkConnectionAction {
 }
 
 /// <p>Contains information about the elastic network interface of the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>A list of IPv6 addresses for the EC2 instance.</p>
@@ -1573,7 +1573,7 @@ pub struct NetworkInterface {
 }
 
 /// <p>Contains information about the ISP organization of the remote IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Organization {
     /// <p>The Autonomous System Number (ASN) of the internet provider of the remote IP address.</p>
@@ -1595,7 +1595,7 @@ pub struct Organization {
 }
 
 /// <p>Contains information about the PORT_PROBE action described in the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeAction {
     /// <p>Indicates whether EC2 blocked the port probe to the instance, such as with an ACL.</p>
@@ -1609,7 +1609,7 @@ pub struct PortProbeAction {
 }
 
 /// <p>Contains information about the port probe details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeDetail {
     /// <p>The local IP information of the connection.</p>
@@ -1627,7 +1627,7 @@ pub struct PortProbeDetail {
 }
 
 /// <p>Contains other private IP address information of the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIpAddressDetails {
     /// <p>The private DNS name of the EC2 instance.</p>
@@ -1641,7 +1641,7 @@ pub struct PrivateIpAddressDetails {
 }
 
 /// <p>Contains information about the product code for the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductCode {
     /// <p>The product code information.</p>
@@ -1655,7 +1655,7 @@ pub struct ProductCode {
 }
 
 /// <p>Contains information about the remote IP address of the connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteIpDetails {
     /// <p>The city information of the remote IP address.</p>
@@ -1681,7 +1681,7 @@ pub struct RemoteIpDetails {
 }
 
 /// <p>Contains information about the remote port.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemotePortDetails {
     /// <p>The port number of the remote connection.</p>
@@ -1695,7 +1695,7 @@ pub struct RemotePortDetails {
 }
 
 /// <p>Contains information about the AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
@@ -1713,7 +1713,7 @@ pub struct Resource {
 }
 
 /// <p>Contains information about the security groups associated with the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>The security group ID of the EC2 instance.</p>
@@ -1727,7 +1727,7 @@ pub struct SecurityGroup {
 }
 
 /// <p>Contains additional information about the generated finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
     /// <p>Information about the activity that is described in a finding.</p>
@@ -1773,7 +1773,7 @@ pub struct Service {
 }
 
 /// <p>Contains information about the criteria used for sorting findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriteria {
     /// <p>Represents the finding attribute (for example, accountId) to sort findings by.</p>
@@ -1786,7 +1786,7 @@ pub struct SortCriteria {
     pub order_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts to start monitoring.</p>
@@ -1797,7 +1797,7 @@ pub struct StartMonitoringMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -1805,7 +1805,7 @@ pub struct StartMonitoringMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringMembersRequest {
     /// <p>A list of account IDs for the member accounts to stop monitoring.</p>
@@ -1816,7 +1816,7 @@ pub struct StopMonitoringMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
     /// <p>A list of objects that contain an accountId for each account that could not be processed, and a result string that indicates why the account was not processed. </p>
@@ -1825,7 +1825,7 @@ pub struct StopMonitoringMembersResponse {
 }
 
 /// <p>Contains information about a tag associated with the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tag {
     /// <p>The EC2 instance tag key.</p>
@@ -1838,7 +1838,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the GuardDuty resource to apply a tag to.</p>
@@ -1849,12 +1849,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>An instance of a threat intelligence detail that constitutes evidence for the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThreatIntelligenceDetail {
     /// <p>The name of the threat intelligence list that triggered the finding.</p>
@@ -1867,7 +1867,7 @@ pub struct ThreatIntelligenceDetail {
     pub threat_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector associated with the findings to unarchive.</p>
@@ -1878,12 +1878,12 @@ pub struct UnarchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
 /// <p>Contains information about the accounts that weren't processed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>The AWS account ID.</p>
@@ -1894,7 +1894,7 @@ pub struct UnprocessedAccount {
     pub result: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the resource to remove tags from.</p>
@@ -1905,11 +1905,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
     /// <p>The unique ID of the detector to update.</p>
@@ -1925,11 +1925,11 @@ pub struct UpdateDetectorRequest {
     pub finding_publishing_frequency: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -1956,7 +1956,7 @@ pub struct UpdateFilterRequest {
     pub rank: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFilterResponse {
     /// <p>The name of the filter.</p>
@@ -1964,7 +1964,7 @@ pub struct UpdateFilterResponse {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsFeedbackRequest {
     /// <p>Additional feedback about the GuardDuty findings.</p>
@@ -1982,11 +1982,11 @@ pub struct UpdateFindingsFeedbackRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
     /// <p>The updated Boolean value that specifies whether the IPSet is active or not.</p>
@@ -2009,11 +2009,11 @@ pub struct UpdateIPSetRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationConfigurationRequest {
     /// <p>Indicates whether to automatically enable member accounts in the organization.</p>
@@ -2024,11 +2024,11 @@ pub struct UpdateOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOrganizationConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to update.</p>
@@ -2043,11 +2043,11 @@ pub struct UpdatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePublishingDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThreatIntelSetRequest {
     /// <p>The updated Boolean value that specifies whether the ThreateIntelSet is active or not.</p>
@@ -2070,7 +2070,7 @@ pub struct UpdateThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
 

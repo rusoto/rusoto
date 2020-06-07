@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddFacetToObjectRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
@@ -42,11 +42,11 @@ pub struct AddFacetToObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddFacetToObjectResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplySchemaRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> into which the schema is copied. For more information, see <a>arns</a>.</p>
@@ -57,7 +57,7 @@ pub struct ApplySchemaRequest {
     pub published_schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplySchemaResponse {
     /// <p>The applied schema ARN that is associated with the copied schema in the <a>Directory</a>. You can use this ARN to describe the schema information applied on this directory. For more information, see <a>arns</a>.</p>
@@ -70,7 +70,7 @@ pub struct ApplySchemaResponse {
     pub directory_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachObjectRequest {
     /// <p>The child object reference to be attached to the object.</p>
@@ -87,7 +87,7 @@ pub struct AttachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachObjectResponse {
     /// <p>The attached <code>ObjectIdentifier</code>, which is the child <code>ObjectIdentifier</code>.</p>
@@ -96,7 +96,7 @@ pub struct AttachObjectResponse {
     pub attached_object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where both objects reside. For more information, see <a>arns</a>.</p>
@@ -110,11 +110,11 @@ pub struct AttachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachPolicyResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachToIndexRequest {
     /// <p>The Amazon Resource Name (ARN) of the directory where the object and index exist.</p>
@@ -128,7 +128,7 @@ pub struct AttachToIndexRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachToIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>
@@ -137,7 +137,7 @@ pub struct AttachToIndexResponse {
     pub attached_object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachTypedLinkRequest {
     /// <p>A set of attributes that are associated with the typed link.</p>
@@ -157,7 +157,7 @@ pub struct AttachTypedLinkRequest {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachTypedLinkResponse {
     /// <p>Returns a typed link specifier as output.</p>
@@ -167,7 +167,7 @@ pub struct AttachTypedLinkResponse {
 }
 
 /// <p>A unique identifier for an attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeKey {
     /// <p>The name of the facet that the attribute exists within.</p>
     #[serde(rename = "FacetName")]
@@ -181,7 +181,7 @@ pub struct AttributeKey {
 }
 
 /// <p>The combination of an attribute key and an attribute value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeKeyAndValue {
     /// <p>The key of the attribute.</p>
     #[serde(rename = "Key")]
@@ -192,7 +192,7 @@ pub struct AttributeKeyAndValue {
 }
 
 /// <p>Identifies the attribute name and value for a typed link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeNameAndValue {
     /// <p>The attribute name of the typed link.</p>
     #[serde(rename = "AttributeName")]
@@ -203,7 +203,7 @@ pub struct AttributeNameAndValue {
 }
 
 /// <p>Represents the output of a batch add facet to object operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAddFacetToObject {
     /// <p>The attributes to set on the object.</p>
@@ -218,12 +218,12 @@ pub struct BatchAddFacetToObject {
 }
 
 /// <p>The result of a batch add facet to object operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAddFacetToObjectResponse {}
 
 /// <p>Represents the output of an <a>AttachObject</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAttachObject {
     /// <p>The child object reference that is to be attached to the object.</p>
@@ -238,7 +238,7 @@ pub struct BatchAttachObject {
 }
 
 /// <p>Represents the output batch <a>AttachObject</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that has been attached.</p>
@@ -248,7 +248,7 @@ pub struct BatchAttachObjectResponse {
 }
 
 /// <p>Attaches a policy object to a regular object inside a <a>BatchRead</a> operation. For more information, see <a>AttachPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAttachPolicy {
     /// <p>The reference that identifies the object to which the policy will be attached.</p>
@@ -260,12 +260,12 @@ pub struct BatchAttachPolicy {
 }
 
 /// <p>Represents the output of an <a>AttachPolicy</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachPolicyResponse {}
 
 /// <p>Attaches the specified object to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>AttachToIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAttachToIndex {
     /// <p>A reference to the index that you are attaching the object to.</p>
@@ -277,7 +277,7 @@ pub struct BatchAttachToIndex {
 }
 
 /// <p>Represents the output of a <a>AttachToIndex</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachToIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was attached to the index.</p>
@@ -287,7 +287,7 @@ pub struct BatchAttachToIndexResponse {
 }
 
 /// <p>Attaches a typed link to a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>AttachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAttachTypedLink {
     /// <p>A set of attributes that are associated with the typed link.</p>
@@ -305,7 +305,7 @@ pub struct BatchAttachTypedLink {
 }
 
 /// <p>Represents the output of a <a>AttachTypedLink</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAttachTypedLinkResponse {
     /// <p>Returns a typed link specifier as output.</p>
@@ -315,7 +315,7 @@ pub struct BatchAttachTypedLinkResponse {
 }
 
 /// <p>Creates an index object inside of a <a>BatchRead</a> operation. For more information, see <a>CreateIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateIndex {
     /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
@@ -339,7 +339,7 @@ pub struct BatchCreateIndex {
 }
 
 /// <p>Represents the output of a <a>CreateIndex</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>
@@ -349,7 +349,7 @@ pub struct BatchCreateIndexResponse {
 }
 
 /// <p>Represents the output of a <a>CreateObject</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateObject {
     /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
@@ -373,7 +373,7 @@ pub struct BatchCreateObject {
 }
 
 /// <p>Represents the output of a <a>CreateObject</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateObjectResponse {
     /// <p>The ID that is associated with the object.</p>
@@ -383,7 +383,7 @@ pub struct BatchCreateObjectResponse {
 }
 
 /// <p>Represents the output of a <a>DeleteObject</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteObject {
     /// <p>The reference that identifies the object.</p>
@@ -392,12 +392,12 @@ pub struct BatchDeleteObject {
 }
 
 /// <p>Represents the output of a <a>DeleteObject</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteObjectResponse {}
 
 /// <p>Detaches the specified object from the specified index inside a <a>BatchRead</a> operation. For more information, see <a>DetachFromIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetachFromIndex {
     /// <p>A reference to the index object.</p>
@@ -409,7 +409,7 @@ pub struct BatchDetachFromIndex {
 }
 
 /// <p>Represents the output of a <a>DetachFromIndex</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachFromIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>
@@ -419,7 +419,7 @@ pub struct BatchDetachFromIndexResponse {
 }
 
 /// <p>Represents the output of a <a>DetachObject</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetachObject {
     /// <p>The batch reference name. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/transaction_support.html">Transaction Support</a> for more information.</p>
@@ -435,7 +435,7 @@ pub struct BatchDetachObject {
 }
 
 /// <p>Represents the output of a <a>DetachObject</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> of the detached object.</p>
@@ -445,7 +445,7 @@ pub struct BatchDetachObjectResponse {
 }
 
 /// <p>Detaches the specified policy from the specified directory inside a <a>BatchWrite</a> operation. For more information, see <a>DetachPolicy</a> and <a>BatchWriteRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetachPolicy {
     /// <p>Reference that identifies the object whose policy object will be detached.</p>
@@ -457,12 +457,12 @@ pub struct BatchDetachPolicy {
 }
 
 /// <p>Represents the output of a <a>DetachPolicy</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachPolicyResponse {}
 
 /// <p>Detaches a typed link from a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>DetachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetachTypedLink {
     /// <p>Used to accept a typed link specifier as input.</p>
@@ -471,12 +471,12 @@ pub struct BatchDetachTypedLink {
 }
 
 /// <p>Represents the output of a <a>DetachTypedLink</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetachTypedLinkResponse {}
 
 /// <p>Retrieves attributes that are associated with a typed link inside a <a>BatchRead</a> operation. For more information, see <a>GetLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetLinkAttributes {
     /// <p>A list of attribute names whose values will be retrieved.</p>
@@ -488,7 +488,7 @@ pub struct BatchGetLinkAttributes {
 }
 
 /// <p>Represents the output of a <a>GetLinkAttributes</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetLinkAttributesResponse {
     /// <p>The attributes that are associated with the typed link.</p>
@@ -498,7 +498,7 @@ pub struct BatchGetLinkAttributesResponse {
 }
 
 /// <p>Retrieves attributes within a facet that are associated with an object inside an <a>BatchRead</a> operation. For more information, see <a>GetObjectAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetObjectAttributes {
     /// <p>List of attribute names whose values will be retrieved.</p>
@@ -513,7 +513,7 @@ pub struct BatchGetObjectAttributes {
 }
 
 /// <p>Represents the output of a <a>GetObjectAttributes</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetObjectAttributesResponse {
     /// <p>The attribute values that are associated with an object.</p>
@@ -523,7 +523,7 @@ pub struct BatchGetObjectAttributesResponse {
 }
 
 /// <p>Retrieves metadata about an object inside a <a>BatchRead</a> operation. For more information, see <a>GetObjectInformation</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetObjectInformation {
     /// <p>A reference to the object.</p>
@@ -532,7 +532,7 @@ pub struct BatchGetObjectInformation {
 }
 
 /// <p>Represents the output of a <a>GetObjectInformation</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetObjectInformationResponse {
     /// <p>The <code>ObjectIdentifier</code> of the specified object.</p>
@@ -546,7 +546,7 @@ pub struct BatchGetObjectInformationResponse {
 }
 
 /// <p>Lists indices attached to an object inside a <a>BatchRead</a> operation. For more information, see <a>ListAttachedIndices</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListAttachedIndices {
     /// <p>The maximum number of results to retrieve.</p>
@@ -563,7 +563,7 @@ pub struct BatchListAttachedIndices {
 }
 
 /// <p>Represents the output of a <a>ListAttachedIndices</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListAttachedIndicesResponse {
     /// <p>The indices attached to the specified object.</p>
@@ -577,7 +577,7 @@ pub struct BatchListAttachedIndicesResponse {
 }
 
 /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object inside a <a>BatchRead</a> operation. For more information, see <a>ListIncomingTypedLinks</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListIncomingTypedLinks {
     /// <p>Provides range filters for multiple attributes. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range.</p>
@@ -602,7 +602,7 @@ pub struct BatchListIncomingTypedLinks {
 }
 
 /// <p>Represents the output of a <a>ListIncomingTypedLinks</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListIncomingTypedLinksResponse {
     /// <p>Returns one or more typed link specifiers as output.</p>
@@ -616,7 +616,7 @@ pub struct BatchListIncomingTypedLinksResponse {
 }
 
 /// <p>Lists objects attached to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>ListIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListIndex {
     /// <p>The reference to the index to list.</p>
@@ -637,7 +637,7 @@ pub struct BatchListIndex {
 }
 
 /// <p>Represents the output of a <a>ListIndex</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListIndexResponse {
     /// <p>The objects and indexed values attached to the index.</p>
@@ -651,7 +651,7 @@ pub struct BatchListIndexResponse {
 }
 
 /// <p>Represents the output of a <a>ListObjectAttributes</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListObjectAttributes {
     /// <p>Used to filter the list of object attributes that are associated with a certain facet.</p>
@@ -672,7 +672,7 @@ pub struct BatchListObjectAttributes {
 }
 
 /// <p>Represents the output of a <a>ListObjectAttributes</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectAttributesResponse {
     /// <p>The attributes map that is associated with the object. <code>AttributeArn</code> is the key; attribute value is the value.</p>
@@ -686,7 +686,7 @@ pub struct BatchListObjectAttributesResponse {
 }
 
 /// <p>Represents the output of a <a>ListObjectChildren</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListObjectChildren {
     /// <p>Maximum number of items to be retrieved in a single call. This is an approximate number.</p>
@@ -703,7 +703,7 @@ pub struct BatchListObjectChildren {
 }
 
 /// <p>Represents the output of a <a>ListObjectChildren</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectChildrenResponse {
     /// <p>The children structure, which is a map with the key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>
@@ -717,7 +717,7 @@ pub struct BatchListObjectChildrenResponse {
 }
 
 /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects inside a <a>BatchRead</a> operation. For more information, see <a>ListObjectParentPaths</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListObjectParentPaths {
     /// <p>The maximum number of results to retrieve.</p>
@@ -734,7 +734,7 @@ pub struct BatchListObjectParentPaths {
 }
 
 /// <p>Represents the output of a <a>ListObjectParentPaths</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectParentPathsResponse {
     /// <p>The pagination token.</p>
@@ -747,7 +747,7 @@ pub struct BatchListObjectParentPathsResponse {
     pub path_to_object_identifiers_list: Option<Vec<PathToObjectIdentifiers>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListObjectParents {
     #[serde(rename = "MaxResults")]
@@ -760,7 +760,7 @@ pub struct BatchListObjectParents {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectParentsResponse {
     #[serde(rename = "NextToken")]
@@ -772,7 +772,7 @@ pub struct BatchListObjectParentsResponse {
 }
 
 /// <p>Returns policies attached to an object in pagination fashion inside a <a>BatchRead</a> operation. For more information, see <a>ListObjectPolicies</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListObjectPolicies {
     /// <p>The maximum number of results to retrieve.</p>
@@ -789,7 +789,7 @@ pub struct BatchListObjectPolicies {
 }
 
 /// <p>Represents the output of a <a>ListObjectPolicies</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListObjectPoliciesResponse {
     /// <p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>
@@ -803,7 +803,7 @@ pub struct BatchListObjectPoliciesResponse {
 }
 
 /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object inside a <a>BatchRead</a> operation. For more information, see <a>ListOutgoingTypedLinks</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListOutgoingTypedLinks {
     /// <p>Provides range filters for multiple attributes. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range.</p>
@@ -828,7 +828,7 @@ pub struct BatchListOutgoingTypedLinks {
 }
 
 /// <p>Represents the output of a <a>ListOutgoingTypedLinks</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListOutgoingTypedLinksResponse {
     /// <p>The pagination token.</p>
@@ -842,7 +842,7 @@ pub struct BatchListOutgoingTypedLinksResponse {
 }
 
 /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached inside a <a>BatchRead</a> operation. For more information, see <a>ListPolicyAttachments</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchListPolicyAttachments {
     /// <p>The maximum number of results to retrieve.</p>
@@ -859,7 +859,7 @@ pub struct BatchListPolicyAttachments {
 }
 
 /// <p>Represents the output of a <a>ListPolicyAttachments</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchListPolicyAttachmentsResponse {
     /// <p>The pagination token.</p>
@@ -873,7 +873,7 @@ pub struct BatchListPolicyAttachmentsResponse {
 }
 
 /// <p>Lists all policies from the root of the Directory to the object specified inside a <a>BatchRead</a> operation. For more information, see <a>LookupPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchLookupPolicy {
     /// <p>The maximum number of results to retrieve.</p>
@@ -890,7 +890,7 @@ pub struct BatchLookupPolicy {
 }
 
 /// <p>Represents the output of a <a>LookupPolicy</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchLookupPolicyResponse {
     /// <p>The pagination token.</p>
@@ -904,7 +904,7 @@ pub struct BatchLookupPolicyResponse {
 }
 
 /// <p>The batch read exception structure, which contains the exception type and message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadException {
     /// <p>An exception message that is associated with the failure.</p>
@@ -918,7 +918,7 @@ pub struct BatchReadException {
 }
 
 /// <p>Represents the output of a <code>BatchRead</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchReadOperation {
     /// <p>Retrieves attributes that are associated with a typed link.</p>
@@ -979,7 +979,7 @@ pub struct BatchReadOperation {
 }
 
 /// <p>Represents the output of a <code>BatchRead</code> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadOperationResponse {
     /// <p>Identifies which operation in a batch has failed.</p>
@@ -992,7 +992,7 @@ pub struct BatchReadOperationResponse {
     pub successful_response: Option<BatchReadSuccessfulResponse>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchReadRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -1007,7 +1007,7 @@ pub struct BatchReadRequest {
     pub operations: Vec<BatchReadOperation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadResponse {
     /// <p>A list of all the responses for each batch read.</p>
@@ -1017,7 +1017,7 @@ pub struct BatchReadResponse {
 }
 
 /// <p>Represents the output of a <code>BatchRead</code> success response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchReadSuccessfulResponse {
     /// <p>The list of attributes to retrieve from the typed link.</p>
@@ -1078,7 +1078,7 @@ pub struct BatchReadSuccessfulResponse {
 }
 
 /// <p>A batch operation to remove a facet from an object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchRemoveFacetFromObject {
     /// <p>A reference to the object whose facet will be removed.</p>
@@ -1090,12 +1090,12 @@ pub struct BatchRemoveFacetFromObject {
 }
 
 /// <p>An empty result that represents success.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchRemoveFacetFromObjectResponse {}
 
 /// <p>Updates a given typed link’s attributes inside a <a>BatchRead</a> operation. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>. For more information, see <a>UpdateLinkAttributes</a> and <a>BatchReadRequest$Operations</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateLinkAttributes {
     /// <p>The attributes update structure.</p>
@@ -1107,12 +1107,12 @@ pub struct BatchUpdateLinkAttributes {
 }
 
 /// <p>Represents the output of a <a>UpdateLinkAttributes</a> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateLinkAttributesResponse {}
 
 /// <p>Represents the output of a <code>BatchUpdate</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateObjectAttributes {
     /// <p>Attributes update structure.</p>
@@ -1124,7 +1124,7 @@ pub struct BatchUpdateObjectAttributes {
 }
 
 /// <p>Represents the output of a <code>BatchUpdate</code> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateObjectAttributesResponse {
     /// <p>ID that is associated with the object.</p>
@@ -1134,7 +1134,7 @@ pub struct BatchUpdateObjectAttributesResponse {
 }
 
 /// <p>Represents the output of a <code>BatchWrite</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchWriteOperation {
     /// <p>A batch operation that adds a facet to an object.</p>
@@ -1200,7 +1200,7 @@ pub struct BatchWriteOperation {
 }
 
 /// <p>Represents the output of a <code>BatchWrite</code> response operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteOperationResponse {
     /// <p>The result of an add facet to object batch operation.</p>
@@ -1265,7 +1265,7 @@ pub struct BatchWriteOperationResponse {
     pub update_object_attributes: Option<BatchUpdateObjectAttributesResponse>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchWriteRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a>. For more information, see <a>arns</a>.</p>
@@ -1276,7 +1276,7 @@ pub struct BatchWriteRequest {
     pub operations: Vec<BatchWriteOperation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchWriteResponse {
     /// <p>A list of all the responses for each batch write.</p>
@@ -1285,7 +1285,7 @@ pub struct BatchWriteResponse {
     pub responses: Option<Vec<BatchWriteOperationResponse>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectoryRequest {
     /// <p>The name of the <a>Directory</a>. Should be unique per account, per region.</p>
@@ -1296,7 +1296,7 @@ pub struct CreateDirectoryRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectoryResponse {
     /// <p>The ARN of the published schema in the <a>Directory</a>. Once a published schema is copied into the directory, it has its own ARN, which is referred to applied schema ARN. For more information, see <a>arns</a>.</p>
@@ -1313,7 +1313,7 @@ pub struct CreateDirectoryResponse {
     pub object_identifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFacetRequest {
     /// <p>The attributes that are associated with the <a>Facet</a>.</p>
@@ -1336,11 +1336,11 @@ pub struct CreateFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIndexRequest {
     /// <p>The ARN of the directory where the index should be created.</p>
@@ -1362,7 +1362,7 @@ pub struct CreateIndexRequest {
     pub parent_reference: Option<ObjectReference>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the index created by this operation.</p>
@@ -1371,7 +1371,7 @@ pub struct CreateIndexResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateObjectRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> in which the object will be created. For more information, see <a>arns</a>.</p>
@@ -1394,7 +1394,7 @@ pub struct CreateObjectRequest {
     pub schema_facets: Vec<SchemaFacet>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateObjectResponse {
     /// <p>The identifier that is associated with the object.</p>
@@ -1403,7 +1403,7 @@ pub struct CreateObjectResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
     /// <p>The name that is associated with the schema. This is unique to each account and in each region.</p>
@@ -1411,7 +1411,7 @@ pub struct CreateSchemaRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
     /// <p>The Amazon Resource Name (ARN) that is associated with the schema. For more information, see <a>arns</a>.</p>
@@ -1420,7 +1420,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTypedLinkFacetRequest {
     /// <p> <a>Facet</a> structure that is associated with the typed link facet.</p>
@@ -1431,11 +1431,11 @@ pub struct CreateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTypedLinkFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectoryRequest {
     /// <p>The ARN of the directory to delete.</p>
@@ -1443,7 +1443,7 @@ pub struct DeleteDirectoryRequest {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectoryResponse {
     /// <p>The ARN of the deleted directory.</p>
@@ -1451,7 +1451,7 @@ pub struct DeleteDirectoryResponse {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFacetRequest {
     /// <p>The name of the facet to delete.</p>
@@ -1462,11 +1462,11 @@ pub struct DeleteFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
@@ -1477,11 +1477,11 @@ pub struct DeleteObjectRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteObjectResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the development schema. For more information, see <a>arns</a>.</p>
@@ -1489,7 +1489,7 @@ pub struct DeleteSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSchemaResponse {
     /// <p>The input ARN that is returned as part of the response. For more information, see <a>arns</a>.</p>
@@ -1498,7 +1498,7 @@ pub struct DeleteSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTypedLinkFacetRequest {
     /// <p>The unique name of the typed link facet.</p>
@@ -1509,11 +1509,11 @@ pub struct DeleteTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTypedLinkFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachFromIndexRequest {
     /// <p>The Amazon Resource Name (ARN) of the directory the index and object exist in.</p>
@@ -1527,7 +1527,7 @@ pub struct DetachFromIndexRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachFromIndexResponse {
     /// <p>The <code>ObjectIdentifier</code> of the object that was detached from the index.</p>
@@ -1536,7 +1536,7 @@ pub struct DetachFromIndexResponse {
     pub detached_object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachObjectRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>
@@ -1550,7 +1550,7 @@ pub struct DetachObjectRequest {
     pub parent_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachObjectResponse {
     /// <p>The <code>ObjectIdentifier</code> that was detached from the object.</p>
@@ -1559,7 +1559,7 @@ pub struct DetachObjectResponse {
     pub detached_object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where both objects reside. For more information, see <a>arns</a>.</p>
@@ -1573,11 +1573,11 @@ pub struct DetachPolicyRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachPolicyResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachTypedLinkRequest {
     /// <p>The Amazon Resource Name (ARN) of the directory where you want to detach the typed link.</p>
@@ -1589,7 +1589,7 @@ pub struct DetachTypedLinkRequest {
 }
 
 /// <p>Directory structure that includes the directory name and directory ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Directory {
     /// <p>The date and time when the directory was created.</p>
@@ -1610,7 +1610,7 @@ pub struct Directory {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableDirectoryRequest {
     /// <p>The ARN of the directory to disable.</p>
@@ -1618,7 +1618,7 @@ pub struct DisableDirectoryRequest {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableDirectoryResponse {
     /// <p>The ARN of the directory that has been disabled.</p>
@@ -1626,7 +1626,7 @@ pub struct DisableDirectoryResponse {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableDirectoryRequest {
     /// <p>The ARN of the directory to enable.</p>
@@ -1634,7 +1634,7 @@ pub struct EnableDirectoryRequest {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableDirectoryResponse {
     /// <p>The ARN of the enabled directory.</p>
@@ -1643,7 +1643,7 @@ pub struct EnableDirectoryResponse {
 }
 
 /// <p>A structure that contains <code>Name</code>, <code>ARN</code>, <code>Attributes</code>, <code> <a>Rule</a>s</code>, and <code>ObjectTypes</code>. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_whatarefacets.html">Facets</a> for more information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Facet {
     /// <p>There are two different styles that you can define on any given facet, <code>Static</code> and <code>Dynamic</code>. For static facets, all attributes must be defined in the schema. For dynamic facets, attributes can be defined during data plane operations.</p>
@@ -1661,7 +1661,7 @@ pub struct Facet {
 }
 
 /// <p>An attribute that is associated with the <a>Facet</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FacetAttribute {
     /// <p>A facet attribute consists of either a definition or a reference. This structure contains the attribute definition. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "AttributeDefinition")]
@@ -1681,7 +1681,7 @@ pub struct FacetAttribute {
 }
 
 /// <p>A facet attribute definition. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FacetAttributeDefinition {
     /// <p>The default value of the attribute (if configured).</p>
     #[serde(rename = "DefaultValue")]
@@ -1701,7 +1701,7 @@ pub struct FacetAttributeDefinition {
 }
 
 /// <p>The facet attribute reference that specifies the attribute definition that contains the attribute facet name and attribute name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FacetAttributeReference {
     /// <p>The target attribute name that is associated with the facet reference. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
     #[serde(rename = "TargetAttributeName")]
@@ -1712,7 +1712,7 @@ pub struct FacetAttributeReference {
 }
 
 /// <p>A structure that contains information used to update an attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FacetAttributeUpdate {
     /// <p>The action to perform when updating the attribute.</p>
@@ -1725,7 +1725,7 @@ pub struct FacetAttributeUpdate {
     pub attribute: Option<FacetAttribute>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppliedSchemaVersionRequest {
     /// <p>The ARN of the applied schema.</p>
@@ -1733,7 +1733,7 @@ pub struct GetAppliedSchemaVersionRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppliedSchemaVersionResponse {
     /// <p>Current applied schema ARN, including the minor version in use if one was provided.</p>
@@ -1742,7 +1742,7 @@ pub struct GetAppliedSchemaVersionResponse {
     pub applied_schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDirectoryRequest {
     /// <p>The ARN of the directory.</p>
@@ -1750,7 +1750,7 @@ pub struct GetDirectoryRequest {
     pub directory_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDirectoryResponse {
     /// <p>Metadata about the directory.</p>
@@ -1758,7 +1758,7 @@ pub struct GetDirectoryResponse {
     pub directory: Directory,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFacetRequest {
     /// <p>The name of the facet to retrieve.</p>
@@ -1769,7 +1769,7 @@ pub struct GetFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFacetResponse {
     /// <p>The <a>Facet</a> structure that is associated with the facet.</p>
@@ -1778,7 +1778,7 @@ pub struct GetFacetResponse {
     pub facet: Option<Facet>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinkAttributesRequest {
     /// <p>A list of attribute names whose values will be retrieved.</p>
@@ -1796,7 +1796,7 @@ pub struct GetLinkAttributesRequest {
     pub typed_link_specifier: TypedLinkSpecifier,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAttributesResponse {
     /// <p>The attributes that are associated with the typed link.</p>
@@ -1805,7 +1805,7 @@ pub struct GetLinkAttributesResponse {
     pub attributes: Option<Vec<AttributeKeyAndValue>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectAttributesRequest {
     /// <p>List of attribute names whose values will be retrieved.</p>
@@ -1826,7 +1826,7 @@ pub struct GetObjectAttributesRequest {
     pub schema_facet: SchemaFacet,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectAttributesResponse {
     /// <p>The attributes that are associated with the object.</p>
@@ -1835,7 +1835,7 @@ pub struct GetObjectAttributesResponse {
     pub attributes: Option<Vec<AttributeKeyAndValue>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectInformationRequest {
     /// <p>The consistency level at which to retrieve the object information.</p>
@@ -1850,7 +1850,7 @@ pub struct GetObjectInformationRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetObjectInformationResponse {
     /// <p>The <code>ObjectIdentifier</code> of the specified object.</p>
@@ -1863,7 +1863,7 @@ pub struct GetObjectInformationResponse {
     pub schema_facets: Option<Vec<SchemaFacet>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSchemaAsJsonRequest {
     /// <p>The ARN of the schema to retrieve.</p>
@@ -1871,7 +1871,7 @@ pub struct GetSchemaAsJsonRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaAsJsonResponse {
     /// <p>The JSON representation of the schema document.</p>
@@ -1884,7 +1884,7 @@ pub struct GetSchemaAsJsonResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTypedLinkFacetInformationRequest {
     /// <p>The unique name of the typed link facet.</p>
@@ -1895,7 +1895,7 @@ pub struct GetTypedLinkFacetInformationRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTypedLinkFacetInformationResponse {
     /// <p>The order of identity attributes for the facet, from most significant to least significant. The ability to filter typed links considers the order that the attributes are defined on the typed link facet. When providing ranges to typed link selection, any inexact ranges must be specified at the end. Any attributes that do not have a range specified are presumed to match the entire range. Filters are interpreted in the order of the attributes on the typed link facet, not the order in which they are supplied to any API calls. For more information about identity attributes, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
@@ -1905,7 +1905,7 @@ pub struct GetTypedLinkFacetInformationResponse {
 }
 
 /// <p>Represents an index and an attached object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IndexAttachment {
     /// <p>The indexed attribute values.</p>
@@ -1919,7 +1919,7 @@ pub struct IndexAttachment {
 }
 
 /// <p>The action to take on a typed link attribute value. Updates are only supported for attributes which don’t contribute to link identity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LinkAttributeAction {
     /// <p>A type that can be either <code>UPDATE_OR_CREATE</code> or <code>DELETE</code>.</p>
@@ -1933,7 +1933,7 @@ pub struct LinkAttributeAction {
 }
 
 /// <p>Structure that contains attribute update information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LinkAttributeUpdate {
     /// <p>The action to perform as part of the attribute update.</p>
@@ -1946,7 +1946,7 @@ pub struct LinkAttributeUpdate {
     pub attribute_key: Option<AttributeKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppliedSchemaArnsRequest {
     /// <p>The ARN of the directory you are listing.</p>
@@ -1966,7 +1966,7 @@ pub struct ListAppliedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppliedSchemaArnsResponse {
     /// <p>The pagination token.</p>
@@ -1979,7 +1979,7 @@ pub struct ListAppliedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedIndicesRequest {
     /// <p>The consistency level to use for this operation.</p>
@@ -2002,7 +2002,7 @@ pub struct ListAttachedIndicesRequest {
     pub target_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttachedIndicesResponse {
     /// <p>The indices attached to the specified object.</p>
@@ -2015,7 +2015,7 @@ pub struct ListAttachedIndicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevelopmentSchemaArnsRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2028,7 +2028,7 @@ pub struct ListDevelopmentSchemaArnsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevelopmentSchemaArnsResponse {
     /// <p>The pagination token.</p>
@@ -2041,7 +2041,7 @@ pub struct ListDevelopmentSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDirectoriesRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2058,7 +2058,7 @@ pub struct ListDirectoriesRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDirectoriesResponse {
     /// <p>Lists all directories that are associated with your account in pagination fashion.</p>
@@ -2070,7 +2070,7 @@ pub struct ListDirectoriesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFacetAttributesRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2089,7 +2089,7 @@ pub struct ListFacetAttributesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetAttributesResponse {
     /// <p>The attributes attached to the facet.</p>
@@ -2102,7 +2102,7 @@ pub struct ListFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFacetNamesRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2118,7 +2118,7 @@ pub struct ListFacetNamesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFacetNamesResponse {
     /// <p>The names of facets that exist within the schema.</p>
@@ -2131,7 +2131,7 @@ pub struct ListFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIncomingTypedLinksRequest {
     /// <p>The consistency level to execute the request at.</p>
@@ -2162,7 +2162,7 @@ pub struct ListIncomingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIncomingTypedLinksResponse {
     /// <p>Returns one or more typed link specifiers as output.</p>
@@ -2175,7 +2175,7 @@ pub struct ListIncomingTypedLinksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndexRequest {
     /// <p>The consistency level to execute the request at.</p>
@@ -2202,7 +2202,7 @@ pub struct ListIndexRequest {
     pub ranges_on_indexed_values: Option<Vec<ObjectAttributeRange>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndexResponse {
     /// <p>The objects and indexed values attached to the index.</p>
@@ -2215,7 +2215,7 @@ pub struct ListIndexResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListManagedSchemaArnsRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2232,7 +2232,7 @@ pub struct ListManagedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListManagedSchemaArnsResponse {
     /// <p>The pagination token.</p>
@@ -2245,7 +2245,7 @@ pub struct ListManagedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectAttributesRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -2272,7 +2272,7 @@ pub struct ListObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectAttributesResponse {
     /// <p>Attributes map that is associated with the object. <code>AttributeArn</code> is the key, and attribute value is the value.</p>
@@ -2285,7 +2285,7 @@ pub struct ListObjectAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectChildrenRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -2308,7 +2308,7 @@ pub struct ListObjectChildrenRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectChildrenResponse {
     /// <p>Children structure, which is a map with key as the <code>LinkName</code> and <code>ObjectIdentifier</code> as the value.</p>
@@ -2321,7 +2321,7 @@ pub struct ListObjectChildrenResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectParentPathsRequest {
     /// <p>The ARN of the directory to which the parent path applies.</p>
@@ -2340,7 +2340,7 @@ pub struct ListObjectParentPathsRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentPathsResponse {
     /// <p>The pagination token.</p>
@@ -2353,7 +2353,7 @@ pub struct ListObjectParentPathsResponse {
     pub path_to_object_identifiers_list: Option<Vec<PathToObjectIdentifiers>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectParentsRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -2380,7 +2380,7 @@ pub struct ListObjectParentsRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectParentsResponse {
     /// <p>The pagination token.</p>
@@ -2397,7 +2397,7 @@ pub struct ListObjectParentsResponse {
     pub parents: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectPoliciesRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -2420,7 +2420,7 @@ pub struct ListObjectPoliciesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListObjectPoliciesResponse {
     /// <p>A list of policy <code>ObjectIdentifiers</code>, that are attached to the object.</p>
@@ -2433,7 +2433,7 @@ pub struct ListObjectPoliciesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutgoingTypedLinksRequest {
     /// <p>The consistency level to execute the request at.</p>
@@ -2464,7 +2464,7 @@ pub struct ListOutgoingTypedLinksRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutgoingTypedLinksResponse {
     /// <p>The pagination token.</p>
@@ -2477,7 +2477,7 @@ pub struct ListOutgoingTypedLinksResponse {
     pub typed_link_specifiers: Option<Vec<TypedLinkSpecifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyAttachmentsRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
@@ -2500,7 +2500,7 @@ pub struct ListPolicyAttachmentsRequest {
     pub policy_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyAttachmentsResponse {
     /// <p>The pagination token.</p>
@@ -2513,7 +2513,7 @@ pub struct ListPolicyAttachmentsResponse {
     pub object_identifiers: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublishedSchemaArnsRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2530,7 +2530,7 @@ pub struct ListPublishedSchemaArnsRequest {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishedSchemaArnsResponse {
     /// <p>The pagination token.</p>
@@ -2543,7 +2543,7 @@ pub struct ListPublishedSchemaArnsResponse {
     pub schema_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. This is for future use and is not supported currently.</p>
@@ -2559,7 +2559,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
@@ -2572,7 +2572,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypedLinkFacetAttributesRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2591,7 +2591,7 @@ pub struct ListTypedLinkFacetAttributesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetAttributesResponse {
     /// <p>An ordered set of attributes associate with the typed link.</p>
@@ -2604,7 +2604,7 @@ pub struct ListTypedLinkFacetAttributesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTypedLinkFacetNamesRequest {
     /// <p>The maximum number of results to retrieve.</p>
@@ -2620,7 +2620,7 @@ pub struct ListTypedLinkFacetNamesRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypedLinkFacetNamesResponse {
     /// <p>The names of typed link facets that exist within the schema.</p>
@@ -2633,7 +2633,7 @@ pub struct ListTypedLinkFacetNamesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a>. For more information, see <a>arns</a>.</p>
@@ -2652,7 +2652,7 @@ pub struct LookupPolicyRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupPolicyResponse {
     /// <p>The pagination token.</p>
@@ -2666,7 +2666,7 @@ pub struct LookupPolicyResponse {
 }
 
 /// <p>The action to take on the object attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectAttributeAction {
     /// <p>A type that can be either <code>Update</code> or <code>Delete</code>.</p>
@@ -2680,7 +2680,7 @@ pub struct ObjectAttributeAction {
 }
 
 /// <p>A range of attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectAttributeRange {
     /// <p>The key of the attribute that the attribute range covers.</p>
@@ -2694,7 +2694,7 @@ pub struct ObjectAttributeRange {
 }
 
 /// <p>Structure that contains attribute update information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectAttributeUpdate {
     /// <p>The action to perform as part of the attribute update.</p>
@@ -2708,7 +2708,7 @@ pub struct ObjectAttributeUpdate {
 }
 
 /// <p>A pair of ObjectIdentifier and LinkName.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ObjectIdentifierAndLinkNameTuple {
     /// <p>The name of the link between the parent and the child object.</p>
@@ -2722,7 +2722,7 @@ pub struct ObjectIdentifierAndLinkNameTuple {
 }
 
 /// <p>The reference that identifies an object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ObjectReference {
     /// <p><p>A path selector supports easy selection of an object by the parent/child links leading to it from the directory root. Use the link names from each parent/child link to construct the path. Path selectors start with a slash (/) and link names are separated by slashes. For more information about paths, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_access_objects.html">Access Objects</a>. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - An object identifier is an opaque string provided by Amazon Cloud Directory. When creating objects, the system will provide you with the identifier of the created object. An object’s identifier is immutable and no two objects will ever share the same object identifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul></p>
     #[serde(rename = "Selector")]
@@ -2731,7 +2731,7 @@ pub struct ObjectReference {
 }
 
 /// <p>Returns the path to the <code>ObjectIdentifiers</code> that is associated with the directory.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PathToObjectIdentifiers {
     /// <p>Lists <code>ObjectIdentifiers</code> starting from directory root to the object in the request.</p>
@@ -2745,7 +2745,7 @@ pub struct PathToObjectIdentifiers {
 }
 
 /// <p>Contains the <code>PolicyType</code>, <code>PolicyId</code>, and the <code>ObjectIdentifier</code> to which it is attached. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyAttachment {
     /// <p>The <code>ObjectIdentifier</code> that is associated with <code>PolicyAttachment</code>.</p>
@@ -2763,7 +2763,7 @@ pub struct PolicyAttachment {
 }
 
 /// <p>Used when a regular object exists in a <a>Directory</a> and you want to find all of the policies that are associated with that object and the parent to that object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyToPath {
     /// <p>The path that is referenced from the root.</p>
@@ -2776,7 +2776,7 @@ pub struct PolicyToPath {
     pub policies: Option<Vec<PolicyAttachment>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the development schema. For more information, see <a>arns</a>.</p>
@@ -2795,7 +2795,7 @@ pub struct PublishSchemaRequest {
     pub version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PublishSchemaResponse {
     /// <p>The ARN that is associated with the published schema. For more information, see <a>arns</a>.</p>
@@ -2804,7 +2804,7 @@ pub struct PublishSchemaResponse {
     pub published_schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSchemaFromJsonRequest {
     /// <p>The replacement JSON schema.</p>
@@ -2815,7 +2815,7 @@ pub struct PutSchemaFromJsonRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSchemaFromJsonResponse {
     /// <p>The ARN of the schema to update.</p>
@@ -2824,7 +2824,7 @@ pub struct PutSchemaFromJsonResponse {
     pub arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFacetFromObjectRequest {
     /// <p>The ARN of the directory in which the object resides.</p>
@@ -2838,12 +2838,12 @@ pub struct RemoveFacetFromObjectRequest {
     pub schema_facet: SchemaFacet,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFacetFromObjectResponse {}
 
 /// <p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
     /// <p>The minimum and maximum parameters that are associated with the rule.</p>
     #[serde(rename = "Parameters")]
@@ -2856,7 +2856,7 @@ pub struct Rule {
 }
 
 /// <p>A facet.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SchemaFacet {
     /// <p>The name of the facet.</p>
     #[serde(rename = "FacetName")]
@@ -2869,7 +2869,7 @@ pub struct SchemaFacet {
 }
 
 /// <p>The tag structure that contains a tag key and value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key that is associated with the tag.</p>
     #[serde(rename = "Key")]
@@ -2881,7 +2881,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource. Tagging is only supported for directories.</p>
@@ -2892,12 +2892,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Represents the data for a typed attribute. You can set one, and only one, of the elements. Each attribute in an item is a name-value pair. Attributes have a single value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TypedAttributeValue {
     /// <p>A binary data value.</p>
     #[serde(rename = "BinaryValue")]
@@ -2927,7 +2927,7 @@ pub struct TypedAttributeValue {
 }
 
 /// <p>A range of attribute values. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_range_filters.html">Range Filters</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TypedAttributeValueRange {
     /// <p>The inclusive or exclusive range end.</p>
@@ -2947,7 +2947,7 @@ pub struct TypedAttributeValueRange {
 }
 
 /// <p>A typed link attribute definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TypedLinkAttributeDefinition {
     /// <p>The default value of the attribute (if configured).</p>
     #[serde(rename = "DefaultValue")]
@@ -2973,7 +2973,7 @@ pub struct TypedLinkAttributeDefinition {
 }
 
 /// <p>Identifies the range of attributes that are used by a specified filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TypedLinkAttributeRange {
     /// <p>The unique name of the typed link attribute.</p>
@@ -2986,7 +2986,7 @@ pub struct TypedLinkAttributeRange {
 }
 
 /// <p>Defines the typed links structure and its attributes. To create a typed link facet, use the <a>CreateTypedLinkFacet</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TypedLinkFacet {
     /// <p>A set of key-value pairs associated with the typed link. Typed link attributes are used when you have data values that are related to the link itself, and not to one of the two objects being linked. Identity attributes also serve to distinguish the link from others of the same type between the same objects.</p>
@@ -3001,7 +3001,7 @@ pub struct TypedLinkFacet {
 }
 
 /// <p>A typed link facet attribute update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TypedLinkFacetAttributeUpdate {
     /// <p>The action to perform when updating the attribute.</p>
@@ -3013,7 +3013,7 @@ pub struct TypedLinkFacetAttributeUpdate {
 }
 
 /// <p>Identifies the schema Amazon Resource Name (ARN) and facet name for the typed link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TypedLinkSchemaAndFacetName {
     /// <p>The Amazon Resource Name (ARN) that is associated with the schema. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
@@ -3024,7 +3024,7 @@ pub struct TypedLinkSchemaAndFacetName {
 }
 
 /// <p>Contains all the information that is used to uniquely identify a typed link. The parameters discussed in this topic are used to uniquely specify the typed link being operated on. The <a>AttachTypedLink</a> API returns a typed link specifier while the <a>DetachTypedLink</a> API accepts one as input. Similarly, the <a>ListIncomingTypedLinks</a> and <a>ListOutgoingTypedLinks</a> API operations provide typed link specifiers as output. You can also construct a typed link specifier from scratch.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TypedLinkSpecifier {
     /// <p>Identifies the attribute value to update.</p>
     #[serde(rename = "IdentityAttributeValues")]
@@ -3040,7 +3040,7 @@ pub struct TypedLinkSpecifier {
     pub typed_link_facet: TypedLinkSchemaAndFacetName,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource. Tagging is only supported for directories.</p>
@@ -3051,11 +3051,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFacetRequest {
     /// <p>List of attributes that need to be updated in a given schema <a>Facet</a>. Each attribute is followed by <code>AttributeAction</code>, which specifies the type of update operation to perform. </p>
@@ -3074,11 +3074,11 @@ pub struct UpdateFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLinkAttributesRequest {
     /// <p>The attributes update structure.</p>
@@ -3092,11 +3092,11 @@ pub struct UpdateLinkAttributesRequest {
     pub typed_link_specifier: TypedLinkSpecifier,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkAttributesResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateObjectAttributesRequest {
     /// <p>The attributes update structure.</p>
@@ -3110,7 +3110,7 @@ pub struct UpdateObjectAttributesRequest {
     pub object_reference: ObjectReference,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateObjectAttributesResponse {
     /// <p>The <code>ObjectIdentifier</code> of the updated object.</p>
@@ -3119,7 +3119,7 @@ pub struct UpdateObjectAttributesResponse {
     pub object_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSchemaRequest {
     /// <p>The name of the schema.</p>
@@ -3130,7 +3130,7 @@ pub struct UpdateSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSchemaResponse {
     /// <p>The ARN that is associated with the updated schema. For more information, see <a>arns</a>.</p>
@@ -3139,7 +3139,7 @@ pub struct UpdateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTypedLinkFacetRequest {
     /// <p>Attributes update structure.</p>
@@ -3156,11 +3156,11 @@ pub struct UpdateTypedLinkFacetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTypedLinkFacetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradeAppliedSchemaRequest {
     /// <p>The ARN for the directory to which the upgraded schema will be applied.</p>
@@ -3175,7 +3175,7 @@ pub struct UpgradeAppliedSchemaRequest {
     pub published_schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeAppliedSchemaResponse {
     /// <p>The ARN of the directory that is returned as part of the response.</p>
@@ -3188,7 +3188,7 @@ pub struct UpgradeAppliedSchemaResponse {
     pub upgraded_schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradePublishedSchemaRequest {
     /// <p>The ARN of the development schema with the changes used for the upgrade.</p>
@@ -3206,7 +3206,7 @@ pub struct UpgradePublishedSchemaRequest {
     pub published_schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradePublishedSchemaResponse {
     /// <p>The ARN of the upgraded schema that is returned as part of the response.</p>

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Provides the error of the batch create variable API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FraudDetectorBatchCreateVariableError {
     /// <p>The error code. </p>
@@ -42,7 +42,7 @@ pub struct FraudDetectorBatchCreateVariableError {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateVariableRequest {
     /// <p>The list of variables for the batch create variable request.</p>
@@ -50,7 +50,7 @@ pub struct BatchCreateVariableRequest {
     pub variable_entries: Vec<VariableEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateVariableResult {
     /// <p>Provides the errors for the <code>BatchCreateVariable</code> request.</p>
@@ -60,7 +60,7 @@ pub struct BatchCreateVariableResult {
 }
 
 /// <p>Provides the error of the batch get variable API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FraudDetectorBatchGetVariableError {
     /// <p>The error code. </p>
@@ -77,7 +77,7 @@ pub struct FraudDetectorBatchGetVariableError {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetVariableRequest {
     /// <p>The list of variable names to get.</p>
@@ -85,7 +85,7 @@ pub struct BatchGetVariableRequest {
     pub names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetVariableResult {
     /// <p>The errors from the request.</p>
@@ -98,7 +98,7 @@ pub struct BatchGetVariableResult {
     pub variables: Option<Vec<Variable>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorVersionRequest {
     /// <p>The description of the detector version.</p>
@@ -125,7 +125,7 @@ pub struct CreateDetectorVersionRequest {
     pub rules: Vec<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorVersionResult {
     /// <p>The ID for the created version's parent detector.</p>
@@ -142,7 +142,7 @@ pub struct CreateDetectorVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelVersionRequest {
     /// <p>The model version description.</p>
@@ -157,7 +157,7 @@ pub struct CreateModelVersionRequest {
     pub model_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelVersionResult {
     /// <p>The model ID. </p>
@@ -178,7 +178,7 @@ pub struct CreateModelVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
     /// <p>The rule description.</p>
@@ -202,7 +202,7 @@ pub struct CreateRuleRequest {
     pub rule_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleResult {
     /// <p>The created rule.</p>
@@ -211,7 +211,7 @@ pub struct CreateRuleResult {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVariableRequest {
     /// <p>The source of the data.</p>
@@ -236,11 +236,11 @@ pub struct CreateVariableRequest {
     pub variable_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVariableResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
     /// <p>The ID of the detector to delete.</p>
@@ -248,11 +248,11 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorVersionRequest {
     /// <p>The ID of the parent detector for the detector version to delete.</p>
@@ -263,11 +263,11 @@ pub struct DeleteDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventRequest {
     /// <p>The ID of the event to delete.</p>
@@ -275,11 +275,11 @@ pub struct DeleteEventRequest {
     pub event_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleVersionRequest {
     /// <p>The ID of the detector that includes the rule version to delete.</p>
@@ -293,11 +293,11 @@ pub struct DeleteRuleVersionRequest {
     pub rule_version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorRequest {
     /// <p>The detector ID.</p>
@@ -313,7 +313,7 @@ pub struct DescribeDetectorRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorResult {
     /// <p>The detector ID.</p>
@@ -330,7 +330,7 @@ pub struct DescribeDetectorResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelVersionsRequest {
     /// <p>The maximum number of results to return.</p>
@@ -355,7 +355,7 @@ pub struct DescribeModelVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelVersionsResult {
     /// <p>The model version details.</p>
@@ -369,7 +369,7 @@ pub struct DescribeModelVersionsResult {
 }
 
 /// <p>The detector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Detector {
     /// <p>Timestamp of when the detector was created.</p>
@@ -391,7 +391,7 @@ pub struct Detector {
 }
 
 /// <p>The summary of the detector version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorVersionSummary {
     /// <p>The detector version description. </p>
@@ -413,7 +413,7 @@ pub struct DetectorVersionSummary {
 }
 
 /// <p>The Amazon SageMaker model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExternalModel {
     /// <p>Timestamp of when the model was last created.</p>
@@ -450,7 +450,7 @@ pub struct ExternalModel {
     pub role: Option<Role>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorVersionRequest {
     /// <p>The detector ID.</p>
@@ -461,7 +461,7 @@ pub struct GetDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorVersionResult {
     /// <p>The timestamp when the detector version was created. </p>
@@ -506,7 +506,7 @@ pub struct GetDetectorVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorsRequest {
     /// <p>The detector ID.</p>
@@ -523,7 +523,7 @@ pub struct GetDetectorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorsResult {
     /// <p>The detectors.</p>
@@ -536,7 +536,7 @@ pub struct GetDetectorsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExternalModelsRequest {
     /// <p>The maximum number of objects to return for the request.</p>
@@ -553,7 +553,7 @@ pub struct GetExternalModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExternalModelsResult {
     /// <p>Gets the Amazon SageMaker models.</p>
@@ -566,7 +566,7 @@ pub struct GetExternalModelsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelVersionRequest {
     /// <p>The model ID. </p>
@@ -580,7 +580,7 @@ pub struct GetModelVersionRequest {
     pub model_version_number: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelVersionResult {
     /// <p>The model version description.</p>
@@ -605,7 +605,7 @@ pub struct GetModelVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The maximum results to return for the request.</p>
@@ -626,7 +626,7 @@ pub struct GetModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResult {
     /// <p>The returned models. </p>
@@ -639,7 +639,7 @@ pub struct GetModelsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutcomesRequest {
     /// <p>The maximum number of objects to return for the request. </p>
@@ -656,7 +656,7 @@ pub struct GetOutcomesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOutcomesResult {
     /// <p>The next page token for subsequent requests.</p>
@@ -669,7 +669,7 @@ pub struct GetOutcomesResult {
     pub outcomes: Option<Vec<Outcome>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPredictionRequest {
     /// <p>The detector ID. </p>
@@ -693,7 +693,7 @@ pub struct GetPredictionRequest {
         Option<::std::collections::HashMap<String, ModelEndpointDataBlob>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPredictionResult {
     /// <p>The model scores for models used in the detector version.</p>
@@ -710,7 +710,7 @@ pub struct GetPredictionResult {
     pub rule_results: Option<Vec<RuleResult>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRulesRequest {
     /// <p>The detector ID.</p>
@@ -734,7 +734,7 @@ pub struct GetRulesRequest {
     pub rule_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRulesResult {
     /// <p>The next page token to be used in subsequent requests.</p>
@@ -747,7 +747,7 @@ pub struct GetRulesResult {
     pub rule_details: Option<Vec<RuleDetail>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVariablesRequest {
     /// <p>The max size per page determined for the get variable request. </p>
@@ -764,7 +764,7 @@ pub struct GetVariablesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVariablesResult {
     /// <p>The next page token to be used in subsequent requests. </p>
@@ -778,7 +778,7 @@ pub struct GetVariablesResult {
 }
 
 /// <p>The label schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LabelSchema {
     /// <p>The label key.</p>
     #[serde(rename = "labelKey")]
@@ -789,7 +789,7 @@ pub struct LabelSchema {
 }
 
 /// <p>The model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
     /// <p>Timestamp of when the model was created.</p>
@@ -827,7 +827,7 @@ pub struct Model {
 }
 
 /// <p>A pre-formed Amazon SageMaker model input you can include if your detector version includes an imported Amazon SageMaker model endpoint with pass-through input configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModelEndpointDataBlob {
     /// <p>The byte buffer of the Amazon SageMaker model endpoint input data blob.</p>
@@ -846,7 +846,7 @@ pub struct ModelEndpointDataBlob {
 }
 
 /// <p>The model input configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelInputConfiguration {
     /// <p> Template for constructing the CSV input-data sent to SageMaker. At event-evaluation, the placeholders for variable-names in the template will be replaced with the variable values before being sent to SageMaker. </p>
     #[serde(rename = "csvInputTemplate")]
@@ -866,7 +866,7 @@ pub struct ModelInputConfiguration {
 }
 
 /// <p>Provides the model output configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelOutputConfiguration {
     /// <p>A map of CSV index values in the SageMaker response to the Amazon Fraud Detector variables. </p>
     #[serde(rename = "csvIndexToVariableMap")]
@@ -882,7 +882,7 @@ pub struct ModelOutputConfiguration {
 }
 
 /// <p>The fraud prediction scores.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelScores {
     /// <p>The model version.</p>
@@ -896,7 +896,7 @@ pub struct ModelScores {
 }
 
 /// <p>The model variable.&gt;</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelVariable {
     /// <p>The model variable's index.&gt;</p>
     #[serde(rename = "index")]
@@ -908,7 +908,7 @@ pub struct ModelVariable {
 }
 
 /// <p>The model version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelVersion {
     /// <p>The parent model ID.</p>
     #[serde(rename = "modelId")]
@@ -922,7 +922,7 @@ pub struct ModelVersion {
 }
 
 /// <p>Provides the model version details. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelVersionDetail {
     /// <p>The timestamp when the model was created.</p>
@@ -976,7 +976,7 @@ pub struct ModelVersionDetail {
 }
 
 /// <p>The outcome.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Outcome {
     /// <p>The timestamp when the outcome was created.</p>
@@ -997,7 +997,7 @@ pub struct Outcome {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDetectorRequest {
     /// <p>The description of the detector.</p>
@@ -1009,11 +1009,11 @@ pub struct PutDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDetectorResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutExternalModelRequest {
     /// <p>The model endpoint input configuration.</p>
@@ -1036,11 +1036,11 @@ pub struct PutExternalModelRequest {
     pub role: Role,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutExternalModelResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutModelRequest {
     /// <p>The model description. </p>
@@ -1064,11 +1064,11 @@ pub struct PutModelRequest {
     pub training_data_source: TrainingDataSource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutModelResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOutcomeRequest {
     /// <p>The outcome description.</p>
@@ -1080,12 +1080,12 @@ pub struct PutOutcomeRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOutcomeResult {}
 
 /// <p>The role used to invoke external model endpoints.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Role {
     /// <p>The role ARN.</p>
     #[serde(rename = "arn")]
@@ -1096,7 +1096,7 @@ pub struct Role {
 }
 
 /// <p>A rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
     /// <p>The detector for which the rule is associated.</p>
     #[serde(rename = "detectorId")]
@@ -1110,7 +1110,7 @@ pub struct Rule {
 }
 
 /// <p>The details of the rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RuleDetail {
     /// <p>The timestamp of when the rule was created.</p>
@@ -1152,7 +1152,7 @@ pub struct RuleDetail {
 }
 
 /// <p>The rule results.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RuleResult {
     /// <p>The outcomes of the matched rule, based on the rule execution mode.</p>
@@ -1166,7 +1166,7 @@ pub struct RuleResult {
 }
 
 /// <p>The training data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TrainingDataSource {
     /// <p>The data access role ARN for the training data source.</p>
     #[serde(rename = "dataAccessRoleArn")]
@@ -1176,7 +1176,7 @@ pub struct TrainingDataSource {
     pub data_location: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionMetadataRequest {
     /// <p>The description.</p>
@@ -1190,11 +1190,11 @@ pub struct UpdateDetectorVersionMetadataRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionMetadataResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionRequest {
     /// <p>The detector version description. </p>
@@ -1223,11 +1223,11 @@ pub struct UpdateDetectorVersionRequest {
     pub rules: Vec<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionStatusRequest {
     /// <p>The detector ID. </p>
@@ -1241,11 +1241,11 @@ pub struct UpdateDetectorVersionStatusRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionStatusResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelVersionRequest {
     /// <p>The model description.</p>
@@ -1265,11 +1265,11 @@ pub struct UpdateModelVersionRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleMetadataRequest {
     /// <p>The rule description.</p>
@@ -1280,11 +1280,11 @@ pub struct UpdateRuleMetadataRequest {
     pub rule: Rule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleMetadataResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleVersionRequest {
     /// <p>The description.</p>
@@ -1305,7 +1305,7 @@ pub struct UpdateRuleVersionRequest {
     pub rule: Rule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleVersionResult {
     /// <p>The new rule version that was created.</p>
@@ -1314,7 +1314,7 @@ pub struct UpdateRuleVersionResult {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVariableRequest {
     /// <p>The new default value of the variable.</p>
@@ -1334,12 +1334,12 @@ pub struct UpdateVariableRequest {
     pub variable_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVariableResult {}
 
 /// <p>The variable.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Variable {
     /// <p>The time when the variable was created.</p>
@@ -1377,7 +1377,7 @@ pub struct Variable {
 }
 
 /// <p>The variable entry in a list.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VariableEntry {
     /// <p>The data source of the variable entry.</p>

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains an array.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArrayValue {
     /// <p>An array of arrays.</p>
     #[serde(rename = "arrayValues")]
@@ -50,7 +50,7 @@ pub struct ArrayValue {
 }
 
 /// <p>The request parameters represent the input of a SQL statement over an array of data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchExecuteStatementRequest {
     /// <p>The name of the database.</p>
@@ -81,7 +81,7 @@ pub struct BatchExecuteStatementRequest {
 }
 
 /// <p>The response elements represent the output of a SQL statement over an array of data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchExecuteStatementResponse {
     /// <p>The execution results of each batch entry.</p>
@@ -91,7 +91,7 @@ pub struct BatchExecuteStatementResponse {
 }
 
 /// <p>The request parameters represent the input of a request to start a SQL transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BeginTransactionRequest {
     /// <p>The name of the database.</p>
@@ -111,7 +111,7 @@ pub struct BeginTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a request to start a SQL transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BeginTransactionResponse {
     /// <p>The transaction ID of the transaction started by the call.</p>
@@ -121,7 +121,7 @@ pub struct BeginTransactionResponse {
 }
 
 /// <p>Contains the metadata for a column.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnMetadata {
     /// <p>The type of the column.</p>
@@ -183,7 +183,7 @@ pub struct ColumnMetadata {
 }
 
 /// <p>The request parameters represent the input of a commit transaction request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
@@ -198,7 +198,7 @@ pub struct CommitTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a commit transaction request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommitTransactionResponse {
     /// <p>The status of the commit operation.</p>
@@ -208,7 +208,7 @@ pub struct CommitTransactionResponse {
 }
 
 /// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteSqlRequest {
     /// <p>The Amazon Resource Name (ARN) of the secret that enables access to the DB cluster.</p>
@@ -231,7 +231,7 @@ pub struct ExecuteSqlRequest {
 }
 
 /// <p>The response elements represent the output of a request to run one or more SQL statements.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteSqlResponse {
     /// <p>The results of the SQL statement or statements.</p>
@@ -241,7 +241,7 @@ pub struct ExecuteSqlResponse {
 }
 
 /// <p>The request parameters represent the input of a request to run a SQL statement against a database.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p><p>A value that indicates whether to continue running the statement after the call times out. By default, the statement stops running when the call times out.</p> <important> <p>For DDL statements, we recommend continuing to run the statement after the call times out. When a DDL statement terminates before it is finished running, it can result in errors and possibly corrupted data structures.</p> </important></p>
@@ -284,7 +284,7 @@ pub struct ExecuteStatementRequest {
 }
 
 /// <p>The response elements represent the output of a request to run a SQL statement against a database.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResponse {
     /// <p>Metadata for the columns included in the results.</p>
@@ -306,7 +306,7 @@ pub struct ExecuteStatementResponse {
 }
 
 /// <p>Contains a value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Field {
     /// <p>An array of values.</p>
     #[serde(rename = "arrayValue")]
@@ -344,7 +344,7 @@ pub struct Field {
 }
 
 /// <p>A record returned by a call.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Record {
     /// <p>The values returned in the record.</p>
@@ -354,7 +354,7 @@ pub struct Record {
 }
 
 /// <p>The result set returned by a SQL statement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultFrame {
     /// <p>The records in the result set.</p>
@@ -368,7 +368,7 @@ pub struct ResultFrame {
 }
 
 /// <p>The metadata of the result set returned by a SQL statement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultSetMetadata {
     /// <p>The number of columns in the result set.</p>
@@ -382,7 +382,7 @@ pub struct ResultSetMetadata {
 }
 
 /// <p>Options that control how the result set is returned.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResultSetOptions {
     /// <p><p>A value that indicates how a field of <code>DECIMAL</code> type is represented in the response. The value of <code>STRING</code>, the default, specifies that it is converted to a String value. The value of <code>DOUBLE<em>OR</em>LONG</code> specifies that it is converted to a Long value if its scale is 0, or to a Double value otherwise.</p> <important> <p>Conversion to Double or Long can result in roundoff errors due to precision loss. We recommend converting to String, especially when working with currency values.</p> </important></p>
@@ -392,7 +392,7 @@ pub struct ResultSetOptions {
 }
 
 /// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTransactionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.</p>
@@ -407,7 +407,7 @@ pub struct RollbackTransactionRequest {
 }
 
 /// <p>The response elements represent the output of a request to perform a rollback of a transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RollbackTransactionResponse {
     /// <p>The status of the rollback operation.</p>
@@ -417,7 +417,7 @@ pub struct RollbackTransactionResponse {
 }
 
 /// <p>A parameter used in a SQL statement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SqlParameter {
     /// <p>The name of the parameter.</p>
@@ -435,7 +435,7 @@ pub struct SqlParameter {
 }
 
 /// <p><p>The result of a SQL statement.</p> <pre><code> &lt;important&gt; &lt;p&gt;This data type is deprecated.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SqlStatementResult {
     /// <p>The number of records updated by a SQL statement.</p>
@@ -449,7 +449,7 @@ pub struct SqlStatementResult {
 }
 
 /// <p>A structure value returned by a call.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StructValue {
     /// <p>The attributes returned in the record.</p>
@@ -459,7 +459,7 @@ pub struct StructValue {
 }
 
 /// <p>The response elements represent the results of an update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResult {
     /// <p>Values for fields generated during the request.</p>
@@ -469,7 +469,7 @@ pub struct UpdateResult {
 }
 
 /// <p><p>Contains the value of a column.</p> <pre><code> &lt;important&gt; &lt;p&gt;This data type is deprecated.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Value {
     /// <p>An array of column values.</p>

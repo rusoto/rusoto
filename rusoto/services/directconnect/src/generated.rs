@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
     /// <p>The ID of the AWS account that owns the virtual private gateway or transit gateway.</p>
@@ -42,7 +42,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
     pub proposal_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalResult {
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -50,7 +50,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateConnectionOnInterconnectRequest {
     /// <p>The bandwidth of the connection. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, 500Mbps, 1Gbps, 2Gbps, 5Gbps, and 10Gbps. Note that only those AWS Direct Connect Partners who have met specific requirements are allowed to create a 1Gbps, 2Gbps, 5Gbps or 10Gbps hosted connection.</p>
@@ -70,7 +70,7 @@ pub struct AllocateConnectionOnInterconnectRequest {
     pub vlan: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateHostedConnectionRequest {
     /// <p>The bandwidth of the connection. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, 500Mbps, 1Gbps, 2Gbps, 5Gbps, and 10Gbps. Note that only those AWS Direct Connect Partners who have met specific requirements are allowed to create a 1Gbps, 2Gbps, 5Gbps or 10Gbps hosted connection. </p>
@@ -94,7 +94,7 @@ pub struct AllocateHostedConnectionRequest {
     pub vlan: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocatePrivateVirtualInterfaceRequest {
     /// <p>The ID of the connection on which the private virtual interface is provisioned.</p>
@@ -108,7 +108,7 @@ pub struct AllocatePrivateVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocatePublicVirtualInterfaceRequest {
     /// <p>The ID of the connection on which the public virtual interface is provisioned.</p>
@@ -122,7 +122,7 @@ pub struct AllocatePublicVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllocateTransitVirtualInterfaceRequest {
     /// <p>The ID of the connection on which the transit virtual interface is provisioned.</p>
@@ -136,7 +136,7 @@ pub struct AllocateTransitVirtualInterfaceRequest {
     pub owner_account: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AllocateTransitVirtualInterfaceResult {
     #[serde(rename = "virtualInterface")]
@@ -144,7 +144,7 @@ pub struct AllocateTransitVirtualInterfaceResult {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConnectionWithLagRequest {
     /// <p>The ID of the connection.</p>
@@ -155,7 +155,7 @@ pub struct AssociateConnectionWithLagRequest {
     pub lag_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateHostedConnectionRequest {
     /// <p>The ID of the hosted connection.</p>
@@ -166,7 +166,7 @@ pub struct AssociateHostedConnectionRequest {
     pub parent_connection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateVirtualInterfaceRequest {
     /// <p>The ID of the LAG or connection.</p>
@@ -178,7 +178,7 @@ pub struct AssociateVirtualInterfaceRequest {
 }
 
 /// <p>Information about the associated gateway.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatedGateway {
     /// <p>The ID of the associated gateway.</p>
@@ -200,7 +200,7 @@ pub struct AssociatedGateway {
 }
 
 /// <p>Information about a BGP peer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BGPPeer {
     /// <p>The address family for the BGP peer.</p>
@@ -241,7 +241,7 @@ pub struct BGPPeer {
     pub customer_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmConnectionRequest {
     /// <p>The ID of the hosted connection.</p>
@@ -249,7 +249,7 @@ pub struct ConfirmConnectionRequest {
     pub connection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmConnectionResponse {
     /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
@@ -258,7 +258,7 @@ pub struct ConfirmConnectionResponse {
     pub connection_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmPrivateVirtualInterfaceRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
@@ -274,7 +274,7 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
@@ -283,7 +283,7 @@ pub struct ConfirmPrivateVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmPublicVirtualInterfaceRequest {
     /// <p>The ID of the virtual interface.</p>
@@ -291,7 +291,7 @@ pub struct ConfirmPublicVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPublicVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
@@ -300,7 +300,7 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmTransitVirtualInterfaceRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
@@ -311,7 +311,7 @@ pub struct ConfirmTransitVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmTransitVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
@@ -321,7 +321,7 @@ pub struct ConfirmTransitVirtualInterfaceResponse {
 }
 
 /// <p>Information about an AWS Direct Connect connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
     /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
@@ -394,7 +394,7 @@ pub struct Connection {
     pub vlan: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connections {
     /// <p>The connections.</p>
@@ -403,7 +403,7 @@ pub struct Connections {
     pub connections: Option<Vec<Connection>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBGPPeerRequest {
     /// <p>Information about the BGP peer.</p>
@@ -416,7 +416,7 @@ pub struct CreateBGPPeerRequest {
     pub virtual_interface_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBGPPeerResponse {
     /// <p>The virtual interface.</p>
@@ -425,7 +425,7 @@ pub struct CreateBGPPeerResponse {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
     /// <p>The bandwidth of the connection.</p>
@@ -451,7 +451,7 @@ pub struct CreateConnectionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayAssociationProposalRequest {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
@@ -473,7 +473,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalRequest {
     pub remove_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationProposalResult {
     /// <p>Information about the Direct Connect gateway proposal.</p>
@@ -483,7 +483,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalResult {
         Option<DirectConnectGatewayAssociationProposal>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayAssociationRequest {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway</p> <p>This parameter is required when you create an association to a transit gateway.</p> <p>For information about how to set the prefixes, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/multi-account-associate-vgw.html#allowed-prefixes">Allowed Prefixes</a> in the <i>AWS Direct Connect User Guide</i>.</p>
@@ -503,7 +503,7 @@ pub struct CreateDirectConnectGatewayAssociationRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationResult {
     /// <p>The association to be created.</p>
@@ -512,7 +512,7 @@ pub struct CreateDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectConnectGatewayRequest {
     /// <p>The autonomous system number (ASN) for Border Gateway Protocol (BGP) to be configured on the Amazon side of the connection. The ASN must be in the private range of 64,512 to 65,534 or 4,200,000,000 to 4,294,967,294. The default is 64512.</p>
@@ -524,7 +524,7 @@ pub struct CreateDirectConnectGatewayRequest {
     pub direct_connect_gateway_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayResult {
     /// <p>The Direct Connect gateway.</p>
@@ -533,7 +533,7 @@ pub struct CreateDirectConnectGatewayResult {
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInterconnectRequest {
     /// <p>The port bandwidth, in Gbps. The possible values are 1 and 10.</p>
@@ -559,7 +559,7 @@ pub struct CreateInterconnectRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLagRequest {
     /// <p>The tags to associate with the automtically created LAGs.</p>
@@ -592,7 +592,7 @@ pub struct CreateLagRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePrivateVirtualInterfaceRequest {
     /// <p>The ID of the connection.</p>
@@ -603,7 +603,7 @@ pub struct CreatePrivateVirtualInterfaceRequest {
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicVirtualInterfaceRequest {
     /// <p>The ID of the connection.</p>
@@ -614,7 +614,7 @@ pub struct CreatePublicVirtualInterfaceRequest {
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTransitVirtualInterfaceRequest {
     /// <p>The ID of the connection.</p>
@@ -625,7 +625,7 @@ pub struct CreateTransitVirtualInterfaceRequest {
     pub new_transit_virtual_interface: NewTransitVirtualInterface,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTransitVirtualInterfaceResult {
     #[serde(rename = "virtualInterface")]
@@ -633,7 +633,7 @@ pub struct CreateTransitVirtualInterfaceResult {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBGPPeerRequest {
     /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
@@ -654,7 +654,7 @@ pub struct DeleteBGPPeerRequest {
     pub virtual_interface_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBGPPeerResponse {
     /// <p>The virtual interface.</p>
@@ -663,7 +663,7 @@ pub struct DeleteBGPPeerResponse {
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
     /// <p>The ID of the connection.</p>
@@ -671,7 +671,7 @@ pub struct DeleteConnectionRequest {
     pub connection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayAssociationProposalRequest {
     /// <p>The ID of the proposal.</p>
@@ -679,7 +679,7 @@ pub struct DeleteDirectConnectGatewayAssociationProposalRequest {
     pub proposal_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationProposalResult {
     /// <p>The ID of the associated gateway.</p>
@@ -689,7 +689,7 @@ pub struct DeleteDirectConnectGatewayAssociationProposalResult {
         Option<DirectConnectGatewayAssociationProposal>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayAssociationRequest {
     /// <p>The ID of the Direct Connect gateway association.</p>
@@ -706,7 +706,7 @@ pub struct DeleteDirectConnectGatewayAssociationRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationResult {
     /// <p>Information about the deleted association.</p>
@@ -715,7 +715,7 @@ pub struct DeleteDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDirectConnectGatewayRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
@@ -723,7 +723,7 @@ pub struct DeleteDirectConnectGatewayRequest {
     pub direct_connect_gateway_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayResult {
     /// <p>The Direct Connect gateway.</p>
@@ -732,7 +732,7 @@ pub struct DeleteDirectConnectGatewayResult {
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInterconnectRequest {
     /// <p>The ID of the interconnect.</p>
@@ -740,7 +740,7 @@ pub struct DeleteInterconnectRequest {
     pub interconnect_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInterconnectResponse {
     /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
@@ -749,7 +749,7 @@ pub struct DeleteInterconnectResponse {
     pub interconnect_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLagRequest {
     /// <p>The ID of the LAG.</p>
@@ -757,7 +757,7 @@ pub struct DeleteLagRequest {
     pub lag_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualInterfaceRequest {
     /// <p>The ID of the virtual interface.</p>
@@ -765,7 +765,7 @@ pub struct DeleteVirtualInterfaceRequest {
     pub virtual_interface_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
@@ -774,7 +774,7 @@ pub struct DeleteVirtualInterfaceResponse {
     pub virtual_interface_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionLoaRequest {
     /// <p>The ID of the connection.</p>
@@ -790,7 +790,7 @@ pub struct DescribeConnectionLoaRequest {
     pub provider_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionLoaResponse {
     /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
@@ -799,7 +799,7 @@ pub struct DescribeConnectionLoaResponse {
     pub loa: Option<Loa>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsOnInterconnectRequest {
     /// <p>The ID of the interconnect.</p>
@@ -807,7 +807,7 @@ pub struct DescribeConnectionsOnInterconnectRequest {
     pub interconnect_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsRequest {
     /// <p>The ID of the connection.</p>
@@ -816,7 +816,7 @@ pub struct DescribeConnectionsRequest {
     pub connection_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAssociationProposalsRequest {
     /// <p>The ID of the associated gateway.</p>
@@ -841,7 +841,7 @@ pub struct DescribeDirectConnectGatewayAssociationProposalsRequest {
     pub proposal_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationProposalsResult {
     /// <p>Describes the Direct Connect gateway association proposals.</p>
@@ -855,7 +855,7 @@ pub struct DescribeDirectConnectGatewayAssociationProposalsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAssociationsRequest {
     /// <p>The ID of the associated gateway.</p>
@@ -884,7 +884,7 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
     pub virtual_gateway_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationsResult {
     /// <p>Information about the associations.</p>
@@ -897,7 +897,7 @@ pub struct DescribeDirectConnectGatewayAssociationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
@@ -918,7 +918,7 @@ pub struct DescribeDirectConnectGatewayAttachmentsRequest {
     pub virtual_interface_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsResult {
     /// <p>The attachments.</p>
@@ -931,7 +931,7 @@ pub struct DescribeDirectConnectGatewayAttachmentsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDirectConnectGatewaysRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
@@ -948,7 +948,7 @@ pub struct DescribeDirectConnectGatewaysRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewaysResult {
     /// <p>The Direct Connect gateways.</p>
@@ -961,7 +961,7 @@ pub struct DescribeDirectConnectGatewaysResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHostedConnectionsRequest {
     /// <p>The ID of the interconnect or LAG.</p>
@@ -969,7 +969,7 @@ pub struct DescribeHostedConnectionsRequest {
     pub connection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInterconnectLoaRequest {
     /// <p>The ID of the interconnect.</p>
@@ -985,7 +985,7 @@ pub struct DescribeInterconnectLoaRequest {
     pub provider_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInterconnectLoaResponse {
     /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
@@ -994,7 +994,7 @@ pub struct DescribeInterconnectLoaResponse {
     pub loa: Option<Loa>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInterconnectsRequest {
     /// <p>The ID of the interconnect.</p>
@@ -1003,7 +1003,7 @@ pub struct DescribeInterconnectsRequest {
     pub interconnect_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLagsRequest {
     /// <p>The ID of the LAG.</p>
@@ -1012,7 +1012,7 @@ pub struct DescribeLagsRequest {
     pub lag_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoaRequest {
     /// <p>The ID of a connection, LAG, or interconnect.</p>
@@ -1028,7 +1028,7 @@ pub struct DescribeLoaRequest {
     pub provider_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The Amazon Resource Names (ARNs) of the resources.</p>
@@ -1036,7 +1036,7 @@ pub struct DescribeTagsRequest {
     pub resource_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>Information about the tags.</p>
@@ -1045,7 +1045,7 @@ pub struct DescribeTagsResponse {
     pub resource_tags: Option<Vec<ResourceTag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualInterfacesRequest {
     /// <p>The ID of the connection.</p>
@@ -1059,7 +1059,7 @@ pub struct DescribeVirtualInterfacesRequest {
 }
 
 /// <p>Information about a Direct Connect gateway, which enables you to connect virtual interfaces and virtual private gateway or transit gateways.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGateway {
     /// <p>The autonomous system number (ASN) for the Amazon side of the connection.</p>
@@ -1089,7 +1089,7 @@ pub struct DirectConnectGateway {
 }
 
 /// <p>Information about an association between a Direct Connect gateway and a virtual private gateway or transit gateway.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAssociation {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
@@ -1135,7 +1135,7 @@ pub struct DirectConnectGatewayAssociation {
 }
 
 /// <p>Information about the proposal request to attach a virtual private gateway to a Direct Connect gateway. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAssociationProposal {
     /// <p>Information about the associated gateway.</p>
@@ -1169,7 +1169,7 @@ pub struct DirectConnectGatewayAssociationProposal {
 }
 
 /// <p>Information about an attachment between a Direct Connect gateway and a virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAttachment {
     /// <p><p>The state of the attachment. The following are the possible values:</p> <ul> <li> <p> <code>attaching</code>: The initial state after a virtual interface is created using the Direct Connect gateway.</p> </li> <li> <p> <code>attached</code>: The Direct Connect gateway and virtual interface are attached and ready to pass traffic.</p> </li> <li> <p> <code>detaching</code>: The initial state after calling <a>DeleteVirtualInterface</a>.</p> </li> <li> <p> <code>detached</code>: The virtual interface is detached from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual interface is stopped.</p> </li> </ul></p>
@@ -1202,7 +1202,7 @@ pub struct DirectConnectGatewayAttachment {
     pub virtual_interface_region: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateConnectionFromLagRequest {
     /// <p>The ID of the connection.</p>
@@ -1214,7 +1214,7 @@ pub struct DisassociateConnectionFromLagRequest {
 }
 
 /// <p>Information about an interconnect.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnect {
     /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
@@ -1275,7 +1275,7 @@ pub struct Interconnect {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnects {
     /// <p>The interconnects.</p>
@@ -1285,7 +1285,7 @@ pub struct Interconnects {
 }
 
 /// <p>Information about a link aggregation group (LAG).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lag {
     /// <p>Indicates whether the LAG can host other connections.</p>
@@ -1358,7 +1358,7 @@ pub struct Lag {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lags {
     /// <p>The LAGs.</p>
@@ -1368,7 +1368,7 @@ pub struct Lags {
 }
 
 /// <p>Information about a Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Loa {
     /// <p>The binary contents of the LOA-CFA document.</p>
@@ -1387,7 +1387,7 @@ pub struct Loa {
 }
 
 /// <p>Information about an AWS Direct Connect location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Location {
     /// <p>The available port speeds for the location.</p>
@@ -1412,7 +1412,7 @@ pub struct Location {
     pub region: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Locations {
     /// <p>The locations.</p>
@@ -1422,7 +1422,7 @@ pub struct Locations {
 }
 
 /// <p>Information about a new BGP peer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewBGPPeer {
     /// <p>The address family for the BGP peer.</p>
@@ -1448,7 +1448,7 @@ pub struct NewBGPPeer {
 }
 
 /// <p>Information about a private virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewPrivateVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1495,7 +1495,7 @@ pub struct NewPrivateVirtualInterface {
 }
 
 /// <p>Information about a private virtual interface to be provisioned on a connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewPrivateVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
@@ -1534,7 +1534,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
 }
 
 /// <p>Information about a public virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewPublicVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1573,7 +1573,7 @@ pub struct NewPublicVirtualInterface {
 }
 
 /// <p>Information about a public virtual interface to be provisioned on a connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewPublicVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
@@ -1612,7 +1612,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
 }
 
 /// <p>Information about a transit virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewTransitVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1658,7 +1658,7 @@ pub struct NewTransitVirtualInterface {
 }
 
 /// <p>Information about a transit virtual interface to be provisioned on a connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NewTransitVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
@@ -1700,7 +1700,7 @@ pub struct NewTransitVirtualInterfaceAllocation {
 }
 
 /// <p>Information about a tag associated with an AWS Direct Connect resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTag {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1714,7 +1714,7 @@ pub struct ResourceTag {
 }
 
 /// <p>Information about a route filter prefix that a customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RouteFilterPrefix {
     /// <p>The CIDR block for the advertised route. Separate multiple routes using commas. An IPv6 CIDR must use /64 or shorter.</p>
     #[serde(rename = "cidr")]
@@ -1723,7 +1723,7 @@ pub struct RouteFilterPrefix {
 }
 
 /// <p>Information about a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key.</p>
     #[serde(rename = "key")]
@@ -1734,7 +1734,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1745,11 +1745,11 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1760,11 +1760,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDirectConnectGatewayAssociationRequest {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
@@ -1781,7 +1781,7 @@ pub struct UpdateDirectConnectGatewayAssociationRequest {
     pub remove_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDirectConnectGatewayAssociationResult {
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -1789,7 +1789,7 @@ pub struct UpdateDirectConnectGatewayAssociationResult {
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLagRequest {
     /// <p>The ID of the LAG.</p>
@@ -1805,7 +1805,7 @@ pub struct UpdateLagRequest {
     pub minimum_links: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualInterfaceAttributesRequest {
     /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
@@ -1818,7 +1818,7 @@ pub struct UpdateVirtualInterfaceAttributesRequest {
 }
 
 /// <p>Information about a virtual private gateway for a private virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualGateway {
     /// <p>The ID of the virtual private gateway.</p>
@@ -1831,7 +1831,7 @@ pub struct VirtualGateway {
     pub virtual_gateway_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualGateways {
     /// <p>The virtual private gateways.</p>
@@ -1841,7 +1841,7 @@ pub struct VirtualGateways {
 }
 
 /// <p>Information about a virtual interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1942,7 +1942,7 @@ pub struct VirtualInterface {
     pub vlan: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterfaces {
     /// <p>The virtual interfaces</p>

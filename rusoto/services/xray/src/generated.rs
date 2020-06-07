@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An alias for an edge.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Alias {
     /// <p>The canonical name of the alias.</p>
@@ -43,7 +43,7 @@ pub struct Alias {
 }
 
 /// <p>Value of a segment annotation. Has one of three value types: Number, Boolean or String.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnnotationValue {
     /// <p>Value for a Boolean annotation.</p>
@@ -61,7 +61,7 @@ pub struct AnnotationValue {
 }
 
 /// <p>A list of availability zones corresponding to the segments in a trace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AvailabilityZoneDetail {
     /// <p>The name of a corresponding availability zone.</p>
@@ -71,7 +71,7 @@ pub struct AvailabilityZoneDetail {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackendConnectionErrors {
     /// <p><p/></p>
@@ -100,7 +100,7 @@ pub struct BackendConnectionErrors {
     pub unknown_host_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTracesRequest {
     /// <p>Pagination token.</p>
@@ -112,7 +112,7 @@ pub struct BatchGetTracesRequest {
     pub trace_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetTracesResult {
     /// <p>Pagination token.</p>
@@ -129,7 +129,7 @@ pub struct BatchGetTracesResult {
     pub unprocessed_trace_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The filter expression defining criteria by which to group traces.</p>
@@ -141,7 +141,7 @@ pub struct CreateGroupRequest {
     pub group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResult {
     /// <p>The group that was created. Contains the name of the group that was created, the ARN of the group that was generated based on the group name, and the filter expression that was assigned to the group.</p>
@@ -150,7 +150,7 @@ pub struct CreateGroupResult {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSamplingRuleRequest {
     /// <p>The rule definition.</p>
@@ -158,7 +158,7 @@ pub struct CreateSamplingRuleRequest {
     pub sampling_rule: SamplingRule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSamplingRuleResult {
     /// <p>The saved rule definition and metadata.</p>
@@ -167,7 +167,7 @@ pub struct CreateSamplingRuleResult {
     pub sampling_rule_record: Option<SamplingRuleRecord>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
@@ -180,11 +180,11 @@ pub struct DeleteGroupRequest {
     pub group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSamplingRuleRequest {
     /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
@@ -197,7 +197,7 @@ pub struct DeleteSamplingRuleRequest {
     pub rule_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSamplingRuleResult {
     /// <p>The deleted rule definition and metadata.</p>
@@ -207,7 +207,7 @@ pub struct DeleteSamplingRuleResult {
 }
 
 /// <p>Information about a connection between two services.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Edge {
     /// <p>Aliases for the edge.</p>
@@ -237,7 +237,7 @@ pub struct Edge {
 }
 
 /// <p>Response statistics for an edge.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EdgeStatistics {
     /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
@@ -263,7 +263,7 @@ pub struct EdgeStatistics {
 }
 
 /// <p>A configuration document that specifies encryption configuration settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptionConfig {
     /// <p>The ID of the customer master key (CMK) used for encryption, if applicable.</p>
@@ -281,7 +281,7 @@ pub struct EncryptionConfig {
 }
 
 /// <p>The root cause of a trace summary error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorRootCause {
     /// <p>A flag that denotes that the root cause impacts the trace client.</p>
@@ -295,7 +295,7 @@ pub struct ErrorRootCause {
 }
 
 /// <p>A collection of segments and corresponding subsegments associated to a trace summary error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorRootCauseEntity {
     /// <p>The types and messages of the exceptions.</p>
@@ -313,7 +313,7 @@ pub struct ErrorRootCauseEntity {
 }
 
 /// <p>A collection of fields identifying the services in a trace summary error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorRootCauseService {
     /// <p>The account ID associated to the service.</p>
@@ -343,7 +343,7 @@ pub struct ErrorRootCauseService {
 }
 
 /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorStatistics {
     /// <p>The number of requests that failed with untracked 4xx Client Error status codes.</p>
@@ -361,7 +361,7 @@ pub struct ErrorStatistics {
 }
 
 /// <p>The root cause information for a trace summary fault.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaultRootCause {
     /// <p>A flag that denotes that the root cause impacts the trace client.</p>
@@ -375,7 +375,7 @@ pub struct FaultRootCause {
 }
 
 /// <p>A collection of segments and corresponding subsegments associated to a trace summary fault error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaultRootCauseEntity {
     /// <p>The types and messages of the exceptions.</p>
@@ -393,7 +393,7 @@ pub struct FaultRootCauseEntity {
 }
 
 /// <p>A collection of fields identifying the services in a trace summary fault.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaultRootCauseService {
     /// <p>The account ID associated to the service.</p>
@@ -423,7 +423,7 @@ pub struct FaultRootCauseService {
 }
 
 /// <p>Information about requests that failed with a 5xx Server Error status code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaultStatistics {
     /// <p>The number of requests that failed with untracked 5xx Server Error status codes.</p>
@@ -436,11 +436,11 @@ pub struct FaultStatistics {
     pub total_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEncryptionConfigRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEncryptionConfigResult {
     /// <p>The encryption configuration document.</p>
@@ -449,7 +449,7 @@ pub struct GetEncryptionConfigResult {
     pub encryption_config: Option<EncryptionConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The ARN of the group that was generated on creation.</p>
@@ -462,7 +462,7 @@ pub struct GetGroupRequest {
     pub group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResult {
     /// <p>The group that was requested. Contains the name of the group, the ARN of the group, and the filter expression that assigned to the group.</p>
@@ -471,7 +471,7 @@ pub struct GetGroupResult {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupsRequest {
     /// <p>Pagination token.</p>
@@ -480,7 +480,7 @@ pub struct GetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupsResult {
     /// <p>The collection of all active groups.</p>
@@ -493,7 +493,7 @@ pub struct GetGroupsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingRulesRequest {
     /// <p>Pagination token.</p>
@@ -502,7 +502,7 @@ pub struct GetSamplingRulesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingRulesResult {
     /// <p>Pagination token.</p>
@@ -515,7 +515,7 @@ pub struct GetSamplingRulesResult {
     pub sampling_rule_records: Option<Vec<SamplingRuleRecord>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingStatisticSummariesRequest {
     /// <p>Pagination token.</p>
@@ -524,7 +524,7 @@ pub struct GetSamplingStatisticSummariesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingStatisticSummariesResult {
     /// <p>Pagination token.</p>
@@ -537,7 +537,7 @@ pub struct GetSamplingStatisticSummariesResult {
     pub sampling_statistic_summaries: Option<Vec<SamplingStatisticSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSamplingTargetsRequest {
     /// <p>Information about rules that the service is using to sample requests.</p>
@@ -545,7 +545,7 @@ pub struct GetSamplingTargetsRequest {
     pub sampling_statistics_documents: Vec<SamplingStatisticsDocument>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSamplingTargetsResult {
     /// <p>The last time a user changed the sampling rule configuration. If the sampling rule configuration changed since the service last retrieved it, the service should call <a>GetSamplingRules</a> to get the latest version.</p>
@@ -562,7 +562,7 @@ pub struct GetSamplingTargetsResult {
     pub unprocessed_statistics: Option<Vec<UnprocessedStatistics>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceGraphRequest {
     /// <p>The end of the timeframe for which to generate a graph.</p>
@@ -585,7 +585,7 @@ pub struct GetServiceGraphRequest {
     pub start_time: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceGraphResult {
     /// <p>A flag indicating whether the group's filter expression has been consistent, or if the returned service graph may show traces from an older version of the group's filter expression.</p>
@@ -610,7 +610,7 @@ pub struct GetServiceGraphResult {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTimeSeriesServiceStatisticsRequest {
     /// <p>The end of the time frame for which to aggregate statistics.</p>
@@ -641,7 +641,7 @@ pub struct GetTimeSeriesServiceStatisticsRequest {
     pub start_time: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTimeSeriesServiceStatisticsResult {
     /// <p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned aggregation may show statistics from an older version of the group's filter expression.</p>
@@ -658,7 +658,7 @@ pub struct GetTimeSeriesServiceStatisticsResult {
     pub time_series_service_statistics: Option<Vec<TimeSeriesServiceStatistics>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceGraphRequest {
     /// <p>Pagination token.</p>
@@ -670,7 +670,7 @@ pub struct GetTraceGraphRequest {
     pub trace_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTraceGraphResult {
     /// <p>Pagination token.</p>
@@ -683,7 +683,7 @@ pub struct GetTraceGraphResult {
     pub services: Option<Vec<Service>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTraceSummariesRequest {
     /// <p>The end of the time frame for which to retrieve traces.</p>
@@ -714,7 +714,7 @@ pub struct GetTraceSummariesRequest {
     pub time_range_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTraceSummariesResult {
     /// <p>The start time of this page of results.</p>
@@ -736,7 +736,7 @@ pub struct GetTraceSummariesResult {
 }
 
 /// <p>Details and metadata for a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
     /// <p>The filter expression defining the parameters to include traces.</p>
@@ -754,7 +754,7 @@ pub struct Group {
 }
 
 /// <p>Details for a group without metadata.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupSummary {
     /// <p>The filter expression defining the parameters to include traces.</p>
@@ -772,7 +772,7 @@ pub struct GroupSummary {
 }
 
 /// <p>An entry in a histogram for a statistic. A histogram maps the range of observed values on the X axis, and the prevalence of each value on the Y axis.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistogramEntry {
     /// <p>The prevalence of the entry.</p>
@@ -786,7 +786,7 @@ pub struct HistogramEntry {
 }
 
 /// <p>Information about an HTTP request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Http {
     /// <p>The IP address of the requestor.</p>
@@ -812,7 +812,7 @@ pub struct Http {
 }
 
 /// <p>A list of EC2 instance IDs corresponding to the segments in a trace. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceIdDetail {
     /// <p>The ID of a corresponding EC2 instance.</p>
@@ -821,7 +821,7 @@ pub struct InstanceIdDetail {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEncryptionConfigRequest {
     /// <p>An AWS KMS customer master key (CMK) in one of the following formats:</p> <ul> <li> <p> <b>Alias</b> - The name of the key. For example, <code>alias/MyKey</code>.</p> </li> <li> <p> <b>Key ID</b> - The KMS key ID of the key. For example, <code>ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>. AWS X-Ray does not support asymmetric CMKs.</p> </li> <li> <p> <b>ARN</b> - The full Amazon Resource Name of the key ID or alias. For example, <code>arn:aws:kms:us-east-2:123456789012:key/ae4aa6d49-a4d8-9df9-a475-4ff6d7898456</code>. Use this format to specify a key in a different account.</p> </li> </ul> <p>Omit this key if you set <code>Type</code> to <code>NONE</code>.</p>
@@ -833,7 +833,7 @@ pub struct PutEncryptionConfigRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEncryptionConfigResult {
     /// <p>The new encryption configuration.</p>
@@ -842,7 +842,7 @@ pub struct PutEncryptionConfigResult {
     pub encryption_config: Option<EncryptionConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTelemetryRecordsRequest {
     /// <p><p/></p>
@@ -862,11 +862,11 @@ pub struct PutTelemetryRecordsRequest {
     pub telemetry_records: Vec<TelemetryRecord>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutTelemetryRecordsResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutTraceSegmentsRequest {
     /// <p>A string containing a JSON document defining one or more segments or subsegments.</p>
@@ -874,7 +874,7 @@ pub struct PutTraceSegmentsRequest {
     pub trace_segment_documents: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutTraceSegmentsResult {
     /// <p>Segments that failed processing.</p>
@@ -884,7 +884,7 @@ pub struct PutTraceSegmentsResult {
 }
 
 /// <p>A list of resources ARNs corresponding to the segments in a trace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceARNDetail {
     /// <p>The ARN of a corresponding resource.</p>
@@ -894,7 +894,7 @@ pub struct ResourceARNDetail {
 }
 
 /// <p>The root cause information for a response time warning.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResponseTimeRootCause {
     /// <p>A flag that denotes that the root cause impacts the trace client.</p>
@@ -908,7 +908,7 @@ pub struct ResponseTimeRootCause {
 }
 
 /// <p>A collection of segments and corresponding subsegments associated to a response time warning.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResponseTimeRootCauseEntity {
     /// <p>The types and messages of the exceptions.</p>
@@ -926,7 +926,7 @@ pub struct ResponseTimeRootCauseEntity {
 }
 
 /// <p>A collection of fields identifying the service in a response time warning.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResponseTimeRootCauseService {
     /// <p>The account ID associated to the service.</p>
@@ -956,7 +956,7 @@ pub struct ResponseTimeRootCauseService {
 }
 
 /// <p>The exception associated with a root cause.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RootCauseException {
     /// <p>The message of the exception.</p>
@@ -970,7 +970,7 @@ pub struct RootCauseException {
 }
 
 /// <p>A sampling rule that services use to decide whether to instrument a request. Rule fields can match properties of the service, or properties of a request. The service can ignore rules that don't match its properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SamplingRule {
     /// <p>Matches attributes derived from the request.</p>
     #[serde(rename = "Attributes")]
@@ -1017,7 +1017,7 @@ pub struct SamplingRule {
 }
 
 /// <p>A <a>SamplingRule</a> and its metadata.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SamplingRuleRecord {
     /// <p>When the rule was created.</p>
@@ -1035,7 +1035,7 @@ pub struct SamplingRuleRecord {
 }
 
 /// <p>A document specifying changes to a sampling rule's configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingRuleUpdate {
     /// <p>Matches attributes derived from the request.</p>
@@ -1089,7 +1089,7 @@ pub struct SamplingRuleUpdate {
 }
 
 /// <p>Aggregated request sampling data for a sampling rule across all services for a 10 second window.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SamplingStatisticSummary {
     /// <p>The number of requests recorded with borrowed reservoir quota.</p>
@@ -1115,7 +1115,7 @@ pub struct SamplingStatisticSummary {
 }
 
 /// <p>Request sampling results for a single rule from a service. Results are for the last 10 seconds unless the service has been assigned a longer reporting interval after a previous call to <a>GetSamplingTargets</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStatisticsDocument {
     /// <p>The number of requests recorded with borrowed reservoir quota.</p>
@@ -1140,7 +1140,7 @@ pub struct SamplingStatisticsDocument {
 }
 
 /// <p>The name and value of a sampling rule to apply to a trace summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SamplingStrategy {
     /// <p>The name of a sampling rule.</p>
@@ -1154,7 +1154,7 @@ pub struct SamplingStrategy {
 }
 
 /// <p>Temporary changes to a sampling rule configuration. To meet the global sampling target for a rule, X-Ray calculates a new reservoir for each service based on the recent sampling results of all services that called <a>GetSamplingTargets</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SamplingTargetDocument {
     /// <p>The percentage of matching requests to instrument, after the reservoir is exhausted.</p>
@@ -1180,7 +1180,7 @@ pub struct SamplingTargetDocument {
 }
 
 /// <p>A segment from a trace that has been ingested by the X-Ray service. The segment can be compiled from documents uploaded with <a>PutTraceSegments</a>, or an <code>inferred</code> segment for a downstream service, generated from a subsegment sent by the service that called it.</p> <p>For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Segment {
     /// <p>The segment document.</p>
@@ -1194,7 +1194,7 @@ pub struct Segment {
 }
 
 /// <p>Information about an application that processed requests, users that made requests, or downstream services, resources and applications that an application used.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
     /// <p>Identifier of the AWS account in which the service runs.</p>
@@ -1252,7 +1252,7 @@ pub struct Service {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceId {
     /// <p><p/></p>
@@ -1274,7 +1274,7 @@ pub struct ServiceId {
 }
 
 /// <p>Response statistics for a service.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceStatistics {
     /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
@@ -1300,7 +1300,7 @@ pub struct ServiceStatistics {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TelemetryRecord {
     /// <p><p/></p>
@@ -1329,7 +1329,7 @@ pub struct TelemetryRecord {
 }
 
 /// <p>A list of TimeSeriesStatistic structures.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TimeSeriesServiceStatistics {
     #[serde(rename = "EdgeSummaryStatistics")]
@@ -1349,7 +1349,7 @@ pub struct TimeSeriesServiceStatistics {
 }
 
 /// <p>A collection of segment documents with matching trace IDs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Trace {
     /// <p>The length of time in seconds between the start time of the root segment and the end time of the last segment that completed.</p>
@@ -1367,7 +1367,7 @@ pub struct Trace {
 }
 
 /// <p>Metadata generated from the segment documents in a trace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TraceSummary {
     /// <p>Annotations from the trace's segment documents.</p>
@@ -1453,7 +1453,7 @@ pub struct TraceSummary {
 }
 
 /// <p>Information about a user recorded in segment documents.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TraceUser {
     /// <p>Services that the user's request hit.</p>
@@ -1467,7 +1467,7 @@ pub struct TraceUser {
 }
 
 /// <p>Sampling statistics from a call to <a>GetSamplingTargets</a> that X-Ray could not process.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedStatistics {
     /// <p>The error code.</p>
@@ -1485,7 +1485,7 @@ pub struct UnprocessedStatistics {
 }
 
 /// <p>Information about a segment that failed processing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedTraceSegment {
     /// <p>The error that caused processing to fail.</p>
@@ -1502,7 +1502,7 @@ pub struct UnprocessedTraceSegment {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The updated filter expression defining criteria by which to group traces.</p>
@@ -1519,7 +1519,7 @@ pub struct UpdateGroupRequest {
     pub group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResult {
     /// <p>The group that was updated. Contains the name of the group that was updated, the ARN of the group that was updated, and the updated filter expression assigned to the group.</p>
@@ -1528,7 +1528,7 @@ pub struct UpdateGroupResult {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSamplingRuleRequest {
     /// <p>The rule and fields to change.</p>
@@ -1536,7 +1536,7 @@ pub struct UpdateSamplingRuleRequest {
     pub sampling_rule_update: SamplingRuleUpdate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSamplingRuleResult {
     /// <p>The updated rule definition and metadata.</p>
@@ -1546,7 +1546,7 @@ pub struct UpdateSamplingRuleResult {
 }
 
 /// <p>Information about a segment annotation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValueWithServiceIds {
     /// <p>Values of the annotation.</p>

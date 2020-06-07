@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains information about the errors encountered.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageErrorEntry {
     /// <p>The code associated with the error.</p>
@@ -43,7 +43,7 @@ pub struct BatchPutMessageErrorEntry {
     pub message_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutMessageRequest {
     /// <p>The list of messages to send. Each message has the following format: <code>'{ "messageId": "string", "inputName": "string", "payload": "string"}'</code> </p>
@@ -51,7 +51,7 @@ pub struct BatchPutMessageRequest {
     pub messages: Vec<Message>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutMessageResponse {
     /// <p>A list of any errors encountered when sending the messages.</p>
@@ -61,7 +61,7 @@ pub struct BatchPutMessageResponse {
 }
 
 /// <p>Information about the error that occured when attempting to update a detector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateDetectorErrorEntry {
     /// <p>The code of the error.</p>
@@ -78,7 +78,7 @@ pub struct BatchUpdateDetectorErrorEntry {
     pub message_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateDetectorRequest {
     /// <p>The list of detectors (instances) to update, along with the values to update.</p>
@@ -86,7 +86,7 @@ pub struct BatchUpdateDetectorRequest {
     pub detectors: Vec<UpdateDetectorRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateDetectorResponse {
     /// <p>A list of those detector updates that resulted in errors. (If an error is listed here, the specific update did not occur.)</p>
@@ -95,7 +95,7 @@ pub struct BatchUpdateDetectorResponse {
     pub batch_update_detector_error_entries: Option<Vec<BatchUpdateDetectorErrorEntry>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorRequest {
     /// <p>The name of the detector model whose detectors (instances) you want information about.</p>
@@ -107,7 +107,7 @@ pub struct DescribeDetectorRequest {
     pub key_value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorResponse {
     /// <p>Information about the detector (instance).</p>
@@ -117,7 +117,7 @@ pub struct DescribeDetectorResponse {
 }
 
 /// <p>Information about the detector (instance).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Detector {
     /// <p>The time the detector (instance) was created.</p>
@@ -147,7 +147,7 @@ pub struct Detector {
 }
 
 /// <p>Information about the current state of the detector instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorState {
     /// <p>The name of the state.</p>
@@ -162,7 +162,7 @@ pub struct DetectorState {
 }
 
 /// <p>The new state, variable values, and timer settings of the detector (instance).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectorStateDefinition {
     /// <p>The name of the new state of the detector (instance).</p>
@@ -177,7 +177,7 @@ pub struct DetectorStateDefinition {
 }
 
 /// <p>Information about the detector state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorStateSummary {
     /// <p>The name of the state.</p>
@@ -187,7 +187,7 @@ pub struct DetectorStateSummary {
 }
 
 /// <p>Information about the detector (instance).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorSummary {
     /// <p>The time the detector (instance) was created.</p>
@@ -216,7 +216,7 @@ pub struct DetectorSummary {
     pub state: Option<DetectorStateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
     /// <p>The name of the detector model whose detectors (instances) are listed.</p>
@@ -236,7 +236,7 @@ pub struct ListDetectorsRequest {
     pub state_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
     /// <p>A list of summary information about the detectors (instances).</p>
@@ -250,7 +250,7 @@ pub struct ListDetectorsResponse {
 }
 
 /// <p>Information about a message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Message {
     /// <p>The name of the input into which the message payload is transformed.</p>
@@ -270,7 +270,7 @@ pub struct Message {
 }
 
 /// <p>The current state of a timer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Timer {
     /// <p>The name of the timer.</p>
@@ -282,7 +282,7 @@ pub struct Timer {
 }
 
 /// <p>The new setting of a timer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimerDefinition {
     /// <p>The name of the timer.</p>
@@ -294,7 +294,7 @@ pub struct TimerDefinition {
 }
 
 /// <p>Information used to update the detector (instance).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
     /// <p>The name of the detector model that created the detectors (instances).</p>
@@ -313,7 +313,7 @@ pub struct UpdateDetectorRequest {
 }
 
 /// <p>The current state of the variable.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Variable {
     /// <p>The name of the variable.</p>
@@ -325,7 +325,7 @@ pub struct Variable {
 }
 
 /// <p>The new value of the variable.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VariableDefinition {
     /// <p>The name of the variable.</p>

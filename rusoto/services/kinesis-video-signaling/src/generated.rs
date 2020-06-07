@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIceServerConfigRequest {
     /// <p>The ARN of the signaling channel to be used for the peer-to-peer connection between configured peers. </p>
@@ -44,7 +44,7 @@ pub struct GetIceServerConfigRequest {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIceServerConfigResponse {
     /// <p>The list of ICE server information objects.</p>
@@ -54,7 +54,7 @@ pub struct GetIceServerConfigResponse {
 }
 
 /// <p>A structure for the ICE server connection data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IceServer {
     /// <p>A password to login to the ICE server.</p>
@@ -75,7 +75,7 @@ pub struct IceServer {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendAlexaOfferToMasterRequest {
     /// <p>The ARN of the signaling channel by which Alexa and the master peer communicate.</p>
@@ -89,7 +89,7 @@ pub struct SendAlexaOfferToMasterRequest {
     pub sender_client_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendAlexaOfferToMasterResponse {
     /// <p>The base64-encoded SDP answer content.</p>

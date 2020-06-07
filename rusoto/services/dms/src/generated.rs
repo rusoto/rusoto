@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountQuota {
     /// <p>The name of the AWS DMS quota for this AWS account.</p>
@@ -43,7 +43,7 @@ pub struct AccountQuota {
 }
 
 /// <p>Associates a set of tags with an AWS DMS resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceMessage {
     /// <p>Identifies the AWS DMS resource to which tags should be added. The value for this parameter is an Amazon Resource Name (ARN).</p> <p>For AWS DMS, you can tag a replication instance, an endpoint, or a replication task.</p>
@@ -55,12 +55,12 @@ pub struct AddTagsToResourceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p>
@@ -75,7 +75,7 @@ pub struct ApplyPendingMaintenanceActionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplyPendingMaintenanceActionResponse {
     /// <p>The AWS DMS resource that the pending maintenance action will be applied to.</p>
@@ -85,7 +85,7 @@ pub struct ApplyPendingMaintenanceActionResponse {
 }
 
 /// <p>The name of the Availability Zone for use during database migration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the Availability Zone.</p>
@@ -95,7 +95,7 @@ pub struct AvailabilityZone {
 }
 
 /// <p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
@@ -146,7 +146,7 @@ pub struct Certificate {
 }
 
 /// <p>Status of the connection between an endpoint and a replication instance, including Amazon Resource Names (ARNs) and the last error message issued.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
     /// <p>The ARN string that uniquely identifies the endpoint.</p>
@@ -176,7 +176,7 @@ pub struct Connection {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
@@ -274,7 +274,7 @@ pub struct CreateEndpointMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointResponse {
     /// <p>The endpoint that was created.</p>
@@ -284,7 +284,7 @@ pub struct CreateEndpointResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSubscriptionMessage {
     /// <p> A Boolean value; set to <code>true</code> to activate the subscription, or set to <code>false</code> to create the subscription but not activate it. </p>
@@ -316,7 +316,7 @@ pub struct CreateEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventSubscriptionResponse {
     /// <p>The event subscription that was created.</p>
@@ -326,7 +326,7 @@ pub struct CreateEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>
@@ -386,7 +386,7 @@ pub struct CreateReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationInstanceResponse {
     /// <p>The replication instance that was created.</p>
@@ -396,7 +396,7 @@ pub struct CreateReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationSubnetGroupMessage {
     /// <p>The description for the subnet group.</p>
@@ -415,7 +415,7 @@ pub struct CreateReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationSubnetGroupResponse {
     /// <p>The replication subnet group that was created.</p>
@@ -425,7 +425,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
@@ -473,7 +473,7 @@ pub struct CreateReplicationTaskMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationTaskResponse {
     /// <p>The replication task that was created.</p>
@@ -482,7 +482,7 @@ pub struct CreateReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateMessage {
     /// <p>The Amazon Resource Name (ARN) of the deleted certificate.</p>
@@ -490,7 +490,7 @@ pub struct DeleteCertificateMessage {
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCertificateResponse {
     /// <p>The Secure Sockets Layer (SSL) certificate.</p>
@@ -500,7 +500,7 @@ pub struct DeleteCertificateResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -512,7 +512,7 @@ pub struct DeleteConnectionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionResponse {
     /// <p>The connection that is being deleted.</p>
@@ -522,7 +522,7 @@ pub struct DeleteConnectionResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -531,7 +531,7 @@ pub struct DeleteEndpointMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEndpointResponse {
     /// <p>The endpoint that was deleted.</p>
@@ -541,7 +541,7 @@ pub struct DeleteEndpointResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the DMS event notification subscription to be deleted.</p>
@@ -550,7 +550,7 @@ pub struct DeleteEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventSubscriptionResponse {
     /// <p>The event subscription that was deleted.</p>
@@ -560,7 +560,7 @@ pub struct DeleteEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationInstanceMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>
@@ -569,7 +569,7 @@ pub struct DeleteReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationInstanceResponse {
     /// <p>The replication instance that was deleted.</p>
@@ -579,7 +579,7 @@ pub struct DeleteReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationSubnetGroupMessage {
     /// <p>The subnet group name of the replication instance.</p>
@@ -588,12 +588,12 @@ pub struct DeleteReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReplicationTaskMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>
@@ -602,7 +602,7 @@ pub struct DeleteReplicationTaskMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationTaskResponse {
     /// <p>The deleted replication task.</p>
@@ -612,12 +612,12 @@ pub struct DeleteReplicationTaskResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAttributesMessage {}
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
     /// <p>Account quota information.</p>
@@ -630,7 +630,7 @@ pub struct DescribeAccountAttributesResponse {
     pub unique_account_identifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
     /// <p>Filters applied to the certificate described in the form of key-value pairs.</p>
@@ -647,7 +647,7 @@ pub struct DescribeCertificatesMessage {
     pub max_records: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificatesResponse {
     /// <p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>
@@ -661,7 +661,7 @@ pub struct DescribeCertificatesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConnectionsMessage {
     /// <p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>
@@ -679,7 +679,7 @@ pub struct DescribeConnectionsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionsResponse {
     /// <p>A description of the connections.</p>
@@ -693,7 +693,7 @@ pub struct DescribeConnectionsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointTypesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>
@@ -711,7 +711,7 @@ pub struct DescribeEndpointTypesMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointTypesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -725,7 +725,7 @@ pub struct DescribeEndpointTypesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointsMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>
@@ -743,7 +743,7 @@ pub struct DescribeEndpointsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
     /// <p>Endpoint description.</p>
@@ -757,7 +757,7 @@ pub struct DescribeEndpointsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventCategoriesMessage {
     /// <p>Filters applied to the action.</p>
@@ -771,7 +771,7 @@ pub struct DescribeEventCategoriesMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventCategoriesResponse {
     /// <p>A list of event categories.</p>
@@ -781,7 +781,7 @@ pub struct DescribeEventCategoriesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>Filters applied to the action.</p>
@@ -803,7 +803,7 @@ pub struct DescribeEventSubscriptionsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventSubscriptionsResponse {
     /// <p>A list of event subscriptions.</p>
@@ -817,7 +817,7 @@ pub struct DescribeEventSubscriptionsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>The duration of the events to be listed.</p>
@@ -859,7 +859,7 @@ pub struct DescribeEventsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventsResponse {
     /// <p>The events described.</p>
@@ -873,7 +873,7 @@ pub struct DescribeEventsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrderableReplicationInstancesMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -887,7 +887,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrderableReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -901,7 +901,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p/></p>
@@ -923,7 +923,7 @@ pub struct DescribePendingMaintenanceActionsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingMaintenanceActionsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -937,7 +937,7 @@ pub struct DescribePendingMaintenanceActionsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRefreshSchemasStatusMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -946,7 +946,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRefreshSchemasStatusResponse {
     /// <p>The status of the schema.</p>
@@ -955,7 +955,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstanceTaskLogsMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -971,7 +971,7 @@ pub struct DescribeReplicationInstanceTaskLogsMessage {
     pub replication_instance_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationInstanceTaskLogsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -989,7 +989,7 @@ pub struct DescribeReplicationInstanceTaskLogsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationInstancesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>
@@ -1007,7 +1007,7 @@ pub struct DescribeReplicationInstancesMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1021,7 +1021,7 @@ pub struct DescribeReplicationInstancesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationSubnetGroupsMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-subnet-group-id</p>
@@ -1039,7 +1039,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationSubnetGroupsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1053,7 +1053,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTaskAssessmentResultsMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1071,7 +1071,7 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTaskAssessmentResultsResponse {
     /// <p>- The Amazon S3 bucket where the task assessment report is located. </p>
@@ -1089,7 +1089,7 @@ pub struct DescribeReplicationTaskAssessmentResultsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReplicationTasksMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
@@ -1111,7 +1111,7 @@ pub struct DescribeReplicationTasksMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReplicationTasksResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1125,7 +1125,7 @@ pub struct DescribeReplicationTasksResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -1142,7 +1142,7 @@ pub struct DescribeSchemasMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemasResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1156,7 +1156,7 @@ pub struct DescribeSchemasResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTableStatisticsMessage {
     /// <p>Filters applied to the describe table statistics action.</p> <p>Valid filter names: schema-name | table-name | table-state</p> <p>A combination of filters creates an AND condition where each record matches all specified filters.</p>
@@ -1177,7 +1177,7 @@ pub struct DescribeTableStatisticsMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTableStatisticsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -1195,7 +1195,7 @@ pub struct DescribeTableStatisticsResponse {
 }
 
 /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DmsTransferSettings {
     /// <p> The name of the S3 bucket to use. </p>
     #[serde(rename = "BucketName")]
@@ -1208,7 +1208,7 @@ pub struct DmsTransferSettings {
 }
 
 /// <p>Provides the Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role used to define an Amazon DynamoDB target endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDbSettings {
     /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
     #[serde(rename = "ServiceAccessRoleArn")]
@@ -1216,7 +1216,7 @@ pub struct DynamoDbSettings {
 }
 
 /// <p>Provides information that defines an Elasticsearch endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ElasticsearchSettings {
     /// <p>The endpoint for the Elasticsearch cluster.</p>
     #[serde(rename = "EndpointUri")]
@@ -1235,7 +1235,7 @@ pub struct ElasticsearchSettings {
 }
 
 /// <p><p>Describes an endpoint of a database instance in response to operations such as the following:</p> <ul> <li> <p> <code>CreateEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpointTypes</code> </p> </li> <li> <p> <code>ModifyEndpoint</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
     /// <p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>
@@ -1345,7 +1345,7 @@ pub struct Endpoint {
 }
 
 /// <p>Describes an identifiable significant activity that affects a replication instance or task. This object can provide the message, the available event categories, the date and source of the event, and the AWS DMS resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Event {
     /// <p>The date of the event.</p>
@@ -1371,7 +1371,7 @@ pub struct Event {
 }
 
 /// <p>Lists categories of events subscribed to, and generated by, the applicable AWS DMS resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventCategoryGroup {
     /// <p> A list of event categories from a source type that you've chosen.</p>
@@ -1385,7 +1385,7 @@ pub struct EventCategoryGroup {
 }
 
 /// <p>Describes an event notification subscription created by the <code>CreateEventSubscription</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The AWS DMS event notification subscription Id.</p>
@@ -1427,7 +1427,7 @@ pub struct EventSubscription {
 }
 
 /// <p>Identifies the name and value of a source filter object used to limit the number and type of records transferred from your source to your target.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter.</p>
@@ -1438,7 +1438,7 @@ pub struct Filter {
     pub values: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCertificateMessage {
     /// <p>A customer-assigned name for the certificate. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen or contain two consecutive hyphens.</p>
@@ -1463,7 +1463,7 @@ pub struct ImportCertificateMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportCertificateResponse {
     /// <p>The certificate to be uploaded.</p>
@@ -1473,7 +1473,7 @@ pub struct ImportCertificateResponse {
 }
 
 /// <p>Provides information that describes an Apache Kafka endpoint. This information includes the output format of records applied to the endpoint and details of transaction and control table data information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KafkaSettings {
     /// <p>The broker location and port of the Kafka broker that hosts your Kafka instance. Specify the broker in the form <code> <i>broker-hostname-or-ip</i>:<i>port</i> </code>. For example, <code>"ec2-12-345-678-901.compute-1.amazonaws.com:2345"</code>.</p>
     #[serde(rename = "Broker")]
@@ -1486,7 +1486,7 @@ pub struct KafkaSettings {
 }
 
 /// <p>Provides information that describes an Amazon Kinesis Data Stream endpoint. This information includes the output format of records applied to the endpoint and details of transaction and control table data information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KinesisSettings {
     /// <p>Shows detailed control information for table definition, column definition, and table and column changes in the Kinesis message output. The default is <code>False</code>.</p>
     #[serde(rename = "IncludeControlDetails")]
@@ -1523,7 +1523,7 @@ pub struct KinesisSettings {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
@@ -1532,7 +1532,7 @@ pub struct ListTagsForResourceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags for the resource.</p>
@@ -1542,7 +1542,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>
@@ -1638,7 +1638,7 @@ pub struct ModifyEndpointMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyEndpointResponse {
     /// <p>The modified endpoint.</p>
@@ -1648,7 +1648,7 @@ pub struct ModifyEndpointResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
@@ -1673,7 +1673,7 @@ pub struct ModifyEventSubscriptionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyEventSubscriptionResponse {
     /// <p>The modified event subscription.</p>
@@ -1683,7 +1683,7 @@ pub struct ModifyEventSubscriptionResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>
@@ -1732,7 +1732,7 @@ pub struct ModifyReplicationInstanceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationInstanceResponse {
     /// <p>The modified replication instance.</p>
@@ -1742,7 +1742,7 @@ pub struct ModifyReplicationInstanceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationSubnetGroupMessage {
     /// <p>A description for the replication instance subnet group.</p>
@@ -1758,7 +1758,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationSubnetGroupResponse {
     /// <p>The modified replication subnet group.</p>
@@ -1768,7 +1768,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
@@ -1809,7 +1809,7 @@ pub struct ModifyReplicationTaskMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyReplicationTaskResponse {
     /// <p>The replication task that was modified.</p>
@@ -1819,7 +1819,7 @@ pub struct ModifyReplicationTaskResponse {
 }
 
 /// <p>Provides information that defines a MongoDB endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MongoDbSettings {
     /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This setting isn't used when authType=No.</p>
     #[serde(rename = "AuthMechanism")]
@@ -1872,7 +1872,7 @@ pub struct MongoDbSettings {
 }
 
 /// <p>Provides information that defines an Amazon Neptune endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NeptuneSettings {
     /// <p>The number of milliseconds for AWS DMS to wait to retry a bulk-load of migrated graph data to the Neptune target database before raising an error. The default is 250.</p>
     #[serde(rename = "ErrorRetryDuration")]
@@ -1903,7 +1903,7 @@ pub struct NeptuneSettings {
 }
 
 /// <p>In response to the <code>DescribeOrderableReplicationInstances</code> operation, this object describes an available replication instance. This description includes the replication instance's type, engine version, and allocated storage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrderableReplicationInstance {
     /// <p>List of Availability Zones for this replication instance.</p>
@@ -1945,7 +1945,7 @@ pub struct OrderableReplicationInstance {
 }
 
 /// <p>Describes a maintenance action pending for an AWS DMS resource, including when and how it will be applied. This data type is a response element to the <code>DescribePendingMaintenanceActions</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingMaintenanceAction {
     /// <p>The type of pending maintenance action that is available for the resource.</p>
@@ -1974,7 +1974,7 @@ pub struct PendingMaintenanceAction {
     pub opt_in_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootReplicationInstanceMessage {
     /// <p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>
@@ -1986,7 +1986,7 @@ pub struct RebootReplicationInstanceMessage {
     pub replication_instance_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootReplicationInstanceResponse {
     /// <p>The replication instance that is being rebooted. </p>
@@ -1996,7 +1996,7 @@ pub struct RebootReplicationInstanceResponse {
 }
 
 /// <p>Provides information that defines an Amazon Redshift endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RedshiftSettings {
     /// <p>A value that indicates to allow any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose <code>true</code> or <code>false</code> (the default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data doesn't match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
     #[serde(rename = "AcceptAnyDate")]
@@ -2101,7 +2101,7 @@ pub struct RedshiftSettings {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -2113,7 +2113,7 @@ pub struct RefreshSchemasMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshSchemasResponse {
     /// <p>The status of the refreshed schema.</p>
@@ -2123,7 +2123,7 @@ pub struct RefreshSchemasResponse {
 }
 
 /// <p>Provides information that describes status of a schema at an endpoint specified by the <code>DescribeRefreshSchemaStatus</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RefreshSchemasStatus {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -2148,7 +2148,7 @@ pub struct RefreshSchemasStatus {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReloadTablesMessage {
     /// <p>Options for reload. Specify <code>data-reload</code> to reload the data and re-validate it if validation is enabled. Specify <code>validate-only</code> to re-validate the table. This option applies only when validation is enabled for the task. </p> <p>Valid values: data-reload, validate-only</p> <p>Default value is data-reload.</p>
@@ -2163,7 +2163,7 @@ pub struct ReloadTablesMessage {
     pub tables_to_reload: Vec<TableToReload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReloadTablesResponse {
     /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
@@ -2173,7 +2173,7 @@ pub struct ReloadTablesResponse {
 }
 
 /// <p>Removes one or more tags from an AWS DMS resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>An AWS DMS resource from which you want to remove tag(s). The value for this parameter is an Amazon Resource Name (ARN).</p>
@@ -2185,12 +2185,12 @@ pub struct RemoveTagsFromResourceMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
 
 /// <p>Provides information that defines a replication instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationInstance {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
@@ -2280,7 +2280,7 @@ pub struct ReplicationInstance {
 }
 
 /// <p>Contains metadata for a replication instance task log.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationInstanceTaskLog {
     /// <p>The size, in bytes, of the replication task log.</p>
@@ -2298,7 +2298,7 @@ pub struct ReplicationInstanceTaskLog {
 }
 
 /// <p>Provides information about the values of pending modifications to a replication instance. This data type is an object of the <code>ReplicationInstance</code> user-defined data type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationPendingModifiedValues {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
@@ -2320,7 +2320,7 @@ pub struct ReplicationPendingModifiedValues {
 }
 
 /// <p>Describes a subnet group in response to a request by the <code>DescribeReplicationSubnetGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationSubnetGroup {
     /// <p>A description for the replication subnet group.</p>
@@ -2346,7 +2346,7 @@ pub struct ReplicationSubnetGroup {
 }
 
 /// <p>Provides information that describes a replication task created by the <code>CreateReplicationTask</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationTask {
     /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either <code>CdcStartPosition</code> or <code>CdcStartTime</code> to specify when you want the CDC operation to start. Specifying both values results in an error.</p> <p>The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
@@ -2424,7 +2424,7 @@ pub struct ReplicationTask {
 }
 
 /// <p> The task assessment report in JSON format. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationTaskAssessmentResult {
     /// <p> The task assessment results in JSON format. </p>
@@ -2458,7 +2458,7 @@ pub struct ReplicationTaskAssessmentResult {
 }
 
 /// <p>In response to a request by the <code>DescribeReplicationTasks</code> operation, this object provides a collection of statistics about a replication task.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationTaskStats {
     /// <p>The elapsed time of the task, in milliseconds.</p>
@@ -2508,7 +2508,7 @@ pub struct ReplicationTaskStats {
 }
 
 /// <p>Identifies an AWS DMS resource and any pending actions for it.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourcePendingMaintenanceActions {
     /// <p>Detailed information about the pending maintenance action.</p>
@@ -2522,7 +2522,7 @@ pub struct ResourcePendingMaintenanceActions {
 }
 
 /// <p>Settings for exporting data to Amazon S3. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Settings {
     /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code> <i>bucketFolder</i>/<i>schema_name</i>/<i>table_name</i>/</code>. If this parameter isn't specified, then the path used is <code> <i>schema_name</i>/<i>table_name</i>/</code>. </p>
     #[serde(rename = "BucketFolder")]
@@ -2611,7 +2611,7 @@ pub struct S3Settings {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskAssessmentMessage {
     /// <p> The Amazon Resource Name (ARN) of the replication task. </p>
@@ -2620,7 +2620,7 @@ pub struct StartReplicationTaskAssessmentMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplicationTaskAssessmentResponse {
     /// <p> The assessed replication task. </p>
@@ -2630,7 +2630,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartReplicationTaskMessage {
     /// <p><p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position &quot;checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93&quot;</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p> <note> <p>When you use this task setting with a source PostgreSQL database, a logical replication slot should already be created and associated with the source endpoint. You can verify this by setting the <code>slotName</code> extra connection attribute to the name of this logical replication slot. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.PostgreSQL.html#CHAP_Source.PostgreSQL.ConnectionAttrib">Extra Connection Attributes When Using PostgreSQL as a Source for AWS DMS</a>.</p> </note></p>
@@ -2654,7 +2654,7 @@ pub struct StartReplicationTaskMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartReplicationTaskResponse {
     /// <p>The replication task started.</p>
@@ -2664,7 +2664,7 @@ pub struct StartReplicationTaskResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopReplicationTaskMessage {
     /// <p>The Amazon Resource Name(ARN) of the replication task to be stopped.</p>
@@ -2673,7 +2673,7 @@ pub struct StopReplicationTaskMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopReplicationTaskResponse {
     /// <p>The replication task stopped.</p>
@@ -2683,7 +2683,7 @@ pub struct StopReplicationTaskResponse {
 }
 
 /// <p>In response to a request by the <code>DescribeReplicationSubnetGroup</code> operation, this object identifies a subnet by its given Availability Zone, subnet identifier, and status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subnet {
     /// <p>The Availability Zone of the subnet.</p>
@@ -2701,7 +2701,7 @@ pub struct Subnet {
 }
 
 /// <p>Provides information about types of supported endpoints in response to a request by the <code>DescribeEndpointTypes</code> operation. This information includes the type of endpoint, the database engine name, and whether change data capture (CDC) is supported.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SupportedEndpointType {
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
@@ -2727,7 +2727,7 @@ pub struct SupportedEndpointType {
 }
 
 /// <p>Provides a collection of table statistics in response to a request by the <code>DescribeTableStatistics</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableStatistics {
     /// <p>The data definition language (DDL) used to build and modify the structure of your tables.</p>
@@ -2809,7 +2809,7 @@ pub struct TableStatistics {
 }
 
 /// <p>Provides the name of the schema and table to be reloaded.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TableToReload {
     /// <p>The schema name of the table to be reloaded.</p>
@@ -2823,7 +2823,7 @@ pub struct TableToReload {
 }
 
 /// <p><p>A user-defined key-value pair that describes metadata added to an AWS DMS resource and that is used by operations such as the following:</p> <ul> <li> <p> <code>AddTagsToResource</code> </p> </li> <li> <p> <code>ListTagsForResource</code> </p> </li> <li> <p> <code>RemoveTagsFromResource</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     #[serde(rename = "Key")]
@@ -2836,7 +2836,7 @@ pub struct Tag {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestConnectionMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -2848,7 +2848,7 @@ pub struct TestConnectionMessage {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestConnectionResponse {
     /// <p>The connection tested.</p>
@@ -2858,7 +2858,7 @@ pub struct TestConnectionResponse {
 }
 
 /// <p>Describes status of a security group associated with the virtual private cloud hosting your replication and DB instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>

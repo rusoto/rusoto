@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A chat message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChatMessage {
     /// <p>The content of the chat message.</p>
@@ -38,7 +38,7 @@ pub struct ChatMessage {
 }
 
 /// <p>Contains summary information about a contact flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContactFlowSummary {
     /// <p>The Amazon Resource Name (ARN) of the contact flow.</p>
@@ -59,7 +59,7 @@ pub struct ContactFlowSummary {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The identifier of the user account in the directory used for identity management. If Amazon Connect cannot access the directory, you can specify this identifier to authenticate users. If you include the identifier, we assume that Amazon Connect cannot access the directory. Otherwise, the identity information is used to authenticate users from your directory.</p> <p>This parameter is required if you are using an existing directory for identity management in Amazon Connect when Amazon Connect cannot access your directory to authenticate users. If you are using SAML for identity management and include this parameter, an error is returned.</p>
@@ -99,7 +99,7 @@ pub struct CreateUserRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The Amazon Resource Name (ARN) of the user account.</p>
@@ -113,7 +113,7 @@ pub struct CreateUserResponse {
 }
 
 /// <p>Contains credentials to use for federation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Credentials {
     /// <p>An access token generated for a federated user to access Amazon Connect.</p>
@@ -135,7 +135,7 @@ pub struct Credentials {
 }
 
 /// <p>Contains information about a real-time metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CurrentMetric {
     /// <p>The name of the metric.</p>
     #[serde(rename = "Name")]
@@ -148,7 +148,7 @@ pub struct CurrentMetric {
 }
 
 /// <p>Contains the data for a real-time metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CurrentMetricData {
     /// <p>Information about the metric.</p>
@@ -162,7 +162,7 @@ pub struct CurrentMetricData {
 }
 
 /// <p>Contains information about a set of real-time metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CurrentMetricResult {
     /// <p>The set of metrics.</p>
@@ -175,7 +175,7 @@ pub struct CurrentMetricResult {
     pub dimensions: Option<Dimensions>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -186,7 +186,7 @@ pub struct DeleteUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
@@ -197,7 +197,7 @@ pub struct DescribeUserHierarchyGroupRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyGroupResponse {
     /// <p>Information about the hierarchy group.</p>
@@ -206,7 +206,7 @@ pub struct DescribeUserHierarchyGroupResponse {
     pub hierarchy_group: Option<HierarchyGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyStructureRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -214,7 +214,7 @@ pub struct DescribeUserHierarchyStructureRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserHierarchyStructureResponse {
     /// <p>Information about the hierarchy structure.</p>
@@ -223,7 +223,7 @@ pub struct DescribeUserHierarchyStructureResponse {
     pub hierarchy_structure: Option<HierarchyStructure>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -234,7 +234,7 @@ pub struct DescribeUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>Information about the user account and configuration settings.</p>
@@ -244,7 +244,7 @@ pub struct DescribeUserResponse {
 }
 
 /// <p>Contains information about the dimensions for a set of metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dimensions {
     /// <p>The channel used for grouping and filters.</p>
@@ -258,7 +258,7 @@ pub struct Dimensions {
 }
 
 /// <p>Contains the filter to apply when retrieving metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filters {
     /// <p>The channel to use to filter the metrics.</p>
@@ -271,7 +271,7 @@ pub struct Filters {
     pub queues: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetContactAttributesRequest {
     /// <p>The identifier of the initial contact.</p>
@@ -282,7 +282,7 @@ pub struct GetContactAttributesRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetContactAttributesResponse {
     /// <p>Information about the attributes.</p>
@@ -291,7 +291,7 @@ pub struct GetContactAttributesResponse {
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCurrentMetricDataRequest {
     /// <p><p>The metrics to retrieve. Specify the name and unit for each metric. The following metrics are available:</p> <dl> <dt>AGENTS<em>AFTER</em>CONTACT<em>WORK</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>ERROR</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>NON<em>PRODUCTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CALL</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ON<em>CONTACT</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ONLINE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>STAFFED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>IN<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>SCHEDULED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>OLDEST<em>CONTACT</em>AGE</dt> <dd> <p>Unit: SECONDS</p> </dd> <dt>SLOTS<em>ACTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>SLOTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> </dl></p>
@@ -317,7 +317,7 @@ pub struct GetCurrentMetricDataRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCurrentMetricDataResponse {
     /// <p>The time at which the metrics were retrieved and cached for pagination.</p>
@@ -334,7 +334,7 @@ pub struct GetCurrentMetricDataResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFederationTokenRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -342,7 +342,7 @@ pub struct GetFederationTokenRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFederationTokenResponse {
     /// <p>The credentials to use for federation.</p>
@@ -351,7 +351,7 @@ pub struct GetFederationTokenResponse {
     pub credentials: Option<Credentials>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMetricDataRequest {
     /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the start time timestamp.</p> <p>The time range between the start and end time must be less than 24 hours.</p>
@@ -383,7 +383,7 @@ pub struct GetMetricDataRequest {
     pub start_time: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMetricDataResponse {
     /// <p>Information about the historical metrics.</p> <p>If no grouping is specified, a summary of metric data is returned.</p>
@@ -397,7 +397,7 @@ pub struct GetMetricDataResponse {
 }
 
 /// <p>Contains information about a hierarchy group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyGroup {
     /// <p>The Amazon Resource Name (ARN) of the hierarchy group.</p>
@@ -423,7 +423,7 @@ pub struct HierarchyGroup {
 }
 
 /// <p>Contains summary information about a hierarchy group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyGroupSummary {
     /// <p>The Amazon Resource Name (ARN) of the hierarchy group.</p>
@@ -441,7 +441,7 @@ pub struct HierarchyGroupSummary {
 }
 
 /// <p>Contains information about a hierarchy level.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyLevel {
     /// <p>The Amazon Resource Name (ARN) of the hierarchy level.</p>
@@ -459,7 +459,7 @@ pub struct HierarchyLevel {
 }
 
 /// <p>Contains information about the levels of a hierarchy group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyPath {
     /// <p>Information about level five.</p>
@@ -485,7 +485,7 @@ pub struct HierarchyPath {
 }
 
 /// <p>Contains information about a hierarchy structure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HierarchyStructure {
     /// <p>Information about level five.</p>
@@ -511,7 +511,7 @@ pub struct HierarchyStructure {
 }
 
 /// <p>Contains information about a historical metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HistoricalMetric {
     /// <p>The name of the metric.</p>
     #[serde(rename = "Name")]
@@ -532,7 +532,7 @@ pub struct HistoricalMetric {
 }
 
 /// <p>Contains the data for a historical metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistoricalMetricData {
     /// <p>Information about the metric.</p>
@@ -546,7 +546,7 @@ pub struct HistoricalMetricData {
 }
 
 /// <p>Contains information about the historical metrics retrieved.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HistoricalMetricResult {
     /// <p>The set of metrics.</p>
@@ -560,7 +560,7 @@ pub struct HistoricalMetricResult {
 }
 
 /// <p>Contains summary information about hours of operation for a contact center.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HoursOfOperationSummary {
     /// <p>The Amazon Resource Name (ARN) of the hours of operation.</p>
@@ -577,7 +577,7 @@ pub struct HoursOfOperationSummary {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactFlowsRequest {
     /// <p>The type of contact flow.</p>
@@ -597,7 +597,7 @@ pub struct ListContactFlowsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactFlowsResponse {
     /// <p>Information about the contact flows.</p>
@@ -610,7 +610,7 @@ pub struct ListContactFlowsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHoursOfOperationsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -626,7 +626,7 @@ pub struct ListHoursOfOperationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHoursOfOperationsResponse {
     /// <p>Information about the hours of operation.</p>
@@ -639,7 +639,7 @@ pub struct ListHoursOfOperationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -663,7 +663,7 @@ pub struct ListPhoneNumbersRequest {
     pub phone_number_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumbersResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -676,7 +676,7 @@ pub struct ListPhoneNumbersResponse {
     pub phone_number_summary_list: Option<Vec<PhoneNumberSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -696,7 +696,7 @@ pub struct ListQueuesRequest {
     pub queue_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueuesResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -709,7 +709,7 @@ pub struct ListQueuesResponse {
     pub queue_summary_list: Option<Vec<QueueSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -725,7 +725,7 @@ pub struct ListRoutingProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoutingProfilesResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -738,7 +738,7 @@ pub struct ListRoutingProfilesResponse {
     pub routing_profile_summary_list: Option<Vec<RoutingProfileSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -754,7 +754,7 @@ pub struct ListSecurityProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -767,7 +767,7 @@ pub struct ListSecurityProfilesResponse {
     pub security_profile_summary_list: Option<Vec<SecurityProfileSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -775,7 +775,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>Information about the tags.</p>
@@ -784,7 +784,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserHierarchyGroupsRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -800,7 +800,7 @@ pub struct ListUserHierarchyGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserHierarchyGroupsResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -813,7 +813,7 @@ pub struct ListUserHierarchyGroupsResponse {
     pub user_hierarchy_group_summary_list: Option<Vec<HierarchyGroupSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -829,7 +829,7 @@ pub struct ListUsersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>If there are additional results, this is the token for the next set of results.</p>
@@ -843,7 +843,7 @@ pub struct ListUsersResponse {
 }
 
 /// <p>The customer's details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParticipantDetails {
     /// <p>Display name of the participant.</p>
@@ -852,7 +852,7 @@ pub struct ParticipantDetails {
 }
 
 /// <p>Contains summary information about a phone number for a contact center.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberSummary {
     /// <p>The Amazon Resource Name (ARN) of the phone number.</p>
@@ -878,7 +878,7 @@ pub struct PhoneNumberSummary {
 }
 
 /// <p>Contains information about a queue resource for which metrics are returned.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueueReference {
     /// <p>The Amazon Resource Name (ARN) of the queue.</p>
@@ -892,7 +892,7 @@ pub struct QueueReference {
 }
 
 /// <p>Contains summary information about a queue.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueueSummary {
     /// <p>The Amazon Resource Name (ARN) of the queue.</p>
@@ -914,7 +914,7 @@ pub struct QueueSummary {
 }
 
 /// <p>Contains summary information about a routing profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoutingProfileSummary {
     /// <p>The Amazon Resource Name (ARN) of the routing profile.</p>
@@ -932,7 +932,7 @@ pub struct RoutingProfileSummary {
 }
 
 /// <p>Contains information about a security profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityProfileSummary {
     /// <p>The Amazon Resource Name (ARN) of the security profile.</p>
@@ -949,7 +949,7 @@ pub struct SecurityProfileSummary {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChatContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes. </p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
@@ -975,7 +975,7 @@ pub struct StartChatContactRequest {
     pub participant_details: ParticipantDetails,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChatContactResponse {
     /// <p>The identifier of this contact within the Amazon Connect instance. </p>
@@ -992,7 +992,7 @@ pub struct StartChatContactResponse {
     pub participant_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOutboundVoiceContactRequest {
     /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
@@ -1022,7 +1022,7 @@ pub struct StartOutboundVoiceContactRequest {
     pub source_phone_number: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOutboundVoiceContactResponse {
     /// <p>The identifier of this contact within the Amazon Connect instance.</p>
@@ -1031,7 +1031,7 @@ pub struct StartOutboundVoiceContactResponse {
     pub contact_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRequest {
     /// <p>The ID of the contact.</p>
@@ -1042,11 +1042,11 @@ pub struct StopContactRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1058,7 +1058,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>Contains information about the threshold for service level metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Threshold {
     /// <p>The type of comparison. Only "less than" (LT) comparisons are supported.</p>
     #[serde(rename = "Comparison")]
@@ -1070,7 +1070,7 @@ pub struct Threshold {
     pub threshold_value: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1081,7 +1081,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateContactAttributesRequest {
     /// <p>The Amazon Connect attributes. These attributes can be accessed in contact flows just like any other contact attributes.</p> <p>You can have up to 32,768 UTF-8 bytes across all attributes for a contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
@@ -1095,11 +1095,11 @@ pub struct UpdateContactAttributesRequest {
     pub instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactAttributesResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserHierarchyRequest {
     /// <p>The identifier of the hierarchy group.</p>
@@ -1114,7 +1114,7 @@ pub struct UpdateUserHierarchyRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserIdentityInfoRequest {
     /// <p>The identity information for the user.</p>
@@ -1128,7 +1128,7 @@ pub struct UpdateUserIdentityInfoRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPhoneConfigRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -1142,7 +1142,7 @@ pub struct UpdateUserPhoneConfigRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRoutingProfileRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -1156,7 +1156,7 @@ pub struct UpdateUserRoutingProfileRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSecurityProfilesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
@@ -1171,7 +1171,7 @@ pub struct UpdateUserSecurityProfilesRequest {
 }
 
 /// <p>Contains information about a user account for a Amazon Connect instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The Amazon Resource Name (ARN) of the user account.</p>
@@ -1217,7 +1217,7 @@ pub struct User {
 }
 
 /// <p>Contains information about the identity of a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserIdentityInfo {
     /// <p>The email address. If you are using SAML for identity management and include this parameter, an error is returned.</p>
     #[serde(rename = "Email")]
@@ -1234,7 +1234,7 @@ pub struct UserIdentityInfo {
 }
 
 /// <p>Contains information about the phone configuration settings for a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserPhoneConfig {
     /// <p>The After Call Work (ACW) timeout setting, in seconds.</p>
     #[serde(rename = "AfterContactWorkTimeLimit")]
@@ -1254,7 +1254,7 @@ pub struct UserPhoneConfig {
 }
 
 /// <p>Contains summary information about a user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserSummary {
     /// <p>The Amazon Resource Name (ARN) of the user account.</p>

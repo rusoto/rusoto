@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes a custom algorithm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Algorithm {
     /// <p>The Amazon Resource Name (ARN) of the algorithm.</p>
@@ -71,7 +71,7 @@ pub struct Algorithm {
 }
 
 /// <p>Describes an algorithm image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AlgorithmImage {
     /// <p>The URI of the Docker container for the algorithm image.</p>
@@ -84,7 +84,7 @@ pub struct AlgorithmImage {
 }
 
 /// <p>When the solution performs AutoML (<code>performAutoML</code> is true in <a>CreateSolution</a>), Amazon Personalize determines which recipe, from the specified list, optimizes the given metric. Amazon Personalize then uses that recipe for the solution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoMLConfig {
     /// <p>The metric to optimize.</p>
     #[serde(rename = "metricName")]
@@ -97,7 +97,7 @@ pub struct AutoMLConfig {
 }
 
 /// <p>When the solution performs AutoML (<code>performAutoML</code> is true in <a>CreateSolution</a>), specifies the recipe that best optimized the specified metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoMLResult {
     /// <p>The Amazon Resource Name (ARN) of the best recipe.</p>
@@ -107,7 +107,7 @@ pub struct AutoMLResult {
 }
 
 /// <p>Contains information on a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchInferenceJob {
     /// <p>The Amazon Resource Name (ARN) of the batch inference job.</p>
@@ -157,7 +157,7 @@ pub struct BatchInferenceJob {
 }
 
 /// <p>The input configuration of a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchInferenceJobInput {
     /// <p>The URI of the Amazon S3 location that contains your input data. The Amazon S3 bucket must be in the same region as the API endpoint you are calling.</p>
     #[serde(rename = "s3DataSource")]
@@ -165,7 +165,7 @@ pub struct BatchInferenceJobInput {
 }
 
 /// <p>The output configuration parameters of a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchInferenceJobOutput {
     /// <p>Information on the Amazon S3 bucket in which the batch inference job's output is stored.</p>
     #[serde(rename = "s3DataDestination")]
@@ -173,7 +173,7 @@ pub struct BatchInferenceJobOutput {
 }
 
 /// <p>A truncated version of the <a>BatchInferenceJob</a> datatype. The <a>ListBatchInferenceJobs</a> operation returns a list of batch inference job summaries.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchInferenceJobSummary {
     /// <p>The Amazon Resource Name (ARN) of the batch inference job.</p>
@@ -207,7 +207,7 @@ pub struct BatchInferenceJobSummary {
 }
 
 /// <p>Describes a deployed solution version, otherwise known as a campaign. For more information on campaigns, see <a>CreateCampaign</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Campaign {
     /// <p>The Amazon Resource Name (ARN) of the campaign. </p>
@@ -248,7 +248,7 @@ pub struct Campaign {
 }
 
 /// <p>Provides a summary of the properties of a campaign. For a complete listing, call the <a>DescribeCampaign</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CampaignSummary {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -278,7 +278,7 @@ pub struct CampaignSummary {
 }
 
 /// <p>Provides a summary of the properties of a campaign update. For a complete listing, call the <a>DescribeCampaign</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CampaignUpdateSummary {
     /// <p>The date and time (in Unix time) that the campaign update was created.</p>
@@ -308,7 +308,7 @@ pub struct CampaignUpdateSummary {
 }
 
 /// <p>Provides the name and range of a categorical hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CategoricalHyperParameterRange {
     /// <p>The name of the hyperparameter.</p>
     #[serde(rename = "name")]
@@ -321,7 +321,7 @@ pub struct CategoricalHyperParameterRange {
 }
 
 /// <p>Provides the name and range of a continuous hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContinuousHyperParameterRange {
     /// <p>The maximum allowable value for the hyperparameter.</p>
     #[serde(rename = "maxValue")]
@@ -337,7 +337,7 @@ pub struct ContinuousHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchInferenceJobRequest {
     /// <p>The Amazon S3 path that leads to the input file to base your recommendations on. The input material must be in JSON format.</p>
@@ -361,7 +361,7 @@ pub struct CreateBatchInferenceJobRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBatchInferenceJobResponse {
     /// <p>The ARN of the batch inference job.</p>
@@ -370,7 +370,7 @@ pub struct CreateBatchInferenceJobResponse {
     pub batch_inference_job_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCampaignRequest {
     /// <p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>
@@ -384,7 +384,7 @@ pub struct CreateCampaignRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCampaignResponse {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -393,7 +393,7 @@ pub struct CreateCampaignResponse {
     pub campaign_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of a KMS key used to encrypt the datasets.</p>
@@ -409,7 +409,7 @@ pub struct CreateDatasetGroupRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetGroupResponse {
     /// <p>The Amazon Resource Name (ARN) of the new dataset group.</p>
@@ -418,7 +418,7 @@ pub struct CreateDatasetGroupResponse {
     pub dataset_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetImportJobRequest {
     /// <p>The Amazon S3 bucket that contains the training data to import.</p>
@@ -435,7 +435,7 @@ pub struct CreateDatasetImportJobRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetImportJobResponse {
     /// <p>The ARN of the dataset import job.</p>
@@ -444,7 +444,7 @@ pub struct CreateDatasetImportJobResponse {
     pub dataset_import_job_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group to add the dataset to.</p>
@@ -461,7 +461,7 @@ pub struct CreateDatasetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
     /// <p>The ARN of the dataset.</p>
@@ -470,7 +470,7 @@ pub struct CreateDatasetResponse {
     pub dataset_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that receives the event data.</p>
@@ -481,7 +481,7 @@ pub struct CreateEventTrackerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventTrackerResponse {
     /// <p>The ARN of the event tracker.</p>
@@ -494,7 +494,7 @@ pub struct CreateEventTrackerResponse {
     pub tracking_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
     /// <p>The name for the schema.</p>
@@ -505,7 +505,7 @@ pub struct CreateSchemaRequest {
     pub schema: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
     /// <p>The Amazon Resource Name (ARN) of the created schema.</p>
@@ -514,7 +514,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that provides the training data.</p>
@@ -545,7 +545,7 @@ pub struct CreateSolutionRequest {
     pub solution_config: Option<SolutionConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionResponse {
     /// <p>The ARN of the solution.</p>
@@ -554,7 +554,7 @@ pub struct CreateSolutionResponse {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution containing the training configuration information.</p>
@@ -566,7 +566,7 @@ pub struct CreateSolutionVersionRequest {
     pub training_mode: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionVersionResponse {
     /// <p>The ARN of the new solution version.</p>
@@ -576,7 +576,7 @@ pub struct CreateSolutionVersionResponse {
 }
 
 /// <p>Describes the data source that contains the data to upload to a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSource {
     /// <p>The path to the Amazon S3 bucket where the data that you want to upload to your dataset is stored. For example: </p> <p> <code>s3://bucket-name/training-data.csv</code> </p>
     #[serde(rename = "dataLocation")]
@@ -585,7 +585,7 @@ pub struct DataSource {
 }
 
 /// <p>Provides metadata for a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dataset {
     /// <p>The creation date and time (in Unix time) of the dataset.</p>
@@ -623,7 +623,7 @@ pub struct Dataset {
 }
 
 /// <p>A dataset group is a collection of related datasets (Interactions, User, and Item). You create a dataset group by calling <a>CreateDatasetGroup</a>. You then create a dataset and add it to a dataset group by calling <a>CreateDataset</a>. The dataset group is used to create and train a solution by calling <a>CreateSolution</a>. A dataset group can contain only one of each type of dataset.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the datasets in the group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetGroup {
     /// <p>The creation date and time (in Unix time) of the dataset group.</p>
@@ -661,7 +661,7 @@ pub struct DatasetGroup {
 }
 
 /// <p>Provides a summary of the properties of a dataset group. For a complete listing, call the <a>DescribeDatasetGroup</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetGroupSummary {
     /// <p>The date and time (in Unix time) that the dataset group was created.</p>
@@ -691,7 +691,7 @@ pub struct DatasetGroupSummary {
 }
 
 /// <p><p>Describes a job that imports training data from a data source (Amazon S3 bucket) to an Amazon Personalize dataset. For more information, see <a>CreateDatasetImportJob</a>.</p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetImportJob {
     /// <p>The creation date and time (in Unix time) of the dataset import job.</p>
@@ -733,7 +733,7 @@ pub struct DatasetImportJob {
 }
 
 /// <p>Provides a summary of the properties of a dataset import job. For a complete listing, call the <a>DescribeDatasetImportJob</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetImportJobSummary {
     /// <p>The date and time (in Unix time) that the dataset import job was created.</p>
@@ -763,7 +763,7 @@ pub struct DatasetImportJobSummary {
 }
 
 /// <p>Describes the schema for a dataset. For more information on schemas, see <a>CreateSchema</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSchema {
     /// <p>The date and time (in Unix time) that the schema was created.</p>
@@ -789,7 +789,7 @@ pub struct DatasetSchema {
 }
 
 /// <p>Provides a summary of the properties of a dataset schema. For a complete listing, call the <a>DescribeSchema</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSchemaSummary {
     /// <p>The date and time (in Unix time) that the schema was created.</p>
@@ -811,7 +811,7 @@ pub struct DatasetSchemaSummary {
 }
 
 /// <p>Provides a summary of the properties of a dataset. For a complete listing, call the <a>DescribeDataset</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSummary {
     /// <p>The date and time (in Unix time) that the dataset was created.</p>
@@ -841,7 +841,7 @@ pub struct DatasetSummary {
 }
 
 /// <p>Provides the name and default range of a categorical hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultCategoricalHyperParameterRange {
     /// <p>Whether the hyperparameter is tunable.</p>
@@ -859,7 +859,7 @@ pub struct DefaultCategoricalHyperParameterRange {
 }
 
 /// <p>Provides the name and default range of a continuous hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultContinuousHyperParameterRange {
     /// <p>Whether the hyperparameter is tunable.</p>
@@ -881,7 +881,7 @@ pub struct DefaultContinuousHyperParameterRange {
 }
 
 /// <p>Specifies the hyperparameters and their default ranges. Hyperparameters can be categorical, continuous, or integer-valued.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultHyperParameterRanges {
     /// <p>The categorical hyperparameters and their default ranges.</p>
@@ -899,7 +899,7 @@ pub struct DefaultHyperParameterRanges {
 }
 
 /// <p>Provides the name and default range of a integer-valued hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultIntegerHyperParameterRange {
     /// <p>Indicates whether the hyperparameter is tunable.</p>
@@ -920,7 +920,7 @@ pub struct DefaultIntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to delete.</p>
@@ -928,7 +928,7 @@ pub struct DeleteCampaignRequest {
     pub campaign_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetGroupRequest {
     /// <p>The ARN of the dataset group to delete.</p>
@@ -936,7 +936,7 @@ pub struct DeleteDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to delete.</p>
@@ -944,7 +944,7 @@ pub struct DeleteDatasetRequest {
     pub dataset_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the event tracker to delete.</p>
@@ -952,7 +952,7 @@ pub struct DeleteEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the schema to delete.</p>
@@ -960,7 +960,7 @@ pub struct DeleteSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSolutionRequest {
     /// <p>The ARN of the solution to delete.</p>
@@ -968,7 +968,7 @@ pub struct DeleteSolutionRequest {
     pub solution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmRequest {
     /// <p>The Amazon Resource Name (ARN) of the algorithm to describe.</p>
@@ -976,7 +976,7 @@ pub struct DescribeAlgorithmRequest {
     pub algorithm_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAlgorithmResponse {
     /// <p>A listing of the properties of the algorithm.</p>
@@ -985,7 +985,7 @@ pub struct DescribeAlgorithmResponse {
     pub algorithm: Option<Algorithm>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchInferenceJobRequest {
     /// <p>The ARN of the batch inference job to describe.</p>
@@ -993,7 +993,7 @@ pub struct DescribeBatchInferenceJobRequest {
     pub batch_inference_job_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBatchInferenceJobResponse {
     /// <p>Information on the specified batch inference job.</p>
@@ -1002,7 +1002,7 @@ pub struct DescribeBatchInferenceJobResponse {
     pub batch_inference_job: Option<BatchInferenceJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -1010,7 +1010,7 @@ pub struct DescribeCampaignRequest {
     pub campaign_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCampaignResponse {
     /// <p>The properties of the campaign.</p>
@@ -1019,7 +1019,7 @@ pub struct DescribeCampaignResponse {
     pub campaign: Option<Campaign>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group to describe.</p>
@@ -1027,7 +1027,7 @@ pub struct DescribeDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetGroupResponse {
     /// <p>A listing of the dataset group's properties.</p>
@@ -1036,7 +1036,7 @@ pub struct DescribeDatasetGroupResponse {
     pub dataset_group: Option<DatasetGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetImportJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset import job to describe.</p>
@@ -1044,7 +1044,7 @@ pub struct DescribeDatasetImportJobRequest {
     pub dataset_import_job_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetImportJobResponse {
     /// <p><p>Information about the dataset import job, including the status.</p> <p>The status is one of the following values:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> </ul></p>
@@ -1053,7 +1053,7 @@ pub struct DescribeDatasetImportJobResponse {
     pub dataset_import_job: Option<DatasetImportJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to describe.</p>
@@ -1061,7 +1061,7 @@ pub struct DescribeDatasetRequest {
     pub dataset_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
     /// <p>A listing of the dataset's properties.</p>
@@ -1070,7 +1070,7 @@ pub struct DescribeDatasetResponse {
     pub dataset: Option<Dataset>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the event tracker to describe.</p>
@@ -1078,7 +1078,7 @@ pub struct DescribeEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventTrackerResponse {
     /// <p>An object that describes the event tracker.</p>
@@ -1087,7 +1087,7 @@ pub struct DescribeEventTrackerResponse {
     pub event_tracker: Option<EventTracker>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFeatureTransformationRequest {
     /// <p>The Amazon Resource Name (ARN) of the feature transformation to describe.</p>
@@ -1095,7 +1095,7 @@ pub struct DescribeFeatureTransformationRequest {
     pub feature_transformation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFeatureTransformationResponse {
     /// <p>A listing of the FeatureTransformation properties.</p>
@@ -1104,7 +1104,7 @@ pub struct DescribeFeatureTransformationResponse {
     pub feature_transformation: Option<FeatureTransformation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the recipe to describe.</p>
@@ -1112,7 +1112,7 @@ pub struct DescribeRecipeRequest {
     pub recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecipeResponse {
     /// <p>An object that describes the recipe.</p>
@@ -1121,7 +1121,7 @@ pub struct DescribeRecipeResponse {
     pub recipe: Option<Recipe>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the schema to retrieve.</p>
@@ -1129,7 +1129,7 @@ pub struct DescribeSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemaResponse {
     /// <p>The requested schema.</p>
@@ -1138,7 +1138,7 @@ pub struct DescribeSchemaResponse {
     pub schema: Option<DatasetSchema>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution to describe.</p>
@@ -1146,7 +1146,7 @@ pub struct DescribeSolutionRequest {
     pub solution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionResponse {
     /// <p>An object that describes the solution.</p>
@@ -1155,7 +1155,7 @@ pub struct DescribeSolutionResponse {
     pub solution: Option<Solution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution version.</p>
@@ -1163,7 +1163,7 @@ pub struct DescribeSolutionVersionRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionVersionResponse {
     /// <p>The solution version.</p>
@@ -1173,7 +1173,7 @@ pub struct DescribeSolutionVersionResponse {
 }
 
 /// <p>Provides information about an event tracker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventTracker {
     /// <p>The Amazon AWS account that owns the event tracker.</p>
@@ -1211,7 +1211,7 @@ pub struct EventTracker {
 }
 
 /// <p>Provides a summary of the properties of an event tracker. For a complete listing, call the <a>DescribeEventTracker</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventTrackerSummary {
     /// <p>The date and time (in Unix time) that the event tracker was created.</p>
@@ -1237,7 +1237,7 @@ pub struct EventTrackerSummary {
 }
 
 /// <p>Provides feature transformation information. Feature transformation is the process of modifying raw input data into a form more suitable for model training.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FeatureTransformation {
     /// <p>The creation date and time (in Unix time) of the feature transformation.</p>
@@ -1266,7 +1266,7 @@ pub struct FeatureTransformation {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSolutionMetricsRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution version for which to get metrics.</p>
@@ -1274,7 +1274,7 @@ pub struct GetSolutionMetricsRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSolutionMetricsResponse {
     /// <p>The metrics for the solution version.</p>
@@ -1288,7 +1288,7 @@ pub struct GetSolutionMetricsResponse {
 }
 
 /// <p>Describes the properties for hyperparameter optimization (HPO). For use with the bring-your-own-recipe feature. Do not use for Amazon Personalize native recipes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOConfig {
     /// <p>The hyperparameters and their allowable ranges.</p>
     #[serde(rename = "algorithmHyperParameterRanges")]
@@ -1305,7 +1305,7 @@ pub struct HPOConfig {
 }
 
 /// <p>The metric to optimize during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOObjective {
     /// <p>The name of the metric.</p>
     #[serde(rename = "metricName")]
@@ -1322,7 +1322,7 @@ pub struct HPOObjective {
 }
 
 /// <p>Describes the resource configuration for hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOResourceConfig {
     /// <p>The maximum number of training jobs when you create a solution version. The maximum value for <code>maxNumberOfTrainingJobs</code> is <code>40</code>.</p>
     #[serde(rename = "maxNumberOfTrainingJobs")]
@@ -1335,7 +1335,7 @@ pub struct HPOResourceConfig {
 }
 
 /// <p>Specifies the hyperparameters and their ranges. Hyperparameters can be categorical, continuous, or integer-valued.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HyperParameterRanges {
     /// <p>The categorical hyperparameters and their ranges.</p>
     #[serde(rename = "categoricalHyperParameterRanges")]
@@ -1352,7 +1352,7 @@ pub struct HyperParameterRanges {
 }
 
 /// <p>Provides the name and range of an integer-valued hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IntegerHyperParameterRange {
     /// <p>The maximum allowable value for the hyperparameter.</p>
     #[serde(rename = "maxValue")]
@@ -1368,7 +1368,7 @@ pub struct IntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBatchInferenceJobsRequest {
     /// <p>The maximum number of batch inference job results to return in each page. The default value is 100.</p>
@@ -1385,7 +1385,7 @@ pub struct ListBatchInferenceJobsRequest {
     pub solution_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBatchInferenceJobsResponse {
     /// <p>A list containing information on each job that is returned.</p>
@@ -1398,7 +1398,7 @@ pub struct ListBatchInferenceJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCampaignsRequest {
     /// <p>The maximum number of campaigns to return.</p>
@@ -1415,7 +1415,7 @@ pub struct ListCampaignsRequest {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCampaignsResponse {
     /// <p>A list of the campaigns.</p>
@@ -1428,7 +1428,7 @@ pub struct ListCampaignsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetGroupsRequest {
     /// <p>The maximum number of dataset groups to return.</p>
@@ -1441,7 +1441,7 @@ pub struct ListDatasetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetGroupsResponse {
     /// <p>The list of your dataset groups.</p>
@@ -1454,7 +1454,7 @@ pub struct ListDatasetGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetImportJobsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to list the dataset import jobs for.</p>
@@ -1471,7 +1471,7 @@ pub struct ListDatasetImportJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetImportJobsResponse {
     /// <p>The list of dataset import jobs.</p>
@@ -1484,7 +1484,7 @@ pub struct ListDatasetImportJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that contains the datasets to list.</p>
@@ -1501,7 +1501,7 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
     /// <p>An array of <code>Dataset</code> objects. Each object provides metadata information.</p>
@@ -1514,7 +1514,7 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventTrackersRequest {
     /// <p>The ARN of a dataset group used to filter the response.</p>
@@ -1531,7 +1531,7 @@ pub struct ListEventTrackersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventTrackersResponse {
     /// <p>A list of event trackers.</p>
@@ -1544,7 +1544,7 @@ pub struct ListEventTrackersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecipesRequest {
     /// <p>The maximum number of recipes to return.</p>
@@ -1561,7 +1561,7 @@ pub struct ListRecipesRequest {
     pub recipe_provider: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecipesResponse {
     /// <p>A token for getting the next set of recipes.</p>
@@ -1574,7 +1574,7 @@ pub struct ListRecipesResponse {
     pub recipes: Option<Vec<RecipeSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemasRequest {
     /// <p>The maximum number of schemas to return.</p>
@@ -1587,7 +1587,7 @@ pub struct ListSchemasRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemasResponse {
     /// <p>A token used to get the next set of schemas (if they exist).</p>
@@ -1600,7 +1600,7 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<DatasetSchemaSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionVersionsRequest {
     /// <p>The maximum number of solution versions to return.</p>
@@ -1617,7 +1617,7 @@ pub struct ListSolutionVersionsRequest {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionVersionsResponse {
     /// <p>A token for getting the next set of solution versions (if they exist).</p>
@@ -1630,7 +1630,7 @@ pub struct ListSolutionVersionsResponse {
     pub solution_versions: Option<Vec<SolutionVersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group.</p>
@@ -1647,7 +1647,7 @@ pub struct ListSolutionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionsResponse {
     /// <p>A token for getting the next set of solutions (if they exist).</p>
@@ -1661,7 +1661,7 @@ pub struct ListSolutionsResponse {
 }
 
 /// <p>Provides information about a recipe. Each recipe provides an algorithm that Amazon Personalize uses in model training when you use the <a>CreateSolution</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Recipe {
     /// <p>The Amazon Resource Name (ARN) of the algorithm that Amazon Personalize uses to train the model.</p>
@@ -1703,7 +1703,7 @@ pub struct Recipe {
 }
 
 /// <p>Provides a summary of the properties of a recipe. For a complete listing, call the <a>DescribeRecipe</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecipeSummary {
     /// <p>The date and time (in Unix time) that the recipe was created.</p>
@@ -1729,7 +1729,7 @@ pub struct RecipeSummary {
 }
 
 /// <p>The configuration details of an Amazon S3 input or output bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3DataConfig {
     /// <p>The Amazon Resource Name (ARN) of the Amazon Key Management Service (KMS) key that Amazon Personalize uses to encrypt or decrypt the input and output files of a batch inference job.</p>
     #[serde(rename = "kmsKeyArn")]
@@ -1741,7 +1741,7 @@ pub struct S3DataConfig {
 }
 
 /// <p>An object that provides information about a solution. A solution is a trained model that can be deployed as a campaign.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Solution {
     /// <p>When <code>performAutoML</code> is true, specifies the best recipe found.</p>
@@ -1799,7 +1799,7 @@ pub struct Solution {
 }
 
 /// <p>Describes the configuration properties for the solution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SolutionConfig {
     /// <p>Lists the hyperparameter names and ranges.</p>
     #[serde(rename = "algorithmHyperParameters")]
@@ -1824,7 +1824,7 @@ pub struct SolutionConfig {
 }
 
 /// <p>Provides a summary of the properties of a solution. For a complete listing, call the <a>DescribeSolution</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionSummary {
     /// <p>The date and time (in Unix time) that the solution was created.</p>
@@ -1850,7 +1850,7 @@ pub struct SolutionSummary {
 }
 
 /// <p>An object that provides information about a specific version of a <a>Solution</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionVersion {
     /// <p>The date and time (in Unix time) that this version of the solution was created.</p>
@@ -1916,7 +1916,7 @@ pub struct SolutionVersion {
 }
 
 /// <p>Provides a summary of the properties of a solution version. For a complete listing, call the <a>DescribeSolutionVersion</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionVersionSummary {
     /// <p>The date and time (in Unix time) that this version of a solution was created.</p>
@@ -1942,7 +1942,7 @@ pub struct SolutionVersionSummary {
 }
 
 /// <p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TunedHPOParams {
     /// <p>A list of the hyperparameter values of the best performing model.</p>
@@ -1951,7 +1951,7 @@ pub struct TunedHPOParams {
     pub algorithm_hyper_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -1967,7 +1967,7 @@ pub struct UpdateCampaignRequest {
     pub solution_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCampaignResponse {
     /// <p>The same campaign ARN as given in the request.</p>

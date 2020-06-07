@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Details of abort criteria to abort the job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AbortConfig {
     /// <p>The list of abort criteria to define rules to abort the job.</p>
     #[serde(rename = "criteriaList")]
@@ -34,7 +34,7 @@ pub struct AbortConfig {
 }
 
 /// <p>Details of abort criteria to define rules to abort the job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AbortCriteria {
     /// <p>The type of abort action to initiate a job abort.</p>
     #[serde(rename = "action")]
@@ -51,7 +51,7 @@ pub struct AbortCriteria {
 }
 
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -64,7 +64,7 @@ pub struct AcceptCertificateTransferRequest {
 }
 
 /// <p>Describes the actions associated with a rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
     /// <p>Change the state of a CloudWatch alarm.</p>
     #[serde(rename = "cloudwatchAlarm")]
@@ -145,7 +145,7 @@ pub struct Action {
 }
 
 /// <p>Information about an active Device Defender security profile behavior violation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActiveViolation {
     /// <p>The behavior which is being violated.</p>
@@ -178,7 +178,7 @@ pub struct ActiveViolation {
     pub violation_start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToBillingGroupRequest {
     /// <p>The ARN of the billing group.</p>
@@ -199,11 +199,11 @@ pub struct AddThingToBillingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddThingToBillingGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddThingToThingGroupRequest {
     /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
@@ -228,12 +228,12 @@ pub struct AddThingToThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddThingToThingGroupResponse {}
 
 /// <p>Parameters used when defining a mitigation action that move a set of things to a thing group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AddThingsToThingGroupParams {
     /// <p>Specifies if this mitigation action can move the things that triggered the mitigation action even if they are part of one or more dynamic things groups.</p>
     #[serde(rename = "overrideDynamicGroups")]
@@ -245,7 +245,7 @@ pub struct AddThingsToThingGroupParams {
 }
 
 /// <p>A structure containing the alert target ARN and the role ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AlertTarget {
     /// <p>The ARN of the notification target to which alerts are sent.</p>
     #[serde(rename = "alertTargetArn")]
@@ -256,7 +256,7 @@ pub struct AlertTarget {
 }
 
 /// <p>Contains information that allowed the authorization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Allowed {
     /// <p>A list of policies that allowed the authentication.</p>
@@ -266,7 +266,7 @@ pub struct Allowed {
 }
 
 /// <p>An asset property timestamp entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyTimestamp {
     /// <p>Optional. A string that contains the nanosecond time offset. Accepts substitution templates.</p>
     #[serde(rename = "offsetInNanos")]
@@ -278,7 +278,7 @@ pub struct AssetPropertyTimestamp {
 }
 
 /// <p>An asset property value entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyValue {
     /// <p>Optional. A string that describes the quality of the value. Accepts substitution templates. Must be <code>GOOD</code>, <code>BAD</code>, or <code>UNCERTAIN</code>.</p>
     #[serde(rename = "quality")]
@@ -293,7 +293,7 @@ pub struct AssetPropertyValue {
 }
 
 /// <p>Contains an asset property value (of a single type).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyVariant {
     /// <p>Optional. A string that contains the boolean value (<code>true</code> or <code>false</code>) of the value entry. Accepts substitution templates.</p>
     #[serde(rename = "booleanValue")]
@@ -313,7 +313,7 @@ pub struct AssetPropertyVariant {
     pub string_value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTargetsWithJobRequest {
     /// <p>An optional comment string describing why the job was associated with the targets.</p>
@@ -328,7 +328,7 @@ pub struct AssociateTargetsWithJobRequest {
     pub targets: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTargetsWithJobResponse {
     /// <p>A short text description of the job.</p>
@@ -345,7 +345,7 @@ pub struct AssociateTargetsWithJobResponse {
     pub job_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
@@ -357,7 +357,7 @@ pub struct AttachPolicyRequest {
 }
 
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachPrincipalPolicyRequest {
     /// <p>The policy name.</p>
@@ -368,7 +368,7 @@ pub struct AttachPrincipalPolicyRequest {
     pub principal: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachSecurityProfileRequest {
     /// <p>The security profile that is attached.</p>
@@ -379,12 +379,12 @@ pub struct AttachSecurityProfileRequest {
     pub security_profile_target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachSecurityProfileResponse {}
 
 /// <p>The input for the AttachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachThingPrincipalRequest {
     /// <p>The principal, which can be a certificate ARN (as returned from the CreateCertificate operation) or an Amazon Cognito ID.</p>
@@ -396,12 +396,12 @@ pub struct AttachThingPrincipalRequest {
 }
 
 /// <p>The output from the AttachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AttachThingPrincipalResponse {}
 
 /// <p>The attribute payload.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributePayload {
     /// <p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
     #[serde(rename = "attributes")]
@@ -414,7 +414,7 @@ pub struct AttributePayload {
 }
 
 /// <p>Which audit checks are enabled and disabled for this account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuditCheckConfiguration {
     /// <p>True if this audit check is enabled for this account.</p>
     #[serde(rename = "enabled")]
@@ -423,7 +423,7 @@ pub struct AuditCheckConfiguration {
 }
 
 /// <p>Information about the audit check.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuditCheckDetails {
     /// <p>True if the check is complete and found all resources compliant.</p>
@@ -453,7 +453,7 @@ pub struct AuditCheckDetails {
 }
 
 /// <p>The findings (results) of the audit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuditFinding {
     /// <p>The audit check that generated this result.</p>
@@ -499,7 +499,7 @@ pub struct AuditFinding {
 }
 
 /// <p>Returned by ListAuditMitigationActionsTask, this object contains information that describes a mitigation action that has been started.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuditMitigationActionExecutionMetadata {
     /// <p>The unique identifier for the mitigation action being applied by the task.</p>
@@ -541,7 +541,7 @@ pub struct AuditMitigationActionExecutionMetadata {
 }
 
 /// <p>Information about an audit mitigation actions task that is returned by <code>ListAuditMitigationActionsTasks</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuditMitigationActionsTaskMetadata {
     /// <p>The time at which the audit mitigation actions task was started.</p>
@@ -559,7 +559,7 @@ pub struct AuditMitigationActionsTaskMetadata {
 }
 
 /// <p>Used in MitigationActionParams, this information identifies the target findings to which the mitigation actions are applied. Only one entry appears.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuditMitigationActionsTaskTarget {
     /// <p>Specifies a filter in the form of an audit check and set of reason codes that identify the findings from the audit to which the audit mitigation actions task apply.</p>
     #[serde(rename = "auditCheckToReasonCodeFilter")]
@@ -576,7 +576,7 @@ pub struct AuditMitigationActionsTaskTarget {
 }
 
 /// <p>Information about the targets to which audit notifications are sent.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuditNotificationTarget {
     /// <p>True if notifications to the target are enabled.</p>
     #[serde(rename = "enabled")]
@@ -593,7 +593,7 @@ pub struct AuditNotificationTarget {
 }
 
 /// <p>The audits that were performed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuditTaskMetadata {
     /// <p>The ID of this audit.</p>
@@ -611,7 +611,7 @@ pub struct AuditTaskMetadata {
 }
 
 /// <p>A collection of authorization information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuthInfo {
     /// <p>The type of action for which the principal is being authorized.</p>
     #[serde(rename = "actionType")]
@@ -623,7 +623,7 @@ pub struct AuthInfo {
 }
 
 /// <p>The authorizer result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthResult {
     /// <p>The policies and statements that allowed the specified action.</p>
@@ -649,7 +649,7 @@ pub struct AuthResult {
 }
 
 /// <p>An object that specifies the authorization service for a domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuthorizerConfig {
     /// <p>A Boolean that specifies whether the domain configuration's authorization service can be overridden.</p>
     #[serde(rename = "allowAuthorizerOverride")]
@@ -662,7 +662,7 @@ pub struct AuthorizerConfig {
 }
 
 /// <p>The authorizer description.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizerDescription {
     /// <p>The authorizer ARN.</p>
@@ -704,7 +704,7 @@ pub struct AuthorizerDescription {
 }
 
 /// <p>The authorizer summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizerSummary {
     /// <p>The authorizer ARN.</p>
@@ -718,7 +718,7 @@ pub struct AuthorizerSummary {
 }
 
 /// <p>Configuration for the rollout of OTA updates.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsJobExecutionsRolloutConfig {
     /// <p>The maximum number of OTA update job executions started per minute.</p>
     #[serde(rename = "maximumPerMinute")]
@@ -727,7 +727,7 @@ pub struct AwsJobExecutionsRolloutConfig {
 }
 
 /// <p>Configuration information for pre-signed URLs. Valid when <code>protocols</code> contains HTTP.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsJobPresignedUrlConfig {
     /// <p>How long (in seconds) pre-signed URLs are valid. Valid values are 60 - 3600, the default value is 1800 seconds. Pre-signed URLs are generated when a request for the job document is received.</p>
     #[serde(rename = "expiresInSec")]
@@ -736,7 +736,7 @@ pub struct AwsJobPresignedUrlConfig {
 }
 
 /// <p>A Device Defender security profile behavior.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Behavior {
     /// <p>The criteria that determine if a device is behaving normally in regard to the <code>metric</code>.</p>
     #[serde(rename = "criteria")]
@@ -756,7 +756,7 @@ pub struct Behavior {
 }
 
 /// <p>The criteria by which the behavior is determined to be normal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BehaviorCriteria {
     /// <p>The operator that relates the thing measured (<code>metric</code>) to the criteria (containing a <code>value</code> or <code>statisticalThreshold</code>).</p>
     #[serde(rename = "comparisonOperator")]
@@ -785,7 +785,7 @@ pub struct BehaviorCriteria {
 }
 
 /// <p>Additional information about the billing group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BillingGroupMetadata {
     /// <p>The date the billing group was created.</p>
@@ -795,7 +795,7 @@ pub struct BillingGroupMetadata {
 }
 
 /// <p>The properties of a billing group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BillingGroupProperties {
     /// <p>The description of the billing group.</p>
     #[serde(rename = "billingGroupDescription")]
@@ -804,7 +804,7 @@ pub struct BillingGroupProperties {
 }
 
 /// <p>A CA certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CACertificate {
     /// <p>The ARN of the CA certificate.</p>
@@ -826,7 +826,7 @@ pub struct CACertificate {
 }
 
 /// <p>Describes a CA certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CACertificateDescription {
     /// <p>Whether the CA certificate configured for auto registration of device certificates. Valid values are "ENABLE" and "DISABLE"</p>
@@ -875,7 +875,7 @@ pub struct CACertificateDescription {
     pub validity: Option<CertificateValidity>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditMitigationActionsTaskRequest {
     /// <p>The unique identifier for the task that you want to cancel. </p>
@@ -883,11 +883,11 @@ pub struct CancelAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelAuditMitigationActionsTaskResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelAuditTaskRequest {
     /// <p>The ID of the audit you want to cancel. You can only cancel an audit that is "IN_PROGRESS".</p>
@@ -895,12 +895,12 @@ pub struct CancelAuditTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelAuditTaskResponse {}
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -908,7 +908,7 @@ pub struct CancelCertificateTransferRequest {
     pub certificate_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobExecutionRequest {
     /// <p>(Optional) The expected current version of the job execution. Each time you update the job execution, its version is incremented. If the version of the job execution stored in Jobs does not match, the update is rejected with a VersionMismatch error, and an ErrorResponse that contains the current job execution status data is returned. (This makes it unnecessary to perform a separate DescribeJobExecution request in order to obtain the job execution status data.)</p>
@@ -931,7 +931,7 @@ pub struct CancelJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobRequest {
     /// <p>An optional comment string describing why the job was canceled.</p>
@@ -951,7 +951,7 @@ pub struct CancelJobRequest {
     pub reason_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {
     /// <p>A short text description of the job.</p>
@@ -969,7 +969,7 @@ pub struct CancelJobResponse {
 }
 
 /// <p>Information about a certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Certificate {
     /// <p>The ARN of the certificate.</p>
@@ -995,7 +995,7 @@ pub struct Certificate {
 }
 
 /// <p>Describes a certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CertificateDescription {
     /// <p>The certificate ID of the CA certificate used to sign this certificate.</p>
@@ -1057,7 +1057,7 @@ pub struct CertificateDescription {
 }
 
 /// <p>When the certificate is valid.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CertificateValidity {
     /// <p>The certificate is not valid after this date.</p>
@@ -1070,16 +1070,16 @@ pub struct CertificateValidity {
     pub not_before: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClearDefaultAuthorizerRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClearDefaultAuthorizerResponse {}
 
 /// <p>Describes an action that updates a CloudWatch alarm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudwatchAlarmAction {
     /// <p>The CloudWatch alarm name.</p>
     #[serde(rename = "alarmName")]
@@ -1096,7 +1096,7 @@ pub struct CloudwatchAlarmAction {
 }
 
 /// <p>Describes an action that sends data to CloudWatch Logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudwatchLogsAction {
     /// <p>The CloudWatch log group to which the action sends data.</p>
     #[serde(rename = "logGroupName")]
@@ -1107,7 +1107,7 @@ pub struct CloudwatchLogsAction {
 }
 
 /// <p>Describes an action that captures a CloudWatch metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudwatchMetricAction {
     /// <p>The CloudWatch metric name.</p>
     #[serde(rename = "metricName")]
@@ -1131,7 +1131,7 @@ pub struct CloudwatchMetricAction {
 }
 
 /// <p>Describes the method to use when code signing a file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeSigning {
     /// <p>The ID of the AWSSignerJob which was created to sign the file.</p>
     #[serde(rename = "awsSignerJobId")]
@@ -1148,7 +1148,7 @@ pub struct CodeSigning {
 }
 
 /// <p>Describes the certificate chain being used when code signing a file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeSigningCertificateChain {
     /// <p>The name of the certificate.</p>
     #[serde(rename = "certificateName")]
@@ -1161,7 +1161,7 @@ pub struct CodeSigningCertificateChain {
 }
 
 /// <p>Describes the signature for a file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeSigningSignature {
     /// <p>A base64 encoded binary representation of the code signing signature.</p>
     #[serde(rename = "inlineDocument")]
@@ -1175,7 +1175,7 @@ pub struct CodeSigningSignature {
 }
 
 /// <p>Configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Configuration {
     /// <p>True to enable the configuration.</p>
     #[serde(rename = "Enabled")]
@@ -1183,7 +1183,7 @@ pub struct Configuration {
     pub enabled: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfirmTopicRuleDestinationRequest {
     /// <p>The token used to confirm ownership or access to the topic rule confirmation URL.</p>
@@ -1191,11 +1191,11 @@ pub struct ConfirmTopicRuleDestinationRequest {
     pub confirmation_token: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmTopicRuleDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
@@ -1226,7 +1226,7 @@ pub struct CreateAuthorizerRequest {
     pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
@@ -1239,7 +1239,7 @@ pub struct CreateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBillingGroupRequest {
     /// <p>The name you wish to give to the billing group.</p>
@@ -1255,7 +1255,7 @@ pub struct CreateBillingGroupRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBillingGroupResponse {
     /// <p>The ARN of the billing group.</p>
@@ -1273,7 +1273,7 @@ pub struct CreateBillingGroupResponse {
 }
 
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCertificateFromCsrRequest {
     /// <p>The certificate signing request (CSR).</p>
@@ -1286,7 +1286,7 @@ pub struct CreateCertificateFromCsrRequest {
 }
 
 /// <p>The output from the CreateCertificateFromCsr operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCertificateFromCsrResponse {
     /// <p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>
@@ -1303,7 +1303,7 @@ pub struct CreateCertificateFromCsrResponse {
     pub certificate_pem: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDimensionRequest {
     /// <p>Each dimension must have a unique client request token. If you try to create a new dimension with the same token as a dimension that already exists, an exception occurs. If you omit this value, AWS SDKs will automatically generate a unique client request.</p>
@@ -1324,7 +1324,7 @@ pub struct CreateDimensionRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDimensionResponse {
     /// <p>The ARN (Amazon resource name) of the created dimension.</p>
@@ -1337,7 +1337,7 @@ pub struct CreateDimensionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainConfigurationRequest {
     /// <p>An object that specifies the authorization service for a domain.</p>
@@ -1369,7 +1369,7 @@ pub struct CreateDomainConfigurationRequest {
     pub validation_certificate_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainConfigurationResponse {
     /// <p>The ARN of the domain configuration.</p>
@@ -1382,7 +1382,7 @@ pub struct CreateDomainConfigurationResponse {
     pub domain_configuration_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDynamicThingGroupRequest {
     /// <p><p>The dynamic thing group index name.</p> <note> <p>Currently one index is supported: &quot;AWS_Things&quot;.</p> </note></p>
@@ -1409,7 +1409,7 @@ pub struct CreateDynamicThingGroupRequest {
     pub thing_group_properties: Option<ThingGroupProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDynamicThingGroupResponse {
     /// <p>The dynamic thing group index name.</p>
@@ -1438,7 +1438,7 @@ pub struct CreateDynamicThingGroupResponse {
     pub thing_group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>Allows you to create criteria to abort a job.</p>
@@ -1485,7 +1485,7 @@ pub struct CreateJobRequest {
     pub timeout_config: Option<TimeoutConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>The job description.</p>
@@ -1503,7 +1503,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateKeysAndCertificateRequest {
     /// <p>Specifies whether the certificate is active.</p>
@@ -1513,7 +1513,7 @@ pub struct CreateKeysAndCertificateRequest {
 }
 
 /// <p>The output of the CreateKeysAndCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateKeysAndCertificateResponse {
     /// <p>The ARN of the certificate.</p>
@@ -1534,7 +1534,7 @@ pub struct CreateKeysAndCertificateResponse {
     pub key_pair: Option<KeyPair>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMitigationActionRequest {
     /// <p>A friendly name for the action. Choose a friendly name that accurately describes the action (for example, <code>EnableLoggingAction</code>).</p>
@@ -1552,7 +1552,7 @@ pub struct CreateMitigationActionRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMitigationActionResponse {
     /// <p>The ARN for the new mitigation action.</p>
@@ -1565,7 +1565,7 @@ pub struct CreateMitigationActionResponse {
     pub action_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOTAUpdateRequest {
     /// <p>A list of additional OTA update parameters which are name-value pairs.</p>
@@ -1610,7 +1610,7 @@ pub struct CreateOTAUpdateRequest {
     pub targets: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOTAUpdateResponse {
     /// <p>The AWS IoT job ARN associated with the OTA update.</p>
@@ -1636,7 +1636,7 @@ pub struct CreateOTAUpdateResponse {
 }
 
 /// <p>The input for the CreatePolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyRequest {
     /// <p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>
@@ -1652,7 +1652,7 @@ pub struct CreatePolicyRequest {
 }
 
 /// <p>The output from the CreatePolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePolicyResponse {
     /// <p>The policy ARN.</p>
@@ -1674,7 +1674,7 @@ pub struct CreatePolicyResponse {
 }
 
 /// <p>The input for the CreatePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePolicyVersionRequest {
     /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespace.</p>
@@ -1690,7 +1690,7 @@ pub struct CreatePolicyVersionRequest {
 }
 
 /// <p>The output of the CreatePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePolicyVersionResponse {
     /// <p>Specifies whether the policy version is the default.</p>
@@ -1711,7 +1711,7 @@ pub struct CreatePolicyVersionResponse {
     pub policy_version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningClaimRequest {
     /// <p>The name of the provisioning template to use.</p>
@@ -1719,7 +1719,7 @@ pub struct CreateProvisioningClaimRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningClaimResponse {
     /// <p>The ID of the certificate.</p>
@@ -1740,7 +1740,7 @@ pub struct CreateProvisioningClaimResponse {
     pub key_pair: Option<KeyPair>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateRequest {
     /// <p>The description of the fleet provisioning template.</p>
@@ -1770,7 +1770,7 @@ pub struct CreateProvisioningTemplateRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningTemplateResponse {
     /// <p>The default version of the fleet provisioning template.</p>
@@ -1787,7 +1787,7 @@ pub struct CreateProvisioningTemplateResponse {
     pub template_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProvisioningTemplateVersionRequest {
     /// <p>Sets a fleet provision template version as the default version.</p>
@@ -1802,7 +1802,7 @@ pub struct CreateProvisioningTemplateVersionRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningTemplateVersionResponse {
     /// <p>True if the fleet provisioning template version is the default version, otherwise false.</p>
@@ -1823,7 +1823,7 @@ pub struct CreateProvisioningTemplateVersionResponse {
     pub version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoleAliasRequest {
     /// <p>How long (in seconds) the credentials will be valid.</p>
@@ -1842,7 +1842,7 @@ pub struct CreateRoleAliasRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoleAliasResponse {
     /// <p>The role alias.</p>
@@ -1855,7 +1855,7 @@ pub struct CreateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScheduledAuditRequest {
     /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
@@ -1881,7 +1881,7 @@ pub struct CreateScheduledAuditRequest {
     pub target_check_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScheduledAuditResponse {
     /// <p>The ARN of the scheduled audit.</p>
@@ -1890,7 +1890,7 @@ pub struct CreateScheduledAuditResponse {
     pub scheduled_audit_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityProfileRequest {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code>, but it is also retained for any metric specified here.</p>
@@ -1918,7 +1918,7 @@ pub struct CreateSecurityProfileRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityProfileResponse {
     /// <p>The ARN of the security profile.</p>
@@ -1931,7 +1931,7 @@ pub struct CreateSecurityProfileResponse {
     pub security_profile_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamRequest {
     /// <p>A description of the stream.</p>
@@ -1953,7 +1953,7 @@ pub struct CreateStreamRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamResponse {
     /// <p>A description of the stream.</p>
@@ -1974,7 +1974,7 @@ pub struct CreateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingGroupRequest {
     /// <p>The name of the parent thing group.</p>
@@ -1994,7 +1994,7 @@ pub struct CreateThingGroupRequest {
     pub thing_group_properties: Option<ThingGroupProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingGroupResponse {
     /// <p>The thing group ARN.</p>
@@ -2012,7 +2012,7 @@ pub struct CreateThingGroupResponse {
 }
 
 /// <p>The input for the CreateThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingRequest {
     /// <p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
@@ -2033,7 +2033,7 @@ pub struct CreateThingRequest {
 }
 
 /// <p>The output of the CreateThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingResponse {
     /// <p>The ARN of the new thing.</p>
@@ -2051,7 +2051,7 @@ pub struct CreateThingResponse {
 }
 
 /// <p>The input for the CreateThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThingTypeRequest {
     /// <p>Metadata which can be used to manage the thing type.</p>
@@ -2068,7 +2068,7 @@ pub struct CreateThingTypeRequest {
 }
 
 /// <p>The output of the CreateThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThingTypeResponse {
     /// <p>The Amazon Resource Name (ARN) of the thing type.</p>
@@ -2085,7 +2085,7 @@ pub struct CreateThingTypeResponse {
     pub thing_type_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleDestinationRequest {
     /// <p>The topic rule destination configuration.</p>
@@ -2093,7 +2093,7 @@ pub struct CreateTopicRuleDestinationRequest {
     pub destination_configuration: TopicRuleDestinationConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTopicRuleDestinationResponse {
     /// <p>The topic rule destination.</p>
@@ -2103,7 +2103,7 @@ pub struct CreateTopicRuleDestinationResponse {
 }
 
 /// <p>The input for the CreateTopicRule operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicRuleRequest {
     /// <p>The name of the rule.</p>
@@ -2119,7 +2119,7 @@ pub struct CreateTopicRuleRequest {
 }
 
 /// <p>Describes a custom method used to code sign a file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomCodeSigning {
     /// <p>The certificate chain.</p>
     #[serde(rename = "certificateChain")]
@@ -2139,7 +2139,7 @@ pub struct CustomCodeSigning {
     pub signature_algorithm: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountAuditConfigurationRequest {
     /// <p>If true, all scheduled audits are deleted.</p>
@@ -2148,11 +2148,11 @@ pub struct DeleteAccountAuditConfigurationRequest {
     pub delete_scheduled_audits: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountAuditConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
@@ -2160,11 +2160,11 @@ pub struct DeleteAuthorizerRequest {
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAuthorizerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBillingGroupRequest {
     /// <p>The name of the billing group.</p>
@@ -2176,12 +2176,12 @@ pub struct DeleteBillingGroupRequest {
     pub expected_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBillingGroupResponse {}
 
 /// <p>Input for the DeleteCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCACertificateRequest {
     /// <p>The ID of the certificate to delete. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -2190,12 +2190,12 @@ pub struct DeleteCACertificateRequest {
 }
 
 /// <p>The output for the DeleteCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCACertificateResponse {}
 
 /// <p>The input for the DeleteCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -2207,7 +2207,7 @@ pub struct DeleteCertificateRequest {
     pub force_delete: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDimensionRequest {
     /// <p>The unique identifier for the dimension that you want to delete.</p>
@@ -2215,11 +2215,11 @@ pub struct DeleteDimensionRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDimensionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainConfigurationRequest {
     /// <p>The name of the domain configuration to be deleted.</p>
@@ -2227,11 +2227,11 @@ pub struct DeleteDomainConfigurationRequest {
     pub domain_configuration_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to delete.</p>
@@ -2243,11 +2243,11 @@ pub struct DeleteDynamicThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDynamicThingGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobExecutionRequest {
     /// <p>The ID of the job execution to be deleted. The <code>executionNumber</code> refers to the execution of a particular job on a particular device.</p> <p>Note that once a job execution is deleted, the <code>executionNumber</code> may be reused by IoT, so be sure you get and use the correct value here.</p>
@@ -2265,7 +2265,7 @@ pub struct DeleteJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p><p>(Optional) When true, you can delete a job which is &quot;IN<em>PROGRESS&quot;. Otherwise, you can only delete a job which is in a terminal state (&quot;COMPLETED&quot; or &quot;CANCELED&quot;) or an exception will occur. The default is false.</p> <note> <p>Deleting a job which is &quot;IN</em>PROGRESS&quot;, will cause a device which is executing the job to be unable to access job information or update the job execution status. Use caution and ensure that each device executing a job which is deleted is able to recover to a valid state.</p> </note></p>
@@ -2277,7 +2277,7 @@ pub struct DeleteJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMitigationActionRequest {
     /// <p>The name of the mitigation action that you want to delete.</p>
@@ -2285,11 +2285,11 @@ pub struct DeleteMitigationActionRequest {
     pub action_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMitigationActionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOTAUpdateRequest {
     /// <p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>
@@ -2305,12 +2305,12 @@ pub struct DeleteOTAUpdateRequest {
     pub ota_update_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOTAUpdateResponse {}
 
 /// <p>The input for the DeletePolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyRequest {
     /// <p>The name of the policy to delete.</p>
@@ -2319,7 +2319,7 @@ pub struct DeletePolicyRequest {
 }
 
 /// <p>The input for the DeletePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePolicyVersionRequest {
     /// <p>The name of the policy.</p>
@@ -2330,7 +2330,7 @@ pub struct DeletePolicyVersionRequest {
     pub policy_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateRequest {
     /// <p>The name of the fleet provision template to delete.</p>
@@ -2338,11 +2338,11 @@ pub struct DeleteProvisioningTemplateRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProvisioningTemplateVersionRequest {
     /// <p>The name of the fleet provisioning template version to delete.</p>
@@ -2353,21 +2353,21 @@ pub struct DeleteProvisioningTemplateVersionRequest {
     pub version_id: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningTemplateVersionResponse {}
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRegistrationCodeRequest {}
 
 /// <p>The output for the DeleteRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRegistrationCodeResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoleAliasRequest {
     /// <p>The role alias to delete.</p>
@@ -2375,11 +2375,11 @@ pub struct DeleteRoleAliasRequest {
     pub role_alias: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRoleAliasResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduledAuditRequest {
     /// <p>The name of the scheduled audit you want to delete.</p>
@@ -2387,11 +2387,11 @@ pub struct DeleteScheduledAuditRequest {
     pub scheduled_audit_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScheduledAuditResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityProfileRequest {
     /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different from the actual version, a <code>VersionConflictException</code> is thrown.</p>
@@ -2403,11 +2403,11 @@ pub struct DeleteSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityProfileResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamRequest {
     /// <p>The stream ID.</p>
@@ -2415,11 +2415,11 @@ pub struct DeleteStreamRequest {
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingGroupRequest {
     /// <p>The expected version of the thing group to delete.</p>
@@ -2431,12 +2431,12 @@ pub struct DeleteThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingGroupResponse {}
 
 /// <p>The input for the DeleteThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingRequest {
     /// <p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>
@@ -2449,12 +2449,12 @@ pub struct DeleteThingRequest {
 }
 
 /// <p>The output of the DeleteThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingResponse {}
 
 /// <p>The input for the DeleteThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingTypeRequest {
     /// <p>The name of the thing type.</p>
@@ -2463,11 +2463,11 @@ pub struct DeleteThingTypeRequest {
 }
 
 /// <p>The output for the DeleteThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThingTypeResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination to delete.</p>
@@ -2475,12 +2475,12 @@ pub struct DeleteTopicRuleDestinationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTopicRuleDestinationResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicRuleRequest {
     /// <p>The name of the rule.</p>
@@ -2488,7 +2488,7 @@ pub struct DeleteTopicRuleRequest {
     pub rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteV2LoggingLevelRequest {
     /// <p>The name of the resource for which you are configuring logging.</p>
@@ -2500,7 +2500,7 @@ pub struct DeleteV2LoggingLevelRequest {
 }
 
 /// <p>Contains information that denied the authorization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Denied {
     /// <p>Information that explicitly denies the authorization. </p>
@@ -2514,7 +2514,7 @@ pub struct Denied {
 }
 
 /// <p>The input for the DeprecateThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateThingTypeRequest {
     /// <p>The name of the thing type to deprecate.</p>
@@ -2527,15 +2527,15 @@ pub struct DeprecateThingTypeRequest {
 }
 
 /// <p>The output for the DeprecateThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateThingTypeResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountAuditConfigurationRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountAuditConfigurationResponse {
     /// <p>Which audit checks are enabled and disabled for this account.</p>
@@ -2554,7 +2554,7 @@ pub struct DescribeAccountAuditConfigurationResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditFindingRequest {
     /// <p>A unique identifier for a single audit finding. You can use this identifier to apply mitigation actions to the finding.</p>
@@ -2562,7 +2562,7 @@ pub struct DescribeAuditFindingRequest {
     pub finding_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditFindingResponse {
     #[serde(rename = "finding")]
@@ -2570,7 +2570,7 @@ pub struct DescribeAuditFindingResponse {
     pub finding: Option<AuditFinding>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditMitigationActionsTaskRequest {
     /// <p>The unique identifier for the audit mitigation task.</p>
@@ -2578,7 +2578,7 @@ pub struct DescribeAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditMitigationActionsTaskResponse {
     /// <p>Specifies the mitigation actions and their parameters that are applied as part of this task.</p>
@@ -2611,7 +2611,7 @@ pub struct DescribeAuditMitigationActionsTaskResponse {
     pub task_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditTaskRequest {
     /// <p>The ID of the audit whose information you want to get.</p>
@@ -2619,7 +2619,7 @@ pub struct DescribeAuditTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditTaskResponse {
     /// <p>Detailed information about each check performed during this audit.</p>
@@ -2648,7 +2648,7 @@ pub struct DescribeAuditTaskResponse {
     pub task_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuthorizerRequest {
     /// <p>The name of the authorizer to describe.</p>
@@ -2656,7 +2656,7 @@ pub struct DescribeAuthorizerRequest {
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuthorizerResponse {
     /// <p>The authorizer description.</p>
@@ -2665,7 +2665,7 @@ pub struct DescribeAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBillingGroupRequest {
     /// <p>The name of the billing group.</p>
@@ -2673,7 +2673,7 @@ pub struct DescribeBillingGroupRequest {
     pub billing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBillingGroupResponse {
     /// <p>The ARN of the billing group.</p>
@@ -2703,7 +2703,7 @@ pub struct DescribeBillingGroupResponse {
 }
 
 /// <p>The input for the DescribeCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
@@ -2712,7 +2712,7 @@ pub struct DescribeCACertificateRequest {
 }
 
 /// <p>The output from the DescribeCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCACertificateResponse {
     /// <p>The CA certificate description.</p>
@@ -2726,7 +2726,7 @@ pub struct DescribeCACertificateResponse {
 }
 
 /// <p>The input for the DescribeCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -2735,7 +2735,7 @@ pub struct DescribeCertificateRequest {
 }
 
 /// <p>The output of the DescribeCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCertificateResponse {
     /// <p>The description of the certificate.</p>
@@ -2744,11 +2744,11 @@ pub struct DescribeCertificateResponse {
     pub certificate_description: Option<CertificateDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDefaultAuthorizerRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDefaultAuthorizerResponse {
     /// <p>The default authorizer's description.</p>
@@ -2757,7 +2757,7 @@ pub struct DescribeDefaultAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDimensionRequest {
     /// <p>The unique identifier for the dimension.</p>
@@ -2765,7 +2765,7 @@ pub struct DescribeDimensionRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDimensionResponse {
     /// <p>The ARN (Amazon resource name) for the dimension.</p>
@@ -2794,7 +2794,7 @@ pub struct DescribeDimensionResponse {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainConfigurationRequest {
     /// <p>The name of the domain configuration.</p>
@@ -2802,7 +2802,7 @@ pub struct DescribeDomainConfigurationRequest {
     pub domain_configuration_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainConfigurationResponse {
     /// <p>An object that specifies the authorization service for a domain.</p>
@@ -2840,7 +2840,7 @@ pub struct DescribeDomainConfigurationResponse {
 }
 
 /// <p>The input for the DescribeEndpoint operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
     /// <p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul> <p>We strongly recommend that customers use the newer <code>iot:Data-ATS</code> endpoint type to avoid issues related to the widespread distrust of Symantec certificate authorities.</p>
@@ -2850,7 +2850,7 @@ pub struct DescribeEndpointRequest {
 }
 
 /// <p>The output from the DescribeEndpoint operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointResponse {
     /// <p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>
@@ -2859,11 +2859,11 @@ pub struct DescribeEndpointResponse {
     pub endpoint_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventConfigurationsRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventConfigurationsResponse {
     /// <p>The creation date of the event configuration.</p>
@@ -2880,7 +2880,7 @@ pub struct DescribeEventConfigurationsResponse {
     pub last_modified_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexRequest {
     /// <p>The index name.</p>
@@ -2888,7 +2888,7 @@ pub struct DescribeIndexRequest {
     pub index_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
     /// <p>The index name.</p>
@@ -2905,7 +2905,7 @@ pub struct DescribeIndexResponse {
     pub schema: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
     /// <p>A string (consisting of the digits "0" through "9" which is used to specify a particular job execution on a particular device.</p>
@@ -2920,7 +2920,7 @@ pub struct DescribeJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
     /// <p>Information about the job execution.</p>
@@ -2929,7 +2929,7 @@ pub struct DescribeJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
@@ -2937,7 +2937,7 @@ pub struct DescribeJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobResponse {
     /// <p>An S3 link to the job document.</p>
@@ -2950,7 +2950,7 @@ pub struct DescribeJobResponse {
     pub job: Option<Job>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMitigationActionRequest {
     /// <p>The friendly name that uniquely identifies the mitigation action.</p>
@@ -2958,7 +2958,7 @@ pub struct DescribeMitigationActionRequest {
     pub action_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMitigationActionResponse {
     /// <p>The ARN that identifies this migration action.</p>
@@ -2995,7 +2995,7 @@ pub struct DescribeMitigationActionResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateRequest {
     /// <p>The name of the fleet provisioning template.</p>
@@ -3003,7 +3003,7 @@ pub struct DescribeProvisioningTemplateRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningTemplateResponse {
     /// <p>The date when the fleet provisioning template was created.</p>
@@ -3048,7 +3048,7 @@ pub struct DescribeProvisioningTemplateResponse {
     pub template_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisioningTemplateVersionRequest {
     /// <p>The template name.</p>
@@ -3059,7 +3059,7 @@ pub struct DescribeProvisioningTemplateVersionRequest {
     pub version_id: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningTemplateVersionResponse {
     /// <p>The date when the fleet provisioning template version was created.</p>
@@ -3080,7 +3080,7 @@ pub struct DescribeProvisioningTemplateVersionResponse {
     pub version_id: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRoleAliasRequest {
     /// <p>The role alias to describe.</p>
@@ -3088,7 +3088,7 @@ pub struct DescribeRoleAliasRequest {
     pub role_alias: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRoleAliasResponse {
     /// <p>The role alias description.</p>
@@ -3097,7 +3097,7 @@ pub struct DescribeRoleAliasResponse {
     pub role_alias_description: Option<RoleAliasDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduledAuditRequest {
     /// <p>The name of the scheduled audit whose information you want to get.</p>
@@ -3105,7 +3105,7 @@ pub struct DescribeScheduledAuditRequest {
     pub scheduled_audit_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduledAuditResponse {
     /// <p>The day of the month on which the scheduled audit takes place. Will be "1" through "31" or "LAST". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
@@ -3134,7 +3134,7 @@ pub struct DescribeScheduledAuditResponse {
     pub target_check_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityProfileRequest {
     /// <p>The name of the security profile whose information you want to get.</p>
@@ -3142,7 +3142,7 @@ pub struct DescribeSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
@@ -3183,7 +3183,7 @@ pub struct DescribeSecurityProfileResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamRequest {
     /// <p>The stream ID.</p>
@@ -3191,7 +3191,7 @@ pub struct DescribeStreamRequest {
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamResponse {
     /// <p>Information about the stream.</p>
@@ -3200,7 +3200,7 @@ pub struct DescribeStreamResponse {
     pub stream_info: Option<StreamInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingGroupRequest {
     /// <p>The name of the thing group.</p>
@@ -3208,7 +3208,7 @@ pub struct DescribeThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingGroupResponse {
     /// <p>The dynamic thing group index name.</p>
@@ -3253,7 +3253,7 @@ pub struct DescribeThingGroupResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRegistrationTaskRequest {
     /// <p>The task ID.</p>
@@ -3261,7 +3261,7 @@ pub struct DescribeThingRegistrationTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingRegistrationTaskResponse {
     /// <p>The task creation date.</p>
@@ -3315,7 +3315,7 @@ pub struct DescribeThingRegistrationTaskResponse {
 }
 
 /// <p>The input for the DescribeThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingRequest {
     /// <p>The name of the thing.</p>
@@ -3324,7 +3324,7 @@ pub struct DescribeThingRequest {
 }
 
 /// <p>The output from the DescribeThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingResponse {
     /// <p>The thing attributes.</p>
@@ -3362,7 +3362,7 @@ pub struct DescribeThingResponse {
 }
 
 /// <p>The input for the DescribeThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeThingTypeRequest {
     /// <p>The name of the thing type.</p>
@@ -3371,7 +3371,7 @@ pub struct DescribeThingTypeRequest {
 }
 
 /// <p>The output for the DescribeThingType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeThingTypeResponse {
     /// <p>The thing type ARN.</p>
@@ -3397,7 +3397,7 @@ pub struct DescribeThingTypeResponse {
 }
 
 /// <p>Describes the location of the updated firmware.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Destination {
     /// <p>Describes the location in S3 of the updated firmware.</p>
     #[serde(rename = "s3Destination")]
@@ -3405,7 +3405,7 @@ pub struct Destination {
     pub s_3_destination: Option<S3Destination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPolicyRequest {
     /// <p>The policy to detach.</p>
@@ -3417,7 +3417,7 @@ pub struct DetachPolicyRequest {
 }
 
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachPrincipalPolicyRequest {
     /// <p>The name of the policy to detach.</p>
@@ -3428,7 +3428,7 @@ pub struct DetachPrincipalPolicyRequest {
     pub principal: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachSecurityProfileRequest {
     /// <p>The security profile that is detached.</p>
@@ -3439,12 +3439,12 @@ pub struct DetachSecurityProfileRequest {
     pub security_profile_target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachSecurityProfileResponse {}
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetachThingPrincipalRequest {
     /// <p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>
@@ -3456,12 +3456,12 @@ pub struct DetachThingPrincipalRequest {
 }
 
 /// <p>The output from the DetachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetachThingPrincipalResponse {}
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableTopicRuleRequest {
     /// <p>The name of the rule to disable.</p>
@@ -3470,7 +3470,7 @@ pub struct DisableTopicRuleRequest {
 }
 
 /// <p><p>The summary of a domain configuration. A domain configuration specifies custom IoT-specific information about a domain. A domain configuration can be associated with an AWS-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com), a customer managed domain, or a default endpoint.</p> <ul> <li> <p>Data</p> </li> <li> <p>Jobs</p> </li> <li> <p>CredentialProvider</p> </li> </ul> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainConfigurationSummary {
     /// <p>The ARN of the domain configuration.</p>
@@ -3488,7 +3488,7 @@ pub struct DomainConfigurationSummary {
 }
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDBAction {
     /// <p>The hash key name.</p>
     #[serde(rename = "hashKeyField")]
@@ -3529,7 +3529,7 @@ pub struct DynamoDBAction {
 }
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>This DynamoDB action writes each attribute in the message payload into it's own column in the DynamoDB table.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDBv2Action {
     /// <p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>
     #[serde(rename = "putItem")]
@@ -3540,7 +3540,7 @@ pub struct DynamoDBv2Action {
 }
 
 /// <p>The policy that has the effect on the authorization results.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EffectivePolicy {
     /// <p>The policy ARN.</p>
@@ -3558,7 +3558,7 @@ pub struct EffectivePolicy {
 }
 
 /// <p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ElasticsearchAction {
     /// <p>The endpoint of your Elasticsearch domain.</p>
     #[serde(rename = "endpoint")]
@@ -3578,7 +3578,7 @@ pub struct ElasticsearchAction {
 }
 
 /// <p>Parameters used when defining a mitigation action that enable AWS IoT logging.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EnableIoTLoggingParams {
     /// <p>Specifies the types of information to be logged.</p>
     #[serde(rename = "logLevel")]
@@ -3589,7 +3589,7 @@ pub struct EnableIoTLoggingParams {
 }
 
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableTopicRuleRequest {
     /// <p>The name of the topic rule to enable.</p>
@@ -3598,7 +3598,7 @@ pub struct EnableTopicRuleRequest {
 }
 
 /// <p>Error information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorInfo {
     /// <p>The error code.</p>
@@ -3612,7 +3612,7 @@ pub struct ErrorInfo {
 }
 
 /// <p>Information that explicitly denies authorization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExplicitDeny {
     /// <p>The policies that denied the authorization.</p>
@@ -3622,7 +3622,7 @@ pub struct ExplicitDeny {
 }
 
 /// <p>Allows you to create an exponential rate of rollout for a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExponentialRolloutRate {
     /// <p>The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.</p>
     #[serde(rename = "baseRatePerMinute")]
@@ -3636,7 +3636,7 @@ pub struct ExponentialRolloutRate {
 }
 
 /// <p>Describes the name and data type at a field.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Field {
     /// <p>The name of the field.</p>
     #[serde(rename = "name")]
@@ -3649,7 +3649,7 @@ pub struct Field {
 }
 
 /// <p>The location of the OTA update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileLocation {
     /// <p>The location of the updated firmware in S3.</p>
     #[serde(rename = "s3Location")]
@@ -3662,7 +3662,7 @@ pub struct FileLocation {
 }
 
 /// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FirehoseAction {
     /// <p>The delivery stream name.</p>
     #[serde(rename = "deliveryStreamName")]
@@ -3676,7 +3676,7 @@ pub struct FirehoseAction {
     pub separator: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCardinalityRequest {
     /// <p>The field to aggregate.</p>
@@ -3696,7 +3696,7 @@ pub struct GetCardinalityRequest {
     pub query_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCardinalityResponse {
     /// <p>The approximate count of unique values that match the query.</p>
@@ -3705,7 +3705,7 @@ pub struct GetCardinalityResponse {
     pub cardinality: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePoliciesRequest {
     /// <p>The Cognito identity pool ID.</p>
@@ -3722,7 +3722,7 @@ pub struct GetEffectivePoliciesRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEffectivePoliciesResponse {
     /// <p>The effective policies.</p>
@@ -3731,11 +3731,11 @@ pub struct GetEffectivePoliciesResponse {
     pub effective_policies: Option<Vec<EffectivePolicy>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIndexingConfigurationRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIndexingConfigurationResponse {
     /// <p>The index configuration.</p>
@@ -3748,7 +3748,7 @@ pub struct GetIndexingConfigurationResponse {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDocumentRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
@@ -3756,7 +3756,7 @@ pub struct GetJobDocumentRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobDocumentResponse {
     /// <p>The job document content.</p>
@@ -3766,12 +3766,12 @@ pub struct GetJobDocumentResponse {
 }
 
 /// <p>The input for the GetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggingOptionsRequest {}
 
 /// <p>The output from the GetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggingOptionsResponse {
     /// <p>The logging level.</p>
@@ -3784,7 +3784,7 @@ pub struct GetLoggingOptionsResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOTAUpdateRequest {
     /// <p>The OTA update ID.</p>
@@ -3792,7 +3792,7 @@ pub struct GetOTAUpdateRequest {
     pub ota_update_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOTAUpdateResponse {
     /// <p>The OTA update info.</p>
@@ -3801,7 +3801,7 @@ pub struct GetOTAUpdateResponse {
     pub ota_update_info: Option<OTAUpdateInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPercentilesRequest {
     /// <p>The field to aggregate.</p>
@@ -3825,7 +3825,7 @@ pub struct GetPercentilesRequest {
     pub query_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPercentilesResponse {
     /// <p>The percentile values of the aggregated fields.</p>
@@ -3835,7 +3835,7 @@ pub struct GetPercentilesResponse {
 }
 
 /// <p>The input for the GetPolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
     /// <p>The name of the policy.</p>
@@ -3844,7 +3844,7 @@ pub struct GetPolicyRequest {
 }
 
 /// <p>The output from the GetPolicy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>The date the policy was created.</p>
@@ -3878,7 +3878,7 @@ pub struct GetPolicyResponse {
 }
 
 /// <p>The input for the GetPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyVersionRequest {
     /// <p>The name of the policy.</p>
@@ -3890,7 +3890,7 @@ pub struct GetPolicyVersionRequest {
 }
 
 /// <p>The output from the GetPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyVersionResponse {
     /// <p>The date the policy was created.</p>
@@ -3928,12 +3928,12 @@ pub struct GetPolicyVersionResponse {
 }
 
 /// <p>The input to the GetRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRegistrationCodeRequest {}
 
 /// <p>The output from the GetRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRegistrationCodeResponse {
     /// <p>The CA certificate registration code.</p>
@@ -3942,7 +3942,7 @@ pub struct GetRegistrationCodeResponse {
     pub registration_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatisticsRequest {
     /// <p>The aggregation field name.</p>
@@ -3962,7 +3962,7 @@ pub struct GetStatisticsRequest {
     pub query_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStatisticsResponse {
     /// <p>The statistics returned by the Fleet Indexing service based on the query and aggregation field.</p>
@@ -3971,7 +3971,7 @@ pub struct GetStatisticsResponse {
     pub statistics: Option<Statistics>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination.</p>
@@ -3979,7 +3979,7 @@ pub struct GetTopicRuleDestinationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTopicRuleDestinationResponse {
     /// <p>The topic rule destination.</p>
@@ -3989,7 +3989,7 @@ pub struct GetTopicRuleDestinationResponse {
 }
 
 /// <p>The input for the GetTopicRule operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTopicRuleRequest {
     /// <p>The name of the rule.</p>
@@ -3998,7 +3998,7 @@ pub struct GetTopicRuleRequest {
 }
 
 /// <p>The output from the GetTopicRule operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTopicRuleResponse {
     /// <p>The rule.</p>
@@ -4011,11 +4011,11 @@ pub struct GetTopicRuleResponse {
     pub rule_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetV2LoggingOptionsRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetV2LoggingOptionsResponse {
     /// <p>The default log level.</p>
@@ -4033,7 +4033,7 @@ pub struct GetV2LoggingOptionsResponse {
 }
 
 /// <p>The name and ARN of a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupNameAndArn {
     /// <p>The group ARN.</p>
@@ -4047,7 +4047,7 @@ pub struct GroupNameAndArn {
 }
 
 /// <p>Send data to an HTTPS endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpAction {
     /// <p>The authentication method to use when sending data to an HTTPS endpoint.</p>
     #[serde(rename = "auth")]
@@ -4067,7 +4067,7 @@ pub struct HttpAction {
 }
 
 /// <p>The HTTP action header.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpActionHeader {
     /// <p>The HTTP header key.</p>
     #[serde(rename = "key")]
@@ -4078,7 +4078,7 @@ pub struct HttpActionHeader {
 }
 
 /// <p>The authorization method used to send messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpAuthorization {
     /// <p>Use Sig V4 authorization. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4 Signing Process</a>.</p>
     #[serde(rename = "sigv4")]
@@ -4087,7 +4087,7 @@ pub struct HttpAuthorization {
 }
 
 /// <p>Specifies the HTTP context to use for the test authorizer request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpContext {
     /// <p>The header keys and values in an HTTP authorization request.</p>
@@ -4101,7 +4101,7 @@ pub struct HttpContext {
 }
 
 /// <p>HTTP URL destination configuration used by the topic rule's HTTP action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HttpUrlDestinationConfiguration {
     /// <p>The URL AWS IoT uses to confirm ownership of or access to the topic rule destination URL.</p>
@@ -4110,7 +4110,7 @@ pub struct HttpUrlDestinationConfiguration {
 }
 
 /// <p>HTTP URL destination properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HttpUrlDestinationProperties {
     /// <p>The URL used to confirm the HTTP topic rule destination URL.</p>
@@ -4120,7 +4120,7 @@ pub struct HttpUrlDestinationProperties {
 }
 
 /// <p>Information about an HTTP URL destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HttpUrlDestinationSummary {
     /// <p>The URL used to confirm ownership of or access to the HTTP topic rule destination URL.</p>
@@ -4130,7 +4130,7 @@ pub struct HttpUrlDestinationSummary {
 }
 
 /// <p>Information that implicitly denies authorization. When policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImplicitDeny {
     /// <p>Policies that don't contain a matching allow or deny statement for the specified action on the specified resource. </p>
@@ -4140,7 +4140,7 @@ pub struct ImplicitDeny {
 }
 
 /// <p>Sends message data to an AWS IoT Analytics channel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotAnalyticsAction {
     /// <p>(deprecated) The ARN of the IoT Analytics channel to which message data will be sent.</p>
     #[serde(rename = "channelArn")]
@@ -4157,7 +4157,7 @@ pub struct IotAnalyticsAction {
 }
 
 /// <p>Sends an input to an AWS IoT Events detector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotEventsAction {
     /// <p>The name of the AWS IoT Events input.</p>
     #[serde(rename = "inputName")]
@@ -4172,7 +4172,7 @@ pub struct IotEventsAction {
 }
 
 /// <p>Describes an action to send data from an MQTT message that triggered the rule to AWS IoT SiteWise asset properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotSiteWiseAction {
     /// <p>A list of asset property value entries.</p>
     #[serde(rename = "putAssetPropertyValueEntries")]
@@ -4183,7 +4183,7 @@ pub struct IotSiteWiseAction {
 }
 
 /// <p>The <code>Job</code> object contains details about a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>Configuration for criteria to abort the job.</p>
@@ -4257,7 +4257,7 @@ pub struct Job {
 }
 
 /// <p>The job execution object represents the execution of a job on a particular device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecution {
     /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The actual job execution timeout can occur up to 60 seconds later than the estimated duration. This value will not be included if the job execution has reached a terminal status.</p>
@@ -4307,7 +4307,7 @@ pub struct JobExecution {
 }
 
 /// <p>Details of the job execution status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionStatusDetails {
     /// <p>The job execution status.</p>
@@ -4317,7 +4317,7 @@ pub struct JobExecutionStatusDetails {
 }
 
 /// <p>The job execution summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionSummary {
     /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used later in commands which return or update job execution information.</p>
@@ -4343,7 +4343,7 @@ pub struct JobExecutionSummary {
 }
 
 /// <p>Contains a summary of information about job executions for a specific job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionSummaryForJob {
     /// <p>Contains a subset of information about a job execution.</p>
@@ -4357,7 +4357,7 @@ pub struct JobExecutionSummaryForJob {
 }
 
 /// <p>The job execution summary for a thing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionSummaryForThing {
     /// <p>Contains a subset of information about a job execution.</p>
@@ -4371,7 +4371,7 @@ pub struct JobExecutionSummaryForThing {
 }
 
 /// <p>Allows you to create a staged rollout of a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobExecutionsRolloutConfig {
     /// <p>The rate of increase for a job rollout. This parameter allows you to define an exponential rate for a job rollout.</p>
     #[serde(rename = "exponentialRate")]
@@ -4384,7 +4384,7 @@ pub struct JobExecutionsRolloutConfig {
 }
 
 /// <p>The job process details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobProcessDetails {
     /// <p>The number of things that cancelled the job.</p>
@@ -4426,7 +4426,7 @@ pub struct JobProcessDetails {
 }
 
 /// <p>The job summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobSummary {
     /// <p>The time, in seconds since the epoch, when the job completed.</p>
@@ -4464,7 +4464,7 @@ pub struct JobSummary {
 }
 
 /// <p>Describes a key pair.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyPair {
     /// <p>The private key.</p>
@@ -4478,7 +4478,7 @@ pub struct KeyPair {
 }
 
 /// <p>Describes an action to write data to an Amazon Kinesis stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KinesisAction {
     /// <p>The partition key.</p>
     #[serde(rename = "partitionKey")]
@@ -4493,14 +4493,14 @@ pub struct KinesisAction {
 }
 
 /// <p>Describes an action to invoke a Lambda function.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LambdaAction {
     /// <p>The ARN of the Lambda function.</p>
     #[serde(rename = "functionArn")]
     pub function_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActiveViolationsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -4521,7 +4521,7 @@ pub struct ListActiveViolationsRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActiveViolationsResponse {
     /// <p>The list of active violations.</p>
@@ -4534,7 +4534,7 @@ pub struct ListActiveViolationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttachedPoliciesRequest {
     /// <p>The token to retrieve the next set of results.</p>
@@ -4554,7 +4554,7 @@ pub struct ListAttachedPoliciesRequest {
     pub target: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttachedPoliciesResponse {
     /// <p>The token to retrieve the next set of results, or ``null`` if there are no more results.</p>
@@ -4567,7 +4567,7 @@ pub struct ListAttachedPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditFindingsRequest {
     /// <p>A filter to limit results to the findings for the specified audit check.</p>
@@ -4600,7 +4600,7 @@ pub struct ListAuditFindingsRequest {
     pub task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditFindingsResponse {
     /// <p>The findings (results) of the audit.</p>
@@ -4613,7 +4613,7 @@ pub struct ListAuditFindingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsExecutionsRequest {
     /// <p>Specify this filter to limit results to those with a specific status.</p>
@@ -4636,7 +4636,7 @@ pub struct ListAuditMitigationActionsExecutionsRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditMitigationActionsExecutionsResponse {
     /// <p>A set of task execution results based on the input parameters. Details include the mitigation action applied, start time, and task status.</p>
@@ -4649,7 +4649,7 @@ pub struct ListAuditMitigationActionsExecutionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditMitigationActionsTasksRequest {
     /// <p>Specify this filter to limit results to tasks that were applied to results for a specific audit.</p>
@@ -4680,7 +4680,7 @@ pub struct ListAuditMitigationActionsTasksRequest {
     pub task_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditMitigationActionsTasksResponse {
     /// <p>The token for the next set of results.</p>
@@ -4693,7 +4693,7 @@ pub struct ListAuditMitigationActionsTasksResponse {
     pub tasks: Option<Vec<AuditMitigationActionsTaskMetadata>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuditTasksRequest {
     /// <p>The end of the time period.</p>
@@ -4720,7 +4720,7 @@ pub struct ListAuditTasksRequest {
     pub task_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuditTasksResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -4733,7 +4733,7 @@ pub struct ListAuditTasksResponse {
     pub tasks: Option<Vec<AuditTaskMetadata>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAuthorizersRequest {
     /// <p>Return the list of authorizers in ascending alphabetical order.</p>
@@ -4754,7 +4754,7 @@ pub struct ListAuthorizersRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAuthorizersResponse {
     /// <p>The authorizers.</p>
@@ -4767,7 +4767,7 @@ pub struct ListAuthorizersResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBillingGroupsRequest {
     /// <p>The maximum number of results to return per request.</p>
@@ -4784,7 +4784,7 @@ pub struct ListBillingGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBillingGroupsResponse {
     /// <p>The list of billing groups.</p>
@@ -4798,7 +4798,7 @@ pub struct ListBillingGroupsResponse {
 }
 
 /// <p>Input for the ListCACertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCACertificatesRequest {
     /// <p>Determines the order of the results.</p>
@@ -4816,7 +4816,7 @@ pub struct ListCACertificatesRequest {
 }
 
 /// <p>The output from the ListCACertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCACertificatesResponse {
     /// <p>The CA certificates registered in your AWS account.</p>
@@ -4830,7 +4830,7 @@ pub struct ListCACertificatesResponse {
 }
 
 /// <p>The input to the ListCertificatesByCA operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesByCARequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
@@ -4851,7 +4851,7 @@ pub struct ListCertificatesByCARequest {
 }
 
 /// <p>The output of the ListCertificatesByCA operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesByCAResponse {
     /// <p>The device certificates signed by the specified CA certificate.</p>
@@ -4865,7 +4865,7 @@ pub struct ListCertificatesByCAResponse {
 }
 
 /// <p>The input for the ListCertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
@@ -4883,7 +4883,7 @@ pub struct ListCertificatesRequest {
 }
 
 /// <p>The output of the ListCertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCertificatesResponse {
     /// <p>The descriptions of the certificates.</p>
@@ -4896,7 +4896,7 @@ pub struct ListCertificatesResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDimensionsRequest {
     /// <p>The maximum number of results to retrieve at one time.</p>
@@ -4909,7 +4909,7 @@ pub struct ListDimensionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDimensionsResponse {
     /// <p>A list of the names of the defined dimensions. Use <code>DescribeDimension</code> to get details for a dimension.</p>
@@ -4922,7 +4922,7 @@ pub struct ListDimensionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainConfigurationsRequest {
     /// <p>The marker for the next set of results.</p>
@@ -4939,7 +4939,7 @@ pub struct ListDomainConfigurationsRequest {
     pub service_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainConfigurationsResponse {
     /// <p>A list of objects that contain summary information about the user's domain configurations.</p>
@@ -4952,7 +4952,7 @@ pub struct ListDomainConfigurationsResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -4965,7 +4965,7 @@ pub struct ListIndicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndicesResponse {
     /// <p>The index names.</p>
@@ -4978,7 +4978,7 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
@@ -4998,7 +4998,7 @@ pub struct ListJobExecutionsForJobRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobExecutionsForJobResponse {
     /// <p>A list of job execution summaries.</p>
@@ -5011,7 +5011,7 @@ pub struct ListJobExecutionsForJobResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobExecutionsForThingRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -5031,7 +5031,7 @@ pub struct ListJobExecutionsForThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobExecutionsForThingResponse {
     /// <p>A list of job execution summaries.</p>
@@ -5044,7 +5044,7 @@ pub struct ListJobExecutionsForThingResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The maximum number of results to return per request.</p>
@@ -5073,7 +5073,7 @@ pub struct ListJobsRequest {
     pub thing_group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>A list of jobs.</p>
@@ -5086,7 +5086,7 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMitigationActionsRequest {
     /// <p>Specify a value to limit the result to mitigation actions with a specific action type.</p>
@@ -5103,7 +5103,7 @@ pub struct ListMitigationActionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMitigationActionsResponse {
     /// <p>A set of actions that matched the specified filter criteria.</p>
@@ -5116,7 +5116,7 @@ pub struct ListMitigationActionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOTAUpdatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5133,7 +5133,7 @@ pub struct ListOTAUpdatesRequest {
     pub ota_update_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOTAUpdatesResponse {
     /// <p>A token to use to get the next set of results.</p>
@@ -5147,7 +5147,7 @@ pub struct ListOTAUpdatesResponse {
 }
 
 /// <p>The input to the ListOutgoingCertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOutgoingCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
@@ -5165,7 +5165,7 @@ pub struct ListOutgoingCertificatesRequest {
 }
 
 /// <p>The output from the ListOutgoingCertificates operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOutgoingCertificatesResponse {
     /// <p>The marker for the next set of results.</p>
@@ -5179,7 +5179,7 @@ pub struct ListOutgoingCertificatesResponse {
 }
 
 /// <p>The input for the ListPolicies operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPoliciesRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
@@ -5197,7 +5197,7 @@ pub struct ListPoliciesRequest {
 }
 
 /// <p>The output from the ListPolicies operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
@@ -5211,7 +5211,7 @@ pub struct ListPoliciesResponse {
 }
 
 /// <p>The input for the ListPolicyPrincipals operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyPrincipalsRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
@@ -5232,7 +5232,7 @@ pub struct ListPolicyPrincipalsRequest {
 }
 
 /// <p>The output from the ListPolicyPrincipals operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyPrincipalsResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
@@ -5246,7 +5246,7 @@ pub struct ListPolicyPrincipalsResponse {
 }
 
 /// <p>The input for the ListPolicyVersions operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPolicyVersionsRequest {
     /// <p>The policy name.</p>
@@ -5255,7 +5255,7 @@ pub struct ListPolicyVersionsRequest {
 }
 
 /// <p>The output from the ListPolicyVersions operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPolicyVersionsResponse {
     /// <p>The policy versions.</p>
@@ -5265,7 +5265,7 @@ pub struct ListPolicyVersionsResponse {
 }
 
 /// <p>The input for the ListPrincipalPolicies operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalPoliciesRequest {
     /// <p>Specifies the order for results. If true, results are returned in ascending creation order.</p>
@@ -5286,7 +5286,7 @@ pub struct ListPrincipalPoliciesRequest {
 }
 
 /// <p>The output from the ListPrincipalPolicies operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
@@ -5300,7 +5300,7 @@ pub struct ListPrincipalPoliciesResponse {
 }
 
 /// <p>The input for the ListPrincipalThings operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalThingsRequest {
     /// <p>The maximum number of results to return in this operation.</p>
@@ -5317,7 +5317,7 @@ pub struct ListPrincipalThingsRequest {
 }
 
 /// <p>The output from the ListPrincipalThings operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5330,7 +5330,7 @@ pub struct ListPrincipalThingsResponse {
     pub things: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplateVersionsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5346,7 +5346,7 @@ pub struct ListProvisioningTemplateVersionsRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningTemplateVersionsResponse {
     /// <p>A token to retrieve the next set of results.</p>
@@ -5359,7 +5359,7 @@ pub struct ListProvisioningTemplateVersionsResponse {
     pub versions: Option<Vec<ProvisioningTemplateVersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProvisioningTemplatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5372,7 +5372,7 @@ pub struct ListProvisioningTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningTemplatesResponse {
     /// <p>A token to retrieve the next set of results.</p>
@@ -5385,7 +5385,7 @@ pub struct ListProvisioningTemplatesResponse {
     pub templates: Option<Vec<ProvisioningTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoleAliasesRequest {
     /// <p>Return the list of role aliases in ascending alphabetical order.</p>
@@ -5402,7 +5402,7 @@ pub struct ListRoleAliasesRequest {
     pub page_size: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoleAliasesResponse {
     /// <p>A marker used to get the next set of results.</p>
@@ -5415,7 +5415,7 @@ pub struct ListRoleAliasesResponse {
     pub role_aliases: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListScheduledAuditsRequest {
     /// <p>The maximum number of results to return at one time. The default is 25.</p>
@@ -5428,7 +5428,7 @@ pub struct ListScheduledAuditsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListScheduledAuditsResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -5441,7 +5441,7 @@ pub struct ListScheduledAuditsResponse {
     pub scheduled_audits: Option<Vec<ScheduledAuditMetadata>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesForTargetRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5461,7 +5461,7 @@ pub struct ListSecurityProfilesForTargetRequest {
     pub security_profile_target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesForTargetResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -5474,7 +5474,7 @@ pub struct ListSecurityProfilesForTargetResponse {
     pub security_profile_target_mappings: Option<Vec<SecurityProfileTargetMapping>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
     /// <p>A filter to limit results to the security profiles that use the defined dimension.</p>
@@ -5491,7 +5491,7 @@ pub struct ListSecurityProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -5504,7 +5504,7 @@ pub struct ListSecurityProfilesResponse {
     pub security_profile_identifiers: Option<Vec<SecurityProfileIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsRequest {
     /// <p>Set to true to return the list of streams in ascending order.</p>
@@ -5521,7 +5521,7 @@ pub struct ListStreamsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsResponse {
     /// <p>A token used to get the next set of results.</p>
@@ -5534,7 +5534,7 @@ pub struct ListStreamsResponse {
     pub streams: Option<Vec<StreamSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The token to retrieve the next set of results.</p>
@@ -5546,7 +5546,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5559,7 +5559,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForPolicyRequest {
     /// <p>A marker used to get the next set of results.</p>
@@ -5575,7 +5575,7 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsForPolicyResponse {
     /// <p>A marker used to get the next set of results.</p>
@@ -5588,7 +5588,7 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTargetsForSecurityProfileRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5604,7 +5604,7 @@ pub struct ListTargetsForSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTargetsForSecurityProfileResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -5617,7 +5617,7 @@ pub struct ListTargetsForSecurityProfileResponse {
     pub security_profile_targets: Option<Vec<SecurityProfileTarget>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsForThingRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5633,7 +5633,7 @@ pub struct ListThingGroupsForThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsForThingResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5646,7 +5646,7 @@ pub struct ListThingGroupsForThingResponse {
     pub thing_groups: Option<Vec<GroupNameAndArn>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingGroupsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5671,7 +5671,7 @@ pub struct ListThingGroupsRequest {
     pub recursive: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingGroupsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5685,7 +5685,7 @@ pub struct ListThingGroupsResponse {
 }
 
 /// <p>The input for the ListThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingPrincipalsRequest {
     /// <p>The name of the thing.</p>
@@ -5694,7 +5694,7 @@ pub struct ListThingPrincipalsRequest {
 }
 
 /// <p>The output from the ListThingPrincipals operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingPrincipalsResponse {
     /// <p>The principals associated with the thing.</p>
@@ -5703,7 +5703,7 @@ pub struct ListThingPrincipalsResponse {
     pub principals: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTaskReportsRequest {
     /// <p>The maximum number of results to return per request.</p>
@@ -5722,7 +5722,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTaskReportsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5739,7 +5739,7 @@ pub struct ListThingRegistrationTaskReportsResponse {
     pub resource_links: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingRegistrationTasksRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5756,7 +5756,7 @@ pub struct ListThingRegistrationTasksRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingRegistrationTasksResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5770,7 +5770,7 @@ pub struct ListThingRegistrationTasksResponse {
 }
 
 /// <p>The input for the ListThingTypes operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingTypesRequest {
     /// <p>The maximum number of results to return in this operation.</p>
@@ -5788,7 +5788,7 @@ pub struct ListThingTypesRequest {
 }
 
 /// <p>The output for the ListThingTypes operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingTypesResponse {
     /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5801,7 +5801,7 @@ pub struct ListThingTypesResponse {
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInBillingGroupRequest {
     /// <p>The name of the billing group.</p>
@@ -5817,7 +5817,7 @@ pub struct ListThingsInBillingGroupRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInBillingGroupResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5830,7 +5830,7 @@ pub struct ListThingsInBillingGroupResponse {
     pub things: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsInThingGroupRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5850,7 +5850,7 @@ pub struct ListThingsInThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsInThingGroupResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5864,7 +5864,7 @@ pub struct ListThingsInThingGroupResponse {
 }
 
 /// <p>The input for the ListThings operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThingsRequest {
     /// <p>The attribute name used to search for things.</p>
@@ -5890,7 +5890,7 @@ pub struct ListThingsRequest {
 }
 
 /// <p>The output from the ListThings operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
@@ -5903,7 +5903,7 @@ pub struct ListThingsResponse {
     pub things: Option<Vec<ThingAttribute>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRuleDestinationsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5916,7 +5916,7 @@ pub struct ListTopicRuleDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRuleDestinationsResponse {
     /// <p>Information about a topic rule destination.</p>
@@ -5930,7 +5930,7 @@ pub struct ListTopicRuleDestinationsResponse {
 }
 
 /// <p>The input for the ListTopicRules operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicRulesRequest {
     /// <p>The maximum number of results to return.</p>
@@ -5952,7 +5952,7 @@ pub struct ListTopicRulesRequest {
 }
 
 /// <p>The output from the ListTopicRules operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicRulesResponse {
     /// <p>A token used to retrieve the next value.</p>
@@ -5965,7 +5965,7 @@ pub struct ListTopicRulesResponse {
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListV2LoggingLevelsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -5982,7 +5982,7 @@ pub struct ListV2LoggingLevelsRequest {
     pub target_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListV2LoggingLevelsResponse {
     /// <p>The logging configuration for a target.</p>
@@ -5995,7 +5995,7 @@ pub struct ListV2LoggingLevelsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListViolationEventsRequest {
     /// <p>The end time for the alerts to be listed.</p>
@@ -6022,7 +6022,7 @@ pub struct ListViolationEventsRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListViolationEventsResponse {
     /// <p>A token that can be used to retrieve the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -6036,7 +6036,7 @@ pub struct ListViolationEventsResponse {
 }
 
 /// <p>A log target.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogTarget {
     /// <p>The target name.</p>
     #[serde(rename = "targetName")]
@@ -6048,7 +6048,7 @@ pub struct LogTarget {
 }
 
 /// <p>The target configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogTargetConfiguration {
     /// <p>The logging level.</p>
@@ -6062,7 +6062,7 @@ pub struct LogTargetConfiguration {
 }
 
 /// <p>Describes the logging options payload.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingOptionsPayload {
     /// <p>The log level.</p>
@@ -6075,7 +6075,7 @@ pub struct LoggingOptionsPayload {
 }
 
 /// <p>The dimension of a metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricDimension {
     /// <p>A unique identifier for the dimension.</p>
     #[serde(rename = "dimensionName")]
@@ -6087,7 +6087,7 @@ pub struct MetricDimension {
 }
 
 /// <p>The metric you want to retain. Dimensions are optional.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricToRetain {
     /// <p>What is measured by the behavior.</p>
     #[serde(rename = "metric")]
@@ -6099,7 +6099,7 @@ pub struct MetricToRetain {
 }
 
 /// <p>The value to be compared with the <code>metric</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricValue {
     /// <p>If the <code>comparisonOperator</code> calls for a set of CIDRs, use this to specify that set to be compared with the <code>metric</code>.</p>
     #[serde(rename = "cidrs")]
@@ -6116,7 +6116,7 @@ pub struct MetricValue {
 }
 
 /// <p>Describes which changes should be applied as part of a mitigation action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MitigationAction {
     /// <p>The set of parameters for this mitigation action. The parameters vary, depending on the kind of action you apply.</p>
@@ -6138,7 +6138,7 @@ pub struct MitigationAction {
 }
 
 /// <p>Information that identifies a mitigation action. This information is returned by ListMitigationActions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MitigationActionIdentifier {
     /// <p>The IAM role ARN used to apply this mitigation action.</p>
@@ -6156,7 +6156,7 @@ pub struct MitigationActionIdentifier {
 }
 
 /// <p>The set of parameters for this mitigation action. You can specify only one type of parameter (in other words, you can apply only one action for each defined mitigation action).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MitigationActionParams {
     /// <p>Parameters to define a mitigation action that moves devices associated with a certificate to one or more specified thing groups, typically for quarantine.</p>
     #[serde(rename = "addThingsToThingGroupParams")]
@@ -6185,7 +6185,7 @@ pub struct MitigationActionParams {
 }
 
 /// <p>Specifies the MQTT context to use for the test authorizer request</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MqttContext {
     /// <p>The value of the <code>clientId</code> key in an MQTT authorization request.</p>
@@ -6208,7 +6208,7 @@ pub struct MqttContext {
 }
 
 /// <p>Information about the resource that was noncompliant with the audit check.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NonCompliantResource {
     /// <p>Other information about the noncompliant resource.</p>
@@ -6226,7 +6226,7 @@ pub struct NonCompliantResource {
 }
 
 /// <p>Describes a file to be associated with an OTA update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OTAUpdateFile {
     /// <p>A list of name/attribute pairs.</p>
     #[serde(rename = "attributes")]
@@ -6251,7 +6251,7 @@ pub struct OTAUpdateFile {
 }
 
 /// <p>Information about an OTA update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OTAUpdateInfo {
     /// <p>A collection of name/value pairs</p>
@@ -6321,7 +6321,7 @@ pub struct OTAUpdateInfo {
 }
 
 /// <p>An OTA update summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OTAUpdateSummary {
     /// <p>The date when the OTA update was created.</p>
@@ -6339,7 +6339,7 @@ pub struct OTAUpdateSummary {
 }
 
 /// <p>A certificate that has been transferred but not yet accepted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutgoingCertificate {
     /// <p>The certificate ARN.</p>
@@ -6369,7 +6369,7 @@ pub struct OutgoingCertificate {
 }
 
 /// <p>Describes the percentile and percentile value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PercentPair {
     /// <p>The percentile.</p>
@@ -6383,7 +6383,7 @@ pub struct PercentPair {
 }
 
 /// <p>Describes an AWS IoT policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Policy {
     /// <p>The policy ARN.</p>
@@ -6397,7 +6397,7 @@ pub struct Policy {
 }
 
 /// <p>Describes a policy version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PolicyVersion {
     /// <p>The date and time the policy was created.</p>
@@ -6415,7 +6415,7 @@ pub struct PolicyVersion {
 }
 
 /// <p>Information about the version of the policy associated with the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PolicyVersionIdentifier {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -6428,7 +6428,7 @@ pub struct PolicyVersionIdentifier {
 }
 
 /// <p>Configuration for pre-signed S3 URLs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PresignedUrlConfig {
     /// <p>How long (in seconds) pre-signed URLs are valid. Valid values are 60 - 3600, the default value is 3600 seconds. Pre-signed URLs are generated when Jobs receives an MQTT request for the job document.</p>
     #[serde(rename = "expiresInSec")]
@@ -6441,7 +6441,7 @@ pub struct PresignedUrlConfig {
 }
 
 /// <p>Structure that contains <code>payloadVersion</code> and <code>targetArn</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProvisioningHook {
     /// <p>The payload that was sent to the target function.</p> <p> <i>Note:</i> Only Lambda functions are currently supported.</p>
     #[serde(rename = "payloadVersion")]
@@ -6453,7 +6453,7 @@ pub struct ProvisioningHook {
 }
 
 /// <p>A summary of information about a fleet provisioning template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningTemplateSummary {
     /// <p>The date when the fleet provisioning template summary was created.</p>
@@ -6483,7 +6483,7 @@ pub struct ProvisioningTemplateSummary {
 }
 
 /// <p>A summary of information about a fleet provision template version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningTemplateVersionSummary {
     /// <p>The date when the fleet provisioning template version was created</p>
@@ -6501,7 +6501,7 @@ pub struct ProvisioningTemplateVersionSummary {
 }
 
 /// <p>Parameters to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PublishFindingToSnsParams {
     /// <p>The ARN of the topic to which you want to publish the findings.</p>
     #[serde(rename = "topicArn")]
@@ -6509,7 +6509,7 @@ pub struct PublishFindingToSnsParams {
 }
 
 /// <p>An asset property value entry containing the following information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PutAssetPropertyValueEntry {
     /// <p>The ID of the AWS IoT SiteWise asset. You must specify either a <code>propertyAlias</code> or both an <code>aliasId</code> and a <code>propertyId</code>. Accepts substitution templates.</p>
     #[serde(rename = "assetId")]
@@ -6533,7 +6533,7 @@ pub struct PutAssetPropertyValueEntry {
 }
 
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PutItemInput {
     /// <p>The table where the message data will be written.</p>
     #[serde(rename = "tableName")]
@@ -6541,7 +6541,7 @@ pub struct PutItemInput {
 }
 
 /// <p>Allows you to define a criteria to initiate the increase in rate of rollout for a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RateIncreaseCriteria {
     /// <p>The threshold for number of notified things that will initiate the increase in rate of rollout.</p>
     #[serde(rename = "numberOfNotifiedThings")]
@@ -6554,7 +6554,7 @@ pub struct RateIncreaseCriteria {
 }
 
 /// <p>The input to the RegisterCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCACertificateRequest {
     /// <p>Allows this CA certificate to be used for auto registration of device certificates.</p>
@@ -6582,7 +6582,7 @@ pub struct RegisterCACertificateRequest {
 }
 
 /// <p>The output from the RegisterCACertificateResponse operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCACertificateResponse {
     /// <p>The CA certificate ARN.</p>
@@ -6596,7 +6596,7 @@ pub struct RegisterCACertificateResponse {
 }
 
 /// <p>The input to the RegisterCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateRequest {
     /// <p>The CA certificate used to sign the device certificate being registered.</p>
@@ -6613,7 +6613,7 @@ pub struct RegisterCertificateRequest {
 }
 
 /// <p>The output from the RegisterCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCertificateResponse {
     /// <p>The certificate ARN.</p>
@@ -6626,7 +6626,7 @@ pub struct RegisterCertificateResponse {
     pub certificate_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCertificateWithoutCARequest {
     /// <p>The certificate data, in PEM format.</p>
@@ -6638,7 +6638,7 @@ pub struct RegisterCertificateWithoutCARequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterCertificateWithoutCAResponse {
     /// <p>The Amazon Resource Name (ARN) of the registered certificate.</p>
@@ -6651,7 +6651,7 @@ pub struct RegisterCertificateWithoutCAResponse {
     pub certificate_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterThingRequest {
     /// <p>The parameters for provisioning a thing. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-template.html">Provisioning Templates</a> for more information.</p>
@@ -6663,7 +6663,7 @@ pub struct RegisterThingRequest {
     pub template_body: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterThingResponse {
     /// <p>The certificate data, in PEM format.</p>
@@ -6677,7 +6677,7 @@ pub struct RegisterThingResponse {
 }
 
 /// <p>The registration configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RegistrationConfig {
     /// <p>The ARN of the role.</p>
     #[serde(rename = "roleArn")]
@@ -6690,7 +6690,7 @@ pub struct RegistrationConfig {
 }
 
 /// <p>The input for the RejectCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectCertificateTransferRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -6703,7 +6703,7 @@ pub struct RejectCertificateTransferRequest {
 }
 
 /// <p>Information about a related resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RelatedResource {
     /// <p>Other information about the resource.</p>
@@ -6720,7 +6720,7 @@ pub struct RelatedResource {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromBillingGroupRequest {
     /// <p>The ARN of the billing group.</p>
@@ -6741,11 +6741,11 @@ pub struct RemoveThingFromBillingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveThingFromBillingGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveThingFromThingGroupRequest {
     /// <p>The ARN of the thing to remove from the group.</p>
@@ -6766,12 +6766,12 @@ pub struct RemoveThingFromThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveThingFromThingGroupResponse {}
 
 /// <p>Parameters to define a mitigation action that adds a blank policy to restrict permissions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReplaceDefaultPolicyVersionParams {
     /// <p>The name of the template to be applied. The only supported value is <code>BLANK_POLICY</code>.</p>
     #[serde(rename = "templateName")]
@@ -6779,7 +6779,7 @@ pub struct ReplaceDefaultPolicyVersionParams {
 }
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceTopicRuleRequest {
     /// <p>The name of the rule.</p>
@@ -6791,7 +6791,7 @@ pub struct ReplaceTopicRuleRequest {
 }
 
 /// <p>Describes an action to republish to another topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RepublishAction {
     /// <p>The Quality of Service (QoS) level to use when republishing messages. The default value is 0.</p>
     #[serde(rename = "qos")]
@@ -6806,7 +6806,7 @@ pub struct RepublishAction {
 }
 
 /// <p>Information that identifies the noncompliant resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceIdentifier {
     /// <p>The account with which the resource is associated.</p>
     #[serde(rename = "account")]
@@ -6843,7 +6843,7 @@ pub struct ResourceIdentifier {
 }
 
 /// <p>Role alias description.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoleAliasDescription {
     /// <p>The UNIX timestamp of when the role alias was created.</p>
@@ -6877,7 +6877,7 @@ pub struct RoleAliasDescription {
 }
 
 /// <p>Describes an action to write data to an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Action {
     /// <p>The Amazon S3 bucket.</p>
     #[serde(rename = "bucketName")]
@@ -6895,7 +6895,7 @@ pub struct S3Action {
 }
 
 /// <p>Describes the location of updated firmware in S3.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Destination {
     /// <p>The S3 bucket that contains the updated firmware.</p>
     #[serde(rename = "bucket")]
@@ -6908,7 +6908,7 @@ pub struct S3Destination {
 }
 
 /// <p>The S3 location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Location {
     /// <p>The S3 bucket.</p>
     #[serde(rename = "bucket")]
@@ -6925,7 +6925,7 @@ pub struct S3Location {
 }
 
 /// <p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceAction {
     /// <p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>
     #[serde(rename = "token")]
@@ -6936,7 +6936,7 @@ pub struct SalesforceAction {
 }
 
 /// <p>Information about the scheduled audit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduledAuditMetadata {
     /// <p>The day of the month on which the scheduled audit is run (if the <code>frequency</code> is "MONTHLY"). If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
@@ -6961,7 +6961,7 @@ pub struct ScheduledAuditMetadata {
     pub scheduled_audit_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchIndexRequest {
     /// <p>The search index name.</p>
@@ -6985,7 +6985,7 @@ pub struct SearchIndexRequest {
     pub query_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchIndexResponse {
     /// <p>The token used to get the next set of results, or <code>null</code> if there are no additional results.</p>
@@ -7003,7 +7003,7 @@ pub struct SearchIndexResponse {
 }
 
 /// <p>Identifying information for a Device Defender security profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityProfileIdentifier {
     /// <p>The ARN of the security profile.</p>
@@ -7015,7 +7015,7 @@ pub struct SecurityProfileIdentifier {
 }
 
 /// <p>A target to which an alert is sent when a security profile behavior is violated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityProfileTarget {
     /// <p>The ARN of the security profile.</p>
@@ -7024,7 +7024,7 @@ pub struct SecurityProfileTarget {
 }
 
 /// <p>Information about a security profile and the target associated with it.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityProfileTargetMapping {
     /// <p>Information that identifies the security profile.</p>
@@ -7038,7 +7038,7 @@ pub struct SecurityProfileTargetMapping {
 }
 
 /// <p>An object that contains information about a server certificate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServerCertificateSummary {
     /// <p>The ARN of the server certificate.</p>
@@ -7055,7 +7055,7 @@ pub struct ServerCertificateSummary {
     pub server_certificate_status_detail: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultAuthorizerRequest {
     /// <p>The authorizer name.</p>
@@ -7063,7 +7063,7 @@ pub struct SetDefaultAuthorizerRequest {
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetDefaultAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
@@ -7077,7 +7077,7 @@ pub struct SetDefaultAuthorizerResponse {
 }
 
 /// <p>The input for the SetDefaultPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The policy name.</p>
@@ -7089,7 +7089,7 @@ pub struct SetDefaultPolicyVersionRequest {
 }
 
 /// <p>The input for the SetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetLoggingOptionsRequest {
     /// <p>The logging options payload.</p>
@@ -7097,7 +7097,7 @@ pub struct SetLoggingOptionsRequest {
     pub logging_options_payload: LoggingOptionsPayload,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingLevelRequest {
     /// <p>The log level.</p>
@@ -7108,7 +7108,7 @@ pub struct SetV2LoggingLevelRequest {
     pub log_target: LogTarget,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetV2LoggingOptionsRequest {
     /// <p>The default logging level.</p>
@@ -7126,7 +7126,7 @@ pub struct SetV2LoggingOptionsRequest {
 }
 
 /// <p>Use Sig V4 authorization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigV4Authorization {
     /// <p>The ARN of the signing role.</p>
     #[serde(rename = "roleArn")]
@@ -7140,7 +7140,7 @@ pub struct SigV4Authorization {
 }
 
 /// <p>Describes the code-signing profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigningProfileParameter {
     /// <p>Certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -7157,7 +7157,7 @@ pub struct SigningProfileParameter {
 }
 
 /// <p>Describes an action to publish to an Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SnsAction {
     /// <p>(Optional) The message format of the message to publish. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="https://docs.aws.amazon.com/sns/latest/dg/json-formats.html">https://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
     #[serde(rename = "messageFormat")]
@@ -7172,7 +7172,7 @@ pub struct SnsAction {
 }
 
 /// <p>Describes an action to publish data to an Amazon SQS queue.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SqsAction {
     /// <p>The URL of the Amazon SQS queue.</p>
     #[serde(rename = "queueUrl")]
@@ -7186,7 +7186,7 @@ pub struct SqsAction {
     pub use_base_64: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAuditMitigationActionsTaskRequest {
     /// <p>For an audit check, specifies which mitigation actions to apply. Those actions must be defined in your AWS account.</p>
@@ -7203,7 +7203,7 @@ pub struct StartAuditMitigationActionsTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAuditMitigationActionsTaskResponse {
     /// <p>The unique identifier for the audit mitigation task. This matches the <code>taskId</code> that you specified in the request.</p>
@@ -7212,7 +7212,7 @@ pub struct StartAuditMitigationActionsTaskResponse {
     pub task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartOnDemandAuditTaskRequest {
     /// <p>Which checks are performed during the audit. The checks you specify must be enabled for your account or an exception occurs. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.</p>
@@ -7220,7 +7220,7 @@ pub struct StartOnDemandAuditTaskRequest {
     pub target_check_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandAuditTaskResponse {
     /// <p>The ID of the on-demand audit you started.</p>
@@ -7230,7 +7230,7 @@ pub struct StartOnDemandAuditTaskResponse {
 }
 
 /// <p>Information required to start a signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StartSigningJobParameter {
     /// <p>The location to write the code-signed file.</p>
     #[serde(rename = "destination")]
@@ -7246,7 +7246,7 @@ pub struct StartSigningJobParameter {
     pub signing_profile_parameter: Option<SigningProfileParameter>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartThingRegistrationTaskRequest {
     /// <p>The S3 bucket that contains the input file.</p>
@@ -7263,7 +7263,7 @@ pub struct StartThingRegistrationTaskRequest {
     pub template_body: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartThingRegistrationTaskResponse {
     /// <p>The bulk thing provisioning task ID.</p>
@@ -7273,7 +7273,7 @@ pub struct StartThingRegistrationTaskResponse {
 }
 
 /// <p>A statistical ranking (percentile) which indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StatisticalThreshold {
     /// <p>The percentile which resolves to a threshold value by which compliance with a behavior is determined. Metrics are collected over the specified period (<code>durationSeconds</code>) from all reporting devices in your account and statistical ranks are calculated. Then, the measurements from a device are collected over the same period. If the accumulated measurements from the device fall above or below (<code>comparisonOperator</code>) the value associated with the percentile specified, then the device is considered to be in compliance with the behavior, otherwise a violation occurs.</p>
     #[serde(rename = "statistic")]
@@ -7282,7 +7282,7 @@ pub struct StatisticalThreshold {
 }
 
 /// <p>A map of key-value pairs for all supported statistics. Currently, only count is supported.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Statistics {
     /// <p>The average of the aggregated field values.</p>
@@ -7320,7 +7320,7 @@ pub struct Statistics {
 }
 
 /// <p>Starts execution of a Step Functions state machine.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StepFunctionsAction {
     /// <p>(Optional) A name will be given to the state machine execution consisting of this prefix followed by a UUID. Step Functions automatically creates a unique name for each state machine execution if one is not provided.</p>
     #[serde(rename = "executionNamePrefix")]
@@ -7334,7 +7334,7 @@ pub struct StepFunctionsAction {
     pub state_machine_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopThingRegistrationTaskRequest {
     /// <p>The bulk thing provisioning task ID.</p>
@@ -7342,12 +7342,12 @@ pub struct StopThingRegistrationTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopThingRegistrationTaskResponse {}
 
 /// <p>Describes a group of files that can be streamed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Stream {
     /// <p>The ID of a file associated with a stream.</p>
     #[serde(rename = "fileId")]
@@ -7360,7 +7360,7 @@ pub struct Stream {
 }
 
 /// <p>Represents a file to stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamFile {
     /// <p>The file ID.</p>
     #[serde(rename = "fileId")]
@@ -7373,7 +7373,7 @@ pub struct StreamFile {
 }
 
 /// <p>Information about a stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamInfo {
     /// <p>The date when the stream was created.</p>
@@ -7411,7 +7411,7 @@ pub struct StreamInfo {
 }
 
 /// <p>A summary of a stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamSummary {
     /// <p>A description of the stream.</p>
@@ -7433,7 +7433,7 @@ pub struct StreamSummary {
 }
 
 /// <p>A set of key/value pairs that are used to manage the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "Key")]
@@ -7444,7 +7444,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -7455,12 +7455,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Statistics for the checks performed during the audit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskStatistics {
     /// <p>The number of checks that did not run because the audit was canceled.</p>
@@ -7494,7 +7494,7 @@ pub struct TaskStatistics {
 }
 
 /// <p>Provides summary counts of how many tasks for findings are in a particular state. This information is included in the response from DescribeAuditMitigationActionsTask.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskStatisticsForAuditCheck {
     /// <p>The number of findings to which the mitigation action task was canceled when applied.</p>
@@ -7519,7 +7519,7 @@ pub struct TaskStatisticsForAuditCheck {
     pub total_findings_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestAuthorizationRequest {
     /// <p>A list of authorization info objects. Simulating authorization will create a response for each <code>authInfo</code> object in the list.</p>
@@ -7547,7 +7547,7 @@ pub struct TestAuthorizationRequest {
     pub principal: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestAuthorizationResponse {
     /// <p>The authentication results.</p>
@@ -7556,7 +7556,7 @@ pub struct TestAuthorizationResponse {
     pub auth_results: Option<Vec<AuthResult>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
     /// <p>The custom authorizer name.</p>
@@ -7584,7 +7584,7 @@ pub struct TestInvokeAuthorizerRequest {
     pub token_signature: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeAuthorizerResponse {
     /// <p>The number of seconds after which the connection is terminated.</p>
@@ -7610,7 +7610,7 @@ pub struct TestInvokeAuthorizerResponse {
 }
 
 /// <p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingAttribute {
     /// <p>A list of thing attributes which are name-value pairs.</p>
@@ -7636,7 +7636,7 @@ pub struct ThingAttribute {
 }
 
 /// <p>The connectivity status of the thing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingConnectivity {
     /// <p>True if the thing is connected to the AWS IoT service; false if it is not connected.</p>
@@ -7650,7 +7650,7 @@ pub struct ThingConnectivity {
 }
 
 /// <p>The thing search index document.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingDocument {
     /// <p>The attributes.</p>
@@ -7684,7 +7684,7 @@ pub struct ThingDocument {
 }
 
 /// <p>The thing group search index document.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingGroupDocument {
     /// <p>The thing group attributes.</p>
@@ -7710,7 +7710,7 @@ pub struct ThingGroupDocument {
 }
 
 /// <p>Thing group indexing configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ThingGroupIndexingConfiguration {
     /// <p>A list of thing group fields to index. This list cannot contain any managed fields. Use the GetIndexingConfiguration API to get a list of managed fields.</p> <p>Contains custom field names and their data type.</p>
     #[serde(rename = "customFields")]
@@ -7726,7 +7726,7 @@ pub struct ThingGroupIndexingConfiguration {
 }
 
 /// <p>Thing group metadata.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingGroupMetadata {
     /// <p>The UNIX timestamp of when the thing group was created.</p>
@@ -7744,7 +7744,7 @@ pub struct ThingGroupMetadata {
 }
 
 /// <p>Thing group properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ThingGroupProperties {
     /// <p>The thing group attributes in JSON format.</p>
     #[serde(rename = "attributePayload")]
@@ -7757,7 +7757,7 @@ pub struct ThingGroupProperties {
 }
 
 /// <p>The thing indexing configuration. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html">Managing Thing Indexing</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ThingIndexingConfiguration {
     /// <p>Contains custom field names and their data type.</p>
     #[serde(rename = "customFields")]
@@ -7777,7 +7777,7 @@ pub struct ThingIndexingConfiguration {
 }
 
 /// <p>The definition of the thing type, including thing type name and description.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingTypeDefinition {
     /// <p>The thing type ARN.</p>
@@ -7799,7 +7799,7 @@ pub struct ThingTypeDefinition {
 }
 
 /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThingTypeMetadata {
     /// <p>The date and time when the thing type was created.</p>
@@ -7817,7 +7817,7 @@ pub struct ThingTypeMetadata {
 }
 
 /// <p>The ThingTypeProperties contains information about the thing type including: a thing type description, and a list of searchable thing attribute names.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ThingTypeProperties {
     /// <p>A list of searchable thing attribute names.</p>
     #[serde(rename = "searchableAttributes")]
@@ -7830,7 +7830,7 @@ pub struct ThingTypeProperties {
 }
 
 /// <p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeoutConfig {
     /// <p>Specifies the amount of time, in minutes, this device has to finish execution of this job. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The in progress timer can't be updated and will apply to all job executions for the job. Whenever a job execution remains in the IN_PROGRESS status for longer than this interval, the job execution will fail and switch to the terminal <code>TIMED_OUT</code> status.</p>
     #[serde(rename = "inProgressTimeoutInMinutes")]
@@ -7839,7 +7839,7 @@ pub struct TimeoutConfig {
 }
 
 /// <p>Specifies the TLS context to use for the test authorizer request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TlsContext {
     /// <p>The value of the <code>serverName</code> key in a TLS authorization request.</p>
@@ -7849,7 +7849,7 @@ pub struct TlsContext {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicRule {
     /// <p>The actions associated with the rule.</p>
@@ -7887,7 +7887,7 @@ pub struct TopicRule {
 }
 
 /// <p>A topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicRuleDestination {
     /// <p>The topic rule destination URL.</p>
@@ -7909,7 +7909,7 @@ pub struct TopicRuleDestination {
 }
 
 /// <p>Configuration of the topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicRuleDestinationConfiguration {
     /// <p>Configuration of the HTTP URL.</p>
@@ -7919,7 +7919,7 @@ pub struct TopicRuleDestinationConfiguration {
 }
 
 /// <p>Information about the topic rule destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicRuleDestinationSummary {
     /// <p>The topic rule destination ARN.</p>
@@ -7941,7 +7941,7 @@ pub struct TopicRuleDestinationSummary {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicRuleListItem {
     /// <p>The date and time the rule was created.</p>
@@ -7967,7 +7967,7 @@ pub struct TopicRuleListItem {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicRulePayload {
     /// <p>The actions associated with the rule.</p>
@@ -7995,7 +7995,7 @@ pub struct TopicRulePayload {
 }
 
 /// <p>The input for the TransferCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransferCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -8011,7 +8011,7 @@ pub struct TransferCertificateRequest {
 }
 
 /// <p>The output from the TransferCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferCertificateResponse {
     /// <p>The ARN of the certificate.</p>
@@ -8021,7 +8021,7 @@ pub struct TransferCertificateResponse {
 }
 
 /// <p>Data used to transfer a certificate to an AWS account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransferData {
     /// <p>The date the transfer was accepted.</p>
@@ -8046,7 +8046,7 @@ pub struct TransferData {
     pub transfer_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -8057,11 +8057,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountAuditConfigurationRequest {
     /// <p>Specifies which audit checks are enabled and disabled for this account. Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks, including those that are currently enabled.</p> <p>Some data collection might start immediately when certain checks are enabled. When a check is disabled, any data collected so far in relation to the check is deleted.</p> <p>You cannot disable a check if it is used by any scheduled audit. You must first delete the check from the scheduled audit or delete the scheduled audit itself.</p> <p>On the first call to <code>UpdateAccountAuditConfiguration</code>, this parameter is required and must specify at least one enabled check.</p>
@@ -8080,11 +8080,11 @@ pub struct UpdateAccountAuditConfigurationRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountAuditConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
@@ -8108,7 +8108,7 @@ pub struct UpdateAuthorizerRequest {
     pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
@@ -8121,7 +8121,7 @@ pub struct UpdateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBillingGroupRequest {
     /// <p>The name of the billing group.</p>
@@ -8136,7 +8136,7 @@ pub struct UpdateBillingGroupRequest {
     pub expected_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBillingGroupResponse {
     /// <p>The latest version of the billing group.</p>
@@ -8146,7 +8146,7 @@ pub struct UpdateBillingGroupResponse {
 }
 
 /// <p>Parameters to define a mitigation action that changes the state of the CA certificate to inactive.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateCACertificateParams {
     /// <p>The action that you want to apply to the CA cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
     #[serde(rename = "action")]
@@ -8154,7 +8154,7 @@ pub struct UpdateCACertificateParams {
 }
 
 /// <p>The input to the UpdateCACertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
@@ -8179,7 +8179,7 @@ pub struct UpdateCACertificateRequest {
 }
 
 /// <p>The input for the UpdateCertificate operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCertificateRequest {
     /// <p>The ID of the certificate. (The last part of the certificate ARN contains the certificate ID.)</p>
@@ -8191,14 +8191,14 @@ pub struct UpdateCertificateRequest {
 }
 
 /// <p>Parameters to define a mitigation action that changes the state of the device certificate to inactive.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UpdateDeviceCertificateParams {
     /// <p>The action that you want to apply to the device cerrtificate. The only supported value is <code>DEACTIVATE</code>.</p>
     #[serde(rename = "action")]
     pub action: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDimensionRequest {
     /// <p>A unique identifier for the dimension. Choose something that describes the type and value to make it easy to remember what it does.</p>
@@ -8209,7 +8209,7 @@ pub struct UpdateDimensionRequest {
     pub string_values: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDimensionResponse {
     /// <p>The ARN (Amazon resource name) of the created dimension.</p>
@@ -8238,7 +8238,7 @@ pub struct UpdateDimensionResponse {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainConfigurationRequest {
     /// <p>An object that specifies the authorization service for a domain.</p>
@@ -8258,7 +8258,7 @@ pub struct UpdateDomainConfigurationRequest {
     pub remove_authorizer_config: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainConfigurationResponse {
     /// <p>The ARN of the domain configuration that was updated.</p>
@@ -8271,7 +8271,7 @@ pub struct UpdateDomainConfigurationResponse {
     pub domain_configuration_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to update.</p>
@@ -8298,7 +8298,7 @@ pub struct UpdateDynamicThingGroupRequest {
     pub thing_group_properties: ThingGroupProperties,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDynamicThingGroupResponse {
     /// <p>The dynamic thing group version.</p>
@@ -8307,7 +8307,7 @@ pub struct UpdateDynamicThingGroupResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventConfigurationsRequest {
     /// <p>The new event configuration values.</p>
@@ -8316,11 +8316,11 @@ pub struct UpdateEventConfigurationsRequest {
     pub event_configurations: Option<::std::collections::HashMap<String, Configuration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEventConfigurationsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexingConfigurationRequest {
     /// <p>Thing group indexing configuration.</p>
@@ -8333,11 +8333,11 @@ pub struct UpdateIndexingConfigurationRequest {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIndexingConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>Allows you to create criteria to abort a job.</p>
@@ -8365,7 +8365,7 @@ pub struct UpdateJobRequest {
     pub timeout_config: Option<TimeoutConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMitigationActionRequest {
     /// <p>The friendly name for the mitigation action. You can't change the name by using <code>UpdateMitigationAction</code>. Instead, you must delete and re-create the mitigation action with the new name.</p>
@@ -8381,7 +8381,7 @@ pub struct UpdateMitigationActionRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMitigationActionResponse {
     /// <p>The ARN for the new mitigation action.</p>
@@ -8394,7 +8394,7 @@ pub struct UpdateMitigationActionResponse {
     pub action_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProvisioningTemplateRequest {
     /// <p>The ID of the default provisioning template version.</p>
@@ -8426,11 +8426,11 @@ pub struct UpdateProvisioningTemplateRequest {
     pub template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisioningTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoleAliasRequest {
     /// <p>The number of seconds the credential will be valid.</p>
@@ -8446,7 +8446,7 @@ pub struct UpdateRoleAliasRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoleAliasResponse {
     /// <p>The role alias.</p>
@@ -8459,7 +8459,7 @@ pub struct UpdateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateScheduledAuditRequest {
     /// <p>The day of the month on which the scheduled audit takes place. Can be "1" through "31" or "LAST". This field is required if the "frequency" parameter is set to "MONTHLY". If days 29-31 are specified, and the month does not have that many days, the audit takes place on the "LAST" day of the month.</p>
@@ -8483,7 +8483,7 @@ pub struct UpdateScheduledAuditRequest {
     pub target_check_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateScheduledAuditResponse {
     /// <p>The ARN of the scheduled audit.</p>
@@ -8492,7 +8492,7 @@ pub struct UpdateScheduledAuditResponse {
     pub scheduled_audit_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSecurityProfileRequest {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
@@ -8532,7 +8532,7 @@ pub struct UpdateSecurityProfileRequest {
     pub security_profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
     /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.</p>
@@ -8573,7 +8573,7 @@ pub struct UpdateSecurityProfileResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamRequest {
     /// <p>The description of the stream.</p>
@@ -8593,7 +8593,7 @@ pub struct UpdateStreamRequest {
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStreamResponse {
     /// <p>A description of the stream.</p>
@@ -8614,7 +8614,7 @@ pub struct UpdateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupRequest {
     /// <p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>
@@ -8629,7 +8629,7 @@ pub struct UpdateThingGroupRequest {
     pub thing_group_properties: ThingGroupProperties,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingGroupResponse {
     /// <p>The version of the updated thing group.</p>
@@ -8638,7 +8638,7 @@ pub struct UpdateThingGroupResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingGroupsForThingRequest {
     /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
@@ -8659,12 +8659,12 @@ pub struct UpdateThingGroupsForThingRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingGroupsForThingResponse {}
 
 /// <p>The input for the UpdateThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingRequest {
     /// <p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\"attributes\":{\"name1\":\"value2\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>
@@ -8689,11 +8689,11 @@ pub struct UpdateThingRequest {
 }
 
 /// <p>The output from the UpdateThing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThingResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTopicRuleDestinationRequest {
     /// <p>The ARN of the topic rule destination.</p>
@@ -8704,11 +8704,11 @@ pub struct UpdateTopicRuleDestinationRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTopicRuleDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateSecurityProfileBehaviorsRequest {
     /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
@@ -8716,7 +8716,7 @@ pub struct ValidateSecurityProfileBehaviorsRequest {
     pub behaviors: Vec<Behavior>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidateSecurityProfileBehaviorsResponse {
     /// <p>True if the behaviors were valid.</p>
@@ -8730,7 +8730,7 @@ pub struct ValidateSecurityProfileBehaviorsResponse {
 }
 
 /// <p>Information about an error found in a behavior specification.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidationError {
     /// <p>The description of an error found in the behaviors.</p>
@@ -8740,7 +8740,7 @@ pub struct ValidationError {
 }
 
 /// <p>Information about a Device Defender security profile behavior violation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ViolationEvent {
     /// <p>The behavior which was violated.</p>

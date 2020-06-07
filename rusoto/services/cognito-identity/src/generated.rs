@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A provider representing an Amazon Cognito user pool and its client ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoIdentityProvider {
     /// <p>The client ID for the Amazon Cognito user pool.</p>
     #[serde(rename = "ClientId")]
@@ -42,7 +42,7 @@ pub struct CognitoIdentityProvider {
 }
 
 /// <p>Input to the CreateIdentityPool action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIdentityPoolInput {
     /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
@@ -82,7 +82,7 @@ pub struct CreateIdentityPoolInput {
 }
 
 /// <p>Credentials for the provided identity ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Credentials {
     /// <p>The Access Key portion of the credentials.</p>
@@ -104,7 +104,7 @@ pub struct Credentials {
 }
 
 /// <p>Input to the <code>DeleteIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentitiesInput {
     /// <p>A list of 1-60 identities that you want to delete.</p>
@@ -113,7 +113,7 @@ pub struct DeleteIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>DeleteIdentities</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIdentitiesResponse {
     /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
@@ -123,7 +123,7 @@ pub struct DeleteIdentitiesResponse {
 }
 
 /// <p>Input to the DeleteIdentityPool action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -132,7 +132,7 @@ pub struct DeleteIdentityPoolInput {
 }
 
 /// <p>Input to the <code>DescribeIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -141,7 +141,7 @@ pub struct DescribeIdentityInput {
 }
 
 /// <p>Input to the DescribeIdentityPool action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -150,7 +150,7 @@ pub struct DescribeIdentityPoolInput {
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCredentialsForIdentityInput {
     /// <p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>
@@ -167,7 +167,7 @@ pub struct GetCredentialsForIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetCredentialsForIdentity</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCredentialsForIdentityResponse {
     /// <p>Credentials for the provided identity ID.</p>
@@ -181,7 +181,7 @@ pub struct GetCredentialsForIdentityResponse {
 }
 
 /// <p>Input to the GetId action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdInput {
     /// <p>A standard AWS account ID (9+ digits).</p>
@@ -198,7 +198,7 @@ pub struct GetIdInput {
 }
 
 /// <p>Returned in response to a GetId request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -208,7 +208,7 @@ pub struct GetIdResponse {
 }
 
 /// <p>Input to the <code>GetIdentityPoolRoles</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -217,7 +217,7 @@ pub struct GetIdentityPoolRolesInput {
 }
 
 /// <p>Returned in response to a successful <code>GetIdentityPoolRoles</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityPoolRolesResponse {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -235,7 +235,7 @@ pub struct GetIdentityPoolRolesResponse {
 }
 
 /// <p>Input to the <code>GetOpenIdTokenForDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -255,7 +255,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetOpenIdTokenForDeveloperIdentity</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenForDeveloperIdentityResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -269,7 +269,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityResponse {
 }
 
 /// <p>Input to the GetOpenIdToken action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpenIdTokenInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -282,7 +282,7 @@ pub struct GetOpenIdTokenInput {
 }
 
 /// <p>Returned in response to a successful GetOpenIdToken request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOpenIdTokenResponse {
     /// <p>A unique identifier in the format REGION:GUID. Note that the IdentityId returned may not match the one passed on input.</p>
@@ -296,7 +296,7 @@ pub struct GetOpenIdTokenResponse {
 }
 
 /// <p>A description of the identity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityDescription {
     /// <p>Date on which the identity was created.</p>
@@ -318,7 +318,7 @@ pub struct IdentityDescription {
 }
 
 /// <p>An object representing an Amazon Cognito identity pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IdentityPool {
     /// <p>Enables or disables the Basic (Classic) authentication flow. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/authentication-flow.html">Identity Pools (Federated Identities) Authentication Flow</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
     #[serde(rename = "AllowClassicFlow")]
@@ -360,7 +360,7 @@ pub struct IdentityPool {
 }
 
 /// <p>A description of the identity pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityPoolShortDescription {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -374,7 +374,7 @@ pub struct IdentityPoolShortDescription {
 }
 
 /// <p>Input to the ListIdentities action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentitiesInput {
     /// <p>An optional boolean parameter that allows you to hide disabled identities. If omitted, the ListIdentities API will include disabled identities in the response.</p>
@@ -394,7 +394,7 @@ pub struct ListIdentitiesInput {
 }
 
 /// <p>The response to a ListIdentities request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentitiesResponse {
     /// <p>An object containing a set of identities and associated mappings.</p>
@@ -412,7 +412,7 @@ pub struct ListIdentitiesResponse {
 }
 
 /// <p>Input to the ListIdentityPools action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentityPoolsInput {
     /// <p>The maximum number of identities to return.</p>
@@ -425,7 +425,7 @@ pub struct ListIdentityPoolsInput {
 }
 
 /// <p>The result of a successful ListIdentityPools action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityPoolsResponse {
     /// <p>The identity pools returned by the ListIdentityPools action.</p>
@@ -438,7 +438,7 @@ pub struct ListIdentityPoolsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
@@ -446,7 +446,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags that are assigned to the identity pool.</p>
@@ -456,7 +456,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Input to the <code>LookupDeveloperIdentityInput</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LookupDeveloperIdentityInput {
     /// <p>A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.</p>
@@ -481,7 +481,7 @@ pub struct LookupDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>LookupDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LookupDeveloperIdentityResponse {
     /// <p>This is the list of developer user identifiers associated with an identity ID. Cognito supports the association of multiple developer user identifiers with an identity ID.</p>
@@ -499,7 +499,7 @@ pub struct LookupDeveloperIdentityResponse {
 }
 
 /// <p>A rule that maps a claim name, a claim value, and a match type to a role ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MappingRule {
     /// <p>The claim name that must be present in the token, for example, "isAdmin" or "paid".</p>
     #[serde(rename = "Claim")]
@@ -516,7 +516,7 @@ pub struct MappingRule {
 }
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeDeveloperIdentitiesInput {
     /// <p>User identifier for the destination user. The value should be a <code>DeveloperUserIdentifier</code>.</p>
@@ -534,7 +534,7 @@ pub struct MergeDeveloperIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>MergeDeveloperIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeDeveloperIdentitiesResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -544,7 +544,7 @@ pub struct MergeDeveloperIdentitiesResponse {
 }
 
 /// <p>A role mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RoleMapping {
     /// <p>If you specify Token or Rules as the <code>Type</code>, <code>AmbiguousRoleResolution</code> is required.</p> <p>Specifies the action to be taken if either no rules match the claim value for the <code>Rules</code> type, or there is no <code>cognito:preferred_role</code> claim and there are multiple <code>cognito:roles</code> matches for the <code>Token</code> type.</p>
     #[serde(rename = "AmbiguousRoleResolution")]
@@ -560,7 +560,7 @@ pub struct RoleMapping {
 }
 
 /// <p>A container for rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RulesConfigurationType {
     /// <p>An array of rules. You can specify up to 25 rules per identity provider.</p> <p>Rules are evaluated in order. The first one to match specifies the role.</p>
     #[serde(rename = "Rules")]
@@ -568,7 +568,7 @@ pub struct RulesConfigurationType {
 }
 
 /// <p>Input to the <code>SetIdentityPoolRoles</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
@@ -583,7 +583,7 @@ pub struct SetIdentityPoolRolesInput {
     pub roles: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool to assign the tags to.</p>
@@ -594,12 +594,12 @@ pub struct TagResourceInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkDeveloperIdentityInput {
     /// <p>The "domain" by which Cognito will refer to your users.</p>
@@ -617,7 +617,7 @@ pub struct UnlinkDeveloperIdentityInput {
 }
 
 /// <p>Input to the UnlinkIdentity action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnlinkIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
@@ -632,7 +632,7 @@ pub struct UnlinkIdentityInput {
 }
 
 /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedIdentityId {
     /// <p>The error code indicating the type of error that occurred.</p>
@@ -645,7 +645,7 @@ pub struct UnprocessedIdentityId {
     pub identity_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
@@ -656,7 +656,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 

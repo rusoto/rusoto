@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentConfiguration {
     /// <p><p/></p>
@@ -38,7 +38,7 @@ pub struct AgentConfiguration {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AgentOrchestrationConfig {
     /// <p><p/></p>
     #[serde(rename = "profilingEnabled")]
@@ -46,7 +46,7 @@ pub struct AgentOrchestrationConfig {
 }
 
 /// <p>Information about the time range of the latest available aggregated profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregatedProfileTime {
     /// <p>The time period.</p>
@@ -60,7 +60,7 @@ pub struct AggregatedProfileTime {
 }
 
 /// <p>The structure representing the configureAgentRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureAgentRequest {
     /// <p><p/></p>
@@ -73,7 +73,7 @@ pub struct ConfigureAgentRequest {
 }
 
 /// <p>The structure representing the configureAgentResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigureAgentResponse {
     /// <p><p/></p>
@@ -82,7 +82,7 @@ pub struct ConfigureAgentResponse {
 }
 
 /// <p>The structure representing the createProfiliingGroupRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProfilingGroupRequest {
     /// <p>The agent orchestration configuration.</p>
@@ -98,7 +98,7 @@ pub struct CreateProfilingGroupRequest {
 }
 
 /// <p>The structure representing the createProfilingGroupResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProfilingGroupResponse {
     /// <p>Information about the new profiling group</p>
@@ -107,7 +107,7 @@ pub struct CreateProfilingGroupResponse {
 }
 
 /// <p>The structure representing the deleteProfilingGroupRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProfilingGroupRequest {
     /// <p>The profiling group name to delete.</p>
@@ -116,12 +116,12 @@ pub struct DeleteProfilingGroupRequest {
 }
 
 /// <p>The structure representing the deleteProfilingGroupResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProfilingGroupResponse {}
 
 /// <p>The structure representing the describeProfilingGroupRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProfilingGroupRequest {
     /// <p>The profiling group name.</p>
@@ -130,7 +130,7 @@ pub struct DescribeProfilingGroupRequest {
 }
 
 /// <p>The structure representing the describeProfilingGroupResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProfilingGroupResponse {
     /// <p>Information about a profiling group.</p>
@@ -139,7 +139,7 @@ pub struct DescribeProfilingGroupResponse {
 }
 
 /// <p>The structure representing the getPolicyRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPolicyRequest {
     /// <p>The name of the profiling group.</p>
@@ -148,7 +148,7 @@ pub struct GetPolicyRequest {
 }
 
 /// <p>The structure representing the getPolicyResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>The resource-based policy attached to the <code>ProfilingGroup</code>.</p>
@@ -160,7 +160,7 @@ pub struct GetPolicyResponse {
 }
 
 /// <p>The structure representing the getProfileRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProfileRequest {
     /// <p>The format of the profile to return. You can choose <code>application/json</code> or the default <code>application/x-amzn-ion</code>. </p>
@@ -189,7 +189,7 @@ pub struct GetProfileRequest {
 }
 
 /// <p>The structure representing the getProfileResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetProfileResponse {
     /// <p>The content encoding of the profile.</p>
     pub content_encoding: Option<String>,
@@ -200,7 +200,7 @@ pub struct GetProfileResponse {
 }
 
 /// <p>The structure representing the listProfileTimesRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfileTimesRequest {
     /// <p>The end time of the time range from which to list the profiles.</p>
@@ -230,7 +230,7 @@ pub struct ListProfileTimesRequest {
 }
 
 /// <p>The structure representing the listProfileTimesResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfileTimesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListProfileTimes</code> request. When the results of a <code>ListProfileTimes</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -243,7 +243,7 @@ pub struct ListProfileTimesResponse {
 }
 
 /// <p>The structure representing the listProfilingGroupsRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProfilingGroupsRequest {
     /// <p>A Boolean value indicating whether to include a description.</p>
@@ -261,7 +261,7 @@ pub struct ListProfilingGroupsRequest {
 }
 
 /// <p>The structure representing the listProfilingGroupsResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProfilingGroupsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListProfilingGroups</code> request. When the results of a <code>ListProfilingGroups</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -278,7 +278,7 @@ pub struct ListProfilingGroupsResponse {
 }
 
 /// <p>The structure representing the postAgentProfileRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostAgentProfileRequest {
     /// <p><p/></p>
@@ -302,12 +302,12 @@ pub struct PostAgentProfileRequest {
 }
 
 /// <p>The structure representing the postAgentProfileResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostAgentProfileResponse {}
 
 /// <p>Information about the profile time.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfileTime {
     /// <p>The start time of the profile.</p>
@@ -317,7 +317,7 @@ pub struct ProfileTime {
 }
 
 /// <p>The description of a profiling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfilingGroupDescription {
     /// <p><p/></p>
@@ -347,7 +347,7 @@ pub struct ProfilingGroupDescription {
 }
 
 /// <p>Information about the profiling status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProfilingStatus {
     /// <p>The time, in milliseconds since the epoch, when the latest agent was orchestrated.</p>
@@ -365,7 +365,7 @@ pub struct ProfilingStatus {
 }
 
 /// <p>The structure representing the putPermissionRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPermissionRequest {
     /// <p>The list of actions that the users and roles can perform on the profiling group.</p>
@@ -384,7 +384,7 @@ pub struct PutPermissionRequest {
 }
 
 /// <p>The structure representing the putPermissionResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPermissionResponse {
     /// <p>The resource-based policy.</p>
@@ -396,7 +396,7 @@ pub struct PutPermissionResponse {
 }
 
 /// <p>The structure representing the removePermissionRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
     /// <p>The list of actions that the users and roles can perform on the profiling group.</p>
@@ -411,7 +411,7 @@ pub struct RemovePermissionRequest {
 }
 
 /// <p>The structure representing the removePermissionResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemovePermissionResponse {
     /// <p>The resource-based policy.</p>
@@ -423,7 +423,7 @@ pub struct RemovePermissionResponse {
 }
 
 /// <p>The structure representing the updateProfilingGroupRequest.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProfilingGroupRequest {
     /// <p><p/></p>
@@ -435,7 +435,7 @@ pub struct UpdateProfilingGroupRequest {
 }
 
 /// <p>The structure representing the updateProfilingGroupResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProfilingGroupResponse {
     /// <p>Updated information about the profiling group.</p>

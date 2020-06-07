@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateKmsKeyRequest {
     /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. This must be a symmetric CMK. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a> and <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a>.</p>
@@ -35,7 +35,7 @@ pub struct AssociateKmsKeyRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task.</p>
@@ -43,7 +43,7 @@ pub struct CancelExportTaskRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExportTaskRequest {
     /// <p>The name of S3 bucket for the exported log data. The bucket must be in the same AWS region.</p>
@@ -72,7 +72,7 @@ pub struct CreateExportTaskRequest {
     pub to: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExportTaskResponse {
     /// <p>The ID of the export task.</p>
@@ -81,7 +81,7 @@ pub struct CreateExportTaskResponse {
     pub task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a>.</p>
@@ -97,7 +97,7 @@ pub struct CreateLogGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogStreamRequest {
     /// <p>The name of the log group.</p>
@@ -108,7 +108,7 @@ pub struct CreateLogStreamRequest {
     pub log_stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDestinationRequest {
     /// <p>The name of the destination.</p>
@@ -116,7 +116,7 @@ pub struct DeleteDestinationRequest {
     pub destination_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogGroupRequest {
     /// <p>The name of the log group.</p>
@@ -124,7 +124,7 @@ pub struct DeleteLogGroupRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLogStreamRequest {
     /// <p>The name of the log group.</p>
@@ -135,7 +135,7 @@ pub struct DeleteLogStreamRequest {
     pub log_stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMetricFilterRequest {
     /// <p>The name of the metric filter.</p>
@@ -146,14 +146,14 @@ pub struct DeleteMetricFilterRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQueryDefinitionRequest {
     #[serde(rename = "queryDefinitionId")]
     pub query_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueryDefinitionResponse {
     #[serde(rename = "success")]
@@ -161,7 +161,7 @@ pub struct DeleteQueryDefinitionResponse {
     pub success: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The name of the policy to be revoked. This parameter is required.</p>
@@ -170,7 +170,7 @@ pub struct DeleteResourcePolicyRequest {
     pub policy_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
@@ -178,7 +178,7 @@ pub struct DeleteRetentionPolicyRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionFilterRequest {
     /// <p>The name of the subscription filter.</p>
@@ -189,7 +189,7 @@ pub struct DeleteSubscriptionFilterRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDestinationsRequest {
     /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
@@ -206,7 +206,7 @@ pub struct DescribeDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDestinationsResponse {
     /// <p>The destinations.</p>
@@ -218,7 +218,7 @@ pub struct DescribeDestinationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExportTasksRequest {
     /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
@@ -239,7 +239,7 @@ pub struct DescribeExportTasksRequest {
     pub task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExportTasksResponse {
     /// <p>The export tasks.</p>
@@ -251,7 +251,7 @@ pub struct DescribeExportTasksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogGroupsRequest {
     /// <p>The maximum number of items returned. If you don't specify a value, the default is up to 50 items.</p>
@@ -268,7 +268,7 @@ pub struct DescribeLogGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLogGroupsResponse {
     /// <p>The log groups.</p>
@@ -280,7 +280,7 @@ pub struct DescribeLogGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLogStreamsRequest {
     /// <p>If the value is true, results are returned in descending order. If the value is to false, results are returned in ascending order. The default value is false.</p>
@@ -308,7 +308,7 @@ pub struct DescribeLogStreamsRequest {
     pub order_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLogStreamsResponse {
     /// <p>The log streams.</p>
@@ -320,7 +320,7 @@ pub struct DescribeLogStreamsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMetricFiltersRequest {
     /// <p>The prefix to match.</p>
@@ -349,7 +349,7 @@ pub struct DescribeMetricFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMetricFiltersResponse {
     /// <p>The metric filters.</p>
@@ -361,7 +361,7 @@ pub struct DescribeMetricFiltersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQueriesRequest {
     /// <p>Limits the returned queries to only those for the specified log group.</p>
@@ -381,7 +381,7 @@ pub struct DescribeQueriesRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeQueriesResponse {
     #[serde(rename = "nextToken")]
@@ -393,7 +393,7 @@ pub struct DescribeQueriesResponse {
     pub queries: Option<Vec<QueryInfo>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQueryDefinitionsRequest {
     #[serde(rename = "maxResults")]
@@ -407,7 +407,7 @@ pub struct DescribeQueryDefinitionsRequest {
     pub query_definition_name_prefix: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeQueryDefinitionsResponse {
     #[serde(rename = "nextToken")]
@@ -418,7 +418,7 @@ pub struct DescribeQueryDefinitionsResponse {
     pub query_definitions: Option<Vec<QueryDefinition>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourcePoliciesRequest {
     /// <p>The maximum number of resource policies to be displayed with one call of this API.</p>
@@ -430,7 +430,7 @@ pub struct DescribeResourcePoliciesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourcePoliciesResponse {
     #[serde(rename = "nextToken")]
@@ -442,7 +442,7 @@ pub struct DescribeResourcePoliciesResponse {
     pub resource_policies: Option<Vec<ResourcePolicy>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSubscriptionFiltersRequest {
     /// <p>The prefix to match. If you don't specify a value, no prefix filter is applied.</p>
@@ -462,7 +462,7 @@ pub struct DescribeSubscriptionFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscriptionFiltersResponse {
     #[serde(rename = "nextToken")]
@@ -475,7 +475,7 @@ pub struct DescribeSubscriptionFiltersResponse {
 }
 
 /// <p>Represents a cross-account destination that receives subscription log events.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Destination {
     /// <p>An IAM policy document that governs which AWS accounts can create subscription filters against this destination.</p>
@@ -504,7 +504,7 @@ pub struct Destination {
     pub target_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateKmsKeyRequest {
     /// <p>The name of the log group.</p>
@@ -513,7 +513,7 @@ pub struct DisassociateKmsKeyRequest {
 }
 
 /// <p>Represents an export task.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportTask {
     /// <p>The name of Amazon S3 bucket to which the log data was exported.</p>
@@ -555,7 +555,7 @@ pub struct ExportTask {
 }
 
 /// <p>Represents the status of an export task.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportTaskExecutionInfo {
     /// <p>The completion time of the export task, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
@@ -569,7 +569,7 @@ pub struct ExportTaskExecutionInfo {
 }
 
 /// <p>Represents the status of an export task.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportTaskStatus {
     /// <p>The status code of the export task.</p>
@@ -582,7 +582,7 @@ pub struct ExportTaskStatus {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterLogEventsRequest {
     /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>
@@ -618,7 +618,7 @@ pub struct FilterLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FilterLogEventsResponse {
     /// <p>The matched events.</p>
@@ -636,7 +636,7 @@ pub struct FilterLogEventsResponse {
 }
 
 /// <p>Represents a matched event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FilteredLogEvent {
     /// <p>The ID of the event.</p>
@@ -661,7 +661,7 @@ pub struct FilteredLogEvent {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogEventsRequest {
     /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp equal to or later than this time are not included.</p>
@@ -692,7 +692,7 @@ pub struct GetLogEventsRequest {
     pub start_time: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogEventsResponse {
     /// <p>The events.</p>
@@ -709,7 +709,7 @@ pub struct GetLogEventsResponse {
     pub next_forward_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogGroupFieldsRequest {
     /// <p>The name of the log group to search.</p>
@@ -721,7 +721,7 @@ pub struct GetLogGroupFieldsRequest {
     pub time: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogGroupFieldsResponse {
     /// <p>The array of fields found in the query. Each object in the array contains the name of the field, along with the percentage of time it appeared in the log events that were queried.</p>
@@ -730,7 +730,7 @@ pub struct GetLogGroupFieldsResponse {
     pub log_group_fields: Option<Vec<LogGroupField>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLogRecordRequest {
     /// <p>The pointer corresponding to the log event record you want to retrieve. You get this from the response of a <code>GetQueryResults</code> operation. In that response, the value of the <code>@ptr</code> field for a log event is the value to use as <code>logRecordPointer</code> to retrieve that complete log event record.</p>
@@ -738,7 +738,7 @@ pub struct GetLogRecordRequest {
     pub log_record_pointer: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLogRecordResponse {
     /// <p>The requested log event, as a JSON string.</p>
@@ -747,7 +747,7 @@ pub struct GetLogRecordResponse {
     pub log_record: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQueryResultsRequest {
     /// <p>The ID number of the query.</p>
@@ -755,7 +755,7 @@ pub struct GetQueryResultsRequest {
     pub query_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueryResultsResponse {
     /// <p>The log events that matched the query criteria during the most recent time it ran.</p> <p>The <code>results</code> value is an array of arrays. Each log event is one object in the top-level array. Each of these log event objects is an array of <code>field</code>/<code>value</code> pairs.</p>
@@ -773,7 +773,7 @@ pub struct GetQueryResultsResponse {
 }
 
 /// <p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputLogEvent {
     /// <p>The raw event message.</p>
@@ -784,7 +784,7 @@ pub struct InputLogEvent {
     pub timestamp: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsLogGroupRequest {
     /// <p>The name of the log group.</p>
@@ -792,7 +792,7 @@ pub struct ListTagsLogGroupRequest {
     pub log_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsLogGroupResponse {
     /// <p>The tags for the log group.</p>
@@ -802,7 +802,7 @@ pub struct ListTagsLogGroupResponse {
 }
 
 /// <p>Represents a log group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogGroup {
     /// <p>The Amazon Resource Name (ARN) of the log group.</p>
@@ -835,7 +835,7 @@ pub struct LogGroup {
 }
 
 /// <p>The fields contained in log events found by a <code>GetLogGroupFields</code> operation, along with the percentage of queried log events in which each field appears.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogGroupField {
     /// <p>The name of a log field.</p>
@@ -849,7 +849,7 @@ pub struct LogGroupField {
 }
 
 /// <p>Represents a log stream, which is a sequence of log events from a single emitter of logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogStream {
     /// <p>The Amazon Resource Name (ARN) of the log stream.</p>
@@ -883,7 +883,7 @@ pub struct LogStream {
 }
 
 /// <p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricFilter {
     /// <p>The creation time of the metric filter, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
@@ -908,7 +908,7 @@ pub struct MetricFilter {
 }
 
 /// <p>Represents a matched event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricFilterMatchRecord {
     /// <p>The raw event data.</p>
@@ -926,7 +926,7 @@ pub struct MetricFilterMatchRecord {
 }
 
 /// <p>Indicates how to transform ingested log events to metric data in a CloudWatch metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricTransformation {
     /// <p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>
     #[serde(rename = "defaultValue")]
@@ -944,7 +944,7 @@ pub struct MetricTransformation {
 }
 
 /// <p>Represents a log event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputLogEvent {
     /// <p>The time the event was ingested, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
@@ -961,7 +961,7 @@ pub struct OutputLogEvent {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationPolicyRequest {
     /// <p>An IAM policy document that authorizes cross-account users to deliver their log events to the associated destination.</p>
@@ -972,7 +972,7 @@ pub struct PutDestinationPolicyRequest {
     pub destination_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDestinationRequest {
     /// <p>A name for the destination.</p>
@@ -986,7 +986,7 @@ pub struct PutDestinationRequest {
     pub target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDestinationResponse {
     /// <p>The destination.</p>
@@ -995,7 +995,7 @@ pub struct PutDestinationResponse {
     pub destination: Option<Destination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLogEventsRequest {
     /// <p>The log events.</p>
@@ -1013,7 +1013,7 @@ pub struct PutLogEventsRequest {
     pub sequence_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLogEventsResponse {
     /// <p>The next sequence token.</p>
@@ -1026,7 +1026,7 @@ pub struct PutLogEventsResponse {
     pub rejected_log_events_info: Option<RejectedLogEventsInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMetricFilterRequest {
     /// <p>A name for the metric filter.</p>
@@ -1043,7 +1043,7 @@ pub struct PutMetricFilterRequest {
     pub metric_transformations: Vec<MetricTransformation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutQueryDefinitionRequest {
     #[serde(rename = "logGroupNames")]
@@ -1058,7 +1058,7 @@ pub struct PutQueryDefinitionRequest {
     pub query_string: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutQueryDefinitionResponse {
     #[serde(rename = "queryDefinitionId")]
@@ -1066,7 +1066,7 @@ pub struct PutQueryDefinitionResponse {
     pub query_definition_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
     /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string. This parameter is required.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> <code>{ "Version": "2012-10-17", "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": "logArn" } ] } </code> </p>
@@ -1079,7 +1079,7 @@ pub struct PutResourcePolicyRequest {
     pub policy_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
     /// <p>The new policy.</p>
@@ -1088,7 +1088,7 @@ pub struct PutResourcePolicyResponse {
     pub resource_policy: Option<ResourcePolicy>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionPolicyRequest {
     /// <p>The name of the log group.</p>
@@ -1098,7 +1098,7 @@ pub struct PutRetentionPolicyRequest {
     pub retention_in_days: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSubscriptionFilterRequest {
     /// <p><p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul></p>
@@ -1124,7 +1124,7 @@ pub struct PutSubscriptionFilterRequest {
 }
 
 /// <p>Reserved.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct QueryCompileError {
     /// <p>Reserved.</p>
     pub location: Option<QueryCompileErrorLocation>,
@@ -1133,7 +1133,7 @@ pub struct QueryCompileError {
 }
 
 /// <p>Reserved.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct QueryCompileErrorLocation {
     /// <p>Reserved.</p>
     pub end_char_offset: Option<i64>,
@@ -1141,7 +1141,7 @@ pub struct QueryCompileErrorLocation {
     pub start_char_offset: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryDefinition {
     #[serde(rename = "lastModified")]
@@ -1162,7 +1162,7 @@ pub struct QueryDefinition {
 }
 
 /// <p>Information about one CloudWatch Logs Insights query that matches the request in a <code>DescribeQueries</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryInfo {
     /// <p>The date and time that this query was created.</p>
@@ -1188,7 +1188,7 @@ pub struct QueryInfo {
 }
 
 /// <p>Contains the number of log events scanned by the query, the number of log events that matched the query criteria, and the total number of bytes in the log events that were scanned.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryStatistics {
     /// <p>The total number of bytes in the log events scanned during the query.</p>
@@ -1206,7 +1206,7 @@ pub struct QueryStatistics {
 }
 
 /// <p>Represents the rejected events.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectedLogEventsInfo {
     /// <p>The expired log events.</p>
@@ -1224,7 +1224,7 @@ pub struct RejectedLogEventsInfo {
 }
 
 /// <p>A policy enabling one or more entities to put logs to a log group in this account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourcePolicy {
     /// <p>Timestamp showing when this policy was last updated, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
@@ -1242,7 +1242,7 @@ pub struct ResourcePolicy {
 }
 
 /// <p>Contains one field from one log event returned by a CloudWatch Logs Insights query, along with the value of that field.</p> <p>For more information about the fields that are generated by CloudWatch logs, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html">Supported Logs and Discovered Fields</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultField {
     /// <p>The log event field.</p>
@@ -1256,7 +1256,7 @@ pub struct ResultField {
 }
 
 /// <p>Represents the search status of a log stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchedLogStream {
     /// <p>The name of the log stream.</p>
@@ -1269,7 +1269,7 @@ pub struct SearchedLogStream {
     pub searched_completely: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartQueryRequest {
     /// <p>The end of the time range to query. The range is inclusive, so the specified end time is included in the query. Specified as epoch time, the number of seconds since January 1, 1970, 00:00:00 UTC.</p>
@@ -1295,7 +1295,7 @@ pub struct StartQueryRequest {
     pub start_time: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartQueryResponse {
     /// <p>The unique ID of the query. </p>
@@ -1304,7 +1304,7 @@ pub struct StartQueryResponse {
     pub query_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryRequest {
     /// <p>The ID number of the query to stop. If necessary, you can use <code>DescribeQueries</code> to find this ID number.</p>
@@ -1312,7 +1312,7 @@ pub struct StopQueryRequest {
     pub query_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopQueryResponse {
     /// <p>This is true if the query was stopped by the <code>StopQuery</code> operation.</p>
@@ -1322,7 +1322,7 @@ pub struct StopQueryResponse {
 }
 
 /// <p>Represents a subscription filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscriptionFilter {
     /// <p>The creation time of the subscription filter, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
@@ -1353,7 +1353,7 @@ pub struct SubscriptionFilter {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagLogGroupRequest {
     /// <p>The name of the log group.</p>
@@ -1364,7 +1364,7 @@ pub struct TagLogGroupRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestMetricFilterRequest {
     #[serde(rename = "filterPattern")]
@@ -1374,7 +1374,7 @@ pub struct TestMetricFilterRequest {
     pub log_event_messages: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestMetricFilterResponse {
     /// <p>The matched events.</p>
@@ -1383,7 +1383,7 @@ pub struct TestMetricFilterResponse {
     pub matches: Option<Vec<MetricFilterMatchRecord>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagLogGroupRequest {
     /// <p>The name of the log group.</p>

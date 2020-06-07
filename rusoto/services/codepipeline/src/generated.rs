@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AWSSessionCredentials {
     /// <p>The access key for the session.</p>
@@ -40,7 +40,7 @@ pub struct AWSSessionCredentials {
 }
 
 /// <p>Represents the input of an AcknowledgeJob action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeJobInput {
     /// <p>The unique system-generated ID of the job for which you want to confirm receipt.</p>
@@ -52,7 +52,7 @@ pub struct AcknowledgeJobInput {
 }
 
 /// <p>Represents the output of an AcknowledgeJob action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcknowledgeJobOutput {
     /// <p>Whether the job worker has received the specified job.</p>
@@ -62,7 +62,7 @@ pub struct AcknowledgeJobOutput {
 }
 
 /// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcknowledgeThirdPartyJobInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -77,7 +77,7 @@ pub struct AcknowledgeThirdPartyJobInput {
 }
 
 /// <p>Represents the output of an AcknowledgeThirdPartyJob action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcknowledgeThirdPartyJobOutput {
     /// <p>The status information for the third party job, if any.</p>
@@ -87,7 +87,7 @@ pub struct AcknowledgeThirdPartyJobOutput {
 }
 
 /// <p>Represents information about an action configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionConfiguration {
     /// <p>The configuration data for the action.</p>
@@ -97,7 +97,7 @@ pub struct ActionConfiguration {
 }
 
 /// <p>Represents information about an action configuration property.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionConfigurationProperty {
     /// <p>The description of the action configuration property that is displayed to users.</p>
     #[serde(rename = "description")]
@@ -126,7 +126,7 @@ pub struct ActionConfigurationProperty {
 }
 
 /// <p>Represents the context of an action in the stage of a pipeline to a job worker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionContext {
     /// <p>The system-generated unique ID that corresponds to an action's execution.</p>
@@ -140,7 +140,7 @@ pub struct ActionContext {
 }
 
 /// <p>Represents information about an action declaration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionDeclaration {
     /// <p>Specifies the action type and the provider of the action.</p>
     #[serde(rename = "actionTypeId")]
@@ -179,7 +179,7 @@ pub struct ActionDeclaration {
 }
 
 /// <p>Represents information about the run of an action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecution {
     /// <p>The details of an error returned by a URL external to AWS.</p>
@@ -221,7 +221,7 @@ pub struct ActionExecution {
 }
 
 /// <p>Returns information about an execution of an action, including the action execution ID, and the name, version, and timing of the action. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecutionDetail {
     /// <p>The action execution ID.</p>
@@ -267,7 +267,7 @@ pub struct ActionExecutionDetail {
 }
 
 /// <p>Filter values for the action execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ActionExecutionFilter {
     /// <p>The pipeline execution ID used to filter action execution history.</p>
@@ -277,7 +277,7 @@ pub struct ActionExecutionFilter {
 }
 
 /// <p>Input information used for an action execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecutionInput {
     #[serde(rename = "actionTypeId")]
@@ -310,7 +310,7 @@ pub struct ActionExecutionInput {
 }
 
 /// <p>Output details listed for an action execution, such as the action execution result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecutionOutput {
     /// <p>Execution result information listed in the output details for an action execution.</p>
@@ -328,7 +328,7 @@ pub struct ActionExecutionOutput {
 }
 
 /// <p>Execution result information, such as the external execution ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionExecutionResult {
     /// <p>The action provider's external ID for the action execution.</p>
@@ -346,7 +346,7 @@ pub struct ActionExecutionResult {
 }
 
 /// <p>Represents information about the version (or revision) of an action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionRevision {
     /// <p>The date and time when the most recent version of the action was created, in timestamp format.</p>
     #[serde(rename = "created")]
@@ -360,7 +360,7 @@ pub struct ActionRevision {
 }
 
 /// <p>Represents information about the state of an action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionState {
     /// <p>The name of the action.</p>
@@ -386,7 +386,7 @@ pub struct ActionState {
 }
 
 /// <p>Returns information about the details of an action type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActionType {
     /// <p>The configuration properties for the action type.</p>
@@ -409,7 +409,7 @@ pub struct ActionType {
 }
 
 /// <p>Represents information about an action type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionTypeId {
     /// <p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the following values. </p>
     #[serde(rename = "category")]
@@ -426,7 +426,7 @@ pub struct ActionTypeId {
 }
 
 /// <p>Returns information about the settings for an action type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionTypeSettings {
     /// <p>The URL returned to the AWS CodePipeline console that provides a deep link to the resources of the external system, such as the configuration page for an AWS CodeDeploy deployment group. This link is provided as part of the action display in the pipeline.</p>
     #[serde(rename = "entityUrlTemplate")]
@@ -447,7 +447,7 @@ pub struct ActionTypeSettings {
 }
 
 /// <p>Represents information about the result of an approval request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApprovalResult {
     /// <p>The response submitted by a reviewer assigned to an approval action request.</p>
@@ -459,7 +459,7 @@ pub struct ApprovalResult {
 }
 
 /// <p>Represents information about an artifact that is worked on by actions in the pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Artifact {
     /// <p>The location of an artifact.</p>
@@ -477,7 +477,7 @@ pub struct Artifact {
 }
 
 /// <p>Artifact details for the action execution, such as the artifact location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArtifactDetail {
     /// <p>The artifact object name for the action execution.</p>
@@ -491,7 +491,7 @@ pub struct ArtifactDetail {
 }
 
 /// <p>Returns information about the details of an artifact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArtifactDetails {
     /// <p>The maximum number of artifacts allowed for the action type.</p>
     #[serde(rename = "maximumCount")]
@@ -502,7 +502,7 @@ pub struct ArtifactDetails {
 }
 
 /// <p>Represents information about the location of an artifact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArtifactLocation {
     /// <p>The S3 bucket that contains the artifact.</p>
@@ -516,7 +516,7 @@ pub struct ArtifactLocation {
 }
 
 /// <p>Represents revision details of an artifact. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArtifactRevision {
     /// <p>The date and time when the most recent revision of the artifact was created, in timestamp format.</p>
@@ -546,7 +546,7 @@ pub struct ArtifactRevision {
 }
 
 /// <p><p>The S3 bucket where artifacts for the pipeline are stored.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArtifactStore {
     /// <p>The encryption key used to encrypt the data in the artifact store, such as an AWS Key Management Service (AWS KMS) key. If this is undefined, the default key for Amazon S3 is used.</p>
     #[serde(rename = "encryptionKey")]
@@ -561,7 +561,7 @@ pub struct ArtifactStore {
 }
 
 /// <p>Reserved for future use.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlockerDeclaration {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "name")]
@@ -572,7 +572,7 @@ pub struct BlockerDeclaration {
 }
 
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCustomActionTypeInput {
     /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although <code>Source</code> and <code>Approval</code> are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
@@ -605,7 +605,7 @@ pub struct CreateCustomActionTypeInput {
 }
 
 /// <p>Represents the output of a <code>CreateCustomActionType</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomActionTypeOutput {
     /// <p>Returns information about the details of an action type.</p>
@@ -618,7 +618,7 @@ pub struct CreateCustomActionTypeOutput {
 }
 
 /// <p>Represents the input of a <code>CreatePipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineInput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
@@ -631,7 +631,7 @@ pub struct CreatePipelineInput {
 }
 
 /// <p>Represents the output of a <code>CreatePipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineOutput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
@@ -645,7 +645,7 @@ pub struct CreatePipelineOutput {
 }
 
 /// <p>Represents information about a current revision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CurrentRevision {
     /// <p>The change identifier for the current revision.</p>
@@ -665,7 +665,7 @@ pub struct CurrentRevision {
 }
 
 /// <p>Represents the input of a <code>DeleteCustomActionType</code> operation. The custom action will be marked as deleted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCustomActionTypeInput {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
@@ -680,7 +680,7 @@ pub struct DeleteCustomActionTypeInput {
 }
 
 /// <p>Represents the input of a <code>DeletePipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePipelineInput {
     /// <p>The name of the pipeline to be deleted.</p>
@@ -688,7 +688,7 @@ pub struct DeletePipelineInput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookInput {
     /// <p>The name of the webhook you want to delete.</p>
@@ -696,11 +696,11 @@ pub struct DeleteWebhookInput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWebhookWithThirdPartyInput {
     /// <p>The name of the webhook you want to deregister.</p>
@@ -709,12 +709,12 @@ pub struct DeregisterWebhookWithThirdPartyInput {
     pub webhook_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>DisableStageTransition</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
@@ -732,7 +732,7 @@ pub struct DisableStageTransitionInput {
 }
 
 /// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to enable the flow of artifacts from one stage to another.</p>
@@ -747,7 +747,7 @@ pub struct EnableStageTransitionInput {
 }
 
 /// <p>Represents information about the key used to encrypt data in the artifact store, such as an AWS Key Management Service (AWS KMS) key.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionKey {
     /// <p><p>The ID used to identify the key. For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN.</p> <note> <p>Aliases are recognized only in the account that created the customer master key (CMK). For cross-account actions, you can only use the key ID or key ARN to identify the key.</p> </note></p>
     #[serde(rename = "id")]
@@ -758,7 +758,7 @@ pub struct EncryptionKey {
 }
 
 /// <p>Represents information about an error in AWS CodePipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetails {
     /// <p>The system ID or number code of the error.</p>
@@ -772,7 +772,7 @@ pub struct ErrorDetails {
 }
 
 /// <p>The details of the actions taken and results produced on an artifact as it passes through stages in the pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionDetails {
     /// <p>The system-generated unique ID of this action used to identify this job worker in any external systems, such as AWS CodeDeploy.</p>
@@ -790,7 +790,7 @@ pub struct ExecutionDetails {
 }
 
 /// <p>The interaction or event that started a pipeline execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionTrigger {
     /// <p>Detail related to the event that started a pipeline execution, such as the webhook ARN of the webhook that triggered the pipeline execution or the user ARN for a user-initiated <code>start-pipeline-execution</code> CLI command.</p>
@@ -804,7 +804,7 @@ pub struct ExecutionTrigger {
 }
 
 /// <p>Represents information about failure details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FailureDetails {
     /// <p>The external ID of the run of the action that failed.</p>
@@ -820,7 +820,7 @@ pub struct FailureDetails {
 }
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobDetailsInput {
     /// <p>The unique system-generated ID for the job.</p>
@@ -829,7 +829,7 @@ pub struct GetJobDetailsInput {
 }
 
 /// <p>Represents the output of a <code>GetJobDetails</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobDetailsOutput {
     /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call <code>GetJobDetails</code> again to obtain new credentials.</p> </note></p>
@@ -839,7 +839,7 @@ pub struct GetJobDetailsOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipelineExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineExecutionInput {
     /// <p>The ID of the pipeline execution about which you want to get execution details.</p>
@@ -851,7 +851,7 @@ pub struct GetPipelineExecutionInput {
 }
 
 /// <p>Represents the output of a <code>GetPipelineExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineExecutionOutput {
     /// <p>Represents information about the execution of a pipeline.</p>
@@ -861,7 +861,7 @@ pub struct GetPipelineExecutionOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineInput {
     /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an AWS user account.</p>
@@ -874,7 +874,7 @@ pub struct GetPipelineInput {
 }
 
 /// <p>Represents the output of a <code>GetPipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineOutput {
     /// <p>Represents the pipeline metadata information returned as part of the output of a <code>GetPipeline</code> action.</p>
@@ -888,7 +888,7 @@ pub struct GetPipelineOutput {
 }
 
 /// <p>Represents the input of a <code>GetPipelineState</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPipelineStateInput {
     /// <p>The name of the pipeline about which you want to get information.</p>
@@ -897,7 +897,7 @@ pub struct GetPipelineStateInput {
 }
 
 /// <p>Represents the output of a <code>GetPipelineState</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPipelineStateOutput {
     /// <p>The date and time the pipeline was created, in timestamp format.</p>
@@ -923,7 +923,7 @@ pub struct GetPipelineStateOutput {
 }
 
 /// <p>Represents the input of a <code>GetThirdPartyJobDetails</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThirdPartyJobDetailsInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -935,7 +935,7 @@ pub struct GetThirdPartyJobDetailsInput {
 }
 
 /// <p>Represents the output of a <code>GetThirdPartyJobDetails</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThirdPartyJobDetailsOutput {
     /// <p>The details of the job, including any protected values defined for the job.</p>
@@ -945,7 +945,7 @@ pub struct GetThirdPartyJobDetailsOutput {
 }
 
 /// <p>Represents information about an artifact to be worked on, such as a test or build artifact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputArtifact {
     /// <p>The name of the artifact to be worked on (for example, "My App").</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p>
     #[serde(rename = "name")]
@@ -953,7 +953,7 @@ pub struct InputArtifact {
 }
 
 /// <p>Represents information about a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>The ID of the AWS account to use when performing the job.</p>
@@ -975,7 +975,7 @@ pub struct Job {
 }
 
 /// <p>Represents other information about a job required for a job worker to complete the job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobData {
     /// <p>Represents information about an action configuration.</p>
@@ -1013,7 +1013,7 @@ pub struct JobData {
 }
 
 /// <p>Represents information about the details of a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobDetails {
     /// <p>The AWS account ID associated with the job.</p>
@@ -1030,7 +1030,7 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionExecutionsInput {
     /// <p>Input information used to filter action execution history.</p>
@@ -1050,7 +1050,7 @@ pub struct ListActionExecutionsInput {
     pub pipeline_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActionExecutionsOutput {
     /// <p>The details for a list of recent executions, such as action execution ID.</p>
@@ -1064,7 +1064,7 @@ pub struct ListActionExecutionsOutput {
 }
 
 /// <p>Represents the input of a <code>ListActionTypes</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionTypesInput {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
@@ -1078,7 +1078,7 @@ pub struct ListActionTypesInput {
 }
 
 /// <p>Represents the output of a <code>ListActionTypes</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListActionTypesOutput {
     /// <p>Provides details of the action types.</p>
@@ -1091,7 +1091,7 @@ pub struct ListActionTypesOutput {
 }
 
 /// <p>Represents the input of a <code>ListPipelineExecutions</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelineExecutionsInput {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. Pipeline history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
@@ -1108,7 +1108,7 @@ pub struct ListPipelineExecutionsInput {
 }
 
 /// <p>Represents the output of a <code>ListPipelineExecutions</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelineExecutionsOutput {
     /// <p>A token that can be used in the next <code>ListPipelineExecutions</code> call. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
@@ -1122,7 +1122,7 @@ pub struct ListPipelineExecutionsOutput {
 }
 
 /// <p>Represents the input of a <code>ListPipelines</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
     /// <p>An identifier that was returned from the previous list pipelines call. It can be used to return the next set of pipelines in the list.</p>
@@ -1132,7 +1132,7 @@ pub struct ListPipelinesInput {
 }
 
 /// <p>Represents the output of a <code>ListPipelines</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesOutput {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned. It can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>
@@ -1145,7 +1145,7 @@ pub struct ListPipelinesOutput {
     pub pipelines: Option<Vec<PipelineSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1161,7 +1161,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent API call to return the next page of the list. The ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
@@ -1175,7 +1175,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 /// <p>The detail returned for each webhook after listing webhooks, such as the webhook URL, the webhook name, and the webhook ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhookItem {
     /// <p>The Amazon Resource Name (ARN) of the webhook.</p>
@@ -1206,7 +1206,7 @@ pub struct ListWebhookItem {
     pub url: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksInput {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value.</p>
@@ -1219,7 +1219,7 @@ pub struct ListWebhooksInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhooksOutput {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent ListWebhooks call to return the next set of webhooks in the list. </p>
@@ -1233,7 +1233,7 @@ pub struct ListWebhooksOutput {
 }
 
 /// <p>Represents information about the output of an action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputArtifact {
     /// <p>The name of the output of an artifact, such as "My App".</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p> <p>Output artifact names must be unique within a pipeline.</p>
     #[serde(rename = "name")]
@@ -1241,7 +1241,7 @@ pub struct OutputArtifact {
 }
 
 /// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>PipelineContext contains <code>pipelineArn</code> and <code>pipelineExecutionId</code> for custom action jobs. The <code>pipelineArn</code> and <code>pipelineExecutionId</code> fields are not populated for ThirdParty action jobs.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineContext {
     /// <p>The context of an action to a job worker in the stage of a pipeline.</p>
@@ -1267,7 +1267,7 @@ pub struct PipelineContext {
 }
 
 /// <p>Represents the structure of actions and stages to be performed in the pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PipelineDeclaration {
     /// <p><p>Represents information about the S3 bucket where artifacts are stored for the pipeline.</p> <note> <p>You must include either <code>artifactStore</code> or <code>artifactStores</code> in your pipeline, but you cannot use both. If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p> </note></p>
     #[serde(rename = "artifactStore")]
@@ -1293,7 +1293,7 @@ pub struct PipelineDeclaration {
 }
 
 /// <p>Represents information about an execution of a pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineExecution {
     /// <p>A list of <code>ArtifactRevision</code> objects included in a pipeline execution.</p>
@@ -1319,7 +1319,7 @@ pub struct PipelineExecution {
 }
 
 /// <p>Summary information about a pipeline execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineExecutionSummary {
     /// <p>The date and time of the last change to the pipeline execution, in timestamp format.</p>
@@ -1353,7 +1353,7 @@ pub struct PipelineExecutionSummary {
 }
 
 /// <p>Information about a pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineMetadata {
     /// <p>The date and time the pipeline was created, in timestamp format.</p>
@@ -1371,7 +1371,7 @@ pub struct PipelineMetadata {
 }
 
 /// <p>Returns a summary of a pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineSummary {
     /// <p>The date and time the pipeline was created, in timestamp format.</p>
@@ -1393,7 +1393,7 @@ pub struct PipelineSummary {
 }
 
 /// <p>Represents the input of a <code>PollForJobs</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -1410,7 +1410,7 @@ pub struct PollForJobsInput {
 }
 
 /// <p>Represents the output of a <code>PollForJobs</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForJobsOutput {
     /// <p>Information about the jobs to take action on.</p>
@@ -1420,7 +1420,7 @@ pub struct PollForJobsOutput {
 }
 
 /// <p>Represents the input of a <code>PollForThirdPartyJobs</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PollForThirdPartyJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -1433,7 +1433,7 @@ pub struct PollForThirdPartyJobsInput {
 }
 
 /// <p>Represents the output of a <code>PollForThirdPartyJobs</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PollForThirdPartyJobsOutput {
     /// <p>Information about the jobs to take action on.</p>
@@ -1443,7 +1443,7 @@ pub struct PollForThirdPartyJobsOutput {
 }
 
 /// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutActionRevisionInput {
     /// <p>The name of the action that processes the revision.</p>
@@ -1461,7 +1461,7 @@ pub struct PutActionRevisionInput {
 }
 
 /// <p>Represents the output of a <code>PutActionRevision</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutActionRevisionOutput {
     /// <p>Indicates whether the artifact revision was previously used in an execution of the specified pipeline.</p>
@@ -1475,7 +1475,7 @@ pub struct PutActionRevisionOutput {
 }
 
 /// <p>Represents the input of a <code>PutApprovalResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApprovalResultInput {
     /// <p>The name of the action for which approval is requested.</p>
@@ -1496,7 +1496,7 @@ pub struct PutApprovalResultInput {
 }
 
 /// <p>Represents the output of a <code>PutApprovalResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutApprovalResultOutput {
     /// <p>The timestamp showing when the approval or rejection was submitted.</p>
@@ -1506,7 +1506,7 @@ pub struct PutApprovalResultOutput {
 }
 
 /// <p>Represents the input of a <code>PutJobFailureResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobFailureResultInput {
     /// <p>The details about the failure of a job.</p>
@@ -1518,7 +1518,7 @@ pub struct PutJobFailureResultInput {
 }
 
 /// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutJobSuccessResultInput {
     /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs use this token to identify the running instance of the action. It can be reused to return more information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
@@ -1543,7 +1543,7 @@ pub struct PutJobSuccessResultInput {
 }
 
 /// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobFailureResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1558,7 +1558,7 @@ pub struct PutThirdPartyJobFailureResultInput {
 }
 
 /// <p>Represents the input of a <code>PutThirdPartyJobSuccessResult</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutThirdPartyJobSuccessResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1581,7 +1581,7 @@ pub struct PutThirdPartyJobSuccessResultInput {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWebhookInput {
     /// <p>The tags for the webhook.</p>
@@ -1593,7 +1593,7 @@ pub struct PutWebhookInput {
     pub webhook: WebhookDefinition,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWebhookOutput {
     /// <p>The detail returned from creating the webhook, such as the webhook name, webhook URL, and webhook ARN.</p>
@@ -1602,7 +1602,7 @@ pub struct PutWebhookOutput {
     pub webhook: Option<ListWebhookItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWebhookWithThirdPartyInput {
     /// <p>The name of an existing webhook created with PutWebhook to register with a supported third party. </p>
@@ -1611,12 +1611,12 @@ pub struct RegisterWebhookWithThirdPartyInput {
     pub webhook_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterWebhookWithThirdPartyOutput {}
 
 /// <p>Represents the input of a <code>RetryStageExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetryStageExecutionInput {
     /// <p>The ID of the pipeline execution in the failed stage to be retried. Use the <a>GetPipelineState</a> action to retrieve the current pipelineExecutionId of the failed stage</p>
@@ -1634,7 +1634,7 @@ pub struct RetryStageExecutionInput {
 }
 
 /// <p>Represents the output of a <code>RetryStageExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetryStageExecutionOutput {
     /// <p>The ID of the current workflow execution in the failed stage.</p>
@@ -1644,7 +1644,7 @@ pub struct RetryStageExecutionOutput {
 }
 
 /// <p>The location of the S3 bucket that contains a revision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ArtifactLocation {
     /// <p>The name of the S3 bucket.</p>
@@ -1656,7 +1656,7 @@ pub struct S3ArtifactLocation {
 }
 
 /// <p>The Amazon S3 artifact location for an action's artifacts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3Location {
     /// <p>The Amazon S3 artifact bucket for an action's artifacts.</p>
@@ -1670,7 +1670,7 @@ pub struct S3Location {
 }
 
 /// <p>Information about the version (or revision) of a source artifact that initiated a pipeline execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SourceRevision {
     /// <p>The name of the action that processed the revision to the source artifact.</p>
@@ -1691,7 +1691,7 @@ pub struct SourceRevision {
 }
 
 /// <p>Represents information about a stage to a job worker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StageContext {
     /// <p>The name of the stage.</p>
@@ -1701,7 +1701,7 @@ pub struct StageContext {
 }
 
 /// <p>Represents information about a stage and its definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StageDeclaration {
     /// <p>The actions included in a stage.</p>
     #[serde(rename = "actions")]
@@ -1716,7 +1716,7 @@ pub struct StageDeclaration {
 }
 
 /// <p>Represents information about the run of a stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StageExecution {
     /// <p>The ID of the pipeline execution associated with the stage.</p>
@@ -1728,7 +1728,7 @@ pub struct StageExecution {
 }
 
 /// <p>Represents information about the state of the stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StageState {
     /// <p>The state of the stage.</p>
@@ -1750,7 +1750,7 @@ pub struct StageState {
 }
 
 /// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineExecutionInput {
     /// <p>The system-generated unique ID used to identify a unique execution request.</p>
@@ -1763,7 +1763,7 @@ pub struct StartPipelineExecutionInput {
 }
 
 /// <p>Represents the output of a <code>StartPipelineExecution</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartPipelineExecutionOutput {
     /// <p>The unique system-generated ID of the pipeline execution that was started.</p>
@@ -1773,7 +1773,7 @@ pub struct StartPipelineExecutionOutput {
 }
 
 /// <p>The interaction that stopped a pipeline execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopExecutionTrigger {
     /// <p>The user-specified reason the pipeline was stopped.</p>
@@ -1782,7 +1782,7 @@ pub struct StopExecutionTrigger {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopPipelineExecutionInput {
     /// <p><p>Use this option to stop the pipeline execution by abandoning, rather than finishing, in-progress actions.</p> <note> <p>This option can lead to failed or out-of-sequence tasks.</p> </note></p>
@@ -1801,7 +1801,7 @@ pub struct StopPipelineExecutionInput {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopPipelineExecutionOutput {
     /// <p>The unique system-generated ID of the pipeline execution that was stopped.</p>
@@ -1811,7 +1811,7 @@ pub struct StopPipelineExecutionOutput {
 }
 
 /// <p>A tag is a key-value pair that is used to manage the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "key")]
@@ -1821,7 +1821,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
@@ -1832,12 +1832,12 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>A response to a <code>PollForThirdPartyJobs</code> request returned by AWS CodePipeline when there is a job to be worked on by a partner action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThirdPartyJob {
     /// <p>The <code>clientToken</code> portion of the <code>clientId</code> and <code>clientToken</code> pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1851,7 +1851,7 @@ pub struct ThirdPartyJob {
 }
 
 /// <p>Represents information about the job data for a partner action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThirdPartyJobData {
     /// <p>Represents information about an action configuration.</p>
@@ -1889,7 +1889,7 @@ pub struct ThirdPartyJobData {
 }
 
 /// <p>The details of a job sent in response to a <code>GetThirdPartyJobDetails</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThirdPartyJobDetails {
     /// <p>The data to be returned by the third party job worker.</p>
@@ -1907,7 +1907,7 @@ pub struct ThirdPartyJobDetails {
 }
 
 /// <p>Represents information about the state of transitions between one stage and another stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransitionState {
     /// <p>The user-specified reason why the transition between two stages of a pipeline was disabled.</p>
@@ -1928,7 +1928,7 @@ pub struct TransitionState {
     pub last_changed_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p> The Amazon Resource Name (ARN) of the resource to remove tags from.</p>
@@ -1939,12 +1939,12 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineInput {
     /// <p>The name of the pipeline to be updated.</p>
@@ -1953,7 +1953,7 @@ pub struct UpdatePipelineInput {
 }
 
 /// <p>Represents the output of an <code>UpdatePipeline</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineOutput {
     /// <p>The structure of the updated pipeline.</p>
@@ -1963,7 +1963,7 @@ pub struct UpdatePipelineOutput {
 }
 
 /// <p>The authentication applied to incoming webhook trigger requests.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebhookAuthConfiguration {
     /// <p>The property used to configure acceptance of webhooks in an IP address range. For IP, only the <code>AllowedIPRange</code> property must be set. This property must be set to a valid CIDR range.</p>
     #[serde(rename = "AllowedIPRange")]
@@ -1976,7 +1976,7 @@ pub struct WebhookAuthConfiguration {
 }
 
 /// <p>Represents information about a webhook and its definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebhookDefinition {
     /// <p><p>Supported options are GITHUB<em>HMAC, IP, and UNAUTHENTICATED.</p> <ul> <li> <p>For information about the authentication scheme implemented by GITHUB</em>HMAC, see <a href="https://developer.github.com/webhooks/securing/">Securing your webhooks</a> on the GitHub Developer website.</p> </li> <li> <p> IP rejects webhooks trigger requests unless they originate from an IP address in the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED accepts all webhook trigger requests regardless of origin.</p> </li> </ul></p>
     #[serde(rename = "authentication")]
@@ -1999,7 +1999,7 @@ pub struct WebhookDefinition {
 }
 
 /// <p>The event criteria that specify when a webhook notification is sent to your URL.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebhookFilterRule {
     /// <p>A JsonPath expression that is applied to the body/payload of the webhook. The value selected by the JsonPath expression must match the value specified in the <code>MatchEquals</code> field. Otherwise, the request is ignored. For more information, see <a href="https://github.com/json-path/JsonPath">Java JsonPath implementation</a> in GitHub.</p>
     #[serde(rename = "jsonPath")]

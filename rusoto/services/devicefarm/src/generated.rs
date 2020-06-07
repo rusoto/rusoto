@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A container for account-level settings in AWS Device Farm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountSettings {
     /// <p>The AWS account number specified in the <code>AccountSettings</code> container.</p>
@@ -63,7 +63,7 @@ pub struct AccountSettings {
 }
 
 /// <p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Artifact {
     /// <p>The artifact's ARN.</p>
@@ -89,7 +89,7 @@ pub struct Artifact {
 }
 
 /// <p>Represents the amount of CPU that an app is using on a physical device. Does not represent system-wide CPU usage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CPU {
     /// <p>The CPU's architecture (for example, x86 or ARM).</p>
@@ -107,7 +107,7 @@ pub struct CPU {
 }
 
 /// <p>Represents entity counters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Counters {
     /// <p>The number of errored entities.</p>
@@ -141,7 +141,7 @@ pub struct Counters {
 }
 
 /// <p>Represents a request to the create device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevicePoolRequest {
     /// <p>The device pool's description.</p>
@@ -164,7 +164,7 @@ pub struct CreateDevicePoolRequest {
 }
 
 /// <p>Represents the result of a create device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevicePoolResult {
     /// <p>The newly created device pool.</p>
@@ -173,7 +173,7 @@ pub struct CreateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
     /// <p>The description of your instance profile.</p>
@@ -197,7 +197,7 @@ pub struct CreateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceProfileResult {
     /// <p>An object that contains information about your instance profile.</p>
@@ -206,7 +206,7 @@ pub struct CreateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
     /// <p>The description of the network profile.</p>
@@ -257,7 +257,7 @@ pub struct CreateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkProfileResult {
     /// <p>The network profile that is returned by the create network profile request.</p>
@@ -267,7 +267,7 @@ pub struct CreateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the create project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
     /// <p>Sets the execution timeout value (in minutes) for a project. All test runs in this project use the specified execution timeout value unless overridden when scheduling a run.</p>
@@ -280,7 +280,7 @@ pub struct CreateProjectRequest {
 }
 
 /// <p>Represents the result of a create project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
     /// <p>The newly created project.</p>
@@ -290,7 +290,7 @@ pub struct CreateProjectResult {
 }
 
 /// <p>Configuration settings for a remote access session, including billing method.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionConfiguration {
     /// <p>The billing method for the remote access session.</p>
@@ -304,7 +304,7 @@ pub struct CreateRemoteAccessSessionConfiguration {
 }
 
 /// <p>Creates and submits a request to start a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionRequest {
     /// <p>Unique identifier for the client. If you want access to multiple devices on the same client, you should pass the same <code>clientId</code> value in each call to <code>CreateRemoteAccessSession</code>. This identifier is required only if <code>remoteDebugEnabled</code> is set to <code>true</code>.</p> <p>Remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>.</p>
@@ -356,7 +356,7 @@ pub struct CreateRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the server response from a request to create a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRemoteAccessSessionResult {
     /// <p>A container that describes the remote access session when the request to create a remote access session is sent.</p>
@@ -365,7 +365,7 @@ pub struct CreateRemoteAccessSessionResult {
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridProjectRequest {
     /// <p>Human-readable description of the project.</p>
@@ -377,7 +377,7 @@ pub struct CreateTestGridProjectRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridProjectResult {
     /// <p>ARN of the Selenium testing project that was created.</p>
@@ -386,7 +386,7 @@ pub struct CreateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridUrlRequest {
     /// <p>Lifetime, in seconds, of the URL.</p>
@@ -397,7 +397,7 @@ pub struct CreateTestGridUrlRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridUrlResult {
     /// <p>The number of seconds the URL from <a>CreateTestGridUrlResult$url</a> stays active.</p>
@@ -411,7 +411,7 @@ pub struct CreateTestGridUrlResult {
 }
 
 /// <p>Represents a request to the create upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUploadRequest {
     /// <p>The upload's content type (for example, <code>application/octet-stream</code>).</p>
@@ -430,7 +430,7 @@ pub struct CreateUploadRequest {
 }
 
 /// <p>Represents the result of a create upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUploadResult {
     /// <p>The newly created upload.</p>
@@ -439,7 +439,7 @@ pub struct CreateUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVPCEConfigurationRequest {
     /// <p>The DNS name of the service running in your VPC that you want Device Farm to test.</p>
@@ -457,7 +457,7 @@ pub struct CreateVPCEConfigurationRequest {
     pub vpce_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -467,7 +467,7 @@ pub struct CreateVPCEConfigurationResult {
 }
 
 /// <p>A JSON object that specifies the paths where the artifacts generated by the customer's tests, on the device or in the test environment, are pulled from.</p> <p>Specify <code>deviceHostPaths</code> and optionally specify either <code>iosPaths</code> or <code>androidPaths</code>.</p> <p>For web app tests, you can specify both <code>iosPaths</code> and <code>androidPaths</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomerArtifactPaths {
     /// <p>Comma-separated list of paths on the Android device where the artifacts generated by the customer's tests are pulled from.</p>
     #[serde(rename = "androidPaths")]
@@ -484,7 +484,7 @@ pub struct CustomerArtifactPaths {
 }
 
 /// <p>Represents a request to the delete device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevicePoolRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool to delete.</p>
@@ -493,11 +493,11 @@ pub struct DeleteDevicePoolRequest {
 }
 
 /// <p>Represents the result of a delete device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDevicePoolResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile you are requesting to delete.</p>
@@ -505,11 +505,11 @@ pub struct DeleteInstanceProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceProfileResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
     /// <p>The ARN of the network profile to delete.</p>
@@ -517,12 +517,12 @@ pub struct DeleteNetworkProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNetworkProfileResult {}
 
 /// <p>Represents a request to the delete project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm project to delete.</p>
@@ -531,12 +531,12 @@ pub struct DeleteProjectRequest {
 }
 
 /// <p>Represents the result of a delete project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {}
 
 /// <p>Represents the request to delete the specified remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the session for which you want to delete remote access.</p>
@@ -545,12 +545,12 @@ pub struct DeleteRemoteAccessSessionRequest {
 }
 
 /// <p>The response from the server when a request is made to delete the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemoteAccessSessionResult {}
 
 /// <p>Represents a request to the delete run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRunRequest {
     /// <p>The Amazon Resource Name (ARN) for the run to delete.</p>
@@ -559,11 +559,11 @@ pub struct DeleteRunRequest {
 }
 
 /// <p>Represents the result of a delete run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRunResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTestGridProjectRequest {
     /// <p>The ARN of the project to delete, from <a>CreateTestGridProject</a> or <a>ListTestGridProjects</a>.</p>
@@ -571,12 +571,12 @@ pub struct DeleteTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTestGridProjectResult {}
 
 /// <p>Represents a request to the delete upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUploadRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm upload to delete.</p>
@@ -585,11 +585,11 @@ pub struct DeleteUploadRequest {
 }
 
 /// <p>Represents the result of a delete upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUploadResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to delete.</p>
@@ -597,12 +597,12 @@ pub struct DeleteVPCEConfigurationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVPCEConfigurationResult {}
 
 /// <p>Represents a device type that an app is tested against.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The device's ARN.</p>
@@ -692,7 +692,7 @@ pub struct Device {
 }
 
 /// <p>Represents a device filter used to select a set of devices to be included in a test run. This data structure is passed in as the <code>deviceSelectionConfiguration</code> parameter to <code>ScheduleRun</code>. For an example of the JSON request syntax, see <a>ScheduleRun</a>.</p> <p>It is also passed in as the <code>filters</code> parameter to <code>ListDevices</code>. For an example of the JSON request syntax, see <a>ListDevices</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceFilter {
     /// <p><p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>The supported operators for each attribute are provided in the following list.</p> <dl> <dt>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>PLATFORM</dt> <dd> <p>The device platform. Valid values are ANDROID or IOS.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>OS</em>VERSION</dt> <dd> <p>The operating system version (for example, 10.3.2).</p> <p>Supported operators: <code>EQUALS</code>, <code>GREATER<em>THAN</code>, <code>GREATER</em>THAN<em>OR</em>EQUALS</code>, <code>IN</code>, <code>LESS<em>THAN</code>, <code>LESS</em>THAN<em>OR</em>EQUALS</code>, <code>NOT<em>IN</code> </p> </dd> <dt>MODEL</dt> <dd> <p>The device model (for example, iPad 5th Gen).</p> <p>Supported operators: <code>CONTAINS</code>, <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>AVAILABILITY</dt> <dd> <p>The current availability of the device. Valid values are AVAILABLE, HIGHLY<em>AVAILABLE, BUSY, or TEMPORARY</em>NOT<em>AVAILABLE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FORM</em>FACTOR</dt> <dd> <p>The device form factor. Valid values are PHONE or TABLET.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>MANUFACTURER</dt> <dd> <p>The device manufacturer (for example, Apple).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>REMOTE</em>ACCESS<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>REMOTE</em>DEBUG<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> <p>Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </dd> <dt>INSTANCE</em>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device instance.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>INSTANCE</em>LABELS</dt> <dd> <p>The label of the device instance.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>FLEET_TYPE</dt> <dd> <p>The fleet type. Valid values are PUBLIC or PRIVATE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> </dl></p>
     #[serde(rename = "attribute")]
@@ -709,7 +709,7 @@ pub struct DeviceFilter {
 }
 
 /// <p>Represents the device instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceInstance {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
@@ -739,7 +739,7 @@ pub struct DeviceInstance {
 }
 
 /// <p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceMinutes {
     /// <p>When specified, represents only the sum of metered minutes used by the resource to run tests.</p>
@@ -757,7 +757,7 @@ pub struct DeviceMinutes {
 }
 
 /// <p>Represents a collection of device types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevicePool {
     /// <p>The device pool's ARN.</p>
@@ -787,7 +787,7 @@ pub struct DevicePool {
 }
 
 /// <p>Represents a device pool compatibility result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevicePoolCompatibilityResult {
     /// <p>Whether the result was compatible with the device pool.</p>
@@ -805,7 +805,7 @@ pub struct DevicePoolCompatibilityResult {
 }
 
 /// <p>Represents the device filters used in a test run and the maximum number of devices to be included in the run. It is passed in as the <code>deviceSelectionConfiguration</code> request parameter in <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeviceSelectionConfiguration {
     /// <p><p>Used to dynamically select a set of devices for a test run. A filter is made up of an attribute, an operator, and one or more values.</p> <ul> <li> <p> <b>Attribute</b> </p> <p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>).</p> </li> <li> <p>PLATFORM: The device platform. Valid values are ANDROID or IOS.</p> </li> <li> <p>OS<em>VERSION: The operating system version (for example, 10.3.2).</p> </li> <li> <p>MODEL: The device model (for example, iPad 5th Gen).</p> </li> <li> <p>AVAILABILITY: The current availability of the device. Valid values are AVAILABLE, HIGHLY</em>AVAILABLE, BUSY, or TEMPORARY<em>NOT</em>AVAILABLE.</p> </li> <li> <p>FORM<em>FACTOR: The device form factor. Valid values are PHONE or TABLET.</p> </li> <li> <p>MANUFACTURER: The device manufacturer (for example, Apple).</p> </li> <li> <p>REMOTE</em>ACCESS<em>ENABLED: Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> </li> <li> <p>REMOTE</em>DEBUG<em>ENABLED: Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE. Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </li> <li> <p>INSTANCE</em>ARN: The Amazon Resource Name (ARN) of the device instance.</p> </li> <li> <p>INSTANCE<em>LABELS: The label of the device instance.</p> </li> <li> <p>FLEET</em>TYPE: The fleet type. Valid values are PUBLIC or PRIVATE.</p> </li> </ul> </li> <li> <p> <b>Operator</b> </p> <p>The filter operator.</p> <ul> <li> <p>The EQUALS operator is available for every attribute except INSTANCE<em>LABELS.</p> </li> <li> <p>The CONTAINS operator is available for the INSTANCE</em>LABELS and MODEL attributes.</p> </li> <li> <p>The IN and NOT<em>IN operators are available for the ARN, OS</em>VERSION, MODEL, MANUFACTURER, and INSTANCE<em>ARN attributes.</p> </li> <li> <p>The LESS</em>THAN, GREATER<em>THAN, LESS</em>THAN<em>OR</em>EQUALS, and GREATER<em>THAN</em>OR<em>EQUALS operators are also available for the OS</em>VERSION attribute.</p> </li> </ul> </li> <li> <p> <b>Values</b> </p> <p>An array of one or more filter values.</p> <p class="title"> <b>Operator Values</b> </p> <ul> <li> <p>The IN and NOT<em>IN operators can take a values array that has more than one element.</p> </li> <li> <p>The other operators require an array with a single element.</p> </li> </ul> <p class="title"> <b>Attribute Values</b> </p> <ul> <li> <p>The PLATFORM attribute can be set to ANDROID or IOS.</p> </li> <li> <p>The AVAILABILITY attribute can be set to AVAILABLE, HIGHLY</em>AVAILABLE, BUSY, or TEMPORARY<em>NOT</em>AVAILABLE.</p> </li> <li> <p>The FORM<em>FACTOR attribute can be set to PHONE or TABLET.</p> </li> <li> <p>The FLEET</em>TYPE attribute can be set to PUBLIC or PRIVATE.</p> </li> </ul> </li> </ul></p>
@@ -817,7 +817,7 @@ pub struct DeviceSelectionConfiguration {
 }
 
 /// <p>Contains the run results requested by the device selection configuration and how many devices were returned. For an example of the JSON response syntax, see <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceSelectionResult {
     /// <p>The filters in a device selection result.</p>
@@ -835,7 +835,7 @@ pub struct DeviceSelectionResult {
 }
 
 /// <p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionConfiguration {
     /// <p>True if account cleanup is enabled at the beginning of the test. Otherwise, false.</p>
@@ -861,12 +861,12 @@ pub struct ExecutionConfiguration {
 }
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
 /// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResult {
     /// <p>The account settings.</p>
@@ -875,7 +875,7 @@ pub struct GetAccountSettingsResult {
     pub account_settings: Option<AccountSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance you're requesting information about.</p>
@@ -883,7 +883,7 @@ pub struct GetDeviceInstanceRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceInstanceResult {
     /// <p>An object that contains information about your device instance.</p>
@@ -893,7 +893,7 @@ pub struct GetDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the get device pool compatibility operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolCompatibilityRequest {
     /// <p>The ARN of the app that is associated with the specified device pool.</p>
@@ -918,7 +918,7 @@ pub struct GetDevicePoolCompatibilityRequest {
 }
 
 /// <p>Represents the result of describe device pool compatibility request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolCompatibilityResult {
     /// <p>Information about compatible devices.</p>
@@ -932,7 +932,7 @@ pub struct GetDevicePoolCompatibilityResult {
 }
 
 /// <p>Represents a request to the get device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolRequest {
     /// <p>The device pool's ARN.</p>
@@ -941,7 +941,7 @@ pub struct GetDevicePoolRequest {
 }
 
 /// <p>Represents the result of a get device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolResult {
     /// <p>An object that contains information about the requested device pool.</p>
@@ -951,7 +951,7 @@ pub struct GetDevicePoolResult {
 }
 
 /// <p>Represents a request to the get device request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The device type's ARN.</p>
@@ -960,7 +960,7 @@ pub struct GetDeviceRequest {
 }
 
 /// <p>Represents the result of a get device request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResult {
     /// <p>An object that contains information about the requested device.</p>
@@ -969,7 +969,7 @@ pub struct GetDeviceResult {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of an instance profile.</p>
@@ -977,7 +977,7 @@ pub struct GetInstanceProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceProfileResult {
     /// <p>An object that contains information about an instance profile.</p>
@@ -987,7 +987,7 @@ pub struct GetInstanceProfileResult {
 }
 
 /// <p>Represents a request to the get job operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>The job's ARN.</p>
@@ -996,7 +996,7 @@ pub struct GetJobRequest {
 }
 
 /// <p>Represents the result of a get job request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
     /// <p>An object that contains information about the requested job.</p>
@@ -1005,7 +1005,7 @@ pub struct GetJobResult {
     pub job: Option<Job>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
     /// <p>The ARN of the network profile to return information about.</p>
@@ -1013,7 +1013,7 @@ pub struct GetNetworkProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkProfileResult {
     /// <p>The network profile.</p>
@@ -1023,7 +1023,7 @@ pub struct GetNetworkProfileResult {
 }
 
 /// <p>Represents the request to retrieve the offering status for the specified customer or account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOfferingStatusRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1033,7 +1033,7 @@ pub struct GetOfferingStatusRequest {
 }
 
 /// <p>Returns the status result for a device offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOfferingStatusResult {
     /// <p>When specified, gets the offering status for the current period.</p>
@@ -1051,7 +1051,7 @@ pub struct GetOfferingStatusResult {
 }
 
 /// <p>Represents a request to the get project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProjectRequest {
     /// <p>The project's ARN.</p>
@@ -1060,7 +1060,7 @@ pub struct GetProjectRequest {
 }
 
 /// <p>Represents the result of a get project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProjectResult {
     /// <p>The project to get information about.</p>
@@ -1070,7 +1070,7 @@ pub struct GetProjectResult {
 }
 
 /// <p>Represents the request to get information about the specified remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>
@@ -1079,7 +1079,7 @@ pub struct GetRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that lists detailed information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRemoteAccessSessionResult {
     /// <p>A container that lists detailed information about the remote access session.</p>
@@ -1089,7 +1089,7 @@ pub struct GetRemoteAccessSessionResult {
 }
 
 /// <p>Represents a request to the get run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRunRequest {
     /// <p>The run's ARN.</p>
@@ -1098,7 +1098,7 @@ pub struct GetRunRequest {
 }
 
 /// <p>Represents the result of a get run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRunResult {
     /// <p>The run to get results from.</p>
@@ -1108,7 +1108,7 @@ pub struct GetRunResult {
 }
 
 /// <p>Represents a request to the get suite operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSuiteRequest {
     /// <p>The suite's ARN.</p>
@@ -1117,7 +1117,7 @@ pub struct GetSuiteRequest {
 }
 
 /// <p>Represents the result of a get suite request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSuiteResult {
     /// <p>A collection of one or more tests.</p>
@@ -1126,7 +1126,7 @@ pub struct GetSuiteResult {
     pub suite: Option<Suite>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridProjectRequest {
     /// <p>The ARN of the Selenium testing project, from either <a>CreateTestGridProject</a> or <a>ListTestGridProjects</a>.</p>
@@ -1134,7 +1134,7 @@ pub struct GetTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridProjectResult {
     /// <p>A <a>TestGridProject</a>.</p>
@@ -1143,7 +1143,7 @@ pub struct GetTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridSessionRequest {
     /// <p>The ARN for the project that this session belongs to. See <a>CreateTestGridProject</a> and <a>ListTestGridProjects</a>.</p>
@@ -1160,7 +1160,7 @@ pub struct GetTestGridSessionRequest {
     pub session_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridSessionResult {
     /// <p>The <a>TestGridSession</a> that was requested.</p>
@@ -1170,7 +1170,7 @@ pub struct GetTestGridSessionResult {
 }
 
 /// <p>Represents a request to the get test operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestRequest {
     /// <p>The test's ARN.</p>
@@ -1179,7 +1179,7 @@ pub struct GetTestRequest {
 }
 
 /// <p>Represents the result of a get test request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestResult {
     /// <p>A test condition that is evaluated.</p>
@@ -1189,7 +1189,7 @@ pub struct GetTestResult {
 }
 
 /// <p>Represents a request to the get upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadRequest {
     /// <p>The upload's ARN.</p>
@@ -1198,7 +1198,7 @@ pub struct GetUploadRequest {
 }
 
 /// <p>Represents the result of a get upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadResult {
     /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
@@ -1207,7 +1207,7 @@ pub struct GetUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to describe.</p>
@@ -1215,7 +1215,7 @@ pub struct GetVPCEConfigurationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -1225,7 +1225,7 @@ pub struct GetVPCEConfigurationResult {
 }
 
 /// <p>Represents information about incompatibility.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IncompatibilityMessage {
     /// <p>A message about the incompatibility.</p>
@@ -1239,7 +1239,7 @@ pub struct IncompatibilityMessage {
 }
 
 /// <p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstallToRemoteAccessSessionRequest {
     /// <p>The ARN of the app about which you are requesting information.</p>
@@ -1251,7 +1251,7 @@ pub struct InstallToRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstallToRemoteAccessSessionResult {
     /// <p>An app to upload or that has been uploaded.</p>
@@ -1261,7 +1261,7 @@ pub struct InstallToRemoteAccessSessionResult {
 }
 
 /// <p>Represents the instance profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceProfile {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
@@ -1291,7 +1291,7 @@ pub struct InstanceProfile {
 }
 
 /// <p>Represents a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>The job's ARN.</p>
@@ -1357,7 +1357,7 @@ pub struct Job {
 }
 
 /// <p>Represents a request to the list artifacts operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
     /// <p>The run, job, suite, or test ARN.</p>
@@ -1373,7 +1373,7 @@ pub struct ListArtifactsRequest {
 }
 
 /// <p>Represents the result of a list artifacts operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResult {
     /// <p>Information about the artifacts.</p>
@@ -1386,7 +1386,7 @@ pub struct ListArtifactsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceInstancesRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -1399,7 +1399,7 @@ pub struct ListDeviceInstancesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceInstancesResult {
     /// <p>An object that contains information about your device instances.</p>
@@ -1413,7 +1413,7 @@ pub struct ListDeviceInstancesResult {
 }
 
 /// <p>Represents the result of a list device pools request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicePoolsRequest {
     /// <p>The project ARN.</p>
@@ -1430,7 +1430,7 @@ pub struct ListDevicePoolsRequest {
 }
 
 /// <p>Represents the result of a list device pools request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicePoolsResult {
     /// <p>Information about the device pools.</p>
@@ -1444,7 +1444,7 @@ pub struct ListDevicePoolsResult {
 }
 
 /// <p>Represents the result of a list devices request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project.</p>
@@ -1462,7 +1462,7 @@ pub struct ListDevicesRequest {
 }
 
 /// <p>Represents the result of a list devices operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResult {
     /// <p>Information about the devices.</p>
@@ -1475,7 +1475,7 @@ pub struct ListDevicesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -1488,7 +1488,7 @@ pub struct ListInstanceProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceProfilesResult {
     /// <p>An object that contains information about your instance profiles.</p>
@@ -1502,7 +1502,7 @@ pub struct ListInstanceProfilesResult {
 }
 
 /// <p>Represents a request to the list jobs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The run's Amazon Resource Name (ARN).</p>
@@ -1515,7 +1515,7 @@ pub struct ListJobsRequest {
 }
 
 /// <p>Represents the result of a list jobs request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
     /// <p>Information about the jobs.</p>
@@ -1528,7 +1528,7 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworkProfilesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>
@@ -1544,7 +1544,7 @@ pub struct ListNetworkProfilesRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNetworkProfilesResult {
     /// <p>A list of the available network profiles.</p>
@@ -1557,7 +1557,7 @@ pub struct ListNetworkProfilesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingPromotionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1566,7 +1566,7 @@ pub struct ListOfferingPromotionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingPromotionsResult {
     /// <p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>
@@ -1580,7 +1580,7 @@ pub struct ListOfferingPromotionsResult {
 }
 
 /// <p>Represents the request to list the offering transaction history.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingTransactionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1590,7 +1590,7 @@ pub struct ListOfferingTransactionsRequest {
 }
 
 /// <p>Returns the transaction log of the specified offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingTransactionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1604,7 +1604,7 @@ pub struct ListOfferingTransactionsResult {
 }
 
 /// <p>Represents the request to list all offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1614,7 +1614,7 @@ pub struct ListOfferingsRequest {
 }
 
 /// <p>Represents the return values of the list of offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1628,7 +1628,7 @@ pub struct ListOfferingsResult {
 }
 
 /// <p>Represents a request to the list projects operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
     /// <p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>
@@ -1642,7 +1642,7 @@ pub struct ListProjectsRequest {
 }
 
 /// <p>Represents the result of a list projects request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1656,7 +1656,7 @@ pub struct ListProjectsResult {
 }
 
 /// <p>Represents the request to return information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRemoteAccessSessionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project about which you are requesting information.</p>
@@ -1669,7 +1669,7 @@ pub struct ListRemoteAccessSessionsRequest {
 }
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRemoteAccessSessionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1683,7 +1683,7 @@ pub struct ListRemoteAccessSessionsResult {
 }
 
 /// <p>Represents a request to the list runs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRunsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>
@@ -1696,7 +1696,7 @@ pub struct ListRunsRequest {
 }
 
 /// <p>Represents the result of a list runs request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRunsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1710,7 +1710,7 @@ pub struct ListRunsResult {
 }
 
 /// <p>Represents a request to the list samples operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSamplesRequest {
     /// <p>The Amazon Resource Name (ARN) of the job used to list samples.</p>
@@ -1723,7 +1723,7 @@ pub struct ListSamplesRequest {
 }
 
 /// <p>Represents the result of a list samples request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSamplesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1737,7 +1737,7 @@ pub struct ListSamplesResult {
 }
 
 /// <p>Represents a request to the list suites operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSuitesRequest {
     /// <p>The job's Amazon Resource Name (ARN).</p>
@@ -1750,7 +1750,7 @@ pub struct ListSuitesRequest {
 }
 
 /// <p>Represents the result of a list suites request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSuitesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1763,7 +1763,7 @@ pub struct ListSuitesResult {
     pub suites: Option<Vec<Suite>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources for which to list tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -1771,7 +1771,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters.</p>
@@ -1780,7 +1780,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridProjectsRequest {
     /// <p>Return no more than this number of results.</p>
@@ -1793,7 +1793,7 @@ pub struct ListTestGridProjectsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridProjectsResult {
     /// <p>Used for pagination. Pass into <a>ListTestGridProjects</a> to get more results in a paginated request.</p>
@@ -1806,7 +1806,7 @@ pub struct ListTestGridProjectsResult {
     pub test_grid_projects: Option<Vec<TestGridProject>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionActionsRequest {
     /// <p>The maximum number of sessions to return per response.</p>
@@ -1822,7 +1822,7 @@ pub struct ListTestGridSessionActionsRequest {
     pub session_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionActionsResult {
     /// <p>The action taken by the session.</p>
@@ -1835,7 +1835,7 @@ pub struct ListTestGridSessionActionsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionArtifactsRequest {
     /// <p>The maximum number of results to be returned by a request.</p>
@@ -1855,7 +1855,7 @@ pub struct ListTestGridSessionArtifactsRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionArtifactsResult {
     /// <p>A list of test grid session artifacts for a <a>TestGridSession</a>.</p>
@@ -1868,7 +1868,7 @@ pub struct ListTestGridSessionArtifactsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionsRequest {
     /// <p>Return only sessions created after this time.</p>
@@ -1904,7 +1904,7 @@ pub struct ListTestGridSessionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionsResult {
     /// <p>Pagination token.</p>
@@ -1918,7 +1918,7 @@ pub struct ListTestGridSessionsResult {
 }
 
 /// <p>Represents a request to the list tests operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestsRequest {
     /// <p>The test suite's Amazon Resource Name (ARN).</p>
@@ -1931,7 +1931,7 @@ pub struct ListTestsRequest {
 }
 
 /// <p>Represents the result of a list tests request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1945,7 +1945,7 @@ pub struct ListTestsResult {
 }
 
 /// <p>Represents a request to the list unique problems operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUniqueProblemsRequest {
     /// <p>The unique problems' ARNs.</p>
@@ -1958,7 +1958,7 @@ pub struct ListUniqueProblemsRequest {
 }
 
 /// <p>Represents the result of a list unique problems request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUniqueProblemsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1972,7 +1972,7 @@ pub struct ListUniqueProblemsResult {
 }
 
 /// <p>Represents a request to the list uploads operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUploadsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>
@@ -1989,7 +1989,7 @@ pub struct ListUploadsRequest {
 }
 
 /// <p>Represents the result of a list uploads request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUploadsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -2002,7 +2002,7 @@ pub struct ListUploadsResult {
     pub uploads: Option<Vec<Upload>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVPCEConfigurationsRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -2015,7 +2015,7 @@ pub struct ListVPCEConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVPCEConfigurationsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2029,7 +2029,7 @@ pub struct ListVPCEConfigurationsResult {
 }
 
 /// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example, 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Location {
     /// <p>The latitude.</p>
     #[serde(rename = "latitude")]
@@ -2040,7 +2040,7 @@ pub struct Location {
 }
 
 /// <p>A number that represents the monetary amount for an offering or transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MonetaryAmount {
     /// <p>The numerical amount of an offering or transaction.</p>
@@ -2054,7 +2054,7 @@ pub struct MonetaryAmount {
 }
 
 /// <p>An array of settings that describes characteristics of a network profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkProfile {
     /// <p>The Amazon Resource Name (ARN) of the network profile.</p>
@@ -2108,7 +2108,7 @@ pub struct NetworkProfile {
 }
 
 /// <p>Represents the metadata of a device offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Offering {
     /// <p>A string that describes the offering.</p>
@@ -2134,7 +2134,7 @@ pub struct Offering {
 }
 
 /// <p>Represents information about an offering promotion.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingPromotion {
     /// <p>A string that describes the offering promotion.</p>
@@ -2148,7 +2148,7 @@ pub struct OfferingPromotion {
 }
 
 /// <p>The status of the offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingStatus {
     /// <p>The date on which the offering is effective.</p>
@@ -2170,7 +2170,7 @@ pub struct OfferingStatus {
 }
 
 /// <p>Represents the metadata of an offering transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingTransaction {
     /// <p>The cost of an offering transaction.</p>
@@ -2196,7 +2196,7 @@ pub struct OfferingTransaction {
 }
 
 /// <p>Represents a specific warning or failure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Problem {
     /// <p>Information about the associated device.</p>
@@ -2230,7 +2230,7 @@ pub struct Problem {
 }
 
 /// <p>Information about a problem detail.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProblemDetail {
     /// <p>The problem detail's ARN.</p>
@@ -2244,7 +2244,7 @@ pub struct ProblemDetail {
 }
 
 /// <p>Represents an operating-system neutral workspace for running and managing tests.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Project {
     /// <p>The project's ARN.</p>
@@ -2266,7 +2266,7 @@ pub struct Project {
 }
 
 /// <p>Represents a request for a purchase offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
     /// <p>The ID of the offering.</p>
@@ -2284,7 +2284,7 @@ pub struct PurchaseOfferingRequest {
 }
 
 /// <p>The result of the purchase offering (for example, success or failure).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResult {
     /// <p>Represents the offering transaction for the purchase result.</p>
@@ -2294,7 +2294,7 @@ pub struct PurchaseOfferingResult {
 }
 
 /// <p>Represents the set of radios and their states on a device. Examples of radios include Wi-Fi, GPS, Bluetooth, and NFC.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Radios {
     /// <p>True if Bluetooth is enabled at the beginning of the test. Otherwise, false.</p>
     #[serde(rename = "bluetooth")]
@@ -2315,7 +2315,7 @@ pub struct Radios {
 }
 
 /// <p>Specifies whether charges for devices are recurring.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The cost of the recurring charge.</p>
@@ -2329,7 +2329,7 @@ pub struct RecurringCharge {
 }
 
 /// <p>Represents information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteAccessSession {
     /// <p>The Amazon Resource Name (ARN) of the remote access session.</p>
@@ -2419,7 +2419,7 @@ pub struct RemoteAccessSession {
 }
 
 /// <p>A request that represents an offering renewal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewOfferingRequest {
     /// <p>The ID of a request to renew an offering.</p>
@@ -2433,7 +2433,7 @@ pub struct RenewOfferingRequest {
 }
 
 /// <p>The result of a renewal offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenewOfferingResult {
     /// <p>Represents the status of the offering transaction for the renewal.</p>
@@ -2443,7 +2443,7 @@ pub struct RenewOfferingResult {
 }
 
 /// <p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resolution {
     /// <p>The screen resolution's height, expressed in pixels.</p>
@@ -2457,7 +2457,7 @@ pub struct Resolution {
 }
 
 /// <p>Represents a condition for a device pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
     /// <p><p>The rule&#39;s stringified attribute. For example, specify the value as <code>&quot;&quot;abc&quot;&quot;</code>.</p> <p>The supported operators for each attribute are provided in the following list.</p> <dl> <dt>APPIUM<em>VERSION</dt> <dd> <p>The Appium version for the test.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>AVAILABILITY</dt> <dd> <p>The current availability of the device. Valid values are AVAILABLE, HIGHLY<em>AVAILABLE, BUSY, or TEMPORARY</em>NOT<em>AVAILABLE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FLEET</em>TYPE</dt> <dd> <p>The fleet type. Valid values are PUBLIC or PRIVATE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FORM<em>FACTOR</dt> <dd> <p>The device form factor. Valid values are PHONE or TABLET.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>INSTANCE<em>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device instance.</p> <p>Supported operators: <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>INSTANCE<em>LABELS</dt> <dd> <p>The label of the device instance.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>MANUFACTURER</dt> <dd> <p>The device manufacturer (for example, Apple).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>MODEL</dt> <dd> <p>The device model, such as Apple iPad Air 2 or Google Pixel.</p> <p>Supported operators: <code>CONTAINS</code>, <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>OS</em>VERSION</dt> <dd> <p>The operating system version (for example, 10.3.2).</p> <p>Supported operators: <code>EQUALS</code>, <code>GREATER<em>THAN</code>, <code>GREATER</em>THAN<em>OR</em>EQUALS</code>, <code>IN</code>, <code>LESS<em>THAN</code>, <code>LESS</em>THAN<em>OR</em>EQUALS</code>, <code>NOT<em>IN</code> </p> </dd> <dt>PLATFORM</dt> <dd> <p>The device platform. Valid values are ANDROID or IOS.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>REMOTE<em>ACCESS</em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>REMOTE<em>DEBUG</em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> <p>Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </dd> </dl></p>
     #[serde(rename = "attribute")]
@@ -2474,7 +2474,7 @@ pub struct Rule {
 }
 
 /// <p>Represents a test run on a set of devices with a given app package, test parameters, and so on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Run {
     /// <p>An app to upload or that has been uploaded.</p>
@@ -2604,7 +2604,7 @@ pub struct Run {
 }
 
 /// <p>Represents a sample of performance data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Sample {
     /// <p>The sample's ARN.</p>
@@ -2622,7 +2622,7 @@ pub struct Sample {
 }
 
 /// <p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunConfiguration {
     /// <p>A list of upload ARNs for app packages to be installed with your app.</p>
@@ -2664,7 +2664,7 @@ pub struct ScheduleRunConfiguration {
 }
 
 /// <p>Represents a request to the schedule run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunRequest {
     /// <p>The ARN of an application package to run tests against, created with <a>CreateUpload</a>. See <a>ListUploads</a>.</p>
@@ -2700,7 +2700,7 @@ pub struct ScheduleRunRequest {
 }
 
 /// <p>Represents the result of a schedule run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleRunResult {
     /// <p>Information about the scheduled run.</p>
@@ -2710,7 +2710,7 @@ pub struct ScheduleRunResult {
 }
 
 /// <p>Represents test settings. This data structure is passed in as the test parameter to ScheduleRun. For an example of the JSON request syntax, see <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunTest {
     /// <p>The test's filter.</p>
@@ -2734,7 +2734,7 @@ pub struct ScheduleRunTest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm job to stop.</p>
@@ -2742,7 +2742,7 @@ pub struct StopJobRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
     /// <p>The job that was stopped.</p>
@@ -2752,7 +2752,7 @@ pub struct StopJobResult {
 }
 
 /// <p>Represents the request to stop the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session to stop.</p>
@@ -2761,7 +2761,7 @@ pub struct StopRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRemoteAccessSessionResult {
     /// <p>A container that represents the metadata from the service about the remote access session you are stopping.</p>
@@ -2771,7 +2771,7 @@ pub struct StopRemoteAccessSessionResult {
 }
 
 /// <p>Represents the request to stop a specific run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRunRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm run to stop.</p>
@@ -2780,7 +2780,7 @@ pub struct StopRunRequest {
 }
 
 /// <p>Represents the results of your stop run attempt.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRunResult {
     /// <p>The run that was stopped.</p>
@@ -2790,7 +2790,7 @@ pub struct StopRunResult {
 }
 
 /// <p>Represents a collection of one or more tests.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Suite {
     /// <p>The suite's ARN.</p>
@@ -2840,7 +2840,7 @@ pub struct Suite {
 }
 
 /// <p>The metadata that you apply to a resource to help you categorize and organize it. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that makes up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -2850,7 +2850,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources to which to add tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -2861,12 +2861,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Represents a condition that is evaluated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Test {
     /// <p>The test's ARN.</p>
@@ -2916,7 +2916,7 @@ pub struct Test {
 }
 
 /// <p>A Selenium testing project. Projects are used to collect and collate sessions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridProject {
     /// <p>The ARN for the project.</p>
@@ -2938,7 +2938,7 @@ pub struct TestGridProject {
 }
 
 /// <p>A <a>TestGridSession</a> is a single instance of a browser launched from the URL provided by a call to <a>CreateTestGridUrl</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSession {
     /// <p>The ARN of the session.</p>
@@ -2968,7 +2968,7 @@ pub struct TestGridSession {
 }
 
 /// <p>An action taken by a <a>TestGridSession</a> browser instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSessionAction {
     /// <p>The action taken by the session.</p>
@@ -2994,7 +2994,7 @@ pub struct TestGridSessionAction {
 }
 
 /// <p><p>Artifacts are video and other files that are produced in the process of running a browser in an automated context. </p> <note> <p>Video elements might be broken up into multiple artifacts as they grow in size during creation. </p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSessionArtifact {
     /// <p>The file name of the artifact.</p>
@@ -3012,7 +3012,7 @@ pub struct TestGridSessionArtifact {
 }
 
 /// <p>Represents information about free trial device minutes for an AWS account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrialMinutes {
     /// <p>The number of free trial minutes remaining in the account.</p>
@@ -3026,7 +3026,7 @@ pub struct TrialMinutes {
 }
 
 /// <p>A collection of one or more problems, grouped by their result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UniqueProblem {
     /// <p>A message about the unique problems' result.</p>
@@ -3039,7 +3039,7 @@ pub struct UniqueProblem {
     pub problems: Option<Vec<Problem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources from which to delete tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -3050,11 +3050,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
@@ -3070,7 +3070,7 @@ pub struct UpdateDeviceInstanceRequest {
     pub profile_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceInstanceResult {
     /// <p>An object that contains information about your device instance.</p>
@@ -3080,7 +3080,7 @@ pub struct UpdateDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the update device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePoolRequest {
     /// <p>The Amazon Resource Name (ARN) of the Device Farm device pool to update.</p>
@@ -3109,7 +3109,7 @@ pub struct UpdateDevicePoolRequest {
 }
 
 /// <p>Represents the result of an update device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePoolResult {
     /// <p>The device pool you just updated.</p>
@@ -3118,7 +3118,7 @@ pub struct UpdateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
@@ -3146,7 +3146,7 @@ pub struct UpdateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInstanceProfileResult {
     /// <p>An object that contains information about your instance profile.</p>
@@ -3155,7 +3155,7 @@ pub struct UpdateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to update network profile settings.</p>
@@ -3207,7 +3207,7 @@ pub struct UpdateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNetworkProfileResult {
     /// <p>A list of the available network profiles.</p>
@@ -3217,7 +3217,7 @@ pub struct UpdateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the update project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
     /// <p>The Amazon Resource Name (ARN) of the project whose name to update.</p>
@@ -3234,7 +3234,7 @@ pub struct UpdateProjectRequest {
 }
 
 /// <p>Represents the result of an update project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {
     /// <p>The project to update.</p>
@@ -3243,7 +3243,7 @@ pub struct UpdateProjectResult {
     pub project: Option<Project>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTestGridProjectRequest {
     /// <p>Human-readable description for the project.</p>
@@ -3259,7 +3259,7 @@ pub struct UpdateTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTestGridProjectResult {
     /// <p>The project, including updated information.</p>
@@ -3268,7 +3268,7 @@ pub struct UpdateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUploadRequest {
     /// <p>The Amazon Resource Name (ARN) of the uploaded test spec.</p>
@@ -3288,7 +3288,7 @@ pub struct UpdateUploadRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUploadResult {
     /// <p>A test spec uploaded to Device Farm.</p>
@@ -3297,7 +3297,7 @@ pub struct UpdateUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to update.</p>
@@ -3321,7 +3321,7 @@ pub struct UpdateVPCEConfigurationRequest {
     pub vpce_service_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -3331,7 +3331,7 @@ pub struct UpdateVPCEConfigurationResult {
 }
 
 /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Upload {
     /// <p>The upload's ARN.</p>
@@ -3377,7 +3377,7 @@ pub struct Upload {
 }
 
 /// <p>Represents an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VPCEConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration.</p>

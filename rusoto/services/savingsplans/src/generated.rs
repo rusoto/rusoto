@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSavingsPlanRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -47,7 +47,7 @@ pub struct CreateSavingsPlanRequest {
     pub upfront_payment_amount: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSavingsPlanResponse {
     /// <p>The ID of the Savings Plan.</p>
@@ -56,7 +56,7 @@ pub struct CreateSavingsPlanResponse {
     pub savings_plan_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlanRatesRequest {
     /// <p>The filters.</p>
@@ -76,7 +76,7 @@ pub struct DescribeSavingsPlanRatesRequest {
     pub savings_plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlanRatesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
@@ -93,7 +93,7 @@ pub struct DescribeSavingsPlanRatesResponse {
     pub search_results: Option<Vec<SavingsPlanRate>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansOfferingRatesRequest {
     /// <p>The filters.</p>
@@ -138,7 +138,7 @@ pub struct DescribeSavingsPlansOfferingRatesRequest {
     pub usage_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansOfferingRatesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
@@ -151,7 +151,7 @@ pub struct DescribeSavingsPlansOfferingRatesResponse {
     pub search_results: Option<Vec<SavingsPlanOfferingRate>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansOfferingsRequest {
     /// <p>The currencies.</p>
@@ -208,7 +208,7 @@ pub struct DescribeSavingsPlansOfferingsRequest {
     pub usage_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansOfferingsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
@@ -221,7 +221,7 @@ pub struct DescribeSavingsPlansOfferingsResponse {
     pub search_results: Option<Vec<SavingsPlanOffering>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSavingsPlansRequest {
     /// <p>The filters.</p>
@@ -250,7 +250,7 @@ pub struct DescribeSavingsPlansRequest {
     pub states: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSavingsPlansResponse {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
@@ -263,7 +263,7 @@ pub struct DescribeSavingsPlansResponse {
     pub savings_plans: Option<Vec<SavingsPlan>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -271,7 +271,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>Information about the tags.</p>
@@ -281,7 +281,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Information about a Savings Plan offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParentSavingsPlanOffering {
     /// <p>The currency.</p>
@@ -311,7 +311,7 @@ pub struct ParentSavingsPlanOffering {
 }
 
 /// <p>Information about a Savings Plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlan {
     /// <p>The hourly commitment, in USD.</p>
@@ -389,7 +389,7 @@ pub struct SavingsPlan {
 }
 
 /// <p>Information about a filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SavingsPlanFilter {
     /// <p>The filter name.</p>
@@ -403,7 +403,7 @@ pub struct SavingsPlanFilter {
 }
 
 /// <p>Information about a Savings Plan offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanOffering {
     /// <p>The currency.</p>
@@ -453,7 +453,7 @@ pub struct SavingsPlanOffering {
 }
 
 /// <p>Information about a filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SavingsPlanOfferingFilterElement {
     /// <p>The filter name.</p>
@@ -467,7 +467,7 @@ pub struct SavingsPlanOfferingFilterElement {
 }
 
 /// <p>Information about a property.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanOfferingProperty {
     /// <p>The property name.</p>
@@ -481,7 +481,7 @@ pub struct SavingsPlanOfferingProperty {
 }
 
 /// <p>Information about a Savings Plan offering rate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanOfferingRate {
     /// <p>The specific AWS operation for the line item in the billing report.</p>
@@ -519,7 +519,7 @@ pub struct SavingsPlanOfferingRate {
 }
 
 /// <p>Information about a filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SavingsPlanOfferingRateFilterElement {
     /// <p>The filter name.</p>
@@ -533,7 +533,7 @@ pub struct SavingsPlanOfferingRateFilterElement {
 }
 
 /// <p>Information about a property.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanOfferingRateProperty {
     /// <p>The property name.</p>
@@ -547,7 +547,7 @@ pub struct SavingsPlanOfferingRateProperty {
 }
 
 /// <p>Information about a Savings Plan rate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanRate {
     /// <p>The currency.</p>
@@ -585,7 +585,7 @@ pub struct SavingsPlanRate {
 }
 
 /// <p>Information about a filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SavingsPlanRateFilter {
     /// <p>The filter name.</p>
@@ -599,7 +599,7 @@ pub struct SavingsPlanRateFilter {
 }
 
 /// <p>Information about a property.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlanRateProperty {
     /// <p>The property name.</p>
@@ -612,7 +612,7 @@ pub struct SavingsPlanRateProperty {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -623,11 +623,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -638,7 +638,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
