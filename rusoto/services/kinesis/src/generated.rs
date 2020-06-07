@@ -19,13 +19,14 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use rusoto_core::event_stream::{DeserializeEvent, EventStream};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents the input for <code>AddTagsToStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToStreamInput {
     /// <p>The name of the stream.</p>
@@ -37,7 +38,7 @@ pub struct AddTagsToStreamInput {
 }
 
 /// <p>An object that represents the details of the consumer you registered.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Consumer {
     /// <p>When you register a consumer, Kinesis Data Streams generates an ARN for it. You need this ARN to be able to call <a>SubscribeToShard</a>.</p> <p>If you delete a consumer and then create a new one with the same name, it won't have the same ARN. That's because consumer ARNs contain the creation timestamp. This is important to keep in mind if you have IAM policies that reference consumer ARNs.</p>
@@ -55,7 +56,7 @@ pub struct Consumer {
 }
 
 /// <p>An object that represents the details of a registered consumer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConsumerDescription {
     /// <p>When you register a consumer, Kinesis Data Streams generates an ARN for it. You need this ARN to be able to call <a>SubscribeToShard</a>.</p> <p>If you delete a consumer and then create a new one with the same name, it won't have the same ARN. That's because consumer ARNs contain the creation timestamp. This is important to keep in mind if you have IAM policies that reference consumer ARNs.</p>
@@ -76,7 +77,7 @@ pub struct ConsumerDescription {
 }
 
 /// <p>Represents the input for <code>CreateStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamInput {
     /// <p>The number of shards that the stream will use. The throughput of the stream is a function of the number of shards; more shards are required for greater provisioned throughput.</p> <p>DefaultShardLimit;</p>
@@ -88,7 +89,7 @@ pub struct CreateStreamInput {
 }
 
 /// <p>Represents the input for <a>DecreaseStreamRetentionPeriod</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecreaseStreamRetentionPeriodInput {
     /// <p>The new retention period of the stream, in hours. Must be less than the current retention period.</p>
@@ -100,7 +101,7 @@ pub struct DecreaseStreamRetentionPeriodInput {
 }
 
 /// <p>Represents the input for <a>DeleteStream</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamInput {
     /// <p>If this parameter is unset (<code>null</code>) or if you set it to <code>false</code>, and the stream has registered consumers, the call to <code>DeleteStream</code> fails with a <code>ResourceInUseException</code>. </p>
@@ -112,7 +113,7 @@ pub struct DeleteStreamInput {
     pub stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterStreamConsumerInput {
     /// <p>The ARN returned by Kinesis Data Streams when you registered the consumer. If you don't know the ARN of the consumer that you want to deregister, you can use the ListStreamConsumers operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream. The description of a consumer contains its ARN.</p>
@@ -129,11 +130,11 @@ pub struct DeregisterStreamConsumerInput {
     pub stream_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLimitsInput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLimitsOutput {
     /// <p>The number of open shards.</p>
@@ -144,7 +145,7 @@ pub struct DescribeLimitsOutput {
     pub shard_limit: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamConsumerInput {
     /// <p>The ARN returned by Kinesis Data Streams when you registered the consumer.</p>
@@ -161,7 +162,7 @@ pub struct DescribeStreamConsumerInput {
     pub stream_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamConsumerOutput {
     /// <p>An object that represents the details of the consumer.</p>
@@ -170,7 +171,7 @@ pub struct DescribeStreamConsumerOutput {
 }
 
 /// <p>Represents the input for <code>DescribeStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamInput {
     /// <p>The shard ID of the shard to start with.</p>
@@ -187,7 +188,7 @@ pub struct DescribeStreamInput {
 }
 
 /// <p>Represents the output for <code>DescribeStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
     /// <p>The current status of the stream, the stream Amazon Resource Name (ARN), an array of shard objects that comprise the stream, and whether there are more shards available.</p>
@@ -195,7 +196,7 @@ pub struct DescribeStreamOutput {
     pub stream_description: StreamDescription,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStreamSummaryInput {
     /// <p>The name of the stream to describe.</p>
@@ -203,7 +204,7 @@ pub struct DescribeStreamSummaryInput {
     pub stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamSummaryOutput {
     /// <p>A <a>StreamDescriptionSummary</a> containing information about the stream.</p>
@@ -212,7 +213,7 @@ pub struct DescribeStreamSummaryOutput {
 }
 
 /// <p>Represents the input for <a>DisableEnhancedMonitoring</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableEnhancedMonitoringInput {
     /// <p>List of shard-level metrics to disable.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" disables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
@@ -224,7 +225,7 @@ pub struct DisableEnhancedMonitoringInput {
 }
 
 /// <p>Represents the input for <a>EnableEnhancedMonitoring</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableEnhancedMonitoringInput {
     /// <p>List of shard-level metrics to enable.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" enables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
@@ -236,7 +237,7 @@ pub struct EnableEnhancedMonitoringInput {
 }
 
 /// <p>Represents enhanced metrics types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnhancedMetrics {
     /// <p>List of shard-level metrics.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" enhances every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
@@ -246,7 +247,7 @@ pub struct EnhancedMetrics {
 }
 
 /// <p>Represents the output for <a>EnableEnhancedMonitoring</a> and <a>DisableEnhancedMonitoring</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnhancedMonitoringOutput {
     /// <p>Represents the current state of the metrics that are in the enhanced state before the operation.</p>
@@ -264,20 +265,20 @@ pub struct EnhancedMonitoringOutput {
 }
 
 /// <p>The provided iterator exceeds the maximum age allowed.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExpiredIteratorException {
     /// <p>A message that provides information about the error.</p>
     pub message: Option<String>,
 }
 
 /// <p>The pagination token passed to the operation is expired.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExpiredNextTokenException {
     pub message: Option<String>,
 }
 
 /// <p>Represents the input for <a>GetRecords</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecordsInput {
     /// <p>The maximum number of records to return. Specify a value of up to 10,000. If you specify a value that is greater than 10,000, <a>GetRecords</a> throws <code>InvalidArgumentException</code>.</p>
@@ -290,7 +291,7 @@ pub struct GetRecordsInput {
 }
 
 /// <p>Represents the output for <a>GetRecords</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecordsOutput {
     /// <p>The number of milliseconds the <a>GetRecords</a> response is from the tip of the stream, indicating how far behind current time the consumer is. A value of zero indicates that record processing is caught up, and there are no new records to process at this moment.</p>
@@ -307,7 +308,7 @@ pub struct GetRecordsOutput {
 }
 
 /// <p>Represents the input for <code>GetShardIterator</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShardIteratorInput {
     /// <p>The shard ID of the Kinesis Data Streams shard to get the iterator for.</p>
@@ -330,7 +331,7 @@ pub struct GetShardIteratorInput {
 }
 
 /// <p>Represents the output for <code>GetShardIterator</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetShardIteratorOutput {
     /// <p>The position in the shard from which to start reading data records sequentially. A shard iterator specifies this position using the sequence number of a data record in a shard.</p>
@@ -340,7 +341,7 @@ pub struct GetShardIteratorOutput {
 }
 
 /// <p>The range of possible hash key values for the shard, which is a set of ordered contiguous positive integers.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HashKeyRange {
     /// <p>The ending hash key of the hash key range.</p>
@@ -352,7 +353,7 @@ pub struct HashKeyRange {
 }
 
 /// <p>Represents the input for <a>IncreaseStreamRetentionPeriod</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IncreaseStreamRetentionPeriodInput {
     /// <p>The new retention period of the stream, in hours. Must be more than the current retention period.</p>
@@ -363,7 +364,7 @@ pub struct IncreaseStreamRetentionPeriodInput {
     pub stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InternalFailureException {
     #[serde(rename = "message")]
@@ -372,14 +373,14 @@ pub struct InternalFailureException {
 }
 
 /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct InvalidArgumentException {
     /// <p>A message that provides information about the error.</p>
     pub message: Option<String>,
 }
 
 /// <p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSAccessDeniedException {
     /// <p>A message that provides information about the error.</p>
@@ -389,7 +390,7 @@ pub struct KMSAccessDeniedException {
 }
 
 /// <p>The request was rejected because the specified customer master key (CMK) isn't enabled.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSDisabledException {
     /// <p>A message that provides information about the error.</p>
@@ -399,7 +400,7 @@ pub struct KMSDisabledException {
 }
 
 /// <p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSInvalidStateException {
     /// <p>A message that provides information about the error.</p>
@@ -409,7 +410,7 @@ pub struct KMSInvalidStateException {
 }
 
 /// <p>The request was rejected because the specified entity or resource can't be found.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSNotFoundException {
     /// <p>A message that provides information about the error.</p>
@@ -419,7 +420,7 @@ pub struct KMSNotFoundException {
 }
 
 /// <p>The AWS access key ID needs a subscription for the service.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSOptInRequired {
     /// <p>A message that provides information about the error.</p>
@@ -429,7 +430,7 @@ pub struct KMSOptInRequired {
 }
 
 /// <p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KMSThrottlingException {
     /// <p>A message that provides information about the error.</p>
@@ -439,13 +440,13 @@ pub struct KMSThrottlingException {
 }
 
 /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct LimitExceededException {
     /// <p>A message that provides information about the error.</p>
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListShardsInput {
     /// <p>Specify this parameter to indicate that you want to list the shards starting with the shard whose ID immediately follows <code>ExclusiveStartShardId</code>.</p> <p>If you don't specify this parameter, the default behavior is for <code>ListShards</code> to list the shards starting with the first one in the stream.</p> <p>You cannot specify this parameter if you specify <code>NextToken</code>.</p>
@@ -470,7 +471,7 @@ pub struct ListShardsInput {
     pub stream_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListShardsOutput {
     /// <p><p>When the number of shards in the data stream is greater than the default value for the <code>MaxResults</code> parameter, or if you explicitly specify a value for <code>MaxResults</code> that is less than the number of shards in the data stream, the response includes a pagination token named <code>NextToken</code>. You can specify this <code>NextToken</code> value in a subsequent call to <code>ListShards</code> to list the next set of shards. For more information about the use of this pagination token when calling the <code>ListShards</code> operation, see <a>ListShardsInput$NextToken</a>.</p> <important> <p>Tokens expire after 300 seconds. When you obtain a value for <code>NextToken</code> in the response to a call to <code>ListShards</code>, you have 300 seconds to use that value. If you specify an expired token in a call to <code>ListShards</code>, you get <code>ExpiredNextTokenException</code>.</p> </important></p>
@@ -483,7 +484,7 @@ pub struct ListShardsOutput {
     pub shards: Option<Vec<Shard>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamConsumersInput {
     /// <p>The maximum number of consumers that you want a single call of <code>ListStreamConsumers</code> to return.</p>
@@ -503,7 +504,7 @@ pub struct ListStreamConsumersInput {
     pub stream_creation_timestamp: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamConsumersOutput {
     /// <p>An array of JSON objects. Each object represents one registered consumer.</p>
@@ -517,7 +518,7 @@ pub struct ListStreamConsumersOutput {
 }
 
 /// <p>Represents the input for <code>ListStreams</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamsInput {
     /// <p>The name of the stream to start the list with.</p>
@@ -531,7 +532,7 @@ pub struct ListStreamsInput {
 }
 
 /// <p>Represents the output for <code>ListStreams</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
     /// <p>If set to <code>true</code>, there are more streams available to list.</p>
@@ -543,7 +544,7 @@ pub struct ListStreamsOutput {
 }
 
 /// <p>Represents the input for <code>ListTagsForStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForStreamInput {
     /// <p>The key to use as the starting point for the list of tags. If this parameter is set, <code>ListTagsForStream</code> gets all tags that occur after <code>ExclusiveStartTagKey</code>. </p>
@@ -560,7 +561,7 @@ pub struct ListTagsForStreamInput {
 }
 
 /// <p>Represents the output for <code>ListTagsForStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForStreamOutput {
     /// <p>If set to <code>true</code>, more tags are available. To request additional tags, set <code>ExclusiveStartTagKey</code> to the key of the last tag returned.</p>
@@ -572,7 +573,7 @@ pub struct ListTagsForStreamOutput {
 }
 
 /// <p>Represents the input for <code>MergeShards</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeShardsInput {
     /// <p>The shard ID of the adjacent shard for the merge.</p>
@@ -587,14 +588,14 @@ pub struct MergeShardsInput {
 }
 
 /// <p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ProvisionedThroughputExceededException {
     /// <p>A message that provides information about the error.</p>
     pub message: Option<String>,
 }
 
 /// <p>Represents the input for <code>PutRecord</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordInput {
     /// <p>The data blob to put into the record, which is base64-encoded when the blob is serialized. When the data blob (the payload before base64-encoding) is added to the partition key size, the total size must not exceed the maximum record size (1 MB).</p>
@@ -622,7 +623,7 @@ pub struct PutRecordInput {
 }
 
 /// <p>Represents the output for <code>PutRecord</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordOutput {
     /// <p><p>The encryption type to use on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
@@ -638,7 +639,7 @@ pub struct PutRecordOutput {
 }
 
 /// <p>A <code>PutRecords</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordsInput {
     /// <p>The records associated with the request.</p>
@@ -650,7 +651,7 @@ pub struct PutRecordsInput {
 }
 
 /// <p> <code>PutRecords</code> results.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordsOutput {
     /// <p><p>The encryption type used on the records. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records using a customer-managed AWS KMS key.</p> </li> </ul></p>
@@ -667,7 +668,7 @@ pub struct PutRecordsOutput {
 }
 
 /// <p>Represents the output for <code>PutRecords</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecordsRequestEntry {
     /// <p>The data blob to put into the record, which is base64-encoded when the blob is serialized. When the data blob (the payload before base64-encoding) is added to the partition key size, the total size must not exceed the maximum record size (1 MB).</p>
@@ -688,7 +689,7 @@ pub struct PutRecordsRequestEntry {
 }
 
 /// <p>Represents the result of an individual record from a <code>PutRecords</code> request. A record that is successfully added to a stream includes <code>SequenceNumber</code> and <code>ShardId</code> in the result. A record that fails to be added to the stream includes <code>ErrorCode</code> and <code>ErrorMessage</code> in the result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRecordsResultEntry {
     /// <p>The error code for an individual record result. <code>ErrorCodes</code> can be either <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>.</p>
@@ -710,7 +711,7 @@ pub struct PutRecordsResultEntry {
 }
 
 /// <p>The unit of data of the Kinesis data stream, which is composed of a sequence number, a partition key, and a data blob.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Record {
     /// <p>The approximate time that the record was inserted into the stream.</p>
@@ -737,7 +738,7 @@ pub struct Record {
     pub sequence_number: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterStreamConsumerInput {
     /// <p>For a given Kinesis data stream, each consumer must have a unique name. However, consumer names don't have to be unique across data streams.</p>
@@ -748,7 +749,7 @@ pub struct RegisterStreamConsumerInput {
     pub stream_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterStreamConsumerOutput {
     /// <p>An object that represents the details of the consumer you registered. When you register a consumer, it gets an ARN that is generated by Kinesis Data Streams.</p>
@@ -757,7 +758,7 @@ pub struct RegisterStreamConsumerOutput {
 }
 
 /// <p>Represents the input for <code>RemoveTagsFromStream</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromStreamInput {
     /// <p>The name of the stream.</p>
@@ -769,7 +770,7 @@ pub struct RemoveTagsFromStreamInput {
 }
 
 /// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceInUseException {
     /// <p>A message that provides information about the error.</p>
@@ -779,7 +780,7 @@ pub struct ResourceInUseException {
 }
 
 /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceNotFoundException {
     /// <p>A message that provides information about the error.</p>
@@ -789,7 +790,7 @@ pub struct ResourceNotFoundException {
 }
 
 /// <p>The range of possible sequence numbers for the shard.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SequenceNumberRange {
     /// <p>The ending sequence number for the range. Shards that are in the OPEN state have an ending sequence number of <code>null</code>.</p>
@@ -802,7 +803,7 @@ pub struct SequenceNumberRange {
 }
 
 /// <p>A uniquely identified group of data records in a Kinesis data stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Shard {
     /// <p>The shard ID of the shard adjacent to the shard's parent.</p>
@@ -825,7 +826,7 @@ pub struct Shard {
 }
 
 /// <p>Represents the input for <code>SplitShard</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SplitShardInput {
     /// <p>A hash key value for the starting hash key of one of the child shards created by the split. The hash key range for a given shard constitutes a set of ordered contiguous positive integers. The value for <code>NewStartingHashKey</code> must be in the range of hash keys being mapped into the shard. The <code>NewStartingHashKey</code> hash key value and all higher hash key values in hash key range are distributed to one of the child shards. All the lower hash key values in the range are distributed to the other child shard.</p>
@@ -839,7 +840,7 @@ pub struct SplitShardInput {
     pub stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStreamEncryptionInput {
     /// <p>The encryption type to use. The only valid value is <code>KMS</code>.</p>
@@ -853,7 +854,7 @@ pub struct StartStreamEncryptionInput {
     pub stream_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartingPosition {
     #[serde(rename = "SequenceNumber")]
@@ -866,7 +867,7 @@ pub struct StartingPosition {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopStreamEncryptionInput {
     /// <p>The encryption type. The only valid value is <code>KMS</code>.</p>
@@ -881,7 +882,7 @@ pub struct StopStreamEncryptionInput {
 }
 
 /// <p>Represents the output for <a>DescribeStream</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamDescription {
     /// <p><p>The server-side encryption type used on the stream. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
@@ -919,7 +920,7 @@ pub struct StreamDescription {
 }
 
 /// <p>Represents the output for <a>DescribeStreamSummary</a> </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamDescriptionSummary {
     /// <p>The number of enhanced fan-out consumers registered with the stream.</p>
@@ -958,7 +959,7 @@ pub struct StreamDescriptionSummary {
 }
 
 /// <p>After you call <a>SubscribeToShard</a>, Kinesis Data Streams sends events of this type to your consumer. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscribeToShardEvent {
     /// <p>Use this as <code>StartingSequenceNumber</code> in the next call to <a>SubscribeToShard</a>.</p>
@@ -972,41 +973,73 @@ pub struct SubscribeToShardEvent {
     pub records: Vec<Record>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct SubscribeToShardEventStream {
-    #[serde(rename = "InternalFailureException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub internal_failure_exception: Option<InternalFailureException>,
-    #[serde(rename = "KMSAccessDeniedException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_access_denied_exception: Option<KMSAccessDeniedException>,
-    #[serde(rename = "KMSDisabledException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_disabled_exception: Option<KMSDisabledException>,
-    #[serde(rename = "KMSInvalidStateException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_invalid_state_exception: Option<KMSInvalidStateException>,
-    #[serde(rename = "KMSNotFoundException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_not_found_exception: Option<KMSNotFoundException>,
-    #[serde(rename = "KMSOptInRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_opt_in_required: Option<KMSOptInRequired>,
-    #[serde(rename = "KMSThrottlingException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kms_throttling_exception: Option<KMSThrottlingException>,
-    #[serde(rename = "ResourceInUseException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_in_use_exception: Option<ResourceInUseException>,
-    #[serde(rename = "ResourceNotFoundException")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_not_found_exception: Option<ResourceNotFoundException>,
-    #[serde(rename = "SubscribeToShardEvent")]
-    pub subscribe_to_shard_event: SubscribeToShardEvent,
+#[derive(Debug, Clone, PartialEq)]
+pub enum SubscribeToShardEventStreamItem {
+    InternalFailureException(InternalFailureException),
+    KMSAccessDeniedException(KMSAccessDeniedException),
+    KMSDisabledException(KMSDisabledException),
+    KMSInvalidStateException(KMSInvalidStateException),
+    KMSNotFoundException(KMSNotFoundException),
+    KMSOptInRequired(KMSOptInRequired),
+    KMSThrottlingException(KMSThrottlingException),
+    ResourceInUseException(ResourceInUseException),
+    ResourceNotFoundException(ResourceNotFoundException),
+    SubscribeToShardEvent(SubscribeToShardEvent),
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+impl DeserializeEvent for SubscribeToShardEventStreamItem {
+    fn deserialize_event(event_type: &str, data: &[u8]) -> Result<Self, RusotoError<()>> {
+        let deserializer = &mut serde_json::Deserializer::from_slice(data);
+
+        let deserialized = match event_type {
+            "InternalFailureException" => {
+                SubscribeToShardEventStreamItem::InternalFailureException(
+                    InternalFailureException::deserialize(deserializer)?,
+                )
+            }
+            "KMSAccessDeniedException" => {
+                SubscribeToShardEventStreamItem::KMSAccessDeniedException(
+                    KMSAccessDeniedException::deserialize(deserializer)?,
+                )
+            }
+            "KMSDisabledException" => SubscribeToShardEventStreamItem::KMSDisabledException(
+                KMSDisabledException::deserialize(deserializer)?,
+            ),
+            "KMSInvalidStateException" => {
+                SubscribeToShardEventStreamItem::KMSInvalidStateException(
+                    KMSInvalidStateException::deserialize(deserializer)?,
+                )
+            }
+            "KMSNotFoundException" => SubscribeToShardEventStreamItem::KMSNotFoundException(
+                KMSNotFoundException::deserialize(deserializer)?,
+            ),
+            "KMSOptInRequired" => SubscribeToShardEventStreamItem::KMSOptInRequired(
+                KMSOptInRequired::deserialize(deserializer)?,
+            ),
+            "KMSThrottlingException" => SubscribeToShardEventStreamItem::KMSThrottlingException(
+                KMSThrottlingException::deserialize(deserializer)?,
+            ),
+            "ResourceInUseException" => SubscribeToShardEventStreamItem::ResourceInUseException(
+                ResourceInUseException::deserialize(deserializer)?,
+            ),
+            "ResourceNotFoundException" => {
+                SubscribeToShardEventStreamItem::ResourceNotFoundException(
+                    ResourceNotFoundException::deserialize(deserializer)?,
+                )
+            }
+            "SubscribeToShardEvent" => SubscribeToShardEventStreamItem::SubscribeToShardEvent(
+                SubscribeToShardEvent::deserialize(deserializer)?,
+            ),
+            _ => Err(RusotoError::ParseError(format!(
+                "Invalid event type: {}",
+                event_type
+            )))?,
+        };
+        Ok(deserialized)
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToShardInput {
     /// <p>For this parameter, use the value you obtained when you called <a>RegisterStreamConsumer</a>.</p>
@@ -1019,16 +1052,14 @@ pub struct SubscribeToShardInput {
     pub starting_position: StartingPosition,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[derive(Debug)]
 pub struct SubscribeToShardOutput {
     /// <p>The event stream that your consumer can use to read records from the shard.</p>
-    #[serde(rename = "EventStream")]
-    pub event_stream: SubscribeToShardEventStream,
+    pub event_stream: EventStream<SubscribeToShardEventStreamItem>,
 }
 
 /// <p>Metadata assigned to the stream, consisting of a key-value pair.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tag {
     /// <p>A unique identifier for the tag. Maximum length: 128 characters. Valid characters: Unicode letters, digits, white space, _ . / = + - % @</p>
@@ -1040,7 +1071,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateShardCountInput {
     /// <p>The scaling type. Uniform scaling creates shards of equal size.</p>
@@ -1054,7 +1085,7 @@ pub struct UpdateShardCountInput {
     pub target_shard_count: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateShardCountOutput {
     /// <p>The current number of shards.</p>
@@ -3499,8 +3530,9 @@ impl Kinesis for KinesisClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SubscribeToShardOutput, _>()
+            Ok(SubscribeToShardOutput {
+                event_stream: EventStream::new(response),
+            })
         } else {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
