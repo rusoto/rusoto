@@ -269,7 +269,12 @@ impl<T: DeserializeEvent + Unpin> EventStream<T> {
 
             let event_type_header = event_msg
                 .get_header(":event-type")
-                .ok_or_else(|| RusotoError::ParseError("Expected event-type header".to_string()))?;
+                .or_else(|| event_msg.get_header(":exception-type"))
+                .ok_or_else(|| {
+                    RusotoError::ParseError(
+                        "Expected event-type or exception-type header".to_string(),
+                    )
+                })?;
             let event_type: &str = match event_type_header.value {
                 EventStreamHeaderValue::String(s) => s,
                 _ => {
