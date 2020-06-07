@@ -28,6 +28,7 @@ rustc_version = "0.2"
 [dependencies]
 async-trait = "0.1"
 bytes = "0.5"
+crc32fast = "1.2"
 futures = "0.3"
 hmac = "0.7"
 http = "0.2"

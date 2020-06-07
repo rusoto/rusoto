@@ -114,6 +114,10 @@ impl<'b> Service<'b> {
         }
     }
 
+    pub fn has_event_streams(&self) -> bool {
+        self.shapes().values().into_iter().any(|s| s.eventstream())
+    }
+
     pub fn get_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {
         let mut dependencies = BTreeMap::new();
 
