@@ -39,9 +39,7 @@ impl GenerateProtocol for JsonGenerator {
                      "
                 {documentation}
                 {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\");
-                    {modify_endpoint_prefix}
-                    request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
+                    let mut request = self.new_signed_request(\"{http_method}\", \"{request_uri}\");
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
@@ -49,8 +47,7 @@ impl GenerateProtocol for JsonGenerator {
                     if response.status.is_success() {{
                         {ok_response}
                     }} else {{
-                        let try_response = response.buffer().await;
-                        let response = try_response.map_err(RusotoError::HttpDispatch)?;
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                         Err({error_type}::from_response(response))
                     }}
                 }}
@@ -58,15 +55,11 @@ impl GenerateProtocol for JsonGenerator {
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                      method_signature = generate_method_signature(service, operation),
                      payload = generate_payload(service, operation),
-                     signing_name = service.signing_name(),
-                     modify_endpoint_prefix = generate_endpoint_modification(service)
-                         .unwrap_or_else(|| "".to_owned()),
                      http_method = operation.http.method,
                      name = operation.name,
                      ok_response = generate_ok_response(operation, output_type),
                      request_uri = operation.http.request_uri,
-                     target_prefix = service.target_prefix().unwrap(),
-                     json_version = service.json_version().unwrap(),
+                    target_prefix = service.target_prefix().unwrap(),
                      error_type = error_type_name(service, operation_name),
                      output_type = output_type)?;
         }
@@ -74,17 +67,40 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
-        let res = writeln!(
+        writeln!(
             writer,
             "use rusoto_core::proto;
         use rusoto_core::signature::SignedRequest;
         #[allow(unused_imports)]
         use serde::{{Deserialize, Serialize}};"
-        );
+        )?;
+
+        writeln!(
+            writer,
+            "
+            impl {type_name} {{
+                fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {{
+                    let mut request = SignedRequest::new(http_method, \"{signing_name}\", &self.region, request_uri);
+                    {modify_endpoint_prefix}
+
+                    request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
+
+                    request
+                }}
+            }}
+            ",
+            type_name = service.client_type_name(),
+            signing_name = service.signing_name(),
+            modify_endpoint_prefix =
+                generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
+            json_version = service.json_version().unwrap(),
+        )?;
+
         if service.needs_serde_json_crate() {
-            return writeln!(writer, "use serde_json;");
+            writeln!(writer, "use serde_json;")?;
         }
-        res
+
+        Ok(())
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {

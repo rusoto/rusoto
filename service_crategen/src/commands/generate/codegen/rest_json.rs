@@ -113,17 +113,19 @@ impl GenerateProtocol for RestJsonGenerator {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
 
-        let res = writeln!(
+        writeln!(
             writer,
             "use rusoto_core::signature::SignedRequest;
                   use rusoto_core::proto;
                   #[allow(unused_imports)]
                   use serde::{{Deserialize, Serialize}};"
-        );
+        )?;
+
         if service.needs_serde_json_crate() {
-            return writeln!(writer, "use serde_json;");
+            writeln!(writer, "use serde_json;")?;
         }
-        res
+
+        Ok(())
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {

@@ -39,10 +39,7 @@ impl GenerateProtocol for QueryGenerator {
                 {documentation}
                 {method_signature} {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, \"{request_uri}\");
-                    let mut params = Params::new();
-
-                    params.put(\"Action\", \"{operation_name}\");
-                    params.put(\"Version\", \"{api_version}\");
+                    let params = self.new_params(\"{operation_name}\");
                     {serialize_input}
                     {set_input_params}
 
@@ -55,7 +52,6 @@ impl GenerateProtocol for QueryGenerator {
                     {parse_payload}
                 }}
                 ",
-                     api_version = service.api_version(),
                      documentation = generate_documentation(operation),
                      error_type = error_type_name(service, operation_name),
                      http_method = &operation.http.method,
@@ -71,7 +67,7 @@ impl GenerateProtocol for QueryGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         writeln!(writer,
                  "use std::str::FromStr;
             use xml::EventReader;
@@ -86,7 +82,25 @@ impl GenerateProtocol for QueryGenerator {
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
             use serde::Deserialize;
-            ")
+            ")?;
+
+        writeln!(
+            writer,
+            "
+            impl {type_name} {{
+                fn new_params(&self, operation_name: &str) -> Params {{
+                    let mut params = Params::new();
+
+                    params.put(\"Action\", operation_name);
+                    params.put(\"Version\", \"{api_version}\");
+
+                    params
+                }}
+            }}
+            ",
+            type_name = service.client_type_name(),
+            api_version = service.api_version(),
+        )
     }
 
     fn generate_serializer(
@@ -136,7 +150,8 @@ impl GenerateProtocol for QueryGenerator {
 pub fn generate_method_input_serialization(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "{input_type}Serializer::serialize(&mut params, \"\", &input);",
+            "let mut params = params;
+            {input_type}Serializer::serialize(&mut params, \"\", &input);",
             input_type = operation.input.as_ref().unwrap().shape,
         )
     } else {
