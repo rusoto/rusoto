@@ -212,12 +212,6 @@ pub fn find_start_element<T: Peek + Next>(stack: &mut T) {
     }
 }
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
-
 pub fn deserialize_elements<T, S, F>(
     tag_name: &str,
     stack: &mut T,
@@ -233,20 +227,13 @@ where
     start_element(tag_name, stack)?;
 
     loop {
-        let next_event = match stack.peek() {
-            Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+        match stack.peek() {
+            Some(&Ok(XmlEvent::EndElement { .. })) => break,
             Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                DeserializerNext::Element(name.local_name.to_owned())
+                let local_name = name.local_name.to_owned();
+                handle_element(&local_name, stack, &mut obj)?;
             }
-            _ => DeserializerNext::Skip,
-        };
-
-        match next_event {
-            DeserializerNext::Element(name) => {
-                handle_element(&name[..], stack, &mut obj)?;
-            }
-            DeserializerNext::Close => break,
-            DeserializerNext::Skip => {
+            _ => {
                 stack.next();
             }
         }
