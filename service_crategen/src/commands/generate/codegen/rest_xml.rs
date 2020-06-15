@@ -51,7 +51,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        let response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
+                        let mut response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
 
                         {parse_response_body}
                     }}
