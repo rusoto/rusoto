@@ -246,6 +246,12 @@ impl SignedRequest {
         }
     }
 
+    pub fn add_optional_header<K: ToString, V: ToString>(&mut self, key: K, value: Option<V>) {
+        if let Some(ref value) = value {
+            self.add_header(key, &value.to_string());
+        }
+    }
+
     /// Adds parameter to the HTTP Request
     pub fn add_param<S>(&mut self, key: S, value: S)
     where
@@ -604,11 +610,7 @@ fn sign_string(
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(
-    date: OffsetDateTime,
-    hashed_canonical_request: &str,
-    scope: &str,
-) -> String {
+pub fn string_to_sign(date: OffsetDateTime, hashed_canonical_request: &str, scope: &str) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
         date.format("%Y%m%dT%H%M%SZ"),
