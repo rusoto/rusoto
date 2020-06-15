@@ -95,7 +95,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use xml::EventWriter;
             use rusoto_core::proto::xml::error::*;
             use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::proto::xml::util::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements};
+            use rusoto_core::proto::xml::util::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements, write_characters_element};
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
@@ -314,11 +314,10 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
         ShapeType::Blob => "String::from_utf8(obj.to_vec()).expect(\"Not a UTF-8 string\")",
         _ => "obj.to_string()",
     };
-    format!("
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value = {value_str})))?;
-        writer.write(xml::writer::XmlEvent::end_element())
-        ", value_str = value_str)
+    format!(
+        "write_characters_element(writer, name, &{value_str})",
+        value_str = value_str
+    )
 }
 
 fn generate_list_serializer(shape: &Shape, service: &Service<'_>) -> String {
@@ -403,18 +402,14 @@ fn generate_primitive_struct_field_serializer(
 ) -> String {
     if shape.required(member_name) {
         format!(
-        "writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=obj.{field_name})))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;",
-        field_name = generate_field_name(member_name),
-        location_name = location_name,
-    )
+            "write_characters_element(writer, \"{location_name}\", &obj.{field_name}.to_string())?;",
+            field_name = generate_field_name(member_name),
+            location_name = location_name,
+        )
     } else {
         format!(
             "if let Some(ref value) = obj.{field_name} {{
-                writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
-                writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=value)));
-                writer.write(xml::writer::XmlEvent::end_element())?;
+                write_characters_element(writer, \"{location_name}\", &value.to_string())?;
             }}",
             field_name = generate_field_name(member_name),
             location_name = location_name,
