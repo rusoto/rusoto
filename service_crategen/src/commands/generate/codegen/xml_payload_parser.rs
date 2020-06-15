@@ -165,10 +165,10 @@ fn xml_body_parser(
         let deserialize = match *result_wrapper {
             Some(ref tag_name) => format!(
                 "|actual_tag_name, stack| {{
-                     start_element(actual_tag_name, stack)?;
+                     xml_util::start_element(actual_tag_name, stack)?;
                      let result = {output_shape}Deserializer::deserialize(\"{tag_name}\", stack)?;
                      skip_tree(stack);
-                     end_element(actual_tag_name, stack)?;
+                     xml_util::end_element(actual_tag_name, stack)?;
                      Ok(result)
                 }}",
                 output_shape = output_shape,
@@ -334,11 +334,11 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         let mut obj = ::std::collections::HashMap::new();
 
         while xml_util::peek_at_name(stack)? == {entry_location} {{
-            start_element({entry_location}, stack)?;
+            xml_util::start_element({entry_location}, stack)?;
             let key = {key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack)?;
             let value = {value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack)?;
             obj.insert(key, value);
-            end_element({entry_location}, stack)?;
+            xml_util::end_element({entry_location}, stack)?;
         }}
         ",
         key_tag_name = key.tag_name(),
@@ -357,10 +357,10 @@ fn generate_map_deserializer(shape: &Shape) -> String {
             entries_parser = entries_parser
         ),
         _ => format!(
-            "start_element(tag_name, stack)?;
-                    {entries_parser}
-                    end_element(tag_name, stack)?;
-                    Ok(obj)
+            "xml_util::start_element(tag_name, stack)?;
+            {entries_parser}
+            xml_util::end_element(tag_name, stack)?;
+            Ok(obj)
                     ",
             entries_parser = entries_parser
         ),
@@ -368,29 +368,20 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 }
 
 fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> String {
-    let statement = match shape.shape_type {
-        ShapeType::String if percent_decode => {
-            "rusoto_core::signature::decode_uri(&characters(stack)?)"
-        }
-        ShapeType::String | ShapeType::Timestamp => "characters(stack)?",
-        ShapeType::Integer | ShapeType::Long => {
-            "i64::from_str(characters(stack)?.as_ref()).unwrap()"
-        }
-        ShapeType::Double => "f64::from_str(characters(stack)?.as_ref()).unwrap()",
-        ShapeType::Float => "f32::from_str(characters(stack)?.as_ref()).unwrap()",
-        ShapeType::Blob => "characters(stack)?.into()",
-        ShapeType::Boolean => "bool::from_str(characters(stack)?.as_ref()).unwrap()",
+    let deserialize = match shape.shape_type {
+        ShapeType::String if percent_decode => "|s| Ok(rusoto_core::signature::decode_uri(&s))",
+        ShapeType::String | ShapeType::Timestamp => "Ok",
+        ShapeType::Integer | ShapeType::Long => "|s| Ok(i64::from_str(&s).unwrap())",
+        ShapeType::Double => "|s| Ok(f64::from_str(&s).unwrap())",
+        ShapeType::Float => "|s| Ok(f32::from_str(&s).unwrap())",
+        ShapeType::Blob => "|s| Ok(s.into())",
+        ShapeType::Boolean => "|s| Ok(bool::from_str(&s).unwrap())",
         _ => panic!("Unknown primitive shape type"),
     };
 
     format!(
-        "start_element(tag_name, stack)?;
-        let obj = {statement};
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-        ",
-        statement = statement,
+        "xml_util::deserialize_primitive(tag_name, stack, {deserialize})",
+        deserialize = deserialize,
     )
 }
 
@@ -435,11 +426,11 @@ fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape
 
     if !needs_xml_deserializer || shape.members.as_ref().unwrap().is_empty() {
         return format!(
-            "start_element(tag_name, stack)?;
+            "xml_util::start_element(tag_name, stack)?;
 
             let obj = {name}::default();
 
-            end_element(tag_name, stack)?;
+            xml_util::end_element(tag_name, stack)?;
 
             Ok(obj)
             ",

@@ -97,6 +97,18 @@ where
     writer.write(xml::writer::XmlEvent::end_element())
 }
 
+pub fn deserialize_primitive<T: Peek + Next, U>(
+    tag_name: &str,
+    stack: &mut T,
+    deserialize: fn(String) -> Result<U, XmlParseError>,
+) -> Result<U, XmlParseError> {
+    start_element(tag_name, stack)?;
+    let obj = deserialize(characters(stack)?)?;
+    end_element(tag_name, stack)?;
+
+    Ok(obj)
+}
+
 /// return some XML Characters
 pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError> {
     {

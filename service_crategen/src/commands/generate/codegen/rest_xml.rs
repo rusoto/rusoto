@@ -91,7 +91,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use rusoto_core::request::HttpResponse;
             use rusoto_core::proto::xml::error::*;
             use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::proto::xml::util::{self as xml_util, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements, write_characters_element};
+            use rusoto_core::proto::xml::util::{self as xml_util, find_start_element, skip_tree, deserialize_elements, write_characters_element};
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
@@ -327,11 +327,11 @@ fn generate_serializer_signature(name: &str) -> String {
 
 fn generate_primitive_serializer(shape: &Shape) -> String {
     let value_str = match shape.shape_type {
-        ShapeType::Blob => "String::from_utf8(obj.to_vec()).expect(\"Not a UTF-8 string\")",
-        _ => "obj.to_string()",
+        ShapeType::Blob => "std::str::from_utf8(obj).expect(\"Not a UTF-8 string\")",
+        _ => "&obj.to_string()",
     };
     format!(
-        "write_characters_element(writer, name, &{value_str})",
+        "write_characters_element(writer, name, {value_str})",
         value_str = value_str
     )
 }
