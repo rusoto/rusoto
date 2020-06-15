@@ -114,8 +114,7 @@ fn parse_single_header(
         )
     } else {
         format!(
-            "if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
-                    let value = {field_name}.to_owned();
+            "if let Some(value) = response.headers.get(\"{location_name}\") {{
                     result.{field_name} = Some({primitive_parser})
                   }};",
             location_name = member.location_name.as_ref().unwrap(),
@@ -127,7 +126,7 @@ fn parse_single_header(
 
 fn generate_header_primitive_parser(shape: &Shape) -> String {
     let statement = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => "value",
+        ShapeType::String | ShapeType::Timestamp => "value.to_owned()",
         ShapeType::Double => "value.parse::<f64>().unwrap()",
         ShapeType::Integer | ShapeType::Long => "value.parse::<i64>().unwrap()",
         ShapeType::Float => "value.parse::<f32>().unwrap()",
