@@ -67,12 +67,11 @@ impl GenerateProtocol for QueryGenerator {
         writeln!(writer,
                  "use std::str::FromStr;
             use xml::EventReader;
-            use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
             use rusoto_core::request::HttpResponse;
             use rusoto_core::signature::SignedRequest;
             use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
-            use rusoto_core::proto::xml::util::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
+            use rusoto_core::proto::xml::util::{{self as xml_util, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements}};
             use rusoto_core::proto::xml::error::*;
             use serde_urlencoded;
             #[cfg(feature = \"serialize_structs\")]

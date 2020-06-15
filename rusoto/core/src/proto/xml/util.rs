@@ -4,10 +4,14 @@
 //! Also provides a method of supplying an XML stack from a file for testing purposes.
 
 use std::collections::HashMap;
+use std::io;
 use std::iter::Peekable;
 use std::num::ParseIntError;
 use xml;
-use xml::reader::{Events, XmlEvent};
+use xml::reader::{EventReader, Events, ParserConfig, XmlEvent};
+use xml::writer::EventWriter;
+
+use crate::{error::RusotoError, request::HttpResponse};
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -78,6 +82,19 @@ pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String,
     let value = characters(stack)?;
     end_element(name, stack)?;
     Ok(value)
+}
+
+pub fn write_characters_element<W>(
+    writer: &mut EventWriter<W>,
+    name: &str,
+    value_str: &str,
+) -> Result<(), xml::writer::Error>
+where
+    W: io::Write,
+{
+    writer.write(xml::writer::XmlEvent::start_element(name))?;
+    writer.write(xml::writer::XmlEvent::characters(value_str))?;
+    writer.write(xml::writer::XmlEvent::end_element())
 }
 
 /// return some XML Characters
@@ -240,12 +257,33 @@ where
     Ok(obj)
 }
 
+pub async fn parse_response<T, E>(
+    response: &mut HttpResponse,
+    deserialize: fn(&str, &mut XmlResponse<'_>) -> Result<T, XmlParseError>,
+) -> Result<T, RusotoError<E>>
+where
+    T: Default,
+{
+    let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+    if xml_response.body.is_empty() {
+        Ok(T::default())
+    } else {
+        let reader = EventReader::new_with_config(
+            xml_response.body.as_ref(),
+            ParserConfig::new().trim_whitespace(false),
+        );
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        let _start_document = stack.next();
+        let actual_tag_name = peek_at_name(&mut stack)?;
+        Ok(deserialize(&actual_tag_name, &mut stack)?)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::fs::File;
     use std::io::Read;
-    use xml::reader::EventReader;
 
     #[test]
     fn peek_at_name_happy_path() {

@@ -161,58 +161,46 @@ fn xml_body_parser(
     mutable_result: bool,
     parse_non_payload: &str,
 ) -> String {
-    let let_result = if mutable_result {
-        "let mut result;"
-    } else {
-        "let result;"
-    };
-
     let xml_deserialize = if needs_xml_deserializer(shape) {
         let deserialize = match *result_wrapper {
             Some(ref tag_name) => format!(
-                "start_element(&actual_tag_name, &mut stack)?;
-                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
-                     skip_tree(&mut stack);
-                     end_element(&actual_tag_name, &mut stack)?;",
+                "|actual_tag_name, stack| {{
+                     start_element(actual_tag_name, stack)?;
+                     let result = {output_shape}Deserializer::deserialize(\"{tag_name}\", stack)?;
+                     skip_tree(stack);
+                     end_element(actual_tag_name, stack)?;
+                     Ok(result)
+                }}",
                 output_shape = output_shape,
                 tag_name = tag_name
             ),
             None => format!(
-                "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
+                "|actual_tag_name, stack| {output_shape}Deserializer::deserialize(actual_tag_name, stack)",
                 output_shape = output_shape
             ),
         };
         format!(
             "let mut response = response;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {{
-            result = {output_shape}::default();
-        }} else {{
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            {deserialize}
-        }}",
-            output_shape = output_shape,
+            let result = xml_util::parse_response(&mut response, {deserialize}).await?;",
             deserialize = deserialize,
         )
     } else {
         format!(
-            "result = {output_shape}::default();",
+            "let result = {output_shape}::default();",
             output_shape = output_shape,
         )
     };
 
     format!(
-        "{let_result}
-        {xml_deserialize}
+        "{xml_deserialize}
+        {let_result}
         {parse_non_payload} // parse non-payload
         Ok(result)",
-        let_result = let_result,
+        let_result = if mutable_result {
+            "let mut result = result;"
+        } else {
+            ""
+        },
         xml_deserialize = xml_deserialize,
         parse_non_payload = parse_non_payload
     )
@@ -345,7 +333,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         "
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == {entry_location} {{
+        while xml_util::peek_at_name(stack)? == {entry_location} {{
             start_element({entry_location}, stack)?;
             let key = {key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack)?;
             let value = {value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack)?;

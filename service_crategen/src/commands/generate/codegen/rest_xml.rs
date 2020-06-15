@@ -87,7 +87,6 @@ impl GenerateProtocol for RestXmlGenerator {
         let imports = "
             use std::str::{FromStr};
             use std::io::Write;
-            use xml::reader::ParserConfig;
             use rusoto_core::param::{Params, ServiceParams};
             use rusoto_core::signature::SignedRequest;
             use xml;
@@ -95,7 +94,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use xml::EventWriter;
             use rusoto_core::proto::xml::error::*;
             use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::proto::xml::util::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements, write_characters_element};
+            use rusoto_core::proto::xml::util::{self as xml_util, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements, write_characters_element};
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
