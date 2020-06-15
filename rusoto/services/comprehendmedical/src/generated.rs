@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ComprehendMedicalClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "comprehendmedical", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p> An extracted segment of the text that is an attribute of an entity, or otherwise related to an entity, such as the dosage of a medication taken. It contains information about the attribute such as id, begin and end offset within the input text, and the segment of the input text. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2341,9 +2368,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         DescribeEntitiesDetectionV2JobResponse,
         RusotoError<DescribeEntitiesDetectionV2JobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.DescribeEntitiesDetectionV2Job",
@@ -2351,20 +2376,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntitiesDetectionV2JobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEntitiesDetectionV2JobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEntitiesDetectionV2JobResponse, _>()
     }
 
     /// <p>Gets the properties associated with an InferICD10CM job. Use this operation to get the status of an inference job.</p>
@@ -2373,9 +2391,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         input: DescribeICD10CMInferenceJobRequest,
     ) -> Result<DescribeICD10CMInferenceJobResponse, RusotoError<DescribeICD10CMInferenceJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.DescribeICD10CMInferenceJob",
@@ -2383,20 +2399,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeICD10CMInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeICD10CMInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeICD10CMInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeICD10CMInferenceJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a protected health information (PHI) detection job. Use this operation to get the status of a detection job.</p>
@@ -2404,9 +2413,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DescribePHIDetectionJobRequest,
     ) -> Result<DescribePHIDetectionJobResponse, RusotoError<DescribePHIDetectionJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.DescribePHIDetectionJob",
@@ -2414,20 +2421,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePHIDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePHIDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePHIDetectionJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with an InferRxNorm job. Use this operation to get the status of an inference job.</p>
@@ -2436,9 +2436,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         input: DescribeRxNormInferenceJobRequest,
     ) -> Result<DescribeRxNormInferenceJobResponse, RusotoError<DescribeRxNormInferenceJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.DescribeRxNormInferenceJob",
@@ -2446,20 +2444,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRxNormInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRxNormInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRxNormInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRxNormInferenceJobResponse, _>()
     }
 
     /// <p>The <code>DetectEntities</code> operation is deprecated. You should use the <a>DetectEntitiesV2</a> operation instead.</p> <p> Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information .</p>
@@ -2467,26 +2458,17 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DetectEntitiesRequest,
     ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
     }
 
     /// <p>Inspects the clinical text for a variety of medical entities and returns specific information about them such as entity category, location, and confidence score on that information. Amazon Comprehend Medical only detects medical entities in English language texts.</p> <p>The <code>DetectEntitiesV2</code> operation replaces the <a>DetectEntities</a> operation. This new action uses a different model for determining the entities in your medical text and changes the way that some entities are returned in the output. You should use the <code>DetectEntitiesV2</code> operation in all new applications.</p> <p>The <code>DetectEntitiesV2</code> operation returns the <code>Acuity</code> and <code>Direction</code> entities as attributes instead of types. </p>
@@ -2494,9 +2476,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DetectEntitiesV2Request,
     ) -> Result<DetectEntitiesV2Response, RusotoError<DetectEntitiesV2Error>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.DetectEntitiesV2",
@@ -2504,20 +2484,12 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectEntitiesV2Response, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesV2Error::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectEntitiesV2Error::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesV2Response, _>()
     }
 
     /// <p> Inspects the clinical text for protected health information (PHI) entities and returns the entity category, location, and confidence score for each entity. Amazon Comprehend Medical only detects entities in English language texts.</p>
@@ -2525,26 +2497,17 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DetectPHIRequest,
     ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectPHI");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectPHIError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectPHIError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
     }
 
     /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
@@ -2552,26 +2515,17 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: InferICD10CMRequest,
     ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ComprehendMedical_20181030.InferICD10CM");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InferICD10CMError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, InferICD10CMError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
     }
 
     /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
@@ -2579,26 +2533,17 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: InferRxNormRequest,
     ) -> Result<InferRxNormResponse, RusotoError<InferRxNormError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ComprehendMedical_20181030.InferRxNorm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InferRxNormError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, InferRxNormError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<InferRxNormResponse, _>()
     }
 
     /// <p>Gets a list of medical entity detection jobs that you have submitted.</p>
@@ -2607,9 +2552,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         input: ListEntitiesDetectionV2JobsRequest,
     ) -> Result<ListEntitiesDetectionV2JobsResponse, RusotoError<ListEntitiesDetectionV2JobsError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.ListEntitiesDetectionV2Jobs",
@@ -2617,20 +2560,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitiesDetectionV2JobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEntitiesDetectionV2JobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEntitiesDetectionV2JobsResponse, _>()
     }
 
     /// <p>Gets a list of InferICD10CM jobs that you have submitted.</p>
@@ -2638,9 +2574,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: ListICD10CMInferenceJobsRequest,
     ) -> Result<ListICD10CMInferenceJobsResponse, RusotoError<ListICD10CMInferenceJobsError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.ListICD10CMInferenceJobs",
@@ -2648,20 +2582,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListICD10CMInferenceJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListICD10CMInferenceJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListICD10CMInferenceJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListICD10CMInferenceJobsResponse, _>()
     }
 
     /// <p>Gets a list of protected health information (PHI) detection jobs that you have submitted.</p>
@@ -2669,9 +2596,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: ListPHIDetectionJobsRequest,
     ) -> Result<ListPHIDetectionJobsResponse, RusotoError<ListPHIDetectionJobsError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.ListPHIDetectionJobs",
@@ -2679,20 +2604,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPHIDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPHIDetectionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPHIDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPHIDetectionJobsResponse, _>()
     }
 
     /// <p>Gets a list of InferRxNorm jobs that you have submitted.</p>
@@ -2700,9 +2618,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: ListRxNormInferenceJobsRequest,
     ) -> Result<ListRxNormInferenceJobsResponse, RusotoError<ListRxNormInferenceJobsError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.ListRxNormInferenceJobs",
@@ -2710,20 +2626,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRxNormInferenceJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRxNormInferenceJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRxNormInferenceJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRxNormInferenceJobsResponse, _>()
     }
 
     /// <p>Starts an asynchronous medical entity detection job for a collection of documents. Use the <code>DescribeEntitiesDetectionV2Job</code> operation to track the status of a job.</p>
@@ -2732,9 +2641,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         input: StartEntitiesDetectionV2JobRequest,
     ) -> Result<StartEntitiesDetectionV2JobResponse, RusotoError<StartEntitiesDetectionV2JobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StartEntitiesDetectionV2Job",
@@ -2742,20 +2649,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartEntitiesDetectionV2JobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartEntitiesDetectionV2JobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartEntitiesDetectionV2JobResponse, _>()
     }
 
     /// <p>Starts an asynchronous job to detect medical conditions and link them to the ICD-10-CM ontology. Use the <code>DescribeICD10CMInferenceJob</code> operation to track the status of a job.</p>
@@ -2763,9 +2663,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StartICD10CMInferenceJobRequest,
     ) -> Result<StartICD10CMInferenceJobResponse, RusotoError<StartICD10CMInferenceJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StartICD10CMInferenceJob",
@@ -2773,20 +2671,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartICD10CMInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartICD10CMInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartICD10CMInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartICD10CMInferenceJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous job to detect protected health information (PHI). Use the <code>DescribePHIDetectionJob</code> operation to track the status of a job.</p>
@@ -2794,9 +2685,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StartPHIDetectionJobRequest,
     ) -> Result<StartPHIDetectionJobResponse, RusotoError<StartPHIDetectionJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StartPHIDetectionJob",
@@ -2804,20 +2693,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartPHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartPHIDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartPHIDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartPHIDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous job to detect medication entities and link them to the RxNorm ontology. Use the <code>DescribeRxNormInferenceJob</code> operation to track the status of a job.</p>
@@ -2825,9 +2707,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StartRxNormInferenceJobRequest,
     ) -> Result<StartRxNormInferenceJobResponse, RusotoError<StartRxNormInferenceJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StartRxNormInferenceJob",
@@ -2835,20 +2715,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartRxNormInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartRxNormInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartRxNormInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartRxNormInferenceJobResponse, _>()
     }
 
     /// <p>Stops a medical entities detection job in progress.</p>
@@ -2857,9 +2730,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         input: StopEntitiesDetectionV2JobRequest,
     ) -> Result<StopEntitiesDetectionV2JobResponse, RusotoError<StopEntitiesDetectionV2JobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StopEntitiesDetectionV2Job",
@@ -2867,20 +2738,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopEntitiesDetectionV2JobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopEntitiesDetectionV2JobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopEntitiesDetectionV2JobResponse, _>()
     }
 
     /// <p>Stops an InferICD10CM inference job in progress.</p>
@@ -2888,9 +2752,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StopICD10CMInferenceJobRequest,
     ) -> Result<StopICD10CMInferenceJobResponse, RusotoError<StopICD10CMInferenceJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StopICD10CMInferenceJob",
@@ -2898,20 +2760,13 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopICD10CMInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopICD10CMInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopICD10CMInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopICD10CMInferenceJobResponse, _>()
     }
 
     /// <p>Stops a protected health information (PHI) detection job in progress.</p>
@@ -2919,9 +2774,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StopPHIDetectionJobRequest,
     ) -> Result<StopPHIDetectionJobResponse, RusotoError<StopPHIDetectionJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StopPHIDetectionJob",
@@ -2929,20 +2782,12 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopPHIDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopPHIDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopPHIDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopPHIDetectionJobResponse, _>()
     }
 
     /// <p>Stops an InferRxNorm inference job in progress.</p>
@@ -2950,9 +2795,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: StopRxNormInferenceJobRequest,
     ) -> Result<StopRxNormInferenceJobResponse, RusotoError<StopRxNormInferenceJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComprehendMedical_20181030.StopRxNormInferenceJob",
@@ -2960,19 +2803,12 @@ impl ComprehendMedical for ComprehendMedicalClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopRxNormInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRxNormInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopRxNormInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopRxNormInferenceJobResponse, _>()
     }
 }

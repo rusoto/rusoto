@@ -7374,6 +7374,7 @@ impl ApiGatewayV2Client {
 #[async_trait]
 impl ApiGatewayV2 for ApiGatewayV2Client {
     /// <p>Creates an Api resource.</p>
+    #[allow(unused_mut)]
     async fn create_api(
         &self,
         input: CreateApiRequest,
@@ -7392,7 +7393,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiResponse, _>()?;
 
@@ -7404,6 +7405,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an API mapping.</p>
+    #[allow(unused_mut)]
     async fn create_api_mapping(
         &self,
         input: CreateApiMappingRequest,
@@ -7425,7 +7427,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiMappingResponse, _>()?;
 
@@ -7437,6 +7439,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an Authorizer for an API.</p>
+    #[allow(unused_mut)]
     async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
@@ -7455,7 +7458,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAuthorizerResponse, _>()?;
 
@@ -7467,6 +7470,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Deployment for an API.</p>
+    #[allow(unused_mut)]
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -7485,7 +7489,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeploymentResponse, _>()?;
 
@@ -7497,6 +7501,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a domain name.</p>
+    #[allow(unused_mut)]
     async fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
@@ -7515,7 +7520,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDomainNameResponse, _>()?;
 
@@ -7527,6 +7532,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an Integration.</p>
+    #[allow(unused_mut)]
     async fn create_integration(
         &self,
         input: CreateIntegrationRequest,
@@ -7545,7 +7551,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIntegrationResult, _>()?;
 
@@ -7557,6 +7563,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn create_integration_response(
         &self,
         input: CreateIntegrationResponseRequest,
@@ -7580,7 +7587,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIntegrationResponseResponse, _>()?;
 
@@ -7592,6 +7599,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Model for an API.</p>
+    #[allow(unused_mut)]
     async fn create_model(
         &self,
         input: CreateModelRequest,
@@ -7610,7 +7618,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateModelResponse, _>()?;
 
@@ -7622,6 +7630,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Route for an API.</p>
+    #[allow(unused_mut)]
     async fn create_route(
         &self,
         input: CreateRouteRequest,
@@ -7640,7 +7649,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRouteResult, _>()?;
 
@@ -7652,6 +7661,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a RouteResponse for a Route.</p>
+    #[allow(unused_mut)]
     async fn create_route_response(
         &self,
         input: CreateRouteResponseRequest,
@@ -7674,7 +7684,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRouteResponseResponse, _>()?;
 
@@ -7686,6 +7696,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Stage for an API.</p>
+    #[allow(unused_mut)]
     async fn create_stage(
         &self,
         input: CreateStageRequest,
@@ -7704,7 +7715,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateStageResponse, _>()?;
 
@@ -7716,6 +7727,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a VPC link.</p>
+    #[allow(unused_mut)]
     async fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
@@ -7734,7 +7746,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVpcLinkResponse, _>()?;
 
@@ -7746,6 +7758,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes the AccessLogSettings for a Stage. To disable access logging for a Stage, delete its AccessLogSettings.</p>
+    #[allow(unused_mut)]
     async fn delete_access_log_settings(
         &self,
         input: DeleteAccessLogSettingsRequest,
@@ -7765,7 +7778,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7776,6 +7789,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Api resource.</p>
+    #[allow(unused_mut)]
     async fn delete_api(&self, input: DeleteApiRequest) -> Result<(), RusotoError<DeleteApiError>> {
         let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
 
@@ -7788,7 +7802,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7799,6 +7813,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an API mapping.</p>
+    #[allow(unused_mut)]
     async fn delete_api_mapping(
         &self,
         input: DeleteApiMappingRequest,
@@ -7818,7 +7833,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7829,6 +7844,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
@@ -7848,7 +7864,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7859,6 +7875,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a CORS configuration.</p>
+    #[allow(unused_mut)]
     async fn delete_cors_configuration(
         &self,
         input: DeleteCorsConfigurationRequest,
@@ -7874,7 +7891,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7885,6 +7902,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Deployment.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
@@ -7904,7 +7922,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7915,6 +7933,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a domain name.</p>
+    #[allow(unused_mut)]
     async fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
@@ -7933,7 +7952,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7944,6 +7963,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Integration.</p>
+    #[allow(unused_mut)]
     async fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
@@ -7963,7 +7983,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7974,6 +7994,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
@@ -7989,7 +8010,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8000,6 +8021,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Model.</p>
+    #[allow(unused_mut)]
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
@@ -8019,7 +8041,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8030,6 +8052,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Route.</p>
+    #[allow(unused_mut)]
     async fn delete_route(
         &self,
         input: DeleteRouteRequest,
@@ -8049,7 +8072,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8060,6 +8083,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a route request parameter.</p>
+    #[allow(unused_mut)]
     async fn delete_route_request_parameter(
         &self,
         input: DeleteRouteRequestParameterRequest,
@@ -8080,7 +8104,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8091,6 +8115,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn delete_route_response(
         &self,
         input: DeleteRouteResponseRequest,
@@ -8111,7 +8136,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8122,6 +8147,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes the RouteSettings for a stage.</p>
+    #[allow(unused_mut)]
     async fn delete_route_settings(
         &self,
         input: DeleteRouteSettingsRequest,
@@ -8142,7 +8168,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8153,6 +8179,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Stage.</p>
+    #[allow(unused_mut)]
     async fn delete_stage(
         &self,
         input: DeleteStageRequest,
@@ -8172,7 +8199,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8183,6 +8210,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a VPC link.</p>
+    #[allow(unused_mut)]
     async fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
@@ -8201,7 +8229,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteVpcLinkResponse, _>()?;
 
@@ -8212,6 +8240,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    #[allow(unused_mut)]
     async fn export_api(
         &self,
         input: ExportApiRequest,
@@ -8244,7 +8273,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = ExportApiResponse::default();
             result.body = Some(response.body);
@@ -8257,6 +8286,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Api resource.</p>
+    #[allow(unused_mut)]
     async fn get_api(
         &self,
         input: GetApiRequest,
@@ -8272,7 +8302,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetApiResponse, _>()?;
 
@@ -8284,6 +8314,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an API mapping.</p>
+    #[allow(unused_mut)]
     async fn get_api_mapping(
         &self,
         input: GetApiMappingRequest,
@@ -8303,7 +8334,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApiMappingResponse, _>()?;
 
@@ -8315,6 +8346,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets API mappings.</p>
+    #[allow(unused_mut)]
     async fn get_api_mappings(
         &self,
         input: GetApiMappingsRequest,
@@ -8342,7 +8374,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApiMappingsResponse, _>()?;
 
@@ -8354,6 +8386,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of Api resources.</p>
+    #[allow(unused_mut)]
     async fn get_apis(
         &self,
         input: GetApisRequest,
@@ -8378,7 +8411,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetApisResponse, _>()?;
 
@@ -8390,6 +8423,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
@@ -8409,7 +8443,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAuthorizerResponse, _>()?;
 
@@ -8421,6 +8455,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Authorizers for an API.</p>
+    #[allow(unused_mut)]
     async fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
@@ -8445,7 +8480,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAuthorizersResponse, _>()?;
 
@@ -8457,6 +8492,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Deployment.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -8476,7 +8512,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeploymentResponse, _>()?;
 
@@ -8488,6 +8524,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Deployments for an API.</p>
+    #[allow(unused_mut)]
     async fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
@@ -8512,7 +8549,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeploymentsResponse, _>()?;
 
@@ -8524,6 +8561,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a domain name.</p>
+    #[allow(unused_mut)]
     async fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
@@ -8542,7 +8580,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainNameResponse, _>()?;
 
@@ -8554,6 +8592,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the domain names for an AWS account.</p>
+    #[allow(unused_mut)]
     async fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
@@ -8578,7 +8617,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainNamesResponse, _>()?;
 
@@ -8590,6 +8629,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Integration.</p>
+    #[allow(unused_mut)]
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
@@ -8609,7 +8649,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResult, _>()?;
 
@@ -8621,6 +8661,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
@@ -8636,7 +8677,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResponseResponse, _>()?;
 
@@ -8648,6 +8689,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the IntegrationResponses for an Integration.</p>
+    #[allow(unused_mut)]
     async fn get_integration_responses(
         &self,
         input: GetIntegrationResponsesRequest,
@@ -8676,7 +8718,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResponsesResponse, _>()?;
 
@@ -8688,6 +8730,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Integrations for an API.</p>
+    #[allow(unused_mut)]
     async fn get_integrations(
         &self,
         input: GetIntegrationsRequest,
@@ -8712,7 +8755,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationsResponse, _>()?;
 
@@ -8724,6 +8767,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Model.</p>
+    #[allow(unused_mut)]
     async fn get_model(
         &self,
         input: GetModelRequest,
@@ -8743,7 +8787,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelResponse, _>()?;
 
@@ -8755,6 +8799,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a model template.</p>
+    #[allow(unused_mut)]
     async fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
@@ -8774,7 +8819,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelTemplateResponse, _>()?;
 
@@ -8786,6 +8831,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Models for an API.</p>
+    #[allow(unused_mut)]
     async fn get_models(
         &self,
         input: GetModelsRequest,
@@ -8810,7 +8856,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelsResponse, _>()?;
 
@@ -8822,6 +8868,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Route.</p>
+    #[allow(unused_mut)]
     async fn get_route(
         &self,
         input: GetRouteRequest,
@@ -8841,7 +8888,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetRouteResult, _>()?;
 
@@ -8853,6 +8900,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn get_route_response(
         &self,
         input: GetRouteResponseRequest,
@@ -8873,7 +8921,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRouteResponseResponse, _>()?;
 
@@ -8885,6 +8933,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the RouteResponses for a Route.</p>
+    #[allow(unused_mut)]
     async fn get_route_responses(
         &self,
         input: GetRouteResponsesRequest,
@@ -8913,7 +8962,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRouteResponsesResponse, _>()?;
 
@@ -8925,6 +8974,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Routes for an API.</p>
+    #[allow(unused_mut)]
     async fn get_routes(
         &self,
         input: GetRoutesRequest,
@@ -8949,7 +8999,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRoutesResponse, _>()?;
 
@@ -8961,6 +9011,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Stage.</p>
+    #[allow(unused_mut)]
     async fn get_stage(
         &self,
         input: GetStageRequest,
@@ -8980,7 +9031,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetStageResponse, _>()?;
 
@@ -8992,6 +9043,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Stages for an API.</p>
+    #[allow(unused_mut)]
     async fn get_stages(
         &self,
         input: GetStagesRequest,
@@ -9016,7 +9068,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetStagesResponse, _>()?;
 
@@ -9028,6 +9080,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of Tag resources.</p>
+    #[allow(unused_mut)]
     async fn get_tags(
         &self,
         input: GetTagsRequest,
@@ -9043,7 +9096,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()?;
 
@@ -9055,6 +9108,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a VPC link.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
@@ -9073,7 +9127,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVpcLinkResponse, _>()?;
 
@@ -9085,6 +9139,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of VPC links.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
@@ -9109,7 +9164,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVpcLinksResponse, _>()?;
 
@@ -9121,6 +9176,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Imports an API.</p>
+    #[allow(unused_mut)]
     async fn import_api(
         &self,
         input: ImportApiRequest,
@@ -9148,7 +9204,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ImportApiResponse, _>()?;
 
@@ -9160,6 +9216,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Puts an Api resource.</p>
+    #[allow(unused_mut)]
     async fn reimport_api(
         &self,
         input: ReimportApiRequest,
@@ -9187,7 +9244,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ReimportApiResponse, _>()?;
 
@@ -9199,6 +9256,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a new Tag resource to represent a tag.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -9217,7 +9275,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -9229,6 +9287,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Tag.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -9250,7 +9309,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -9261,6 +9320,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Api resource.</p>
+    #[allow(unused_mut)]
     async fn update_api(
         &self,
         input: UpdateApiRequest,
@@ -9279,7 +9339,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiResponse, _>()?;
 
@@ -9291,6 +9351,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>The API mapping.</p>
+    #[allow(unused_mut)]
     async fn update_api_mapping(
         &self,
         input: UpdateApiMappingRequest,
@@ -9313,7 +9374,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiMappingResponse, _>()?;
 
@@ -9325,6 +9386,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
@@ -9347,7 +9409,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAuthorizerResponse, _>()?;
 
@@ -9359,6 +9421,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Deployment.</p>
+    #[allow(unused_mut)]
     async fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
@@ -9381,7 +9444,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeploymentResponse, _>()?;
 
@@ -9393,6 +9456,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a domain name.</p>
+    #[allow(unused_mut)]
     async fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
@@ -9414,7 +9478,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDomainNameResponse, _>()?;
 
@@ -9426,6 +9490,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Integration.</p>
+    #[allow(unused_mut)]
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
@@ -9448,7 +9513,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIntegrationResult, _>()?;
 
@@ -9460,6 +9525,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
@@ -9479,7 +9545,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIntegrationResponseResponse, _>()?;
 
@@ -9491,6 +9557,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Model.</p>
+    #[allow(unused_mut)]
     async fn update_model(
         &self,
         input: UpdateModelRequest,
@@ -9513,7 +9580,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateModelResponse, _>()?;
 
@@ -9525,6 +9592,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Route.</p>
+    #[allow(unused_mut)]
     async fn update_route(
         &self,
         input: UpdateRouteRequest,
@@ -9547,7 +9615,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRouteResult, _>()?;
 
@@ -9559,6 +9627,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn update_route_response(
         &self,
         input: UpdateRouteResponseRequest,
@@ -9582,7 +9651,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRouteResponseResponse, _>()?;
 
@@ -9594,6 +9663,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Stage.</p>
+    #[allow(unused_mut)]
     async fn update_stage(
         &self,
         input: UpdateStageRequest,
@@ -9616,7 +9686,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateStageResponse, _>()?;
 
@@ -9628,6 +9698,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a VPC link.</p>
+    #[allow(unused_mut)]
     async fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
@@ -9649,7 +9720,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVpcLinkResponse, _>()?;
 

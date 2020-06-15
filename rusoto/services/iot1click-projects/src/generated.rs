@@ -1337,6 +1337,7 @@ impl Iot1ClickProjectsClient {
 #[async_trait]
 impl Iot1ClickProjects for Iot1ClickProjectsClient {
     /// <p>Associates a physical device with a placement.</p>
+    #[allow(unused_mut)]
     async fn associate_device_with_placement(
         &self,
         input: AssociateDeviceWithPlacementRequest,
@@ -1362,7 +1363,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateDeviceWithPlacementResponse, _>()?;
 
@@ -1374,6 +1375,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Creates an empty placement.</p>
+    #[allow(unused_mut)]
     async fn create_placement(
         &self,
         input: CreatePlacementRequest,
@@ -1396,7 +1398,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePlacementResponse, _>()?;
 
@@ -1408,6 +1410,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Creates an empty project with a placement template. A project contains zero or more placements that adhere to the placement template defined in the project.</p>
+    #[allow(unused_mut)]
     async fn create_project(
         &self,
         input: CreateProjectRequest,
@@ -1427,7 +1430,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProjectResponse, _>()?;
 
@@ -1439,6 +1442,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p><p>Deletes a placement. To delete a placement, it must not have any devices associated with it.</p> <note> <p>When you delete a placement, all associated data becomes irretrievable.</p> </note></p>
+    #[allow(unused_mut)]
     async fn delete_placement(
         &self,
         input: DeletePlacementRequest,
@@ -1460,7 +1464,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePlacementResponse, _>()?;
 
@@ -1472,6 +1476,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p><p>Deletes a project. To delete a project, it must not have any placements associated with it.</p> <note> <p>When you delete a project, all associated data becomes irretrievable.</p> </note></p>
+    #[allow(unused_mut)]
     async fn delete_project(
         &self,
         input: DeleteProjectRequest,
@@ -1492,7 +1497,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteProjectResponse, _>()?;
 
@@ -1504,6 +1509,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Describes a placement in a project.</p>
+    #[allow(unused_mut)]
     async fn describe_placement(
         &self,
         input: DescribePlacementRequest,
@@ -1525,7 +1531,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePlacementResponse, _>()?;
 
@@ -1537,6 +1543,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Returns an object describing a project.</p>
+    #[allow(unused_mut)]
     async fn describe_project(
         &self,
         input: DescribeProjectRequest,
@@ -1557,7 +1564,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeProjectResponse, _>()?;
 
@@ -1569,6 +1576,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Removes a physical device from a placement.</p>
+    #[allow(unused_mut)]
     async fn disassociate_device_from_placement(
         &self,
         input: DisassociateDeviceFromPlacementRequest,
@@ -1594,7 +1602,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateDeviceFromPlacementResponse, _>()?;
 
@@ -1608,6 +1616,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Returns an object enumerating the devices in a placement.</p>
+    #[allow(unused_mut)]
     async fn get_devices_in_placement(
         &self,
         input: GetDevicesInPlacementRequest,
@@ -1629,7 +1638,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDevicesInPlacementResponse, _>()?;
 
@@ -1641,6 +1650,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Lists the placement(s) of a project.</p>
+    #[allow(unused_mut)]
     async fn list_placements(
         &self,
         input: ListPlacementsRequest,
@@ -1670,7 +1680,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPlacementsResponse, _>()?;
 
@@ -1682,6 +1692,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
+    #[allow(unused_mut)]
     async fn list_projects(
         &self,
         input: ListProjectsRequest,
@@ -1708,7 +1719,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProjectsResponse, _>()?;
 
@@ -1720,6 +1731,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1737,7 +1749,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1749,6 +1761,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1768,7 +1781,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -1780,6 +1793,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1803,7 +1817,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -1815,6 +1829,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
+    #[allow(unused_mut)]
     async fn update_placement(
         &self,
         input: UpdatePlacementRequest,
@@ -1838,7 +1853,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdatePlacementResponse, _>()?;
 
@@ -1850,6 +1865,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 
     /// <p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>""</code>).</p>
+    #[allow(unused_mut)]
     async fn update_project(
         &self,
         input: UpdateProjectRequest,
@@ -1872,7 +1888,7 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateProjectResponse, _>()?;
 

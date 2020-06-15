@@ -2637,6 +2637,7 @@ impl MediaConnectClient {
 #[async_trait]
 impl MediaConnect for MediaConnectClient {
     /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
+    #[allow(unused_mut)]
     async fn add_flow_outputs(
         &self,
         input: AddFlowOutputsRequest,
@@ -2655,7 +2656,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AddFlowOutputsResponse, _>()?;
 
@@ -2667,6 +2668,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Adds Sources to flow</p>
+    #[allow(unused_mut)]
     async fn add_flow_sources(
         &self,
         input: AddFlowSourcesRequest,
@@ -2685,7 +2687,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AddFlowSourcesResponse, _>()?;
 
@@ -2697,6 +2699,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Adds VPC interfaces to flow</p>
+    #[allow(unused_mut)]
     async fn add_flow_vpc_interfaces(
         &self,
         input: AddFlowVpcInterfacesRequest,
@@ -2718,7 +2721,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AddFlowVpcInterfacesResponse, _>()?;
 
@@ -2730,6 +2733,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Creates a new flow. The request must include one source. The request optionally can include outputs (up to 50) and entitlements (up to 50).</p>
+    #[allow(unused_mut)]
     async fn create_flow(
         &self,
         input: CreateFlowRequest,
@@ -2748,7 +2752,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFlowResponse, _>()?;
 
@@ -2760,6 +2764,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Deletes a flow. Before you can delete a flow, you must stop the flow.</p>
+    #[allow(unused_mut)]
     async fn delete_flow(
         &self,
         input: DeleteFlowRequest,
@@ -2775,7 +2780,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFlowResponse, _>()?;
 
@@ -2787,6 +2792,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Displays the details of a flow. The response includes the flow ARN, name, and Availability Zone, as well as details about the source, outputs, and entitlements.</p>
+    #[allow(unused_mut)]
     async fn describe_flow(
         &self,
         input: DescribeFlowRequest,
@@ -2802,7 +2808,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeFlowResponse, _>()?;
 
@@ -2814,6 +2820,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Grants entitlements to an existing flow.</p>
+    #[allow(unused_mut)]
     async fn grant_flow_entitlements(
         &self,
         input: GrantFlowEntitlementsRequest,
@@ -2835,7 +2842,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GrantFlowEntitlementsResponse, _>()?;
 
@@ -2847,6 +2854,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Displays a list of all entitlements that have been granted to this account. This request returns 20 results per page.</p>
+    #[allow(unused_mut)]
     async fn list_entitlements(
         &self,
         input: ListEntitlementsRequest,
@@ -2871,7 +2879,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEntitlementsResponse, _>()?;
 
@@ -2883,6 +2891,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Displays a list of flows that are associated with this account. This request returns a paginated result.</p>
+    #[allow(unused_mut)]
     async fn list_flows(
         &self,
         input: ListFlowsRequest,
@@ -2907,7 +2916,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFlowsResponse, _>()?;
 
@@ -2919,6 +2928,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>List all tags on an AWS Elemental MediaConnect resource</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2934,7 +2944,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2946,6 +2956,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
+    #[allow(unused_mut)]
     async fn remove_flow_output(
         &self,
         input: RemoveFlowOutputRequest,
@@ -2965,7 +2976,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RemoveFlowOutputResponse, _>()?;
 
@@ -2977,6 +2988,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Removes a source from an existing flow. This request can be made only if there is more than one source on the flow.</p>
+    #[allow(unused_mut)]
     async fn remove_flow_source(
         &self,
         input: RemoveFlowSourceRequest,
@@ -2996,7 +3008,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RemoveFlowSourceResponse, _>()?;
 
@@ -3008,6 +3020,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Removes a VPC Interface from an existing flow. This request can be made only on a VPC interface that does not have a Source or Output associated with it. If the VPC interface is referenced by a Source or Output, you must first delete or update the Source or Output to no longer reference the VPC interface.</p>
+    #[allow(unused_mut)]
     async fn remove_flow_vpc_interface(
         &self,
         input: RemoveFlowVpcInterfaceRequest,
@@ -3027,7 +3040,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RemoveFlowVpcInterfaceResponse, _>()?;
 
@@ -3039,6 +3052,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Revokes an entitlement from a flow. Once an entitlement is revoked, the content becomes unavailable to the subscriber and the associated output is removed.</p>
+    #[allow(unused_mut)]
     async fn revoke_flow_entitlement(
         &self,
         input: RevokeFlowEntitlementRequest,
@@ -3058,7 +3072,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RevokeFlowEntitlementResponse, _>()?;
 
@@ -3070,6 +3084,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Starts a flow.</p>
+    #[allow(unused_mut)]
     async fn start_flow(
         &self,
         input: StartFlowRequest,
@@ -3085,7 +3100,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartFlowResponse, _>()?;
 
@@ -3097,6 +3112,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Stops a flow.</p>
+    #[allow(unused_mut)]
     async fn stop_flow(
         &self,
         input: StopFlowRequest,
@@ -3112,7 +3128,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopFlowResponse, _>()?;
 
@@ -3124,6 +3140,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3142,7 +3159,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3153,6 +3170,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Deletes specified tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3174,7 +3192,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3185,6 +3203,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Updates flow</p>
+    #[allow(unused_mut)]
     async fn update_flow(
         &self,
         input: UpdateFlowRequest,
@@ -3203,7 +3222,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFlowResponse, _>()?;
 
@@ -3215,6 +3234,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>You can change an entitlement&#39;s description, subscribers, and encryption. If you change the subscribers, the service will remove the outputs that are are used by the subscribers that are removed.</p>
+    #[allow(unused_mut)]
     async fn update_flow_entitlement(
         &self,
         input: UpdateFlowEntitlementRequest,
@@ -3237,7 +3257,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFlowEntitlementResponse, _>()?;
 
@@ -3249,6 +3269,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Updates an existing flow output.</p>
+    #[allow(unused_mut)]
     async fn update_flow_output(
         &self,
         input: UpdateFlowOutputRequest,
@@ -3271,7 +3292,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFlowOutputResponse, _>()?;
 
@@ -3283,6 +3304,7 @@ impl MediaConnect for MediaConnectClient {
     }
 
     /// <p>Updates the source of a flow.</p>
+    #[allow(unused_mut)]
     async fn update_flow_source(
         &self,
         input: UpdateFlowSourceRequest,
@@ -3305,7 +3327,7 @@ impl MediaConnect for MediaConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFlowSourceResponse, _>()?;
 

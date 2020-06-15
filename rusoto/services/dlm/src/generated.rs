@@ -889,6 +889,7 @@ impl DlmClient {
 #[async_trait]
 impl Dlm for DlmClient {
     /// <p>Creates a policy to manage the lifecycle of the specified AWS resources. You can create up to 100 lifecycle policies.</p>
+    #[allow(unused_mut)]
     async fn create_lifecycle_policy(
         &self,
         input: CreateLifecyclePolicyRequest,
@@ -907,7 +908,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateLifecyclePolicyResponse, _>()?;
 
@@ -919,6 +920,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Deletes the specified lifecycle policy and halts the automated operations that the policy specified.</p>
+    #[allow(unused_mut)]
     async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
@@ -934,7 +936,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteLifecyclePolicyResponse, _>()?;
 
@@ -946,6 +948,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Gets summary information about all or the specified data lifecycle policies.</p> <p>To get complete information about a policy, use <a>GetLifecyclePolicy</a>.</p>
+    #[allow(unused_mut)]
     async fn get_lifecycle_policies(
         &self,
         input: GetLifecyclePoliciesRequest,
@@ -987,7 +990,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLifecyclePoliciesResponse, _>()?;
 
@@ -999,6 +1002,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Gets detailed information about the specified lifecycle policy.</p>
+    #[allow(unused_mut)]
     async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
@@ -1014,7 +1018,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLifecyclePolicyResponse, _>()?;
 
@@ -1026,6 +1030,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Lists the tags for the specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1041,7 +1046,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1053,6 +1058,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Adds the specified tags to the specified resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1071,7 +1077,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -1083,6 +1089,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Removes the specified tags from the specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1104,7 +1111,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -1116,6 +1123,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Updates the specified lifecycle policy.</p>
+    #[allow(unused_mut)]
     async fn update_lifecycle_policy(
         &self,
         input: UpdateLifecyclePolicyRequest,
@@ -1134,7 +1142,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLifecyclePolicyResponse, _>()?;
 

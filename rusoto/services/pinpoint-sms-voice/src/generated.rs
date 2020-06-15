@@ -845,6 +845,7 @@ impl PinpointSmsVoiceClient {
 #[async_trait]
 impl PinpointSmsVoice for PinpointSmsVoiceClient {
     /// <p>Create a new configuration set. After you create the configuration set, you can add one or more event destinations to it.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
@@ -864,7 +865,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetResponse, _>()?;
 
@@ -876,6 +877,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Create a new event destination in a configuration set.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
@@ -901,7 +903,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
 
@@ -915,6 +917,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Deletes an existing configuration set.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
@@ -935,7 +938,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetResponse, _>()?;
 
@@ -947,6 +950,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Deletes an event destination in a configuration set.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
@@ -967,7 +971,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
 
@@ -981,6 +985,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Obtain information about an event destination, including the types of events it reports, the Amazon Resource Name (ARN) of the destination, and the name of the event destination.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
@@ -1004,7 +1009,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
 
@@ -1018,6 +1023,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Create a new voice message and send it to a recipient&#39;s phone number.</p>
+    #[allow(unused_mut)]
     async fn send_voice_message(
         &self,
         input: SendVoiceMessageRequest,
@@ -1037,7 +1043,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendVoiceMessageResponse, _>()?;
 
@@ -1049,6 +1055,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Update an event destination in a configuration set. An event destination is a location that you publish information about your voice calls to. For example, you can log an event to an Amazon CloudWatch destination when a call fails.</p>
+    #[allow(unused_mut)]
     async fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
@@ -1071,7 +1078,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
 

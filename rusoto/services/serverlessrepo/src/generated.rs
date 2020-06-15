@@ -2003,6 +2003,7 @@ impl ServerlessRepoClient {
 #[async_trait]
 impl ServerlessRepo for ServerlessRepoClient {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
+    #[allow(unused_mut)]
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
@@ -2021,7 +2022,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApplicationResponse, _>()?;
 
@@ -2033,6 +2034,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an application version.</p>
+    #[allow(unused_mut)]
     async fn create_application_version(
         &self,
         input: CreateApplicationVersionRequest,
@@ -2055,7 +2057,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApplicationVersionResponse, _>()?;
 
@@ -2067,6 +2069,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an AWS CloudFormation change set for the given application.</p>
+    #[allow(unused_mut)]
     async fn create_cloud_formation_change_set(
         &self,
         input: CreateCloudFormationChangeSetRequest,
@@ -2091,7 +2094,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateCloudFormationChangeSetResponse, _>()?;
 
@@ -2103,6 +2106,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an AWS CloudFormation template.</p>
+    #[allow(unused_mut)]
     async fn create_cloud_formation_template(
         &self,
         input: CreateCloudFormationTemplateRequest,
@@ -2125,7 +2129,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateCloudFormationTemplateResponse, _>()?;
 
@@ -2137,6 +2141,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Deletes the specified application.</p>
+    #[allow(unused_mut)]
     async fn delete_application(
         &self,
         input: DeleteApplicationRequest,
@@ -2156,7 +2161,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2167,6 +2172,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Gets the specified application.</p>
+    #[allow(unused_mut)]
     async fn get_application(
         &self,
         input: GetApplicationRequest,
@@ -2191,7 +2197,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApplicationResponse, _>()?;
 
@@ -2203,6 +2209,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Retrieves the policy for the application.</p>
+    #[allow(unused_mut)]
     async fn get_application_policy(
         &self,
         input: GetApplicationPolicyRequest,
@@ -2221,7 +2228,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApplicationPolicyResponse, _>()?;
 
@@ -2233,6 +2240,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Gets the specified AWS CloudFormation template.</p>
+    #[allow(unused_mut)]
     async fn get_cloud_formation_template(
         &self,
         input: GetCloudFormationTemplateRequest,
@@ -2253,7 +2261,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCloudFormationTemplateResponse, _>()?;
 
@@ -2265,6 +2273,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Retrieves the list of applications nested in the containing application.</p>
+    #[allow(unused_mut)]
     async fn list_application_dependencies(
         &self,
         input: ListApplicationDependenciesRequest,
@@ -2296,7 +2305,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationDependenciesResponse, _>()?;
 
@@ -2308,6 +2317,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Lists versions for the specified application.</p>
+    #[allow(unused_mut)]
     async fn list_application_versions(
         &self,
         input: ListApplicationVersionsRequest,
@@ -2335,7 +2345,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationVersionsResponse, _>()?;
 
@@ -2347,6 +2357,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Lists applications owned by the requester.</p>
+    #[allow(unused_mut)]
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -2371,7 +2382,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationsResponse, _>()?;
 
@@ -2386,6 +2397,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
     /// Permissions</a>
     /// .</p>
+    #[allow(unused_mut)]
     async fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,
@@ -2407,7 +2419,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutApplicationPolicyResponse, _>()?;
 
@@ -2419,6 +2431,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Unshares an application from an AWS Organization.</p><p>This operation can be called only from the organization's master account.</p>
+    #[allow(unused_mut)]
     async fn unshare_application(
         &self,
         input: UnshareApplicationRequest,
@@ -2440,7 +2453,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2451,6 +2464,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Updates the specified application.</p>
+    #[allow(unused_mut)]
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,
@@ -2472,7 +2486,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApplicationResponse, _>()?;
 

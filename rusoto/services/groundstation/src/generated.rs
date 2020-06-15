@@ -2443,6 +2443,7 @@ impl GroundStationClient {
 #[async_trait]
 impl GroundStation for GroundStationClient {
     /// <p>Cancels a contact with a specified contact ID.</p>
+    #[allow(unused_mut)]
     async fn cancel_contact(
         &self,
         input: CancelContactRequest,
@@ -2458,7 +2459,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ContactIdResponse, _>()?;
 
@@ -2470,6 +2471,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p> <p>Only one type of <code>configData</code> can be specified.</p>
+    #[allow(unused_mut)]
     async fn create_config(
         &self,
         input: CreateConfigRequest,
@@ -2488,7 +2490,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -2500,6 +2502,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p> <p>The <code>name</code> field in each endpoint is used in your mission profile <code>DataflowEndpointConfig</code> to specify which endpoints to use during a contact.</p> <p>When a contact uses multiple <code>DataflowEndpointConfig</code> objects, each <code>Config</code> must match a <code>DataflowEndpoint</code> in the same group.</p>
+    #[allow(unused_mut)]
     async fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
@@ -2519,7 +2522,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
@@ -2531,6 +2534,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a mission profile.</p> <p> <code>dataflowEdges</code> is a list of lists of strings. Each lower level list of strings has two elements: a <i>from</i> ARN and a <i>to</i> ARN.</p>
+    #[allow(unused_mut)]
     async fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
@@ -2549,7 +2553,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 
@@ -2561,6 +2565,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a <code>Config</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_config(
         &self,
         input: DeleteConfigRequest,
@@ -2580,7 +2585,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -2592,6 +2597,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a dataflow endpoint group.</p>
+    #[allow(unused_mut)]
     async fn delete_dataflow_endpoint_group(
         &self,
         input: DeleteDataflowEndpointGroupRequest,
@@ -2611,7 +2617,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
@@ -2623,6 +2629,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a mission profile.</p>
+    #[allow(unused_mut)]
     async fn delete_mission_profile(
         &self,
         input: DeleteMissionProfileRequest,
@@ -2641,7 +2648,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 
@@ -2653,6 +2660,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Describes an existing contact.</p>
+    #[allow(unused_mut)]
     async fn describe_contact(
         &self,
         input: DescribeContactRequest,
@@ -2668,7 +2676,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeContactResponse, _>()?;
 
@@ -2680,6 +2688,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns <code>Config</code> information.</p> <p>Only one <code>Config</code> response can be returned.</p>
+    #[allow(unused_mut)]
     async fn get_config(
         &self,
         input: GetConfigRequest,
@@ -2699,7 +2708,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigResponse, _>()?;
 
@@ -2711,6 +2720,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns the dataflow endpoint group.</p>
+    #[allow(unused_mut)]
     async fn get_dataflow_endpoint_group(
         &self,
         input: GetDataflowEndpointGroupRequest,
@@ -2729,7 +2739,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDataflowEndpointGroupResponse, _>()?;
 
@@ -2741,6 +2751,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns the number of minutes used by account.</p>
+    #[allow(unused_mut)]
     async fn get_minute_usage(
         &self,
         input: GetMinuteUsageRequest,
@@ -2759,7 +2770,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMinuteUsageResponse, _>()?;
 
@@ -2771,6 +2782,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a mission profile.</p>
+    #[allow(unused_mut)]
     async fn get_mission_profile(
         &self,
         input: GetMissionProfileRequest,
@@ -2789,7 +2801,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMissionProfileResponse, _>()?;
 
@@ -2801,6 +2813,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a satellite.</p>
+    #[allow(unused_mut)]
     async fn get_satellite(
         &self,
         input: GetSatelliteRequest,
@@ -2819,7 +2832,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSatelliteResponse, _>()?;
 
@@ -2831,6 +2844,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of <code>Config</code> objects.</p>
+    #[allow(unused_mut)]
     async fn list_configs(
         &self,
         input: ListConfigsRequest,
@@ -2855,7 +2869,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigsResponse, _>()?;
 
@@ -2867,6 +2881,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of contacts.</p> <p>If <code>statusList</code> contains AVAILABLE, the request must include <code>groundStation</code>, <code>missionprofileArn</code>, and <code>satelliteArn</code>. </p>
+    #[allow(unused_mut)]
     async fn list_contacts(
         &self,
         input: ListContactsRequest,
@@ -2885,7 +2900,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListContactsResponse, _>()?;
 
@@ -2897,6 +2912,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of <code>DataflowEndpoint</code> groups.</p>
+    #[allow(unused_mut)]
     async fn list_dataflow_endpoint_groups(
         &self,
         input: ListDataflowEndpointGroupsRequest,
@@ -2922,7 +2938,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataflowEndpointGroupsResponse, _>()?;
 
@@ -2934,6 +2950,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of ground stations. </p>
+    #[allow(unused_mut)]
     async fn list_ground_stations(
         &self,
         input: ListGroundStationsRequest,
@@ -2961,7 +2978,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroundStationsResponse, _>()?;
 
@@ -2973,6 +2990,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of mission profiles.</p>
+    #[allow(unused_mut)]
     async fn list_mission_profiles(
         &self,
         input: ListMissionProfilesRequest,
@@ -2997,7 +3015,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMissionProfilesResponse, _>()?;
 
@@ -3009,6 +3027,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of satellites.</p>
+    #[allow(unused_mut)]
     async fn list_satellites(
         &self,
         input: ListSatellitesRequest,
@@ -3033,7 +3052,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSatellitesResponse, _>()?;
 
@@ -3045,6 +3064,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of tags for a specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3060,7 +3080,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3072,6 +3092,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Reserves a contact using specified parameters.</p>
+    #[allow(unused_mut)]
     async fn reserve_contact(
         &self,
         input: ReserveContactRequest,
@@ -3090,7 +3111,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ContactIdResponse, _>()?;
 
@@ -3102,6 +3123,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Assigns a tag to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3120,7 +3142,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3132,6 +3154,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deassigns a resource tag.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3153,7 +3176,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -3165,6 +3188,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Updates the <code>Config</code> used when scheduling contacts.</p> <p>Updating a <code>Config</code> will not update the execution parameters for existing future contacts scheduled with this <code>Config</code>.</p>
+    #[allow(unused_mut)]
     async fn update_config(
         &self,
         input: UpdateConfigRequest,
@@ -3187,7 +3211,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -3199,6 +3223,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Updates a mission profile.</p> <p>Updating a mission profile will not update the execution parameters for existing future contacts.</p>
+    #[allow(unused_mut)]
     async fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,
@@ -3220,7 +3245,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 

@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl DataPipelineClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "datapipeline", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1807,26 +1834,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ActivatePipelineInput,
     ) -> Result<ActivatePipelineOutput, RusotoError<ActivatePipelineError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.ActivatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ActivatePipelineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ActivatePipelineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ActivatePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ActivatePipelineOutput, _>()
     }
 
     /// <p>Adds or modifies tags for the specified pipeline.</p>
@@ -1834,26 +1852,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: AddTagsInput,
     ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
     }
 
     /// <p>Creates a new, empty pipeline. Use <a>PutPipelineDefinition</a> to populate the pipeline.</p>
@@ -1861,26 +1870,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: CreatePipelineInput,
     ) -> Result<CreatePipelineOutput, RusotoError<CreatePipelineError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.CreatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreatePipelineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePipelineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePipelineOutput, _>()
     }
 
     /// <p>Deactivates the specified running pipeline. The pipeline is set to the <code>DEACTIVATING</code> state until the deactivation process completes.</p> <p>To resume a deactivated pipeline, use <a>ActivatePipeline</a>. By default, the pipeline resumes from the last completed execution. Optionally, you can specify the date and time to resume the pipeline.</p>
@@ -1888,27 +1888,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DeactivatePipelineInput,
     ) -> Result<DeactivatePipelineOutput, RusotoError<DeactivatePipelineError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.DeactivatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeactivatePipelineOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeactivatePipelineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeactivatePipelineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeactivatePipelineOutput, _>()
     }
 
     /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
@@ -1916,26 +1906,16 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DeletePipelineInput,
     ) -> Result<(), RusotoError<DeletePipelineError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.DeletePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePipelineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePipelineError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Gets the object definitions for a set of objects associated with the pipeline. Object definitions are composed of a set of fields that define the properties of the object.</p>
@@ -1943,26 +1923,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DescribeObjectsInput,
     ) -> Result<DescribeObjectsOutput, RusotoError<DescribeObjectsError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.DescribeObjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeObjectsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeObjectsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeObjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeObjectsOutput, _>()
     }
 
     /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
@@ -1970,26 +1941,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DescribePipelinesInput,
     ) -> Result<DescribePipelinesOutput, RusotoError<DescribePipelinesError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.DescribePipelines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribePipelinesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePipelinesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePipelinesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribePipelinesOutput, _>()
     }
 
     /// <p>Task runners call <code>EvaluateExpression</code> to evaluate a string in the context of the specified object. For example, a task runner can evaluate SQL queries stored in Amazon S3.</p>
@@ -1997,27 +1959,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: EvaluateExpressionInput,
     ) -> Result<EvaluateExpressionOutput, RusotoError<EvaluateExpressionError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.EvaluateExpression");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<EvaluateExpressionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EvaluateExpressionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, EvaluateExpressionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<EvaluateExpressionOutput, _>()
     }
 
     /// <p>Gets the definition of the specified pipeline. You can call <code>GetPipelineDefinition</code> to retrieve the pipeline definition that you provided using <a>PutPipelineDefinition</a>.</p>
@@ -2025,27 +1977,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: GetPipelineDefinitionInput,
     ) -> Result<GetPipelineDefinitionOutput, RusotoError<GetPipelineDefinitionError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.GetPipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPipelineDefinitionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPipelineDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPipelineDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPipelineDefinitionOutput, _>()
     }
 
     /// <p>Lists the pipeline identifiers for all active pipelines that you have permission to access.</p>
@@ -2053,26 +1995,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ListPipelinesInput,
     ) -> Result<ListPipelinesOutput, RusotoError<ListPipelinesError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.ListPipelines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPipelinesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPipelinesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPipelinesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPipelinesOutput, _>()
     }
 
     /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
@@ -2080,26 +2013,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: PollForTaskInput,
     ) -> Result<PollForTaskOutput, RusotoError<PollForTaskError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.PollForTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PollForTaskOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PollForTaskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PollForTaskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PollForTaskOutput, _>()
     }
 
     /// <p>Adds tasks, schedules, and preconditions to the specified pipeline. You can use <code>PutPipelineDefinition</code> to populate a new pipeline.</p> <p> <code>PutPipelineDefinition</code> also validates the configuration as it adds it to the pipeline. Changes to the pipeline are saved unless one of the following three validation errors exists in the pipeline. </p> <ol> <li>An object is missing a name or identifier field.</li> <li>A string or reference field is empty.</li> <li>The number of objects in the pipeline exceeds the maximum allowed objects.</li> <li>The pipeline is in a FINISHED state.</li> </ol> <p> Pipeline object definitions are passed to the <code>PutPipelineDefinition</code> action and returned by the <a>GetPipelineDefinition</a> action. </p>
@@ -2107,27 +2031,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: PutPipelineDefinitionInput,
     ) -> Result<PutPipelineDefinitionOutput, RusotoError<PutPipelineDefinitionError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.PutPipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutPipelineDefinitionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutPipelineDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutPipelineDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutPipelineDefinitionOutput, _>()
     }
 
     /// <p>Queries the specified pipeline for the names of objects that match the specified set of conditions.</p>
@@ -2135,26 +2049,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: QueryObjectsInput,
     ) -> Result<QueryObjectsOutput, RusotoError<QueryObjectsError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.QueryObjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<QueryObjectsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(QueryObjectsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, QueryObjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<QueryObjectsOutput, _>()
     }
 
     /// <p>Removes existing tags from the specified pipeline.</p>
@@ -2162,26 +2067,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: RemoveTagsInput,
     ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.RemoveTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
     }
 
     /// <p>Task runners call <code>ReportTaskProgress</code> when assigned a task to acknowledge that it has the task. If the web service does not receive this acknowledgement within 2 minutes, it assigns the task in a subsequent <a>PollForTask</a> call. After this initial acknowledgement, the task runner only needs to report progress every 15 minutes to maintain its ownership of the task. You can change this reporting time from 15 minutes by specifying a <code>reportProgressTimeout</code> field in your pipeline.</p> <p>If a task runner does not report its status after 5 minutes, AWS Data Pipeline assumes that the task runner is unable to process the task and reassigns the task in a subsequent response to <a>PollForTask</a>. Task runners should call <code>ReportTaskProgress</code> every 60 seconds.</p>
@@ -2189,27 +2085,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ReportTaskProgressInput,
     ) -> Result<ReportTaskProgressOutput, RusotoError<ReportTaskProgressError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.ReportTaskProgress");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ReportTaskProgressOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ReportTaskProgressError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ReportTaskProgressError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ReportTaskProgressOutput, _>()
     }
 
     /// <p>Task runners call <code>ReportTaskRunnerHeartbeat</code> every 15 minutes to indicate that they are operational. If the AWS Data Pipeline Task Runner is launched on a resource managed by AWS Data Pipeline, the web service can use this call to detect when the task runner application has failed and restart a new instance.</p>
@@ -2217,51 +2103,32 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ReportTaskRunnerHeartbeatInput,
     ) -> Result<ReportTaskRunnerHeartbeatOutput, RusotoError<ReportTaskRunnerHeartbeatError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.ReportTaskRunnerHeartbeat");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ReportTaskRunnerHeartbeatError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ReportTaskRunnerHeartbeatError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
     }
 
     /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
     async fn set_status(&self, input: SetStatusInput) -> Result<(), RusotoError<SetStatusError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.SetStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetStatusError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Task runners call <code>SetTaskStatus</code> to notify AWS Data Pipeline that a task is completed and provide information about the final status. A task runner makes this call regardless of whether the task was sucessful. A task runner does not need to call <code>SetTaskStatus</code> for tasks that are canceled by the web service during a call to <a>ReportTaskProgress</a>.</p>
@@ -2269,26 +2136,17 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: SetTaskStatusInput,
     ) -> Result<SetTaskStatusOutput, RusotoError<SetTaskStatusError>> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.SetTaskStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SetTaskStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetTaskStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetTaskStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SetTaskStatusOutput, _>()
     }
 
     /// <p>Validates the specified pipeline definition to ensure that it is well formed and can be run without error.</p>
@@ -2297,26 +2155,17 @@ impl DataPipeline for DataPipelineClient {
         input: ValidatePipelineDefinitionInput,
     ) -> Result<ValidatePipelineDefinitionOutput, RusotoError<ValidatePipelineDefinitionError>>
     {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DataPipeline.ValidatePipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ValidatePipelineDefinitionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ValidatePipelineDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ValidatePipelineDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ValidatePipelineDefinitionOutput, _>()
     }
 }

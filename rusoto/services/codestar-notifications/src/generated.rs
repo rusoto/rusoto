@@ -1038,6 +1038,7 @@ impl CodeStarNotificationsClient {
 #[async_trait]
 impl CodeStarNotifications for CodeStarNotificationsClient {
     /// <p>Creates a notification rule for a resource. The rule specifies the events you want notifications about and the targets (such as SNS topics) where you want to receive them.</p>
+    #[allow(unused_mut)]
     async fn create_notification_rule(
         &self,
         input: CreateNotificationRuleRequest,
@@ -1057,7 +1058,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateNotificationRuleResult, _>()?;
 
@@ -1069,6 +1070,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Deletes a notification rule for a resource.</p>
+    #[allow(unused_mut)]
     async fn delete_notification_rule(
         &self,
         input: DeleteNotificationRuleRequest,
@@ -1088,7 +1090,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteNotificationRuleResult, _>()?;
 
@@ -1100,6 +1102,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Deletes a specified target for notifications.</p>
+    #[allow(unused_mut)]
     async fn delete_target(
         &self,
         input: DeleteTargetRequest,
@@ -1119,7 +1122,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteTargetResult, _>()?;
 
@@ -1131,6 +1134,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Returns information about a specified notification rule.</p>
+    #[allow(unused_mut)]
     async fn describe_notification_rule(
         &self,
         input: DescribeNotificationRuleRequest,
@@ -1150,7 +1154,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeNotificationRuleResult, _>()?;
 
@@ -1162,6 +1166,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Returns information about the event types available for configuring notifications.</p>
+    #[allow(unused_mut)]
     async fn list_event_types(
         &self,
         input: ListEventTypesRequest,
@@ -1181,7 +1186,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEventTypesResult, _>()?;
 
@@ -1193,6 +1198,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Returns a list of the notification rules for an AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_notification_rules(
         &self,
         input: ListNotificationRulesRequest,
@@ -1212,7 +1218,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListNotificationRulesResult, _>()?;
 
@@ -1224,6 +1230,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Returns a list of the tags associated with a notification rule.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1243,7 +1250,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResult, _>()?;
 
@@ -1255,6 +1262,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Returns a list of the notification rule targets for an AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_targets(
         &self,
         input: ListTargetsRequest,
@@ -1274,7 +1282,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTargetsResult, _>()?;
 
@@ -1286,6 +1294,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Creates an association between a notification rule and an SNS topic so that the associated target can receive notifications when the events described in the rule are triggered.</p>
+    #[allow(unused_mut)]
     async fn subscribe(
         &self,
         input: SubscribeRequest,
@@ -1305,7 +1314,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<SubscribeResult, _>()?;
 
@@ -1317,6 +1326,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Associates a set of provided tags with a notification rule.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1336,7 +1346,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResult, _>()?;
 
@@ -1348,6 +1358,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Removes an association between a notification rule and an Amazon SNS topic so that subscribers to that topic stop receiving notifications when the events described in the rule are triggered.</p>
+    #[allow(unused_mut)]
     async fn unsubscribe(
         &self,
         input: UnsubscribeRequest,
@@ -1367,7 +1378,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UnsubscribeResult, _>()?;
 
@@ -1379,6 +1390,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p>Removes the association between one or more provided tags and a notification rule.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1398,7 +1410,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResult, _>()?;
 
@@ -1410,6 +1422,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
     }
 
     /// <p><p>Updates a notification rule for a resource. You can change the events that trigger the notification rule, the status of the rule, and the targets that receive the notifications.</p> <note> <p>To add or remove tags for a notification rule, you must use <a>TagResource</a> and <a>UntagResource</a>.</p> </note></p>
+    #[allow(unused_mut)]
     async fn update_notification_rule(
         &self,
         input: UpdateNotificationRuleRequest,
@@ -1429,7 +1442,7 @@ impl CodeStarNotifications for CodeStarNotificationsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateNotificationRuleResult, _>()?;
 

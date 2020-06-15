@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl IamClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-05-08");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 /// <p>An object that contains details about when a principal in the reported AWS Organizations entity last attempted to access an AWS service. A principal can be an IAM user, an IAM role, or the AWS account root user within the reported Organizations entity.</p> <p>This data type is a response element in the <a>GetOrganizationsAccessReport</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -171,11 +195,7 @@ struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the last time an AWS access key was used since IAM began tracking this information on April 22, 2015.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> operation.</p>
@@ -283,11 +303,7 @@ struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -313,11 +329,7 @@ struct AccountAliasTypeDeserializer;
 impl AccountAliasTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -337,11 +349,7 @@ struct ActionNameTypeDeserializer;
 impl ActionNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -442,11 +450,7 @@ struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -618,11 +622,7 @@ struct AttachmentCountTypeDeserializer;
 impl AttachmentCountTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -630,11 +630,7 @@ struct BooleanObjectTypeDeserializer;
 impl BooleanObjectTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -642,11 +638,7 @@ struct BooleanTypeDeserializer;
 impl BooleanTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -657,11 +649,7 @@ impl BootstrapDatumDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -669,11 +657,7 @@ struct CertificateBodyTypeDeserializer;
 impl CertificateBodyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -681,11 +665,7 @@ struct CertificateChainTypeDeserializer;
 impl CertificateChainTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -693,11 +673,7 @@ struct CertificateIdTypeDeserializer;
 impl CertificateIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -778,11 +754,7 @@ struct ClientIDTypeDeserializer;
 impl ClientIDTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -790,11 +762,7 @@ struct ColumnNumberDeserializer;
 impl ColumnNumberDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Contains information about a condition context key. It includes the name of the key and specifies the value (or values, if the context key supports multiple values) to use in the simulation. This information is used when evaluating the <code>Condition</code> elements of the input policies.</p> <p>This data type is used as an input parameter to <a>SimulateCustomPolicy</a> and <a>SimulatePrincipalPolicy</a>.</p>
@@ -850,11 +818,7 @@ struct ContextKeyNameTypeDeserializer;
 impl ContextKeyNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1724,11 +1688,7 @@ struct DateTypeDeserializer;
 impl DateTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2319,11 +2279,7 @@ struct DeletionTaskIdTypeDeserializer;
 impl DeletionTaskIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2331,11 +2287,7 @@ struct DeletionTaskStatusTypeDeserializer;
 impl DeletionTaskStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2558,11 +2510,7 @@ struct EntityNameTypeDeserializer;
 impl EntityNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the reason that the operation failed.</p> <p>This data type is used as a response element in the <a>GetOrganizationsAccessReport</a>, <a>GetServiceLastAccessedDetails</a>, and <a>GetServiceLastAccessedDetailsWithEntities</a> operations.</p>
@@ -2605,19 +2553,19 @@ impl EvalDecisionDetailsTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = EvalDecisionSourceTypeDeserializer::deserialize("key", stack)?;
             let value = PolicyEvaluationDecisionTypeDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -2626,11 +2574,7 @@ struct EvalDecisionSourceTypeDeserializer;
 impl EvalDecisionSourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the results of a simulation.</p> <p>This data type is used by the return parameter of <code> <a>SimulateCustomPolicy</a> </code> and <code> <a>SimulatePrincipalPolicy</a> </code>.</p>
@@ -2754,11 +2698,7 @@ struct ExistingUserNameTypeDeserializer;
 impl ExistingUserNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>
@@ -4673,11 +4613,7 @@ struct GroupNameTypeDeserializer;
 impl GroupNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4685,11 +4621,7 @@ struct IdTypeDeserializer;
 impl IdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p><p>Contains information about an instance profile.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateInstanceProfile</a> </p> </li> <li> <p> <a>GetInstanceProfile</a> </p> </li> <li> <p> <a>ListInstanceProfiles</a> </p> </li> <li> <p> <a>ListInstanceProfilesForRole</a> </p> </li> </ul></p>
@@ -4772,11 +4704,7 @@ struct InstanceProfileNameTypeDeserializer;
 impl InstanceProfileNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4784,11 +4712,7 @@ struct IntegerTypeDeserializer;
 impl IntegerTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4796,11 +4720,7 @@ struct JobIDTypeDeserializer;
 impl JobIDTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4808,11 +4728,7 @@ struct JobStatusTypeDeserializer;
 impl JobStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4820,11 +4736,7 @@ struct LineNumberDeserializer;
 impl LineNumberDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7238,11 +7150,7 @@ struct MarkerTypeDeserializer;
 impl MarkerTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7250,11 +7158,7 @@ struct MaxPasswordAgeTypeDeserializer;
 impl MaxPasswordAgeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -7280,11 +7184,7 @@ struct MinimumPasswordLengthTypeDeserializer;
 impl MinimumPasswordLengthTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Contains the Amazon Resource Name (ARN) for an IAM OpenID Connect provider.</p>
@@ -7342,11 +7242,7 @@ struct OpenIDConnectProviderUrlTypeDeserializer;
 impl OpenIDConnectProviderUrlTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the effect that Organizations has on a policy simulation.</p>
@@ -7388,11 +7284,7 @@ struct OrganizationsEntityPathTypeDeserializer;
 impl OrganizationsEntityPathTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the account password policy.</p> <p> This data type is used as a response element in the <a>GetAccountPasswordPolicy</a> operation. </p>
@@ -7503,11 +7395,7 @@ struct PasswordReusePreventionTypeDeserializer;
 impl PasswordReusePreventionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -7515,11 +7403,7 @@ struct PathTypeDeserializer;
 impl PathTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7527,11 +7411,7 @@ struct PermissionsBoundaryAttachmentTypeDeserializer;
 impl PermissionsBoundaryAttachmentTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the effect that a permissions boundary has on a policy simulation when the boundary is applied to an IAM entity.</p>
@@ -7664,11 +7544,7 @@ struct PolicyDescriptionTypeDeserializer;
 impl PolicyDescriptionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about an IAM policy, including the policy document.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
@@ -7732,11 +7608,9 @@ struct PolicyDocumentTypeDeserializer;
 impl PolicyDocumentTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = rusoto_core::signature::decode_uri(&characters(stack)?);
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(rusoto_core::signature::decode_uri(&s))
+        })
     }
 }
 #[allow(dead_code)]
@@ -7762,11 +7636,7 @@ struct PolicyEvaluationDecisionTypeDeserializer;
 impl PolicyEvaluationDecisionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is an element of the <a>ListPoliciesGrantingServiceAccessEntry</a> object.</p>
@@ -7903,11 +7773,7 @@ struct PolicyIdentifierTypeDeserializer;
 impl PolicyIdentifierTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7951,11 +7817,7 @@ struct PolicyNameTypeDeserializer;
 impl PolicyNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7963,11 +7825,7 @@ struct PolicyOwnerEntityTypeDeserializer;
 impl PolicyOwnerEntityTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7975,11 +7833,7 @@ struct PolicyPathTypeDeserializer;
 impl PolicyPathTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about a role that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
@@ -8037,11 +7891,7 @@ struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8049,11 +7899,7 @@ struct PolicyTypeDeserializer;
 impl PolicyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about a user that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>. </p>
@@ -8161,11 +8007,7 @@ struct PolicyVersionIdTypeDeserializer;
 impl PolicyVersionIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the row and column of a location of a <code>Statement</code> element in a policy document.</p> <p>This data type is used as a member of the <code> <a>Statement</a> </code> type.</p>
@@ -8205,11 +8047,7 @@ struct PublicKeyFingerprintTypeDeserializer;
 impl PublicKeyFingerprintTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8217,11 +8055,7 @@ struct PublicKeyIdTypeDeserializer;
 impl PublicKeyIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8229,11 +8063,7 @@ struct PublicKeyMaterialTypeDeserializer;
 impl PublicKeyMaterialTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8380,11 +8210,7 @@ struct ReasonTypeDeserializer;
 impl ReasonTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8392,11 +8218,7 @@ struct RegionNameTypeDeserializer;
 impl RegionNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8486,11 +8308,7 @@ impl ReportContentTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8498,11 +8316,7 @@ struct ReportFormatTypeDeserializer;
 impl ReportFormatTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8510,11 +8324,7 @@ struct ReportStateDescriptionTypeDeserializer;
 impl ReportStateDescriptionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8522,11 +8332,7 @@ struct ReportStateTypeDeserializer;
 impl ReportStateTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8608,11 +8414,7 @@ struct ResourceNameTypeDeserializer;
 impl ResourceNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the result of the simulation of a single API operation call on a single resource.</p> <p>This data type is used by a member of the <a>EvaluationResult</a> data type.</p>
@@ -8712,11 +8514,7 @@ struct ResponseMarkerTypeDeserializer;
 impl ResponseMarkerTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8853,11 +8651,7 @@ struct RoleDescriptionTypeDeserializer;
 impl RoleDescriptionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about an IAM role, including all of the role's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
@@ -9040,11 +8834,7 @@ struct RoleMaxSessionDurationTypeDeserializer;
 impl RoleMaxSessionDurationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -9052,11 +8842,7 @@ struct RoleNameTypeDeserializer;
 impl RoleNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9116,11 +8902,7 @@ struct SAMLMetadataDocumentTypeDeserializer;
 impl SAMLMetadataDocumentTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the list of SAML providers for this account.</p>
@@ -9303,11 +9085,7 @@ struct SerialNumberTypeDeserializer;
 impl SerialNumberTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about a server certificate.</p> <p> This data type is used as a response element in the <a>GetServerCertificate</a> operation. </p>
@@ -9443,11 +9221,7 @@ struct ServerCertificateNameTypeDeserializer;
 impl ServerCertificateNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains details about the most recent attempt to access the service.</p> <p>This data type is used as a response element in the <a>GetServiceLastAccessedDetails</a> operation.</p>
@@ -9513,11 +9287,7 @@ struct ServiceNameDeserializer;
 impl ServiceNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9525,11 +9295,7 @@ struct ServiceNameTypeDeserializer;
 impl ServiceNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9549,11 +9315,7 @@ struct ServiceNamespaceTypeDeserializer;
 impl ServiceNamespaceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9561,11 +9323,7 @@ struct ServicePasswordDeserializer;
 impl ServicePasswordDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the details of a service-specific credential.</p>
@@ -9641,11 +9399,7 @@ struct ServiceSpecificCredentialIdDeserializer;
 impl ServiceSpecificCredentialIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains additional details about a service-specific credential.</p>
@@ -9735,11 +9489,7 @@ struct ServiceUserNameDeserializer;
 impl ServiceUserNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10176,11 +9926,7 @@ struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10188,11 +9934,7 @@ struct StringTypeDeserializer;
 impl StringTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10200,11 +9942,7 @@ struct SummaryKeyTypeDeserializer;
 impl SummaryKeyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10215,19 +9953,19 @@ impl SummaryMapTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, i64>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = SummaryKeyTypeDeserializer::deserialize("key", stack)?;
             let value = SummaryValueTypeDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -10236,11 +9974,7 @@ struct SummaryValueTypeDeserializer;
 impl SummaryValueTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>A structure that represents user-provided metadata that can be associated with a resource such as an IAM user or role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
@@ -10304,11 +10038,7 @@ struct TagKeyTypeDeserializer;
 impl TagKeyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10392,11 +10122,7 @@ struct TagValueTypeDeserializer;
 impl TagValueTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10434,11 +10160,7 @@ struct ThumbprintTypeDeserializer;
 impl ThumbprintTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -10818,11 +10540,11 @@ impl UpdateRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateRoleResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11437,11 +11159,7 @@ struct UserNameTypeDeserializer;
 impl UserNameTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about a virtual MFA device.</p>
@@ -11576,7 +11294,7 @@ impl AddClientIDToOpenIDConnectProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11661,7 +11379,7 @@ impl AddRoleToInstanceProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11723,7 +11441,7 @@ impl AddUserToGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11797,7 +11515,7 @@ impl AttachGroupPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11880,7 +11598,7 @@ impl AttachRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11957,7 +11675,7 @@ impl AttachUserPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12042,7 +11760,7 @@ impl ChangePasswordError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12105,7 +11823,7 @@ impl CreateAccessKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12165,7 +11883,7 @@ impl CreateAccountAliasError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12232,7 +11950,7 @@ impl CreateGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12293,7 +12011,7 @@ impl CreateInstanceProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12367,7 +12085,7 @@ impl CreateLoginProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12440,7 +12158,7 @@ impl CreateOpenIDConnectProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12517,7 +12235,7 @@ impl CreatePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12593,7 +12311,7 @@ impl CreatePolicyVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12676,7 +12394,7 @@ impl CreateRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12746,7 +12464,7 @@ impl CreateSAMLProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12814,7 +12532,7 @@ impl CreateServiceLinkedRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12883,7 +12601,7 @@ impl CreateServiceSpecificCredentialError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12968,7 +12686,7 @@ impl CreateUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13031,7 +12749,7 @@ impl CreateVirtualMFADeviceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13100,7 +12818,7 @@ impl DeactivateMFADeviceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13163,7 +12881,7 @@ impl DeleteAccessKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13223,7 +12941,7 @@ impl DeleteAccountAliasError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13285,7 +13003,7 @@ impl DeleteAccountPasswordPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13352,7 +13070,7 @@ impl DeleteGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13413,7 +13131,7 @@ impl DeleteGroupPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13480,7 +13198,7 @@ impl DeleteInstanceProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13550,7 +13268,7 @@ impl DeleteLoginProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13615,7 +13333,7 @@ impl DeleteOpenIDConnectProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13689,7 +13407,7 @@ impl DeletePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13765,7 +13483,7 @@ impl DeletePolicyVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13848,7 +13566,7 @@ impl DeleteRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13917,7 +13635,7 @@ impl DeleteRolePermissionsBoundaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13986,7 +13704,7 @@ impl DeleteRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14054,7 +13772,7 @@ impl DeleteSAMLProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14101,7 +13819,7 @@ impl DeleteSSHPublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14166,7 +13884,7 @@ impl DeleteServerCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14227,7 +13945,7 @@ impl DeleteServiceLinkedRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14277,7 +13995,7 @@ impl DeleteServiceSpecificCredentialError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14335,7 +14053,7 @@ impl DeleteSigningCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14409,7 +14127,7 @@ impl DeleteUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14468,7 +14186,7 @@ impl DeleteUserPermissionsBoundaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14527,7 +14245,7 @@ impl DeleteUserPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14594,7 +14312,7 @@ impl DeleteVirtualMFADeviceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14662,7 +14380,7 @@ impl DetachGroupPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14737,7 +14455,7 @@ impl DetachRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14806,7 +14524,7 @@ impl DetachUserPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14890,7 +14608,7 @@ impl EnableMFADeviceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14948,7 +14666,7 @@ impl GenerateCredentialReportError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14997,7 +14715,7 @@ impl GenerateOrganizationsAccessReportError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15056,7 +14774,7 @@ impl GenerateServiceLastAccessedDetailsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15097,7 +14815,7 @@ impl GetAccessKeyLastUsedError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15143,7 +14861,7 @@ impl GetAccountAuthorizationDetailsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15196,7 +14914,7 @@ impl GetAccountPasswordPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15241,7 +14959,7 @@ impl GetAccountSummaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15287,7 +15005,7 @@ impl GetContextKeysForCustomPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15344,7 +15062,7 @@ impl GetContextKeysForPrincipalPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15418,7 +15136,7 @@ impl GetCredentialReportError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15474,7 +15192,7 @@ impl GetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15526,7 +15244,7 @@ impl GetGroupPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15578,7 +15296,7 @@ impl GetInstanceProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15630,7 +15348,7 @@ impl GetLoginProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15689,7 +15407,7 @@ impl GetOpenIDConnectProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15737,7 +15455,7 @@ impl GetOrganizationsAccessReportError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15795,7 +15513,7 @@ impl GetPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15855,7 +15573,7 @@ impl GetPolicyVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15908,7 +15626,7 @@ impl GetRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15960,7 +15678,7 @@ impl GetRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16019,7 +15737,7 @@ impl GetSAMLProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16074,7 +15792,7 @@ impl GetSSHPublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16128,7 +15846,7 @@ impl GetServerCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16182,7 +15900,7 @@ impl GetServiceLastAccessedDetailsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16240,7 +15958,7 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16311,7 +16029,7 @@ impl GetServiceLinkedRoleDeletionStatusError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16370,7 +16088,7 @@ impl GetUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16422,7 +16140,7 @@ impl GetUserPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16474,7 +16192,7 @@ impl ListAccessKeysError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16519,7 +16237,7 @@ impl ListAccountAliasesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16577,7 +16295,7 @@ impl ListAttachedGroupPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16637,7 +16355,7 @@ impl ListAttachedRolePoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16697,7 +16415,7 @@ impl ListAttachedUserPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16757,7 +16475,7 @@ impl ListEntitiesForPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16810,7 +16528,7 @@ impl ListGroupPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16855,7 +16573,7 @@ impl ListGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16906,7 +16624,7 @@ impl ListGroupsForUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16951,7 +16669,7 @@ impl ListInstanceProfilesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17004,7 +16722,7 @@ impl ListInstanceProfilesForRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17056,7 +16774,7 @@ impl ListMFADevicesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17103,7 +16821,7 @@ impl ListOpenIDConnectProvidersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17147,7 +16865,7 @@ impl ListPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17204,7 +16922,7 @@ impl ListPoliciesGrantingServiceAccessError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17267,7 +16985,7 @@ impl ListPolicyVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17320,7 +17038,7 @@ impl ListRolePoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17372,7 +17090,7 @@ impl ListRoleTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17417,7 +17135,7 @@ impl ListRolesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17461,7 +17179,7 @@ impl ListSAMLProvidersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17505,7 +17223,7 @@ impl ListSSHPublicKeysError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17549,7 +17267,7 @@ impl ListServerCertificatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17604,7 +17322,7 @@ impl ListServiceSpecificCredentialsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17658,7 +17376,7 @@ impl ListSigningCertificatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17710,7 +17428,7 @@ impl ListUserPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17762,7 +17480,7 @@ impl ListUserTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17807,7 +17525,7 @@ impl ListUsersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17843,7 +17561,7 @@ impl ListVirtualMFADevicesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17906,7 +17624,7 @@ impl PutGroupPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17987,7 +17705,7 @@ impl PutRolePermissionsBoundaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18067,7 +17785,7 @@ impl PutRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18140,7 +17858,7 @@ impl PutUserPermissionsBoundaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18210,7 +17928,7 @@ impl PutUserPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18279,7 +17997,7 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18358,7 +18076,7 @@ impl RemoveRoleFromInstanceProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18421,7 +18139,7 @@ impl RemoveUserFromGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18469,7 +18187,7 @@ impl ResetServiceSpecificCredentialError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18534,7 +18252,7 @@ impl ResyncMFADeviceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18602,7 +18320,7 @@ impl SetDefaultPolicyVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18653,7 +18371,7 @@ impl SetSecurityTokenServicePreferencesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18706,7 +18424,7 @@ impl SimulateCustomPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18765,7 +18483,7 @@ impl SimulatePrincipalPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18839,7 +18557,7 @@ impl TagRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18915,7 +18633,7 @@ impl TagUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18977,7 +18695,7 @@ impl UntagRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19037,7 +18755,7 @@ impl UntagUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19097,7 +18815,7 @@ impl UpdateAccessKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19168,7 +18886,7 @@ impl UpdateAccountPasswordPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19247,7 +18965,7 @@ impl UpdateAssumeRolePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19318,7 +19036,7 @@ impl UpdateGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19395,7 +19113,7 @@ impl UpdateLoginProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19467,7 +19185,7 @@ impl UpdateOpenIDConnectProviderThumbprintError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19533,7 +19251,7 @@ impl UpdateRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19593,7 +19311,7 @@ impl UpdateRoleDescriptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19660,7 +19378,7 @@ impl UpdateSAMLProviderError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19707,7 +19425,7 @@ impl UpdateSSHPublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19772,7 +19490,7 @@ impl UpdateServerCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19823,7 +19541,7 @@ impl UpdateServiceSpecificCredentialError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19881,7 +19599,7 @@ impl UpdateSigningCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19962,7 +19680,7 @@ impl UpdateUserError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -20041,7 +19759,7 @@ impl UploadSSHPublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -20121,7 +19839,7 @@ impl UploadServerCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -20217,7 +19935,7 @@ impl UploadSigningCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -21142,25 +20860,18 @@ impl Iam for IamClient {
         input: AddClientIDToOpenIDConnectProviderRequest,
     ) -> Result<(), RusotoError<AddClientIDToOpenIDConnectProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddClientIDToOpenIDConnectProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AddClientIDToOpenIDConnectProvider");
+        let mut params = params;
         AddClientIDToOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddClientIDToOpenIDConnectProviderError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AddClientIDToOpenIDConnectProviderError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21172,23 +20883,15 @@ impl Iam for IamClient {
         input: AddRoleToInstanceProfileRequest,
     ) -> Result<(), RusotoError<AddRoleToInstanceProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddRoleToInstanceProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AddRoleToInstanceProfile");
+        let mut params = params;
         AddRoleToInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddRoleToInstanceProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddRoleToInstanceProfileError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21200,23 +20903,15 @@ impl Iam for IamClient {
         input: AddUserToGroupRequest,
     ) -> Result<(), RusotoError<AddUserToGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddUserToGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AddUserToGroup");
+        let mut params = params;
         AddUserToGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddUserToGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddUserToGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21228,23 +20923,15 @@ impl Iam for IamClient {
         input: AttachGroupPolicyRequest,
     ) -> Result<(), RusotoError<AttachGroupPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachGroupPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AttachGroupPolicy");
+        let mut params = params;
         AttachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachGroupPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachGroupPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21256,23 +20943,15 @@ impl Iam for IamClient {
         input: AttachRolePolicyRequest,
     ) -> Result<(), RusotoError<AttachRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AttachRolePolicy");
+        let mut params = params;
         AttachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachRolePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21284,23 +20963,15 @@ impl Iam for IamClient {
         input: AttachUserPolicyRequest,
     ) -> Result<(), RusotoError<AttachUserPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachUserPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("AttachUserPolicy");
+        let mut params = params;
         AttachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachUserPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachUserPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21312,23 +20983,15 @@ impl Iam for IamClient {
         input: ChangePasswordRequest,
     ) -> Result<(), RusotoError<ChangePasswordError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ChangePassword");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ChangePassword");
+        let mut params = params;
         ChangePasswordRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ChangePasswordError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ChangePasswordError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21340,45 +21003,28 @@ impl Iam for IamClient {
         input: CreateAccessKeyRequest,
     ) -> Result<CreateAccessKeyResponse, RusotoError<CreateAccessKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateAccessKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateAccessKey");
+        let mut params = params;
         CreateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateAccessKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAccessKeyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateAccessKeyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateAccessKeyResponseDeserializer::deserialize(
-                "CreateAccessKeyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateAccessKeyResponseDeserializer::deserialize("CreateAccessKeyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21388,23 +21034,15 @@ impl Iam for IamClient {
         input: CreateAccountAliasRequest,
     ) -> Result<(), RusotoError<CreateAccountAliasError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateAccountAlias");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateAccountAlias");
+        let mut params = params;
         CreateAccountAliasRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateAccountAliasError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAccountAliasError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -21416,42 +21054,27 @@ impl Iam for IamClient {
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateGroup");
+        let mut params = params;
         CreateGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateGroupResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateGroupResponseDeserializer::deserialize("CreateGroupResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21461,45 +21084,30 @@ impl Iam for IamClient {
         input: CreateInstanceProfileRequest,
     ) -> Result<CreateInstanceProfileResponse, RusotoError<CreateInstanceProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateInstanceProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateInstanceProfile");
+        let mut params = params;
         CreateInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateInstanceProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateInstanceProfileError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateInstanceProfileResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateInstanceProfileResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateInstanceProfileResponseDeserializer::deserialize(
                 "CreateInstanceProfileResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21509,45 +21117,30 @@ impl Iam for IamClient {
         input: CreateLoginProfileRequest,
     ) -> Result<CreateLoginProfileResponse, RusotoError<CreateLoginProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLoginProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateLoginProfile");
+        let mut params = params;
         CreateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLoginProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLoginProfileError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateLoginProfileResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateLoginProfileResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateLoginProfileResponseDeserializer::deserialize(
                 "CreateLoginProfileResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21558,45 +21151,30 @@ impl Iam for IamClient {
     ) -> Result<CreateOpenIDConnectProviderResponse, RusotoError<CreateOpenIDConnectProviderError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateOpenIDConnectProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateOpenIDConnectProvider");
+        let mut params = params;
         CreateOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateOpenIDConnectProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateOpenIDConnectProviderError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateOpenIDConnectProviderResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateOpenIDConnectProviderResponseDeserializer::deserialize(
                 "CreateOpenIDConnectProviderResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21606,43 +21184,28 @@ impl Iam for IamClient {
         input: CreatePolicyRequest,
     ) -> Result<CreatePolicyResponse, RusotoError<CreatePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreatePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreatePolicy");
+        let mut params = params;
         CreatePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreatePolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreatePolicyResponseDeserializer::deserialize("CreatePolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21652,45 +21215,30 @@ impl Iam for IamClient {
         input: CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreatePolicyVersion");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreatePolicyVersion");
+        let mut params = params;
         CreatePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePolicyVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePolicyVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreatePolicyVersionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreatePolicyVersionResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreatePolicyVersionResponseDeserializer::deserialize(
                 "CreatePolicyVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21700,42 +21248,27 @@ impl Iam for IamClient {
         input: CreateRoleRequest,
     ) -> Result<CreateRoleResponse, RusotoError<CreateRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateRole");
+        let mut params = params;
         CreateRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateRoleResponseDeserializer::deserialize("CreateRoleResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21745,45 +21278,30 @@ impl Iam for IamClient {
         input: CreateSAMLProviderRequest,
     ) -> Result<CreateSAMLProviderResponse, RusotoError<CreateSAMLProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateSAMLProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateSAMLProvider");
+        let mut params = params;
         CreateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateSAMLProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSAMLProviderError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateSAMLProviderResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateSAMLProviderResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateSAMLProviderResponseDeserializer::deserialize(
                 "CreateSAMLProviderResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21793,45 +21311,30 @@ impl Iam for IamClient {
         input: CreateServiceLinkedRoleRequest,
     ) -> Result<CreateServiceLinkedRoleResponse, RusotoError<CreateServiceLinkedRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateServiceLinkedRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateServiceLinkedRole");
+        let mut params = params;
         CreateServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateServiceLinkedRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateServiceLinkedRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateServiceLinkedRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateServiceLinkedRoleResponseDeserializer::deserialize(
                 "CreateServiceLinkedRoleResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21844,47 +21347,30 @@ impl Iam for IamClient {
         RusotoError<CreateServiceSpecificCredentialError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateServiceSpecificCredential");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateServiceSpecificCredential");
+        let mut params = params;
         CreateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateServiceSpecificCredentialError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateServiceSpecificCredentialError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateServiceSpecificCredentialResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateServiceSpecificCredentialResponseDeserializer::deserialize(
                 "CreateServiceSpecificCredentialResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21894,42 +21380,27 @@ impl Iam for IamClient {
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateUser");
+        let mut params = params;
         CreateUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUserError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateUserResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateUserResponseDeserializer::deserialize("CreateUserResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateUserResponseDeserializer::deserialize("CreateUserResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21939,45 +21410,30 @@ impl Iam for IamClient {
         input: CreateVirtualMFADeviceRequest,
     ) -> Result<CreateVirtualMFADeviceResponse, RusotoError<CreateVirtualMFADeviceError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateVirtualMFADevice");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("CreateVirtualMFADevice");
+        let mut params = params;
         CreateVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateVirtualMFADeviceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateVirtualMFADeviceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateVirtualMFADeviceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateVirtualMFADeviceResponseDeserializer::deserialize(
                 "CreateVirtualMFADeviceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21987,23 +21443,15 @@ impl Iam for IamClient {
         input: DeactivateMFADeviceRequest,
     ) -> Result<(), RusotoError<DeactivateMFADeviceError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeactivateMFADevice");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeactivateMFADevice");
+        let mut params = params;
         DeactivateMFADeviceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeactivateMFADeviceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeactivateMFADeviceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22015,23 +21463,15 @@ impl Iam for IamClient {
         input: DeleteAccessKeyRequest,
     ) -> Result<(), RusotoError<DeleteAccessKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAccessKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteAccessKey");
+        let mut params = params;
         DeleteAccessKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAccessKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAccessKeyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22043,23 +21483,15 @@ impl Iam for IamClient {
         input: DeleteAccountAliasRequest,
     ) -> Result<(), RusotoError<DeleteAccountAliasError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAccountAlias");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteAccountAlias");
+        let mut params = params;
         DeleteAccountAliasRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAccountAliasError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAccountAliasError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22070,23 +21502,14 @@ impl Iam for IamClient {
         &self,
     ) -> Result<(), RusotoError<DeleteAccountPasswordPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAccountPasswordPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteAccountPasswordPolicy");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAccountPasswordPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAccountPasswordPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22098,23 +21521,15 @@ impl Iam for IamClient {
         input: DeleteGroupRequest,
     ) -> Result<(), RusotoError<DeleteGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteGroup");
+        let mut params = params;
         DeleteGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22126,23 +21541,15 @@ impl Iam for IamClient {
         input: DeleteGroupPolicyRequest,
     ) -> Result<(), RusotoError<DeleteGroupPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteGroupPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteGroupPolicy");
+        let mut params = params;
         DeleteGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteGroupPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteGroupPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22154,23 +21561,15 @@ impl Iam for IamClient {
         input: DeleteInstanceProfileRequest,
     ) -> Result<(), RusotoError<DeleteInstanceProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteInstanceProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteInstanceProfile");
+        let mut params = params;
         DeleteInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteInstanceProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInstanceProfileError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22182,23 +21581,15 @@ impl Iam for IamClient {
         input: DeleteLoginProfileRequest,
     ) -> Result<(), RusotoError<DeleteLoginProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLoginProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteLoginProfile");
+        let mut params = params;
         DeleteLoginProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLoginProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLoginProfileError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22210,23 +21601,15 @@ impl Iam for IamClient {
         input: DeleteOpenIDConnectProviderRequest,
     ) -> Result<(), RusotoError<DeleteOpenIDConnectProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteOpenIDConnectProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteOpenIDConnectProvider");
+        let mut params = params;
         DeleteOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteOpenIDConnectProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteOpenIDConnectProviderError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22238,23 +21621,15 @@ impl Iam for IamClient {
         input: DeletePolicyRequest,
     ) -> Result<(), RusotoError<DeletePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeletePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeletePolicy");
+        let mut params = params;
         DeletePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22266,23 +21641,15 @@ impl Iam for IamClient {
         input: DeletePolicyVersionRequest,
     ) -> Result<(), RusotoError<DeletePolicyVersionError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeletePolicyVersion");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeletePolicyVersion");
+        let mut params = params;
         DeletePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePolicyVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePolicyVersionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22294,23 +21661,15 @@ impl Iam for IamClient {
         input: DeleteRoleRequest,
     ) -> Result<(), RusotoError<DeleteRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteRole");
+        let mut params = params;
         DeleteRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRoleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22322,23 +21681,15 @@ impl Iam for IamClient {
         input: DeleteRolePermissionsBoundaryRequest,
     ) -> Result<(), RusotoError<DeleteRolePermissionsBoundaryError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteRolePermissionsBoundary");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteRolePermissionsBoundary");
+        let mut params = params;
         DeleteRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteRolePermissionsBoundaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRolePermissionsBoundaryError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22350,23 +21701,15 @@ impl Iam for IamClient {
         input: DeleteRolePolicyRequest,
     ) -> Result<(), RusotoError<DeleteRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteRolePolicy");
+        let mut params = params;
         DeleteRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRolePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22378,23 +21721,15 @@ impl Iam for IamClient {
         input: DeleteSAMLProviderRequest,
     ) -> Result<(), RusotoError<DeleteSAMLProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteSAMLProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteSAMLProvider");
+        let mut params = params;
         DeleteSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteSAMLProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSAMLProviderError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22406,23 +21741,15 @@ impl Iam for IamClient {
         input: DeleteSSHPublicKeyRequest,
     ) -> Result<(), RusotoError<DeleteSSHPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteSSHPublicKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteSSHPublicKey");
+        let mut params = params;
         DeleteSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteSSHPublicKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSSHPublicKeyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22434,23 +21761,15 @@ impl Iam for IamClient {
         input: DeleteServerCertificateRequest,
     ) -> Result<(), RusotoError<DeleteServerCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteServerCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteServerCertificate");
+        let mut params = params;
         DeleteServerCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteServerCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServerCertificateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22462,45 +21781,30 @@ impl Iam for IamClient {
         input: DeleteServiceLinkedRoleRequest,
     ) -> Result<DeleteServiceLinkedRoleResponse, RusotoError<DeleteServiceLinkedRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteServiceLinkedRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteServiceLinkedRole");
+        let mut params = params;
         DeleteServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteServiceLinkedRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServiceLinkedRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteServiceLinkedRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
                 "DeleteServiceLinkedRoleResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22510,25 +21814,15 @@ impl Iam for IamClient {
         input: DeleteServiceSpecificCredentialRequest,
     ) -> Result<(), RusotoError<DeleteServiceSpecificCredentialError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteServiceSpecificCredential");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteServiceSpecificCredential");
+        let mut params = params;
         DeleteServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteServiceSpecificCredentialError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServiceSpecificCredentialError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22540,23 +21834,15 @@ impl Iam for IamClient {
         input: DeleteSigningCertificateRequest,
     ) -> Result<(), RusotoError<DeleteSigningCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteSigningCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteSigningCertificate");
+        let mut params = params;
         DeleteSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteSigningCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSigningCertificateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22568,23 +21854,15 @@ impl Iam for IamClient {
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteUser");
+        let mut params = params;
         DeleteUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22596,23 +21874,15 @@ impl Iam for IamClient {
         input: DeleteUserPermissionsBoundaryRequest,
     ) -> Result<(), RusotoError<DeleteUserPermissionsBoundaryError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteUserPermissionsBoundary");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteUserPermissionsBoundary");
+        let mut params = params;
         DeleteUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteUserPermissionsBoundaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserPermissionsBoundaryError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22624,23 +21894,15 @@ impl Iam for IamClient {
         input: DeleteUserPolicyRequest,
     ) -> Result<(), RusotoError<DeleteUserPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteUserPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteUserPolicy");
+        let mut params = params;
         DeleteUserPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteUserPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22652,23 +21914,15 @@ impl Iam for IamClient {
         input: DeleteVirtualMFADeviceRequest,
     ) -> Result<(), RusotoError<DeleteVirtualMFADeviceError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteVirtualMFADevice");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DeleteVirtualMFADevice");
+        let mut params = params;
         DeleteVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteVirtualMFADeviceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteVirtualMFADeviceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22680,23 +21934,15 @@ impl Iam for IamClient {
         input: DetachGroupPolicyRequest,
     ) -> Result<(), RusotoError<DetachGroupPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachGroupPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DetachGroupPolicy");
+        let mut params = params;
         DetachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachGroupPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachGroupPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22708,23 +21954,15 @@ impl Iam for IamClient {
         input: DetachRolePolicyRequest,
     ) -> Result<(), RusotoError<DetachRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DetachRolePolicy");
+        let mut params = params;
         DetachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachRolePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22736,23 +21974,15 @@ impl Iam for IamClient {
         input: DetachUserPolicyRequest,
     ) -> Result<(), RusotoError<DetachUserPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachUserPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("DetachUserPolicy");
+        let mut params = params;
         DetachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachUserPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachUserPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22764,23 +21994,15 @@ impl Iam for IamClient {
         input: EnableMFADeviceRequest,
     ) -> Result<(), RusotoError<EnableMFADeviceError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableMFADevice");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("EnableMFADevice");
+        let mut params = params;
         EnableMFADeviceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableMFADeviceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableMFADeviceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22791,45 +22013,29 @@ impl Iam for IamClient {
         &self,
     ) -> Result<GenerateCredentialReportResponse, RusotoError<GenerateCredentialReportError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GenerateCredentialReport");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GenerateCredentialReport");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GenerateCredentialReportError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GenerateCredentialReportError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GenerateCredentialReportResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GenerateCredentialReportResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GenerateCredentialReportResponseDeserializer::deserialize(
                 "GenerateCredentialReportResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22842,47 +22048,33 @@ impl Iam for IamClient {
         RusotoError<GenerateOrganizationsAccessReportError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GenerateOrganizationsAccessReport");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GenerateOrganizationsAccessReport");
+        let mut params = params;
         GenerateOrganizationsAccessReportRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GenerateOrganizationsAccessReportError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GenerateOrganizationsAccessReportError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GenerateOrganizationsAccessReportResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GenerateOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GenerateOrganizationsAccessReportResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22895,47 +22087,33 @@ impl Iam for IamClient {
         RusotoError<GenerateServiceLastAccessedDetailsError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GenerateServiceLastAccessedDetails");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GenerateServiceLastAccessedDetails");
+        let mut params = params;
         GenerateServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GenerateServiceLastAccessedDetailsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GenerateServiceLastAccessedDetailsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GenerateServiceLastAccessedDetailsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GenerateServiceLastAccessedDetailsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22945,45 +22123,30 @@ impl Iam for IamClient {
         input: GetAccessKeyLastUsedRequest,
     ) -> Result<GetAccessKeyLastUsedResponse, RusotoError<GetAccessKeyLastUsedError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccessKeyLastUsed");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetAccessKeyLastUsed");
+        let mut params = params;
         GetAccessKeyLastUsedRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccessKeyLastUsedError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccessKeyLastUsedError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccessKeyLastUsedResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetAccessKeyLastUsedResponseDeserializer::deserialize(
                 "GetAccessKeyLastUsedResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22996,45 +22159,30 @@ impl Iam for IamClient {
         RusotoError<GetAccountAuthorizationDetailsError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccountAuthorizationDetails");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetAccountAuthorizationDetails");
+        let mut params = params;
         GetAccountAuthorizationDetailsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccountAuthorizationDetailsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountAuthorizationDetailsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccountAuthorizationDetailsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetAccountAuthorizationDetailsResponseDeserializer::deserialize(
                 "GetAccountAuthorizationDetailsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23043,45 +22191,29 @@ impl Iam for IamClient {
         &self,
     ) -> Result<GetAccountPasswordPolicyResponse, RusotoError<GetAccountPasswordPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccountPasswordPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetAccountPasswordPolicy");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccountPasswordPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountPasswordPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccountPasswordPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetAccountPasswordPolicyResponseDeserializer::deserialize(
                 "GetAccountPasswordPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23090,45 +22222,29 @@ impl Iam for IamClient {
         &self,
     ) -> Result<GetAccountSummaryResponse, RusotoError<GetAccountSummaryError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccountSummary");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetAccountSummary");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccountSummaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountSummaryError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccountSummaryResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccountSummaryResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetAccountSummaryResponseDeserializer::deserialize(
                 "GetAccountSummaryResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23139,45 +22255,30 @@ impl Iam for IamClient {
     ) -> Result<GetContextKeysForPolicyResponse, RusotoError<GetContextKeysForCustomPolicyError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetContextKeysForCustomPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetContextKeysForCustomPolicy");
+        let mut params = params;
         GetContextKeysForCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetContextKeysForCustomPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetContextKeysForCustomPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetContextKeysForPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForCustomPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23188,47 +22289,33 @@ impl Iam for IamClient {
     ) -> Result<GetContextKeysForPolicyResponse, RusotoError<GetContextKeysForPrincipalPolicyError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetContextKeysForPrincipalPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetContextKeysForPrincipalPolicy");
+        let mut params = params;
         GetContextKeysForPrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetContextKeysForPrincipalPolicyError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetContextKeysForPrincipalPolicyError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetContextKeysForPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetContextKeysForPolicyResponseDeserializer::deserialize(
                 "GetContextKeysForPrincipalPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23237,45 +22324,29 @@ impl Iam for IamClient {
         &self,
     ) -> Result<GetCredentialReportResponse, RusotoError<GetCredentialReportError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetCredentialReport");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetCredentialReport");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCredentialReportError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCredentialReportError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCredentialReportResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetCredentialReportResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetCredentialReportResponseDeserializer::deserialize(
                 "GetCredentialReportResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23285,42 +22356,27 @@ impl Iam for IamClient {
         input: GetGroupRequest,
     ) -> Result<GetGroupResponse, RusotoError<GetGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetGroup");
+        let mut params = params;
         GetGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetGroupResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetGroupResponseDeserializer::deserialize("GetGroupResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetGroupResponseDeserializer::deserialize("GetGroupResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23330,45 +22386,28 @@ impl Iam for IamClient {
         input: GetGroupPolicyRequest,
     ) -> Result<GetGroupPolicyResponse, RusotoError<GetGroupPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetGroupPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetGroupPolicy");
+        let mut params = params;
         GetGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetGroupPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetGroupPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetGroupPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetGroupPolicyResponseDeserializer::deserialize(
-                "GetGroupPolicyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetGroupPolicyResponseDeserializer::deserialize("GetGroupPolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23378,45 +22417,30 @@ impl Iam for IamClient {
         input: GetInstanceProfileRequest,
     ) -> Result<GetInstanceProfileResponse, RusotoError<GetInstanceProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetInstanceProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetInstanceProfile");
+        let mut params = params;
         GetInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetInstanceProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceProfileError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetInstanceProfileResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetInstanceProfileResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetInstanceProfileResponseDeserializer::deserialize(
                 "GetInstanceProfileResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23426,45 +22450,28 @@ impl Iam for IamClient {
         input: GetLoginProfileRequest,
     ) -> Result<GetLoginProfileResponse, RusotoError<GetLoginProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetLoginProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetLoginProfile");
+        let mut params = params;
         GetLoginProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetLoginProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLoginProfileError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetLoginProfileResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetLoginProfileResponseDeserializer::deserialize(
-                "GetLoginProfileResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetLoginProfileResponseDeserializer::deserialize("GetLoginProfileResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23474,45 +22481,30 @@ impl Iam for IamClient {
         input: GetOpenIDConnectProviderRequest,
     ) -> Result<GetOpenIDConnectProviderResponse, RusotoError<GetOpenIDConnectProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetOpenIDConnectProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetOpenIDConnectProvider");
+        let mut params = params;
         GetOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetOpenIDConnectProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOpenIDConnectProviderError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetOpenIDConnectProviderResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetOpenIDConnectProviderResponseDeserializer::deserialize(
                 "GetOpenIDConnectProviderResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23523,45 +22515,30 @@ impl Iam for IamClient {
     ) -> Result<GetOrganizationsAccessReportResponse, RusotoError<GetOrganizationsAccessReportError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetOrganizationsAccessReport");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetOrganizationsAccessReport");
+        let mut params = params;
         GetOrganizationsAccessReportRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetOrganizationsAccessReportError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOrganizationsAccessReportError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetOrganizationsAccessReportResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetOrganizationsAccessReportResponseDeserializer::deserialize(
                 "GetOrganizationsAccessReportResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23571,42 +22548,27 @@ impl Iam for IamClient {
         input: GetPolicyRequest,
     ) -> Result<GetPolicyResponse, RusotoError<GetPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetPolicy");
+        let mut params = params;
         GetPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetPolicyResponseDeserializer::deserialize("GetPolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23616,45 +22578,28 @@ impl Iam for IamClient {
         input: GetPolicyVersionRequest,
     ) -> Result<GetPolicyVersionResponse, RusotoError<GetPolicyVersionError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetPolicyVersion");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetPolicyVersion");
+        let mut params = params;
         GetPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPolicyVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPolicyVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPolicyVersionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetPolicyVersionResponseDeserializer::deserialize(
-                "GetPolicyVersionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetPolicyVersionResponseDeserializer::deserialize("GetPolicyVersionResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23664,42 +22609,27 @@ impl Iam for IamClient {
         input: GetRoleRequest,
     ) -> Result<GetRoleResponse, RusotoError<GetRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetRole");
+        let mut params = params;
         GetRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetRoleResponseDeserializer::deserialize("GetRoleResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetRoleResponseDeserializer::deserialize("GetRoleResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23709,43 +22639,28 @@ impl Iam for IamClient {
         input: GetRolePolicyRequest,
     ) -> Result<GetRolePolicyResponse, RusotoError<GetRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetRolePolicy");
+        let mut params = params;
         GetRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRolePolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetRolePolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetRolePolicyResponseDeserializer::deserialize("GetRolePolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23755,45 +22670,28 @@ impl Iam for IamClient {
         input: GetSAMLProviderRequest,
     ) -> Result<GetSAMLProviderResponse, RusotoError<GetSAMLProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSAMLProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetSAMLProvider");
+        let mut params = params;
         GetSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSAMLProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSAMLProviderError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSAMLProviderResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSAMLProviderResponseDeserializer::deserialize(
-                "GetSAMLProviderResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetSAMLProviderResponseDeserializer::deserialize("GetSAMLProviderResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23803,45 +22701,28 @@ impl Iam for IamClient {
         input: GetSSHPublicKeyRequest,
     ) -> Result<GetSSHPublicKeyResponse, RusotoError<GetSSHPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSSHPublicKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetSSHPublicKey");
+        let mut params = params;
         GetSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSSHPublicKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSSHPublicKeyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSSHPublicKeyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSSHPublicKeyResponseDeserializer::deserialize(
-                "GetSSHPublicKeyResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetSSHPublicKeyResponseDeserializer::deserialize("GetSSHPublicKeyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23851,45 +22732,30 @@ impl Iam for IamClient {
         input: GetServerCertificateRequest,
     ) -> Result<GetServerCertificateResponse, RusotoError<GetServerCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetServerCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetServerCertificate");
+        let mut params = params;
         GetServerCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetServerCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServerCertificateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetServerCertificateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetServerCertificateResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetServerCertificateResponseDeserializer::deserialize(
                 "GetServerCertificateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23902,45 +22768,30 @@ impl Iam for IamClient {
         RusotoError<GetServiceLastAccessedDetailsError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetServiceLastAccessedDetails");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetServiceLastAccessedDetails");
+        let mut params = params;
         GetServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetServiceLastAccessedDetailsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServiceLastAccessedDetailsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetServiceLastAccessedDetailsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
                 "GetServiceLastAccessedDetailsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23953,10 +22804,8 @@ impl Iam for IamClient {
         RusotoError<GetServiceLastAccessedDetailsWithEntitiesError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetServiceLastAccessedDetailsWithEntities");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetServiceLastAccessedDetailsWithEntities");
+        let mut params = params;
         GetServiceLastAccessedDetailsWithEntitiesRequestSerializer::serialize(
             &mut params,
             "",
@@ -23965,37 +22814,28 @@ impl Iam for IamClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetServiceLastAccessedDetailsWithEntitiesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetServiceLastAccessedDetailsWithEntitiesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetServiceLastAccessedDetailsWithEntitiesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
-                "GetServiceLastAccessedDetailsWithEntitiesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
+                    "GetServiceLastAccessedDetailsWithEntitiesResult",
+                    stack,
+                )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24008,47 +22848,33 @@ impl Iam for IamClient {
         RusotoError<GetServiceLinkedRoleDeletionStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetServiceLinkedRoleDeletionStatus");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetServiceLinkedRoleDeletionStatus");
+        let mut params = params;
         GetServiceLinkedRoleDeletionStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetServiceLinkedRoleDeletionStatusError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetServiceLinkedRoleDeletionStatusError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetServiceLinkedRoleDeletionStatusResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
                 "GetServiceLinkedRoleDeletionStatusResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24058,42 +22884,27 @@ impl Iam for IamClient {
         input: GetUserRequest,
     ) -> Result<GetUserResponse, RusotoError<GetUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetUser");
+        let mut params = params;
         GetUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUserError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetUserResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetUserResponseDeserializer::deserialize("GetUserResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetUserResponseDeserializer::deserialize("GetUserResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24103,43 +22914,28 @@ impl Iam for IamClient {
         input: GetUserPolicyRequest,
     ) -> Result<GetUserPolicyResponse, RusotoError<GetUserPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetUserPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("GetUserPolicy");
+        let mut params = params;
         GetUserPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetUserPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUserPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetUserPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetUserPolicyResponseDeserializer::deserialize("GetUserPolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24149,45 +22945,28 @@ impl Iam for IamClient {
         input: ListAccessKeysRequest,
     ) -> Result<ListAccessKeysResponse, RusotoError<ListAccessKeysError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAccessKeys");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListAccessKeys");
+        let mut params = params;
         ListAccessKeysRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAccessKeysError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAccessKeysError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAccessKeysResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAccessKeysResponseDeserializer::deserialize(
-                "ListAccessKeysResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListAccessKeysResponseDeserializer::deserialize("ListAccessKeysResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24197,45 +22976,30 @@ impl Iam for IamClient {
         input: ListAccountAliasesRequest,
     ) -> Result<ListAccountAliasesResponse, RusotoError<ListAccountAliasesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAccountAliases");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListAccountAliases");
+        let mut params = params;
         ListAccountAliasesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAccountAliasesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAccountAliasesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAccountAliasesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAccountAliasesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListAccountAliasesResponseDeserializer::deserialize(
                 "ListAccountAliasesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24246,45 +23010,30 @@ impl Iam for IamClient {
     ) -> Result<ListAttachedGroupPoliciesResponse, RusotoError<ListAttachedGroupPoliciesError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAttachedGroupPolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListAttachedGroupPolicies");
+        let mut params = params;
         ListAttachedGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAttachedGroupPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAttachedGroupPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAttachedGroupPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListAttachedGroupPoliciesResponseDeserializer::deserialize(
                 "ListAttachedGroupPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24294,45 +23043,30 @@ impl Iam for IamClient {
         input: ListAttachedRolePoliciesRequest,
     ) -> Result<ListAttachedRolePoliciesResponse, RusotoError<ListAttachedRolePoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAttachedRolePolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListAttachedRolePolicies");
+        let mut params = params;
         ListAttachedRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAttachedRolePoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAttachedRolePoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAttachedRolePoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListAttachedRolePoliciesResponseDeserializer::deserialize(
                 "ListAttachedRolePoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24342,45 +23076,30 @@ impl Iam for IamClient {
         input: ListAttachedUserPoliciesRequest,
     ) -> Result<ListAttachedUserPoliciesResponse, RusotoError<ListAttachedUserPoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAttachedUserPolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListAttachedUserPolicies");
+        let mut params = params;
         ListAttachedUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAttachedUserPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAttachedUserPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAttachedUserPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListAttachedUserPoliciesResponseDeserializer::deserialize(
                 "ListAttachedUserPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24390,45 +23109,30 @@ impl Iam for IamClient {
         input: ListEntitiesForPolicyRequest,
     ) -> Result<ListEntitiesForPolicyResponse, RusotoError<ListEntitiesForPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListEntitiesForPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListEntitiesForPolicy");
+        let mut params = params;
         ListEntitiesForPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListEntitiesForPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEntitiesForPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListEntitiesForPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListEntitiesForPolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListEntitiesForPolicyResponseDeserializer::deserialize(
                 "ListEntitiesForPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24438,45 +23142,30 @@ impl Iam for IamClient {
         input: ListGroupPoliciesRequest,
     ) -> Result<ListGroupPoliciesResponse, RusotoError<ListGroupPoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListGroupPolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListGroupPolicies");
+        let mut params = params;
         ListGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListGroupPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGroupPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListGroupPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListGroupPoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListGroupPoliciesResponseDeserializer::deserialize(
                 "ListGroupPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24486,42 +23175,27 @@ impl Iam for IamClient {
         input: ListGroupsRequest,
     ) -> Result<ListGroupsResponse, RusotoError<ListGroupsError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListGroups");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListGroups");
+        let mut params = params;
         ListGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListGroupsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListGroupsResponseDeserializer::deserialize("ListGroupsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24531,45 +23205,30 @@ impl Iam for IamClient {
         input: ListGroupsForUserRequest,
     ) -> Result<ListGroupsForUserResponse, RusotoError<ListGroupsForUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListGroupsForUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListGroupsForUser");
+        let mut params = params;
         ListGroupsForUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListGroupsForUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGroupsForUserError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListGroupsForUserResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListGroupsForUserResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListGroupsForUserResponseDeserializer::deserialize(
                 "ListGroupsForUserResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24579,45 +23238,30 @@ impl Iam for IamClient {
         input: ListInstanceProfilesRequest,
     ) -> Result<ListInstanceProfilesResponse, RusotoError<ListInstanceProfilesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListInstanceProfiles");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListInstanceProfiles");
+        let mut params = params;
         ListInstanceProfilesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListInstanceProfilesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstanceProfilesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListInstanceProfilesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListInstanceProfilesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListInstanceProfilesResponseDeserializer::deserialize(
                 "ListInstanceProfilesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24628,45 +23272,30 @@ impl Iam for IamClient {
     ) -> Result<ListInstanceProfilesForRoleResponse, RusotoError<ListInstanceProfilesForRoleError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListInstanceProfilesForRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListInstanceProfilesForRole");
+        let mut params = params;
         ListInstanceProfilesForRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListInstanceProfilesForRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstanceProfilesForRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListInstanceProfilesForRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListInstanceProfilesForRoleResponseDeserializer::deserialize(
                 "ListInstanceProfilesForRoleResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24676,45 +23305,28 @@ impl Iam for IamClient {
         input: ListMFADevicesRequest,
     ) -> Result<ListMFADevicesResponse, RusotoError<ListMFADevicesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListMFADevices");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListMFADevices");
+        let mut params = params;
         ListMFADevicesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListMFADevicesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMFADevicesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListMFADevicesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListMFADevicesResponseDeserializer::deserialize(
-                "ListMFADevicesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListMFADevicesResponseDeserializer::deserialize("ListMFADevicesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24725,45 +23337,30 @@ impl Iam for IamClient {
     ) -> Result<ListOpenIDConnectProvidersResponse, RusotoError<ListOpenIDConnectProvidersError>>
     {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListOpenIDConnectProviders");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListOpenIDConnectProviders");
+        let mut params = params;
         ListOpenIDConnectProvidersRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListOpenIDConnectProvidersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOpenIDConnectProvidersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListOpenIDConnectProvidersResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListOpenIDConnectProvidersResponseDeserializer::deserialize(
                 "ListOpenIDConnectProvidersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24773,43 +23370,28 @@ impl Iam for IamClient {
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListPolicies");
+        let mut params = params;
         ListPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListPoliciesResponseDeserializer::deserialize("ListPoliciesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24822,47 +23404,33 @@ impl Iam for IamClient {
         RusotoError<ListPoliciesGrantingServiceAccessError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPoliciesGrantingServiceAccess");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListPoliciesGrantingServiceAccess");
+        let mut params = params;
         ListPoliciesGrantingServiceAccessRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPoliciesGrantingServiceAccessError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListPoliciesGrantingServiceAccessError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPoliciesGrantingServiceAccessResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
                 "ListPoliciesGrantingServiceAccessResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24872,45 +23440,30 @@ impl Iam for IamClient {
         input: ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, RusotoError<ListPolicyVersionsError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPolicyVersions");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListPolicyVersions");
+        let mut params = params;
         ListPolicyVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPolicyVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPolicyVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPolicyVersionsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPolicyVersionsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPolicyVersionsResponseDeserializer::deserialize(
                 "ListPolicyVersionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24920,45 +23473,28 @@ impl Iam for IamClient {
         input: ListRolePoliciesRequest,
     ) -> Result<ListRolePoliciesResponse, RusotoError<ListRolePoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListRolePolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListRolePolicies");
+        let mut params = params;
         ListRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListRolePoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRolePoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListRolePoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListRolePoliciesResponseDeserializer::deserialize(
-                "ListRolePoliciesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListRolePoliciesResponseDeserializer::deserialize("ListRolePoliciesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -24968,43 +23504,28 @@ impl Iam for IamClient {
         input: ListRoleTagsRequest,
     ) -> Result<ListRoleTagsResponse, RusotoError<ListRoleTagsError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListRoleTags");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListRoleTags");
+        let mut params = params;
         ListRoleTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListRoleTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRoleTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListRoleTagsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListRoleTagsResponseDeserializer::deserialize("ListRoleTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25014,42 +23535,27 @@ impl Iam for IamClient {
         input: ListRolesRequest,
     ) -> Result<ListRolesResponse, RusotoError<ListRolesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListRoles");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListRoles");
+        let mut params = params;
         ListRolesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListRolesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRolesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListRolesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListRolesResponseDeserializer::deserialize("ListRolesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListRolesResponseDeserializer::deserialize("ListRolesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25059,45 +23565,30 @@ impl Iam for IamClient {
         input: ListSAMLProvidersRequest,
     ) -> Result<ListSAMLProvidersResponse, RusotoError<ListSAMLProvidersError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListSAMLProviders");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListSAMLProviders");
+        let mut params = params;
         ListSAMLProvidersRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListSAMLProvidersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSAMLProvidersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListSAMLProvidersResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListSAMLProvidersResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSAMLProvidersResponseDeserializer::deserialize(
                 "ListSAMLProvidersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25107,45 +23598,30 @@ impl Iam for IamClient {
         input: ListSSHPublicKeysRequest,
     ) -> Result<ListSSHPublicKeysResponse, RusotoError<ListSSHPublicKeysError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListSSHPublicKeys");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListSSHPublicKeys");
+        let mut params = params;
         ListSSHPublicKeysRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListSSHPublicKeysError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSSHPublicKeysError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListSSHPublicKeysResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListSSHPublicKeysResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSSHPublicKeysResponseDeserializer::deserialize(
                 "ListSSHPublicKeysResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25155,45 +23631,30 @@ impl Iam for IamClient {
         input: ListServerCertificatesRequest,
     ) -> Result<ListServerCertificatesResponse, RusotoError<ListServerCertificatesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListServerCertificates");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListServerCertificates");
+        let mut params = params;
         ListServerCertificatesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListServerCertificatesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServerCertificatesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListServerCertificatesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListServerCertificatesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListServerCertificatesResponseDeserializer::deserialize(
                 "ListServerCertificatesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25206,45 +23667,30 @@ impl Iam for IamClient {
         RusotoError<ListServiceSpecificCredentialsError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListServiceSpecificCredentials");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListServiceSpecificCredentials");
+        let mut params = params;
         ListServiceSpecificCredentialsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListServiceSpecificCredentialsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServiceSpecificCredentialsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListServiceSpecificCredentialsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListServiceSpecificCredentialsResponseDeserializer::deserialize(
                 "ListServiceSpecificCredentialsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25254,45 +23700,30 @@ impl Iam for IamClient {
         input: ListSigningCertificatesRequest,
     ) -> Result<ListSigningCertificatesResponse, RusotoError<ListSigningCertificatesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListSigningCertificates");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListSigningCertificates");
+        let mut params = params;
         ListSigningCertificatesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListSigningCertificatesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSigningCertificatesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListSigningCertificatesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListSigningCertificatesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSigningCertificatesResponseDeserializer::deserialize(
                 "ListSigningCertificatesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25302,45 +23733,28 @@ impl Iam for IamClient {
         input: ListUserPoliciesRequest,
     ) -> Result<ListUserPoliciesResponse, RusotoError<ListUserPoliciesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListUserPolicies");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListUserPolicies");
+        let mut params = params;
         ListUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListUserPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUserPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListUserPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListUserPoliciesResponseDeserializer::deserialize(
-                "ListUserPoliciesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListUserPoliciesResponseDeserializer::deserialize("ListUserPoliciesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25350,43 +23764,28 @@ impl Iam for IamClient {
         input: ListUserTagsRequest,
     ) -> Result<ListUserTagsResponse, RusotoError<ListUserTagsError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListUserTags");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListUserTags");
+        let mut params = params;
         ListUserTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListUserTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUserTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListUserTagsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListUserTagsResponseDeserializer::deserialize("ListUserTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25396,42 +23795,27 @@ impl Iam for IamClient {
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListUsers");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListUsers");
+        let mut params = params;
         ListUsersRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListUsersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUsersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListUsersResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListUsersResponseDeserializer::deserialize("ListUsersResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListUsersResponseDeserializer::deserialize("ListUsersResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25441,45 +23825,30 @@ impl Iam for IamClient {
         input: ListVirtualMFADevicesRequest,
     ) -> Result<ListVirtualMFADevicesResponse, RusotoError<ListVirtualMFADevicesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListVirtualMFADevices");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ListVirtualMFADevices");
+        let mut params = params;
         ListVirtualMFADevicesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListVirtualMFADevicesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListVirtualMFADevicesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListVirtualMFADevicesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListVirtualMFADevicesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListVirtualMFADevicesResponseDeserializer::deserialize(
                 "ListVirtualMFADevicesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25489,23 +23858,15 @@ impl Iam for IamClient {
         input: PutGroupPolicyRequest,
     ) -> Result<(), RusotoError<PutGroupPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutGroupPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("PutGroupPolicy");
+        let mut params = params;
         PutGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutGroupPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutGroupPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25517,23 +23878,15 @@ impl Iam for IamClient {
         input: PutRolePermissionsBoundaryRequest,
     ) -> Result<(), RusotoError<PutRolePermissionsBoundaryError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutRolePermissionsBoundary");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("PutRolePermissionsBoundary");
+        let mut params = params;
         PutRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutRolePermissionsBoundaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRolePermissionsBoundaryError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25545,23 +23898,15 @@ impl Iam for IamClient {
         input: PutRolePolicyRequest,
     ) -> Result<(), RusotoError<PutRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("PutRolePolicy");
+        let mut params = params;
         PutRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRolePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25573,23 +23918,15 @@ impl Iam for IamClient {
         input: PutUserPermissionsBoundaryRequest,
     ) -> Result<(), RusotoError<PutUserPermissionsBoundaryError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutUserPermissionsBoundary");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("PutUserPermissionsBoundary");
+        let mut params = params;
         PutUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutUserPermissionsBoundaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutUserPermissionsBoundaryError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25601,23 +23938,15 @@ impl Iam for IamClient {
         input: PutUserPolicyRequest,
     ) -> Result<(), RusotoError<PutUserPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutUserPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("PutUserPolicy");
+        let mut params = params;
         PutUserPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutUserPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutUserPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25629,10 +23958,8 @@ impl Iam for IamClient {
         input: RemoveClientIDFromOpenIDConnectProviderRequest,
     ) -> Result<(), RusotoError<RemoveClientIDFromOpenIDConnectProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemoveClientIDFromOpenIDConnectProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("RemoveClientIDFromOpenIDConnectProvider");
+        let mut params = params;
         RemoveClientIDFromOpenIDConnectProviderRequestSerializer::serialize(
             &mut params,
             "",
@@ -25641,17 +23968,12 @@ impl Iam for IamClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemoveClientIDFromOpenIDConnectProviderError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RemoveClientIDFromOpenIDConnectProviderError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25663,23 +23985,15 @@ impl Iam for IamClient {
         input: RemoveRoleFromInstanceProfileRequest,
     ) -> Result<(), RusotoError<RemoveRoleFromInstanceProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemoveRoleFromInstanceProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("RemoveRoleFromInstanceProfile");
+        let mut params = params;
         RemoveRoleFromInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemoveRoleFromInstanceProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveRoleFromInstanceProfileError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25691,23 +24005,15 @@ impl Iam for IamClient {
         input: RemoveUserFromGroupRequest,
     ) -> Result<(), RusotoError<RemoveUserFromGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemoveUserFromGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("RemoveUserFromGroup");
+        let mut params = params;
         RemoveUserFromGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemoveUserFromGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveUserFromGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25722,45 +24028,30 @@ impl Iam for IamClient {
         RusotoError<ResetServiceSpecificCredentialError>,
     > {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResetServiceSpecificCredential");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ResetServiceSpecificCredential");
+        let mut params = params;
         ResetServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResetServiceSpecificCredentialError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResetServiceSpecificCredentialError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResetServiceSpecificCredentialResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ResetServiceSpecificCredentialResponseDeserializer::deserialize(
                 "ResetServiceSpecificCredentialResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25770,23 +24061,15 @@ impl Iam for IamClient {
         input: ResyncMFADeviceRequest,
     ) -> Result<(), RusotoError<ResyncMFADeviceError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResyncMFADevice");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("ResyncMFADevice");
+        let mut params = params;
         ResyncMFADeviceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResyncMFADeviceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResyncMFADeviceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25798,23 +24081,15 @@ impl Iam for IamClient {
         input: SetDefaultPolicyVersionRequest,
     ) -> Result<(), RusotoError<SetDefaultPolicyVersionError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetDefaultPolicyVersion");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("SetDefaultPolicyVersion");
+        let mut params = params;
         SetDefaultPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetDefaultPolicyVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetDefaultPolicyVersionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25826,25 +24101,18 @@ impl Iam for IamClient {
         input: SetSecurityTokenServicePreferencesRequest,
     ) -> Result<(), RusotoError<SetSecurityTokenServicePreferencesError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetSecurityTokenServicePreferences");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("SetSecurityTokenServicePreferences");
+        let mut params = params;
         SetSecurityTokenServicePreferencesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetSecurityTokenServicePreferencesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetSecurityTokenServicePreferencesError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25856,45 +24124,30 @@ impl Iam for IamClient {
         input: SimulateCustomPolicyRequest,
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulateCustomPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SimulateCustomPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("SimulateCustomPolicy");
+        let mut params = params;
         SimulateCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SimulateCustomPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SimulateCustomPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SimulatePolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SimulatePolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulateCustomPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -25904,68 +24157,45 @@ impl Iam for IamClient {
         input: SimulatePrincipalPolicyRequest,
     ) -> Result<SimulatePolicyResponse, RusotoError<SimulatePrincipalPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SimulatePrincipalPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("SimulatePrincipalPolicy");
+        let mut params = params;
         SimulatePrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SimulatePrincipalPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SimulatePrincipalPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SimulatePolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SimulatePolicyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SimulatePolicyResponseDeserializer::deserialize(
                 "SimulatePrincipalPolicyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
     /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn tag_role(&self, input: TagRoleRequest) -> Result<(), RusotoError<TagRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TagRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("TagRole");
+        let mut params = params;
         TagRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TagRoleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25974,23 +24204,15 @@ impl Iam for IamClient {
     /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn tag_user(&self, input: TagUserRequest) -> Result<(), RusotoError<TagUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TagUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("TagUser");
+        let mut params = params;
         TagUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TagUserError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -25999,23 +24221,15 @@ impl Iam for IamClient {
     /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn untag_role(&self, input: UntagRoleRequest) -> Result<(), RusotoError<UntagRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UntagRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UntagRole");
+        let mut params = params;
         UntagRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagRoleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26024,23 +24238,15 @@ impl Iam for IamClient {
     /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
     async fn untag_user(&self, input: UntagUserRequest) -> Result<(), RusotoError<UntagUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UntagUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UntagUser");
+        let mut params = params;
         UntagUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagUserError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26052,23 +24258,15 @@ impl Iam for IamClient {
         input: UpdateAccessKeyRequest,
     ) -> Result<(), RusotoError<UpdateAccessKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateAccessKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateAccessKey");
+        let mut params = params;
         UpdateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateAccessKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAccessKeyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26080,23 +24278,15 @@ impl Iam for IamClient {
         input: UpdateAccountPasswordPolicyRequest,
     ) -> Result<(), RusotoError<UpdateAccountPasswordPolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateAccountPasswordPolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateAccountPasswordPolicy");
+        let mut params = params;
         UpdateAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateAccountPasswordPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAccountPasswordPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26108,23 +24298,15 @@ impl Iam for IamClient {
         input: UpdateAssumeRolePolicyRequest,
     ) -> Result<(), RusotoError<UpdateAssumeRolePolicyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateAssumeRolePolicy");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateAssumeRolePolicy");
+        let mut params = params;
         UpdateAssumeRolePolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateAssumeRolePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAssumeRolePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26136,23 +24318,15 @@ impl Iam for IamClient {
         input: UpdateGroupRequest,
     ) -> Result<(), RusotoError<UpdateGroupError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateGroup");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateGroup");
+        let mut params = params;
         UpdateGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26164,23 +24338,15 @@ impl Iam for IamClient {
         input: UpdateLoginProfileRequest,
     ) -> Result<(), RusotoError<UpdateLoginProfileError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateLoginProfile");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateLoginProfile");
+        let mut params = params;
         UpdateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateLoginProfileError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateLoginProfileError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26192,25 +24358,18 @@ impl Iam for IamClient {
         input: UpdateOpenIDConnectProviderThumbprintRequest,
     ) -> Result<(), RusotoError<UpdateOpenIDConnectProviderThumbprintError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateOpenIDConnectProviderThumbprint");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateOpenIDConnectProviderThumbprint");
+        let mut params = params;
         UpdateOpenIDConnectProviderThumbprintRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateOpenIDConnectProviderThumbprintError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateOpenIDConnectProviderThumbprintError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26222,27 +24381,19 @@ impl Iam for IamClient {
         input: UpdateRoleRequest,
     ) -> Result<UpdateRoleResponse, RusotoError<UpdateRoleError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateRole");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateRole");
+        let mut params = params;
         UpdateRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRoleError::from_response)
+            .await?;
 
-        let result;
-        result = UpdateRoleResponse::default();
-        // parse non-payload
+        let result = UpdateRoleResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -26252,45 +24403,30 @@ impl Iam for IamClient {
         input: UpdateRoleDescriptionRequest,
     ) -> Result<UpdateRoleDescriptionResponse, RusotoError<UpdateRoleDescriptionError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateRoleDescription");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateRoleDescription");
+        let mut params = params;
         UpdateRoleDescriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateRoleDescriptionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRoleDescriptionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateRoleDescriptionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateRoleDescriptionResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UpdateRoleDescriptionResponseDeserializer::deserialize(
                 "UpdateRoleDescriptionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -26300,45 +24436,30 @@ impl Iam for IamClient {
         input: UpdateSAMLProviderRequest,
     ) -> Result<UpdateSAMLProviderResponse, RusotoError<UpdateSAMLProviderError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateSAMLProvider");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateSAMLProvider");
+        let mut params = params;
         UpdateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateSAMLProviderError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateSAMLProviderError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateSAMLProviderResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateSAMLProviderResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UpdateSAMLProviderResponseDeserializer::deserialize(
                 "UpdateSAMLProviderResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -26348,23 +24469,15 @@ impl Iam for IamClient {
         input: UpdateSSHPublicKeyRequest,
     ) -> Result<(), RusotoError<UpdateSSHPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateSSHPublicKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateSSHPublicKey");
+        let mut params = params;
         UpdateSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateSSHPublicKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateSSHPublicKeyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26376,23 +24489,15 @@ impl Iam for IamClient {
         input: UpdateServerCertificateRequest,
     ) -> Result<(), RusotoError<UpdateServerCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateServerCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateServerCertificate");
+        let mut params = params;
         UpdateServerCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateServerCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateServerCertificateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26404,25 +24509,15 @@ impl Iam for IamClient {
         input: UpdateServiceSpecificCredentialRequest,
     ) -> Result<(), RusotoError<UpdateServiceSpecificCredentialError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateServiceSpecificCredential");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateServiceSpecificCredential");
+        let mut params = params;
         UpdateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateServiceSpecificCredentialError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateServiceSpecificCredentialError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26434,23 +24529,15 @@ impl Iam for IamClient {
         input: UpdateSigningCertificateRequest,
     ) -> Result<(), RusotoError<UpdateSigningCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateSigningCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateSigningCertificate");
+        let mut params = params;
         UpdateSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateSigningCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateSigningCertificateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26462,23 +24549,15 @@ impl Iam for IamClient {
         input: UpdateUserRequest,
     ) -> Result<(), RusotoError<UpdateUserError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateUser");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UpdateUser");
+        let mut params = params;
         UpdateUserRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateUserError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateUserError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -26490,45 +24569,30 @@ impl Iam for IamClient {
         input: UploadSSHPublicKeyRequest,
     ) -> Result<UploadSSHPublicKeyResponse, RusotoError<UploadSSHPublicKeyError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UploadSSHPublicKey");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UploadSSHPublicKey");
+        let mut params = params;
         UploadSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadSSHPublicKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UploadSSHPublicKeyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UploadSSHPublicKeyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UploadSSHPublicKeyResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UploadSSHPublicKeyResponseDeserializer::deserialize(
                 "UploadSSHPublicKeyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -26538,45 +24602,30 @@ impl Iam for IamClient {
         input: UploadServerCertificateRequest,
     ) -> Result<UploadServerCertificateResponse, RusotoError<UploadServerCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UploadServerCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UploadServerCertificate");
+        let mut params = params;
         UploadServerCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadServerCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UploadServerCertificateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UploadServerCertificateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UploadServerCertificateResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UploadServerCertificateResponseDeserializer::deserialize(
                 "UploadServerCertificateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -26586,45 +24635,30 @@ impl Iam for IamClient {
         input: UploadSigningCertificateRequest,
     ) -> Result<UploadSigningCertificateResponse, RusotoError<UploadSigningCertificateError>> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UploadSigningCertificate");
-        params.put("Version", "2010-05-08");
+        let params = self.new_params("UploadSigningCertificate");
+        let mut params = params;
         UploadSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadSigningCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UploadSigningCertificateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UploadSigningCertificateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UploadSigningCertificateResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UploadSigningCertificateResponseDeserializer::deserialize(
                 "UploadSigningCertificateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

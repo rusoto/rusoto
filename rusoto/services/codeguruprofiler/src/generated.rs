@@ -1091,6 +1091,7 @@ impl CodeGuruProfilerClient {
 #[async_trait]
 impl CodeGuruProfiler for CodeGuruProfilerClient {
     /// <p><p/></p>
+    #[allow(unused_mut)]
     async fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
@@ -1113,7 +1114,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigureAgentResponse, _>()?;
 
@@ -1125,6 +1126,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Creates a profiling group.</p>
+    #[allow(unused_mut)]
     async fn create_profiling_group(
         &self,
         input: CreateProfilingGroupRequest,
@@ -1148,7 +1150,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProfilingGroupResponse, _>()?;
 
@@ -1160,6 +1162,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Deletes a profiling group.</p>
+    #[allow(unused_mut)]
     async fn delete_profiling_group(
         &self,
         input: DeleteProfilingGroupRequest,
@@ -1179,7 +1182,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteProfilingGroupResponse, _>()?;
 
@@ -1191,6 +1194,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Describes a profiling group.</p>
+    #[allow(unused_mut)]
     async fn describe_profiling_group(
         &self,
         input: DescribeProfilingGroupRequest,
@@ -1210,7 +1214,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeProfilingGroupResponse, _>()?;
 
@@ -1222,6 +1226,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Gets the profiling group policy.</p>
+    #[allow(unused_mut)]
     async fn get_policy(
         &self,
         input: GetPolicyRequest,
@@ -1241,7 +1246,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPolicyResponse, _>()?;
 
@@ -1253,6 +1258,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Gets the aggregated profile of a profiling group for the specified time range. If the requested time range does not align with the available aggregated profiles, it is expanded to attain alignment. If aggregated profiles are available only for part of the period requested, the profile is returned from the earliest available to the latest within the requested time range. </p> <p>For example, if the requested time range is from 00:00 to 00:20 and the available profiles are from 00:15 to 00:25, the returned profile will be from 00:15 to 00:20. </p> <p>You must specify exactly two of the following parameters: <code>startTime</code>, <code>period</code>, and <code>endTime</code>. </p>
+    #[allow(unused_mut)]
     async fn get_profile(
         &self,
         input: GetProfileRequest,
@@ -1266,9 +1272,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             SignedRequest::new("GET", "codeguru-profiler", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref accept) = input.accept {
-            request.add_header("Accept", &accept.to_string());
-        }
+        request.add_optional_header("Accept", input.accept.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.end_time {
             params.put("endTime", x);
@@ -1290,16 +1294,13 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetProfileResponse::default();
             result.profile = response.body;
 
-            if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-                let value = content_encoding.to_owned();
-                result.content_encoding = Some(value)
-            };
-            let value = response.headers.get("Content-Type").unwrap().to_owned();
+            result.content_encoding = response.headers.remove("Content-Encoding");
+            let value = response.headers.remove("Content-Type").unwrap();
             result.content_type = value;
 
             Ok(result)
@@ -1310,6 +1311,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>List the start times of the available aggregated profiles of a profiling group for an aggregation period within the specified time range.</p>
+    #[allow(unused_mut)]
     async fn list_profile_times(
         &self,
         input: ListProfileTimesRequest,
@@ -1344,7 +1346,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProfileTimesResponse, _>()?;
 
@@ -1356,6 +1358,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Lists profiling groups.</p>
+    #[allow(unused_mut)]
     async fn list_profiling_groups(
         &self,
         input: ListProfilingGroupsRequest,
@@ -1384,7 +1387,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProfilingGroupsResponse, _>()?;
 
@@ -1396,6 +1399,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p><p/></p>
+    #[allow(unused_mut)]
     async fn post_agent_profile(
         &self,
         input: PostAgentProfileRequest,
@@ -1424,7 +1428,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PostAgentProfileResponse, _>()?;
 
@@ -1436,6 +1440,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Provides permission to the principals. This overwrites the existing permissions, and is not additive.</p>
+    #[allow(unused_mut)]
     async fn put_permission(
         &self,
         input: PutPermissionRequest,
@@ -1459,7 +1464,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutPermissionResponse, _>()?;
 
@@ -1471,6 +1476,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Removes statement for the provided action group from the policy.</p>
+    #[allow(unused_mut)]
     async fn remove_permission(
         &self,
         input: RemovePermissionRequest,
@@ -1495,7 +1501,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RemovePermissionResponse, _>()?;
 
@@ -1507,6 +1513,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
     }
 
     /// <p>Updates a profiling group.</p>
+    #[allow(unused_mut)]
     async fn update_profiling_group(
         &self,
         input: UpdateProfilingGroupRequest,
@@ -1529,7 +1536,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateProfilingGroupResponse, _>()?;
 

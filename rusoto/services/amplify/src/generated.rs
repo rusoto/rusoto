@@ -3826,6 +3826,7 @@ impl AmplifyClient {
 #[async_trait]
 impl Amplify for AmplifyClient {
     /// <p> Creates a new Amplify App. </p>
+    #[allow(unused_mut)]
     async fn create_app(
         &self,
         input: CreateAppRequest,
@@ -3844,7 +3845,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResult, _>()?;
 
@@ -3856,6 +3857,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Creates a new backend environment for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn create_backend_environment(
         &self,
         input: CreateBackendEnvironmentRequest,
@@ -3874,7 +3876,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackendEnvironmentResult, _>()?;
 
@@ -3886,6 +3888,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Creates a new Branch for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn create_branch(
         &self,
         input: CreateBranchRequest,
@@ -3904,7 +3907,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBranchResult, _>()?;
 
@@ -3916,6 +3919,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Create a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    #[allow(unused_mut)]
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -3938,7 +3942,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeploymentResult, _>()?;
 
@@ -3950,6 +3954,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Create a new DomainAssociation on an App </p>
+    #[allow(unused_mut)]
     async fn create_domain_association(
         &self,
         input: CreateDomainAssociationRequest,
@@ -3968,7 +3973,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDomainAssociationResult, _>()?;
 
@@ -3980,6 +3985,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Create a new webhook on an App. </p>
+    #[allow(unused_mut)]
     async fn create_webhook(
         &self,
         input: CreateWebhookRequest,
@@ -3998,7 +4004,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateWebhookResult, _>()?;
 
@@ -4010,6 +4016,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Delete an existing Amplify App by appId. </p>
+    #[allow(unused_mut)]
     async fn delete_app(
         &self,
         input: DeleteAppRequest,
@@ -4025,7 +4032,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResult, _>()?;
 
@@ -4037,6 +4044,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Delete backend environment for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn delete_backend_environment(
         &self,
         input: DeleteBackendEnvironmentRequest,
@@ -4056,7 +4064,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteBackendEnvironmentResult, _>()?;
 
@@ -4068,6 +4076,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Deletes a branch for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn delete_branch(
         &self,
         input: DeleteBranchRequest,
@@ -4087,7 +4096,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteBranchResult, _>()?;
 
@@ -4099,6 +4108,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Deletes a DomainAssociation. </p>
+    #[allow(unused_mut)]
     async fn delete_domain_association(
         &self,
         input: DeleteDomainAssociationRequest,
@@ -4118,7 +4128,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDomainAssociationResult, _>()?;
 
@@ -4130,6 +4140,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
+    #[allow(unused_mut)]
     async fn delete_job(
         &self,
         input: DeleteJobRequest,
@@ -4150,7 +4161,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResult, _>()?;
 
@@ -4162,6 +4173,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Deletes a webhook. </p>
+    #[allow(unused_mut)]
     async fn delete_webhook(
         &self,
         input: DeleteWebhookRequest,
@@ -4177,7 +4189,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteWebhookResult, _>()?;
 
@@ -4189,6 +4201,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    #[allow(unused_mut)]
     async fn generate_access_logs(
         &self,
         input: GenerateAccessLogsRequest,
@@ -4207,7 +4220,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GenerateAccessLogsResult, _>()?;
 
@@ -4219,6 +4232,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves an existing Amplify App by appId. </p>
+    #[allow(unused_mut)]
     async fn get_app(
         &self,
         input: GetAppRequest,
@@ -4234,7 +4248,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetAppResult, _>()?;
 
@@ -4246,6 +4260,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    #[allow(unused_mut)]
     async fn get_artifact_url(
         &self,
         input: GetArtifactUrlRequest,
@@ -4261,7 +4276,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetArtifactUrlResult, _>()?;
 
@@ -4273,6 +4288,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves a backend environment for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn get_backend_environment(
         &self,
         input: GetBackendEnvironmentRequest,
@@ -4292,7 +4308,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackendEnvironmentResult, _>()?;
 
@@ -4304,6 +4320,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves a branch for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn get_branch(
         &self,
         input: GetBranchRequest,
@@ -4323,7 +4340,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetBranchResult, _>()?;
 
@@ -4335,6 +4352,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
+    #[allow(unused_mut)]
     async fn get_domain_association(
         &self,
         input: GetDomainAssociationRequest,
@@ -4354,7 +4372,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainAssociationResult, _>()?;
 
@@ -4366,6 +4384,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Get a job for a branch, part of an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn get_job(
         &self,
         input: GetJobRequest,
@@ -4386,7 +4405,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()?;
 
@@ -4398,6 +4417,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Retrieves webhook info that corresponds to a webhookId. </p>
+    #[allow(unused_mut)]
     async fn get_webhook(
         &self,
         input: GetWebhookRequest,
@@ -4413,7 +4433,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetWebhookResult, _>()?;
 
@@ -4425,6 +4445,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Lists existing Amplify Apps. </p>
+    #[allow(unused_mut)]
     async fn list_apps(
         &self,
         input: ListAppsRequest,
@@ -4449,7 +4470,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResult, _>()?;
 
@@ -4461,6 +4482,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    #[allow(unused_mut)]
     async fn list_artifacts(
         &self,
         input: ListArtifactsRequest,
@@ -4490,7 +4512,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListArtifactsResult, _>()?;
 
@@ -4502,6 +4524,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Lists backend environments for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn list_backend_environments(
         &self,
         input: ListBackendEnvironmentsRequest,
@@ -4529,7 +4552,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackendEnvironmentsResult, _>()?;
 
@@ -4541,6 +4564,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Lists branches for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn list_branches(
         &self,
         input: ListBranchesRequest,
@@ -4565,7 +4589,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBranchesResult, _>()?;
 
@@ -4577,6 +4601,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> List domains with an app </p>
+    #[allow(unused_mut)]
     async fn list_domain_associations(
         &self,
         input: ListDomainAssociationsRequest,
@@ -4601,7 +4626,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainAssociationsResult, _>()?;
 
@@ -4613,6 +4638,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> List Jobs for a branch, part of an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
@@ -4641,7 +4667,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()?;
 
@@ -4653,6 +4679,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> List tags for resource. </p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -4668,7 +4695,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -4680,6 +4707,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> List webhooks with an app. </p>
+    #[allow(unused_mut)]
     async fn list_webhooks(
         &self,
         input: ListWebhooksRequest,
@@ -4704,7 +4732,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListWebhooksResult, _>()?;
 
@@ -4716,6 +4744,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Start a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    #[allow(unused_mut)]
     async fn start_deployment(
         &self,
         input: StartDeploymentRequest,
@@ -4738,7 +4767,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartDeploymentResult, _>()?;
 
@@ -4750,6 +4779,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Starts a new job for a branch, part of an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn start_job(
         &self,
         input: StartJobRequest,
@@ -4772,7 +4802,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<StartJobResult, _>()?;
 
@@ -4784,6 +4814,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
+    #[allow(unused_mut)]
     async fn stop_job(
         &self,
         input: StopJobRequest,
@@ -4804,7 +4835,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()?;
 
@@ -4816,6 +4847,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Tag resource with tag key and value. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -4834,7 +4866,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -4846,6 +4878,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Untag resource with resourceArn. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4867,7 +4900,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -4879,6 +4912,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Updates an existing Amplify App. </p>
+    #[allow(unused_mut)]
     async fn update_app(
         &self,
         input: UpdateAppRequest,
@@ -4897,7 +4931,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UpdateAppResult, _>()?;
 
@@ -4909,6 +4943,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Updates a branch for an Amplify App. </p>
+    #[allow(unused_mut)]
     async fn update_branch(
         &self,
         input: UpdateBranchRequest,
@@ -4931,7 +4966,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBranchResult, _>()?;
 
@@ -4943,6 +4978,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Create a new DomainAssociation on an App </p>
+    #[allow(unused_mut)]
     async fn update_domain_association(
         &self,
         input: UpdateDomainAssociationRequest,
@@ -4965,7 +5001,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDomainAssociationResult, _>()?;
 
@@ -4977,6 +5013,7 @@ impl Amplify for AmplifyClient {
     }
 
     /// <p> Update a webhook. </p>
+    #[allow(unused_mut)]
     async fn update_webhook(
         &self,
         input: UpdateWebhookRequest,
@@ -4995,7 +5032,7 @@ impl Amplify for AmplifyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateWebhookResult, _>()?;
 

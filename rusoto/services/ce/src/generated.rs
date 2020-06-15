@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CostExplorerClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "ce", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>The structure of Cost Categories. This includes detailed metadata and the set of rules for the <code>CostCategory</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3231,9 +3257,7 @@ impl CostExplorer for CostExplorerClient {
         input: CreateCostCategoryDefinitionRequest,
     ) -> Result<CreateCostCategoryDefinitionResponse, RusotoError<CreateCostCategoryDefinitionError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.CreateCostCategoryDefinition",
@@ -3241,20 +3265,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCostCategoryDefinitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCostCategoryDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCostCategoryDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateCostCategoryDefinitionResponse, _>()
     }
 
     /// <p>Deletes a Cost Category. Expenses from this month going forward will no longer be categorized with this Cost Category.</p>
@@ -3263,9 +3280,7 @@ impl CostExplorer for CostExplorerClient {
         input: DeleteCostCategoryDefinitionRequest,
     ) -> Result<DeleteCostCategoryDefinitionResponse, RusotoError<DeleteCostCategoryDefinitionError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.DeleteCostCategoryDefinition",
@@ -3273,20 +3288,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCostCategoryDefinitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCostCategoryDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteCostCategoryDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteCostCategoryDefinitionResponse, _>()
     }
 
     /// <p>Returns the name, ARN, rules, definition, and effective dates of a Cost Category that's defined in the account.</p> <p>You have the option to use <code>EffectiveOn</code> to return a Cost Category that is active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see a Cost Category that is effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. </p>
@@ -3297,9 +3305,7 @@ impl CostExplorer for CostExplorerClient {
         DescribeCostCategoryDefinitionResponse,
         RusotoError<DescribeCostCategoryDefinitionError>,
     > {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.DescribeCostCategoryDefinition",
@@ -3307,20 +3313,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCostCategoryDefinitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCostCategoryDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeCostCategoryDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCostCategoryDefinitionResponse, _>()
     }
 
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
@@ -3328,26 +3327,17 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetCostAndUsageRequest,
     ) -> Result<GetCostAndUsageResponse, RusotoError<GetCostAndUsageError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetCostAndUsage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCostAndUsageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCostAndUsageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCostAndUsageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCostAndUsageResponse, _>()
     }
 
     /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
@@ -3356,9 +3346,7 @@ impl CostExplorer for CostExplorerClient {
         input: GetCostAndUsageWithResourcesRequest,
     ) -> Result<GetCostAndUsageWithResourcesResponse, RusotoError<GetCostAndUsageWithResourcesError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetCostAndUsageWithResources",
@@ -3366,20 +3354,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCostAndUsageWithResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCostAndUsageWithResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCostAndUsageWithResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCostAndUsageWithResourcesResponse, _>()
     }
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>
@@ -3387,26 +3368,17 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetCostForecastRequest,
     ) -> Result<GetCostForecastResponse, RusotoError<GetCostForecastError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetCostForecast");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCostForecastResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCostForecastError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCostForecastError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCostForecastResponse, _>()
     }
 
     /// <p>Retrieves all available filter values for a specified filter over a period of time. You can search the dimension values for an arbitrary string. </p>
@@ -3414,27 +3386,17 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetDimensionValuesRequest,
     ) -> Result<GetDimensionValuesResponse, RusotoError<GetDimensionValuesError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetDimensionValues");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDimensionValuesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDimensionValuesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDimensionValuesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDimensionValuesResponse, _>()
     }
 
     /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
@@ -3442,9 +3404,7 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetReservationCoverageRequest,
     ) -> Result<GetReservationCoverageResponse, RusotoError<GetReservationCoverageError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationCoverage",
@@ -3452,20 +3412,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetReservationCoverageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetReservationCoverageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetReservationCoverageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetReservationCoverageResponse, _>()
     }
 
     /// <p>Gets recommendations for which reservations to purchase. These recommendations could help you reduce your costs. Reservations provide a discounted hourly rate (up to 75%) compared to On-Demand pricing.</p> <p>AWS generates your recommendations by identifying your On-Demand usage during a specific time period and collecting your usage into categories that are eligible for a reservation. After AWS has these categories, it simulates every combination of reservations in each category of usage to identify the best number of each type of RI to purchase to maximize your estimated savings. </p> <p>For example, AWS automatically aggregates your Amazon EC2 Linux, shared tenancy, and c4 family usage in the US West (Oregon) Region and recommends that you buy size-flexible regional reservations to apply to the c4 family usage. AWS recommends the smallest size instance in an instance family. This makes it easier to purchase a size-flexible RI. AWS also shows the equal number of normalized units so that you can purchase any instance size that you want. For this example, your RI recommendation would be for <code>c4.large</code> because that is the smallest size instance in the c4 instance family.</p>
@@ -3476,9 +3429,7 @@ impl CostExplorer for CostExplorerClient {
         GetReservationPurchaseRecommendationResponse,
         RusotoError<GetReservationPurchaseRecommendationError>,
     > {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationPurchaseRecommendation",
@@ -3486,22 +3437,16 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetReservationPurchaseRecommendationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetReservationPurchaseRecommendationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetReservationPurchaseRecommendationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetReservationPurchaseRecommendationResponse, _>()
     }
 
     /// <p>Retrieves the reservation utilization for your account. Master accounts in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
@@ -3510,9 +3455,7 @@ impl CostExplorer for CostExplorerClient {
         input: GetReservationUtilizationRequest,
     ) -> Result<GetReservationUtilizationResponse, RusotoError<GetReservationUtilizationError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationUtilization",
@@ -3520,20 +3463,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetReservationUtilizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetReservationUtilizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetReservationUtilizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetReservationUtilizationResponse, _>()
     }
 
     /// <p>Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html">Optimizing Your Cost with Rightsizing Recommendations</a>.</p>
@@ -3542,9 +3478,7 @@ impl CostExplorer for CostExplorerClient {
         input: GetRightsizingRecommendationRequest,
     ) -> Result<GetRightsizingRecommendationResponse, RusotoError<GetRightsizingRecommendationError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetRightsizingRecommendation",
@@ -3552,20 +3486,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRightsizingRecommendationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRightsizingRecommendationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRightsizingRecommendationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRightsizingRecommendationResponse, _>()
     }
 
     /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
@@ -3573,9 +3500,7 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetSavingsPlansCoverageRequest,
     ) -> Result<GetSavingsPlansCoverageResponse, RusotoError<GetSavingsPlansCoverageError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetSavingsPlansCoverage",
@@ -3583,20 +3508,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSavingsPlansCoverageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSavingsPlansCoverageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSavingsPlansCoverageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSavingsPlansCoverageResponse, _>()
     }
 
     /// <p>Retrieves your request parameters, Savings Plan Recommendations Summary and Details. </p>
@@ -3607,9 +3525,7 @@ impl CostExplorer for CostExplorerClient {
         GetSavingsPlansPurchaseRecommendationResponse,
         RusotoError<GetSavingsPlansPurchaseRecommendationError>,
     > {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetSavingsPlansPurchaseRecommendation",
@@ -3617,22 +3533,16 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSavingsPlansPurchaseRecommendationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSavingsPlansPurchaseRecommendationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetSavingsPlansPurchaseRecommendationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSavingsPlansPurchaseRecommendationResponse, _>()
     }
 
     /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
@@ -3641,9 +3551,7 @@ impl CostExplorer for CostExplorerClient {
         input: GetSavingsPlansUtilizationRequest,
     ) -> Result<GetSavingsPlansUtilizationResponse, RusotoError<GetSavingsPlansUtilizationError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetSavingsPlansUtilization",
@@ -3651,20 +3559,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSavingsPlansUtilizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSavingsPlansUtilizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSavingsPlansUtilizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSavingsPlansUtilizationResponse, _>()
     }
 
     /// <p><p>Retrieves attribute data along with aggregate utilization and savings data for a given time period. This doesn&#39;t support granular or grouped data (daily/monthly) in response. You can&#39;t retrieve data by dates in a single response similar to <code>GetSavingsPlanUtilization</code>, but you have the option to make multiple calls to <code>GetSavingsPlanUtilizationDetails</code> by providing individual dates. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p> <code>GetSavingsPlanUtilizationDetails</code> internally groups data by <code>SavingsPlansArn</code>.</p> </note></p>
@@ -3675,9 +3576,7 @@ impl CostExplorer for CostExplorerClient {
         GetSavingsPlansUtilizationDetailsResponse,
         RusotoError<GetSavingsPlansUtilizationDetailsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetSavingsPlansUtilizationDetails",
@@ -3685,22 +3584,16 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSavingsPlansUtilizationDetailsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSavingsPlansUtilizationDetailsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetSavingsPlansUtilizationDetailsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSavingsPlansUtilizationDetailsResponse, _>()
     }
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
@@ -3708,26 +3601,17 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetTagsRequest,
     ) -> Result<GetTagsResponse, RusotoError<GetTagsError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
     }
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will use over the forecast time period that you select, based on your past usage. </p>
@@ -3735,27 +3619,17 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetUsageForecastRequest,
     ) -> Result<GetUsageForecastResponse, RusotoError<GetUsageForecastError>> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetUsageForecast");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUsageForecastResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUsageForecastError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUsageForecastError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetUsageForecastResponse, _>()
     }
 
     /// <p>Returns the name, ARN, <code>NumberOfRules</code> and effective dates of all Cost Categories defined in the account. You have the option to use <code>EffectiveOn</code> to return a list of Cost Categories that were active on a specific date. If there is no <code>EffectiveOn</code> specified, you’ll see Cost Categories that are effective on the current date. If Cost Category is still effective, <code>EffectiveEnd</code> is omitted in the response. <code>ListCostCategoryDefinitions</code> supports pagination. The request can have a <code>MaxResults</code> range up to 100.</p>
@@ -3764,9 +3638,7 @@ impl CostExplorer for CostExplorerClient {
         input: ListCostCategoryDefinitionsRequest,
     ) -> Result<ListCostCategoryDefinitionsResponse, RusotoError<ListCostCategoryDefinitionsError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.ListCostCategoryDefinitions",
@@ -3774,20 +3646,13 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCostCategoryDefinitionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCostCategoryDefinitionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCostCategoryDefinitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCostCategoryDefinitionsResponse, _>()
     }
 
     /// <p>Updates an existing Cost Category. Changes made to the Cost Category rules will be used to categorize the current month’s expenses and future expenses. This won’t change categorization for the previous months.</p>
@@ -3796,9 +3661,7 @@ impl CostExplorer for CostExplorerClient {
         input: UpdateCostCategoryDefinitionRequest,
     ) -> Result<UpdateCostCategoryDefinitionResponse, RusotoError<UpdateCostCategoryDefinitionError>>
     {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.UpdateCostCategoryDefinition",
@@ -3806,19 +3669,12 @@ impl CostExplorer for CostExplorerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateCostCategoryDefinitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCostCategoryDefinitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCostCategoryDefinitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateCostCategoryDefinitionResponse, _>()
     }
 }

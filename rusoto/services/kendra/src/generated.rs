@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl KendraClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "kendra", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Access Control List files for the documents in a data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3320,9 +3346,7 @@ impl Kendra for KendraClient {
         &self,
         input: BatchDeleteDocumentRequest,
     ) -> Result<BatchDeleteDocumentResponse, RusotoError<BatchDeleteDocumentError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.BatchDeleteDocument",
@@ -3330,20 +3354,12 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteDocumentResponse, _>()
     }
 
     /// <p>Adds one or more documents to an index.</p> <p>The <code>BatchPutDocument</code> operation enables you to ingest inline documents or a set of documents stored in an Amazon S3 bucket. Use this operation to ingest your text and unstructured text into an index, add custom attributes to the documents, and to attach an access control list to the documents added to the index.</p> <p>The documents are indexed asynchronously. You can see the progress of the batch using AWS CloudWatch. Any error messages related to processing the batch are sent to your AWS CloudWatch log.</p>
@@ -3351,27 +3367,17 @@ impl Kendra for KendraClient {
         &self,
         input: BatchPutDocumentRequest,
     ) -> Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.BatchPutDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchPutDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchPutDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchPutDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchPutDocumentResponse, _>()
     }
 
     /// <p>Creates a data source that you use to with an Amazon Kendra index. </p> <p>You specify a name, connector type and description for your data source. You can choose between an S3 connector, a SharePoint Online connector, and a database connector.</p> <p>You also specify configuration information such as document metadata (author, source URI, and so on) and user context information.</p> <p> <code>CreateDataSource</code> is a synchronous operation. The operation returns 200 if the data source was successfully created. Otherwise, an exception is raised.</p>
@@ -3379,27 +3385,17 @@ impl Kendra for KendraClient {
         &self,
         input: CreateDataSourceRequest,
     ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.CreateDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDataSourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDataSourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDataSourceResponse, _>()
     }
 
     /// <p>Creates an new set of frequently asked question (FAQ) questions and answers.</p>
@@ -3407,26 +3403,17 @@ impl Kendra for KendraClient {
         &self,
         input: CreateFaqRequest,
     ) -> Result<CreateFaqResponse, RusotoError<CreateFaqError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.CreateFaq");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateFaqResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFaqError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateFaqError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateFaqResponse, _>()
     }
 
     /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to . The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the operation or using one of the supported data sources. </p>
@@ -3434,26 +3421,17 @@ impl Kendra for KendraClient {
         &self,
         input: CreateIndexRequest,
     ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.CreateIndex");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateIndexResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateIndexError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateIndexError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateIndexResponse, _>()
     }
 
     /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
@@ -3461,50 +3439,30 @@ impl Kendra for KendraClient {
         &self,
         input: DeleteDataSourceRequest,
     ) -> Result<(), RusotoError<DeleteDataSourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.DeleteDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDataSourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDataSourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes an FAQ from an index.</p>
     async fn delete_faq(&self, input: DeleteFaqRequest) -> Result<(), RusotoError<DeleteFaqError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.DeleteFaq");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFaqError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteFaqError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <a>DescribeIndex</a> operation is set to <code>DELETING</code>.</p>
@@ -3512,26 +3470,16 @@ impl Kendra for KendraClient {
         &self,
         input: DeleteIndexRequest,
     ) -> Result<(), RusotoError<DeleteIndexError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.DeleteIndex");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIndexError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteIndexError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Gets information about a Amazon Kendra data source.</p>
@@ -3539,9 +3487,7 @@ impl Kendra for KendraClient {
         &self,
         input: DescribeDataSourceRequest,
     ) -> Result<DescribeDataSourceResponse, RusotoError<DescribeDataSourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.DescribeDataSource",
@@ -3549,20 +3495,12 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDataSourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDataSourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDataSourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDataSourceResponse, _>()
     }
 
     /// <p>Gets information about an FAQ list.</p>
@@ -3570,26 +3508,17 @@ impl Kendra for KendraClient {
         &self,
         input: DescribeFaqRequest,
     ) -> Result<DescribeFaqResponse, RusotoError<DescribeFaqError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.DescribeFaq");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeFaqResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFaqError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeFaqError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeFaqResponse, _>()
     }
 
     /// <p>Describes an existing Amazon Kendra index</p>
@@ -3597,26 +3526,17 @@ impl Kendra for KendraClient {
         &self,
         input: DescribeIndexRequest,
     ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.DescribeIndex");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeIndexResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIndexError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeIndexError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeIndexResponse, _>()
     }
 
     /// <p>Gets statistics about synchronizing Amazon Kendra with a data source.</p>
@@ -3624,9 +3544,7 @@ impl Kendra for KendraClient {
         &self,
         input: ListDataSourceSyncJobsRequest,
     ) -> Result<ListDataSourceSyncJobsResponse, RusotoError<ListDataSourceSyncJobsError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.ListDataSourceSyncJobs",
@@ -3634,20 +3552,13 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDataSourceSyncJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourceSyncJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDataSourceSyncJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDataSourceSyncJobsResponse, _>()
     }
 
     /// <p>Lists the data sources that you have created.</p>
@@ -3655,26 +3566,17 @@ impl Kendra for KendraClient {
         &self,
         input: ListDataSourcesRequest,
     ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.ListDataSources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDataSourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDataSourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDataSourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDataSourcesResponse, _>()
     }
 
     /// <p>Gets a list of FAQ lists associated with an index.</p>
@@ -3682,26 +3584,17 @@ impl Kendra for KendraClient {
         &self,
         input: ListFaqsRequest,
     ) -> Result<ListFaqsResponse, RusotoError<ListFaqsError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.ListFaqs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListFaqsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFaqsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListFaqsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFaqsResponse, _>()
     }
 
     /// <p>Lists the Amazon Kendra indexes that you have created.</p>
@@ -3709,26 +3602,17 @@ impl Kendra for KendraClient {
         &self,
         input: ListIndicesRequest,
     ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.ListIndices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListIndicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListIndicesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListIndicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListIndicesResponse, _>()
     }
 
     /// <p>Gets a list of tags associated with a specified resource. Indexes, FAQs, and data sources can have tags associated with them.</p>
@@ -3736,9 +3620,7 @@ impl Kendra for KendraClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.ListTagsForResource",
@@ -3746,44 +3628,27 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Searches an active index. Use this API to search your documents using query. The <code>Query</code> operation enables to do faceted search and to filter results based on document attributes.</p> <p>It also enables you to provide user context that Amazon Kendra uses to enforce document access control in the search results. </p> <p>Amazon Kendra searches your index for text content and question and answer (FAQ) content. By default the response contains three types of results.</p> <ul> <li> <p>Relevant passages</p> </li> <li> <p>Matching FAQs</p> </li> <li> <p>Relevant documents</p> </li> </ul> <p>You can specify that the query return only one type of result using the <code>QueryResultTypeConfig</code> parameter.</p>
     async fn query(&self, input: QueryRequest) -> Result<QueryResult, RusotoError<QueryError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.Query");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<QueryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(QueryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, QueryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<QueryResult, _>()
     }
 
     /// <p>Starts a synchronization job for a data source. If a synchronization job is already in progress, Amazon Kendra returns a <code>ResourceInUseException</code> exception.</p>
@@ -3791,9 +3656,7 @@ impl Kendra for KendraClient {
         &self,
         input: StartDataSourceSyncJobRequest,
     ) -> Result<StartDataSourceSyncJobResponse, RusotoError<StartDataSourceSyncJobError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.StartDataSourceSyncJob",
@@ -3801,20 +3664,13 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDataSourceSyncJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDataSourceSyncJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartDataSourceSyncJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartDataSourceSyncJobResponse, _>()
     }
 
     /// <p>Stops a running synchronization job. You can't stop a scheduled synchronization job.</p>
@@ -3822,9 +3678,7 @@ impl Kendra for KendraClient {
         &self,
         input: StopDataSourceSyncJobRequest,
     ) -> Result<(), RusotoError<StopDataSourceSyncJobError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSKendraFrontendService.StopDataSourceSyncJob",
@@ -3832,19 +3686,11 @@ impl Kendra for KendraClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDataSourceSyncJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopDataSourceSyncJobError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Enables you to provide feedback to Amazon Kendra to improve the performance of the service. </p>
@@ -3852,26 +3698,16 @@ impl Kendra for KendraClient {
         &self,
         input: SubmitFeedbackRequest,
     ) -> Result<(), RusotoError<SubmitFeedbackError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.SubmitFeedback");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SubmitFeedbackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SubmitFeedbackError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds the specified tag to the specified index, FAQ, or data source resource. If the tag already exists, the existing value is replaced with the new value.</p>
@@ -3879,26 +3715,17 @@ impl Kendra for KendraClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes a tag from an index, FAQ, or a data source.</p>
@@ -3906,26 +3733,17 @@ impl Kendra for KendraClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates an existing Amazon Kendra data source.</p>
@@ -3933,26 +3751,16 @@ impl Kendra for KendraClient {
         &self,
         input: UpdateDataSourceRequest,
     ) -> Result<(), RusotoError<UpdateDataSourceError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.UpdateDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDataSourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDataSourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates an existing Amazon Kendra index.</p>
@@ -3960,25 +3768,15 @@ impl Kendra for KendraClient {
         &self,
         input: UpdateIndexRequest,
     ) -> Result<(), RusotoError<UpdateIndexError>> {
-        let mut request = SignedRequest::new("POST", "kendra", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSKendraFrontendService.UpdateIndex");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateIndexError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateIndexError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

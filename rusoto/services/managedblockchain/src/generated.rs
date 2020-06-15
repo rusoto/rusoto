@@ -2455,6 +2455,7 @@ impl ManagedBlockchainClient {
 #[async_trait]
 impl ManagedBlockchain for ManagedBlockchainClient {
     /// <p>Creates a member within a Managed Blockchain network.</p>
+    #[allow(unused_mut)]
     async fn create_member(
         &self,
         input: CreateMemberInput,
@@ -2477,7 +2478,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMemberOutput, _>()?;
 
@@ -2489,6 +2490,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
+    #[allow(unused_mut)]
     async fn create_network(
         &self,
         input: CreateNetworkInput,
@@ -2508,7 +2510,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateNetworkOutput, _>()?;
 
@@ -2520,6 +2522,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a peer node in a member.</p>
+    #[allow(unused_mut)]
     async fn create_node(
         &self,
         input: CreateNodeInput,
@@ -2543,7 +2546,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateNodeOutput, _>()?;
 
@@ -2555,6 +2558,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
+    #[allow(unused_mut)]
     async fn create_proposal(
         &self,
         input: CreateProposalInput,
@@ -2577,7 +2581,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProposalOutput, _>()?;
 
@@ -2589,6 +2593,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
+    #[allow(unused_mut)]
     async fn delete_member(
         &self,
         input: DeleteMemberInput,
@@ -2609,7 +2614,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMemberOutput, _>()?;
 
@@ -2621,6 +2626,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
+    #[allow(unused_mut)]
     async fn delete_node(
         &self,
         input: DeleteNodeInput,
@@ -2642,7 +2648,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteNodeOutput, _>()?;
 
@@ -2654,6 +2660,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a member.</p>
+    #[allow(unused_mut)]
     async fn get_member(
         &self,
         input: GetMemberInput,
@@ -2674,7 +2681,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetMemberOutput, _>()?;
 
@@ -2686,6 +2693,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a network.</p>
+    #[allow(unused_mut)]
     async fn get_network(
         &self,
         input: GetNetworkInput,
@@ -2702,7 +2710,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetNetworkOutput, _>()?;
 
@@ -2714,6 +2722,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a peer node.</p>
+    #[allow(unused_mut)]
     async fn get_node(
         &self,
         input: GetNodeInput,
@@ -2735,7 +2744,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetNodeOutput, _>()?;
 
@@ -2747,6 +2756,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a proposal.</p>
+    #[allow(unused_mut)]
     async fn get_proposal(
         &self,
         input: GetProposalInput,
@@ -2767,7 +2777,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetProposalOutput, _>()?;
 
@@ -2779,6 +2789,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of all invitations made on the specified network.</p>
+    #[allow(unused_mut)]
     async fn list_invitations(
         &self,
         input: ListInvitationsInput,
@@ -2804,7 +2815,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInvitationsOutput, _>()?;
 
@@ -2816,6 +2827,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
+    #[allow(unused_mut)]
     async fn list_members(
         &self,
         input: ListMembersInput,
@@ -2853,7 +2865,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMembersOutput, _>()?;
 
@@ -2865,6 +2877,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns information about the networks in which the current AWS account has members.</p>
+    #[allow(unused_mut)]
     async fn list_networks(
         &self,
         input: ListNetworksInput,
@@ -2899,7 +2912,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListNetworksOutput, _>()?;
 
@@ -2911,6 +2924,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns information about the nodes within a network.</p>
+    #[allow(unused_mut)]
     async fn list_nodes(
         &self,
         input: ListNodesInput,
@@ -2943,7 +2957,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListNodesOutput, _>()?;
 
@@ -2955,6 +2969,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
+    #[allow(unused_mut)]
     async fn list_proposal_votes(
         &self,
         input: ListProposalVotesInput,
@@ -2984,7 +2999,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProposalVotesOutput, _>()?;
 
@@ -2996,6 +3011,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of proposals for the network.</p>
+    #[allow(unused_mut)]
     async fn list_proposals(
         &self,
         input: ListProposalsInput,
@@ -3024,7 +3040,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProposalsOutput, _>()?;
 
@@ -3036,6 +3052,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
+    #[allow(unused_mut)]
     async fn reject_invitation(
         &self,
         input: RejectInvitationInput,
@@ -3055,7 +3072,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RejectInvitationOutput, _>()?;
 
@@ -3067,6 +3084,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Updates a member configuration with new parameters.</p>
+    #[allow(unused_mut)]
     async fn update_member(
         &self,
         input: UpdateMemberInput,
@@ -3090,7 +3108,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMemberOutput, _>()?;
 
@@ -3102,6 +3120,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Updates a node configuration with new parameters.</p>
+    #[allow(unused_mut)]
     async fn update_node(
         &self,
         input: UpdateNodeInput,
@@ -3126,7 +3145,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateNodeOutput, _>()?;
 
@@ -3138,6 +3157,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
+    #[allow(unused_mut)]
     async fn vote_on_proposal(
         &self,
         input: VoteOnProposalInput,
@@ -3161,7 +3181,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<VoteOnProposalOutput, _>()?;
 

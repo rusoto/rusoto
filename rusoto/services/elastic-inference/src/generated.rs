@@ -585,6 +585,7 @@ impl ElasticInferenceClient {
 #[async_trait]
 impl ElasticInference for ElasticInferenceClient {
     /// <p> Describes the locations in which a given accelerator type or set of types is present in a given region. </p>
+    #[allow(unused_mut)]
     async fn describe_accelerator_offerings(
         &self,
         input: DescribeAcceleratorOfferingsRequest,
@@ -606,7 +607,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAcceleratorOfferingsResponse, _>()?;
 
@@ -618,6 +619,7 @@ impl ElasticInference for ElasticInferenceClient {
     }
 
     /// <p> Describes the accelerator types available in a given region, as well as their characteristics, such as memory and throughput. </p>
+    #[allow(unused_mut)]
     async fn describe_accelerator_types(
         &self,
     ) -> Result<DescribeAcceleratorTypesResponse, RusotoError<DescribeAcceleratorTypesError>> {
@@ -635,7 +637,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAcceleratorTypesResponse, _>()?;
 
@@ -647,6 +649,7 @@ impl ElasticInference for ElasticInferenceClient {
     }
 
     /// <p> Describes information over a provided set of accelerators belonging to an account. </p>
+    #[allow(unused_mut)]
     async fn describe_accelerators(
         &self,
         input: DescribeAcceleratorsRequest,
@@ -667,7 +670,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAcceleratorsResponse, _>()?;
 
@@ -679,6 +682,7 @@ impl ElasticInference for ElasticInferenceClient {
     }
 
     /// <p> Returns all tags of an Elastic Inference Accelerator. </p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -697,7 +701,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResult, _>()?;
 
@@ -709,6 +713,7 @@ impl ElasticInference for ElasticInferenceClient {
     }
 
     /// <p> Adds the specified tags to an Elastic Inference Accelerator. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -729,7 +734,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResult, _>()?;
 
@@ -741,6 +746,7 @@ impl ElasticInference for ElasticInferenceClient {
     }
 
     /// <p> Removes the specified tags from an Elastic Inference Accelerator. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -765,7 +771,7 @@ impl ElasticInference for ElasticInferenceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResult, _>()?;
 

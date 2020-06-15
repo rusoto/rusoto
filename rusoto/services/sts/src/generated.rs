@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,19 +33,39 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl StsClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2011-06-15");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -53,11 +73,7 @@ struct AccessKeySecretTypeDeserializer;
 impl AccessKeySecretTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -65,11 +81,7 @@ struct AccountTypeDeserializer;
 impl AccountTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -77,11 +89,7 @@ struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -457,11 +465,7 @@ struct AssumedRoleIdTypeDeserializer;
 impl AssumedRoleIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The identifiers for the temporary security credentials that the operation returns.</p>
@@ -502,11 +506,7 @@ struct AudienceDeserializer;
 impl AudienceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>AWS credentials for API authentication.</p>
@@ -558,11 +558,7 @@ struct DateTypeDeserializer;
 impl DateTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -627,11 +623,7 @@ struct DecodedMessageTypeDeserializer;
 impl DecodedMessageTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -639,11 +631,7 @@ struct FederatedIdTypeDeserializer;
 impl FederatedIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Identifiers for the federated user that is associated with the credentials.</p>
@@ -947,11 +935,7 @@ struct IssuerDeserializer;
 impl IssuerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -959,11 +943,7 @@ struct NameQualifierDeserializer;
 impl NameQualifierDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -971,11 +951,7 @@ struct NonNegativeIntegerTypeDeserializer;
 impl NonNegativeIntegerTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -1018,11 +994,7 @@ struct SubjectDeserializer;
 impl SubjectDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1030,11 +1002,7 @@ struct SubjectTypeDeserializer;
 impl SubjectTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>You can pass custom key-value pair attributes when you assume a role or federate a user. These are called session tags. You can then use the session tags to control access to resources. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html">Tagging AWS STS Sessions</a> in the <i>IAM User Guide</i>.</p>
@@ -1088,11 +1056,7 @@ struct TokenTypeDeserializer;
 impl TokenTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1100,11 +1064,7 @@ struct UserIdTypeDeserializer;
 impl UserIdTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1112,11 +1072,7 @@ struct WebIdentitySubjectTypeDeserializer;
 impl WebIdentitySubjectTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by AssumeRole
@@ -1164,7 +1120,7 @@ impl AssumeRoleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1245,7 +1201,7 @@ impl AssumeRoleWithSAMLError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1344,7 +1300,7 @@ impl AssumeRoleWithWebIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1406,7 +1362,7 @@ impl DecodeAuthorizationMessageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1444,7 +1400,7 @@ impl GetAccessKeyInfoError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1478,7 +1434,7 @@ impl GetCallerIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1534,7 +1490,7 @@ impl GetFederationTokenError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1580,7 +1536,7 @@ impl GetSessionTokenError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1690,42 +1646,27 @@ impl Sts for StsClient {
         input: AssumeRoleRequest,
     ) -> Result<AssumeRoleResponse, RusotoError<AssumeRoleError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AssumeRole");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("AssumeRole");
+        let mut params = params;
         AssumeRoleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AssumeRoleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AssumeRoleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AssumeRoleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AssumeRoleResponseDeserializer::deserialize("AssumeRoleResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1735,45 +1676,30 @@ impl Sts for StsClient {
         input: AssumeRoleWithSAMLRequest,
     ) -> Result<AssumeRoleWithSAMLResponse, RusotoError<AssumeRoleWithSAMLError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AssumeRoleWithSAML");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("AssumeRoleWithSAML");
+        let mut params = params;
         AssumeRoleWithSAMLRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AssumeRoleWithSAMLError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AssumeRoleWithSAMLError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AssumeRoleWithSAMLResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AssumeRoleWithSAMLResponseDeserializer::deserialize(
                 "AssumeRoleWithSAMLResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1784,45 +1710,30 @@ impl Sts for StsClient {
     ) -> Result<AssumeRoleWithWebIdentityResponse, RusotoError<AssumeRoleWithWebIdentityError>>
     {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AssumeRoleWithWebIdentity");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("AssumeRoleWithWebIdentity");
+        let mut params = params;
         AssumeRoleWithWebIdentityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AssumeRoleWithWebIdentityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AssumeRoleWithWebIdentityError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AssumeRoleWithWebIdentityResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AssumeRoleWithWebIdentityResponseDeserializer::deserialize(
                 "AssumeRoleWithWebIdentityResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1833,45 +1744,30 @@ impl Sts for StsClient {
     ) -> Result<DecodeAuthorizationMessageResponse, RusotoError<DecodeAuthorizationMessageError>>
     {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DecodeAuthorizationMessage");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("DecodeAuthorizationMessage");
+        let mut params = params;
         DecodeAuthorizationMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DecodeAuthorizationMessageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DecodeAuthorizationMessageError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DecodeAuthorizationMessageResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DecodeAuthorizationMessageResponseDeserializer::deserialize(
                 "DecodeAuthorizationMessageResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1881,45 +1777,28 @@ impl Sts for StsClient {
         input: GetAccessKeyInfoRequest,
     ) -> Result<GetAccessKeyInfoResponse, RusotoError<GetAccessKeyInfoError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccessKeyInfo");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("GetAccessKeyInfo");
+        let mut params = params;
         GetAccessKeyInfoRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccessKeyInfoError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccessKeyInfoError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccessKeyInfoResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccessKeyInfoResponseDeserializer::deserialize(
-                "GetAccessKeyInfoResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetAccessKeyInfoResponseDeserializer::deserialize("GetAccessKeyInfoResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1929,45 +1808,30 @@ impl Sts for StsClient {
         input: GetCallerIdentityRequest,
     ) -> Result<GetCallerIdentityResponse, RusotoError<GetCallerIdentityError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetCallerIdentity");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("GetCallerIdentity");
+        let mut params = params;
         GetCallerIdentityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCallerIdentityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCallerIdentityError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCallerIdentityResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetCallerIdentityResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetCallerIdentityResponseDeserializer::deserialize(
                 "GetCallerIdentityResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1977,45 +1841,30 @@ impl Sts for StsClient {
         input: GetFederationTokenRequest,
     ) -> Result<GetFederationTokenResponse, RusotoError<GetFederationTokenError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetFederationToken");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("GetFederationToken");
+        let mut params = params;
         GetFederationTokenRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetFederationTokenError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFederationTokenError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetFederationTokenResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetFederationTokenResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetFederationTokenResponseDeserializer::deserialize(
                 "GetFederationTokenResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -2025,45 +1874,28 @@ impl Sts for StsClient {
         input: GetSessionTokenRequest,
     ) -> Result<GetSessionTokenResponse, RusotoError<GetSessionTokenError>> {
         let mut request = SignedRequest::new("POST", "sts", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSessionToken");
-        params.put("Version", "2011-06-15");
+        let params = self.new_params("GetSessionToken");
+        let mut params = params;
         GetSessionTokenRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSessionTokenError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSessionTokenError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSessionTokenResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSessionTokenResponseDeserializer::deserialize(
-                "GetSessionTokenResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetSessionTokenResponseDeserializer::deserialize("GetSessionTokenResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

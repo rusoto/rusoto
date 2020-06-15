@@ -421,6 +421,7 @@ impl SsoClient {
 #[async_trait]
 impl Sso for SsoClient {
     /// <p>Returns the STS short-term credentials for a given role name that is assigned to the user.</p>
+    #[allow(unused_mut)]
     async fn get_role_credentials(
         &self,
         input: GetRoleCredentialsRequest,
@@ -444,7 +445,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRoleCredentialsResponse, _>()?;
 
@@ -456,6 +457,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Lists all roles that are assigned to the user for a given AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_account_roles(
         &self,
         input: ListAccountRolesRequest,
@@ -484,7 +486,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountRolesResponse, _>()?;
 
@@ -496,6 +498,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
+    #[allow(unused_mut)]
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
@@ -523,7 +526,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountsResponse, _>()?;
 
@@ -535,6 +538,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
+    #[allow(unused_mut)]
     async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>> {
         let request_uri = "/logout";
 
@@ -551,7 +555,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

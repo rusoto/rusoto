@@ -3595,6 +3595,7 @@ impl EsClient {
 #[async_trait]
 impl Es for EsClient {
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
+    #[allow(unused_mut)]
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>> {
         let request_uri = "/2015-01-01/tags";
 
@@ -3610,7 +3611,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3621,6 +3622,7 @@ impl Es for EsClient {
     }
 
     /// <p>Associates a package with an Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn associate_package(
         &self,
         input: AssociatePackageRequest,
@@ -3640,7 +3642,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePackageResponse, _>()?;
 
@@ -3652,6 +3654,7 @@ impl Es for EsClient {
     }
 
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
+    #[allow(unused_mut)]
     async fn cancel_elasticsearch_service_software_update(
         &self,
         input: CancelElasticsearchServiceSoftwareUpdateRequest,
@@ -3673,7 +3676,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelElasticsearchServiceSoftwareUpdateResponse, _>()?;
 
@@ -3685,6 +3688,7 @@ impl Es for EsClient {
     }
 
     /// <p>Creates a new Elasticsearch domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains" target="_blank">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_elasticsearch_domain(
         &self,
         input: CreateElasticsearchDomainRequest,
@@ -3704,7 +3708,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateElasticsearchDomainResponse, _>()?;
 
@@ -3716,6 +3720,7 @@ impl Es for EsClient {
     }
 
     /// <p>Create a package for use with Amazon ES domains.</p>
+    #[allow(unused_mut)]
     async fn create_package(
         &self,
         input: CreatePackageRequest,
@@ -3734,7 +3739,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackageResponse, _>()?;
 
@@ -3746,6 +3751,7 @@ impl Es for EsClient {
     }
 
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
+    #[allow(unused_mut)]
     async fn delete_elasticsearch_domain(
         &self,
         input: DeleteElasticsearchDomainRequest,
@@ -3765,7 +3771,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteElasticsearchDomainResponse, _>()?;
 
@@ -3777,6 +3783,7 @@ impl Es for EsClient {
     }
 
     /// <p>Deletes the service-linked role that Elasticsearch Service uses to manage and maintain VPC domains. Role deletion will fail if any existing VPC domains use the role. You must delete any such Elasticsearch domains before deleting the role. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-enabling-slr" target="_blank">Deleting Elasticsearch Service Role</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>> {
@@ -3791,7 +3798,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3802,6 +3809,7 @@ impl Es for EsClient {
     }
 
     /// <p>Delete the package.</p>
+    #[allow(unused_mut)]
     async fn delete_package(
         &self,
         input: DeletePackageRequest,
@@ -3820,7 +3828,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackageResponse, _>()?;
 
@@ -3832,6 +3840,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domain(
         &self,
         input: DescribeElasticsearchDomainRequest,
@@ -3851,7 +3860,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainResponse, _>()?;
 
@@ -3863,6 +3872,7 @@ impl Es for EsClient {
     }
 
     /// <p>Provides cluster configuration information about the specified Elasticsearch domain, such as the state, creation date, update version, and update date for cluster options.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domain_config(
         &self,
         input: DescribeElasticsearchDomainConfigRequest,
@@ -3884,7 +3894,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainConfigResponse, _>()?;
 
@@ -3898,6 +3908,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domains, including the domain ID, domain endpoint, and domain ARN.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domains(
         &self,
         input: DescribeElasticsearchDomainsRequest,
@@ -3917,7 +3928,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainsResponse, _>()?;
 
@@ -3929,6 +3940,7 @@ impl Es for EsClient {
     }
 
     /// <p> Describe Elasticsearch Limits for a given InstanceType and ElasticsearchVersion. When modifying existing Domain, specify the <code> <a>DomainName</a> </code> to know what Limits are supported for modifying. </p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_instance_type_limits(
         &self,
         input: DescribeElasticsearchInstanceTypeLimitsRequest,
@@ -3957,7 +3969,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchInstanceTypeLimitsResponse, _>()?;
 
@@ -3971,6 +3983,7 @@ impl Es for EsClient {
     }
 
     /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
+    #[allow(unused_mut)]
     async fn describe_packages(
         &self,
         input: DescribePackagesRequest,
@@ -3989,7 +4002,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagesResponse, _>()?;
 
@@ -4001,6 +4014,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
+    #[allow(unused_mut)]
     async fn describe_reserved_elasticsearch_instance_offerings(
         &self,
         input: DescribeReservedElasticsearchInstanceOfferingsRequest,
@@ -4031,7 +4045,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeReservedElasticsearchInstanceOfferingsResponse, _>(
             )?;
@@ -4044,6 +4058,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
+    #[allow(unused_mut)]
     async fn describe_reserved_elasticsearch_instances(
         &self,
         input: DescribeReservedElasticsearchInstancesRequest,
@@ -4074,7 +4089,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeReservedElasticsearchInstancesResponse, _>()?;
 
@@ -4088,6 +4103,7 @@ impl Es for EsClient {
     }
 
     /// <p>Dissociates a package from the Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn dissociate_package(
         &self,
         input: DissociatePackageRequest,
@@ -4107,7 +4123,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DissociatePackageResponse, _>()?;
 
@@ -4119,6 +4135,7 @@ impl Es for EsClient {
     }
 
     /// <p> Returns a list of upgrade compatible Elastisearch versions. You can optionally pass a <code> <a>DomainName</a> </code> to get all upgrade compatible Elasticsearch versions for that specific domain. </p>
+    #[allow(unused_mut)]
     async fn get_compatible_elasticsearch_versions(
         &self,
         input: GetCompatibleElasticsearchVersionsRequest,
@@ -4143,7 +4160,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCompatibleElasticsearchVersionsResponse, _>()?;
 
@@ -4157,6 +4174,7 @@ impl Es for EsClient {
     }
 
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
+    #[allow(unused_mut)]
     async fn get_upgrade_history(
         &self,
         input: GetUpgradeHistoryRequest,
@@ -4184,7 +4202,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUpgradeHistoryResponse, _>()?;
 
@@ -4196,6 +4214,7 @@ impl Es for EsClient {
     }
 
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
+    #[allow(unused_mut)]
     async fn get_upgrade_status(
         &self,
         input: GetUpgradeStatusRequest,
@@ -4214,7 +4233,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUpgradeStatusResponse, _>()?;
 
@@ -4226,6 +4245,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns the name of all Elasticsearch domains owned by the current user's account. </p>
+    #[allow(unused_mut)]
     async fn list_domain_names(
         &self,
     ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>> {
@@ -4240,7 +4260,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainNamesResponse, _>()?;
 
@@ -4252,6 +4272,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists all Amazon ES domains associated with the package.</p>
+    #[allow(unused_mut)]
     async fn list_domains_for_package(
         &self,
         input: ListDomainsForPackageRequest,
@@ -4279,7 +4300,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainsForPackageResponse, _>()?;
 
@@ -4291,6 +4312,7 @@ impl Es for EsClient {
     }
 
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
+    #[allow(unused_mut)]
     async fn list_elasticsearch_instance_types(
         &self,
         input: ListElasticsearchInstanceTypesRequest,
@@ -4324,7 +4346,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListElasticsearchInstanceTypesResponse, _>()?;
 
@@ -4336,6 +4358,7 @@ impl Es for EsClient {
     }
 
     /// <p>List all supported Elasticsearch versions</p>
+    #[allow(unused_mut)]
     async fn list_elasticsearch_versions(
         &self,
         input: ListElasticsearchVersionsRequest,
@@ -4361,7 +4384,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListElasticsearchVersionsResponse, _>()?;
 
@@ -4373,6 +4396,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists all packages associated with the Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn list_packages_for_domain(
         &self,
         input: ListPackagesForDomainRequest,
@@ -4400,7 +4424,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagesForDomainResponse, _>()?;
 
@@ -4412,6 +4436,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns all tags for the given Elasticsearch domain.</p>
+    #[allow(unused_mut)]
     async fn list_tags(
         &self,
         input: ListTagsRequest,
@@ -4431,7 +4456,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsResponse, _>()?;
 
@@ -4443,6 +4468,7 @@ impl Es for EsClient {
     }
 
     /// <p>Allows you to purchase reserved Elasticsearch instances.</p>
+    #[allow(unused_mut)]
     async fn purchase_reserved_elasticsearch_instance_offering(
         &self,
         input: PurchaseReservedElasticsearchInstanceOfferingRequest,
@@ -4464,7 +4490,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PurchaseReservedElasticsearchInstanceOfferingResponse, _>(
             )?;
@@ -4477,6 +4503,7 @@ impl Es for EsClient {
     }
 
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
+    #[allow(unused_mut)]
     async fn remove_tags(
         &self,
         input: RemoveTagsRequest,
@@ -4495,7 +4522,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4506,6 +4533,7 @@ impl Es for EsClient {
     }
 
     /// <p>Schedules a service software update for an Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn start_elasticsearch_service_software_update(
         &self,
         input: StartElasticsearchServiceSoftwareUpdateRequest,
@@ -4527,7 +4555,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartElasticsearchServiceSoftwareUpdateResponse, _>()?;
 
@@ -4541,6 +4569,7 @@ impl Es for EsClient {
     }
 
     /// <p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>
+    #[allow(unused_mut)]
     async fn update_elasticsearch_domain_config(
         &self,
         input: UpdateElasticsearchDomainConfigRequest,
@@ -4565,7 +4594,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateElasticsearchDomainConfigResponse, _>()?;
 
@@ -4579,6 +4608,7 @@ impl Es for EsClient {
     }
 
     /// <p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>
+    #[allow(unused_mut)]
     async fn upgrade_elasticsearch_domain(
         &self,
         input: UpgradeElasticsearchDomainRequest,
@@ -4598,7 +4628,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpgradeElasticsearchDomainResponse, _>()?;
 

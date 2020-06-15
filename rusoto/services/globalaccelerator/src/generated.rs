@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl GlobalAcceleratorClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "globalaccelerator", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>An accelerator is a complex type that includes one or more listeners that process inbound connections and then direct traffic to one or more endpoint groups, each of which includes endpoints, such as load balancers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2348,9 +2375,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: AdvertiseByoipCidrRequest,
     ) -> Result<AdvertiseByoipCidrResponse, RusotoError<AdvertiseByoipCidrError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.AdvertiseByoipCidr",
@@ -2358,20 +2383,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AdvertiseByoipCidrResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AdvertiseByoipCidrError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AdvertiseByoipCidrError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AdvertiseByoipCidrResponse, _>()
     }
 
     /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
@@ -2379,9 +2396,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: CreateAcceleratorRequest,
     ) -> Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.CreateAccelerator",
@@ -2389,20 +2404,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAcceleratorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAcceleratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateAcceleratorResponse, _>()
     }
 
     /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
@@ -2410,9 +2417,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: CreateEndpointGroupRequest,
     ) -> Result<CreateEndpointGroupResponse, RusotoError<CreateEndpointGroupError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.CreateEndpointGroup",
@@ -2420,20 +2425,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEndpointGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEndpointGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointGroupResponse, _>()
     }
 
     /// <p>Create a listener to process inbound connections from clients to an accelerator. Connections arrive to assigned static IP addresses on a port, port range, or list of port ranges that you specify. To see an AWS CLI example of creating a listener, scroll down to <b>Example</b>.</p>
@@ -2441,26 +2438,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: CreateListenerRequest,
     ) -> Result<CreateListenerResponse, RusotoError<CreateListenerError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.CreateListener");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateListenerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateListenerResponse, _>()
     }
 
     /// <p><p>Delete an accelerator. Before you can delete an accelerator, you must disable it and remove all dependent resources (listeners and endpoint groups). To disable the accelerator, update the accelerator to set <code>Enabled</code> to false.</p> <important> <p>When you create an accelerator, by default, Global Accelerator provides you with a set of two static IP addresses. Alternatively, you can bring your own IP address ranges to Global Accelerator and assign IP addresses from those ranges. </p> <p>The IP addresses are assigned to your accelerator for as long as it exists, even if you disable the accelerator and it no longer accepts or routes traffic. However, when you <i>delete</i> an accelerator, you lose the static IP addresses that are assigned to the accelerator, so you can no longer route traffic by using them. As a best practice, ensure that you have permissions in place to avoid inadvertently deleting accelerators. You can use IAM policies with Global Accelerator to limit the users who have permissions to delete an accelerator. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html">Authentication and Access Control</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p> </important></p>
@@ -2468,9 +2456,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DeleteAcceleratorRequest,
     ) -> Result<(), RusotoError<DeleteAcceleratorError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DeleteAccelerator",
@@ -2478,19 +2464,11 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAcceleratorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAcceleratorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Delete an endpoint group from a listener.</p>
@@ -2498,9 +2476,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DeleteEndpointGroupRequest,
     ) -> Result<(), RusotoError<DeleteEndpointGroupError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DeleteEndpointGroup",
@@ -2508,19 +2484,11 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEndpointGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEndpointGroupError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Delete a listener from an accelerator.</p>
@@ -2528,26 +2496,16 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DeleteListenerRequest,
     ) -> Result<(), RusotoError<DeleteListenerError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.DeleteListener");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteListenerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteListenerError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool. To see an AWS CLI example of deprovisioning an address range, scroll down to <b>Example</b>.</p> <p>Before you can release an address range, you must stop advertising it by using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/WithdrawByoipCidr.html">WithdrawByoipCidr</a> and you must not have any accelerators that are using static IP addresses allocated from its address range. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
@@ -2555,9 +2513,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DeprovisionByoipCidrRequest,
     ) -> Result<DeprovisionByoipCidrResponse, RusotoError<DeprovisionByoipCidrError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DeprovisionByoipCidr",
@@ -2565,20 +2521,13 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprovisionByoipCidrResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprovisionByoipCidrError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeprovisionByoipCidrError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeprovisionByoipCidrResponse, _>()
     }
 
     /// <p>Describe an accelerator. To see an AWS CLI example of describing an accelerator, scroll down to <b>Example</b>.</p>
@@ -2586,9 +2535,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DescribeAcceleratorRequest,
     ) -> Result<DescribeAcceleratorResponse, RusotoError<DescribeAcceleratorError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DescribeAccelerator",
@@ -2596,20 +2543,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAcceleratorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAcceleratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAcceleratorResponse, _>()
     }
 
     /// <p>Describe the attributes of an accelerator. To see an AWS CLI example of describing the attributes of an accelerator, scroll down to <b>Example</b>.</p>
@@ -2620,9 +2559,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         DescribeAcceleratorAttributesResponse,
         RusotoError<DescribeAcceleratorAttributesError>,
     > {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DescribeAcceleratorAttributes",
@@ -2630,20 +2567,13 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAcceleratorAttributesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAcceleratorAttributesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAcceleratorAttributesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAcceleratorAttributesResponse, _>()
     }
 
     /// <p>Describe an endpoint group. To see an AWS CLI example of describing an endpoint group, scroll down to <b>Example</b>.</p>
@@ -2651,9 +2581,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DescribeEndpointGroupRequest,
     ) -> Result<DescribeEndpointGroupResponse, RusotoError<DescribeEndpointGroupError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DescribeEndpointGroup",
@@ -2661,20 +2589,13 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEndpointGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEndpointGroupResponse, _>()
     }
 
     /// <p>Describe a listener. To see an AWS CLI example of describing a listener, scroll down to <b>Example</b>.</p>
@@ -2682,9 +2603,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: DescribeListenerRequest,
     ) -> Result<DescribeListenerResponse, RusotoError<DescribeListenerError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.DescribeListener",
@@ -2692,20 +2611,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeListenerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeListenerResponse, _>()
     }
 
     /// <p>List the accelerators for an AWS account. To see an AWS CLI example of listing the accelerators for an AWS account, scroll down to <b>Example</b>.</p>
@@ -2713,9 +2624,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ListAcceleratorsRequest,
     ) -> Result<ListAcceleratorsResponse, RusotoError<ListAcceleratorsError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.ListAccelerators",
@@ -2723,20 +2632,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAcceleratorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAcceleratorsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAcceleratorsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAcceleratorsResponse, _>()
     }
 
     /// <p>Lists the IP address ranges that were specified in calls to <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/ProvisionByoipCidr.html">ProvisionByoipCidr</a>, including the current state and a history of state changes.</p> <p>To see an AWS CLI example of listing BYOIP CIDR addresses, scroll down to <b>Example</b>.</p>
@@ -2744,26 +2645,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ListByoipCidrsRequest,
     ) -> Result<ListByoipCidrsResponse, RusotoError<ListByoipCidrsError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.ListByoipCidrs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListByoipCidrsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListByoipCidrsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListByoipCidrsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListByoipCidrsResponse, _>()
     }
 
     /// <p>List the endpoint groups that are associated with a listener. To see an AWS CLI example of listing the endpoint groups for listener, scroll down to <b>Example</b>.</p>
@@ -2771,9 +2663,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ListEndpointGroupsRequest,
     ) -> Result<ListEndpointGroupsResponse, RusotoError<ListEndpointGroupsError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.ListEndpointGroups",
@@ -2781,20 +2671,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEndpointGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEndpointGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEndpointGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointGroupsResponse, _>()
     }
 
     /// <p>List the listeners for an accelerator. To see an AWS CLI example of listing the listeners for an accelerator, scroll down to <b>Example</b>.</p>
@@ -2802,26 +2684,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ListListenersRequest,
     ) -> Result<ListListenersResponse, RusotoError<ListListenersError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.ListListeners");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListListenersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListListenersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListListenersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListListenersResponse, _>()
     }
 
     /// <p>List all tags for an accelerator. To see an AWS CLI example of listing tags for an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
@@ -2829,9 +2702,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.ListTagsForResource",
@@ -2839,20 +2710,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool. After the address range is provisioned, it is ready to be advertised using <a href="https://docs.aws.amazon.com/global-accelerator/latest/api/AdvertiseByoipCidr.html"> AdvertiseByoipCidr</a>.</p> <p>To see an AWS CLI example of provisioning an address range for BYOIP, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
@@ -2860,9 +2723,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: ProvisionByoipCidrRequest,
     ) -> Result<ProvisionByoipCidrResponse, RusotoError<ProvisionByoipCidrError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.ProvisionByoipCidr",
@@ -2870,20 +2731,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ProvisionByoipCidrResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ProvisionByoipCidrError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ProvisionByoipCidrError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ProvisionByoipCidrResponse, _>()
     }
 
     /// <p>Add tags to an accelerator resource. To see an AWS CLI example of adding tags to an accelerator, scroll down to <b>Example</b>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
@@ -2891,26 +2744,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Remove tags from a Global Accelerator resource. When you specify a tag key, the action removes both that key and its associated value. To see an AWS CLI example of removing tags from an accelerator, scroll down to <b>Example</b>. The operation succeeds even if you attempt to remove tags from an accelerator that was already removed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/tagging-in-global-accelerator.html">Tagging in AWS Global Accelerator</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
@@ -2918,26 +2762,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
@@ -2945,9 +2780,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: UpdateAcceleratorRequest,
     ) -> Result<UpdateAcceleratorResponse, RusotoError<UpdateAcceleratorError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.UpdateAccelerator",
@@ -2955,20 +2788,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAcceleratorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAcceleratorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAcceleratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateAcceleratorResponse, _>()
     }
 
     /// <p>Update the attributes for an accelerator. To see an AWS CLI example of updating an accelerator to enable flow logs, scroll down to <b>Example</b>.</p>
@@ -2977,9 +2802,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         input: UpdateAcceleratorAttributesRequest,
     ) -> Result<UpdateAcceleratorAttributesResponse, RusotoError<UpdateAcceleratorAttributesError>>
     {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.UpdateAcceleratorAttributes",
@@ -2987,20 +2810,13 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAcceleratorAttributesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAcceleratorAttributesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAcceleratorAttributesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateAcceleratorAttributesResponse, _>()
     }
 
     /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
@@ -3008,9 +2824,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: UpdateEndpointGroupRequest,
     ) -> Result<UpdateEndpointGroupResponse, RusotoError<UpdateEndpointGroupError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.UpdateEndpointGroup",
@@ -3018,20 +2832,12 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEndpointGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEndpointGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateEndpointGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointGroupResponse, _>()
     }
 
     /// <p>Update a listener. To see an AWS CLI example of updating listener, scroll down to <b>Example</b>.</p>
@@ -3039,26 +2845,17 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: UpdateListenerRequest,
     ) -> Result<UpdateListenerResponse, RusotoError<UpdateListenerError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "GlobalAccelerator_V20180706.UpdateListener");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateListenerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateListenerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateListenerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateListenerResponse, _>()
     }
 
     /// <p>Stops advertising an address range that is provisioned as an address pool. You can perform this operation at most once every 10 seconds, even if you specify different address ranges each time. To see an AWS CLI example of withdrawing an address range for BYOIP so it will no longer be advertised by AWS, scroll down to <b>Example</b>.</p> <p>It can take a few minutes before traffic to the specified addresses stops routing to AWS because of propagation delays.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
@@ -3066,9 +2863,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         &self,
         input: WithdrawByoipCidrRequest,
     ) -> Result<WithdrawByoipCidrResponse, RusotoError<WithdrawByoipCidrError>> {
-        let mut request = SignedRequest::new("POST", "globalaccelerator", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "GlobalAccelerator_V20180706.WithdrawByoipCidr",
@@ -3076,19 +2871,11 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<WithdrawByoipCidrResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(WithdrawByoipCidrError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, WithdrawByoipCidrError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<WithdrawByoipCidrResponse, _>()
     }
 }

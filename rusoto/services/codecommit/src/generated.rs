@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CodeCommitClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "codecommit", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Returns information about a specific approval on a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -14734,9 +14760,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: AssociateApprovalRuleTemplateWithRepositoryInput,
     ) -> Result<(), RusotoError<AssociateApprovalRuleTemplateWithRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.AssociateApprovalRuleTemplateWithRepository",
@@ -14744,19 +14768,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateApprovalRuleTemplateWithRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateApprovalRuleTemplateWithRepositoryError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates an association between an approval rule template and one or more specified repositories. </p>
@@ -14767,9 +14786,7 @@ impl CodeCommit for CodeCommitClient {
         BatchAssociateApprovalRuleTemplateWithRepositoriesOutput,
         RusotoError<BatchAssociateApprovalRuleTemplateWithRepositoriesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchAssociateApprovalRuleTemplateWithRepositories",
@@ -14777,20 +14794,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchAssociateApprovalRuleTemplateWithRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchAssociateApprovalRuleTemplateWithRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchAssociateApprovalRuleTemplateWithRepositoriesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchAssociateApprovalRuleTemplateWithRepositoriesOutput, _>()
     }
 
     /// <p>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy.</p>
@@ -14799,9 +14812,7 @@ impl CodeCommit for CodeCommitClient {
         input: BatchDescribeMergeConflictsInput,
     ) -> Result<BatchDescribeMergeConflictsOutput, RusotoError<BatchDescribeMergeConflictsError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchDescribeMergeConflicts",
@@ -14809,20 +14820,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDescribeMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDescribeMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDescribeMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDescribeMergeConflictsOutput, _>()
     }
 
     /// <p>Removes the association between an approval rule template and one or more specified repositories. </p>
@@ -14833,9 +14837,7 @@ impl CodeCommit for CodeCommitClient {
         BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput,
         RusotoError<BatchDisassociateApprovalRuleTemplateFromRepositoriesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchDisassociateApprovalRuleTemplateFromRepositories",
@@ -14843,20 +14845,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchDisassociateApprovalRuleTemplateFromRepositoriesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput, _>()
     }
 
     /// <p>Returns information about the contents of one or more commits in a repository.</p>
@@ -14864,26 +14862,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: BatchGetCommitsInput,
     ) -> Result<BatchGetCommitsOutput, RusotoError<BatchGetCommitsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetCommits");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCommitsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetCommitsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetCommitsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCommitsOutput, _>()
     }
 
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -14891,27 +14880,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: BatchGetRepositoriesInput,
     ) -> Result<BatchGetRepositoriesOutput, RusotoError<BatchGetRepositoriesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetRepositoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetRepositoriesOutput, _>()
     }
 
     /// <p>Creates a template for approval rules that can then be associated with one or more repositories in your AWS account. When you associate a template with a repository, AWS CodeCommit creates an approval rule that matches the conditions of the template for all pull requests that meet the conditions of the template. For more information, see <a>AssociateApprovalRuleTemplateWithRepository</a>.</p>
@@ -14920,9 +14899,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreateApprovalRuleTemplateInput,
     ) -> Result<CreateApprovalRuleTemplateOutput, RusotoError<CreateApprovalRuleTemplateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreateApprovalRuleTemplate",
@@ -14930,20 +14907,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateApprovalRuleTemplateOutput, _>()
     }
 
     /// <p><p>Creates a branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
@@ -14951,26 +14921,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateBranchInput,
     ) -> Result<(), RusotoError<CreateBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateBranchError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
@@ -14978,26 +14938,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateCommitInput,
     ) -> Result<CreateCommitOutput, RusotoError<CreateCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateCommitOutput, _>()
     }
 
     /// <p>Creates a pull request in the specified repository.</p>
@@ -15005,26 +14956,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreatePullRequestInput,
     ) -> Result<CreatePullRequestOutput, RusotoError<CreatePullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreatePullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePullRequestOutput, _>()
     }
 
     /// <p>Creates an approval rule for a pull request.</p>
@@ -15033,9 +14975,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreatePullRequestApprovalRuleInput,
     ) -> Result<CreatePullRequestApprovalRuleOutput, RusotoError<CreatePullRequestApprovalRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreatePullRequestApprovalRule",
@@ -15043,20 +14983,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePullRequestApprovalRuleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePullRequestApprovalRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePullRequestApprovalRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePullRequestApprovalRuleOutput, _>()
     }
 
     /// <p>Creates a new, empty repository.</p>
@@ -15064,26 +14997,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateRepositoryInput,
     ) -> Result<CreateRepositoryOutput, RusotoError<CreateRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRepositoryOutput, _>()
     }
 
     /// <p><p>Creates an unreferenced commit that represents the result of merging two branches using a specified merge strategy. This can help you determine the outcome of a potential merge. This API cannot be used with the fast-forward merge strategy because that strategy does not create a merge commit.</p> <note> <p>This unreferenced merge commit can only be accessed using the GetCommit API or through git commands such as git fetch. To retrieve this commit, you must specify its commit ID or otherwise reference it.</p> </note></p>
@@ -15092,9 +15016,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreateUnreferencedMergeCommitInput,
     ) -> Result<CreateUnreferencedMergeCommitOutput, RusotoError<CreateUnreferencedMergeCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreateUnreferencedMergeCommit",
@@ -15102,20 +15024,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateUnreferencedMergeCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUnreferencedMergeCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUnreferencedMergeCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateUnreferencedMergeCommitOutput, _>()
     }
 
     /// <p>Deletes a specified approval rule template. Deleting a template does not remove approval rules on pull requests already created with the template.</p>
@@ -15124,9 +15039,7 @@ impl CodeCommit for CodeCommitClient {
         input: DeleteApprovalRuleTemplateInput,
     ) -> Result<DeleteApprovalRuleTemplateOutput, RusotoError<DeleteApprovalRuleTemplateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DeleteApprovalRuleTemplate",
@@ -15134,20 +15047,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
@@ -15155,26 +15061,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteBranchInput,
     ) -> Result<DeleteBranchOutput, RusotoError<DeleteBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteBranchOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteBranchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteBranchOutput, _>()
     }
 
     /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
@@ -15182,27 +15079,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteCommentContentInput,
     ) -> Result<DeleteCommentContentOutput, RusotoError<DeleteCommentContentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCommentContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCommentContentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteCommentContentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteCommentContentOutput, _>()
     }
 
     /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file still exists in the commits earlier to the commit that contains the deletion.</p>
@@ -15210,26 +15097,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteFileInput,
     ) -> Result<DeleteFileOutput, RusotoError<DeleteFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteFileOutput, _>()
     }
 
     /// <p>Deletes an approval rule from a specified pull request. Approval rules can be deleted from a pull request only if the pull request is open, and if the approval rule was created specifically for a pull request and not generated from an approval rule template associated with the repository where the pull request was created. You cannot delete an approval rule from a merged or closed pull request.</p>
@@ -15238,9 +15116,7 @@ impl CodeCommit for CodeCommitClient {
         input: DeletePullRequestApprovalRuleInput,
     ) -> Result<DeletePullRequestApprovalRuleOutput, RusotoError<DeletePullRequestApprovalRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DeletePullRequestApprovalRule",
@@ -15248,20 +15124,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePullRequestApprovalRuleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePullRequestApprovalRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePullRequestApprovalRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeletePullRequestApprovalRuleOutput, _>()
     }
 
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID is returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository fail.</p> </important></p>
@@ -15269,26 +15138,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteRepositoryInput,
     ) -> Result<DeleteRepositoryOutput, RusotoError<DeleteRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRepositoryOutput, _>()
     }
 
     /// <p>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy. If the merge option for the attempted merge is specified as FAST_FORWARD_MERGE, an exception is thrown.</p>
@@ -15296,27 +15156,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DescribeMergeConflictsInput,
     ) -> Result<DescribeMergeConflictsOutput, RusotoError<DescribeMergeConflictsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DescribeMergeConflicts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMergeConflictsOutput, _>()
     }
 
     /// <p>Returns information about one or more pull request events.</p>
@@ -15324,9 +15175,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DescribePullRequestEventsInput,
     ) -> Result<DescribePullRequestEventsOutput, RusotoError<DescribePullRequestEventsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DescribePullRequestEvents",
@@ -15334,20 +15183,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePullRequestEventsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePullRequestEventsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePullRequestEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePullRequestEventsOutput, _>()
     }
 
     /// <p>Removes the association between a template and a repository so that approval rules based on the template are not automatically created when pull requests are created in the specified repository. This does not delete any approval rules previously created for pull requests through the template association.</p>
@@ -15355,9 +15197,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DisassociateApprovalRuleTemplateFromRepositoryInput,
     ) -> Result<(), RusotoError<DisassociateApprovalRuleTemplateFromRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DisassociateApprovalRuleTemplateFromRepository",
@@ -15365,19 +15205,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateApprovalRuleTemplateFromRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateApprovalRuleTemplateFromRepositoryError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Evaluates whether a pull request has met all the conditions specified in its associated approval rules.</p>
@@ -15388,9 +15223,7 @@ impl CodeCommit for CodeCommitClient {
         EvaluatePullRequestApprovalRulesOutput,
         RusotoError<EvaluatePullRequestApprovalRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.EvaluatePullRequestApprovalRules",
@@ -15398,22 +15231,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<EvaluatePullRequestApprovalRulesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EvaluatePullRequestApprovalRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                EvaluatePullRequestApprovalRulesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EvaluatePullRequestApprovalRulesOutput, _>()
     }
 
     /// <p>Returns information about a specified approval rule template.</p>
@@ -15421,9 +15248,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetApprovalRuleTemplateInput,
     ) -> Result<GetApprovalRuleTemplateOutput, RusotoError<GetApprovalRuleTemplateError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetApprovalRuleTemplate",
@@ -15431,20 +15256,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Returns the base-64 encoded content of an individual blob in a repository.</p>
@@ -15452,26 +15270,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetBlobInput,
     ) -> Result<GetBlobOutput, RusotoError<GetBlobError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBlobOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBlobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBlobOutput, _>()
     }
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
@@ -15479,26 +15288,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetBranchInput,
     ) -> Result<GetBranchOutput, RusotoError<GetBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBranchOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBranchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBranchOutput, _>()
     }
 
     /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
@@ -15506,26 +15306,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommentInput,
     ) -> Result<GetCommentOutput, RusotoError<GetCommentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCommentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommentOutput, _>()
     }
 
     /// <p>Returns information about comments made on the comparison between two commits.</p>
@@ -15534,9 +15325,7 @@ impl CodeCommit for CodeCommitClient {
         input: GetCommentsForComparedCommitInput,
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForComparedCommit",
@@ -15544,20 +15333,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommentsForComparedCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentsForComparedCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentsForComparedCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCommentsForComparedCommitOutput, _>()
     }
 
     /// <p>Returns comments made on a pull request.</p>
@@ -15565,9 +15347,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommentsForPullRequestInput,
     ) -> Result<GetCommentsForPullRequestOutput, RusotoError<GetCommentsForPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForPullRequest",
@@ -15575,20 +15355,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommentsForPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentsForPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentsForPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCommentsForPullRequestOutput, _>()
     }
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
@@ -15596,26 +15369,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommitInput,
     ) -> Result<GetCommitOutput, RusotoError<GetCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommitOutput, _>()
     }
 
     /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID, or other fully qualified reference). Results can be limited to a specified path.</p>
@@ -15623,26 +15387,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetDifferencesInput,
     ) -> Result<GetDifferencesOutput, RusotoError<GetDifferencesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDifferencesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDifferencesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDifferencesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDifferencesOutput, _>()
     }
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
@@ -15650,26 +15405,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetFileInput,
     ) -> Result<GetFileOutput, RusotoError<GetFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFileOutput, _>()
     }
 
     /// <p>Returns the contents of a specified folder in a repository.</p>
@@ -15677,26 +15423,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetFolderInput,
     ) -> Result<GetFolderOutput, RusotoError<GetFolderError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFolder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFolderOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFolderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFolderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFolderOutput, _>()
     }
 
     /// <p>Returns information about a specified merge commit.</p>
@@ -15704,26 +15441,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeCommitInput,
     ) -> Result<GetMergeCommitOutput, RusotoError<GetMergeCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeCommitOutput, _>()
     }
 
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
@@ -15731,26 +15459,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeConflictsInput,
     ) -> Result<GetMergeConflictsOutput, RusotoError<GetMergeConflictsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeConflictsOutput, _>()
     }
 
     /// <p>Returns information about the merge options available for merging two specified branches. For details about why a merge option is not available, use GetMergeConflicts or DescribeMergeConflicts.</p>
@@ -15758,26 +15477,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeOptionsInput,
     ) -> Result<GetMergeOptionsOutput, RusotoError<GetMergeOptionsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeOptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeOptionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeOptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeOptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeOptionsOutput, _>()
     }
 
     /// <p>Gets information about a pull request in a specified repository.</p>
@@ -15785,26 +15495,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetPullRequestInput,
     ) -> Result<GetPullRequestOutput, RusotoError<GetPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPullRequestOutput, _>()
     }
 
     /// <p>Gets information about the approval states for a specified pull request. Approval states only apply to pull requests that have one or more approval rules applied to them.</p>
@@ -15813,9 +15514,7 @@ impl CodeCommit for CodeCommitClient {
         input: GetPullRequestApprovalStatesInput,
     ) -> Result<GetPullRequestApprovalStatesOutput, RusotoError<GetPullRequestApprovalStatesError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetPullRequestApprovalStates",
@@ -15823,20 +15522,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPullRequestApprovalStatesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestApprovalStatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestApprovalStatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPullRequestApprovalStatesOutput, _>()
     }
 
     /// <p>Returns information about whether approval rules have been set aside (overridden) for a pull request, and if so, the Amazon Resource Name (ARN) of the user or identity that overrode the rules and their requirements for the pull request.</p>
@@ -15845,9 +15537,7 @@ impl CodeCommit for CodeCommitClient {
         input: GetPullRequestOverrideStateInput,
     ) -> Result<GetPullRequestOverrideStateOutput, RusotoError<GetPullRequestOverrideStateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetPullRequestOverrideState",
@@ -15855,20 +15545,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPullRequestOverrideStateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestOverrideStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestOverrideStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPullRequestOverrideStateOutput, _>()
     }
 
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -15876,26 +15559,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryInput,
     ) -> Result<GetRepositoryOutput, RusotoError<GetRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryOutput, _>()
     }
 
     /// <p>Gets information about triggers configured for a repository.</p>
@@ -15903,27 +15577,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryTriggersInput,
     ) -> Result<GetRepositoryTriggersOutput, RusotoError<GetRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryTriggersOutput, _>()
     }
 
     /// <p>Lists all approval rule templates in the specified AWS Region in your AWS account. If an AWS Region is not specified, the AWS Region where you are signed in is used.</p>
@@ -15931,9 +15595,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListApprovalRuleTemplatesInput,
     ) -> Result<ListApprovalRuleTemplatesOutput, RusotoError<ListApprovalRuleTemplatesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListApprovalRuleTemplates",
@@ -15941,20 +15603,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApprovalRuleTemplatesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApprovalRuleTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApprovalRuleTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListApprovalRuleTemplatesOutput, _>()
     }
 
     /// <p>Lists all approval rule templates that are associated with a specified repository.</p>
@@ -15965,9 +15620,7 @@ impl CodeCommit for CodeCommitClient {
         ListAssociatedApprovalRuleTemplatesForRepositoryOutput,
         RusotoError<ListAssociatedApprovalRuleTemplatesForRepositoryError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListAssociatedApprovalRuleTemplatesForRepository",
@@ -15975,20 +15628,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssociatedApprovalRuleTemplatesForRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociatedApprovalRuleTemplatesForRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListAssociatedApprovalRuleTemplatesForRepositoryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssociatedApprovalRuleTemplatesForRepositoryOutput, _>()
     }
 
     /// <p>Gets information about one or more branches in a repository.</p>
@@ -15996,26 +15645,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListBranchesInput,
     ) -> Result<ListBranchesOutput, RusotoError<ListBranchesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListBranchesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBranchesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBranchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListBranchesOutput, _>()
     }
 
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
@@ -16023,26 +15663,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListPullRequestsInput,
     ) -> Result<ListPullRequestsOutput, RusotoError<ListPullRequestsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPullRequestsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPullRequestsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPullRequestsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPullRequestsOutput, _>()
     }
 
     /// <p>Gets information about one or more repositories.</p>
@@ -16050,26 +15681,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListRepositoriesInput,
     ) -> Result<ListRepositoriesOutput, RusotoError<ListRepositoriesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRepositoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRepositoriesOutput, _>()
     }
 
     /// <p>Lists all repositories associated with the specified approval rule template.</p>
@@ -16080,9 +15702,7 @@ impl CodeCommit for CodeCommitClient {
         ListRepositoriesForApprovalRuleTemplateOutput,
         RusotoError<ListRepositoriesForApprovalRuleTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListRepositoriesForApprovalRuleTemplate",
@@ -16090,22 +15710,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRepositoriesForApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRepositoriesForApprovalRuleTemplateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListRepositoriesForApprovalRuleTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRepositoriesForApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the<i> AWS CodeCommit User Guide</i>.</p>
@@ -16113,27 +15727,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
     }
 
     /// <p>Merges two branches using the fast-forward merge strategy.</p>
@@ -16142,9 +15746,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergeBranchesByFastForwardInput,
     ) -> Result<MergeBranchesByFastForwardOutput, RusotoError<MergeBranchesByFastForwardError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergeBranchesByFastForward",
@@ -16152,20 +15754,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesByFastForwardOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesByFastForwardError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesByFastForwardError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergeBranchesByFastForwardOutput, _>()
     }
 
     /// <p>Merges two branches using the squash merge strategy.</p>
@@ -16173,27 +15768,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergeBranchesBySquashInput,
     ) -> Result<MergeBranchesBySquashOutput, RusotoError<MergeBranchesBySquashError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.MergeBranchesBySquash");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesBySquashOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesBySquashError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesBySquashError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<MergeBranchesBySquashOutput, _>()
     }
 
     /// <p>Merges two specified branches using the three-way merge strategy.</p>
@@ -16201,9 +15786,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergeBranchesByThreeWayInput,
     ) -> Result<MergeBranchesByThreeWayOutput, RusotoError<MergeBranchesByThreeWayError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergeBranchesByThreeWay",
@@ -16211,20 +15794,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesByThreeWayOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesByThreeWayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesByThreeWayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergeBranchesByThreeWayOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16233,9 +15809,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergePullRequestByFastForwardInput,
     ) -> Result<MergePullRequestByFastForwardOutput, RusotoError<MergePullRequestByFastForwardError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByFastForward",
@@ -16243,20 +15817,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestByFastForwardOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestByFastForwardError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestByFastForwardError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestByFastForwardOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the squash merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16264,9 +15831,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergePullRequestBySquashInput,
     ) -> Result<MergePullRequestBySquashOutput, RusotoError<MergePullRequestBySquashError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestBySquash",
@@ -16274,20 +15839,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestBySquashOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestBySquashError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestBySquashError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestBySquashOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the three-way merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16296,9 +15854,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergePullRequestByThreeWayInput,
     ) -> Result<MergePullRequestByThreeWayOutput, RusotoError<MergePullRequestByThreeWayError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByThreeWay",
@@ -16306,20 +15862,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestByThreeWayOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestByThreeWayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestByThreeWayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestByThreeWayOutput, _>()
     }
 
     /// <p>Sets aside (overrides) all approval rule requirements for a specified pull request.</p>
@@ -16327,9 +15876,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: OverridePullRequestApprovalRulesInput,
     ) -> Result<(), RusotoError<OverridePullRequestApprovalRulesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.OverridePullRequestApprovalRules",
@@ -16337,21 +15884,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(OverridePullRequestApprovalRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                OverridePullRequestApprovalRulesError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Posts a comment on the comparison between two commits.</p>
@@ -16360,9 +15900,7 @@ impl CodeCommit for CodeCommitClient {
         input: PostCommentForComparedCommitInput,
     ) -> Result<PostCommentForComparedCommitOutput, RusotoError<PostCommentForComparedCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForComparedCommit",
@@ -16370,20 +15908,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PostCommentForComparedCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentForComparedCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentForComparedCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PostCommentForComparedCommitOutput, _>()
     }
 
     /// <p>Posts a comment on a pull request.</p>
@@ -16391,9 +15922,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentForPullRequestInput,
     ) -> Result<PostCommentForPullRequestOutput, RusotoError<PostCommentForPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForPullRequest",
@@ -16401,20 +15930,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PostCommentForPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentForPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentForPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PostCommentForPullRequestOutput, _>()
     }
 
     /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
@@ -16422,26 +15944,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentReplyInput,
     ) -> Result<PostCommentReplyOutput, RusotoError<PostCommentReplyError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PostCommentReplyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentReplyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentReplyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PostCommentReplyOutput, _>()
     }
 
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
@@ -16449,26 +15962,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PutFileInput,
     ) -> Result<PutFileOutput, RusotoError<PutFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutFileOutput, _>()
     }
 
     /// <p>Replaces all triggers for a repository. Used to create or delete triggers.</p>
@@ -16476,27 +15980,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PutRepositoryTriggersInput,
     ) -> Result<PutRepositoryTriggersOutput, RusotoError<PutRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutRepositoryTriggersOutput, _>()
     }
 
     /// <p>Adds or updates tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the <i>AWS CodeCommit User Guide</i>.</p>
@@ -16504,26 +15998,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: TagResourceInput,
     ) -> Result<(), RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test sends data from the last commit. If no data is available, sample data is generated.</p>
@@ -16531,27 +16015,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: TestRepositoryTriggersInput,
     ) -> Result<TestRepositoryTriggersOutput, RusotoError<TestRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TestRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TestRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<TestRepositoryTriggersOutput, _>()
     }
 
     /// <p>Removes tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the <i>AWS CodeCommit User Guide</i>.</p>
@@ -16559,26 +16034,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<(), RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the content of an approval rule template. You can change the number of required approvals, the membership of the approval rule, and whether an approval pool is defined.</p>
@@ -16589,9 +16054,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateContentOutput,
         RusotoError<UpdateApprovalRuleTemplateContentError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateContent",
@@ -16599,22 +16062,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateContentError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApprovalRuleTemplateContentError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateContentOutput, _>()
     }
 
     /// <p>Updates the description for a specified approval rule template.</p>
@@ -16625,9 +16082,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateDescriptionOutput,
         RusotoError<UpdateApprovalRuleTemplateDescriptionError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateDescription",
@@ -16635,22 +16090,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateDescriptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateDescriptionError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApprovalRuleTemplateDescriptionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateDescriptionOutput, _>()
     }
 
     /// <p>Updates the name of a specified approval rule template.</p>
@@ -16661,9 +16110,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateNameOutput,
         RusotoError<UpdateApprovalRuleTemplateNameError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateName",
@@ -16671,20 +16118,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateNameOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateNameError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApprovalRuleTemplateNameError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateNameOutput, _>()
     }
 
     /// <p>Replaces the contents of a comment.</p>
@@ -16692,26 +16132,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateCommentInput,
     ) -> Result<UpdateCommentOutput, RusotoError<UpdateCommentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateCommentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCommentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCommentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateCommentOutput, _>()
     }
 
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
@@ -16719,26 +16150,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateDefaultBranchInput,
     ) -> Result<(), RusotoError<UpdateDefaultBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDefaultBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDefaultBranchError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the structure of an approval rule created specifically for a pull request. For example, you can change the number of required approvers and the approval pool for approvers. </p>
@@ -16749,9 +16170,7 @@ impl CodeCommit for CodeCommitClient {
         UpdatePullRequestApprovalRuleContentOutput,
         RusotoError<UpdatePullRequestApprovalRuleContentError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestApprovalRuleContent",
@@ -16759,22 +16178,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestApprovalRuleContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestApprovalRuleContentError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdatePullRequestApprovalRuleContentError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestApprovalRuleContentOutput, _>()
     }
 
     /// <p>Updates the state of a user's approval on a pull request. The user is derived from the signed-in account when the request is made.</p>
@@ -16782,9 +16195,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestApprovalStateInput,
     ) -> Result<(), RusotoError<UpdatePullRequestApprovalStateError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestApprovalState",
@@ -16792,19 +16203,11 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestApprovalStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestApprovalStateError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Replaces the contents of the description of a pull request.</p>
@@ -16813,9 +16216,7 @@ impl CodeCommit for CodeCommitClient {
         input: UpdatePullRequestDescriptionInput,
     ) -> Result<UpdatePullRequestDescriptionOutput, RusotoError<UpdatePullRequestDescriptionError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestDescription",
@@ -16823,20 +16224,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestDescriptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestDescriptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestDescriptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestDescriptionOutput, _>()
     }
 
     /// <p>Updates the status of a pull request. </p>
@@ -16844,9 +16238,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestStatusInput,
     ) -> Result<UpdatePullRequestStatusOutput, RusotoError<UpdatePullRequestStatusError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestStatus",
@@ -16854,20 +16246,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestStatusOutput, _>()
     }
 
     /// <p>Replaces the title of a pull request.</p>
@@ -16875,27 +16260,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestTitleInput,
     ) -> Result<UpdatePullRequestTitleOutput, RusotoError<UpdatePullRequestTitleError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestTitleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestTitleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestTitleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestTitleOutput, _>()
     }
 
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -16903,9 +16279,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryDescriptionInput,
     ) -> Result<(), RusotoError<UpdateRepositoryDescriptionError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateRepositoryDescription",
@@ -16913,19 +16287,11 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRepositoryDescriptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRepositoryDescriptionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Renames a repository. The repository name must be unique across the calling AWS account. Repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix .git is prohibited. For more information about the limits on repository names, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
@@ -16933,25 +16299,15 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryNameInput,
     ) -> Result<(), RusotoError<UpdateRepositoryNameError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRepositoryNameError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRepositoryNameError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

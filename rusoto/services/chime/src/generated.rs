@@ -12777,6 +12777,7 @@ impl ChimeClient {
 #[async_trait]
 impl Chime for ChimeClient {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_number_with_user(
         &self,
         input: AssociatePhoneNumberWithUserRequest,
@@ -12804,7 +12805,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumberWithUserResponse, _>()?;
 
@@ -12816,6 +12817,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_numbers_with_voice_connector(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorRequest,
@@ -12844,7 +12846,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>()?;
 
@@ -12858,6 +12860,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_numbers_with_voice_connector_group(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorGroupRequest,
@@ -12886,7 +12889,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumbersWithVoiceConnectorGroupResponse, _>(
             )?;
@@ -12899,6 +12902,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn associate_signin_delegate_groups_with_account(
         &self,
         input: AssociateSigninDelegateGroupsWithAccountRequest,
@@ -12924,7 +12928,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateSigninDelegateGroupsWithAccountResponse, _>()?;
 
@@ -12936,6 +12940,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
+    #[allow(unused_mut)]
     async fn batch_create_attendee(
         &self,
         input: BatchCreateAttendeeRequest,
@@ -12961,7 +12966,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchCreateAttendeeResponse, _>()?;
 
@@ -12973,6 +12978,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    #[allow(unused_mut)]
     async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
@@ -13000,7 +13006,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchCreateRoomMembershipResponse, _>()?;
 
@@ -13012,6 +13018,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    #[allow(unused_mut)]
     async fn batch_delete_phone_number(
         &self,
         input: BatchDeletePhoneNumberRequest,
@@ -13034,7 +13041,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
 
@@ -13046,6 +13053,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    #[allow(unused_mut)]
     async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
@@ -13071,7 +13079,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchSuspendUserResponse, _>()?;
 
@@ -13083,6 +13091,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
+    #[allow(unused_mut)]
     async fn batch_unsuspend_user(
         &self,
         input: BatchUnsuspendUserRequest,
@@ -13108,7 +13117,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUnsuspendUserResponse, _>()?;
 
@@ -13120,6 +13129,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    #[allow(unused_mut)]
     async fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
@@ -13142,7 +13152,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
 
@@ -13154,6 +13164,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates user details within the <a>UpdateUserRequestItem</a> object for up to 20 users for the specified Amazon Chime account. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn batch_update_user(
         &self,
         input: BatchUpdateUserRequest,
@@ -13175,7 +13186,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdateUserResponse, _>()?;
 
@@ -13187,6 +13198,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime account under the administrator's AWS account. Only <code>Team</code> account types are currently supported for this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_account(
         &self,
         input: CreateAccountRequest,
@@ -13205,7 +13217,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAccountResponse, _>()?;
 
@@ -13217,6 +13229,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_attendee(
         &self,
         input: CreateAttendeeRequest,
@@ -13238,7 +13251,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAttendeeResponse, _>()?;
 
@@ -13250,6 +13263,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a bot for an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn create_bot(
         &self,
         input: CreateBotRequest,
@@ -13268,7 +13282,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBotResponse, _>()?;
 
@@ -13280,6 +13294,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
@@ -13298,7 +13313,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMeetingResponse, _>()?;
 
@@ -13310,6 +13325,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
+    #[allow(unused_mut)]
     async fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
@@ -13328,7 +13344,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
 
@@ -13340,6 +13356,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a proxy session on the specified Amazon Chime Voice Connector for the specified participant phone numbers.</p>
+    #[allow(unused_mut)]
     async fn create_proxy_session(
         &self,
         input: CreateProxySessionRequest,
@@ -13361,7 +13378,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProxySessionResponse, _>()?;
 
@@ -13373,6 +13390,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a chat room for the specified Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn create_room(
         &self,
         input: CreateRoomRequest,
@@ -13394,7 +13412,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRoomResponse, _>()?;
 
@@ -13406,6 +13424,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds a member to a chat room in an Amazon Chime Enterprise account. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    #[allow(unused_mut)]
     async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
@@ -13428,7 +13447,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRoomMembershipResponse, _>()?;
 
@@ -13440,6 +13459,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a user under the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn create_user(
         &self,
         input: CreateUserRequest,
@@ -13465,7 +13485,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateUserResponse, _>()?;
 
@@ -13477,6 +13497,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
+    #[allow(unused_mut)]
     async fn create_voice_connector(
         &self,
         input: CreateVoiceConnectorRequest,
@@ -13495,7 +13516,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVoiceConnectorResponse, _>()?;
 
@@ -13507,6 +13528,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
+    #[allow(unused_mut)]
     async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
@@ -13526,7 +13548,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVoiceConnectorGroupResponse, _>()?;
 
@@ -13538,6 +13560,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
+    #[allow(unused_mut)]
     async fn delete_account(
         &self,
         input: DeleteAccountRequest,
@@ -13553,7 +13576,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteAccountResponse, _>()?;
 
@@ -13565,6 +13588,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_attendee(
         &self,
         input: DeleteAttendeeRequest,
@@ -13584,7 +13608,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13595,6 +13619,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the events configuration that allows a bot to receive outgoing events.</p>
+    #[allow(unused_mut)]
     async fn delete_events_configuration(
         &self,
         input: DeleteEventsConfigurationRequest,
@@ -13614,7 +13639,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13625,6 +13650,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_meeting(
         &self,
         input: DeleteMeetingRequest,
@@ -13640,7 +13666,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13651,6 +13677,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves the specified phone number into the <b>Deletion queue</b>. A phone number must be disassociated from any users or Amazon Chime Voice Connectors before it can be deleted.</p> <p>Deleted phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    #[allow(unused_mut)]
     async fn delete_phone_number(
         &self,
         input: DeletePhoneNumberRequest,
@@ -13669,7 +13696,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13680,6 +13707,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified proxy session from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_proxy_session(
         &self,
         input: DeleteProxySessionRequest,
@@ -13699,7 +13727,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13710,6 +13738,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes a chat room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn delete_room(
         &self,
         input: DeleteRoomRequest,
@@ -13729,7 +13758,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13740,6 +13769,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Removes a member from a chat room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
@@ -13760,7 +13790,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13771,6 +13801,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime Voice Connector. Any phone numbers associated with the Amazon Chime Voice Connector must be disassociated from it before it can be deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector(
         &self,
         input: DeleteVoiceConnectorRequest,
@@ -13789,7 +13820,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13800,6 +13831,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
@@ -13818,7 +13850,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13829,6 +13861,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
@@ -13847,7 +13880,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13860,6 +13893,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the proxy configuration from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_proxy(
         &self,
         input: DeleteVoiceConnectorProxyRequest,
@@ -13878,7 +13912,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13889,6 +13923,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the streaming configuration for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_streaming_configuration(
         &self,
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
@@ -13907,7 +13942,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13918,6 +13953,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
@@ -13936,7 +13972,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13949,6 +13985,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified SIP credentials used by your equipment to authenticate during call termination.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_termination_credentials(
         &self,
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
@@ -13974,7 +14011,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13985,6 +14022,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_number_from_user(
         &self,
         input: DisassociatePhoneNumberFromUserRequest,
@@ -14011,7 +14049,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumberFromUserResponse, _>()?;
 
@@ -14025,6 +14063,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_numbers_from_voice_connector(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorRequest,
@@ -14053,7 +14092,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>()?;
 
@@ -14065,6 +14104,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_numbers_from_voice_connector_group(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorGroupRequest,
@@ -14093,7 +14133,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorGroupResponse, _>(
             )?;
@@ -14106,6 +14146,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn disassociate_signin_delegate_groups_from_account(
         &self,
         input: DisassociateSigninDelegateGroupsFromAccountRequest,
@@ -14131,7 +14172,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateSigninDelegateGroupsFromAccountResponse, _>()?;
 
@@ -14143,6 +14184,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
+    #[allow(unused_mut)]
     async fn get_account(
         &self,
         input: GetAccountRequest,
@@ -14158,7 +14200,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAccountResponse, _>()?;
 
@@ -14170,6 +14212,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_account_settings(
         &self,
         input: GetAccountSettingsRequest,
@@ -14188,7 +14231,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAccountSettingsResponse, _>()?;
 
@@ -14200,6 +14243,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_attendee(
         &self,
         input: GetAttendeeRequest,
@@ -14219,7 +14263,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAttendeeResponse, _>()?;
 
@@ -14231,6 +14275,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified bot, such as bot email address, bot type, status, and display name.</p>
+    #[allow(unused_mut)]
     async fn get_bot(
         &self,
         input: GetBotRequest,
@@ -14250,7 +14295,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>()?;
 
@@ -14262,6 +14307,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
+    #[allow(unused_mut)]
     async fn get_events_configuration(
         &self,
         input: GetEventsConfigurationRequest,
@@ -14281,7 +14327,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetEventsConfigurationResponse, _>()?;
 
@@ -14293,6 +14339,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
+    #[allow(unused_mut)]
     async fn get_global_settings(
         &self,
     ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>> {
@@ -14307,7 +14354,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetGlobalSettingsResponse, _>()?;
 
@@ -14319,6 +14366,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_meeting(
         &self,
         input: GetMeetingRequest,
@@ -14334,7 +14382,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMeetingResponse, _>()?;
 
@@ -14346,6 +14394,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified phone number ID, such as associations, capabilities, and product type.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number(
         &self,
         input: GetPhoneNumberRequest,
@@ -14364,7 +14413,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberResponse, _>()?;
 
@@ -14376,6 +14425,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number_order(
         &self,
         input: GetPhoneNumberOrderRequest,
@@ -14394,7 +14444,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberOrderResponse, _>()?;
 
@@ -14406,6 +14456,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the phone number settings for the administrator's AWS account, such as the default outbound calling name.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number_settings(
         &self,
     ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>> {
@@ -14420,7 +14471,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberSettingsResponse, _>()?;
 
@@ -14432,6 +14483,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the specified proxy session details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_proxy_session(
         &self,
         input: GetProxySessionRequest,
@@ -14451,7 +14503,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetProxySessionResponse, _>()?;
 
@@ -14463,6 +14515,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_retention_settings(
         &self,
         input: GetRetentionSettingsRequest,
@@ -14481,7 +14534,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRetentionSettingsResponse, _>()?;
 
@@ -14493,6 +14546,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -14512,7 +14566,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()?;
 
@@ -14524,6 +14578,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
+    #[allow(unused_mut)]
     async fn get_user(
         &self,
         input: GetUserRequest,
@@ -14543,7 +14598,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>()?;
 
@@ -14555,6 +14610,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves settings for the specified user ID, such as any associated phone number settings.</p>
+    #[allow(unused_mut)]
     async fn get_user_settings(
         &self,
         input: GetUserSettingsRequest,
@@ -14574,7 +14630,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUserSettingsResponse, _>()?;
 
@@ -14586,6 +14642,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector(
         &self,
         input: GetVoiceConnectorRequest,
@@ -14604,7 +14661,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorResponse, _>()?;
 
@@ -14616,6 +14673,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_group(
         &self,
         input: GetVoiceConnectorGroupRequest,
@@ -14634,7 +14692,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorGroupResponse, _>()?;
 
@@ -14646,6 +14704,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
@@ -14667,7 +14726,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorLoggingConfigurationResponse, _>()?;
 
@@ -14681,6 +14740,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves origination setting details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_origination(
         &self,
         input: GetVoiceConnectorOriginationRequest,
@@ -14700,7 +14760,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorOriginationResponse, _>()?;
 
@@ -14712,6 +14772,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the proxy configuration details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_proxy(
         &self,
         input: GetVoiceConnectorProxyRequest,
@@ -14730,7 +14791,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorProxyResponse, _>()?;
 
@@ -14742,6 +14803,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_streaming_configuration(
         &self,
         input: GetVoiceConnectorStreamingConfigurationRequest,
@@ -14763,7 +14825,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorStreamingConfigurationResponse, _>()?;
 
@@ -14777,6 +14839,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves termination setting details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_termination(
         &self,
         input: GetVoiceConnectorTerminationRequest,
@@ -14796,7 +14859,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorTerminationResponse, _>()?;
 
@@ -14808,6 +14871,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves information about the last time a SIP <code>OPTIONS</code> ping was received from your SIP infrastructure for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_termination_health(
         &self,
         input: GetVoiceConnectorTerminationHealthRequest,
@@ -14829,7 +14893,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>()?;
 
@@ -14843,6 +14907,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
+    #[allow(unused_mut)]
     async fn invite_users(
         &self,
         input: InviteUsersRequest,
@@ -14868,7 +14933,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InviteUsersResponse, _>()?;
 
@@ -14880,6 +14945,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime accounts under the administrator's AWS account. You can filter accounts by account name prefix. To find out which Amazon Chime account a user belongs to, you can filter by the user's email address, which returns one account result.</p>
+    #[allow(unused_mut)]
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
@@ -14910,7 +14976,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountsResponse, _>()?;
 
@@ -14922,6 +14988,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
+    #[allow(unused_mut)]
     async fn list_attendee_tags(
         &self,
         input: ListAttendeeTagsRequest,
@@ -14941,7 +15008,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAttendeeTagsResponse, _>()?;
 
@@ -14953,6 +15020,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_attendees(
         &self,
         input: ListAttendeesRequest,
@@ -14980,7 +15048,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAttendeesResponse, _>()?;
 
@@ -14992,6 +15060,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the bots associated with the administrator's Amazon Chime Enterprise account ID.</p>
+    #[allow(unused_mut)]
     async fn list_bots(
         &self,
         input: ListBotsRequest,
@@ -15016,7 +15085,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBotsResponse, _>()?;
 
@@ -15028,6 +15097,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn list_meeting_tags(
         &self,
         input: ListMeetingTagsRequest,
@@ -15043,7 +15113,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMeetingTagsResponse, _>()?;
 
@@ -15055,6 +15125,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_meetings(
         &self,
         input: ListMeetingsRequest,
@@ -15079,7 +15150,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMeetingsResponse, _>()?;
 
@@ -15091,6 +15162,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the phone number orders for the administrator's Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn list_phone_number_orders(
         &self,
         input: ListPhoneNumberOrdersRequest,
@@ -15115,7 +15187,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
 
@@ -15127,6 +15199,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the phone numbers for the specified Amazon Chime account, Amazon Chime user, Amazon Chime Voice Connector, or Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn list_phone_numbers(
         &self,
         input: ListPhoneNumbersRequest,
@@ -15163,7 +15236,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPhoneNumbersResponse, _>()?;
 
@@ -15175,6 +15248,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the proxy sessions for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn list_proxy_sessions(
         &self,
         input: ListProxySessionsRequest,
@@ -15205,7 +15279,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProxySessionsResponse, _>()?;
 
@@ -15217,6 +15291,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the membership details for the specified room in an Amazon Chime Enterprise account, such as the members' IDs, email addresses, and names.</p>
+    #[allow(unused_mut)]
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
@@ -15245,7 +15320,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRoomMembershipsResponse, _>()?;
 
@@ -15257,6 +15332,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the room details for the specified Amazon Chime Enterprise account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
+    #[allow(unused_mut)]
     async fn list_rooms(
         &self,
         input: ListRoomsRequest,
@@ -15287,7 +15363,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRoomsResponse, _>()?;
 
@@ -15299,6 +15375,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -15318,7 +15395,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -15330,6 +15407,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the users that belong to the specified Amazon Chime account. You can specify an email address to list only the user that the email address belongs to.</p>
+    #[allow(unused_mut)]
     async fn list_users(
         &self,
         input: ListUsersRequest,
@@ -15363,7 +15441,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUsersResponse, _>()?;
 
@@ -15375,6 +15453,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connector_groups(
         &self,
         input: ListVoiceConnectorGroupsRequest,
@@ -15399,7 +15478,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorGroupsResponse, _>()?;
 
@@ -15411,6 +15490,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the SIP credentials for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connector_termination_credentials(
         &self,
         input: ListVoiceConnectorTerminationCredentialsRequest,
@@ -15432,7 +15512,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>()?;
 
@@ -15444,6 +15524,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime Voice Connectors for the administrator's AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connectors(
         &self,
         input: ListVoiceConnectorsRequest,
@@ -15468,7 +15549,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorsResponse, _>()?;
 
@@ -15480,6 +15561,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Logs out the specified user from all of the devices they are currently logged into.</p>
+    #[allow(unused_mut)]
     async fn logout_user(
         &self,
         input: LogoutUserRequest,
@@ -15503,7 +15585,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<LogoutUserResponse, _>()?;
 
@@ -15515,6 +15597,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
+    #[allow(unused_mut)]
     async fn put_events_configuration(
         &self,
         input: PutEventsConfigurationRequest,
@@ -15537,7 +15620,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEventsConfigurationResponse, _>()?;
 
@@ -15549,6 +15632,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn put_retention_settings(
         &self,
         input: PutRetentionSettingsRequest,
@@ -15570,7 +15654,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutRetentionSettingsResponse, _>()?;
 
@@ -15582,6 +15666,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_logging_configuration(
         &self,
         input: PutVoiceConnectorLoggingConfigurationRequest,
@@ -15606,7 +15691,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorLoggingConfigurationResponse, _>()?;
 
@@ -15620,6 +15705,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
@@ -15642,7 +15728,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorOriginationResponse, _>()?;
 
@@ -15654,6 +15740,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Puts the specified proxy configuration to the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_proxy(
         &self,
         input: PutVoiceConnectorProxyRequest,
@@ -15675,7 +15762,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorProxyResponse, _>()?;
 
@@ -15687,6 +15774,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_streaming_configuration(
         &self,
         input: PutVoiceConnectorStreamingConfigurationRequest,
@@ -15711,7 +15799,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorStreamingConfigurationResponse, _>()?;
 
@@ -15725,6 +15813,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
@@ -15747,7 +15836,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorTerminationResponse, _>()?;
 
@@ -15759,6 +15848,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds termination SIP credentials for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_termination_credentials(
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
@@ -15784,7 +15874,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -15797,6 +15887,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
+    #[allow(unused_mut)]
     async fn redact_conversation_message(
         &self,
         input: RedactConversationMessageRequest,
@@ -15822,7 +15913,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RedactConversationMessageResponse, _>()?;
 
@@ -15834,6 +15925,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    #[allow(unused_mut)]
     async fn redact_room_message(
         &self,
         input: RedactRoomMessageRequest,
@@ -15858,7 +15950,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RedactRoomMessageResponse, _>()?;
 
@@ -15870,6 +15962,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Regenerates the security token for a bot.</p>
+    #[allow(unused_mut)]
     async fn regenerate_security_token(
         &self,
         input: RegenerateSecurityTokenRequest,
@@ -15893,7 +15986,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegenerateSecurityTokenResponse, _>()?;
 
@@ -15905,6 +15998,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Resets the personal meeting PIN for the specified user on an Amazon Chime account. Returns the <a>User</a> object with the updated personal meeting PIN.</p>
+    #[allow(unused_mut)]
     async fn reset_personal_pin(
         &self,
         input: ResetPersonalPINRequest,
@@ -15928,7 +16022,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ResetPersonalPINResponse, _>()?;
 
@@ -15940,6 +16034,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves a phone number from the <b>Deletion queue</b> back into the phone number <b>Inventory</b>.</p>
+    #[allow(unused_mut)]
     async fn restore_phone_number(
         &self,
         input: RestorePhoneNumberRequest,
@@ -15962,7 +16057,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestorePhoneNumberResponse, _>()?;
 
@@ -15974,6 +16069,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Searches phone numbers that can be ordered.</p>
+    #[allow(unused_mut)]
     async fn search_available_phone_numbers(
         &self,
         input: SearchAvailablePhoneNumbersRequest,
@@ -16015,7 +16111,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
 
@@ -16027,6 +16123,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK attendee.</p>
+    #[allow(unused_mut)]
     async fn tag_attendee(
         &self,
         input: TagAttendeeRequest,
@@ -16053,7 +16150,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16064,6 +16161,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting.</p>
+    #[allow(unused_mut)]
     async fn tag_meeting(
         &self,
         input: TagMeetingRequest,
@@ -16086,7 +16184,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16097,6 +16195,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -16119,7 +16218,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16130,6 +16229,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK attendee.</p>
+    #[allow(unused_mut)]
     async fn untag_attendee(
         &self,
         input: UntagAttendeeRequest,
@@ -16156,7 +16256,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16167,6 +16267,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting.</p>
+    #[allow(unused_mut)]
     async fn untag_meeting(
         &self,
         input: UntagMeetingRequest,
@@ -16189,7 +16290,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16200,6 +16301,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -16222,7 +16324,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16233,6 +16335,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn update_account(
         &self,
         input: UpdateAccountRequest,
@@ -16251,7 +16354,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAccountResponse, _>()?;
 
@@ -16263,6 +16366,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the settings for the specified Amazon Chime account. You can update settings for remote control of shared screens, or for the dial-out option. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn update_account_settings(
         &self,
         input: UpdateAccountSettingsRequest,
@@ -16284,7 +16388,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAccountSettingsResponse, _>()?;
 
@@ -16296,6 +16400,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn update_bot(
         &self,
         input: UpdateBotRequest,
@@ -16318,7 +16423,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBotResponse, _>()?;
 
@@ -16330,6 +16435,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
+    #[allow(unused_mut)]
     async fn update_global_settings(
         &self,
         input: UpdateGlobalSettingsRequest,
@@ -16348,7 +16454,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16359,6 +16465,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    #[allow(unused_mut)]
     async fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
@@ -16380,7 +16487,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdatePhoneNumberResponse, _>()?;
 
@@ -16392,6 +16499,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the phone number settings for the administrator's AWS account, such as the default outbound calling name. You can update the default outbound calling name once every seven days. Outbound calling names can take up to 72 hours to update.</p>
+    #[allow(unused_mut)]
     async fn update_phone_number_settings(
         &self,
         input: UpdatePhoneNumberSettingsRequest,
@@ -16410,7 +16518,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16421,6 +16529,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the specified proxy session details, such as voice or SMS capabilities.</p>
+    #[allow(unused_mut)]
     async fn update_proxy_session(
         &self,
         input: UpdateProxySessionRequest,
@@ -16443,7 +16552,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateProxySessionResponse, _>()?;
 
@@ -16455,6 +16564,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn update_room(
         &self,
         input: UpdateRoomRequest,
@@ -16477,7 +16587,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRoomResponse, _>()?;
 
@@ -16489,6 +16599,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates room membership details, such as the member role, for a room in an Amazon Chime Enterprise account. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    #[allow(unused_mut)]
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
@@ -16512,7 +16623,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRoomMembershipResponse, _>()?;
 
@@ -16524,6 +16635,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates user details for a specified user ID. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn update_user(
         &self,
         input: UpdateUserRequest,
@@ -16546,7 +16658,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateUserResponse, _>()?;
 
@@ -16558,6 +16670,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the settings for the specified user, such as phone number settings.</p>
+    #[allow(unused_mut)]
     async fn update_user_settings(
         &self,
         input: UpdateUserSettingsRequest,
@@ -16580,7 +16693,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16591,6 +16704,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn update_voice_connector(
         &self,
         input: UpdateVoiceConnectorRequest,
@@ -16612,7 +16726,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVoiceConnectorResponse, _>()?;
 
@@ -16624,6 +16738,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
+    #[allow(unused_mut)]
     async fn update_voice_connector_group(
         &self,
         input: UpdateVoiceConnectorGroupRequest,
@@ -16646,7 +16761,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVoiceConnectorGroupResponse, _>()?;
 

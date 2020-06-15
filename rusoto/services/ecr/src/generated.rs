@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl EcrClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "ecr", &self.region, request_uri);
+        request.set_endpoint_prefix("api.ecr".to_string());
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>This data type is used in the <a>ImageScanFinding</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3105,9 +3132,7 @@ impl Ecr for EcrClient {
         input: BatchCheckLayerAvailabilityRequest,
     ) -> Result<BatchCheckLayerAvailabilityResponse, RusotoError<BatchCheckLayerAvailabilityError>>
     {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchCheckLayerAvailability",
@@ -3115,20 +3140,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchCheckLayerAvailabilityError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchCheckLayerAvailabilityError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
     }
 
     /// <p>Deletes a list of specified images within a repository. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
@@ -3136,9 +3154,7 @@ impl Ecr for EcrClient {
         &self,
         input: BatchDeleteImageRequest,
     ) -> Result<BatchDeleteImageResponse, RusotoError<BatchDeleteImageError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchDeleteImage",
@@ -3146,20 +3162,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteImageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteImageResponse, _>()
     }
 
     /// <p>Gets detailed information for an image. Images are specified with either an <code>imageTag</code> or <code>imageDigest</code>.</p> <p>When an image is pulled, the BatchGetImage API is called once to retrieve the image manifest.</p>
@@ -3167,9 +3175,7 @@ impl Ecr for EcrClient {
         &self,
         input: BatchGetImageRequest,
     ) -> Result<BatchGetImageResponse, RusotoError<BatchGetImageError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchGetImage",
@@ -3177,19 +3183,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetImageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetImageResponse, _>()
     }
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <p>When an image is pushed, the CompleteLayerUpload API is called once per each new image layer to verify that the upload has completed.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
@@ -3197,9 +3196,7 @@ impl Ecr for EcrClient {
         &self,
         input: CompleteLayerUploadRequest,
     ) -> Result<CompleteLayerUploadResponse, RusotoError<CompleteLayerUploadError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CompleteLayerUpload",
@@ -3207,20 +3204,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CompleteLayerUploadResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CompleteLayerUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CompleteLayerUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CompleteLayerUploadResponse, _>()
     }
 
     /// <p>Creates a repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html">Amazon ECR Repositories</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3228,9 +3217,7 @@ impl Ecr for EcrClient {
         &self,
         input: CreateRepositoryRequest,
     ) -> Result<CreateRepositoryResponse, RusotoError<CreateRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CreateRepository",
@@ -3238,20 +3225,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRepositoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRepositoryResponse, _>()
     }
 
     /// <p>Deletes the lifecycle policy associated with the specified repository.</p>
@@ -3259,9 +3238,7 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteLifecyclePolicyRequest,
     ) -> Result<DeleteLifecyclePolicyResponse, RusotoError<DeleteLifecyclePolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteLifecyclePolicy",
@@ -3269,20 +3246,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLifecyclePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLifecyclePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLifecyclePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteLifecyclePolicyResponse, _>()
     }
 
     /// <p>Deletes a repository. If the repository contains images, you must either delete all images in the repository or use the <code>force</code> option to delete the repository.</p>
@@ -3290,9 +3260,7 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteRepositoryRequest,
     ) -> Result<DeleteRepositoryResponse, RusotoError<DeleteRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepository",
@@ -3300,20 +3268,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRepositoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRepositoryResponse, _>()
     }
 
     /// <p>Deletes the repository policy associated with the specified repository.</p>
@@ -3321,9 +3281,7 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteRepositoryPolicyRequest,
     ) -> Result<DeleteRepositoryPolicyResponse, RusotoError<DeleteRepositoryPolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepositoryPolicy",
@@ -3331,20 +3289,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRepositoryPolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRepositoryPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRepositoryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRepositoryPolicyResponse, _>()
     }
 
     /// <p>Returns the scan findings for the specified image.</p>
@@ -3353,9 +3304,7 @@ impl Ecr for EcrClient {
         input: DescribeImageScanFindingsRequest,
     ) -> Result<DescribeImageScanFindingsResponse, RusotoError<DescribeImageScanFindingsError>>
     {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeImageScanFindings",
@@ -3363,20 +3312,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeImageScanFindingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeImageScanFindingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeImageScanFindingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeImageScanFindingsResponse, _>()
     }
 
     /// <p><p>Returns metadata about the images in a repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
@@ -3384,9 +3326,7 @@ impl Ecr for EcrClient {
         &self,
         input: DescribeImagesRequest,
     ) -> Result<DescribeImagesResponse, RusotoError<DescribeImagesError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeImages",
@@ -3394,19 +3334,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeImagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeImagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeImagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeImagesResponse, _>()
     }
 
     /// <p>Describes image repositories in a registry.</p>
@@ -3414,9 +3347,7 @@ impl Ecr for EcrClient {
         &self,
         input: DescribeRepositoriesRequest,
     ) -> Result<DescribeRepositoriesResponse, RusotoError<DescribeRepositoriesError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeRepositories",
@@ -3424,20 +3355,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRepositoriesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRepositoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRepositoriesResponse, _>()
     }
 
     /// <p>Retrieves an authorization token. An authorization token represents your IAM authentication credentials and can be used to access any Amazon ECR registry that your IAM principal has access to. The authorization token is valid for 12 hours.</p> <p>The <code>authorizationToken</code> returned is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>get-login-password</code> command that simplifies the login process. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth">Registry Authentication</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3445,9 +3369,7 @@ impl Ecr for EcrClient {
         &self,
         input: GetAuthorizationTokenRequest,
     ) -> Result<GetAuthorizationTokenResponse, RusotoError<GetAuthorizationTokenError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetAuthorizationToken",
@@ -3455,20 +3377,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAuthorizationTokenResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAuthorizationTokenError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAuthorizationTokenError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAuthorizationTokenResponse, _>()
     }
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <p>When an image is pulled, the GetDownloadUrlForLayer API is called once per image layer that is not already cached.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
@@ -3476,9 +3391,7 @@ impl Ecr for EcrClient {
         &self,
         input: GetDownloadUrlForLayerRequest,
     ) -> Result<GetDownloadUrlForLayerResponse, RusotoError<GetDownloadUrlForLayerError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetDownloadUrlForLayer",
@@ -3486,20 +3399,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDownloadUrlForLayerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDownloadUrlForLayerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDownloadUrlForLayerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDownloadUrlForLayerResponse, _>()
     }
 
     /// <p>Retrieves the lifecycle policy for the specified repository.</p>
@@ -3507,9 +3413,7 @@ impl Ecr for EcrClient {
         &self,
         input: GetLifecyclePolicyRequest,
     ) -> Result<GetLifecyclePolicyResponse, RusotoError<GetLifecyclePolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicy",
@@ -3517,20 +3421,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLifecyclePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLifecyclePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLifecyclePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetLifecyclePolicyResponse, _>()
     }
 
     /// <p>Retrieves the results of the lifecycle policy preview request for the specified repository.</p>
@@ -3539,9 +3435,7 @@ impl Ecr for EcrClient {
         input: GetLifecyclePolicyPreviewRequest,
     ) -> Result<GetLifecyclePolicyPreviewResponse, RusotoError<GetLifecyclePolicyPreviewError>>
     {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicyPreview",
@@ -3549,20 +3443,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLifecyclePolicyPreviewError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLifecyclePolicyPreviewError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
     }
 
     /// <p>Retrieves the repository policy for the specified repository.</p>
@@ -3570,9 +3457,7 @@ impl Ecr for EcrClient {
         &self,
         input: GetRepositoryPolicyRequest,
     ) -> Result<GetRepositoryPolicyResponse, RusotoError<GetRepositoryPolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetRepositoryPolicy",
@@ -3580,20 +3465,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRepositoryPolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRepositoryPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRepositoryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryPolicyResponse, _>()
     }
 
     /// <p><p>Notifies Amazon ECR that you intend to upload an image layer.</p> <p>When an image is pushed, the InitiateLayerUpload API is called once per image layer that has not already been uploaded. Whether or not an image layer has been uploaded is determined by the BatchCheckLayerAvailability API action.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
@@ -3601,9 +3478,7 @@ impl Ecr for EcrClient {
         &self,
         input: InitiateLayerUploadRequest,
     ) -> Result<InitiateLayerUploadResponse, RusotoError<InitiateLayerUploadError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.InitiateLayerUpload",
@@ -3611,20 +3486,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitiateLayerUploadResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InitiateLayerUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, InitiateLayerUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<InitiateLayerUploadResponse, _>()
     }
 
     /// <p>Lists all the image IDs for the specified repository.</p> <p>You can filter images based on whether or not they are tagged by using the <code>tagStatus</code> filter and specifying either <code>TAGGED</code>, <code>UNTAGGED</code> or <code>ANY</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
@@ -3632,9 +3499,7 @@ impl Ecr for EcrClient {
         &self,
         input: ListImagesRequest,
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.ListImages",
@@ -3642,19 +3507,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListImagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListImagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListImagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListImagesResponse, _>()
     }
 
     /// <p>List the tags for an Amazon ECR resource.</p>
@@ -3662,9 +3520,7 @@ impl Ecr for EcrClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.ListTagsForResource",
@@ -3672,20 +3528,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <p>When an image is pushed and all new image layers have been uploaded, the PutImage API is called once to create or update the image manifest and the tags associated with the image.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
@@ -3693,9 +3541,7 @@ impl Ecr for EcrClient {
         &self,
         input: PutImageRequest,
     ) -> Result<PutImageResponse, RusotoError<PutImageError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutImage",
@@ -3703,19 +3549,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutImageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutImageResponse, _>()
     }
 
     /// <p>Updates the image scanning configuration for the specified repository.</p>
@@ -3726,9 +3565,7 @@ impl Ecr for EcrClient {
         PutImageScanningConfigurationResponse,
         RusotoError<PutImageScanningConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutImageScanningConfiguration",
@@ -3736,20 +3573,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutImageScanningConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutImageScanningConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutImageScanningConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutImageScanningConfigurationResponse, _>()
     }
 
     /// <p>Updates the image tag mutability settings for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html">Image Tag Mutability</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3757,9 +3587,7 @@ impl Ecr for EcrClient {
         &self,
         input: PutImageTagMutabilityRequest,
     ) -> Result<PutImageTagMutabilityResponse, RusotoError<PutImageTagMutabilityError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutImageTagMutability",
@@ -3767,20 +3595,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutImageTagMutabilityResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutImageTagMutabilityError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutImageTagMutabilityError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutImageTagMutabilityResponse, _>()
     }
 
     /// <p>Creates or updates the lifecycle policy for the specified repository. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
@@ -3788,9 +3609,7 @@ impl Ecr for EcrClient {
         &self,
         input: PutLifecyclePolicyRequest,
     ) -> Result<PutLifecyclePolicyResponse, RusotoError<PutLifecyclePolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutLifecyclePolicy",
@@ -3798,20 +3617,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutLifecyclePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutLifecyclePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutLifecyclePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutLifecyclePolicyResponse, _>()
     }
 
     /// <p>Applies a repository policy to the specified repository to control access permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policies.html">Amazon ECR Repository Policies</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3819,9 +3630,7 @@ impl Ecr for EcrClient {
         &self,
         input: SetRepositoryPolicyRequest,
     ) -> Result<SetRepositoryPolicyResponse, RusotoError<SetRepositoryPolicyError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.SetRepositoryPolicy",
@@ -3829,20 +3638,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SetRepositoryPolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetRepositoryPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetRepositoryPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SetRepositoryPolicyResponse, _>()
     }
 
     /// <p>Starts an image vulnerability scan. An image scan can only be started once per day on an individual image. This limit includes if an image was scanned on initial push. For more information, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html">Image Scanning</a> in the <i>Amazon Elastic Container Registry User Guide</i>.</p>
@@ -3850,9 +3651,7 @@ impl Ecr for EcrClient {
         &self,
         input: StartImageScanRequest,
     ) -> Result<StartImageScanResponse, RusotoError<StartImageScanError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.StartImageScan",
@@ -3860,19 +3659,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartImageScanResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartImageScanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartImageScanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartImageScanResponse, _>()
     }
 
     /// <p>Starts a preview of a lifecycle policy for the specified repository. This allows you to see the results before associating the lifecycle policy with the repository.</p>
@@ -3881,9 +3673,7 @@ impl Ecr for EcrClient {
         input: StartLifecyclePolicyPreviewRequest,
     ) -> Result<StartLifecyclePolicyPreviewResponse, RusotoError<StartLifecyclePolicyPreviewError>>
     {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.StartLifecyclePolicyPreview",
@@ -3891,20 +3681,13 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartLifecyclePolicyPreviewError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartLifecyclePolicyPreviewError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
     }
 
     /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
@@ -3912,9 +3695,7 @@ impl Ecr for EcrClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.TagResource",
@@ -3922,19 +3703,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Deletes specified tags from a resource.</p>
@@ -3942,9 +3716,7 @@ impl Ecr for EcrClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.UntagResource",
@@ -3952,19 +3724,12 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <p>When an image is pushed, each new image layer is uploaded in parts. The maximum size of each image layer part can be 20971520 bytes (or about 20MB). The UploadLayerPart API is called once per each new image layer part.</p> <note> <p>This operation is used by the Amazon ECR proxy and is not generally used by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
@@ -3972,9 +3737,7 @@ impl Ecr for EcrClient {
         &self,
         input: UploadLayerPartRequest,
     ) -> Result<UploadLayerPartResponse, RusotoError<UploadLayerPartError>> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-        request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.UploadLayerPart",
@@ -3982,18 +3745,11 @@ impl Ecr for EcrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UploadLayerPartResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UploadLayerPartError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UploadLayerPartError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UploadLayerPartResponse, _>()
     }
 }

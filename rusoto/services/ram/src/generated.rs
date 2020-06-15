@@ -3301,6 +3301,7 @@ impl RamClient {
 #[async_trait]
 impl Ram for RamClient {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
+    #[allow(unused_mut)]
     async fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
@@ -3322,7 +3323,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AcceptResourceShareInvitationResponse, _>()?;
 
@@ -3334,6 +3335,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Associates the specified resource share with the specified principals and resources.</p>
+    #[allow(unused_mut)]
     async fn associate_resource_share(
         &self,
         input: AssociateResourceShareRequest,
@@ -3352,7 +3354,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateResourceShareResponse, _>()?;
 
@@ -3364,6 +3366,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Associates a permission with a resource share.</p>
+    #[allow(unused_mut)]
     async fn associate_resource_share_permission(
         &self,
         input: AssociateResourceSharePermissionRequest,
@@ -3385,7 +3388,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateResourceSharePermissionResponse, _>()?;
 
@@ -3399,6 +3402,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Creates a resource share.</p>
+    #[allow(unused_mut)]
     async fn create_resource_share(
         &self,
         input: CreateResourceShareRequest,
@@ -3417,7 +3421,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateResourceShareResponse, _>()?;
 
@@ -3429,6 +3433,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Deletes the specified resource share.</p>
+    #[allow(unused_mut)]
     async fn delete_resource_share(
         &self,
         input: DeleteResourceShareRequest,
@@ -3451,7 +3456,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteResourceShareResponse, _>()?;
 
@@ -3463,6 +3468,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
+    #[allow(unused_mut)]
     async fn disassociate_resource_share(
         &self,
         input: DisassociateResourceShareRequest,
@@ -3482,7 +3488,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateResourceShareResponse, _>()?;
 
@@ -3494,6 +3500,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Disassociates an AWS RAM permission from a resource share.</p>
+    #[allow(unused_mut)]
     async fn disassociate_resource_share_permission(
         &self,
         input: DisassociateResourceSharePermissionRequest,
@@ -3515,7 +3522,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateResourceSharePermissionResponse, _>()?;
 
@@ -3529,6 +3536,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Enables resource sharing within your AWS Organization.</p> <p>The caller must be the master account for the AWS Organization.</p>
+    #[allow(unused_mut)]
     async fn enable_sharing_with_aws_organization(
         &self,
     ) -> Result<
@@ -3546,7 +3554,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableSharingWithAwsOrganizationResponse, _>()?;
 
@@ -3560,6 +3568,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the contents of an AWS RAM permission in JSON format.</p>
+    #[allow(unused_mut)]
     async fn get_permission(
         &self,
         input: GetPermissionRequest,
@@ -3578,7 +3587,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPermissionResponse, _>()?;
 
@@ -3590,6 +3599,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the policies for the specified resources that you own and have shared.</p>
+    #[allow(unused_mut)]
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -3608,7 +3618,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourcePoliciesResponse, _>()?;
 
@@ -3620,6 +3630,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the resources or principals for the resource shares that you own.</p>
+    #[allow(unused_mut)]
     async fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
@@ -3639,7 +3650,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceShareAssociationsResponse, _>()?;
 
@@ -3651,6 +3662,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the invitations for resource sharing that you've received.</p>
+    #[allow(unused_mut)]
     async fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
@@ -3670,7 +3682,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceShareInvitationsResponse, _>()?;
 
@@ -3682,6 +3694,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the resource shares that you own or the resource shares that are shared with you.</p>
+    #[allow(unused_mut)]
     async fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
@@ -3700,7 +3713,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceSharesResponse, _>()?;
 
@@ -3712,6 +3725,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the resources in a resource share that is shared with you but that the invitation is still pending for.</p>
+    #[allow(unused_mut)]
     async fn list_pending_invitation_resources(
         &self,
         input: ListPendingInvitationResourcesRequest,
@@ -3733,7 +3747,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPendingInvitationResourcesResponse, _>()?;
 
@@ -3745,6 +3759,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the AWS RAM permissions.</p>
+    #[allow(unused_mut)]
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
@@ -3763,7 +3778,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPermissionsResponse, _>()?;
 
@@ -3775,6 +3790,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the principals that you have shared resources with or that have shared resources with you.</p>
+    #[allow(unused_mut)]
     async fn list_principals(
         &self,
         input: ListPrincipalsRequest,
@@ -3793,7 +3809,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPrincipalsResponse, _>()?;
 
@@ -3805,6 +3821,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the AWS RAM permissions that are associated with a resource share.</p>
+    #[allow(unused_mut)]
     async fn list_resource_share_permissions(
         &self,
         input: ListResourceSharePermissionsRequest,
@@ -3824,7 +3841,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourceSharePermissionsResponse, _>()?;
 
@@ -3836,6 +3853,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the shareable resource types supported by AWS RAM.</p>
+    #[allow(unused_mut)]
     async fn list_resource_types(
         &self,
         input: ListResourceTypesRequest,
@@ -3854,7 +3872,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourceTypesResponse, _>()?;
 
@@ -3866,6 +3884,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the resources that you added to a resource shares or the resources that are shared with you.</p>
+    #[allow(unused_mut)]
     async fn list_resources(
         &self,
         input: ListResourcesRequest,
@@ -3884,7 +3903,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourcesResponse, _>()?;
 
@@ -3896,6 +3915,7 @@ impl Ram for RamClient {
     }
 
     /// <p><p>Resource shares that were created by attaching a policy to a resource are visible only to the resource share owner, and the resource share cannot be modified in AWS RAM.</p> <p>Use this API action to promote the resource share. When you promote the resource share, it becomes:</p> <ul> <li> <p>Visible to all principals that it is shared with.</p> </li> <li> <p>Modifiable in AWS RAM.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn promote_resource_share_created_from_policy(
         &self,
         input: PromoteResourceShareCreatedFromPolicyRequest,
@@ -3918,7 +3938,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PromoteResourceShareCreatedFromPolicyResponse, _>()?;
 
@@ -3932,6 +3952,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Rejects an invitation to a resource share from another AWS account.</p>
+    #[allow(unused_mut)]
     async fn reject_resource_share_invitation(
         &self,
         input: RejectResourceShareInvitationRequest,
@@ -3953,7 +3974,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RejectResourceShareInvitationResponse, _>()?;
 
@@ -3965,6 +3986,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Adds the specified tags to the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3983,7 +4005,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3995,6 +4017,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Removes the specified tags from the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4013,7 +4036,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -4025,6 +4048,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Updates the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn update_resource_share(
         &self,
         input: UpdateResourceShareRequest,
@@ -4043,7 +4067,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateResourceShareResponse, _>()?;
 

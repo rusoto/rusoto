@@ -1032,6 +1032,7 @@ impl SavingsPlansClient {
 #[async_trait]
 impl SavingsPlans for SavingsPlansClient {
     /// <p>Creates a Savings Plan.</p>
+    #[allow(unused_mut)]
     async fn create_savings_plan(
         &self,
         input: CreateSavingsPlanRequest,
@@ -1050,7 +1051,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSavingsPlanResponse, _>()?;
 
@@ -1062,6 +1063,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Describes the specified Savings Plans rates.</p>
+    #[allow(unused_mut)]
     async fn describe_savings_plan_rates(
         &self,
         input: DescribeSavingsPlanRatesRequest,
@@ -1080,7 +1082,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSavingsPlanRatesResponse, _>()?;
 
@@ -1092,6 +1094,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Describes the specified Savings Plans.</p>
+    #[allow(unused_mut)]
     async fn describe_savings_plans(
         &self,
         input: DescribeSavingsPlansRequest,
@@ -1110,7 +1113,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSavingsPlansResponse, _>()?;
 
@@ -1122,6 +1125,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Describes the specified Savings Plans offering rates.</p>
+    #[allow(unused_mut)]
     async fn describe_savings_plans_offering_rates(
         &self,
         input: DescribeSavingsPlansOfferingRatesRequest,
@@ -1143,7 +1147,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSavingsPlansOfferingRatesResponse, _>()?;
 
@@ -1157,6 +1161,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Describes the specified Savings Plans offerings.</p>
+    #[allow(unused_mut)]
     async fn describe_savings_plans_offerings(
         &self,
         input: DescribeSavingsPlansOfferingsRequest,
@@ -1178,7 +1183,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSavingsPlansOfferingsResponse, _>()?;
 
@@ -1190,6 +1195,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Lists the tags for the specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1208,7 +1214,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1220,6 +1226,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Adds the specified tags to the specified resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1238,7 +1245,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -1250,6 +1257,7 @@ impl SavingsPlans for SavingsPlansClient {
     }
 
     /// <p>Removes the specified tags from the specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1268,7 +1276,7 @@ impl SavingsPlans for SavingsPlansClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 

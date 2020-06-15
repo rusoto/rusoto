@@ -2978,6 +2978,7 @@ impl SchemasClient {
 #[async_trait]
 impl Schemas for SchemasClient {
     /// <p>Creates a discoverer.</p>
+    #[allow(unused_mut)]
     async fn create_discoverer(
         &self,
         input: CreateDiscovererRequest,
@@ -2996,7 +2997,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDiscovererResponse, _>()?;
 
@@ -3008,6 +3009,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Creates a registry.</p>
+    #[allow(unused_mut)]
     async fn create_registry(
         &self,
         input: CreateRegistryRequest,
@@ -3029,7 +3031,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRegistryResponse, _>()?;
 
@@ -3041,6 +3043,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p><p>Creates a schema definition.</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
+    #[allow(unused_mut)]
     async fn create_schema(
         &self,
         input: CreateSchemaRequest,
@@ -3063,7 +3066,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSchemaResponse, _>()?;
 
@@ -3075,6 +3078,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Deletes a discoverer.</p>
+    #[allow(unused_mut)]
     async fn delete_discoverer(
         &self,
         input: DeleteDiscovererRequest,
@@ -3093,7 +3097,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3104,6 +3108,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Deletes a Registry.</p>
+    #[allow(unused_mut)]
     async fn delete_registry(
         &self,
         input: DeleteRegistryRequest,
@@ -3122,7 +3127,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3133,6 +3138,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Delete the resource-based policy attached to the specified registry.</p>
+    #[allow(unused_mut)]
     async fn delete_resource_policy(
         &self,
         input: DeleteResourcePolicyRequest,
@@ -3154,7 +3160,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3165,6 +3171,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Delete a schema definition.</p>
+    #[allow(unused_mut)]
     async fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
@@ -3184,7 +3191,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3195,6 +3202,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Delete the schema version definition</p>
+    #[allow(unused_mut)]
     async fn delete_schema_version(
         &self,
         input: DeleteSchemaVersionRequest,
@@ -3210,7 +3218,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3221,6 +3229,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Describe the code binding URI.</p>
+    #[allow(unused_mut)]
     async fn describe_code_binding(
         &self,
         input: DescribeCodeBindingRequest,
@@ -3247,7 +3256,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCodeBindingResponse, _>()?;
 
@@ -3259,6 +3268,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Describes the discoverer.</p>
+    #[allow(unused_mut)]
     async fn describe_discoverer(
         &self,
         input: DescribeDiscovererRequest,
@@ -3277,7 +3287,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDiscovererResponse, _>()?;
 
@@ -3289,6 +3299,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Describes the registry.</p>
+    #[allow(unused_mut)]
     async fn describe_registry(
         &self,
         input: DescribeRegistryRequest,
@@ -3307,7 +3318,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRegistryResponse, _>()?;
 
@@ -3319,6 +3330,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Retrieve the schema definition.</p>
+    #[allow(unused_mut)]
     async fn describe_schema(
         &self,
         input: DescribeSchemaRequest,
@@ -3344,7 +3356,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSchemaResponse, _>()?;
 
@@ -3356,6 +3368,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Get the code binding source URI.</p>
+    #[allow(unused_mut)]
     async fn get_code_binding_source(
         &self,
         input: GetCodeBindingSourceRequest,
@@ -3377,7 +3390,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetCodeBindingSourceResponse::default();
             result.body = Some(response.body);
@@ -3390,6 +3403,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Get the discovered schema that was generated based on sampled events.</p>
+    #[allow(unused_mut)]
     async fn get_discovered_schema(
         &self,
         input: GetDiscoveredSchemaRequest,
@@ -3408,7 +3422,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDiscoveredSchemaResponse, _>()?;
 
@@ -3420,6 +3434,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Retrieves the resource-based policy attached to a given registry.</p>
+    #[allow(unused_mut)]
     async fn get_resource_policy(
         &self,
         input: GetResourcePolicyRequest,
@@ -3441,7 +3456,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourcePolicyResponse, _>()?;
 
@@ -3453,6 +3468,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>List the discoverers.</p>
+    #[allow(unused_mut)]
     async fn list_discoverers(
         &self,
         input: ListDiscoverersRequest,
@@ -3483,7 +3499,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDiscoverersResponse, _>()?;
 
@@ -3495,6 +3511,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>List the registries.</p>
+    #[allow(unused_mut)]
     async fn list_registries(
         &self,
         input: ListRegistriesRequest,
@@ -3525,7 +3542,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRegistriesResponse, _>()?;
 
@@ -3537,6 +3554,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Provides a list of the schema versions and related information.</p>
+    #[allow(unused_mut)]
     async fn list_schema_versions(
         &self,
         input: ListSchemaVersionsRequest,
@@ -3565,7 +3583,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSchemaVersionsResponse, _>()?;
 
@@ -3577,6 +3595,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>List the schemas.</p>
+    #[allow(unused_mut)]
     async fn list_schemas(
         &self,
         input: ListSchemasRequest,
@@ -3607,7 +3626,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSchemasResponse, _>()?;
 
@@ -3619,6 +3638,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Get tags for resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3634,7 +3654,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3646,6 +3666,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Put code binding URI</p>
+    #[allow(unused_mut)]
     async fn put_code_binding(
         &self,
         input: PutCodeBindingRequest,
@@ -3672,7 +3693,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutCodeBindingResponse, _>()?;
 
@@ -3684,6 +3705,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>The name of the policy.</p>
+    #[allow(unused_mut)]
     async fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
@@ -3708,7 +3730,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutResourcePolicyResponse, _>()?;
 
@@ -3720,6 +3742,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Search the schemas</p>
+    #[allow(unused_mut)]
     async fn search_schemas(
         &self,
         input: SearchSchemasRequest,
@@ -3748,7 +3771,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchSchemasResponse, _>()?;
 
@@ -3760,6 +3783,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Starts the discoverer</p>
+    #[allow(unused_mut)]
     async fn start_discoverer(
         &self,
         input: StartDiscovererRequest,
@@ -3778,7 +3802,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartDiscovererResponse, _>()?;
 
@@ -3790,6 +3814,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Stops the discoverer</p>
+    #[allow(unused_mut)]
     async fn stop_discoverer(
         &self,
         input: StopDiscovererRequest,
@@ -3808,7 +3833,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopDiscovererResponse, _>()?;
 
@@ -3820,6 +3845,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Add tags to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3838,7 +3864,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3849,6 +3875,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Removes tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3870,7 +3897,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3881,6 +3908,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Updates the discoverer</p>
+    #[allow(unused_mut)]
     async fn update_discoverer(
         &self,
         input: UpdateDiscovererRequest,
@@ -3902,7 +3930,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDiscovererResponse, _>()?;
 
@@ -3914,6 +3942,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p>Updates a registry.</p>
+    #[allow(unused_mut)]
     async fn update_registry(
         &self,
         input: UpdateRegistryRequest,
@@ -3935,7 +3964,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRegistryResponse, _>()?;
 
@@ -3947,6 +3976,7 @@ impl Schemas for SchemasClient {
     }
 
     /// <p><p>Updates the schema definition</p> <note><p>Inactive schemas will be deleted after two years.</p></note></p>
+    #[allow(unused_mut)]
     async fn update_schema(
         &self,
         input: UpdateSchemaRequest,
@@ -3969,7 +3999,7 @@ impl Schemas for SchemasClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSchemaResponse, _>()?;
 

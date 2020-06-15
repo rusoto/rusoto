@@ -1249,6 +1249,7 @@ impl ResourceGroupsClient {
 #[async_trait]
 impl ResourceGroups for ResourceGroupsClient {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
+    #[allow(unused_mut)]
     async fn create_group(
         &self,
         input: CreateGroupInput,
@@ -1267,7 +1268,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGroupOutput, _>()?;
 
@@ -1279,6 +1280,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
+    #[allow(unused_mut)]
     async fn delete_group(
         &self,
         input: DeleteGroupInput,
@@ -1295,7 +1297,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGroupOutput, _>()?;
 
@@ -1307,6 +1309,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns information about a specified resource group.</p>
+    #[allow(unused_mut)]
     async fn get_group(
         &self,
         input: GetGroupInput,
@@ -1322,7 +1325,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetGroupOutput, _>()?;
 
@@ -1334,6 +1337,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns the resource query associated with the specified resource group.</p>
+    #[allow(unused_mut)]
     async fn get_group_query(
         &self,
         input: GetGroupQueryInput,
@@ -1349,7 +1353,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetGroupQueryOutput, _>()?;
 
@@ -1361,6 +1365,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
+    #[allow(unused_mut)]
     async fn get_tags(
         &self,
         input: GetTagsInput,
@@ -1376,7 +1381,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetTagsOutput, _>()?;
 
@@ -1388,6 +1393,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
+    #[allow(unused_mut)]
     async fn list_group_resources(
         &self,
         input: ListGroupResourcesInput,
@@ -1418,7 +1424,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupResourcesOutput, _>()?;
 
@@ -1430,6 +1436,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of existing resource groups in your account.</p>
+    #[allow(unused_mut)]
     async fn list_groups(
         &self,
         input: ListGroupsInput,
@@ -1457,7 +1464,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupsOutput, _>()?;
 
@@ -1469,6 +1476,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    #[allow(unused_mut)]
     async fn search_resources(
         &self,
         input: SearchResourcesInput,
@@ -1487,7 +1495,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchResourcesOutput, _>()?;
 
@@ -1499,6 +1507,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
+    #[allow(unused_mut)]
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
@@ -1514,7 +1523,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>()?;
 
@@ -1526,6 +1535,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Deletes specified tags from a specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
@@ -1542,7 +1552,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>()?;
 
@@ -1554,6 +1564,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
+    #[allow(unused_mut)]
     async fn update_group(
         &self,
         input: UpdateGroupInput,
@@ -1572,7 +1583,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupOutput, _>()?;
 
@@ -1584,6 +1595,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Updates the resource query of a group.</p>
+    #[allow(unused_mut)]
     async fn update_group_query(
         &self,
         input: UpdateGroupQueryInput,
@@ -1602,7 +1614,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupQueryOutput, _>()?;
 

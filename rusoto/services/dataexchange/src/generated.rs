@@ -2399,6 +2399,7 @@ impl DataExchangeClient {
 #[async_trait]
 impl DataExchange for DataExchangeClient {
     /// <p>This operation cancels a job. Jobs can be cancelled only when they are in the WAITING state.</p>
+    #[allow(unused_mut)]
     async fn cancel_job(&self, input: CancelJobRequest) -> Result<(), RusotoError<CancelJobError>> {
         let request_uri = format!("/v1/jobs/{job_id}", job_id = input.job_id);
 
@@ -2411,7 +2412,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2422,6 +2423,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation creates a data set.</p>
+    #[allow(unused_mut)]
     async fn create_data_set(
         &self,
         input: CreateDataSetRequest,
@@ -2440,7 +2442,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDataSetResponse, _>()?;
 
@@ -2452,6 +2454,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation creates a job.</p>
+    #[allow(unused_mut)]
     async fn create_job(
         &self,
         input: CreateJobRequest,
@@ -2470,7 +2473,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateJobResponse, _>()?;
 
@@ -2482,6 +2485,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation creates a revision for a data set.</p>
+    #[allow(unused_mut)]
     async fn create_revision(
         &self,
         input: CreateRevisionRequest,
@@ -2503,7 +2507,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRevisionResponse, _>()?;
 
@@ -2515,6 +2519,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation deletes an asset.</p>
+    #[allow(unused_mut)]
     async fn delete_asset(
         &self,
         input: DeleteAssetRequest,
@@ -2535,7 +2540,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2546,6 +2551,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation deletes a data set.</p>
+    #[allow(unused_mut)]
     async fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
@@ -2564,7 +2570,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2575,6 +2581,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation deletes a revision.</p>
+    #[allow(unused_mut)]
     async fn delete_revision(
         &self,
         input: DeleteRevisionRequest,
@@ -2594,7 +2601,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2605,6 +2612,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation returns information about an asset.</p>
+    #[allow(unused_mut)]
     async fn get_asset(
         &self,
         input: GetAssetRequest,
@@ -2625,7 +2633,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAssetResponse, _>()?;
 
@@ -2637,6 +2645,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation returns information about a data set.</p>
+    #[allow(unused_mut)]
     async fn get_data_set(
         &self,
         input: GetDataSetRequest,
@@ -2655,7 +2664,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDataSetResponse, _>()?;
 
@@ -2667,6 +2676,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation returns information about a job.</p>
+    #[allow(unused_mut)]
     async fn get_job(
         &self,
         input: GetJobRequest,
@@ -2682,7 +2692,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()?;
 
@@ -2694,6 +2704,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation returns information about a revision.</p>
+    #[allow(unused_mut)]
     async fn get_revision(
         &self,
         input: GetRevisionRequest,
@@ -2713,7 +2724,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRevisionResponse, _>()?;
 
@@ -2725,6 +2736,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation lists a data set's revisions sorted by CreatedAt in descending order.</p>
+    #[allow(unused_mut)]
     async fn list_data_set_revisions(
         &self,
         input: ListDataSetRevisionsRequest,
@@ -2752,7 +2764,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataSetRevisionsResponse, _>()?;
 
@@ -2764,6 +2776,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation lists your data sets. When listing by origin OWNED, results are sorted by CreatedAt in descending order. When listing by origin ENTITLED, there is no order and the maxResults parameter is ignored.</p>
+    #[allow(unused_mut)]
     async fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
@@ -2791,7 +2804,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataSetsResponse, _>()?;
 
@@ -2803,6 +2816,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation lists your jobs sorted by CreatedAt in descending order.</p>
+    #[allow(unused_mut)]
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
@@ -2833,7 +2847,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListJobsResponse, _>()?;
 
@@ -2845,6 +2859,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation lists a revision's assets sorted alphabetically in descending order.</p>
+    #[allow(unused_mut)]
     async fn list_revision_assets(
         &self,
         input: ListRevisionAssetsRequest,
@@ -2873,7 +2888,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRevisionAssetsResponse, _>()?;
 
@@ -2885,6 +2900,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation lists the tags on the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2900,7 +2916,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2912,6 +2928,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation starts a job.</p>
+    #[allow(unused_mut)]
     async fn start_job(
         &self,
         input: StartJobRequest,
@@ -2927,7 +2944,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartJobResponse, _>()?;
 
@@ -2939,6 +2956,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation tags a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2957,7 +2975,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2968,6 +2986,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation removes one or more tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2989,7 +3008,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3000,6 +3019,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation updates an asset.</p>
+    #[allow(unused_mut)]
     async fn update_asset(
         &self,
         input: UpdateAssetRequest,
@@ -3023,7 +3043,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAssetResponse, _>()?;
 
@@ -3035,6 +3055,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation updates a data set.</p>
+    #[allow(unused_mut)]
     async fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
@@ -3056,7 +3077,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSetResponse, _>()?;
 
@@ -3068,6 +3089,7 @@ impl DataExchange for DataExchangeClient {
     }
 
     /// <p>This operation updates a revision.</p>
+    #[allow(unused_mut)]
     async fn update_revision(
         &self,
         input: UpdateRevisionRequest,
@@ -3090,7 +3112,7 @@ impl DataExchange for DataExchangeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRevisionResponse, _>()?;
 

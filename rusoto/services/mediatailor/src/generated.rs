@@ -710,6 +710,7 @@ impl MediaTailorClient {
 #[async_trait]
 impl MediaTailor for MediaTailorClient {
     /// <p>Deletes the playback configuration for the specified name. </p>
+    #[allow(unused_mut)]
     async fn delete_playback_configuration(
         &self,
         input: DeletePlaybackConfigurationRequest,
@@ -728,7 +729,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePlaybackConfigurationResponse, _>()?;
 
@@ -740,6 +741,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Returns the playback configuration for the specified name. </p>
+    #[allow(unused_mut)]
     async fn get_playback_configuration(
         &self,
         input: GetPlaybackConfigurationRequest,
@@ -757,7 +759,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPlaybackConfigurationResponse, _>()?;
 
@@ -769,6 +771,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Returns a list of the playback configurations defined in AWS Elemental MediaTailor. You can specify a maximum number of configurations to return at a time. The default maximum is 50. Results are returned in pagefuls. If MediaTailor has more configurations than the specified maximum, it provides parameters in the response that you can use to retrieve the next pageful. </p>
+    #[allow(unused_mut)]
     async fn list_playback_configurations(
         &self,
         input: ListPlaybackConfigurationsRequest,
@@ -796,7 +799,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPlaybackConfigurationsResponse, _>()?;
 
@@ -808,6 +811,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -825,7 +829,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -837,6 +841,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Adds a new playback configuration to AWS Elemental MediaTailor. </p>
+    #[allow(unused_mut)]
     async fn put_playback_configuration(
         &self,
         input: PutPlaybackConfigurationRequest,
@@ -856,7 +861,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutPlaybackConfigurationResponse, _>()?;
 
@@ -868,6 +873,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Adds tags to the specified playback configuration resource. You can specify one or more tags to add. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -887,7 +893,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -898,6 +904,7 @@ impl MediaTailor for MediaTailorClient {
     }
 
     /// <p>Removes tags from the specified playback configuration resource. You can specify one or more tags to remove. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -921,7 +928,7 @@ impl MediaTailor for MediaTailorClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

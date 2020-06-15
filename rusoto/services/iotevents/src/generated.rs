@@ -2101,6 +2101,7 @@ impl IotEventsClient {
 #[async_trait]
 impl IotEvents for IotEventsClient {
     /// <p>Creates a detector model.</p>
+    #[allow(unused_mut)]
     async fn create_detector_model(
         &self,
         input: CreateDetectorModelRequest,
@@ -2119,7 +2120,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDetectorModelResponse, _>()?;
 
@@ -2131,6 +2132,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Creates an input.</p>
+    #[allow(unused_mut)]
     async fn create_input(
         &self,
         input: CreateInputRequest,
@@ -2149,7 +2151,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInputResponse, _>()?;
 
@@ -2161,6 +2163,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Deletes a detector model. Any active instances of the detector model are also deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_detector_model(
         &self,
         input: DeleteDetectorModelRequest,
@@ -2179,7 +2182,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDetectorModelResponse, _>()?;
 
@@ -2191,6 +2194,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Deletes an input.</p>
+    #[allow(unused_mut)]
     async fn delete_input(
         &self,
         input: DeleteInputRequest,
@@ -2206,7 +2210,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInputResponse, _>()?;
 
@@ -2218,6 +2222,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Describes a detector model. If the <code>version</code> parameter is not specified, information about the latest version is returned.</p>
+    #[allow(unused_mut)]
     async fn describe_detector_model(
         &self,
         input: DescribeDetectorModelRequest,
@@ -2242,7 +2247,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDetectorModelResponse, _>()?;
 
@@ -2254,6 +2259,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Describes an input.</p>
+    #[allow(unused_mut)]
     async fn describe_input(
         &self,
         input: DescribeInputRequest,
@@ -2269,7 +2275,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeInputResponse, _>()?;
 
@@ -2281,6 +2287,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Retrieves the current settings of the AWS IoT Events logging options.</p>
+    #[allow(unused_mut)]
     async fn describe_logging_options(
         &self,
     ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
@@ -2295,7 +2302,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeLoggingOptionsResponse, _>()?;
 
@@ -2307,6 +2314,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists all the versions of a detector model. Only the metadata associated with each detector model version is returned.</p>
+    #[allow(unused_mut)]
     async fn list_detector_model_versions(
         &self,
         input: ListDetectorModelVersionsRequest,
@@ -2335,7 +2343,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorModelVersionsResponse, _>()?;
 
@@ -2347,6 +2355,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the detector models you have created. Only the metadata associated with each detector model is returned.</p>
+    #[allow(unused_mut)]
     async fn list_detector_models(
         &self,
         input: ListDetectorModelsRequest,
@@ -2371,7 +2380,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorModelsResponse, _>()?;
 
@@ -2383,6 +2392,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the inputs you have created.</p>
+    #[allow(unused_mut)]
     async fn list_inputs(
         &self,
         input: ListInputsRequest,
@@ -2407,7 +2417,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInputsResponse, _>()?;
 
@@ -2419,6 +2429,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2438,7 +2449,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2450,6 +2461,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Sets or updates the AWS IoT Events logging options.</p> <p>If you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. If you change the policy attached to the role you specified in the <code>roleArn</code> field (for example, to correct an invalid policy), it takes up to five minutes for that change to take effect.</p>
+    #[allow(unused_mut)]
     async fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
@@ -2468,7 +2480,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2479,6 +2491,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2501,7 +2514,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -2513,6 +2526,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2535,7 +2549,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -2547,6 +2561,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Updates a detector model. Detectors (instances) spawned by the previous version are deleted and then re-created as new inputs arrive.</p>
+    #[allow(unused_mut)]
     async fn update_detector_model(
         &self,
         input: UpdateDetectorModelRequest,
@@ -2568,7 +2583,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDetectorModelResponse, _>()?;
 
@@ -2580,6 +2595,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Updates an input.</p>
+    #[allow(unused_mut)]
     async fn update_input(
         &self,
         input: UpdateInputRequest,
@@ -2598,7 +2614,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInputResponse, _>()?;
 

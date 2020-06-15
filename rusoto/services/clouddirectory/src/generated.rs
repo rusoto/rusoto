@@ -8653,6 +8653,7 @@ impl CloudDirectoryClient {
 #[async_trait]
 impl CloudDirectory for CloudDirectoryClient {
     /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
+    #[allow(unused_mut)]
     async fn add_facet_to_object(
         &self,
         input: AddFacetToObjectRequest,
@@ -8672,7 +8673,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AddFacetToObjectResponse, _>()?;
 
@@ -8684,6 +8685,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
+    #[allow(unused_mut)]
     async fn apply_schema(
         &self,
         input: ApplySchemaRequest,
@@ -8703,7 +8705,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ApplySchemaResponse, _>()?;
 
@@ -8715,6 +8717,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
+    #[allow(unused_mut)]
     async fn attach_object(
         &self,
         input: AttachObjectRequest,
@@ -8734,7 +8737,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AttachObjectResponse, _>()?;
 
@@ -8746,6 +8749,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
+    #[allow(unused_mut)]
     async fn attach_policy(
         &self,
         input: AttachPolicyRequest,
@@ -8765,7 +8769,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AttachPolicyResponse, _>()?;
 
@@ -8777,6 +8781,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Attaches the specified object to the specified index.</p>
+    #[allow(unused_mut)]
     async fn attach_to_index(
         &self,
         input: AttachToIndexRequest,
@@ -8796,7 +8801,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AttachToIndexResponse, _>()?;
 
@@ -8808,6 +8813,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn attach_typed_link(
         &self,
         input: AttachTypedLinkRequest,
@@ -8827,7 +8833,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AttachTypedLinkResponse, _>()?;
 
@@ -8839,6 +8845,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Performs all the read operations in a batch. </p>
+    #[allow(unused_mut)]
     async fn batch_read(
         &self,
         input: BatchReadRequest,
@@ -8850,10 +8857,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -8862,7 +8866,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchReadResponse, _>()?;
 
@@ -8874,6 +8878,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
+    #[allow(unused_mut)]
     async fn batch_write(
         &self,
         input: BatchWriteRequest,
@@ -8893,7 +8898,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchWriteResponse, _>()?;
 
@@ -8905,6 +8910,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p> <p>You can also quickly create a directory using a managed schema, called the <code>QuickStartSchema</code>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_managed.html">Managed Schema</a> in the <i>Amazon Cloud Directory Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_directory(
         &self,
         input: CreateDirectoryRequest,
@@ -8924,7 +8930,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDirectoryResponse, _>()?;
 
@@ -8936,6 +8942,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
+    #[allow(unused_mut)]
     async fn create_facet(
         &self,
         input: CreateFacetRequest,
@@ -8955,7 +8962,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFacetResponse, _>()?;
 
@@ -8967,6 +8974,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Creates an index object. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/indexing_search.html">Indexing and search</a> for more information.</p>
+    #[allow(unused_mut)]
     async fn create_index(
         &self,
         input: CreateIndexRequest,
@@ -8986,7 +8994,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIndexResponse, _>()?;
 
@@ -8998,6 +9006,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
+    #[allow(unused_mut)]
     async fn create_object(
         &self,
         input: CreateObjectRequest,
@@ -9017,7 +9026,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateObjectResponse, _>()?;
 
@@ -9029,6 +9038,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn create_schema(
         &self,
         input: CreateSchemaRequest,
@@ -9047,7 +9057,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSchemaResponse, _>()?;
 
@@ -9059,6 +9069,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn create_typed_link_facet(
         &self,
         input: CreateTypedLinkFacetRequest,
@@ -9078,7 +9089,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTypedLinkFacetResponse, _>()?;
 
@@ -9090,6 +9101,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
+    #[allow(unused_mut)]
     async fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
@@ -9107,7 +9119,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDirectoryResponse, _>()?;
 
@@ -9119,6 +9131,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
+    #[allow(unused_mut)]
     async fn delete_facet(
         &self,
         input: DeleteFacetRequest,
@@ -9138,7 +9151,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFacetResponse, _>()?;
 
@@ -9150,6 +9163,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted. The maximum number of attributes that can be deleted during an object deletion is 30. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/limits.html">Amazon Cloud Directory Limits</a>.</p>
+    #[allow(unused_mut)]
     async fn delete_object(
         &self,
         input: DeleteObjectRequest,
@@ -9169,7 +9183,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteObjectResponse, _>()?;
 
@@ -9181,6 +9195,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
+    #[allow(unused_mut)]
     async fn delete_schema(
         &self,
         input: DeleteSchemaRequest,
@@ -9198,7 +9213,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSchemaResponse, _>()?;
 
@@ -9210,6 +9225,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn delete_typed_link_facet(
         &self,
         input: DeleteTypedLinkFacetRequest,
@@ -9229,7 +9245,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteTypedLinkFacetResponse, _>()?;
 
@@ -9241,6 +9257,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Detaches the specified object from the specified index.</p>
+    #[allow(unused_mut)]
     async fn detach_from_index(
         &self,
         input: DetachFromIndexRequest,
@@ -9260,7 +9277,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DetachFromIndexResponse, _>()?;
 
@@ -9272,6 +9289,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
+    #[allow(unused_mut)]
     async fn detach_object(
         &self,
         input: DetachObjectRequest,
@@ -9291,7 +9309,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DetachObjectResponse, _>()?;
 
@@ -9303,6 +9321,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Detaches a policy from an object.</p>
+    #[allow(unused_mut)]
     async fn detach_policy(
         &self,
         input: DetachPolicyRequest,
@@ -9322,7 +9341,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DetachPolicyResponse, _>()?;
 
@@ -9334,6 +9353,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn detach_typed_link(
         &self,
         input: DetachTypedLinkRequest,
@@ -9353,7 +9373,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -9364,6 +9384,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
+    #[allow(unused_mut)]
     async fn disable_directory(
         &self,
         input: DisableDirectoryRequest,
@@ -9381,7 +9402,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisableDirectoryResponse, _>()?;
 
@@ -9393,6 +9414,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
+    #[allow(unused_mut)]
     async fn enable_directory(
         &self,
         input: EnableDirectoryRequest,
@@ -9410,7 +9432,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableDirectoryResponse, _>()?;
 
@@ -9422,6 +9444,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
+    #[allow(unused_mut)]
     async fn get_applied_schema_version(
         &self,
         input: GetAppliedSchemaVersionRequest,
@@ -9440,7 +9463,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAppliedSchemaVersionResponse, _>()?;
 
@@ -9452,6 +9475,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves metadata about a directory.</p>
+    #[allow(unused_mut)]
     async fn get_directory(
         &self,
         input: GetDirectoryRequest,
@@ -9469,7 +9493,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDirectoryResponse, _>()?;
 
@@ -9481,6 +9505,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
+    #[allow(unused_mut)]
     async fn get_facet(
         &self,
         input: GetFacetRequest,
@@ -9500,7 +9525,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFacetResponse, _>()?;
 
@@ -9512,6 +9537,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves attributes that are associated with a typed link.</p>
+    #[allow(unused_mut)]
     async fn get_link_attributes(
         &self,
         input: GetLinkAttributesRequest,
@@ -9531,7 +9557,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLinkAttributesResponse, _>()?;
 
@@ -9543,6 +9569,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    #[allow(unused_mut)]
     async fn get_object_attributes(
         &self,
         input: GetObjectAttributesRequest,
@@ -9554,10 +9581,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -9566,7 +9590,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetObjectAttributesResponse, _>()?;
 
@@ -9578,6 +9602,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves metadata about an object.</p>
+    #[allow(unused_mut)]
     async fn get_object_information(
         &self,
         input: GetObjectInformationRequest,
@@ -9589,10 +9614,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -9601,7 +9623,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetObjectInformationResponse, _>()?;
 
@@ -9613,6 +9635,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
+    #[allow(unused_mut)]
     async fn get_schema_as_json(
         &self,
         input: GetSchemaAsJsonRequest,
@@ -9630,7 +9653,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSchemaAsJsonResponse, _>()?;
 
@@ -9642,6 +9665,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn get_typed_link_facet_information(
         &self,
         input: GetTypedLinkFacetInformationRequest,
@@ -9662,7 +9686,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTypedLinkFacetInformationResponse, _>()?;
 
@@ -9674,6 +9698,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
+    #[allow(unused_mut)]
     async fn list_applied_schema_arns(
         &self,
         input: ListAppliedSchemaArnsRequest,
@@ -9692,7 +9717,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAppliedSchemaArnsResponse, _>()?;
 
@@ -9704,6 +9729,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists indices attached to the specified object.</p>
+    #[allow(unused_mut)]
     async fn list_attached_indices(
         &self,
         input: ListAttachedIndicesRequest,
@@ -9715,10 +9741,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -9727,7 +9750,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAttachedIndicesResponse, _>()?;
 
@@ -9739,6 +9762,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
+    #[allow(unused_mut)]
     async fn list_development_schema_arns(
         &self,
         input: ListDevelopmentSchemaArnsRequest,
@@ -9758,7 +9782,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDevelopmentSchemaArnsResponse, _>()?;
 
@@ -9770,6 +9794,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists directories created within an account.</p>
+    #[allow(unused_mut)]
     async fn list_directories(
         &self,
         input: ListDirectoriesRequest,
@@ -9788,7 +9813,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDirectoriesResponse, _>()?;
 
@@ -9800,6 +9825,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves attributes attached to the facet.</p>
+    #[allow(unused_mut)]
     async fn list_facet_attributes(
         &self,
         input: ListFacetAttributesRequest,
@@ -9819,7 +9845,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFacetAttributesResponse, _>()?;
 
@@ -9831,6 +9857,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
+    #[allow(unused_mut)]
     async fn list_facet_names(
         &self,
         input: ListFacetNamesRequest,
@@ -9850,7 +9877,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFacetNamesResponse, _>()?;
 
@@ -9862,6 +9889,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn list_incoming_typed_links(
         &self,
         input: ListIncomingTypedLinksRequest,
@@ -9881,7 +9909,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIncomingTypedLinksResponse, _>()?;
 
@@ -9893,6 +9921,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists objects attached to the specified index.</p>
+    #[allow(unused_mut)]
     async fn list_index(
         &self,
         input: ListIndexRequest,
@@ -9904,10 +9933,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -9916,7 +9942,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIndexResponse, _>()?;
 
@@ -9928,6 +9954,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists the major version families of each managed schema. If a major version ARN is provided as SchemaArn, the minor version revisions in that family are listed instead.</p>
+    #[allow(unused_mut)]
     async fn list_managed_schema_arns(
         &self,
         input: ListManagedSchemaArnsRequest,
@@ -9946,7 +9973,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListManagedSchemaArnsResponse, _>()?;
 
@@ -9958,6 +9985,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists all attributes that are associated with an object. </p>
+    #[allow(unused_mut)]
     async fn list_object_attributes(
         &self,
         input: ListObjectAttributesRequest,
@@ -9969,10 +9997,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -9981,7 +10006,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListObjectAttributesResponse, _>()?;
 
@@ -9993,6 +10018,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
+    #[allow(unused_mut)]
     async fn list_object_children(
         &self,
         input: ListObjectChildrenRequest,
@@ -10004,10 +10030,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -10016,7 +10039,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListObjectChildrenResponse, _>()?;
 
@@ -10028,6 +10051,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directorystructure.html">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
+    #[allow(unused_mut)]
     async fn list_object_parent_paths(
         &self,
         input: ListObjectParentPathsRequest,
@@ -10047,7 +10071,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListObjectParentPathsResponse, _>()?;
 
@@ -10059,6 +10083,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
+    #[allow(unused_mut)]
     async fn list_object_parents(
         &self,
         input: ListObjectParentsRequest,
@@ -10070,10 +10095,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -10082,7 +10104,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListObjectParentsResponse, _>()?;
 
@@ -10094,6 +10116,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
+    #[allow(unused_mut)]
     async fn list_object_policies(
         &self,
         input: ListObjectPoliciesRequest,
@@ -10105,10 +10128,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -10117,7 +10137,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListObjectPoliciesResponse, _>()?;
 
@@ -10129,6 +10149,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn list_outgoing_typed_links(
         &self,
         input: ListOutgoingTypedLinksRequest,
@@ -10148,7 +10169,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOutgoingTypedLinksResponse, _>()?;
 
@@ -10160,6 +10181,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
+    #[allow(unused_mut)]
     async fn list_policy_attachments(
         &self,
         input: ListPolicyAttachmentsRequest,
@@ -10171,10 +10193,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-
-        if let Some(ref consistency_level) = input.consistency_level {
-            request.add_header("x-amz-consistency-level", &consistency_level.to_string());
-        }
+        request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let mut response = self
@@ -10183,7 +10202,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPolicyAttachmentsResponse, _>()?;
 
@@ -10195,6 +10214,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
+    #[allow(unused_mut)]
     async fn list_published_schema_arns(
         &self,
         input: ListPublishedSchemaArnsRequest,
@@ -10213,7 +10233,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPublishedSchemaArnsResponse, _>()?;
 
@@ -10225,6 +10245,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -10243,7 +10264,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -10255,6 +10276,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn list_typed_link_facet_attributes(
         &self,
         input: ListTypedLinkFacetAttributesRequest,
@@ -10275,7 +10297,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTypedLinkFacetAttributesResponse, _>()?;
 
@@ -10287,6 +10309,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn list_typed_link_facet_names(
         &self,
         input: ListTypedLinkFacetNamesRequest,
@@ -10306,7 +10329,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTypedLinkFacetNamesResponse, _>()?;
 
@@ -10318,6 +10341,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p>
+    #[allow(unused_mut)]
     async fn lookup_policy(
         &self,
         input: LookupPolicyRequest,
@@ -10337,7 +10361,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<LookupPolicyResponse, _>()?;
 
@@ -10349,6 +10373,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
+    #[allow(unused_mut)]
     async fn publish_schema(
         &self,
         input: PublishSchemaRequest,
@@ -10368,7 +10393,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PublishSchemaResponse, _>()?;
 
@@ -10380,6 +10405,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_jsonformat.html#schemas_json">JSON Schema Format</a> for more information.</p>
+    #[allow(unused_mut)]
     async fn put_schema_from_json(
         &self,
         input: PutSchemaFromJsonRequest,
@@ -10399,7 +10425,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutSchemaFromJsonResponse, _>()?;
 
@@ -10411,6 +10437,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Removes the specified facet from the specified object.</p>
+    #[allow(unused_mut)]
     async fn remove_facet_from_object(
         &self,
         input: RemoveFacetFromObjectRequest,
@@ -10430,7 +10457,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RemoveFacetFromObjectResponse, _>()?;
 
@@ -10442,6 +10469,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>An API operation for adding tags to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -10460,7 +10488,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -10472,6 +10500,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>An API operation for removing tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -10490,7 +10519,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -10502,6 +10531,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
+    #[allow(unused_mut)]
     async fn update_facet(
         &self,
         input: UpdateFacetRequest,
@@ -10521,7 +10551,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFacetResponse, _>()?;
 
@@ -10533,6 +10563,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
+    #[allow(unused_mut)]
     async fn update_link_attributes(
         &self,
         input: UpdateLinkAttributesRequest,
@@ -10552,7 +10583,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLinkAttributesResponse, _>()?;
 
@@ -10564,6 +10595,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Updates a given object's attributes.</p>
+    #[allow(unused_mut)]
     async fn update_object_attributes(
         &self,
         input: UpdateObjectAttributesRequest,
@@ -10583,7 +10615,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateObjectAttributesResponse, _>()?;
 
@@ -10595,6 +10627,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
+    #[allow(unused_mut)]
     async fn update_schema(
         &self,
         input: UpdateSchemaRequest,
@@ -10614,7 +10647,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSchemaResponse, _>()?;
 
@@ -10626,6 +10659,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
+    #[allow(unused_mut)]
     async fn update_typed_link_facet(
         &self,
         input: UpdateTypedLinkFacetRequest,
@@ -10645,7 +10679,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateTypedLinkFacetResponse, _>()?;
 
@@ -10657,6 +10691,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
+    #[allow(unused_mut)]
     async fn upgrade_applied_schema(
         &self,
         input: UpgradeAppliedSchemaRequest,
@@ -10675,7 +10710,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpgradeAppliedSchemaResponse, _>()?;
 
@@ -10687,6 +10722,7 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
+    #[allow(unused_mut)]
     async fn upgrade_published_schema(
         &self,
         input: UpgradePublishedSchemaRequest,
@@ -10705,7 +10741,7 @@ impl CloudDirectory for CloudDirectoryClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpgradePublishedSchemaResponse, _>()?;
 

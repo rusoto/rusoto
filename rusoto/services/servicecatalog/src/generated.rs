@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ServiceCatalogClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "servicecatalog", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7938,9 +7965,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: AcceptPortfolioShareInput,
     ) -> Result<AcceptPortfolioShareOutput, RusotoError<AcceptPortfolioShareError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AcceptPortfolioShare",
@@ -7948,20 +7973,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AcceptPortfolioShareOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AcceptPortfolioShareError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AcceptPortfolioShareError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AcceptPortfolioShareOutput, _>()
     }
 
     /// <p>Associates the specified budget with the specified resource.</p>
@@ -7970,9 +7987,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: AssociateBudgetWithResourceInput,
     ) -> Result<AssociateBudgetWithResourceOutput, RusotoError<AssociateBudgetWithResourceError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateBudgetWithResource",
@@ -7980,20 +7995,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateBudgetWithResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateBudgetWithResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateBudgetWithResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateBudgetWithResourceOutput, _>()
     }
 
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
@@ -8004,9 +8012,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         AssociatePrincipalWithPortfolioOutput,
         RusotoError<AssociatePrincipalWithPortfolioError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociatePrincipalWithPortfolio",
@@ -8014,22 +8020,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociatePrincipalWithPortfolioError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociatePrincipalWithPortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
     }
 
     /// <p>Associates the specified product with the specified portfolio.</p>
@@ -8038,9 +8035,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: AssociateProductWithPortfolioInput,
     ) -> Result<AssociateProductWithPortfolioOutput, RusotoError<AssociateProductWithPortfolioError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateProductWithPortfolio",
@@ -8048,20 +8043,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateProductWithPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateProductWithPortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateProductWithPortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateProductWithPortfolioOutput, _>()
     }
 
     /// <p>Associates a self-service action with a provisioning artifact.</p>
@@ -8072,9 +8060,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         AssociateServiceActionWithProvisioningArtifactOutput,
         RusotoError<AssociateServiceActionWithProvisioningArtifactError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateServiceActionWithProvisioningArtifact",
@@ -8082,20 +8068,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateServiceActionWithProvisioningArtifactError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
     }
 
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
@@ -8106,9 +8088,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         AssociateTagOptionWithResourceOutput,
         RusotoError<AssociateTagOptionWithResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateTagOptionWithResource",
@@ -8116,20 +8096,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateTagOptionWithResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateTagOptionWithResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateTagOptionWithResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateTagOptionWithResourceOutput, _>()
     }
 
     /// <p>Associates multiple self-service actions with provisioning artifacts.</p>
@@ -8140,9 +8113,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         BatchAssociateServiceActionWithProvisioningArtifactOutput,
         RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.BatchAssociateServiceActionWithProvisioningArtifact",
@@ -8150,20 +8121,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchAssociateServiceActionWithProvisioningArtifactError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
     }
 
     /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
@@ -8174,9 +8141,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         BatchDisassociateServiceActionFromProvisioningArtifactOutput,
         RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.BatchDisassociateServiceActionFromProvisioningArtifact",
@@ -8184,24 +8149,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(
-                BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(
-                    response,
-                ),
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchDisassociateServiceActionFromProvisioningArtifactError::from_response,
             )
-        }
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
     }
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
@@ -8209,26 +8166,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CopyProductInput,
     ) -> Result<CopyProductOutput, RusotoError<CopyProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CopyProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CopyProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CopyProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CopyProductOutput, _>()
     }
 
     /// <p>Creates a constraint.</p>
@@ -8236,9 +8184,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateConstraintInput,
     ) -> Result<CreateConstraintOutput, RusotoError<CreateConstraintError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateConstraint",
@@ -8246,19 +8192,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateConstraintOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConstraintError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConstraintError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateConstraintOutput, _>()
     }
 
     /// <p>Creates a portfolio.</p>
@@ -8266,9 +8205,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreatePortfolioInput,
     ) -> Result<CreatePortfolioOutput, RusotoError<CreatePortfolioError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolio",
@@ -8276,19 +8213,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreatePortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePortfolioOutput, _>()
     }
 
     /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
@@ -8296,9 +8226,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreatePortfolioShareInput,
     ) -> Result<CreatePortfolioShareOutput, RusotoError<CreatePortfolioShareError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolioShare",
@@ -8306,20 +8234,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePortfolioShareOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePortfolioShareError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePortfolioShareError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePortfolioShareOutput, _>()
     }
 
     /// <p>Creates a product.</p>
@@ -8327,26 +8247,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateProductInput,
     ) -> Result<CreateProductOutput, RusotoError<CreateProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CreateProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateProductOutput, _>()
     }
 
     /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
@@ -8355,9 +8266,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: CreateProvisionedProductPlanInput,
     ) -> Result<CreateProvisionedProductPlanOutput, RusotoError<CreateProvisionedProductPlanError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisionedProductPlan",
@@ -8365,20 +8274,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProvisionedProductPlanOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProvisionedProductPlanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProvisionedProductPlanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateProvisionedProductPlanOutput, _>()
     }
 
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
@@ -8387,9 +8289,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: CreateProvisioningArtifactInput,
     ) -> Result<CreateProvisioningArtifactOutput, RusotoError<CreateProvisioningArtifactError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisioningArtifact",
@@ -8397,20 +8297,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProvisioningArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateProvisioningArtifactOutput, _>()
     }
 
     /// <p>Creates a self-service action.</p>
@@ -8418,9 +8311,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateServiceActionInput,
     ) -> Result<CreateServiceActionOutput, RusotoError<CreateServiceActionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateServiceAction",
@@ -8428,20 +8319,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateServiceActionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateServiceActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateServiceActionOutput, _>()
     }
 
     /// <p>Creates a TagOption.</p>
@@ -8449,9 +8332,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateTagOptionInput,
     ) -> Result<CreateTagOptionOutput, RusotoError<CreateTagOptionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateTagOption",
@@ -8459,19 +8340,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagOptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTagOptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTagOptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTagOptionOutput, _>()
     }
 
     /// <p>Deletes the specified constraint.</p>
@@ -8479,9 +8353,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteConstraintInput,
     ) -> Result<DeleteConstraintOutput, RusotoError<DeleteConstraintError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteConstraint",
@@ -8489,19 +8361,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteConstraintOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConstraintError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConstraintError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteConstraintOutput, _>()
     }
 
     /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
@@ -8509,9 +8374,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeletePortfolioInput,
     ) -> Result<DeletePortfolioOutput, RusotoError<DeletePortfolioError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolio",
@@ -8519,19 +8382,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeletePortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeletePortfolioOutput, _>()
     }
 
     /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
@@ -8539,9 +8395,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeletePortfolioShareInput,
     ) -> Result<DeletePortfolioShareOutput, RusotoError<DeletePortfolioShareError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolioShare",
@@ -8549,20 +8403,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePortfolioShareOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePortfolioShareError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePortfolioShareError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeletePortfolioShareOutput, _>()
     }
 
     /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
@@ -8570,26 +8416,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteProductInput,
     ) -> Result<DeleteProductOutput, RusotoError<DeleteProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DeleteProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteProductOutput, _>()
     }
 
     /// <p>Deletes the specified plan.</p>
@@ -8598,9 +8435,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DeleteProvisionedProductPlanInput,
     ) -> Result<DeleteProvisionedProductPlanOutput, RusotoError<DeleteProvisionedProductPlanError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisionedProductPlan",
@@ -8608,20 +8443,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProvisionedProductPlanOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProvisionedProductPlanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProvisionedProductPlanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteProvisionedProductPlanOutput, _>()
     }
 
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
@@ -8630,9 +8458,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DeleteProvisioningArtifactInput,
     ) -> Result<DeleteProvisioningArtifactOutput, RusotoError<DeleteProvisioningArtifactError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisioningArtifact",
@@ -8640,20 +8466,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProvisioningArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteProvisioningArtifactOutput, _>()
     }
 
     /// <p>Deletes a self-service action.</p>
@@ -8661,9 +8480,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteServiceActionInput,
     ) -> Result<DeleteServiceActionOutput, RusotoError<DeleteServiceActionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteServiceAction",
@@ -8671,20 +8488,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServiceActionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServiceActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteServiceActionOutput, _>()
     }
 
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
@@ -8692,9 +8501,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteTagOptionInput,
     ) -> Result<DeleteTagOptionOutput, RusotoError<DeleteTagOptionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteTagOption",
@@ -8702,19 +8509,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagOptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTagOptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTagOptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagOptionOutput, _>()
     }
 
     /// <p>Gets information about the specified constraint.</p>
@@ -8722,9 +8522,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeConstraintInput,
     ) -> Result<DescribeConstraintOutput, RusotoError<DescribeConstraintError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeConstraint",
@@ -8732,20 +8530,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConstraintOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConstraintError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConstraintError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConstraintOutput, _>()
     }
 
     /// <p>Gets the status of the specified copy product operation.</p>
@@ -8753,9 +8543,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeCopyProductStatusInput,
     ) -> Result<DescribeCopyProductStatusOutput, RusotoError<DescribeCopyProductStatusError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeCopyProductStatus",
@@ -8763,20 +8551,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCopyProductStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCopyProductStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeCopyProductStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCopyProductStatusOutput, _>()
     }
 
     /// <p>Gets information about the specified portfolio.</p>
@@ -8784,9 +8565,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribePortfolioInput,
     ) -> Result<DescribePortfolioOutput, RusotoError<DescribePortfolioError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribePortfolio",
@@ -8794,19 +8573,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribePortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribePortfolioOutput, _>()
     }
 
     /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
@@ -8815,9 +8587,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DescribePortfolioShareStatusInput,
     ) -> Result<DescribePortfolioShareStatusOutput, RusotoError<DescribePortfolioShareStatusError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribePortfolioShareStatus",
@@ -8825,20 +8595,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePortfolioShareStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePortfolioShareStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePortfolioShareStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePortfolioShareStatusOutput, _>()
     }
 
     /// <p>Gets information about the specified product.</p>
@@ -8846,9 +8609,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductInput,
     ) -> Result<DescribeProductOutput, RusotoError<DescribeProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProduct",
@@ -8856,19 +8617,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeProductOutput, _>()
     }
 
     /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
@@ -8876,9 +8630,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductAsAdminInput,
     ) -> Result<DescribeProductAsAdminOutput, RusotoError<DescribeProductAsAdminError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductAsAdmin",
@@ -8886,20 +8638,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProductAsAdminOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProductAsAdminError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProductAsAdminError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProductAsAdminOutput, _>()
     }
 
     /// <p>Gets information about the specified product.</p>
@@ -8907,9 +8652,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductViewInput,
     ) -> Result<DescribeProductViewOutput, RusotoError<DescribeProductViewError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductView",
@@ -8917,20 +8660,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProductViewOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProductViewError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProductViewError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeProductViewOutput, _>()
     }
 
     /// <p>Gets information about the specified provisioned product.</p>
@@ -8939,9 +8674,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DescribeProvisionedProductInput,
     ) -> Result<DescribeProvisionedProductOutput, RusotoError<DescribeProvisionedProductError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProduct",
@@ -8949,20 +8682,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisionedProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisionedProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProvisionedProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProvisionedProductOutput, _>()
     }
 
     /// <p>Gets information about the resource changes for the specified plan.</p>
@@ -8973,9 +8699,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DescribeProvisionedProductPlanOutput,
         RusotoError<DescribeProvisionedProductPlanError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProductPlan",
@@ -8983,20 +8707,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisionedProductPlanOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisionedProductPlanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProvisionedProductPlanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProvisionedProductPlanOutput, _>()
     }
 
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
@@ -9005,9 +8722,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DescribeProvisioningArtifactInput,
     ) -> Result<DescribeProvisioningArtifactOutput, RusotoError<DescribeProvisioningArtifactError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningArtifact",
@@ -9015,20 +8730,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProvisioningArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProvisioningArtifactOutput, _>()
     }
 
     /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
@@ -9039,9 +8747,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DescribeProvisioningParametersOutput,
         RusotoError<DescribeProvisioningParametersError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningParameters",
@@ -9049,20 +8755,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProvisioningParametersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProvisioningParametersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProvisioningParametersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProvisioningParametersOutput, _>()
     }
 
     /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
@@ -9070,26 +8769,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeRecordInput,
     ) -> Result<DescribeRecordOutput, RusotoError<DescribeRecordError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DescribeRecord");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeRecordOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRecordError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRecordError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeRecordOutput, _>()
     }
 
     /// <p>Describes a self-service action.</p>
@@ -9097,9 +8787,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeServiceActionInput,
     ) -> Result<DescribeServiceActionOutput, RusotoError<DescribeServiceActionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeServiceAction",
@@ -9107,20 +8795,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeServiceActionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeServiceActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeServiceActionOutput, _>()
     }
 
     /// <p>Finds the default parameters for a specific self-service action on a specific provisioned product and returns a map of the results to the user.</p>
@@ -9131,9 +8811,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DescribeServiceActionExecutionParametersOutput,
         RusotoError<DescribeServiceActionExecutionParametersError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeServiceActionExecutionParameters",
@@ -9141,20 +8819,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeServiceActionExecutionParametersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeServiceActionExecutionParametersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeServiceActionExecutionParametersError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeServiceActionExecutionParametersOutput, _>()
     }
 
     /// <p>Gets information about the specified TagOption.</p>
@@ -9162,9 +8836,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeTagOptionInput,
     ) -> Result<DescribeTagOptionOutput, RusotoError<DescribeTagOptionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeTagOption",
@@ -9172,19 +8844,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagOptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTagOptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTagOptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagOptionOutput, _>()
     }
 
     /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
@@ -9192,29 +8857,20 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
     ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisableAWSOrganizationsAccess",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableAWSOrganizationsAccessError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableAWSOrganizationsAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
     }
 
     /// <p>Disassociates the specified budget from the specified resource.</p>
@@ -9225,9 +8881,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociateBudgetFromResourceOutput,
         RusotoError<DisassociateBudgetFromResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateBudgetFromResource",
@@ -9235,20 +8889,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateBudgetFromResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateBudgetFromResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateBudgetFromResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateBudgetFromResourceOutput, _>()
     }
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
@@ -9259,9 +8906,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociatePrincipalFromPortfolioOutput,
         RusotoError<DisassociatePrincipalFromPortfolioError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociatePrincipalFromPortfolio",
@@ -9269,22 +8914,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociatePrincipalFromPortfolioError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociatePrincipalFromPortfolioError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
     }
 
     /// <p>Disassociates the specified product from the specified portfolio. </p>
@@ -9295,9 +8934,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociateProductFromPortfolioOutput,
         RusotoError<DisassociateProductFromPortfolioError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateProductFromPortfolio",
@@ -9305,22 +8942,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateProductFromPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateProductFromPortfolioError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateProductFromPortfolioError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateProductFromPortfolioOutput, _>()
     }
 
     /// <p>Disassociates the specified self-service action association from the specified provisioning artifact.</p>
@@ -9331,9 +8962,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociateServiceActionFromProvisioningArtifactOutput,
         RusotoError<DisassociateServiceActionFromProvisioningArtifactError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateServiceActionFromProvisioningArtifact",
@@ -9341,20 +8970,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateServiceActionFromProvisioningArtifactError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
     }
 
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
@@ -9365,9 +8990,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociateTagOptionFromResourceOutput,
         RusotoError<DisassociateTagOptionFromResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateTagOptionFromResource",
@@ -9375,22 +8998,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateTagOptionFromResourceError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateTagOptionFromResourceError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
     }
 
     /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
@@ -9398,29 +9015,20 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
     ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.EnableAWSOrganizationsAccess",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableAWSOrganizationsAccessError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableAWSOrganizationsAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
     }
 
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
@@ -9429,9 +9037,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ExecuteProvisionedProductPlanInput,
     ) -> Result<ExecuteProvisionedProductPlanOutput, RusotoError<ExecuteProvisionedProductPlanError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ExecuteProvisionedProductPlan",
@@ -9439,20 +9045,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ExecuteProvisionedProductPlanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ExecuteProvisionedProductPlanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
     }
 
     /// <p>Executes a self-service action against a provisioned product.</p>
@@ -9463,9 +9062,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         ExecuteProvisionedProductServiceActionOutput,
         RusotoError<ExecuteProvisionedProductServiceActionError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ExecuteProvisionedProductServiceAction",
@@ -9473,22 +9070,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ExecuteProvisionedProductServiceActionError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ExecuteProvisionedProductServiceActionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
     }
 
     /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
@@ -9498,31 +9089,20 @@ impl ServiceCatalog for ServiceCatalogClient {
         GetAWSOrganizationsAccessStatusOutput,
         RusotoError<GetAWSOrganizationsAccessStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.GetAWSOrganizationsAccessStatus",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAWSOrganizationsAccessStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAWSOrganizationsAccessStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
     }
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
@@ -9531,9 +9111,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ListAcceptedPortfolioSharesInput,
     ) -> Result<ListAcceptedPortfolioSharesOutput, RusotoError<ListAcceptedPortfolioSharesError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListAcceptedPortfolioShares",
@@ -9541,20 +9119,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAcceptedPortfolioSharesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAcceptedPortfolioSharesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
     }
 
     /// <p>Lists all the budgets associated to the specified resource.</p>
@@ -9562,9 +9133,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListBudgetsForResourceInput,
     ) -> Result<ListBudgetsForResourceOutput, RusotoError<ListBudgetsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListBudgetsForResource",
@@ -9572,20 +9141,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBudgetsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBudgetsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBudgetsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListBudgetsForResourceOutput, _>()
     }
 
     /// <p>Lists the constraints for the specified portfolio and product.</p>
@@ -9594,9 +9156,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ListConstraintsForPortfolioInput,
     ) -> Result<ListConstraintsForPortfolioOutput, RusotoError<ListConstraintsForPortfolioError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListConstraintsForPortfolio",
@@ -9604,20 +9164,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConstraintsForPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConstraintsForPortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListConstraintsForPortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListConstraintsForPortfolioOutput, _>()
     }
 
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
@@ -9625,9 +9178,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListLaunchPaths",
@@ -9635,19 +9186,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListLaunchPathsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLaunchPathsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListLaunchPathsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListLaunchPathsOutput, _>()
     }
 
     /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
@@ -9658,9 +9202,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListOrganizationPortfolioAccessOutput,
         RusotoError<ListOrganizationPortfolioAccessError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListOrganizationPortfolioAccess",
@@ -9668,22 +9210,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOrganizationPortfolioAccessError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOrganizationPortfolioAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
     }
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
@@ -9691,9 +9224,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfolioAccessInput,
     ) -> Result<ListPortfolioAccessOutput, RusotoError<ListPortfolioAccessError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfolioAccess",
@@ -9701,20 +9232,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPortfolioAccessOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPortfolioAccessError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPortfolioAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPortfolioAccessOutput, _>()
     }
 
     /// <p>Lists all portfolios in the catalog.</p>
@@ -9722,26 +9245,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfoliosInput,
     ) -> Result<ListPortfoliosOutput, RusotoError<ListPortfoliosError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListPortfolios");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPortfoliosOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPortfoliosError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPortfoliosError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPortfoliosOutput, _>()
     }
 
     /// <p>Lists all portfolios that the specified product is associated with.</p>
@@ -9749,9 +9263,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfoliosForProductInput,
     ) -> Result<ListPortfoliosForProductOutput, RusotoError<ListPortfoliosForProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfoliosForProduct",
@@ -9759,20 +9271,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPortfoliosForProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPortfoliosForProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPortfoliosForProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPortfoliosForProductOutput, _>()
     }
 
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
@@ -9781,9 +9286,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ListPrincipalsForPortfolioInput,
     ) -> Result<ListPrincipalsForPortfolioOutput, RusotoError<ListPrincipalsForPortfolioError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPrincipalsForPortfolio",
@@ -9791,20 +9294,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListPrincipalsForPortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPrincipalsForPortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPrincipalsForPortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPrincipalsForPortfolioOutput, _>()
     }
 
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
@@ -9813,9 +9309,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ListProvisionedProductPlansInput,
     ) -> Result<ListProvisionedProductPlansOutput, RusotoError<ListProvisionedProductPlansError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisionedProductPlans",
@@ -9823,20 +9317,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisionedProductPlansOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProvisionedProductPlansError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProvisionedProductPlansError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListProvisionedProductPlansOutput, _>()
     }
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
@@ -9844,9 +9331,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListProvisioningArtifactsInput,
     ) -> Result<ListProvisioningArtifactsOutput, RusotoError<ListProvisioningArtifactsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisioningArtifacts",
@@ -9854,20 +9339,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisioningArtifactsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProvisioningArtifactsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProvisioningArtifactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListProvisioningArtifactsOutput, _>()
     }
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified self-service action.</p>
@@ -9878,9 +9356,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListProvisioningArtifactsForServiceActionOutput,
         RusotoError<ListProvisioningArtifactsForServiceActionError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisioningArtifactsForServiceAction",
@@ -9888,20 +9364,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListProvisioningArtifactsForServiceActionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
     }
 
     /// <p>Lists the specified requests or all performed requests.</p>
@@ -9909,9 +9381,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListRecordHistoryInput,
     ) -> Result<ListRecordHistoryOutput, RusotoError<ListRecordHistoryError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListRecordHistory",
@@ -9919,19 +9389,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRecordHistoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRecordHistoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRecordHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRecordHistoryOutput, _>()
     }
 
     /// <p>Lists the resources associated with the specified TagOption.</p>
@@ -9939,9 +9402,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListResourcesForTagOptionInput,
     ) -> Result<ListResourcesForTagOptionOutput, RusotoError<ListResourcesForTagOptionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListResourcesForTagOption",
@@ -9949,20 +9410,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourcesForTagOptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourcesForTagOptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListResourcesForTagOptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListResourcesForTagOptionOutput, _>()
     }
 
     /// <p>Lists all self-service actions.</p>
@@ -9970,9 +9424,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListServiceActionsInput,
     ) -> Result<ListServiceActionsOutput, RusotoError<ListServiceActionsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListServiceActions",
@@ -9980,20 +9432,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceActionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceActionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServiceActionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListServiceActionsOutput, _>()
     }
 
     /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
@@ -10004,9 +9448,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListServiceActionsForProvisioningArtifactOutput,
         RusotoError<ListServiceActionsForProvisioningArtifactError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListServiceActionsForProvisioningArtifact",
@@ -10014,20 +9456,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListServiceActionsForProvisioningArtifactError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
     }
 
     /// <p>Returns summary information about stack instances that are associated with the specified <code>CFN_STACKSET</code> type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. </p>
@@ -10038,9 +9476,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListStackInstancesForProvisionedProductOutput,
         RusotoError<ListStackInstancesForProvisionedProductError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListStackInstancesForProvisionedProduct",
@@ -10048,22 +9484,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStackInstancesForProvisionedProductError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListStackInstancesForProvisionedProductError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
     }
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
@@ -10071,26 +9501,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListTagOptionsInput,
     ) -> Result<ListTagOptionsOutput, RusotoError<ListTagOptionsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListTagOptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTagOptionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagOptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagOptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagOptionsOutput, _>()
     }
 
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
@@ -10098,9 +9519,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ProvisionProductInput,
     ) -> Result<ProvisionProductOutput, RusotoError<ProvisionProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ProvisionProduct",
@@ -10108,19 +9527,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ProvisionProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ProvisionProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ProvisionProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ProvisionProductOutput, _>()
     }
 
     /// <p>Rejects an offer to share the specified portfolio.</p>
@@ -10128,9 +9540,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: RejectPortfolioShareInput,
     ) -> Result<RejectPortfolioShareOutput, RusotoError<RejectPortfolioShareError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.RejectPortfolioShare",
@@ -10138,20 +9548,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RejectPortfolioShareOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectPortfolioShareError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RejectPortfolioShareError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RejectPortfolioShareOutput, _>()
     }
 
     /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
@@ -10159,9 +9561,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ScanProvisionedProductsInput,
     ) -> Result<ScanProvisionedProductsOutput, RusotoError<ScanProvisionedProductsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ScanProvisionedProducts",
@@ -10169,20 +9569,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ScanProvisionedProductsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ScanProvisionedProductsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ScanProvisionedProductsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ScanProvisionedProductsOutput, _>()
     }
 
     /// <p>Gets information about the products to which the caller has access.</p>
@@ -10190,26 +9583,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProductsInput,
     ) -> Result<SearchProductsOutput, RusotoError<SearchProductsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.SearchProducts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchProductsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchProductsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchProductsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchProductsOutput, _>()
     }
 
     /// <p>Gets information about the products for the specified portfolio or all products.</p>
@@ -10217,9 +9601,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProductsAsAdminInput,
     ) -> Result<SearchProductsAsAdminOutput, RusotoError<SearchProductsAsAdminError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProductsAsAdmin",
@@ -10227,20 +9609,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchProductsAsAdminOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchProductsAsAdminError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchProductsAsAdminError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchProductsAsAdminOutput, _>()
     }
 
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
@@ -10248,9 +9622,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProvisionedProductsInput,
     ) -> Result<SearchProvisionedProductsOutput, RusotoError<SearchProvisionedProductsError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProvisionedProducts",
@@ -10258,20 +9630,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchProvisionedProductsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchProvisionedProductsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchProvisionedProductsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SearchProvisionedProductsOutput, _>()
     }
 
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
@@ -10280,9 +9645,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: TerminateProvisionedProductInput,
     ) -> Result<TerminateProvisionedProductOutput, RusotoError<TerminateProvisionedProductError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.TerminateProvisionedProduct",
@@ -10290,20 +9653,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TerminateProvisionedProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateProvisionedProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateProvisionedProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<TerminateProvisionedProductOutput, _>()
     }
 
     /// <p>Updates the specified constraint.</p>
@@ -10311,9 +9667,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateConstraintInput,
     ) -> Result<UpdateConstraintOutput, RusotoError<UpdateConstraintError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateConstraint",
@@ -10321,19 +9675,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateConstraintOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConstraintError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateConstraintError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateConstraintOutput, _>()
     }
 
     /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
@@ -10341,9 +9688,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdatePortfolioInput,
     ) -> Result<UpdatePortfolioOutput, RusotoError<UpdatePortfolioError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdatePortfolio",
@@ -10351,19 +9696,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdatePortfolioOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePortfolioError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePortfolioError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdatePortfolioOutput, _>()
     }
 
     /// <p>Updates the specified product.</p>
@@ -10371,26 +9709,17 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateProductInput,
     ) -> Result<UpdateProductOutput, RusotoError<UpdateProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.UpdateProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateProductOutput, _>()
     }
 
     /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
@@ -10398,9 +9727,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateProvisionedProductInput,
     ) -> Result<UpdateProvisionedProductOutput, RusotoError<UpdateProvisionedProductError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisionedProduct",
@@ -10408,20 +9735,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProvisionedProductOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProvisionedProductError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProvisionedProductError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateProvisionedProductOutput, _>()
     }
 
     /// <p>Requests updates to the properties of the specified provisioned product.</p>
@@ -10432,9 +9752,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         UpdateProvisionedProductPropertiesOutput,
         RusotoError<UpdateProvisionedProductPropertiesError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisionedProductProperties",
@@ -10442,22 +9760,16 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProvisionedProductPropertiesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateProvisionedProductPropertiesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
     }
 
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
@@ -10466,9 +9778,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: UpdateProvisioningArtifactInput,
     ) -> Result<UpdateProvisioningArtifactOutput, RusotoError<UpdateProvisioningArtifactError>>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisioningArtifact",
@@ -10476,20 +9786,13 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProvisioningArtifactOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProvisioningArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProvisioningArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateProvisioningArtifactOutput, _>()
     }
 
     /// <p>Updates a self-service action.</p>
@@ -10497,9 +9800,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateServiceActionInput,
     ) -> Result<UpdateServiceActionOutput, RusotoError<UpdateServiceActionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateServiceAction",
@@ -10507,20 +9808,12 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateServiceActionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateServiceActionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateServiceActionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateServiceActionOutput, _>()
     }
 
     /// <p>Updates the specified TagOption.</p>
@@ -10528,9 +9821,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateTagOptionInput,
     ) -> Result<UpdateTagOptionOutput, RusotoError<UpdateTagOptionError>> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateTagOption",
@@ -10538,18 +9829,11 @@ impl ServiceCatalog for ServiceCatalogClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTagOptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTagOptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTagOptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTagOptionOutput, _>()
     }
 }

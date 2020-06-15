@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,19 +33,39 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl CloudWatchClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-08-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct ActionsEnabledDeserializer;
 impl ActionsEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -53,11 +73,7 @@ struct AlarmArnDeserializer;
 impl AlarmArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -65,11 +81,7 @@ struct AlarmDescriptionDeserializer;
 impl AlarmDescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents the history of a specific alarm.</p>
@@ -154,11 +166,7 @@ struct AlarmNameDeserializer;
 impl AlarmNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -178,11 +186,7 @@ struct AlarmRuleDeserializer;
 impl AlarmRuleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -190,11 +194,7 @@ struct AlarmTypeDeserializer;
 impl AlarmTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -377,11 +377,7 @@ struct AnomalyDetectorMetricStatDeserializer;
 impl AnomalyDetectorMetricStatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -389,11 +385,7 @@ struct AnomalyDetectorMetricTimezoneDeserializer;
 impl AnomalyDetectorMetricTimezoneDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -401,11 +393,7 @@ struct AnomalyDetectorStateValueDeserializer;
 impl AnomalyDetectorStateValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -449,11 +437,7 @@ struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The details about a composite alarm.</p>
@@ -602,11 +586,7 @@ struct DashboardArnDeserializer;
 impl DashboardArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -614,11 +594,7 @@ struct DashboardBodyDeserializer;
 impl DashboardBodyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -695,11 +671,7 @@ struct DashboardNameDeserializer;
 impl DashboardNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -775,11 +747,7 @@ struct DataPathDeserializer;
 impl DataPathDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Encapsulates the statistical data that CloudWatch computes from metric data.</p>
@@ -855,11 +823,7 @@ struct DatapointValueDeserializer;
 impl DatapointValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -870,19 +834,19 @@ impl DatapointValueMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, f64>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = ExtendedStatisticDeserializer::deserialize("key", stack)?;
             let value = DatapointValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -927,11 +891,7 @@ struct DatapointsToAlarmDeserializer;
 impl DatapointsToAlarmDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1005,11 +965,11 @@ impl DeleteAnomalyDetectorOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteAnomalyDetectorOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteAnomalyDetectorOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1050,11 +1010,11 @@ impl DeleteDashboardsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDashboardsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteDashboardsOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1650,11 +1610,7 @@ struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1662,11 +1618,7 @@ struct DimensionValueDeserializer;
 impl DimensionValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1864,11 +1816,7 @@ struct EvaluateLowSampleCountPercentileDeserializer;
 impl EvaluateLowSampleCountPercentileDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1876,11 +1824,7 @@ struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1888,11 +1832,7 @@ struct ExceptionTypeDeserializer;
 impl ExceptionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1900,11 +1840,7 @@ struct ExtendedStatisticDeserializer;
 impl ExtendedStatisticDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1924,11 +1860,7 @@ struct FailureCodeDeserializer;
 impl FailureCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1936,11 +1868,7 @@ struct FailureDescriptionDeserializer;
 impl FailureDescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1948,11 +1876,7 @@ struct FailureResourceDeserializer;
 impl FailureResourceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2405,11 +2329,7 @@ struct HistoryDataDeserializer;
 impl HistoryDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2417,11 +2337,7 @@ struct HistoryItemTypeDeserializer;
 impl HistoryItemTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2429,11 +2345,7 @@ struct HistorySummaryDeserializer;
 impl HistorySummaryDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>This structure contains the definition for a Contributor Insights rule.</p>
@@ -2484,11 +2396,7 @@ struct InsightRuleAggregationStatisticDeserializer;
 impl InsightRuleAggregationStatisticDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>One of the unique contributors found by a Contributor Insights rule. If the rule contains multiple keys, then a unique contributor is a unique combination of values from all the keys in the rule.</p> <p>If the rule contains a single key, then each unique contributor is each unique value for this key.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetInsightRuleReport.html">GetInsightRuleReport</a>.</p>
@@ -2604,11 +2512,7 @@ struct InsightRuleContributorKeyDeserializer;
 impl InsightRuleContributorKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2616,11 +2520,7 @@ struct InsightRuleContributorKeyLabelDeserializer;
 impl InsightRuleContributorKeyLabelDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2688,11 +2588,7 @@ struct InsightRuleDefinitionDeserializer;
 impl InsightRuleDefinitionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>One data point from the metric time series returned in a Contributor Insights rule report.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetInsightRuleReport.html">GetInsightRuleReport</a>.</p>
@@ -2817,11 +2713,7 @@ struct InsightRuleNameDeserializer;
 impl InsightRuleNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2841,11 +2733,7 @@ struct InsightRuleSchemaDeserializer;
 impl InsightRuleSchemaDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2853,11 +2741,7 @@ struct InsightRuleStateDeserializer;
 impl InsightRuleStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2865,11 +2749,7 @@ struct InsightRuleUnboundDoubleDeserializer;
 impl InsightRuleUnboundDoubleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2877,11 +2757,7 @@ struct InsightRuleUnboundLongDeserializer;
 impl InsightRuleUnboundLongDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2907,11 +2783,7 @@ struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3108,11 +2980,7 @@ struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A message returned by the <code>GetMetricData</code>API, including a code and a description.</p>
@@ -3152,11 +3020,7 @@ struct MessageDataCodeDeserializer;
 impl MessageDataCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3164,11 +3028,7 @@ struct MessageDataValueDeserializer;
 impl MessageDataValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a specific metric.</p>
@@ -3763,11 +3623,7 @@ struct MetricExpressionDeserializer;
 impl MetricExpressionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3775,11 +3631,7 @@ struct MetricIdDeserializer;
 impl MetricIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3787,11 +3639,7 @@ struct MetricLabelDeserializer;
 impl MetricLabelDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3799,11 +3647,7 @@ struct MetricNameDeserializer;
 impl MetricNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>This structure defines the metric to be returned, along with the statistics, period, and units.</p>
@@ -3876,11 +3720,7 @@ impl MetricWidgetImageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3906,11 +3746,7 @@ struct NamespaceDeserializer;
 impl NamespaceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3918,11 +3754,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>This array is empty if the API operation was successful for all the rules specified in the request. If the operation could not process one of the rules, the following data is returned for each of those rules.</p>
@@ -3982,11 +3814,7 @@ struct PeriodDeserializer;
 impl PeriodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4045,11 +3873,11 @@ impl PutAnomalyDetectorOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutAnomalyDetectorOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutAnomalyDetectorOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4227,11 +4055,11 @@ impl PutInsightRuleOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutInsightRuleOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutInsightRuleOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4493,11 +4321,7 @@ struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4505,11 +4329,7 @@ struct ReturnDataDeserializer;
 impl ReturnDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4548,11 +4368,7 @@ struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4560,11 +4376,7 @@ struct StandardUnitDeserializer;
 impl StandardUnitDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4572,11 +4384,7 @@ struct StatDeserializer;
 impl StatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4584,11 +4392,7 @@ struct StateReasonDeserializer;
 impl StateReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4596,11 +4400,7 @@ struct StateReasonDataDeserializer;
 impl StateReasonDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4608,11 +4408,7 @@ struct StateValueDeserializer;
 impl StateValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4620,11 +4416,7 @@ struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a set of statistics that describes a specific metric. </p>
@@ -4673,11 +4465,7 @@ struct StatusCodeDeserializer;
 impl StatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A key-value pair associated with a CloudWatch resource.</p>
@@ -4730,11 +4518,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4814,11 +4598,11 @@ impl TagResourceOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagResourceOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = TagResourceOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4828,11 +4612,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4840,11 +4620,7 @@ struct ThresholdDeserializer;
 impl ThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4852,11 +4628,7 @@ struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4882,11 +4654,7 @@ struct TreatMissingDataDeserializer;
 impl TreatMissingDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4924,11 +4692,11 @@ impl UntagResourceOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UntagResourceOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UntagResourceOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4976,7 +4744,7 @@ impl DeleteAlarmsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5043,7 +4811,7 @@ impl DeleteAnomalyDetectorError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5106,7 +4874,7 @@ impl DeleteDashboardsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5159,7 +4927,7 @@ impl DeleteInsightRulesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5204,7 +4972,7 @@ impl DescribeAlarmHistoryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5248,7 +5016,7 @@ impl DescribeAlarmsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5284,7 +5052,7 @@ impl DescribeAlarmsForMetricError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5344,7 +5112,7 @@ impl DescribeAnomalyDetectorsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5394,7 +5162,7 @@ impl DescribeInsightRulesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5430,7 +5198,7 @@ impl DisableAlarmActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5481,7 +5249,7 @@ impl DisableInsightRulesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5518,7 +5286,7 @@ impl EnableAlarmActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5574,7 +5342,7 @@ impl EnableInsightRulesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5634,7 +5402,7 @@ impl GetDashboardError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5696,7 +5464,7 @@ impl GetInsightRuleReportError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5744,7 +5512,7 @@ impl GetMetricDataError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5813,7 +5581,7 @@ impl GetMetricStatisticsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5854,7 +5622,7 @@ impl GetMetricWidgetImageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5903,7 +5671,7 @@ impl ListDashboardsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5955,7 +5723,7 @@ impl ListMetricsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6014,7 +5782,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6081,7 +5849,7 @@ impl PutAnomalyDetectorError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6128,7 +5896,7 @@ impl PutCompositeAlarmError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6179,7 +5947,7 @@ impl PutDashboardError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6238,7 +6006,7 @@ impl PutInsightRuleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6284,7 +6052,7 @@ impl PutMetricAlarmError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6349,7 +6117,7 @@ impl PutMetricDataError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6403,7 +6171,7 @@ impl SetAlarmStateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6469,7 +6237,7 @@ impl TagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6537,7 +6305,7 @@ impl UntagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6782,23 +6550,15 @@ impl CloudWatch for CloudWatchClient {
         input: DeleteAlarmsInput,
     ) -> Result<(), RusotoError<DeleteAlarmsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAlarms");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DeleteAlarms");
+        let mut params = params;
         DeleteAlarmsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAlarmsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAlarmsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6810,27 +6570,19 @@ impl CloudWatch for CloudWatchClient {
         input: DeleteAnomalyDetectorInput,
     ) -> Result<DeleteAnomalyDetectorOutput, RusotoError<DeleteAnomalyDetectorError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAnomalyDetector");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DeleteAnomalyDetector");
+        let mut params = params;
         DeleteAnomalyDetectorInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAnomalyDetectorError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAnomalyDetectorError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteAnomalyDetectorOutput::default();
-        // parse non-payload
+        let result = DeleteAnomalyDetectorOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6840,27 +6592,19 @@ impl CloudWatch for CloudWatchClient {
         input: DeleteDashboardsInput,
     ) -> Result<DeleteDashboardsOutput, RusotoError<DeleteDashboardsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDashboards");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DeleteDashboards");
+        let mut params = params;
         DeleteDashboardsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDashboardsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDashboardsError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteDashboardsOutput::default();
-        // parse non-payload
+        let result = DeleteDashboardsOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6870,45 +6614,30 @@ impl CloudWatch for CloudWatchClient {
         input: DeleteInsightRulesInput,
     ) -> Result<DeleteInsightRulesOutput, RusotoError<DeleteInsightRulesError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteInsightRules");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DeleteInsightRules");
+        let mut params = params;
         DeleteInsightRulesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteInsightRulesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInsightRulesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteInsightRulesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteInsightRulesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteInsightRulesOutputDeserializer::deserialize(
                 "DeleteInsightRulesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6918,45 +6647,30 @@ impl CloudWatch for CloudWatchClient {
         input: DescribeAlarmHistoryInput,
     ) -> Result<DescribeAlarmHistoryOutput, RusotoError<DescribeAlarmHistoryError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAlarmHistory");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DescribeAlarmHistory");
+        let mut params = params;
         DescribeAlarmHistoryInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAlarmHistoryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAlarmHistoryError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAlarmHistoryOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAlarmHistoryOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAlarmHistoryOutputDeserializer::deserialize(
                 "DescribeAlarmHistoryResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6966,43 +6680,28 @@ impl CloudWatch for CloudWatchClient {
         input: DescribeAlarmsInput,
     ) -> Result<DescribeAlarmsOutput, RusotoError<DescribeAlarmsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAlarms");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DescribeAlarms");
+        let mut params = params;
         DescribeAlarmsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAlarmsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAlarmsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAlarmsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DescribeAlarmsOutputDeserializer::deserialize("DescribeAlarmsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7012,45 +6711,30 @@ impl CloudWatch for CloudWatchClient {
         input: DescribeAlarmsForMetricInput,
     ) -> Result<DescribeAlarmsForMetricOutput, RusotoError<DescribeAlarmsForMetricError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAlarmsForMetric");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DescribeAlarmsForMetric");
+        let mut params = params;
         DescribeAlarmsForMetricInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAlarmsForMetricError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAlarmsForMetricError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAlarmsForMetricOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAlarmsForMetricOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAlarmsForMetricOutputDeserializer::deserialize(
                 "DescribeAlarmsForMetricResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7060,45 +6744,30 @@ impl CloudWatch for CloudWatchClient {
         input: DescribeAnomalyDetectorsInput,
     ) -> Result<DescribeAnomalyDetectorsOutput, RusotoError<DescribeAnomalyDetectorsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAnomalyDetectors");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DescribeAnomalyDetectors");
+        let mut params = params;
         DescribeAnomalyDetectorsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAnomalyDetectorsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAnomalyDetectorsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAnomalyDetectorsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAnomalyDetectorsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAnomalyDetectorsOutputDeserializer::deserialize(
                 "DescribeAnomalyDetectorsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7108,45 +6777,30 @@ impl CloudWatch for CloudWatchClient {
         input: DescribeInsightRulesInput,
     ) -> Result<DescribeInsightRulesOutput, RusotoError<DescribeInsightRulesError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeInsightRules");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DescribeInsightRules");
+        let mut params = params;
         DescribeInsightRulesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeInsightRulesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInsightRulesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeInsightRulesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeInsightRulesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeInsightRulesOutputDeserializer::deserialize(
                 "DescribeInsightRulesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7156,23 +6810,15 @@ impl CloudWatch for CloudWatchClient {
         input: DisableAlarmActionsInput,
     ) -> Result<(), RusotoError<DisableAlarmActionsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableAlarmActions");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DisableAlarmActions");
+        let mut params = params;
         DisableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableAlarmActionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableAlarmActionsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7184,45 +6830,30 @@ impl CloudWatch for CloudWatchClient {
         input: DisableInsightRulesInput,
     ) -> Result<DisableInsightRulesOutput, RusotoError<DisableInsightRulesError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableInsightRules");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("DisableInsightRules");
+        let mut params = params;
         DisableInsightRulesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableInsightRulesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableInsightRulesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DisableInsightRulesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DisableInsightRulesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DisableInsightRulesOutputDeserializer::deserialize(
                 "DisableInsightRulesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7232,23 +6863,15 @@ impl CloudWatch for CloudWatchClient {
         input: EnableAlarmActionsInput,
     ) -> Result<(), RusotoError<EnableAlarmActionsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableAlarmActions");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("EnableAlarmActions");
+        let mut params = params;
         EnableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableAlarmActionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableAlarmActionsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7260,45 +6883,30 @@ impl CloudWatch for CloudWatchClient {
         input: EnableInsightRulesInput,
     ) -> Result<EnableInsightRulesOutput, RusotoError<EnableInsightRulesError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableInsightRules");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("EnableInsightRules");
+        let mut params = params;
         EnableInsightRulesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableInsightRulesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableInsightRulesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnableInsightRulesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnableInsightRulesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnableInsightRulesOutputDeserializer::deserialize(
                 "EnableInsightRulesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7308,42 +6916,27 @@ impl CloudWatch for CloudWatchClient {
         input: GetDashboardInput,
     ) -> Result<GetDashboardOutput, RusotoError<GetDashboardError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetDashboard");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("GetDashboard");
+        let mut params = params;
         GetDashboardInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetDashboardError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDashboardError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetDashboardOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetDashboardOutputDeserializer::deserialize("GetDashboardResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetDashboardOutputDeserializer::deserialize("GetDashboardResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7353,45 +6946,30 @@ impl CloudWatch for CloudWatchClient {
         input: GetInsightRuleReportInput,
     ) -> Result<GetInsightRuleReportOutput, RusotoError<GetInsightRuleReportError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetInsightRuleReport");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("GetInsightRuleReport");
+        let mut params = params;
         GetInsightRuleReportInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetInsightRuleReportError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInsightRuleReportError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetInsightRuleReportOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetInsightRuleReportOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetInsightRuleReportOutputDeserializer::deserialize(
                 "GetInsightRuleReportResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7401,43 +6979,28 @@ impl CloudWatch for CloudWatchClient {
         input: GetMetricDataInput,
     ) -> Result<GetMetricDataOutput, RusotoError<GetMetricDataError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetMetricData");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("GetMetricData");
+        let mut params = params;
         GetMetricDataInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetMetricDataError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMetricDataError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetMetricDataOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetMetricDataOutputDeserializer::deserialize("GetMetricDataResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetMetricDataOutputDeserializer::deserialize("GetMetricDataResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7447,45 +7010,30 @@ impl CloudWatch for CloudWatchClient {
         input: GetMetricStatisticsInput,
     ) -> Result<GetMetricStatisticsOutput, RusotoError<GetMetricStatisticsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetMetricStatistics");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("GetMetricStatistics");
+        let mut params = params;
         GetMetricStatisticsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetMetricStatisticsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMetricStatisticsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetMetricStatisticsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetMetricStatisticsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetMetricStatisticsOutputDeserializer::deserialize(
                 "GetMetricStatisticsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7495,45 +7043,30 @@ impl CloudWatch for CloudWatchClient {
         input: GetMetricWidgetImageInput,
     ) -> Result<GetMetricWidgetImageOutput, RusotoError<GetMetricWidgetImageError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetMetricWidgetImage");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("GetMetricWidgetImage");
+        let mut params = params;
         GetMetricWidgetImageInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetMetricWidgetImageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMetricWidgetImageError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetMetricWidgetImageOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetMetricWidgetImageOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetMetricWidgetImageOutputDeserializer::deserialize(
                 "GetMetricWidgetImageResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7543,43 +7076,28 @@ impl CloudWatch for CloudWatchClient {
         input: ListDashboardsInput,
     ) -> Result<ListDashboardsOutput, RusotoError<ListDashboardsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListDashboards");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("ListDashboards");
+        let mut params = params;
         ListDashboardsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListDashboardsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDashboardsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListDashboardsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListDashboardsOutputDeserializer::deserialize("ListDashboardsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListDashboardsOutputDeserializer::deserialize("ListDashboardsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7589,42 +7107,27 @@ impl CloudWatch for CloudWatchClient {
         input: ListMetricsInput,
     ) -> Result<ListMetricsOutput, RusotoError<ListMetricsError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListMetrics");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("ListMetrics");
+        let mut params = params;
         ListMetricsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListMetricsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMetricsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListMetricsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListMetricsOutputDeserializer::deserialize("ListMetricsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListMetricsOutputDeserializer::deserialize("ListMetricsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7634,45 +7137,30 @@ impl CloudWatch for CloudWatchClient {
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTagsForResource");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("ListTagsForResource");
+        let mut params = params;
         ListTagsForResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTagsForResourceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTagsForResourceOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListTagsForResourceOutputDeserializer::deserialize(
                 "ListTagsForResourceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7682,27 +7170,19 @@ impl CloudWatch for CloudWatchClient {
         input: PutAnomalyDetectorInput,
     ) -> Result<PutAnomalyDetectorOutput, RusotoError<PutAnomalyDetectorError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutAnomalyDetector");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutAnomalyDetector");
+        let mut params = params;
         PutAnomalyDetectorInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutAnomalyDetectorError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAnomalyDetectorError::from_response)
+            .await?;
 
-        let result;
-        result = PutAnomalyDetectorOutput::default();
-        // parse non-payload
+        let result = PutAnomalyDetectorOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7712,23 +7192,15 @@ impl CloudWatch for CloudWatchClient {
         input: PutCompositeAlarmInput,
     ) -> Result<(), RusotoError<PutCompositeAlarmError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutCompositeAlarm");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutCompositeAlarm");
+        let mut params = params;
         PutCompositeAlarmInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutCompositeAlarmError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutCompositeAlarmError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7740,42 +7212,27 @@ impl CloudWatch for CloudWatchClient {
         input: PutDashboardInput,
     ) -> Result<PutDashboardOutput, RusotoError<PutDashboardError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutDashboard");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutDashboard");
+        let mut params = params;
         PutDashboardInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutDashboardError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutDashboardError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PutDashboardOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PutDashboardOutputDeserializer::deserialize("PutDashboardResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PutDashboardOutputDeserializer::deserialize("PutDashboardResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7785,27 +7242,19 @@ impl CloudWatch for CloudWatchClient {
         input: PutInsightRuleInput,
     ) -> Result<PutInsightRuleOutput, RusotoError<PutInsightRuleError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutInsightRule");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutInsightRule");
+        let mut params = params;
         PutInsightRuleInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutInsightRuleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutInsightRuleError::from_response)
+            .await?;
 
-        let result;
-        result = PutInsightRuleOutput::default();
-        // parse non-payload
+        let result = PutInsightRuleOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7815,23 +7264,15 @@ impl CloudWatch for CloudWatchClient {
         input: PutMetricAlarmInput,
     ) -> Result<(), RusotoError<PutMetricAlarmError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutMetricAlarm");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutMetricAlarm");
+        let mut params = params;
         PutMetricAlarmInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutMetricAlarmError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutMetricAlarmError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7843,23 +7284,15 @@ impl CloudWatch for CloudWatchClient {
         input: PutMetricDataInput,
     ) -> Result<(), RusotoError<PutMetricDataError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutMetricData");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("PutMetricData");
+        let mut params = params;
         PutMetricDataInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutMetricDataError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutMetricDataError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7871,23 +7304,15 @@ impl CloudWatch for CloudWatchClient {
         input: SetAlarmStateInput,
     ) -> Result<(), RusotoError<SetAlarmStateError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetAlarmState");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("SetAlarmState");
+        let mut params = params;
         SetAlarmStateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetAlarmStateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetAlarmStateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -7899,27 +7324,19 @@ impl CloudWatch for CloudWatchClient {
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TagResource");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("TagResource");
+        let mut params = params;
         TagResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
 
-        let result;
-        result = TagResourceOutput::default();
-        // parse non-payload
+        let result = TagResourceOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7929,27 +7346,19 @@ impl CloudWatch for CloudWatchClient {
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UntagResource");
-        params.put("Version", "2010-08-01");
+        let params = self.new_params("UntagResource");
+        let mut params = params;
         UntagResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
 
-        let result;
-        result = UntagResourceOutput::default();
-        // parse non-payload
+        let result = UntagResourceOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

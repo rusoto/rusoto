@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ConfigServiceClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "config", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -8255,9 +8281,7 @@ impl ConfigService for ConfigServiceClient {
         BatchGetAggregateResourceConfigResponse,
         RusotoError<BatchGetAggregateResourceConfigError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.BatchGetAggregateResourceConfig",
@@ -8265,22 +8289,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetAggregateResourceConfigError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
     }
 
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
@@ -8288,27 +8303,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: BatchGetResourceConfigRequest,
     ) -> Result<BatchGetResourceConfigResponse, RusotoError<BatchGetResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.BatchGetResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetResourceConfigResponse, _>()
     }
 
     /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
@@ -8316,9 +8322,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteAggregationAuthorizationRequest,
     ) -> Result<(), RusotoError<DeleteAggregationAuthorizationError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteAggregationAuthorization",
@@ -8326,19 +8330,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAggregationAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAggregationAuthorizationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
@@ -8346,26 +8342,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigRuleRequest,
     ) -> Result<(), RusotoError<DeleteConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
@@ -8373,9 +8359,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationAggregatorRequest,
     ) -> Result<(), RusotoError<DeleteConfigurationAggregatorError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationAggregator",
@@ -8383,19 +8367,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationAggregatorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationAggregatorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
@@ -8403,9 +8379,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<DeleteConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationRecorder",
@@ -8413,19 +8387,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified conformance pack and all the AWS Config rules, remediation actions, and all evaluation results within that conformance pack.</p> <p>AWS Config sets the conformance pack to <code>DELETE_IN_PROGRESS</code> until the deletion is complete. You cannot update a conformance pack while it is in this state.</p>
@@ -8433,26 +8399,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConformancePackRequest,
     ) -> Result<(), RusotoError<DeleteConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConformancePack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConformancePackError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
@@ -8460,26 +8416,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteDeliveryChannelRequest,
     ) -> Result<(), RusotoError<DeleteDeliveryChannelError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeliveryChannelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeliveryChannelError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
@@ -8487,9 +8433,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteEvaluationResultsRequest,
     ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteEvaluationResults",
@@ -8497,20 +8441,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteEvaluationResultsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEvaluationResultsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEvaluationResultsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteEvaluationResultsResponse, _>()
     }
 
     /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
@@ -8518,9 +8455,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteOrganizationConfigRuleRequest,
     ) -> Result<(), RusotoError<DeleteOrganizationConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteOrganizationConfigRule",
@@ -8528,19 +8463,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOrganizationConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteOrganizationConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
@@ -8548,9 +8475,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteOrganizationConformancePackRequest,
     ) -> Result<(), RusotoError<DeleteOrganizationConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteOrganizationConformancePack",
@@ -8558,21 +8483,14 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOrganizationConformancePackError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteOrganizationConformancePackError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
@@ -8580,9 +8498,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeletePendingAggregationRequestRequest,
     ) -> Result<(), RusotoError<DeletePendingAggregationRequestError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeletePendingAggregationRequest",
@@ -8590,21 +8506,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePendingAggregationRequestError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePendingAggregationRequestError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the remediation configuration.</p>
@@ -8615,9 +8521,7 @@ impl ConfigService for ConfigServiceClient {
         DeleteRemediationConfigurationResponse,
         RusotoError<DeleteRemediationConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRemediationConfiguration",
@@ -8625,20 +8529,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemediationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemediationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRemediationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRemediationConfigurationResponse, _>()
     }
 
     /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
@@ -8647,9 +8544,7 @@ impl ConfigService for ConfigServiceClient {
         input: DeleteRemediationExceptionsRequest,
     ) -> Result<DeleteRemediationExceptionsResponse, RusotoError<DeleteRemediationExceptionsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRemediationExceptions",
@@ -8657,20 +8552,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRemediationExceptionsResponse, _>()
     }
 
     /// <p>Records the configuration state for a custom resource that has been deleted. This API records a new ConfigurationItem with a ResourceDeleted status. You can retrieve the ConfigurationItems recorded for this resource in your AWS Config History. </p>
@@ -8678,26 +8566,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteResourceConfigRequest,
     ) -> Result<(), RusotoError<DeleteResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteResourceConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the retention configuration.</p>
@@ -8705,9 +8583,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteRetentionConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteRetentionConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRetentionConfiguration",
@@ -8715,19 +8591,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRetentionConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRetentionConfigurationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
@@ -8735,27 +8603,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeliverConfigSnapshotRequest,
     ) -> Result<DeliverConfigSnapshotResponse, RusotoError<DeliverConfigSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeliverConfigSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeliverConfigSnapshotResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeliverConfigSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeliverConfigSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeliverConfigSnapshotResponse, _>()
     }
 
     /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
@@ -8766,9 +8625,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregateComplianceByConfigRulesResponse,
         RusotoError<DescribeAggregateComplianceByConfigRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregateComplianceByConfigRules",
@@ -8776,20 +8633,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAggregateComplianceByConfigRulesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
     }
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -8800,9 +8653,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregationAuthorizationsResponse,
         RusotoError<DescribeAggregationAuthorizationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregationAuthorizations",
@@ -8810,22 +8661,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAggregationAuthorizationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAggregationAuthorizationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
     }
 
     /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
@@ -8836,9 +8681,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeComplianceByConfigRuleResponse,
         RusotoError<DescribeComplianceByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByConfigRule",
@@ -8846,20 +8689,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComplianceByConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComplianceByConfigRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
     }
 
     /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
@@ -8868,9 +8704,7 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeComplianceByResourceRequest,
     ) -> Result<DescribeComplianceByResourceResponse, RusotoError<DescribeComplianceByResourceError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByResource",
@@ -8878,20 +8712,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComplianceByResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComplianceByResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComplianceByResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComplianceByResourceResponse, _>()
     }
 
     /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
@@ -8902,9 +8729,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigRuleEvaluationStatusResponse,
         RusotoError<DescribeConfigRuleEvaluationStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigRuleEvaluationStatus",
@@ -8912,22 +8737,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigRuleEvaluationStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigRuleEvaluationStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
     }
 
     /// <p>Returns details about your AWS Config rules.</p>
@@ -8935,27 +8754,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeConfigRulesRequest,
     ) -> Result<DescribeConfigRulesResponse, RusotoError<DescribeConfigRulesError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DescribeConfigRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigRulesResponse, _>()
     }
 
     /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config verified authorization between the source account and an aggregator account. In case of a failure, the status contains the related error code or message. </p>
@@ -8966,9 +8775,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationAggregatorSourcesStatusResponse,
         RusotoError<DescribeConfigurationAggregatorSourcesStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregatorSourcesStatus",
@@ -8976,20 +8783,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationAggregatorSourcesStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
     }
 
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
@@ -9000,9 +8803,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationAggregatorsResponse,
         RusotoError<DescribeConfigurationAggregatorsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregators",
@@ -9010,22 +8811,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationAggregatorsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationAggregatorsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
     }
 
     /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
@@ -9036,9 +8831,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationRecorderStatusResponse,
         RusotoError<DescribeConfigurationRecorderStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorderStatus",
@@ -9046,22 +8839,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationRecorderStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationRecorderStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
     }
 
     /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
@@ -9072,9 +8859,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationRecordersResponse,
         RusotoError<DescribeConfigurationRecordersError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorders",
@@ -9082,20 +8867,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRecordersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationRecordersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigurationRecordersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationRecordersResponse, _>()
     }
 
     /// <p><p>Returns compliance details for each rule in that conformance pack.</p> <note> <p>You must provide exact rule names.</p> </note></p>
@@ -9106,9 +8884,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConformancePackComplianceResponse,
         RusotoError<DescribeConformancePackComplianceError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePackCompliance",
@@ -9116,22 +8892,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePackComplianceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePackComplianceError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConformancePackComplianceError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePackComplianceResponse, _>()
     }
 
     /// <p><p>Provides one or more conformance packs deployment status.</p> <note> <p>If there are no conformance packs then you will see an empty result.</p> </note></p>
@@ -9142,9 +8912,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConformancePackStatusResponse,
         RusotoError<DescribeConformancePackStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePackStatus",
@@ -9152,20 +8920,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePackStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePackStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConformancePackStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePackStatusResponse, _>()
     }
 
     /// <p>Returns a list of one or more conformance packs.</p>
@@ -9173,9 +8934,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeConformancePacksRequest,
     ) -> Result<DescribeConformancePacksResponse, RusotoError<DescribeConformancePacksError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePacks",
@@ -9183,20 +8942,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePacksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePacksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConformancePacksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePacksResponse, _>()
     }
 
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
@@ -9207,9 +8959,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeDeliveryChannelStatusResponse,
         RusotoError<DescribeDeliveryChannelStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannelStatus",
@@ -9217,20 +8967,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDeliveryChannelStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDeliveryChannelStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
     }
 
     /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
@@ -9238,9 +8981,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeDeliveryChannelsRequest,
     ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannels",
@@ -9248,20 +8989,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeliveryChannelsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDeliveryChannelsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDeliveryChannelsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDeliveryChannelsResponse, _>()
     }
 
     /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9272,9 +9006,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConfigRuleStatusesResponse,
         RusotoError<DescribeOrganizationConfigRuleStatusesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConfigRuleStatuses",
@@ -9282,22 +9014,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConfigRuleStatusesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConfigRuleStatusesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
     }
 
     /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9308,9 +9034,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConfigRulesResponse,
         RusotoError<DescribeOrganizationConfigRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConfigRules",
@@ -9318,22 +9042,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConfigRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeOrganizationConfigRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
     }
 
     /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9344,9 +9059,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConformancePackStatusesResponse,
         RusotoError<DescribeOrganizationConformancePackStatusesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConformancePackStatuses",
@@ -9354,20 +9067,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConformancePackStatusesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConformancePackStatusesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
     }
 
     /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
@@ -9378,9 +9087,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConformancePacksResponse,
         RusotoError<DescribeOrganizationConformancePacksError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConformancePacks",
@@ -9388,22 +9095,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConformancePacksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConformancePacksError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConformancePacksError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConformancePacksResponse, _>()
     }
 
     /// <p>Returns a list of all pending aggregation requests.</p>
@@ -9414,9 +9115,7 @@ impl ConfigService for ConfigServiceClient {
         DescribePendingAggregationRequestsResponse,
         RusotoError<DescribePendingAggregationRequestsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribePendingAggregationRequests",
@@ -9424,22 +9123,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePendingAggregationRequestsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePendingAggregationRequestsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribePendingAggregationRequestsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePendingAggregationRequestsResponse, _>()
     }
 
     /// <p>Returns the details of one or more remediation configurations.</p>
@@ -9450,9 +9143,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationConfigurationsResponse,
         RusotoError<DescribeRemediationConfigurationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationConfigurations",
@@ -9460,22 +9151,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationConfigurationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeRemediationConfigurationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationConfigurationsResponse, _>()
     }
 
     /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
@@ -9486,9 +9171,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationExceptionsResponse,
         RusotoError<DescribeRemediationExceptionsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationExceptions",
@@ -9496,20 +9179,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationExceptionsResponse, _>()
     }
 
     /// <p>Provides a detailed view of a Remediation Execution for a set of resources including state, timestamps for when steps for the remediation execution occur, and any error messages for steps that have failed. When you specify the limit and the next token, you receive a paginated response.</p>
@@ -9520,9 +9196,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationExecutionStatusResponse,
         RusotoError<DescribeRemediationExecutionStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationExecutionStatus",
@@ -9530,22 +9204,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationExecutionStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeRemediationExecutionStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
     }
 
     /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
@@ -9556,9 +9224,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRetentionConfigurationsResponse,
         RusotoError<DescribeRetentionConfigurationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRetentionConfigurations",
@@ -9566,22 +9232,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRetentionConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRetentionConfigurationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRetentionConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRetentionConfigurationsResponse, _>()
     }
 
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
@@ -9592,9 +9249,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateComplianceDetailsByConfigRuleResponse,
         RusotoError<GetAggregateComplianceDetailsByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateComplianceDetailsByConfigRule",
@@ -9602,20 +9257,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateComplianceDetailsByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
     }
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
@@ -9626,9 +9277,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateConfigRuleComplianceSummaryResponse,
         RusotoError<GetAggregateConfigRuleComplianceSummaryError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateConfigRuleComplianceSummary",
@@ -9636,22 +9285,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateConfigRuleComplianceSummaryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateConfigRuleComplianceSummaryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
     }
 
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
@@ -9662,9 +9305,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateDiscoveredResourceCountsResponse,
         RusotoError<GetAggregateDiscoveredResourceCountsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateDiscoveredResourceCounts",
@@ -9672,22 +9313,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateDiscoveredResourceCountsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateDiscoveredResourceCountsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
     }
 
     /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
@@ -9696,9 +9331,7 @@ impl ConfigService for ConfigServiceClient {
         input: GetAggregateResourceConfigRequest,
     ) -> Result<GetAggregateResourceConfigResponse, RusotoError<GetAggregateResourceConfigError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateResourceConfig",
@@ -9706,20 +9339,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateResourceConfigResponse, _>()
     }
 
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
@@ -9730,9 +9356,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceDetailsByConfigRuleResponse,
         RusotoError<GetComplianceDetailsByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByConfigRule",
@@ -9740,22 +9364,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceDetailsByConfigRuleError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceDetailsByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
     }
 
     /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
@@ -9766,9 +9384,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceDetailsByResourceResponse,
         RusotoError<GetComplianceDetailsByResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByResource",
@@ -9776,20 +9392,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceDetailsByResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceDetailsByResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetComplianceDetailsByResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceDetailsByResourceResponse, _>()
     }
 
     /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
@@ -9799,31 +9408,23 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceSummaryByConfigRuleResponse,
         RusotoError<GetComplianceSummaryByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByConfigRule",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceSummaryByConfigRuleError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceSummaryByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
     }
 
     /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
@@ -9834,9 +9435,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceSummaryByResourceTypeResponse,
         RusotoError<GetComplianceSummaryByResourceTypeError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByResourceType",
@@ -9844,22 +9443,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceSummaryByResourceTypeError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceSummaryByResourceTypeError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
     }
 
     /// <p>Returns compliance details of a conformance pack for all AWS resources that are monitered by conformance pack.</p>
@@ -9870,9 +9463,7 @@ impl ConfigService for ConfigServiceClient {
         GetConformancePackComplianceDetailsResponse,
         RusotoError<GetConformancePackComplianceDetailsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetConformancePackComplianceDetails",
@@ -9880,22 +9471,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConformancePackComplianceDetailsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConformancePackComplianceDetailsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetConformancePackComplianceDetailsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConformancePackComplianceDetailsResponse, _>()
     }
 
     /// <p>Returns compliance details for the conformance pack based on the cumulative compliance results of all the rules in that conformance pack.</p>
@@ -9906,9 +9491,7 @@ impl ConfigService for ConfigServiceClient {
         GetConformancePackComplianceSummaryResponse,
         RusotoError<GetConformancePackComplianceSummaryError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetConformancePackComplianceSummary",
@@ -9916,22 +9499,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConformancePackComplianceSummaryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConformancePackComplianceSummaryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetConformancePackComplianceSummaryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConformancePackComplianceSummaryResponse, _>()
     }
 
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
@@ -9940,9 +9517,7 @@ impl ConfigService for ConfigServiceClient {
         input: GetDiscoveredResourceCountsRequest,
     ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetDiscoveredResourceCounts",
@@ -9950,20 +9525,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDiscoveredResourceCountsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiscoveredResourceCountsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDiscoveredResourceCountsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDiscoveredResourceCountsResponse, _>()
     }
 
     /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
@@ -9974,9 +9542,7 @@ impl ConfigService for ConfigServiceClient {
         GetOrganizationConfigRuleDetailedStatusResponse,
         RusotoError<GetOrganizationConfigRuleDetailedStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetOrganizationConfigRuleDetailedStatus",
@@ -9984,22 +9550,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOrganizationConfigRuleDetailedStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetOrganizationConfigRuleDetailedStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
     }
 
     /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
@@ -10010,9 +9570,7 @@ impl ConfigService for ConfigServiceClient {
         GetOrganizationConformancePackDetailedStatusResponse,
         RusotoError<GetOrganizationConformancePackDetailedStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetOrganizationConformancePackDetailedStatus",
@@ -10020,20 +9578,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOrganizationConformancePackDetailedStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOrganizationConformancePackDetailedStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetOrganizationConformancePackDetailedStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetOrganizationConformancePackDetailedStatusResponse, _>()
     }
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
@@ -10041,9 +9595,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: GetResourceConfigHistoryRequest,
     ) -> Result<GetResourceConfigHistoryResponse, RusotoError<GetResourceConfigHistoryError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetResourceConfigHistory",
@@ -10051,20 +9603,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceConfigHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourceConfigHistoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetResourceConfigHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetResourceConfigHistoryResponse, _>()
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
@@ -10075,9 +9620,7 @@ impl ConfigService for ConfigServiceClient {
         ListAggregateDiscoveredResourcesResponse,
         RusotoError<ListAggregateDiscoveredResourcesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListAggregateDiscoveredResources",
@@ -10085,22 +9628,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAggregateDiscoveredResourcesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListAggregateDiscoveredResourcesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
@@ -10108,9 +9645,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListDiscoveredResources",
@@ -10118,20 +9653,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDiscoveredResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDiscoveredResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDiscoveredResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDiscoveredResourcesResponse, _>()
     }
 
     /// <p>List the tags for AWS Config resource.</p>
@@ -10139,27 +9667,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
@@ -10168,9 +9686,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutAggregationAuthorizationRequest,
     ) -> Result<PutAggregationAuthorizationResponse, RusotoError<PutAggregationAuthorizationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutAggregationAuthorization",
@@ -10178,20 +9694,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAggregationAuthorizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAggregationAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAggregationAuthorizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutAggregationAuthorizationResponse, _>()
     }
 
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 150.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
@@ -10199,26 +9708,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigRuleRequest,
     ) -> Result<(), RusotoError<PutConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
@@ -10227,9 +9726,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutConfigurationAggregatorRequest,
     ) -> Result<PutConfigurationAggregatorResponse, RusotoError<PutConfigurationAggregatorError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationAggregator",
@@ -10237,20 +9734,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationAggregatorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationAggregatorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigurationAggregatorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutConfigurationAggregatorResponse, _>()
     }
 
     /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
@@ -10258,9 +9748,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<PutConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationRecorder",
@@ -10268,19 +9756,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
@@ -10288,27 +9768,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConformancePackRequest,
     ) -> Result<PutConformancePackResponse, RusotoError<PutConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutConformancePack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConformancePackResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConformancePackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutConformancePackResponse, _>()
     }
 
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
@@ -10316,26 +9786,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutDeliveryChannelRequest,
     ) -> Result<(), RusotoError<PutDeliveryChannelError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDeliveryChannelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutDeliveryChannelError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
@@ -10343,26 +9803,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutEvaluations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEvaluationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutEvaluationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
     }
 
     /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
@@ -10371,9 +9822,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutOrganizationConfigRuleRequest,
     ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutOrganizationConfigRule",
@@ -10381,20 +9830,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutOrganizationConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOrganizationConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutOrganizationConfigRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutOrganizationConfigRuleResponse, _>()
     }
 
     /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
@@ -10405,9 +9847,7 @@ impl ConfigService for ConfigServiceClient {
         PutOrganizationConformancePackResponse,
         RusotoError<PutOrganizationConformancePackError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutOrganizationConformancePack",
@@ -10415,20 +9855,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutOrganizationConformancePackResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOrganizationConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutOrganizationConformancePackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutOrganizationConformancePackResponse, _>()
     }
 
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
@@ -10437,9 +9870,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutRemediationConfigurationsRequest,
     ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRemediationConfigurations",
@@ -10447,20 +9878,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRemediationConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRemediationConfigurationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRemediationConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRemediationConfigurationsResponse, _>()
     }
 
     /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
@@ -10468,9 +9892,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutRemediationExceptionsRequest,
     ) -> Result<PutRemediationExceptionsResponse, RusotoError<PutRemediationExceptionsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRemediationExceptions",
@@ -10478,20 +9900,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRemediationExceptionsResponse, _>()
     }
 
     /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
@@ -10499,26 +9914,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutResourceConfigRequest,
     ) -> Result<(), RusotoError<PutResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutResourceConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
@@ -10527,9 +9932,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutRetentionConfigurationRequest,
     ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRetentionConfiguration",
@@ -10537,20 +9940,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRetentionConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRetentionConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRetentionConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRetentionConfigurationResponse, _>()
     }
 
     /// <p>Accepts a structured query language (SQL) SELECT command and an aggregator to query configuration state of AWS resources across multiple accounts and regions, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
@@ -10561,9 +9957,7 @@ impl ConfigService for ConfigServiceClient {
         SelectAggregateResourceConfigResponse,
         RusotoError<SelectAggregateResourceConfigError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.SelectAggregateResourceConfig",
@@ -10571,20 +9965,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SelectAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SelectAggregateResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SelectAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SelectAggregateResourceConfigResponse, _>()
     }
 
     /// <p>Accepts a structured query language (SQL) <code>SELECT</code> command, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
@@ -10592,27 +9979,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: SelectResourceConfigRequest,
     ) -> Result<SelectResourceConfigResponse, RusotoError<SelectResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.SelectResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SelectResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SelectResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SelectResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SelectResourceConfigResponse, _>()
     }
 
     /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
@@ -10621,9 +9999,7 @@ impl ConfigService for ConfigServiceClient {
         input: StartConfigRulesEvaluationRequest,
     ) -> Result<StartConfigRulesEvaluationResponse, RusotoError<StartConfigRulesEvaluationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigRulesEvaluation",
@@ -10631,20 +10007,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartConfigRulesEvaluationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartConfigRulesEvaluationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartConfigRulesEvaluationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartConfigRulesEvaluationResponse, _>()
     }
 
     /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
@@ -10652,9 +10021,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StartConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<StartConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigurationRecorder",
@@ -10662,19 +10029,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Runs an on-demand remediation for the specified AWS Config rules against the last known remediation configuration. It runs an execution against the current state of your resources. Remediation execution is asynchronous.</p> <p>You can specify up to 100 resource keys per request. An existing StartRemediationExecution call for the specified resource keys must complete before you can call the API again.</p>
@@ -10683,9 +10042,7 @@ impl ConfigService for ConfigServiceClient {
         input: StartRemediationExecutionRequest,
     ) -> Result<StartRemediationExecutionResponse, RusotoError<StartRemediationExecutionError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartRemediationExecution",
@@ -10693,20 +10050,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartRemediationExecutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartRemediationExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartRemediationExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartRemediationExecutionResponse, _>()
     }
 
     /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
@@ -10714,9 +10064,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StopConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<StopConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StopConfigurationRecorder",
@@ -10724,19 +10072,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
@@ -10744,26 +10084,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes specified tags from a resource.</p>
@@ -10771,25 +10101,15 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

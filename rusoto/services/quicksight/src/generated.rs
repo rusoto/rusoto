@@ -9235,6 +9235,7 @@ impl QuicksightClient {
 #[async_trait]
 impl Quicksight for QuicksightClient {
     /// <p>Cancels an ongoing ingestion of data into SPICE.</p>
+    #[allow(unused_mut)]
     async fn cancel_ingestion(
         &self,
         input: CancelIngestionRequest,
@@ -9255,7 +9256,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelIngestionResponse, _>()?;
 
@@ -9268,6 +9269,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates a dashboard from a template. To first create a template, see the CreateTemplate API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
+    #[allow(unused_mut)]
     async fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
@@ -9290,7 +9292,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDashboardResponse, _>()?;
 
@@ -9303,6 +9305,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates a dataset.</p>
+    #[allow(unused_mut)]
     async fn create_data_set(
         &self,
         input: CreateDataSetRequest,
@@ -9324,7 +9327,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDataSetResponse, _>()?;
 
@@ -9337,6 +9340,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates a data source.</p>
+    #[allow(unused_mut)]
     async fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
@@ -9358,7 +9362,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDataSourceResponse, _>()?;
 
@@ -9371,6 +9375,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates an Amazon QuickSight group.</p> <p>The permissions resource is <code>arn:aws:quicksight:us-east-1:<i>&lt;relevant-aws-account-id&gt;</i>:group/default/<i>&lt;group-name&gt;</i> </code>.</p> <p>The response is a group object.</p>
+    #[allow(unused_mut)]
     async fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -9393,7 +9398,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGroupResponse, _>()?;
 
@@ -9406,6 +9411,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Adds an Amazon QuickSight user to an Amazon QuickSight group. </p>
+    #[allow(unused_mut)]
     async fn create_group_membership(
         &self,
         input: CreateGroupMembershipRequest,
@@ -9421,7 +9427,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGroupMembershipResponse, _>()?;
 
@@ -9434,6 +9440,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates an assignment with one specified IAM policy, identified by its Amazon Resource Name (ARN). This policy will be assigned to specified groups or users of Amazon QuickSight. The users and groups need to be in the same namespace. </p>
+    #[allow(unused_mut)]
     async fn create_iam_policy_assignment(
         &self,
         input: CreateIAMPolicyAssignmentRequest,
@@ -9457,7 +9464,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIAMPolicyAssignmentResponse, _>()?;
 
@@ -9470,6 +9477,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.example.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
+    #[allow(unused_mut)]
     async fn create_ingestion(
         &self,
         input: CreateIngestionRequest,
@@ -9490,7 +9498,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIngestionResponse, _>()?;
 
@@ -9503,6 +9511,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates a template from an existing QuickSight analysis or template. You can use the resulting template to create a dashboard.</p> <p>A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create s dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p>
+    #[allow(unused_mut)]
     async fn create_template(
         &self,
         input: CreateTemplateRequest,
@@ -9525,7 +9534,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTemplateResponse, _>()?;
 
@@ -9538,6 +9547,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates a template alias for a template.</p>
+    #[allow(unused_mut)]
     async fn create_template_alias(
         &self,
         input: CreateTemplateAliasRequest,
@@ -9561,7 +9571,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTemplateAliasResponse, _>()?;
 
@@ -9574,6 +9584,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes a dashboard.</p>
+    #[allow(unused_mut)]
     async fn delete_dashboard(
         &self,
         input: DeleteDashboardRequest,
@@ -9599,7 +9610,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDashboardResponse, _>()?;
 
@@ -9612,6 +9623,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes a dataset.</p>
+    #[allow(unused_mut)]
     async fn delete_data_set(
         &self,
         input: DeleteDataSetRequest,
@@ -9631,7 +9643,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDataSetResponse, _>()?;
 
@@ -9644,6 +9656,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes the data source permanently. This action breaks all the datasets that reference the deleted data source.</p>
+    #[allow(unused_mut)]
     async fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
@@ -9663,7 +9676,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDataSourceResponse, _>()?;
 
@@ -9676,6 +9689,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Removes a user group from Amazon QuickSight. </p>
+    #[allow(unused_mut)]
     async fn delete_group(
         &self,
         input: DeleteGroupRequest,
@@ -9696,7 +9710,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGroupResponse, _>()?;
 
@@ -9709,6 +9723,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Removes a user from a group so that the user is no longer a member of the group.</p>
+    #[allow(unused_mut)]
     async fn delete_group_membership(
         &self,
         input: DeleteGroupMembershipRequest,
@@ -9724,7 +9739,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGroupMembershipResponse, _>()?;
 
@@ -9737,6 +9752,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes an existing IAM policy assignment.</p>
+    #[allow(unused_mut)]
     async fn delete_iam_policy_assignment(
         &self,
         input: DeleteIAMPolicyAssignmentRequest,
@@ -9753,7 +9769,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteIAMPolicyAssignmentResponse, _>()?;
 
@@ -9766,6 +9782,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes a template.</p>
+    #[allow(unused_mut)]
     async fn delete_template(
         &self,
         input: DeleteTemplateRequest,
@@ -9791,7 +9808,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteTemplateResponse, _>()?;
 
@@ -9804,6 +9821,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes the item that the specified template alias points to. If you provide a specific alias, you delete the version of the template that the alias points to.</p>
+    #[allow(unused_mut)]
     async fn delete_template_alias(
         &self,
         input: DeleteTemplateAliasRequest,
@@ -9824,7 +9842,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteTemplateAliasResponse, _>()?;
 
@@ -9837,6 +9855,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes the Amazon QuickSight user that is associated with the identity of the AWS Identity and Access Management (IAM) user or role that's making the call. The IAM user isn't deleted as a result of this call. </p>
+    #[allow(unused_mut)]
     async fn delete_user(
         &self,
         input: DeleteUserRequest,
@@ -9857,7 +9876,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteUserResponse, _>()?;
 
@@ -9870,6 +9889,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Deletes a user identified by its principal ID. </p>
+    #[allow(unused_mut)]
     async fn delete_user_by_principal_id(
         &self,
         input: DeleteUserByPrincipalIdRequest,
@@ -9890,7 +9910,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteUserByPrincipalIdResponse, _>()?;
 
@@ -9903,6 +9923,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Provides a summary for a dashboard.</p>
+    #[allow(unused_mut)]
     async fn describe_dashboard(
         &self,
         input: DescribeDashboardRequest,
@@ -9931,7 +9952,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDashboardResponse, _>()?;
 
@@ -9944,6 +9965,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes read and write permissions for a dashboard.</p>
+    #[allow(unused_mut)]
     async fn describe_dashboard_permissions(
         &self,
         input: DescribeDashboardPermissionsRequest,
@@ -9964,7 +9986,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDashboardPermissionsResponse, _>()?;
 
@@ -9977,6 +9999,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes a dataset. </p>
+    #[allow(unused_mut)]
     async fn describe_data_set(
         &self,
         input: DescribeDataSetRequest,
@@ -9996,7 +10019,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDataSetResponse, _>()?;
 
@@ -10009,6 +10032,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
+    #[allow(unused_mut)]
     async fn describe_data_set_permissions(
         &self,
         input: DescribeDataSetPermissionsRequest,
@@ -10029,7 +10053,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDataSetPermissionsResponse, _>()?;
 
@@ -10042,6 +10066,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes a data source.</p>
+    #[allow(unused_mut)]
     async fn describe_data_source(
         &self,
         input: DescribeDataSourceRequest,
@@ -10061,7 +10086,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDataSourceResponse, _>()?;
 
@@ -10074,6 +10099,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes the resource permissions for a data source.</p>
+    #[allow(unused_mut)]
     async fn describe_data_source_permissions(
         &self,
         input: DescribeDataSourcePermissionsRequest,
@@ -10096,7 +10122,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDataSourcePermissionsResponse, _>()?;
 
@@ -10109,6 +10135,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Returns an Amazon QuickSight group's description and Amazon Resource Name (ARN). </p>
+    #[allow(unused_mut)]
     async fn describe_group(
         &self,
         input: DescribeGroupRequest,
@@ -10129,7 +10156,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeGroupResponse, _>()?;
 
@@ -10142,6 +10169,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes an existing IAM policy assignment, as specified by the assignment name.</p>
+    #[allow(unused_mut)]
     async fn describe_iam_policy_assignment(
         &self,
         input: DescribeIAMPolicyAssignmentRequest,
@@ -10158,7 +10186,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeIAMPolicyAssignmentResponse, _>()?;
 
@@ -10171,6 +10199,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes a SPICE ingestion.</p>
+    #[allow(unused_mut)]
     async fn describe_ingestion(
         &self,
         input: DescribeIngestionRequest,
@@ -10191,7 +10220,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeIngestionResponse, _>()?;
 
@@ -10204,6 +10233,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes a template's metadata.</p>
+    #[allow(unused_mut)]
     async fn describe_template(
         &self,
         input: DescribeTemplateRequest,
@@ -10232,7 +10262,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeTemplateResponse, _>()?;
 
@@ -10245,6 +10275,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes the template alias for a template.</p>
+    #[allow(unused_mut)]
     async fn describe_template_alias(
         &self,
         input: DescribeTemplateAliasRequest,
@@ -10265,7 +10296,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeTemplateAliasResponse, _>()?;
 
@@ -10278,6 +10309,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Describes read and write permissions on a template.</p>
+    #[allow(unused_mut)]
     async fn describe_template_permissions(
         &self,
         input: DescribeTemplatePermissionsRequest,
@@ -10298,7 +10330,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeTemplatePermissionsResponse, _>()?;
 
@@ -10311,6 +10343,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Returns information about a user, given the user name. </p>
+    #[allow(unused_mut)]
     async fn describe_user(
         &self,
         input: DescribeUserRequest,
@@ -10331,7 +10364,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeUserResponse, _>()?;
 
@@ -10344,6 +10377,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Generates a server-side embeddable URL and authorization code. For this process to work properly, first configure the dashboards and user permissions. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user’s browser.</p>
+    #[allow(unused_mut)]
     async fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
@@ -10379,7 +10413,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDashboardEmbedUrlResponse, _>()?;
 
@@ -10392,6 +10426,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all the versions of the dashboards in the QuickSight subscription.</p>
+    #[allow(unused_mut)]
     async fn list_dashboard_versions(
         &self,
         input: ListDashboardVersionsRequest,
@@ -10420,7 +10455,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDashboardVersionsResponse, _>()?;
 
@@ -10433,6 +10468,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists dashboards in an AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_dashboards(
         &self,
         input: ListDashboardsRequest,
@@ -10460,7 +10496,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDashboardsResponse, _>()?;
 
@@ -10473,6 +10509,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all of the datasets belonging to the current AWS account in an AWS Region.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/*</code>.</p>
+    #[allow(unused_mut)]
     async fn list_data_sets(
         &self,
         input: ListDataSetsRequest,
@@ -10500,7 +10537,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataSetsResponse, _>()?;
 
@@ -10513,6 +10550,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists data sources in current AWS Region that belong to this AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
@@ -10540,7 +10578,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataSourcesResponse, _>()?;
 
@@ -10553,6 +10591,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists member users in a group.</p>
+    #[allow(unused_mut)]
     async fn list_group_memberships(
         &self,
         input: ListGroupMembershipsRequest,
@@ -10582,7 +10621,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupMembershipsResponse, _>()?;
 
@@ -10595,6 +10634,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all user groups in Amazon QuickSight. </p>
+    #[allow(unused_mut)]
     async fn list_groups(
         &self,
         input: ListGroupsRequest,
@@ -10623,7 +10663,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupsResponse, _>()?;
 
@@ -10636,6 +10676,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists IAM policy assignments in the current Amazon QuickSight account.</p>
+    #[allow(unused_mut)]
     async fn list_iam_policy_assignments(
         &self,
         input: ListIAMPolicyAssignmentsRequest,
@@ -10667,7 +10708,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIAMPolicyAssignmentsResponse, _>()?;
 
@@ -10680,6 +10721,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all the IAM policy assignments, including the Amazon Resource Names (ARNs) for the IAM policies assigned to the specified user and group or groups that the user belongs to.</p>
+    #[allow(unused_mut)]
     async fn list_iam_policy_assignments_for_user(
         &self,
         input: ListIAMPolicyAssignmentsForUserRequest,
@@ -10707,7 +10749,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIAMPolicyAssignmentsForUserResponse, _>()?;
 
@@ -10722,6 +10764,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists the history of SPICE ingestions for a dataset.</p>
+    #[allow(unused_mut)]
     async fn list_ingestions(
         &self,
         input: ListIngestionsRequest,
@@ -10750,7 +10793,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIngestionsResponse, _>()?;
 
@@ -10763,6 +10806,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists the tags assigned to a resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -10781,7 +10825,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -10794,6 +10838,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all the aliases of a template.</p>
+    #[allow(unused_mut)]
     async fn list_template_aliases(
         &self,
         input: ListTemplateAliasesRequest,
@@ -10822,7 +10867,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTemplateAliasesResponse, _>()?;
 
@@ -10835,6 +10880,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all the versions of the templates in the current Amazon QuickSight account.</p>
+    #[allow(unused_mut)]
     async fn list_template_versions(
         &self,
         input: ListTemplateVersionsRequest,
@@ -10863,7 +10909,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTemplateVersionsResponse, _>()?;
 
@@ -10876,6 +10922,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists all the templates in the current Amazon QuickSight account.</p>
+    #[allow(unused_mut)]
     async fn list_templates(
         &self,
         input: ListTemplatesRequest,
@@ -10903,7 +10950,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTemplatesResponse, _>()?;
 
@@ -10916,6 +10963,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Lists the Amazon QuickSight groups that an Amazon QuickSight user is a member of.</p>
+    #[allow(unused_mut)]
     async fn list_user_groups(
         &self,
         input: ListUserGroupsRequest,
@@ -10945,7 +10993,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUserGroupsResponse, _>()?;
 
@@ -10958,6 +11006,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Returns a list of all of the Amazon QuickSight users belonging to this account. </p>
+    #[allow(unused_mut)]
     async fn list_users(
         &self,
         input: ListUsersRequest,
@@ -10986,7 +11035,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUsersResponse, _>()?;
 
@@ -10999,6 +11048,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Creates an Amazon QuickSight user, whose identity is associated with the AWS Identity and Access Management (IAM) identity or role specified in the request. </p>
+    #[allow(unused_mut)]
     async fn register_user(
         &self,
         input: RegisterUserRequest,
@@ -11021,7 +11071,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterUserResponse, _>()?;
 
@@ -11034,6 +11084,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Searchs for dashboards that belong to a user. </p>
+    #[allow(unused_mut)]
     async fn search_dashboards(
         &self,
         input: SearchDashboardsRequest,
@@ -11055,7 +11106,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchDashboardsResponse, _>()?;
 
@@ -11068,6 +11119,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -11089,7 +11141,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -11102,6 +11154,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Removes a tag or tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -11126,7 +11179,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -11139,6 +11192,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates a dashboard in an AWS account.</p>
+    #[allow(unused_mut)]
     async fn update_dashboard(
         &self,
         input: UpdateDashboardRequest,
@@ -11161,7 +11215,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDashboardResponse, _>()?;
 
@@ -11173,6 +11227,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates read and write permissions on a dashboard.</p>
+    #[allow(unused_mut)]
     async fn update_dashboard_permissions(
         &self,
         input: UpdateDashboardPermissionsRequest,
@@ -11196,7 +11251,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDashboardPermissionsResponse, _>()?;
 
@@ -11209,6 +11264,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates the published version of a dashboard.</p>
+    #[allow(unused_mut)]
     async fn update_dashboard_published_version(
         &self,
         input: UpdateDashboardPublishedVersionRequest,
@@ -11232,7 +11288,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDashboardPublishedVersionResponse, _>()?;
 
@@ -11247,6 +11303,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates a dataset.</p>
+    #[allow(unused_mut)]
     async fn update_data_set(
         &self,
         input: UpdateDataSetRequest,
@@ -11269,7 +11326,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSetResponse, _>()?;
 
@@ -11282,6 +11339,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates the permissions on a dataset.</p> <p>The permissions resource is <code>arn:aws:quicksight:region:aws-account-id:dataset/data-set-id</code>.</p>
+    #[allow(unused_mut)]
     async fn update_data_set_permissions(
         &self,
         input: UpdateDataSetPermissionsRequest,
@@ -11304,7 +11362,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSetPermissionsResponse, _>()?;
 
@@ -11317,6 +11375,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates a data source.</p>
+    #[allow(unused_mut)]
     async fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
@@ -11339,7 +11398,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSourceResponse, _>()?;
 
@@ -11352,6 +11411,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates the permissions to a data source.</p>
+    #[allow(unused_mut)]
     async fn update_data_source_permissions(
         &self,
         input: UpdateDataSourcePermissionsRequest,
@@ -11375,7 +11435,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSourcePermissionsResponse, _>()?;
 
@@ -11388,6 +11448,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Changes a group description. </p>
+    #[allow(unused_mut)]
     async fn update_group(
         &self,
         input: UpdateGroupRequest,
@@ -11411,7 +11472,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupResponse, _>()?;
 
@@ -11424,6 +11485,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates an existing IAM policy assignment. This operation updates only the optional parameter or parameters that are specified in the request.</p>
+    #[allow(unused_mut)]
     async fn update_iam_policy_assignment(
         &self,
         input: UpdateIAMPolicyAssignmentRequest,
@@ -11443,7 +11505,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIAMPolicyAssignmentResponse, _>()?;
 
@@ -11456,6 +11518,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates a template from an existing Amazon QuickSight analysis or another template.</p>
+    #[allow(unused_mut)]
     async fn update_template(
         &self,
         input: UpdateTemplateRequest,
@@ -11478,7 +11541,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateTemplateResponse, _>()?;
 
@@ -11491,6 +11554,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates the template alias of a template.</p>
+    #[allow(unused_mut)]
     async fn update_template_alias(
         &self,
         input: UpdateTemplateAliasRequest,
@@ -11514,7 +11578,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateTemplateAliasResponse, _>()?;
 
@@ -11527,6 +11591,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates the resource permissions for a template.</p>
+    #[allow(unused_mut)]
     async fn update_template_permissions(
         &self,
         input: UpdateTemplatePermissionsRequest,
@@ -11550,7 +11615,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateTemplatePermissionsResponse, _>()?;
 
@@ -11563,6 +11628,7 @@ impl Quicksight for QuicksightClient {
     }
 
     /// <p>Updates an Amazon QuickSight user.</p>
+    #[allow(unused_mut)]
     async fn update_user(
         &self,
         input: UpdateUserRequest,
@@ -11586,7 +11652,7 @@ impl Quicksight for QuicksightClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateUserResponse, _>()?;
 

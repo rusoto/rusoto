@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CodeStarClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "codestar", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1647,27 +1673,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: AssociateTeamMemberRequest,
     ) -> Result<AssociateTeamMemberResult, RusotoError<AssociateTeamMemberError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.AssociateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateTeamMemberError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateTeamMemberError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AssociateTeamMemberResult, _>()
     }
 
     /// <p>Creates a project, including project resources. This action creates a project based on a submitted project request. A set of source code files and a toolchain template file can be included with the project request. If these are not provided, an empty project is created.</p>
@@ -1675,26 +1691,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: CreateProjectRequest,
     ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.CreateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
     }
 
     /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
@@ -1702,26 +1709,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: CreateUserProfileRequest,
     ) -> Result<CreateUserProfileResult, RusotoError<CreateUserProfileError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.CreateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUserProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUserProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateUserProfileResult, _>()
     }
 
     /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
@@ -1729,26 +1727,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DeleteProjectRequest,
     ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.DeleteProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
     }
 
     /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
@@ -1756,26 +1745,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DeleteUserProfileRequest,
     ) -> Result<DeleteUserProfileResult, RusotoError<DeleteUserProfileError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.DeleteUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserProfileResult, _>()
     }
 
     /// <p>Describes a project and its resources.</p>
@@ -1783,26 +1763,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DescribeProjectRequest,
     ) -> Result<DescribeProjectResult, RusotoError<DescribeProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.DescribeProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeProjectResult, _>()
     }
 
     /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
@@ -1810,27 +1781,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DescribeUserProfileRequest,
     ) -> Result<DescribeUserProfileResult, RusotoError<DescribeUserProfileError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.DescribeUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeUserProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeUserProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeUserProfileResult, _>()
     }
 
     /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
@@ -1838,27 +1799,18 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DisassociateTeamMemberRequest,
     ) -> Result<DisassociateTeamMemberResult, RusotoError<DisassociateTeamMemberError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.DisassociateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateTeamMemberError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateTeamMemberError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateTeamMemberResult, _>()
     }
 
     /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
@@ -1866,26 +1818,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.ListProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProjectsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
     }
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
@@ -1893,26 +1836,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResult, RusotoError<ListResourcesError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.ListResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResult, _>()
     }
 
     /// <p>Gets the tags for a project.</p>
@@ -1920,27 +1854,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListTagsForProjectRequest,
     ) -> Result<ListTagsForProjectResult, RusotoError<ListTagsForProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.ListTagsForProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForProjectResult, _>()
     }
 
     /// <p>Lists all team members associated with a project.</p>
@@ -1948,26 +1872,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListTeamMembersRequest,
     ) -> Result<ListTeamMembersResult, RusotoError<ListTeamMembersError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.ListTeamMembers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTeamMembersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTeamMembersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTeamMembersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTeamMembersResult, _>()
     }
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
@@ -1975,26 +1890,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResult, RusotoError<ListUserProfilesError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.ListUserProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListUserProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUserProfilesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUserProfilesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListUserProfilesResult, _>()
     }
 
     /// <p>Adds tags to a project.</p>
@@ -2002,26 +1908,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: TagProjectRequest,
     ) -> Result<TagProjectResult, RusotoError<TagProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.TagProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagProjectResult, _>()
     }
 
     /// <p>Removes tags from a project.</p>
@@ -2029,26 +1926,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UntagProjectRequest,
     ) -> Result<UntagProjectResult, RusotoError<UntagProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.UntagProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagProjectResult, _>()
     }
 
     /// <p>Updates a project in AWS CodeStar.</p>
@@ -2056,26 +1944,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateProjectRequest,
     ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
     }
 
     /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
@@ -2083,26 +1962,17 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateTeamMemberRequest,
     ) -> Result<UpdateTeamMemberResult, RusotoError<UpdateTeamMemberError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTeamMemberResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTeamMemberError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTeamMemberError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTeamMemberResult, _>()
     }
 
     /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
@@ -2110,25 +1980,16 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateUserProfileRequest,
     ) -> Result<UpdateUserProfileResult, RusotoError<UpdateUserProfileError>> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUserProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateUserProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateUserProfileResult, _>()
     }
 }

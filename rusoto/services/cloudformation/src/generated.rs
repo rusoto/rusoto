@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,19 +33,39 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl CloudFormationClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-05-15");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct AccountDeserializer;
 impl AccountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Structure that contains the results of the account gate function which AWS CloudFormation invokes, if present, before proceeding with a stack set operation in an account and Region.</p> <p>For each account and Region, AWS CloudFormation lets you specify a Lamdba function that encapsulates any requirements that must be met before CloudFormation can proceed with a stack set operation in that account and Region. CloudFormation invokes the function each time a stack set operation is requested for that account and Region; if the function returns <code>FAILED</code>, CloudFormation cancels the operation in that account and Region, and sets the stack set operation result status for that account and Region to <code>FAILED</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-account-gating.html">Configuring a target account gate</a>.</p>
@@ -88,11 +108,7 @@ struct AccountGateStatusDeserializer;
 impl AccountGateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -100,11 +116,7 @@ struct AccountGateStatusReasonDeserializer;
 impl AccountGateStatusReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The AccountLimit data type. </p> <p>CloudFormation has the following limits per account:</p> <ul> <li> <p>Number of concurrent resources</p> </li> <li> <p>Number of stacks</p> </li> <li> <p>Number of stack outputs</p> </li> </ul> <p>For more information about these account limits, and other CloudFormation limits, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">AWS CloudFormation Limits</a> in the <i>AWS CloudFormation User Guide</i>.</p>
@@ -192,11 +204,7 @@ struct AllowedValueDeserializer;
 impl AllowedValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -222,11 +230,7 @@ struct ArnDeserializer;
 impl ArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>[<code>Service-managed</code> permissions] Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).</p>
@@ -296,11 +300,7 @@ struct AutoDeploymentNullableDeserializer;
 impl AutoDeploymentNullableDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -308,11 +308,7 @@ struct BoxedIntegerDeserializer;
 impl BoxedIntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for the <a>CancelUpdateStack</a> action.</p>
@@ -376,11 +372,7 @@ struct CapabilitiesReasonDeserializer;
 impl CapabilitiesReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -388,11 +380,7 @@ struct CapabilityDeserializer;
 impl CapabilityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -400,11 +388,7 @@ struct CausingEntityDeserializer;
 impl CausingEntityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The <code>Change</code> structure describes the changes AWS CloudFormation will perform if you execute the change set.</p>
@@ -444,11 +428,7 @@ struct ChangeActionDeserializer;
 impl ChangeActionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -456,11 +436,7 @@ struct ChangeSetIdDeserializer;
 impl ChangeSetIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -468,11 +444,7 @@ struct ChangeSetNameDeserializer;
 impl ChangeSetNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -480,11 +452,7 @@ struct ChangeSetStatusDeserializer;
 impl ChangeSetStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -492,11 +460,7 @@ struct ChangeSetStatusReasonDeserializer;
 impl ChangeSetStatusReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -603,11 +567,7 @@ struct ChangeSourceDeserializer;
 impl ChangeSourceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -615,11 +575,7 @@ struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -645,11 +601,7 @@ struct ClientRequestTokenDeserializer;
 impl ClientRequestTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The input for the <a>ContinueUpdateRollback</a> action.</p>
@@ -705,11 +657,11 @@ impl ContinueUpdateRollbackOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinueUpdateRollbackOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ContinueUpdateRollbackOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1246,11 +1198,7 @@ struct CreationTimeDeserializer;
 impl CreationTimeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The input for the <a>DeleteChangeSet</a> action.</p>
@@ -1295,11 +1243,11 @@ impl DeleteChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteChangeSetOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteChangeSetOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1473,11 +1421,11 @@ impl DeleteStackSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteStackSetOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteStackSetOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1487,11 +1435,7 @@ struct DeletionTimeDeserializer;
 impl DeletionTimeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>[<code>Service-managed</code> permissions] The AWS Organizations accounts to which StackSets deploys. StackSets does not deploy stack instances to the organization master account, even if the master account is in your organization or in an OU in your organization.</p> <p>For update operations, you can specify either <code>Accounts</code> or <code>OrganizationalUnitIds</code>. For create and delete operations, specify <code>OrganizationalUnitIds</code>.</p>
@@ -1566,11 +1510,7 @@ struct DeprecatedStatusDeserializer;
 impl DeprecatedStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1622,11 +1562,11 @@ impl DeregisterTypeOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeregisterTypeOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeregisterTypeOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2720,11 +2660,7 @@ struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2918,11 +2854,7 @@ struct DifferenceTypeDeserializer;
 impl DifferenceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2930,11 +2862,7 @@ struct DisableRollbackDeserializer;
 impl DisableRollbackDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2942,11 +2870,7 @@ struct DriftedStackInstancesCountDeserializer;
 impl DriftedStackInstancesCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2954,11 +2878,7 @@ struct EnableTerminationProtectionDeserializer;
 impl EnableTerminationProtectionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for an <a>EstimateTemplateCost</a> action.</p>
@@ -3034,11 +2954,7 @@ struct EvaluationTypeDeserializer;
 impl EvaluationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3046,11 +2962,7 @@ struct EventIdDeserializer;
 impl EventIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The input for the <a>ExecuteChangeSet</a> action.</p>
@@ -3100,11 +3012,11 @@ impl ExecuteChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExecuteChangeSetOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ExecuteChangeSetOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3114,11 +3026,7 @@ struct ExecutionRoleNameDeserializer;
 impl ExecutionRoleNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3126,11 +3034,7 @@ struct ExecutionStatusDeserializer;
 impl ExecutionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The <code>Export</code> structure describes the exported output values for a stack.</p>
@@ -3173,11 +3077,7 @@ struct ExportNameDeserializer;
 impl ExportNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3185,11 +3085,7 @@ struct ExportValueDeserializer;
 impl ExportValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3215,11 +3111,7 @@ struct FailedStackInstancesCountDeserializer;
 impl FailedStackInstancesCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3227,11 +3119,7 @@ struct FailureToleranceCountDeserializer;
 impl FailureToleranceCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3239,11 +3127,7 @@ struct FailureTolerancePercentageDeserializer;
 impl FailureTolerancePercentageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for the <a>GetStackPolicy</a> action.</p>
@@ -3517,11 +3401,7 @@ struct InProgressStackInstancesCountDeserializer;
 impl InProgressStackInstancesCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3529,11 +3409,7 @@ struct InSyncStackInstancesCountDeserializer;
 impl InSyncStackInstancesCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3541,11 +3417,7 @@ struct IsDefaultVersionDeserializer;
 impl IsDefaultVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3553,11 +3425,7 @@ struct KeyDeserializer;
 impl KeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3565,11 +3433,7 @@ struct LastUpdatedTimeDeserializer;
 impl LastUpdatedTimeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3577,11 +3441,7 @@ struct LimitNameDeserializer;
 impl LimitNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3589,11 +3449,7 @@ struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for the <a>ListChangeSets</a> action.</p>
@@ -4460,11 +4316,7 @@ struct LogGroupNameDeserializer;
 impl LogGroupNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains logging configuration information for a type.</p>
@@ -4524,11 +4376,7 @@ struct LogicalResourceIdDeserializer;
 impl LogicalResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4566,11 +4414,7 @@ struct MaxConcurrentCountDeserializer;
 impl MaxConcurrentCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4578,11 +4422,7 @@ struct MaxConcurrentPercentageDeserializer;
 impl MaxConcurrentPercentageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4590,11 +4430,7 @@ struct MetadataDeserializer;
 impl MetadataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4602,11 +4438,7 @@ struct MonitoringTimeInMinutesDeserializer;
 impl MonitoringTimeInMinutesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4614,11 +4446,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4626,11 +4454,7 @@ struct NoEchoDeserializer;
 impl NoEchoDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4638,11 +4462,7 @@ struct NotificationARNDeserializer;
 impl NotificationARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4680,11 +4500,7 @@ struct OptionalSecureUrlDeserializer;
 impl OptionalSecureUrlDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4692,11 +4508,7 @@ struct OrganizationalUnitIdDeserializer;
 impl OrganizationalUnitIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4778,11 +4590,7 @@ struct OutputKeyDeserializer;
 impl OutputKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4790,11 +4598,7 @@ struct OutputValueDeserializer;
 impl OutputValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5015,11 +4819,7 @@ struct ParameterKeyDeserializer;
 impl ParameterKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5027,11 +4827,7 @@ struct ParameterTypeDeserializer;
 impl ParameterTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5039,11 +4835,7 @@ struct ParameterValueDeserializer;
 impl ParameterValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5081,11 +4873,7 @@ struct PermissionModelsDeserializer;
 impl PermissionModelsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5093,11 +4881,7 @@ struct PhysicalResourceIdDeserializer;
 impl PhysicalResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5163,11 +4947,7 @@ struct PropertiesDeserializer;
 impl PropertiesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Information about a resource property whose actual value differs from its expected value, as defined in the stack template and any values specified as template parameters. These will be present only for resources whose <code>StackResourceDriftStatus</code> is <code>MODIFIED</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p>
@@ -5241,11 +5021,7 @@ struct PropertyNameDeserializer;
 impl PropertyNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5253,11 +5029,7 @@ struct PropertyPathDeserializer;
 impl PropertyPathDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5265,11 +5037,7 @@ struct PropertyValueDeserializer;
 impl PropertyValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5277,11 +5045,7 @@ struct ProvisioningTypeDeserializer;
 impl ProvisioningTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5289,11 +5053,7 @@ struct ReasonDeserializer;
 impl ReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5362,11 +5122,11 @@ impl RecordHandlerProgressOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecordHandlerProgressOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = RecordHandlerProgressOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5376,11 +5136,7 @@ struct RegionDeserializer;
 impl RegionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5497,11 +5253,7 @@ struct RegistrationStatusDeserializer;
 impl RegistrationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5509,11 +5261,7 @@ struct RegistrationTokenDeserializer;
 impl RegistrationTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5539,11 +5287,7 @@ struct RegistryTypeDeserializer;
 impl RegistryTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5551,11 +5295,7 @@ struct ReplacementDeserializer;
 impl ReplacementDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5563,11 +5303,7 @@ struct RequiresRecreationDeserializer;
 impl RequiresRecreationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5575,11 +5311,7 @@ struct ResourceAttributeDeserializer;
 impl ResourceAttributeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The <code>ResourceChange</code> structure describes the resource and the action that AWS CloudFormation will perform on it if you execute this change set.</p>
@@ -5748,11 +5480,7 @@ struct ResourceIdentifierPropertyKeyDeserializer;
 impl ResourceIdentifierPropertyKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5854,11 +5582,7 @@ struct ResourcePropertiesDeserializer;
 impl ResourcePropertiesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5866,11 +5590,7 @@ struct ResourceStatusDeserializer;
 impl ResourceStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5878,11 +5598,7 @@ struct ResourceStatusReasonDeserializer;
 impl ResourceStatusReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The field that AWS CloudFormation will change, such as the name of a resource's property, and whether the resource will be recreated.</p>
@@ -5972,11 +5688,7 @@ struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6047,11 +5759,7 @@ struct RetainStacksNullableDeserializer;
 impl RetainStacksNullableDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6059,11 +5767,7 @@ struct RetainStacksOnAccountRemovalNullableDeserializer;
 impl RetainStacksOnAccountRemovalNullableDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6071,11 +5775,7 @@ struct RoleARNDeserializer;
 impl RoleARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6083,11 +5783,7 @@ struct RoleArnDeserializer;
 impl RoleArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Structure containing the rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p> <p>Rollback triggers enable you to have AWS CloudFormation monitor the state of your application during stack creation and updating, and to roll back that operation if the application breaches the threshold of any of the alarms you've specified. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html">Monitor and Roll Back Stack Operations</a>.</p>
@@ -6331,11 +6027,11 @@ impl SetTypeDefaultVersionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetTypeDefaultVersionOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetTypeDefaultVersionOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6546,11 +6242,7 @@ struct StackDriftDetectionIdDeserializer;
 impl StackDriftDetectionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6558,11 +6250,7 @@ struct StackDriftDetectionStatusDeserializer;
 impl StackDriftDetectionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6570,11 +6258,7 @@ struct StackDriftDetectionStatusReasonDeserializer;
 impl StackDriftDetectionStatusReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about whether the stack's actual configuration differs, or has <i>drifted</i>, from its expected configuration, as defined in the stack template and any values specified as template parameters. A stack is considered to have drifted if one or more of its resources have drifted.</p>
@@ -6658,11 +6342,7 @@ struct StackDriftStatusDeserializer;
 impl StackDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The StackEvent data type.</p>
@@ -6787,11 +6467,7 @@ struct StackIdDeserializer;
 impl StackIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>An AWS CloudFormation stack, in a specific account and Region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given Region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status.</p>
@@ -6887,11 +6563,7 @@ struct StackInstanceStatusDeserializer;
 impl StackInstanceStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7000,11 +6672,7 @@ struct StackNameDeserializer;
 impl StackNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7012,11 +6680,7 @@ struct StackPolicyBodyDeserializer;
 impl StackPolicyBodyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The StackResource data type.</p>
@@ -7384,11 +7048,7 @@ struct StackResourceDriftStatusDeserializer;
 impl StackResourceDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7672,11 +7332,7 @@ struct StackSetARNDeserializer;
 impl StackSetARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Detailed information about the drift status of the stack set.</p> <p>For stack sets, contains information about the last <i>completed</i> drift operation performed on the stack set. Information about drift operations in-progress is not included. </p> <p>For stack set operations, includes information about drift operations currently being performed on the stack set.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html">Detecting Unmanaged Changes in Stack Sets</a> in the <i>AWS CloudFormation User Guide</i>.</p>
@@ -7780,11 +7436,7 @@ struct StackSetDriftDetectionStatusDeserializer;
 impl StackSetDriftDetectionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7792,11 +7444,7 @@ struct StackSetDriftStatusDeserializer;
 impl StackSetDriftStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7804,11 +7452,7 @@ struct StackSetIdDeserializer;
 impl StackSetIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7816,11 +7460,7 @@ struct StackSetNameDeserializer;
 impl StackSetNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The structure that contains information about a stack set operation. </p>
@@ -7942,11 +7582,7 @@ struct StackSetOperationActionDeserializer;
 impl StackSetOperationActionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The user-specified preferences for how AWS CloudFormation performs a stack set operation. </p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a>.</p>
@@ -8065,11 +7701,7 @@ struct StackSetOperationResultStatusDeserializer;
 impl StackSetOperationResultStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8163,11 +7795,7 @@ struct StackSetOperationStatusDeserializer;
 impl StackSetOperationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8257,11 +7885,7 @@ struct StackSetStatusDeserializer;
 impl StackSetStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8366,11 +7990,7 @@ struct StackStatusDeserializer;
 impl StackStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8390,11 +8010,7 @@ struct StackStatusReasonDeserializer;
 impl StackStatusReasonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8583,11 +8199,11 @@ impl StopStackSetOperationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopStackSetOperationOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = StopStackSetOperationOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8642,11 +8258,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8654,11 +8266,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8696,11 +8304,7 @@ struct TemplateBodyDeserializer;
 impl TemplateBodyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8708,11 +8312,7 @@ struct TemplateDescriptionDeserializer;
 impl TemplateDescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The TemplateParameter data type.</p>
@@ -8787,11 +8387,7 @@ struct TemplateStageDeserializer;
 impl TemplateStageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8799,11 +8395,7 @@ struct TimeoutMinutesDeserializer;
 impl TimeoutMinutesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -8811,11 +8403,7 @@ struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8823,11 +8411,7 @@ struct TotalStackInstancesCountDeserializer;
 impl TotalStackInstancesCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -8835,11 +8419,7 @@ struct TransformNameDeserializer;
 impl TransformNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8865,11 +8445,7 @@ struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8877,11 +8453,7 @@ struct TypeArnDeserializer;
 impl TypeArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8889,11 +8461,7 @@ struct TypeNameDeserializer;
 impl TypeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8901,11 +8469,7 @@ struct TypeSchemaDeserializer;
 impl TypeSchemaDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8988,11 +8552,7 @@ struct TypeVersionIdDeserializer;
 impl TypeVersionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9557,11 +9117,7 @@ struct UrlDeserializer;
 impl UrlDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9569,11 +9125,7 @@ struct UsePreviousValueDeserializer;
 impl UsePreviousValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for <a>ValidateTemplate</a> action.</p>
@@ -9666,11 +9218,7 @@ struct ValueDeserializer;
 impl ValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9678,11 +9226,7 @@ struct VersionDeserializer;
 impl VersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9690,11 +9234,7 @@ struct VisibilityDeserializer;
 impl VisibilityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by CancelUpdateStack
@@ -9728,7 +9268,7 @@ impl CancelUpdateStackError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9772,7 +9312,7 @@ impl ContinueUpdateRollbackError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9830,7 +9370,7 @@ impl CreateChangeSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9897,7 +9437,7 @@ impl CreateStackError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9981,7 +9521,7 @@ impl CreateStackInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10046,7 +9586,7 @@ impl CreateStackSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10092,7 +9632,7 @@ impl DeleteChangeSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10136,7 +9676,7 @@ impl DeleteStackError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10210,7 +9750,7 @@ impl DeleteStackInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10267,7 +9807,7 @@ impl DeleteStackSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10319,7 +9859,7 @@ impl DeregisterTypeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10356,7 +9896,7 @@ impl DescribeAccountLimitsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10398,7 +9938,7 @@ impl DescribeChangeSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10436,7 +9976,7 @@ impl DescribeStackDriftDetectionStatusError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10470,7 +10010,7 @@ impl DescribeStackEventsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10519,7 +10059,7 @@ impl DescribeStackInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10556,7 +10096,7 @@ impl DescribeStackResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10592,7 +10132,7 @@ impl DescribeStackResourceDriftsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10626,7 +10166,7 @@ impl DescribeStackResourcesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10668,7 +10208,7 @@ impl DescribeStackSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10719,7 +10259,7 @@ impl DescribeStackSetOperationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10756,7 +10296,7 @@ impl DescribeStacksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10805,7 +10345,7 @@ impl DescribeTypeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10850,7 +10390,7 @@ impl DescribeTypeRegistrationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10886,7 +10426,7 @@ impl DetectStackDriftError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10920,7 +10460,7 @@ impl DetectStackResourceDriftError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10976,7 +10516,7 @@ impl DetectStackSetDriftError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11014,7 +10554,7 @@ impl EstimateTemplateCostError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11077,7 +10617,7 @@ impl ExecuteChangeSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11116,7 +10656,7 @@ impl GetStackPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11158,7 +10698,7 @@ impl GetTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11202,7 +10742,7 @@ impl GetTemplateSummaryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11238,7 +10778,7 @@ impl ListChangeSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11272,7 +10812,7 @@ impl ListExportsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11306,7 +10846,7 @@ impl ListImportsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11348,7 +10888,7 @@ impl ListStackInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11384,7 +10924,7 @@ impl ListStackResourcesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11439,7 +10979,7 @@ impl ListStackSetOperationResultsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11488,7 +11028,7 @@ impl ListStackSetOperationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11524,7 +11064,7 @@ impl ListStackSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11558,7 +11098,7 @@ impl ListStacksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11600,7 +11140,7 @@ impl ListTypeRegistrationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11644,7 +11184,7 @@ impl ListTypeVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11688,7 +11228,7 @@ impl ListTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11743,7 +11283,7 @@ impl RecordHandlerProgressError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11790,7 +11330,7 @@ impl RegisterTypeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11826,7 +11366,7 @@ impl SetStackPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11875,7 +11415,7 @@ impl SetTypeDefaultVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11912,7 +11452,7 @@ impl SignalResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11968,7 +11508,7 @@ impl StopStackSetOperationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12021,7 +11561,7 @@ impl UpdateStackError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12103,7 +11643,7 @@ impl UpdateStackInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12189,7 +11729,7 @@ impl UpdateStackSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12232,7 +11772,7 @@ impl UpdateTerminationProtectionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12266,7 +11806,7 @@ impl ValidateTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12659,23 +12199,15 @@ impl CloudFormation for CloudFormationClient {
         input: CancelUpdateStackInput,
     ) -> Result<(), RusotoError<CancelUpdateStackError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CancelUpdateStack");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("CancelUpdateStack");
+        let mut params = params;
         CancelUpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CancelUpdateStackError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CancelUpdateStackError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12687,27 +12219,19 @@ impl CloudFormation for CloudFormationClient {
         input: ContinueUpdateRollbackInput,
     ) -> Result<ContinueUpdateRollbackOutput, RusotoError<ContinueUpdateRollbackError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ContinueUpdateRollback");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ContinueUpdateRollback");
+        let mut params = params;
         ContinueUpdateRollbackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ContinueUpdateRollbackError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ContinueUpdateRollbackError::from_response)
+            .await?;
 
-        let result;
-        result = ContinueUpdateRollbackOutput::default();
-        // parse non-payload
+        let result = ContinueUpdateRollbackOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12717,45 +12241,28 @@ impl CloudFormation for CloudFormationClient {
         input: CreateChangeSetInput,
     ) -> Result<CreateChangeSetOutput, RusotoError<CreateChangeSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateChangeSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("CreateChangeSet");
+        let mut params = params;
         CreateChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateChangeSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateChangeSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateChangeSetOutputDeserializer::deserialize(
-                "CreateChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateChangeSetOutputDeserializer::deserialize("CreateChangeSetResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12765,42 +12272,27 @@ impl CloudFormation for CloudFormationClient {
         input: CreateStackInput,
     ) -> Result<CreateStackOutput, RusotoError<CreateStackError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateStack");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("CreateStack");
+        let mut params = params;
         CreateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateStackError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateStackOutputDeserializer::deserialize("CreateStackResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateStackOutputDeserializer::deserialize("CreateStackResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12810,45 +12302,30 @@ impl CloudFormation for CloudFormationClient {
         input: CreateStackInstancesInput,
     ) -> Result<CreateStackInstancesOutput, RusotoError<CreateStackInstancesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateStackInstances");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("CreateStackInstances");
+        let mut params = params;
         CreateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateStackInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateStackInstancesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateStackInstancesOutputDeserializer::deserialize(
                 "CreateStackInstancesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12858,43 +12335,28 @@ impl CloudFormation for CloudFormationClient {
         input: CreateStackSetInput,
     ) -> Result<CreateStackSetOutput, RusotoError<CreateStackSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateStackSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("CreateStackSet");
+        let mut params = params;
         CreateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStackSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateStackSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                CreateStackSetOutputDeserializer::deserialize("CreateStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateStackSetOutputDeserializer::deserialize("CreateStackSetResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12904,27 +12366,19 @@ impl CloudFormation for CloudFormationClient {
         input: DeleteChangeSetInput,
     ) -> Result<DeleteChangeSetOutput, RusotoError<DeleteChangeSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteChangeSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DeleteChangeSet");
+        let mut params = params;
         DeleteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteChangeSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteChangeSetError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteChangeSetOutput::default();
-        // parse non-payload
+        let result = DeleteChangeSetOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12934,23 +12388,15 @@ impl CloudFormation for CloudFormationClient {
         input: DeleteStackInput,
     ) -> Result<(), RusotoError<DeleteStackError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteStack");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DeleteStack");
+        let mut params = params;
         DeleteStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteStackError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12962,45 +12408,30 @@ impl CloudFormation for CloudFormationClient {
         input: DeleteStackInstancesInput,
     ) -> Result<DeleteStackInstancesOutput, RusotoError<DeleteStackInstancesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteStackInstances");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DeleteStackInstances");
+        let mut params = params;
         DeleteStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteStackInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteStackInstancesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteStackInstancesOutputDeserializer::deserialize(
                 "DeleteStackInstancesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13010,27 +12441,19 @@ impl CloudFormation for CloudFormationClient {
         input: DeleteStackSetInput,
     ) -> Result<DeleteStackSetOutput, RusotoError<DeleteStackSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteStackSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DeleteStackSet");
+        let mut params = params;
         DeleteStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStackSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteStackSetError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteStackSetOutput::default();
-        // parse non-payload
+        let result = DeleteStackSetOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13040,27 +12463,19 @@ impl CloudFormation for CloudFormationClient {
         input: DeregisterTypeInput,
     ) -> Result<DeregisterTypeOutput, RusotoError<DeregisterTypeError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeregisterType");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DeregisterType");
+        let mut params = params;
         DeregisterTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeregisterTypeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterTypeError::from_response)
+            .await?;
 
-        let result;
-        result = DeregisterTypeOutput::default();
-        // parse non-payload
+        let result = DeregisterTypeOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13070,45 +12485,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAccountLimits");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeAccountLimits");
+        let mut params = params;
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountLimitsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountLimitsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAccountLimitsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccountLimitsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAccountLimitsOutputDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13118,45 +12518,28 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeChangeSetInput,
     ) -> Result<DescribeChangeSetOutput, RusotoError<DescribeChangeSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeChangeSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeChangeSet");
+        let mut params = params;
         DescribeChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeChangeSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeChangeSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeChangeSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeChangeSetOutputDeserializer::deserialize(
-                "DescribeChangeSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DescribeChangeSetOutputDeserializer::deserialize("DescribeChangeSetResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13169,47 +12552,33 @@ impl CloudFormation for CloudFormationClient {
         RusotoError<DescribeStackDriftDetectionStatusError>,
     > {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackDriftDetectionStatus");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackDriftDetectionStatus");
+        let mut params = params;
         DescribeStackDriftDetectionStatusInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackDriftDetectionStatusError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeStackDriftDetectionStatusError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackDriftDetectionStatusOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackDriftDetectionStatusOutputDeserializer::deserialize(
                 "DescribeStackDriftDetectionStatusResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13219,45 +12588,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackEventsInput,
     ) -> Result<DescribeStackEventsOutput, RusotoError<DescribeStackEventsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackEvents");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackEvents");
+        let mut params = params;
         DescribeStackEventsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackEventsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackEventsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackEventsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackEventsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackEventsOutputDeserializer::deserialize(
                 "DescribeStackEventsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13267,45 +12621,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackInstanceInput,
     ) -> Result<DescribeStackInstanceOutput, RusotoError<DescribeStackInstanceError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackInstance");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackInstance");
+        let mut params = params;
         DescribeStackInstanceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackInstanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackInstanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackInstanceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackInstanceOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackInstanceOutputDeserializer::deserialize(
                 "DescribeStackInstanceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13315,45 +12654,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackResourceInput,
     ) -> Result<DescribeStackResourceOutput, RusotoError<DescribeStackResourceError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackResource");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackResource");
+        let mut params = params;
         DescribeStackResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackResourceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourceOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourceOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackResourceOutputDeserializer::deserialize(
                 "DescribeStackResourceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13364,45 +12688,30 @@ impl CloudFormation for CloudFormationClient {
     ) -> Result<DescribeStackResourceDriftsOutput, RusotoError<DescribeStackResourceDriftsError>>
     {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackResourceDrifts");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackResourceDrifts");
+        let mut params = params;
         DescribeStackResourceDriftsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourceDriftsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackResourceDriftsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourceDriftsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackResourceDriftsOutputDeserializer::deserialize(
                 "DescribeStackResourceDriftsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13412,45 +12721,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackResourcesInput,
     ) -> Result<DescribeStackResourcesOutput, RusotoError<DescribeStackResourcesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackResources");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackResources");
+        let mut params = params;
         DescribeStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackResourcesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackResourcesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackResourcesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackResourcesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackResourcesOutputDeserializer::deserialize(
                 "DescribeStackResourcesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13460,45 +12754,28 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackSetInput,
     ) -> Result<DescribeStackSetOutput, RusotoError<DescribeStackSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackSet");
+        let mut params = params;
         DescribeStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackSetOutputDeserializer::deserialize(
-                "DescribeStackSetResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DescribeStackSetOutputDeserializer::deserialize("DescribeStackSetResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13508,45 +12785,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStackSetOperationInput,
     ) -> Result<DescribeStackSetOperationOutput, RusotoError<DescribeStackSetOperationError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStackSetOperation");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStackSetOperation");
+        let mut params = params;
         DescribeStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStackSetOperationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStackSetOperationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStackSetOperationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeStackSetOperationOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeStackSetOperationOutputDeserializer::deserialize(
                 "DescribeStackSetOperationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13556,43 +12818,28 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeStacksInput,
     ) -> Result<DescribeStacksOutput, RusotoError<DescribeStacksError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStacks");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeStacks");
+        let mut params = params;
         DescribeStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStacksError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStacksError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeStacksOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DescribeStacksOutputDeserializer::deserialize("DescribeStacksResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13602,42 +12849,27 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeTypeInput,
     ) -> Result<DescribeTypeOutput, RusotoError<DescribeTypeError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeType");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeType");
+        let mut params = params;
         DescribeTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTypeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTypeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeTypeOutputDeserializer::deserialize("DescribeTypeResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13647,45 +12879,30 @@ impl CloudFormation for CloudFormationClient {
         input: DescribeTypeRegistrationInput,
     ) -> Result<DescribeTypeRegistrationOutput, RusotoError<DescribeTypeRegistrationError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTypeRegistration");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DescribeTypeRegistration");
+        let mut params = params;
         DescribeTypeRegistrationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTypeRegistrationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTypeRegistrationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeTypeRegistrationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTypeRegistrationOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeTypeRegistrationOutputDeserializer::deserialize(
                 "DescribeTypeRegistrationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13695,45 +12912,28 @@ impl CloudFormation for CloudFormationClient {
         input: DetectStackDriftInput,
     ) -> Result<DetectStackDriftOutput, RusotoError<DetectStackDriftError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetectStackDrift");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DetectStackDrift");
+        let mut params = params;
         DetectStackDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackDriftError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectStackDriftError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DetectStackDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackDriftOutputDeserializer::deserialize(
-                "DetectStackDriftResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DetectStackDriftOutputDeserializer::deserialize("DetectStackDriftResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13743,45 +12943,30 @@ impl CloudFormation for CloudFormationClient {
         input: DetectStackResourceDriftInput,
     ) -> Result<DetectStackResourceDriftOutput, RusotoError<DetectStackResourceDriftError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetectStackResourceDrift");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DetectStackResourceDrift");
+        let mut params = params;
         DetectStackResourceDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackResourceDriftError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectStackResourceDriftError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DetectStackResourceDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackResourceDriftOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DetectStackResourceDriftOutputDeserializer::deserialize(
                 "DetectStackResourceDriftResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13791,45 +12976,30 @@ impl CloudFormation for CloudFormationClient {
         input: DetectStackSetDriftInput,
     ) -> Result<DetectStackSetDriftOutput, RusotoError<DetectStackSetDriftError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetectStackSetDrift");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("DetectStackSetDrift");
+        let mut params = params;
         DetectStackSetDriftInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetectStackSetDriftError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectStackSetDriftError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DetectStackSetDriftOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetectStackSetDriftOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DetectStackSetDriftOutputDeserializer::deserialize(
                 "DetectStackSetDriftResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13839,45 +13009,30 @@ impl CloudFormation for CloudFormationClient {
         input: EstimateTemplateCostInput,
     ) -> Result<EstimateTemplateCostOutput, RusotoError<EstimateTemplateCostError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EstimateTemplateCost");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("EstimateTemplateCost");
+        let mut params = params;
         EstimateTemplateCostInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EstimateTemplateCostError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EstimateTemplateCostError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EstimateTemplateCostOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EstimateTemplateCostOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EstimateTemplateCostOutputDeserializer::deserialize(
                 "EstimateTemplateCostResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13887,27 +13042,19 @@ impl CloudFormation for CloudFormationClient {
         input: ExecuteChangeSetInput,
     ) -> Result<ExecuteChangeSetOutput, RusotoError<ExecuteChangeSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ExecuteChangeSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ExecuteChangeSet");
+        let mut params = params;
         ExecuteChangeSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ExecuteChangeSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ExecuteChangeSetError::from_response)
+            .await?;
 
-        let result;
-        result = ExecuteChangeSetOutput::default();
-        // parse non-payload
+        let result = ExecuteChangeSetOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13917,43 +13064,28 @@ impl CloudFormation for CloudFormationClient {
         input: GetStackPolicyInput,
     ) -> Result<GetStackPolicyOutput, RusotoError<GetStackPolicyError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetStackPolicy");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("GetStackPolicy");
+        let mut params = params;
         GetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetStackPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetStackPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetStackPolicyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetStackPolicyOutputDeserializer::deserialize("GetStackPolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13963,42 +13095,27 @@ impl CloudFormation for CloudFormationClient {
         input: GetTemplateInput,
     ) -> Result<GetTemplateOutput, RusotoError<GetTemplateError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetTemplate");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("GetTemplate");
+        let mut params = params;
         GetTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTemplateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTemplateOutputDeserializer::deserialize("GetTemplateResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetTemplateOutputDeserializer::deserialize("GetTemplateResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14008,45 +13125,30 @@ impl CloudFormation for CloudFormationClient {
         input: GetTemplateSummaryInput,
     ) -> Result<GetTemplateSummaryOutput, RusotoError<GetTemplateSummaryError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetTemplateSummary");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("GetTemplateSummary");
+        let mut params = params;
         GetTemplateSummaryInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTemplateSummaryError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTemplateSummaryError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTemplateSummaryOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTemplateSummaryOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetTemplateSummaryOutputDeserializer::deserialize(
                 "GetTemplateSummaryResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14056,43 +13158,28 @@ impl CloudFormation for CloudFormationClient {
         input: ListChangeSetsInput,
     ) -> Result<ListChangeSetsOutput, RusotoError<ListChangeSetsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListChangeSets");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListChangeSets");
+        let mut params = params;
         ListChangeSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListChangeSetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListChangeSetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListChangeSetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListChangeSetsOutputDeserializer::deserialize("ListChangeSetsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14102,42 +13189,27 @@ impl CloudFormation for CloudFormationClient {
         input: ListExportsInput,
     ) -> Result<ListExportsOutput, RusotoError<ListExportsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListExports");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListExports");
+        let mut params = params;
         ListExportsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListExportsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListExportsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListExportsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListExportsOutputDeserializer::deserialize("ListExportsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListExportsOutputDeserializer::deserialize("ListExportsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14147,42 +13219,27 @@ impl CloudFormation for CloudFormationClient {
         input: ListImportsInput,
     ) -> Result<ListImportsOutput, RusotoError<ListImportsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListImports");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListImports");
+        let mut params = params;
         ListImportsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListImportsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListImportsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListImportsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListImportsOutputDeserializer::deserialize("ListImportsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListImportsOutputDeserializer::deserialize("ListImportsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14192,45 +13249,30 @@ impl CloudFormation for CloudFormationClient {
         input: ListStackInstancesInput,
     ) -> Result<ListStackInstancesOutput, RusotoError<ListStackInstancesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStackInstances");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStackInstances");
+        let mut params = params;
         ListStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStackInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackInstancesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListStackInstancesOutputDeserializer::deserialize(
                 "ListStackInstancesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14240,45 +13282,30 @@ impl CloudFormation for CloudFormationClient {
         input: ListStackResourcesInput,
     ) -> Result<ListStackResourcesOutput, RusotoError<ListStackResourcesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStackResources");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStackResources");
+        let mut params = params;
         ListStackResourcesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackResourcesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStackResourcesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStackResourcesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackResourcesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListStackResourcesOutputDeserializer::deserialize(
                 "ListStackResourcesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14289,45 +13316,30 @@ impl CloudFormation for CloudFormationClient {
     ) -> Result<ListStackSetOperationResultsOutput, RusotoError<ListStackSetOperationResultsError>>
     {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStackSetOperationResults");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStackSetOperationResults");
+        let mut params = params;
         ListStackSetOperationResultsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetOperationResultsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStackSetOperationResultsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStackSetOperationResultsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackSetOperationResultsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListStackSetOperationResultsOutputDeserializer::deserialize(
                 "ListStackSetOperationResultsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14337,45 +13349,30 @@ impl CloudFormation for CloudFormationClient {
         input: ListStackSetOperationsInput,
     ) -> Result<ListStackSetOperationsOutput, RusotoError<ListStackSetOperationsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStackSetOperations");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStackSetOperations");
+        let mut params = params;
         ListStackSetOperationsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetOperationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStackSetOperationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStackSetOperationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStackSetOperationsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListStackSetOperationsOutputDeserializer::deserialize(
                 "ListStackSetOperationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14385,43 +13382,28 @@ impl CloudFormation for CloudFormationClient {
         input: ListStackSetsInput,
     ) -> Result<ListStackSetsOutput, RusotoError<ListStackSetsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStackSets");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStackSets");
+        let mut params = params;
         ListStackSetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStackSetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStackSetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStackSetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListStackSetsOutputDeserializer::deserialize("ListStackSetsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListStackSetsOutputDeserializer::deserialize("ListStackSetsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14431,42 +13413,27 @@ impl CloudFormation for CloudFormationClient {
         input: ListStacksInput,
     ) -> Result<ListStacksOutput, RusotoError<ListStacksError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListStacks");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListStacks");
+        let mut params = params;
         ListStacksInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStacksError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStacksError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStacksOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListStacksOutputDeserializer::deserialize("ListStacksResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14476,45 +13443,30 @@ impl CloudFormation for CloudFormationClient {
         input: ListTypeRegistrationsInput,
     ) -> Result<ListTypeRegistrationsOutput, RusotoError<ListTypeRegistrationsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTypeRegistrations");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListTypeRegistrations");
+        let mut params = params;
         ListTypeRegistrationsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypeRegistrationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTypeRegistrationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTypeRegistrationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypeRegistrationsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListTypeRegistrationsOutputDeserializer::deserialize(
                 "ListTypeRegistrationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14524,45 +13476,28 @@ impl CloudFormation for CloudFormationClient {
         input: ListTypeVersionsInput,
     ) -> Result<ListTypeVersionsOutput, RusotoError<ListTypeVersionsError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTypeVersions");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListTypeVersions");
+        let mut params = params;
         ListTypeVersionsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypeVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTypeVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTypeVersionsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypeVersionsOutputDeserializer::deserialize(
-                "ListTypeVersionsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListTypeVersionsOutputDeserializer::deserialize("ListTypeVersionsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14572,42 +13507,27 @@ impl CloudFormation for CloudFormationClient {
         input: ListTypesInput,
     ) -> Result<ListTypesOutput, RusotoError<ListTypesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTypes");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ListTypes");
+        let mut params = params;
         ListTypesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTypesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTypesOutputDeserializer::deserialize("ListTypesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListTypesOutputDeserializer::deserialize("ListTypesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14617,27 +13537,19 @@ impl CloudFormation for CloudFormationClient {
         input: RecordHandlerProgressInput,
     ) -> Result<RecordHandlerProgressOutput, RusotoError<RecordHandlerProgressError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RecordHandlerProgress");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("RecordHandlerProgress");
+        let mut params = params;
         RecordHandlerProgressInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RecordHandlerProgressError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RecordHandlerProgressError::from_response)
+            .await?;
 
-        let result;
-        result = RecordHandlerProgressOutput::default();
-        // parse non-payload
+        let result = RecordHandlerProgressOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14647,42 +13559,27 @@ impl CloudFormation for CloudFormationClient {
         input: RegisterTypeInput,
     ) -> Result<RegisterTypeOutput, RusotoError<RegisterTypeError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RegisterType");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("RegisterType");
+        let mut params = params;
         RegisterTypeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RegisterTypeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterTypeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RegisterTypeOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RegisterTypeOutputDeserializer::deserialize("RegisterTypeResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14692,23 +13589,15 @@ impl CloudFormation for CloudFormationClient {
         input: SetStackPolicyInput,
     ) -> Result<(), RusotoError<SetStackPolicyError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetStackPolicy");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("SetStackPolicy");
+        let mut params = params;
         SetStackPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetStackPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetStackPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -14720,27 +13609,19 @@ impl CloudFormation for CloudFormationClient {
         input: SetTypeDefaultVersionInput,
     ) -> Result<SetTypeDefaultVersionOutput, RusotoError<SetTypeDefaultVersionError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetTypeDefaultVersion");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("SetTypeDefaultVersion");
+        let mut params = params;
         SetTypeDefaultVersionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetTypeDefaultVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetTypeDefaultVersionError::from_response)
+            .await?;
 
-        let result;
-        result = SetTypeDefaultVersionOutput::default();
-        // parse non-payload
+        let result = SetTypeDefaultVersionOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14750,23 +13631,15 @@ impl CloudFormation for CloudFormationClient {
         input: SignalResourceInput,
     ) -> Result<(), RusotoError<SignalResourceError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SignalResource");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("SignalResource");
+        let mut params = params;
         SignalResourceInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SignalResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SignalResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -14778,27 +13651,19 @@ impl CloudFormation for CloudFormationClient {
         input: StopStackSetOperationInput,
     ) -> Result<StopStackSetOperationOutput, RusotoError<StopStackSetOperationError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "StopStackSetOperation");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("StopStackSetOperation");
+        let mut params = params;
         StopStackSetOperationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(StopStackSetOperationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, StopStackSetOperationError::from_response)
+            .await?;
 
-        let result;
-        result = StopStackSetOperationOutput::default();
-        // parse non-payload
+        let result = StopStackSetOperationOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14808,42 +13673,27 @@ impl CloudFormation for CloudFormationClient {
         input: UpdateStackInput,
     ) -> Result<UpdateStackOutput, RusotoError<UpdateStackError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateStack");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("UpdateStack");
+        let mut params = params;
         UpdateStackInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateStackError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateStackOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateStackOutputDeserializer::deserialize("UpdateStackResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UpdateStackOutputDeserializer::deserialize("UpdateStackResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14853,45 +13703,30 @@ impl CloudFormation for CloudFormationClient {
         input: UpdateStackInstancesInput,
     ) -> Result<UpdateStackInstancesOutput, RusotoError<UpdateStackInstancesError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateStackInstances");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("UpdateStackInstances");
+        let mut params = params;
         UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateStackInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateStackInstancesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateStackInstancesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UpdateStackInstancesOutputDeserializer::deserialize(
                 "UpdateStackInstancesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14901,43 +13736,28 @@ impl CloudFormation for CloudFormationClient {
         input: UpdateStackSetInput,
     ) -> Result<UpdateStackSetOutput, RusotoError<UpdateStackSetError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateStackSet");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("UpdateStackSet");
+        let mut params = params;
         UpdateStackSetInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStackSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateStackSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateStackSetOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                UpdateStackSetOutputDeserializer::deserialize("UpdateStackSetResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                UpdateStackSetOutputDeserializer::deserialize("UpdateStackSetResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14948,45 +13768,30 @@ impl CloudFormation for CloudFormationClient {
     ) -> Result<UpdateTerminationProtectionOutput, RusotoError<UpdateTerminationProtectionError>>
     {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateTerminationProtection");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("UpdateTerminationProtection");
+        let mut params = params;
         UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTerminationProtectionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTerminationProtectionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateTerminationProtectionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UpdateTerminationProtectionOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UpdateTerminationProtectionOutputDeserializer::deserialize(
                 "UpdateTerminationProtectionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -14996,45 +13801,28 @@ impl CloudFormation for CloudFormationClient {
         input: ValidateTemplateInput,
     ) -> Result<ValidateTemplateOutput, RusotoError<ValidateTemplateError>> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ValidateTemplate");
-        params.put("Version", "2010-05-15");
+        let params = self.new_params("ValidateTemplate");
+        let mut params = params;
         ValidateTemplateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ValidateTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ValidateTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ValidateTemplateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ValidateTemplateOutputDeserializer::deserialize(
-                "ValidateTemplateResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ValidateTemplateOutputDeserializer::deserialize("ValidateTemplateResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

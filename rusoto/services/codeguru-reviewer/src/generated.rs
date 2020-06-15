@@ -1274,6 +1274,7 @@ impl CodeGuruReviewerClient {
 #[async_trait]
 impl CodeGuruReviewer for CodeGuruReviewerClient {
     /// <p>Associates an AWS CodeCommit repository with Amazon CodeGuru Reviewer. When you associate an AWS CodeCommit repository with Amazon CodeGuru Reviewer, Amazon CodeGuru Reviewer will provide recommendations for each pull request raised within the repository. You can view recommendations in the AWS CodeCommit repository.</p> <p>You can associate a GitHub repository using the Amazon CodeGuru Reviewer console.</p>
+    #[allow(unused_mut)]
     async fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
@@ -1293,7 +1294,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateRepositoryResponse, _>()?;
 
@@ -1305,6 +1306,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Returns the metadaata associated with the code review along with its status.</p>
+    #[allow(unused_mut)]
     async fn describe_code_review(
         &self,
         input: DescribeCodeReviewRequest,
@@ -1324,7 +1326,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCodeReviewResponse, _>()?;
 
@@ -1336,6 +1338,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Describes the customer feedback for a CodeGuru Reviewer recommendation. </p>
+    #[allow(unused_mut)]
     async fn describe_recommendation_feedback(
         &self,
         input: DescribeRecommendationFeedbackRequest,
@@ -1365,7 +1368,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRecommendationFeedbackResponse, _>()?;
 
@@ -1377,6 +1380,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p>Describes a repository association.</p>
+    #[allow(unused_mut)]
     async fn describe_repository_association(
         &self,
         input: DescribeRepositoryAssociationRequest,
@@ -1399,7 +1403,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRepositoryAssociationResponse, _>()?;
 
@@ -1411,6 +1415,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p>Removes the association between Amazon CodeGuru Reviewer and a repository.</p>
+    #[allow(unused_mut)]
     async fn disassociate_repository(
         &self,
         input: DisassociateRepositoryRequest,
@@ -1430,7 +1435,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateRepositoryResponse, _>()?;
 
@@ -1442,6 +1447,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Lists all the code reviews that the customer has created in the past 90 days. </p>
+    #[allow(unused_mut)]
     async fn list_code_reviews(
         &self,
         input: ListCodeReviewsRequest,
@@ -1483,7 +1489,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListCodeReviewsResponse, _>()?;
 
@@ -1495,6 +1501,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Lists the customer feedback for a CodeGuru Reviewer recommendation for all users. This API will be used from the console to extract the previously given feedback by the user to pre-populate the feedback emojis for all recommendations. </p>
+    #[allow(unused_mut)]
     async fn list_recommendation_feedback(
         &self,
         input: ListRecommendationFeedbackRequest,
@@ -1534,7 +1541,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecommendationFeedbackResponse, _>()?;
 
@@ -1546,6 +1553,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Returns the list of all recommendations for a completed code review. </p>
+    #[allow(unused_mut)]
     async fn list_recommendations(
         &self,
         input: ListRecommendationsRequest,
@@ -1574,7 +1582,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecommendationsResponse, _>()?;
 
@@ -1586,6 +1594,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p>Lists repository associations. You can optionally filter on one or more of the following recommendation properties: provider types, states, names, and owners.</p>
+    #[allow(unused_mut)]
     async fn list_repository_associations(
         &self,
         input: ListRepositoryAssociationsRequest,
@@ -1632,7 +1641,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRepositoryAssociationsResponse, _>()?;
 
@@ -1644,6 +1653,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
     }
 
     /// <p> Stores customer feedback for a CodeGuru-Reviewer recommendation. When this API is called again with different reactions the previous feedback is overwritten. </p>
+    #[allow(unused_mut)]
     async fn put_recommendation_feedback(
         &self,
         input: PutRecommendationFeedbackRequest,
@@ -1664,7 +1674,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutRecommendationFeedbackResponse, _>()?;
 

@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl AlexaForBusinessClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "a4b", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>An address book with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -7372,26 +7398,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ApproveSkillRequest,
     ) -> Result<ApproveSkillResponse, RusotoError<ApproveSkillError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ApproveSkill");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ApproveSkillResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ApproveSkillError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ApproveSkillError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ApproveSkillResponse, _>()
     }
 
     /// <p>Associates a contact with a given address book.</p>
@@ -7402,9 +7419,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         AssociateContactWithAddressBookResponse,
         RusotoError<AssociateContactWithAddressBookError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateContactWithAddressBook",
@@ -7412,22 +7427,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateContactWithAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateContactWithAddressBookError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateContactWithAddressBookError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateContactWithAddressBookResponse, _>()
     }
 
     /// <p>Associates a device with the specified network profile.</p>
@@ -7438,9 +7444,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         AssociateDeviceWithNetworkProfileResponse,
         RusotoError<AssociateDeviceWithNetworkProfileError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateDeviceWithNetworkProfile",
@@ -7448,22 +7452,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateDeviceWithNetworkProfileError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateDeviceWithNetworkProfileError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
     }
 
     /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
@@ -7471,27 +7469,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateDeviceWithRoomRequest,
     ) -> Result<AssociateDeviceWithRoomResponse, RusotoError<AssociateDeviceWithRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.AssociateDeviceWithRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateDeviceWithRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateDeviceWithRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateDeviceWithRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateDeviceWithRoomResponse, _>()
     }
 
     /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
@@ -7500,9 +7489,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: AssociateSkillGroupWithRoomRequest,
     ) -> Result<AssociateSkillGroupWithRoomResponse, RusotoError<AssociateSkillGroupWithRoomError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateSkillGroupWithRoom",
@@ -7510,20 +7497,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateSkillGroupWithRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateSkillGroupWithRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
     }
 
     /// <p>Associates a skill with a skill group.</p>
@@ -7532,9 +7512,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: AssociateSkillWithSkillGroupRequest,
     ) -> Result<AssociateSkillWithSkillGroupResponse, RusotoError<AssociateSkillWithSkillGroupError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateSkillWithSkillGroup",
@@ -7542,20 +7520,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateSkillWithSkillGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateSkillWithSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
     }
 
     /// <p>Makes a private skill available for enrolled users to enable on their devices.</p>
@@ -7563,27 +7534,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateSkillWithUsersRequest,
     ) -> Result<AssociateSkillWithUsersResponse, RusotoError<AssociateSkillWithUsersError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.AssociateSkillWithUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateSkillWithUsersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateSkillWithUsersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateSkillWithUsersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateSkillWithUsersResponse, _>()
     }
 
     /// <p>Creates an address book with the specified details.</p>
@@ -7591,27 +7553,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateAddressBookRequest,
     ) -> Result<CreateAddressBookResponse, RusotoError<CreateAddressBookError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAddressBookError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAddressBookError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateAddressBookResponse, _>()
     }
 
     /// <p>Creates a recurring schedule for usage reports to deliver to the specified S3 location with a specified daily or weekly interval.</p>
@@ -7620,9 +7572,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: CreateBusinessReportScheduleRequest,
     ) -> Result<CreateBusinessReportScheduleResponse, RusotoError<CreateBusinessReportScheduleError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.CreateBusinessReportSchedule",
@@ -7630,20 +7580,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBusinessReportScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBusinessReportScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateBusinessReportScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateBusinessReportScheduleResponse, _>()
     }
 
     /// <p>Adds a new conference provider under the user's AWS account.</p>
@@ -7651,27 +7594,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateConferenceProviderRequest,
     ) -> Result<CreateConferenceProviderResponse, RusotoError<CreateConferenceProviderError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConferenceProviderResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConferenceProviderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConferenceProviderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateConferenceProviderResponse, _>()
     }
 
     /// <p>Creates a contact with the specified details.</p>
@@ -7679,26 +7613,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateContactRequest,
     ) -> Result<CreateContactResponse, RusotoError<CreateContactError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateContactResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateContactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateContactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateContactResponse, _>()
     }
 
     /// <p>Creates a gateway group with the specified details.</p>
@@ -7706,27 +7631,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateGatewayGroupRequest,
     ) -> Result<CreateGatewayGroupResponse, RusotoError<CreateGatewayGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateGatewayGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateGatewayGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateGatewayGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateGatewayGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateGatewayGroupResponse, _>()
     }
 
     /// <p>Creates a network profile with the specified details.</p>
@@ -7734,27 +7649,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateNetworkProfileRequest,
     ) -> Result<CreateNetworkProfileResponse, RusotoError<CreateNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNetworkProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateNetworkProfileResponse, _>()
     }
 
     /// <p>Creates a new room profile with the specified details.</p>
@@ -7762,26 +7668,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateProfileRequest,
     ) -> Result<CreateProfileResponse, RusotoError<CreateProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateProfileResponse, _>()
     }
 
     /// <p>Creates a room with the specified details.</p>
@@ -7789,26 +7686,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateRoomRequest,
     ) -> Result<CreateRoomResponse, RusotoError<CreateRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRoomResponse, _>()
     }
 
     /// <p>Creates a skill group with a specified name and description.</p>
@@ -7816,27 +7704,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateSkillGroupRequest,
     ) -> Result<CreateSkillGroupResponse, RusotoError<CreateSkillGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSkillGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateSkillGroupResponse, _>()
     }
 
     /// <p>Creates a user.</p>
@@ -7844,26 +7722,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.CreateUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUserError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUserError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
     }
 
     /// <p>Deletes an address book by the address book ARN.</p>
@@ -7871,27 +7740,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteAddressBookRequest,
     ) -> Result<DeleteAddressBookResponse, RusotoError<DeleteAddressBookError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAddressBookError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAddressBookError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAddressBookResponse, _>()
     }
 
     /// <p>Deletes the recurring report delivery schedule with the specified schedule ARN.</p>
@@ -7900,9 +7759,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: DeleteBusinessReportScheduleRequest,
     ) -> Result<DeleteBusinessReportScheduleResponse, RusotoError<DeleteBusinessReportScheduleError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DeleteBusinessReportSchedule",
@@ -7910,20 +7767,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteBusinessReportScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBusinessReportScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteBusinessReportScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteBusinessReportScheduleResponse, _>()
     }
 
     /// <p>Deletes a conference provider.</p>
@@ -7931,27 +7781,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteConferenceProviderRequest,
     ) -> Result<DeleteConferenceProviderResponse, RusotoError<DeleteConferenceProviderError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConferenceProviderResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConferenceProviderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConferenceProviderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteConferenceProviderResponse, _>()
     }
 
     /// <p>Deletes a contact by the contact ARN.</p>
@@ -7959,26 +7800,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteContactRequest,
     ) -> Result<DeleteContactResponse, RusotoError<DeleteContactError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteContactResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteContactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteContactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteContactResponse, _>()
     }
 
     /// <p>Removes a device from Alexa For Business.</p>
@@ -7986,26 +7818,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteDeviceRequest,
     ) -> Result<DeleteDeviceResponse, RusotoError<DeleteDeviceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDeviceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeviceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDeviceResponse, _>()
     }
 
     /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p>
@@ -8013,27 +7836,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteDeviceUsageDataRequest,
     ) -> Result<DeleteDeviceUsageDataResponse, RusotoError<DeleteDeviceUsageDataError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteDeviceUsageData");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDeviceUsageDataResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeviceUsageDataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeviceUsageDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteDeviceUsageDataResponse, _>()
     }
 
     /// <p>Deletes a gateway group.</p>
@@ -8041,27 +7855,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteGatewayGroupRequest,
     ) -> Result<DeleteGatewayGroupResponse, RusotoError<DeleteGatewayGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteGatewayGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGatewayGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGatewayGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteGatewayGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteGatewayGroupResponse, _>()
     }
 
     /// <p>Deletes a network profile by the network profile ARN.</p>
@@ -8069,27 +7873,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteNetworkProfileRequest,
     ) -> Result<DeleteNetworkProfileResponse, RusotoError<DeleteNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteNetworkProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteNetworkProfileResponse, _>()
     }
 
     /// <p>Deletes a room profile by the profile ARN.</p>
@@ -8097,26 +7892,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteProfileRequest,
     ) -> Result<DeleteProfileResponse, RusotoError<DeleteProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteProfileResponse, _>()
     }
 
     /// <p>Deletes a room by the room ARN.</p>
@@ -8124,26 +7910,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteRoomRequest,
     ) -> Result<DeleteRoomResponse, RusotoError<DeleteRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRoomResponse, _>()
     }
 
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
@@ -8151,27 +7928,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteRoomSkillParameterRequest,
     ) -> Result<DeleteRoomSkillParameterResponse, RusotoError<DeleteRoomSkillParameterError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRoomSkillParameterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRoomSkillParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRoomSkillParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRoomSkillParameterResponse, _>()
     }
 
     /// <p>Unlinks a third-party account from a skill.</p>
@@ -8179,27 +7947,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteSkillAuthorizationRequest,
     ) -> Result<DeleteSkillAuthorizationResponse, RusotoError<DeleteSkillAuthorizationError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSkillAuthorizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSkillAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSkillAuthorizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSkillAuthorizationResponse, _>()
     }
 
     /// <p>Deletes a skill group by skill group ARN.</p>
@@ -8207,27 +7966,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteSkillGroupRequest,
     ) -> Result<DeleteSkillGroupResponse, RusotoError<DeleteSkillGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSkillGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteSkillGroupResponse, _>()
     }
 
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
@@ -8235,26 +7984,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteUserRequest,
     ) -> Result<DeleteUserResponse, RusotoError<DeleteUserError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteUserResponse, _>()
     }
 
     /// <p>Disassociates a contact from a given address book.</p>
@@ -8265,9 +8005,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         DisassociateContactFromAddressBookResponse,
         RusotoError<DisassociateContactFromAddressBookError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateContactFromAddressBook",
@@ -8275,22 +8013,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateContactFromAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateContactFromAddressBookError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateContactFromAddressBookError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateContactFromAddressBookResponse, _>()
     }
 
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
@@ -8299,9 +8031,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: DisassociateDeviceFromRoomRequest,
     ) -> Result<DisassociateDeviceFromRoomResponse, RusotoError<DisassociateDeviceFromRoomError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateDeviceFromRoom",
@@ -8309,20 +8039,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateDeviceFromRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateDeviceFromRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateDeviceFromRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateDeviceFromRoomResponse, _>()
     }
 
     /// <p>Disassociates a skill from a skill group.</p>
@@ -8333,9 +8056,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         DisassociateSkillFromSkillGroupResponse,
         RusotoError<DisassociateSkillFromSkillGroupError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillFromSkillGroup",
@@ -8343,22 +8064,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateSkillFromSkillGroupError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateSkillFromSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
     }
 
     /// <p>Makes a private skill unavailable for enrolled users and prevents them from enabling it on their devices.</p>
@@ -8367,9 +8079,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: DisassociateSkillFromUsersRequest,
     ) -> Result<DisassociateSkillFromUsersResponse, RusotoError<DisassociateSkillFromUsersError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillFromUsers",
@@ -8377,20 +8087,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateSkillFromUsersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateSkillFromUsersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateSkillFromUsersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateSkillFromUsersResponse, _>()
     }
 
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
@@ -8401,9 +8104,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         DisassociateSkillGroupFromRoomResponse,
         RusotoError<DisassociateSkillGroupFromRoomError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillGroupFromRoom",
@@ -8411,20 +8112,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateSkillGroupFromRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateSkillGroupFromRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
     }
 
     /// <p>Forgets smart home appliances associated to a room.</p>
@@ -8433,27 +8127,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: ForgetSmartHomeAppliancesRequest,
     ) -> Result<ForgetSmartHomeAppliancesResponse, RusotoError<ForgetSmartHomeAppliancesError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ForgetSmartHomeAppliances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ForgetSmartHomeAppliancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ForgetSmartHomeAppliancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
     }
 
     /// <p>Gets address the book details by the address book ARN.</p>
@@ -8461,52 +8146,34 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetAddressBookRequest,
     ) -> Result<GetAddressBookResponse, RusotoError<GetAddressBookError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAddressBookError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAddressBookError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAddressBookResponse, _>()
     }
 
     /// <p>Retrieves the existing conference preferences.</p>
     async fn get_conference_preference(
         &self,
     ) -> Result<GetConferencePreferenceResponse, RusotoError<GetConferencePreferenceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetConferencePreference");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConferencePreferenceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConferencePreferenceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConferencePreferenceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConferencePreferenceResponse, _>()
     }
 
     /// <p>Gets details about a specific conference provider.</p>
@@ -8514,27 +8181,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetConferenceProviderRequest,
     ) -> Result<GetConferenceProviderResponse, RusotoError<GetConferenceProviderError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConferenceProviderResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConferenceProviderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConferenceProviderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConferenceProviderResponse, _>()
     }
 
     /// <p>Gets the contact details by the contact ARN.</p>
@@ -8542,26 +8200,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetContactRequest,
     ) -> Result<GetContactResponse, RusotoError<GetContactError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetContactResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetContactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetContactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetContactResponse, _>()
     }
 
     /// <p>Gets the details of a device by device ARN.</p>
@@ -8569,26 +8218,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetDeviceRequest,
     ) -> Result<GetDeviceResponse, RusotoError<GetDeviceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeviceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResponse, _>()
     }
 
     /// <p>Retrieves the details of a gateway.</p>
@@ -8596,26 +8236,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetGatewayRequest,
     ) -> Result<GetGatewayResponse, RusotoError<GetGatewayError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGatewayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetGatewayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayResponse, _>()
     }
 
     /// <p>Retrieves the details of a gateway group.</p>
@@ -8623,26 +8254,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetGatewayGroupRequest,
     ) -> Result<GetGatewayGroupResponse, RusotoError<GetGatewayGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetGatewayGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetGatewayGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetGatewayGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetGatewayGroupResponse, _>()
     }
 
     /// <p>Retrieves the configured values for the user enrollment invitation email template.</p>
@@ -8650,29 +8272,20 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
     ) -> Result<GetInvitationConfigurationResponse, RusotoError<GetInvitationConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.GetInvitationConfiguration",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInvitationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInvitationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInvitationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetInvitationConfigurationResponse, _>()
     }
 
     /// <p>Gets the network profile details by the network profile ARN.</p>
@@ -8680,27 +8293,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetNetworkProfileRequest,
     ) -> Result<GetNetworkProfileResponse, RusotoError<GetNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetNetworkProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetNetworkProfileResponse, _>()
     }
 
     /// <p>Gets the details of a room profile by profile ARN.</p>
@@ -8708,26 +8311,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetProfileRequest,
     ) -> Result<GetProfileResponse, RusotoError<GetProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetProfileResponse, _>()
     }
 
     /// <p>Gets room details by room ARN.</p>
@@ -8735,26 +8329,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetRoomRequest,
     ) -> Result<GetRoomResponse, RusotoError<GetRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()
     }
 
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
@@ -8762,27 +8347,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetRoomSkillParameterRequest,
     ) -> Result<GetRoomSkillParameterResponse, RusotoError<GetRoomSkillParameterError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRoomSkillParameterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRoomSkillParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRoomSkillParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRoomSkillParameterResponse, _>()
     }
 
     /// <p>Gets skill group details by skill group ARN.</p>
@@ -8790,26 +8366,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetSkillGroupRequest,
     ) -> Result<GetSkillGroupResponse, RusotoError<GetSkillGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.GetSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSkillGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSkillGroupResponse, _>()
     }
 
     /// <p>Lists the details of the schedules that a user configured. A download URL of the report associated with each schedule is returned every time this action is called. A new download URL is returned each time, and is valid for 24 hours.</p>
@@ -8818,9 +8385,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: ListBusinessReportSchedulesRequest,
     ) -> Result<ListBusinessReportSchedulesResponse, RusotoError<ListBusinessReportSchedulesError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.ListBusinessReportSchedules",
@@ -8828,20 +8393,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBusinessReportSchedulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBusinessReportSchedulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBusinessReportSchedulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListBusinessReportSchedulesResponse, _>()
     }
 
     /// <p>Lists conference providers under a specific AWS account.</p>
@@ -8849,27 +8407,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListConferenceProvidersRequest,
     ) -> Result<ListConferenceProvidersResponse, RusotoError<ListConferenceProvidersError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListConferenceProviders");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConferenceProvidersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConferenceProvidersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListConferenceProvidersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListConferenceProvidersResponse, _>()
     }
 
     /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
@@ -8877,27 +8426,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListDeviceEventsRequest,
     ) -> Result<ListDeviceEventsResponse, RusotoError<ListDeviceEventsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListDeviceEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceEventsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeviceEventsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeviceEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeviceEventsResponse, _>()
     }
 
     /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
@@ -8905,27 +8444,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListGatewayGroupsRequest,
     ) -> Result<ListGatewayGroupsResponse, RusotoError<ListGatewayGroupsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListGatewayGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGatewayGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGatewayGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGatewayGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListGatewayGroupsResponse, _>()
     }
 
     /// <p>Retrieves a list of gateway summaries. Use GetGateway to retrieve details of a specific gateway. An optional gateway group ARN can be provided to only retrieve gateway summaries of gateways that are associated with that gateway group ARN.</p>
@@ -8933,26 +8462,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListGatewaysRequest,
     ) -> Result<ListGatewaysResponse, RusotoError<ListGatewaysError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListGateways");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListGatewaysResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGatewaysError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGatewaysError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListGatewaysResponse, _>()
     }
 
     /// <p>Lists all enabled skills in a specific skill group.</p>
@@ -8960,26 +8480,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListSkillsRequest,
     ) -> Result<ListSkillsResponse, RusotoError<ListSkillsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListSkills");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSkillsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSkillsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSkillsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSkillsResponse, _>()
     }
 
     /// <p>Lists all categories in the Alexa skill store.</p>
@@ -8988,27 +8499,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: ListSkillsStoreCategoriesRequest,
     ) -> Result<ListSkillsStoreCategoriesResponse, RusotoError<ListSkillsStoreCategoriesError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListSkillsStoreCategories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSkillsStoreCategoriesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSkillsStoreCategoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSkillsStoreCategoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSkillsStoreCategoriesResponse, _>()
     }
 
     /// <p>Lists all skills in the Alexa skill store by category.</p>
@@ -9019,9 +8521,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         ListSkillsStoreSkillsByCategoryResponse,
         RusotoError<ListSkillsStoreSkillsByCategoryError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.ListSkillsStoreSkillsByCategory",
@@ -9029,22 +8529,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSkillsStoreSkillsByCategoryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSkillsStoreSkillsByCategoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
     }
 
     /// <p>Lists all of the smart home appliances associated with a room.</p>
@@ -9052,27 +8543,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListSmartHomeAppliancesRequest,
     ) -> Result<ListSmartHomeAppliancesResponse, RusotoError<ListSmartHomeAppliancesError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListSmartHomeAppliances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSmartHomeAppliancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSmartHomeAppliancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSmartHomeAppliancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSmartHomeAppliancesResponse, _>()
     }
 
     /// <p>Lists all tags for the specified resource.</p>
@@ -9080,26 +8562,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
     }
 
     /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
@@ -9107,27 +8580,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutConferencePreferenceRequest,
     ) -> Result<PutConferencePreferenceResponse, RusotoError<PutConferencePreferenceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.PutConferencePreference");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConferencePreferenceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConferencePreferenceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConferencePreferenceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutConferencePreferenceResponse, _>()
     }
 
     /// <p>Configures the email template for the user enrollment invitation with the specified attributes.</p>
@@ -9136,9 +8600,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: PutInvitationConfigurationRequest,
     ) -> Result<PutInvitationConfigurationResponse, RusotoError<PutInvitationConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.PutInvitationConfiguration",
@@ -9146,20 +8608,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutInvitationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutInvitationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutInvitationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutInvitationConfigurationResponse, _>()
     }
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
@@ -9167,27 +8622,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutRoomSkillParameterRequest,
     ) -> Result<PutRoomSkillParameterResponse, RusotoError<PutRoomSkillParameterError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.PutRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRoomSkillParameterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRoomSkillParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRoomSkillParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRoomSkillParameterResponse, _>()
     }
 
     /// <p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>
@@ -9195,27 +8641,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutSkillAuthorizationRequest,
     ) -> Result<PutSkillAuthorizationResponse, RusotoError<PutSkillAuthorizationError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.PutSkillAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutSkillAuthorizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutSkillAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutSkillAuthorizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutSkillAuthorizationResponse, _>()
     }
 
     /// <p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>
@@ -9223,27 +8660,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RegisterAVSDeviceRequest,
     ) -> Result<RegisterAVSDeviceResponse, RusotoError<RegisterAVSDeviceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.RegisterAVSDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterAVSDeviceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterAVSDeviceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterAVSDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RegisterAVSDeviceResponse, _>()
     }
 
     /// <p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>
@@ -9251,26 +8678,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RejectSkillRequest,
     ) -> Result<RejectSkillResponse, RusotoError<RejectSkillError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.RejectSkill");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RejectSkillResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectSkillError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RejectSkillError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RejectSkillResponse, _>()
     }
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
@@ -9278,26 +8696,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ResolveRoomRequest,
     ) -> Result<ResolveRoomResponse, RusotoError<ResolveRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.ResolveRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ResolveRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResolveRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ResolveRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResolveRoomResponse, _>()
     }
 
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
@@ -9305,27 +8714,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RevokeInvitationRequest,
     ) -> Result<RevokeInvitationResponse, RusotoError<RevokeInvitationError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.RevokeInvitation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RevokeInvitationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RevokeInvitationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RevokeInvitationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RevokeInvitationResponse, _>()
     }
 
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9333,27 +8732,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchAddressBooksRequest,
     ) -> Result<SearchAddressBooksResponse, RusotoError<SearchAddressBooksError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchAddressBooks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchAddressBooksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchAddressBooksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchAddressBooksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchAddressBooksResponse, _>()
     }
 
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9361,26 +8750,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchContactsRequest,
     ) -> Result<SearchContactsResponse, RusotoError<SearchContactsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchContacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchContactsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchContactsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchContactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchContactsResponse, _>()
     }
 
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
@@ -9388,26 +8768,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchDevicesRequest,
     ) -> Result<SearchDevicesResponse, RusotoError<SearchDevicesError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchDevices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchDevicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchDevicesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchDevicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchDevicesResponse, _>()
     }
 
     /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9415,27 +8786,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchNetworkProfilesRequest,
     ) -> Result<SearchNetworkProfilesResponse, RusotoError<SearchNetworkProfilesError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchNetworkProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchNetworkProfilesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchNetworkProfilesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchNetworkProfilesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SearchNetworkProfilesResponse, _>()
     }
 
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
@@ -9443,26 +8805,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchProfilesRequest,
     ) -> Result<SearchProfilesResponse, RusotoError<SearchProfilesError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchProfilesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchProfilesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchProfilesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchProfilesResponse, _>()
     }
 
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9470,26 +8823,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchRoomsRequest,
     ) -> Result<SearchRoomsResponse, RusotoError<SearchRoomsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchRooms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchRoomsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchRoomsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchRoomsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchRoomsResponse, _>()
     }
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9497,27 +8841,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchSkillGroupsRequest,
     ) -> Result<SearchSkillGroupsResponse, RusotoError<SearchSkillGroupsError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchSkillGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSkillGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSkillGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchSkillGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchSkillGroupsResponse, _>()
     }
 
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
@@ -9525,26 +8859,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchUsersRequest,
     ) -> Result<SearchUsersResponse, RusotoError<SearchUsersError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SearchUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchUsersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchUsersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchUsersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchUsersResponse, _>()
     }
 
     /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
@@ -9552,27 +8877,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SendAnnouncementRequest,
     ) -> Result<SendAnnouncementResponse, RusotoError<SendAnnouncementError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SendAnnouncement");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendAnnouncementResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendAnnouncementError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendAnnouncementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendAnnouncementResponse, _>()
     }
 
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>
@@ -9580,26 +8895,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SendInvitationRequest,
     ) -> Result<SendInvitationResponse, RusotoError<SendInvitationError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.SendInvitation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendInvitationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendInvitationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendInvitationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendInvitationResponse, _>()
     }
 
     /// <p><p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device&#39;s volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room&#39;s profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul></p>
@@ -9607,26 +8913,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: StartDeviceSyncRequest,
     ) -> Result<StartDeviceSyncResponse, RusotoError<StartDeviceSyncError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.StartDeviceSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartDeviceSyncResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDeviceSyncError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartDeviceSyncError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartDeviceSyncResponse, _>()
     }
 
     /// <p>Initiates the discovery of any smart home appliances associated with the room.</p>
@@ -9637,9 +8934,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         StartSmartHomeApplianceDiscoveryResponse,
         RusotoError<StartSmartHomeApplianceDiscoveryError>,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.StartSmartHomeApplianceDiscovery",
@@ -9647,22 +8942,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSmartHomeApplianceDiscoveryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StartSmartHomeApplianceDiscoveryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
     }
 
     /// <p>Adds metadata tags to a specified resource.</p>
@@ -9670,26 +8959,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes metadata tags from a specified resource.</p>
@@ -9697,26 +8977,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates address book details by the address book ARN.</p>
@@ -9724,27 +8995,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateAddressBookRequest,
     ) -> Result<UpdateAddressBookResponse, RusotoError<UpdateAddressBookError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAddressBookResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAddressBookError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAddressBookError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateAddressBookResponse, _>()
     }
 
     /// <p>Updates the configuration of the report delivery schedule with the specified schedule ARN.</p>
@@ -9753,9 +9014,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: UpdateBusinessReportScheduleRequest,
     ) -> Result<UpdateBusinessReportScheduleResponse, RusotoError<UpdateBusinessReportScheduleError>>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.UpdateBusinessReportSchedule",
@@ -9763,20 +9022,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateBusinessReportScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateBusinessReportScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateBusinessReportScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateBusinessReportScheduleResponse, _>()
     }
 
     /// <p>Updates an existing conference provider's settings.</p>
@@ -9784,27 +9036,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateConferenceProviderRequest,
     ) -> Result<UpdateConferenceProviderResponse, RusotoError<UpdateConferenceProviderError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConferenceProviderResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConferenceProviderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateConferenceProviderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateConferenceProviderResponse, _>()
     }
 
     /// <p>Updates the contact details by the contact ARN.</p>
@@ -9812,26 +9055,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateContactRequest,
     ) -> Result<UpdateContactResponse, RusotoError<UpdateContactError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateContactResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateContactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateContactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateContactResponse, _>()
     }
 
     /// <p>Updates the device name by device ARN.</p>
@@ -9839,26 +9073,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateDeviceRequest,
     ) -> Result<UpdateDeviceResponse, RusotoError<UpdateDeviceError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeviceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeviceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeviceResponse, _>()
     }
 
     /// <p>Updates the details of a gateway. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
@@ -9866,26 +9091,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateGatewayRequest,
     ) -> Result<UpdateGatewayResponse, RusotoError<UpdateGatewayError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateGatewayResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGatewayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateGatewayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateGatewayResponse, _>()
     }
 
     /// <p>Updates the details of a gateway group. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
@@ -9893,27 +9109,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateGatewayGroupRequest,
     ) -> Result<UpdateGatewayGroupResponse, RusotoError<UpdateGatewayGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateGatewayGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateGatewayGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateGatewayGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateGatewayGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateGatewayGroupResponse, _>()
     }
 
     /// <p>Updates a network profile by the network profile ARN.</p>
@@ -9921,27 +9127,18 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateNetworkProfileRequest,
     ) -> Result<UpdateNetworkProfileResponse, RusotoError<UpdateNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateNetworkProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateNetworkProfileResponse, _>()
     }
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
@@ -9949,26 +9146,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateProfileRequest,
     ) -> Result<UpdateProfileResponse, RusotoError<UpdateProfileError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProfileResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateProfileResponse, _>()
     }
 
     /// <p>Updates room details by room ARN.</p>
@@ -9976,26 +9164,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateRoomRequest,
     ) -> Result<UpdateRoomResponse, RusotoError<UpdateRoomError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateRoomResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRoomError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRoomError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateRoomResponse, _>()
     }
 
     /// <p>Updates skill group details by skill group ARN.</p>
@@ -10003,26 +9182,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateSkillGroupRequest,
     ) -> Result<UpdateSkillGroupResponse, RusotoError<UpdateSkillGroupError>> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSkillGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSkillGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateSkillGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateSkillGroupResponse, _>()
     }
 }

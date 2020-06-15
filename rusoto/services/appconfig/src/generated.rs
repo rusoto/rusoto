@@ -2379,6 +2379,7 @@ impl AppConfigClient {
 #[async_trait]
 impl AppConfig for AppConfigClient {
     /// <p>An application in AppConfig is a logical unit of code that provides capabilities for your customers. For example, an application can be a microservice that runs on Amazon EC2 instances, a mobile application installed by your users, a serverless application using Amazon API Gateway and AWS Lambda, or any system you run on behalf of others.</p>
+    #[allow(unused_mut)]
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
@@ -2397,7 +2398,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -2409,6 +2410,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents, SSM Parameter Store parameters, and Amazon S3 objects. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-creating-configuration-and-profile.html">Create a Configuration and a Configuration Profile</a> in the <i>AWS AppConfig User Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
@@ -2430,7 +2432,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -2442,6 +2444,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
+    #[allow(unused_mut)]
     async fn create_deployment_strategy(
         &self,
         input: CreateDeploymentStrategyRequest,
@@ -2460,7 +2463,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -2472,6 +2475,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>For each application, you define one or more environments. An environment is a logical deployment group of AppConfig targets, such as applications in a <code>Beta</code> or <code>Production</code> environment. You can also define environments for application subcomponents such as the <code>Web</code>, <code>Mobile</code> and <code>Back-end</code> components for your application. You can configure Amazon CloudWatch alarms for each environment. The system monitors alarms during a configuration deployment. If an alarm is triggered, the system rolls back the configuration.</p>
+    #[allow(unused_mut)]
     async fn create_environment(
         &self,
         input: CreateEnvironmentRequest,
@@ -2493,7 +2497,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -2505,6 +2509,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_application(
         &self,
         input: DeleteApplicationRequest,
@@ -2523,7 +2528,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2534,6 +2539,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete a configuration profile. Deleting a configuration profile does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_profile(
         &self,
         input: DeleteConfigurationProfileRequest,
@@ -2553,7 +2559,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2564,6 +2570,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete a deployment strategy. Deleting a deployment strategy does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment_strategy(
         &self,
         input: DeleteDeploymentStrategyRequest,
@@ -2582,7 +2589,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2593,6 +2600,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete an environment. Deleting an environment does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
@@ -2612,7 +2620,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2623,6 +2631,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about an application.</p>
+    #[allow(unused_mut)]
     async fn get_application(
         &self,
         input: GetApplicationRequest,
@@ -2641,7 +2650,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -2653,6 +2662,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p><p>Receive information about a configuration.</p> <important> <p>AWS AppConfig uses the value of the <code>ClientConfigurationVersion</code> parameter to identify the configuration version on your clients. If you don’t send <code>ClientConfigurationVersion</code> with each call to <code>GetConfiguration</code>, your clients receive the current configuration. You are charged each time your clients receive a configuration.</p> <p>To avoid excess charges, we recommend that you include the <code>ClientConfigurationVersion</code> value with every call to <code>GetConfiguration</code>. This value must be saved on your client. Subsequent calls to <code>GetConfiguration</code> must pass this value by using the <code>ClientConfigurationVersion</code> parameter. </p> </important></p>
+    #[allow(unused_mut)]
     async fn get_configuration(
         &self,
         input: GetConfigurationRequest,
@@ -2680,19 +2690,13 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = Configuration::default();
             result.content = Some(response.body);
 
-            if let Some(configuration_version) = response.headers.get("Configuration-Version") {
-                let value = configuration_version.to_owned();
-                result.configuration_version = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.configuration_version = response.headers.remove("Configuration-Version");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -2702,6 +2706,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a configuration profile.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_profile(
         &self,
         input: GetConfigurationProfileRequest,
@@ -2721,7 +2726,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -2733,6 +2738,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a configuration deployment.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -2748,7 +2754,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -2760,6 +2766,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a deployment strategy. A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
+    #[allow(unused_mut)]
     async fn get_deployment_strategy(
         &self,
         input: GetDeploymentStrategyRequest,
@@ -2778,7 +2785,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -2790,6 +2797,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about an environment. An environment is a logical deployment group of AppConfig applications, such as applications in a <code>Production</code> environment or in an <code>EU_Region</code> environment. Each configuration deployment targets an environment. You can enable one or more Amazon CloudWatch alarms for an environment. If an alarm is triggered during a deployment, AppConfig roles back the configuration.</p>
+    #[allow(unused_mut)]
     async fn get_environment(
         &self,
         input: GetEnvironmentRequest,
@@ -2809,7 +2817,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -2821,6 +2829,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>List all applications in your AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -2845,7 +2854,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Applications, _>()?;
 
@@ -2857,6 +2866,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Lists the configuration profiles for an application.</p>
+    #[allow(unused_mut)]
     async fn list_configuration_profiles(
         &self,
         input: ListConfigurationProfilesRequest,
@@ -2884,7 +2894,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfiles, _>()?;
 
@@ -2896,6 +2906,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>List deployment strategies.</p>
+    #[allow(unused_mut)]
     async fn list_deployment_strategies(
         &self,
         input: ListDeploymentStrategiesRequest,
@@ -2920,7 +2931,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategies, _>()?;
 
@@ -2932,6 +2943,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Lists the deployments for an environment.</p>
+    #[allow(unused_mut)]
     async fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
@@ -2960,7 +2972,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
@@ -2972,6 +2984,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>List the environments for an application.</p>
+    #[allow(unused_mut)]
     async fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
@@ -2999,7 +3012,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environments, _>()?;
 
@@ -3011,6 +3024,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3026,7 +3040,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ResourceTags, _>()?;
 
@@ -3038,6 +3052,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Starts a deployment.</p>
+    #[allow(unused_mut)]
     async fn start_deployment(
         &self,
         input: StartDeploymentRequest,
@@ -3060,7 +3075,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -3072,6 +3087,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Stops a deployment. This API action works only on deployments that have a status of <code>DEPLOYING</code>. This action moves the deployment to a status of <code>ROLLED_BACK</code>.</p>
+    #[allow(unused_mut)]
     async fn stop_deployment(
         &self,
         input: StopDeploymentRequest,
@@ -3087,7 +3103,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -3099,6 +3115,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Metadata to assign to an AppConfig resource. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define. You can specify a maximum of 50 tags for a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3117,7 +3134,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3128,6 +3145,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Deletes a tag key and value from an AppConfig resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3149,7 +3167,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3160,6 +3178,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates an application.</p>
+    #[allow(unused_mut)]
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,
@@ -3181,7 +3200,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -3193,6 +3212,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates a configuration profile.</p>
+    #[allow(unused_mut)]
     async fn update_configuration_profile(
         &self,
         input: UpdateConfigurationProfileRequest,
@@ -3215,7 +3235,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -3227,6 +3247,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates a deployment strategy.</p>
+    #[allow(unused_mut)]
     async fn update_deployment_strategy(
         &self,
         input: UpdateDeploymentStrategyRequest,
@@ -3248,7 +3269,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -3260,6 +3281,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates an environment.</p>
+    #[allow(unused_mut)]
     async fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
@@ -3282,7 +3304,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -3294,6 +3316,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Uses the validators in a configuration profile to validate a configuration.</p>
+    #[allow(unused_mut)]
     async fn validate_configuration(
         &self,
         input: ValidateConfigurationRequest,
@@ -3313,7 +3336,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

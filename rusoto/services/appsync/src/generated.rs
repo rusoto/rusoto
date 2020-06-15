@@ -4134,6 +4134,7 @@ impl AppSyncClient {
 #[async_trait]
 impl AppSync for AppSyncClient {
     /// <p>Creates a cache for the GraphQL API.</p>
+    #[allow(unused_mut)]
     async fn create_api_cache(
         &self,
         input: CreateApiCacheRequest,
@@ -4152,7 +4153,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiCacheResponse, _>()?;
 
@@ -4164,6 +4165,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
+    #[allow(unused_mut)]
     async fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
@@ -4182,7 +4184,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiKeyResponse, _>()?;
 
@@ -4194,6 +4196,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a <code>DataSource</code> object.</p>
+    #[allow(unused_mut)]
     async fn create_data_source(
         &self,
         input: CreateDataSourceRequest,
@@ -4212,7 +4215,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDataSourceResponse, _>()?;
 
@@ -4224,6 +4227,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
+    #[allow(unused_mut)]
     async fn create_function(
         &self,
         input: CreateFunctionRequest,
@@ -4242,7 +4246,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFunctionResponse, _>()?;
 
@@ -4254,6 +4258,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a <code>GraphqlApi</code> object.</p>
+    #[allow(unused_mut)]
     async fn create_graphql_api(
         &self,
         input: CreateGraphqlApiRequest,
@@ -4272,7 +4277,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGraphqlApiResponse, _>()?;
 
@@ -4284,6 +4289,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
+    #[allow(unused_mut)]
     async fn create_resolver(
         &self,
         input: CreateResolverRequest,
@@ -4306,7 +4312,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateResolverResponse, _>()?;
 
@@ -4318,6 +4324,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Creates a <code>Type</code> object.</p>
+    #[allow(unused_mut)]
     async fn create_type(
         &self,
         input: CreateTypeRequest,
@@ -4336,7 +4343,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTypeResponse, _>()?;
 
@@ -4348,6 +4355,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes an <code>ApiCache</code> object.</p>
+    #[allow(unused_mut)]
     async fn delete_api_cache(
         &self,
         input: DeleteApiCacheRequest,
@@ -4363,7 +4371,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteApiCacheResponse, _>()?;
 
@@ -4375,6 +4383,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes an API key.</p>
+    #[allow(unused_mut)]
     async fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
@@ -4394,7 +4403,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteApiKeyResponse, _>()?;
 
@@ -4406,6 +4415,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes a <code>DataSource</code> object.</p>
+    #[allow(unused_mut)]
     async fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
@@ -4425,7 +4435,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDataSourceResponse, _>()?;
 
@@ -4437,6 +4447,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes a <code>Function</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_function(
         &self,
         input: DeleteFunctionRequest,
@@ -4456,7 +4467,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFunctionResponse, _>()?;
 
@@ -4468,6 +4479,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
+    #[allow(unused_mut)]
     async fn delete_graphql_api(
         &self,
         input: DeleteGraphqlApiRequest,
@@ -4483,7 +4495,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGraphqlApiResponse, _>()?;
 
@@ -4495,6 +4507,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes a <code>Resolver</code> object.</p>
+    #[allow(unused_mut)]
     async fn delete_resolver(
         &self,
         input: DeleteResolverRequest,
@@ -4515,7 +4528,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteResolverResponse, _>()?;
 
@@ -4527,6 +4540,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Deletes a <code>Type</code> object.</p>
+    #[allow(unused_mut)]
     async fn delete_type(
         &self,
         input: DeleteTypeRequest,
@@ -4546,7 +4560,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteTypeResponse, _>()?;
 
@@ -4558,6 +4572,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Flushes an <code>ApiCache</code> object.</p>
+    #[allow(unused_mut)]
     async fn flush_api_cache(
         &self,
         input: FlushApiCacheRequest,
@@ -4573,7 +4588,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<FlushApiCacheResponse, _>()?;
 
@@ -4585,6 +4600,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves an <code>ApiCache</code> object.</p>
+    #[allow(unused_mut)]
     async fn get_api_cache(
         &self,
         input: GetApiCacheRequest,
@@ -4600,7 +4616,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApiCacheResponse, _>()?;
 
@@ -4612,6 +4628,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves a <code>DataSource</code> object.</p>
+    #[allow(unused_mut)]
     async fn get_data_source(
         &self,
         input: GetDataSourceRequest,
@@ -4631,7 +4648,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDataSourceResponse, _>()?;
 
@@ -4643,6 +4660,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Get a <code>Function</code>.</p>
+    #[allow(unused_mut)]
     async fn get_function(
         &self,
         input: GetFunctionRequest,
@@ -4662,7 +4680,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFunctionResponse, _>()?;
 
@@ -4674,6 +4692,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
+    #[allow(unused_mut)]
     async fn get_graphql_api(
         &self,
         input: GetGraphqlApiRequest,
@@ -4689,7 +4708,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetGraphqlApiResponse, _>()?;
 
@@ -4701,6 +4720,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves the introspection schema for a GraphQL API.</p>
+    #[allow(unused_mut)]
     async fn get_introspection_schema(
         &self,
         input: GetIntrospectionSchemaRequest,
@@ -4723,7 +4743,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetIntrospectionSchemaResponse::default();
             result.schema = Some(response.body);
@@ -4736,6 +4756,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves a <code>Resolver</code> object.</p>
+    #[allow(unused_mut)]
     async fn get_resolver(
         &self,
         input: GetResolverRequest,
@@ -4756,7 +4777,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResolverResponse, _>()?;
 
@@ -4768,6 +4789,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves the current status of a schema creation operation.</p>
+    #[allow(unused_mut)]
     async fn get_schema_creation_status(
         &self,
         input: GetSchemaCreationStatusRequest,
@@ -4783,7 +4805,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSchemaCreationStatusResponse, _>()?;
 
@@ -4795,6 +4817,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Retrieves a <code>Type</code> object.</p>
+    #[allow(unused_mut)]
     async fn get_type(
         &self,
         input: GetTypeRequest,
@@ -4818,7 +4841,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetTypeResponse, _>()?;
 
@@ -4830,6 +4853,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
+    #[allow(unused_mut)]
     async fn list_api_keys(
         &self,
         input: ListApiKeysRequest,
@@ -4854,7 +4878,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApiKeysResponse, _>()?;
 
@@ -4866,6 +4890,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Lists the data sources for a given API.</p>
+    #[allow(unused_mut)]
     async fn list_data_sources(
         &self,
         input: ListDataSourcesRequest,
@@ -4890,7 +4915,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataSourcesResponse, _>()?;
 
@@ -4902,6 +4927,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>List multiple functions.</p>
+    #[allow(unused_mut)]
     async fn list_functions(
         &self,
         input: ListFunctionsRequest,
@@ -4926,7 +4952,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFunctionsResponse, _>()?;
 
@@ -4938,6 +4964,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Lists your GraphQL APIs.</p>
+    #[allow(unused_mut)]
     async fn list_graphql_apis(
         &self,
         input: ListGraphqlApisRequest,
@@ -4962,7 +4989,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGraphqlApisResponse, _>()?;
 
@@ -4974,6 +5001,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Lists the resolvers for a given API and type.</p>
+    #[allow(unused_mut)]
     async fn list_resolvers(
         &self,
         input: ListResolversRequest,
@@ -5002,7 +5030,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResolversResponse, _>()?;
 
@@ -5014,6 +5042,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>List the resolvers that are associated with a specific function.</p>
+    #[allow(unused_mut)]
     async fn list_resolvers_by_function(
         &self,
         input: ListResolversByFunctionRequest,
@@ -5042,7 +5071,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResolversByFunctionResponse, _>()?;
 
@@ -5054,6 +5083,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Lists the tags for a resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5069,7 +5099,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -5081,6 +5111,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Lists the types for a given API.</p>
+    #[allow(unused_mut)]
     async fn list_types(
         &self,
         input: ListTypesRequest,
@@ -5106,7 +5137,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTypesResponse, _>()?;
 
@@ -5118,6 +5149,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
+    #[allow(unused_mut)]
     async fn start_schema_creation(
         &self,
         input: StartSchemaCreationRequest,
@@ -5136,7 +5168,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartSchemaCreationResponse, _>()?;
 
@@ -5148,6 +5180,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Tags a resource with user-supplied tags.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -5166,7 +5199,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -5178,6 +5211,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Untags a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -5199,7 +5233,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -5211,6 +5245,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates the cache for the GraphQL API.</p>
+    #[allow(unused_mut)]
     async fn update_api_cache(
         &self,
         input: UpdateApiCacheRequest,
@@ -5229,7 +5264,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiCacheResponse, _>()?;
 
@@ -5241,6 +5276,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates an API key.</p>
+    #[allow(unused_mut)]
     async fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
@@ -5263,7 +5299,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiKeyResponse, _>()?;
 
@@ -5275,6 +5311,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates a <code>DataSource</code> object.</p>
+    #[allow(unused_mut)]
     async fn update_data_source(
         &self,
         input: UpdateDataSourceRequest,
@@ -5297,7 +5334,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDataSourceResponse, _>()?;
 
@@ -5309,6 +5346,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates a <code>Function</code> object.</p>
+    #[allow(unused_mut)]
     async fn update_function(
         &self,
         input: UpdateFunctionRequest,
@@ -5331,7 +5369,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFunctionResponse, _>()?;
 
@@ -5343,6 +5381,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates a <code>GraphqlApi</code> object.</p>
+    #[allow(unused_mut)]
     async fn update_graphql_api(
         &self,
         input: UpdateGraphqlApiRequest,
@@ -5361,7 +5400,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGraphqlApiResponse, _>()?;
 
@@ -5373,6 +5412,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates a <code>Resolver</code> object.</p>
+    #[allow(unused_mut)]
     async fn update_resolver(
         &self,
         input: UpdateResolverRequest,
@@ -5396,7 +5436,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateResolverResponse, _>()?;
 
@@ -5408,6 +5448,7 @@ impl AppSync for AppSyncClient {
     }
 
     /// <p>Updates a <code>Type</code> object.</p>
+    #[allow(unused_mut)]
     async fn update_type(
         &self,
         input: UpdateTypeRequest,
@@ -5430,7 +5471,7 @@ impl AppSync for AppSyncClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateTypeResponse, _>()?;
 

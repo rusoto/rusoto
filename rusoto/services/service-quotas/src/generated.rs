@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ServiceQuotasClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "servicequotas", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2212,29 +2239,20 @@ impl ServiceQuotas for ServiceQuotasClient {
         AssociateServiceQuotaTemplateResponse,
         RusotoError<AssociateServiceQuotaTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.AssociateServiceQuotaTemplate",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateServiceQuotaTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateServiceQuotaTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateServiceQuotaTemplateResponse, _>()
     }
 
     /// <p>Removes a service quota increase request from the Service Quotas template. </p>
@@ -2245,9 +2263,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         DeleteServiceQuotaIncreaseRequestFromTemplateResponse,
         RusotoError<DeleteServiceQuotaIncreaseRequestFromTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.DeleteServiceQuotaIncreaseRequestFromTemplate",
@@ -2255,20 +2271,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteServiceQuotaIncreaseRequestFromTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteServiceQuotaIncreaseRequestFromTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteServiceQuotaIncreaseRequestFromTemplateResponse, _>()
     }
 
     /// <p><p>Disables the Service Quotas template. Once the template is disabled, it does not request quota increases for new accounts in your organization. Disabling the quota template does not apply the quota increase requests from the template. </p> <p> <b>Related operations</b> </p> <ul> <li> <p>To enable the quota template, call <a>AssociateServiceQuotaTemplate</a>. </p> </li> <li> <p>To delete a specific service quota from the template, use <a>DeleteServiceQuotaIncreaseRequestFromTemplate</a>.</p> </li> </ul></p>
@@ -2278,31 +2290,23 @@ impl ServiceQuotas for ServiceQuotasClient {
         DisassociateServiceQuotaTemplateResponse,
         RusotoError<DisassociateServiceQuotaTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.DisassociateServiceQuotaTemplate",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateServiceQuotaTemplateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateServiceQuotaTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateServiceQuotaTemplateResponse, _>()
     }
 
     /// <p>Retrieves the default service quotas values. The Value returned for each quota is the AWS default value, even if the quotas have been increased.. </p>
@@ -2311,9 +2315,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         input: GetAWSDefaultServiceQuotaRequest,
     ) -> Result<GetAWSDefaultServiceQuotaResponse, RusotoError<GetAWSDefaultServiceQuotaError>>
     {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.GetAWSDefaultServiceQuota",
@@ -2321,20 +2323,13 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAWSDefaultServiceQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAWSDefaultServiceQuotaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAWSDefaultServiceQuotaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAWSDefaultServiceQuotaResponse, _>()
     }
 
     /// <p>Retrieves the <code>ServiceQuotaTemplateAssociationStatus</code> value from the service. Use this action to determine if the Service Quota template is associated, or enabled. </p>
@@ -2344,31 +2339,23 @@ impl ServiceQuotas for ServiceQuotasClient {
         GetAssociationForServiceQuotaTemplateResponse,
         RusotoError<GetAssociationForServiceQuotaTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.GetAssociationForServiceQuotaTemplate",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAssociationForServiceQuotaTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAssociationForServiceQuotaTemplateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAssociationForServiceQuotaTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAssociationForServiceQuotaTemplateResponse, _>()
     }
 
     /// <p>Retrieves the details for a particular increase request. </p>
@@ -2379,9 +2366,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         GetRequestedServiceQuotaChangeResponse,
         RusotoError<GetRequestedServiceQuotaChangeError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.GetRequestedServiceQuotaChange",
@@ -2389,20 +2374,13 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRequestedServiceQuotaChangeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRequestedServiceQuotaChangeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRequestedServiceQuotaChangeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRequestedServiceQuotaChangeResponse, _>()
     }
 
     /// <p>Returns the details for the specified service quota. This operation provides a different Value than the <code>GetAWSDefaultServiceQuota</code> operation. This operation returns the applied value for each quota. <code>GetAWSDefaultServiceQuota</code> returns the default AWS value for each quota. </p>
@@ -2410,26 +2388,17 @@ impl ServiceQuotas for ServiceQuotasClient {
         &self,
         input: GetServiceQuotaRequest,
     ) -> Result<GetServiceQuotaResponse, RusotoError<GetServiceQuotaError>> {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ServiceQuotasV20190624.GetServiceQuota");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceQuotaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServiceQuotaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetServiceQuotaResponse, _>()
     }
 
     /// <p>Returns the details of the service quota increase request in your template.</p>
@@ -2440,9 +2409,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         GetServiceQuotaIncreaseRequestFromTemplateResponse,
         RusotoError<GetServiceQuotaIncreaseRequestFromTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.GetServiceQuotaIncreaseRequestFromTemplate",
@@ -2450,20 +2417,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetServiceQuotaIncreaseRequestFromTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceQuotaIncreaseRequestFromTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetServiceQuotaIncreaseRequestFromTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetServiceQuotaIncreaseRequestFromTemplateResponse, _>()
     }
 
     /// <p><p>Lists all default service quotas for the specified AWS service or all AWS services. ListAWSDefaultServiceQuotas is similar to <a>ListServiceQuotas</a> except for the Value object. The Value object returned by <code>ListAWSDefaultServiceQuotas</code> is the default value assigned by AWS. This request returns a list of all service quotas for the specified service. The listing of each you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
@@ -2472,9 +2435,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         input: ListAWSDefaultServiceQuotasRequest,
     ) -> Result<ListAWSDefaultServiceQuotasResponse, RusotoError<ListAWSDefaultServiceQuotasError>>
     {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.ListAWSDefaultServiceQuotas",
@@ -2482,20 +2443,13 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAWSDefaultServiceQuotasResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAWSDefaultServiceQuotasError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAWSDefaultServiceQuotasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAWSDefaultServiceQuotasResponse, _>()
     }
 
     /// <p>Requests a list of the changes to quotas for a service.</p>
@@ -2506,9 +2460,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         ListRequestedServiceQuotaChangeHistoryResponse,
         RusotoError<ListRequestedServiceQuotaChangeHistoryError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.ListRequestedServiceQuotaChangeHistory",
@@ -2516,22 +2468,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRequestedServiceQuotaChangeHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRequestedServiceQuotaChangeHistoryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListRequestedServiceQuotaChangeHistoryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRequestedServiceQuotaChangeHistoryResponse, _>()
     }
 
     /// <p>Requests a list of the changes to specific service quotas. This command provides additional granularity over the <code>ListRequestedServiceQuotaChangeHistory</code> command. Once a quota change request has reached <code>CASE_CLOSED, APPROVED,</code> or <code>DENIED</code>, the history has been kept for 90 days.</p>
@@ -2542,9 +2488,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         ListRequestedServiceQuotaChangeHistoryByQuotaResponse,
         RusotoError<ListRequestedServiceQuotaChangeHistoryByQuotaError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.ListRequestedServiceQuotaChangeHistoryByQuota",
@@ -2552,20 +2496,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRequestedServiceQuotaChangeHistoryByQuotaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRequestedServiceQuotaChangeHistoryByQuotaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListRequestedServiceQuotaChangeHistoryByQuotaError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRequestedServiceQuotaChangeHistoryByQuotaResponse, _>()
     }
 
     /// <p>Returns a list of the quota increase requests in the template. </p>
@@ -2576,9 +2516,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         ListServiceQuotaIncreaseRequestsInTemplateResponse,
         RusotoError<ListServiceQuotaIncreaseRequestsInTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.ListServiceQuotaIncreaseRequestsInTemplate",
@@ -2586,20 +2524,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceQuotaIncreaseRequestsInTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceQuotaIncreaseRequestsInTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListServiceQuotaIncreaseRequestsInTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListServiceQuotaIncreaseRequestsInTemplateResponse, _>()
     }
 
     /// <p><p>Lists all service quotas for the specified AWS service. This request returns a list of the service quotas for the specified service. you&#39;ll see the default values are the values that AWS provides for the quotas. </p> <note> <p>Always check the <code>NextToken</code> response parameter when calling any of the <code>List*</code> operations. These operations can return an unexpected list of results, even when there are more results available. When this happens, the <code>NextToken</code> response parameter contains a value to pass the next call to the same API to request the next part of the list.</p> </note></p>
@@ -2607,27 +2541,17 @@ impl ServiceQuotas for ServiceQuotasClient {
         &self,
         input: ListServiceQuotasRequest,
     ) -> Result<ListServiceQuotasResponse, RusotoError<ListServiceQuotasError>> {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ServiceQuotasV20190624.ListServiceQuotas");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListServiceQuotasResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServiceQuotasError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServiceQuotasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListServiceQuotasResponse, _>()
     }
 
     /// <p>Lists the AWS services available in Service Quotas. Not all AWS services are available in Service Quotas. To list the see the list of the service quotas for a specific service, use <a>ListServiceQuotas</a>.</p>
@@ -2635,26 +2559,17 @@ impl ServiceQuotas for ServiceQuotasClient {
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>> {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ServiceQuotasV20190624.ListServices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServicesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
     }
 
     /// <p>Defines and adds a quota to the service quota template. To add a quota to the template, you must provide the <code>ServiceCode</code>, <code>QuotaCode</code>, <code>AwsRegion</code>, and <code>DesiredValue</code>. Once you add a quota to the template, use <a>ListServiceQuotaIncreaseRequestsInTemplate</a> to see the list of quotas in the template.</p>
@@ -2665,9 +2580,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         PutServiceQuotaIncreaseRequestIntoTemplateResponse,
         RusotoError<PutServiceQuotaIncreaseRequestIntoTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.PutServiceQuotaIncreaseRequestIntoTemplate",
@@ -2675,20 +2588,16 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutServiceQuotaIncreaseRequestIntoTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutServiceQuotaIncreaseRequestIntoTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                PutServiceQuotaIncreaseRequestIntoTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutServiceQuotaIncreaseRequestIntoTemplateResponse, _>()
     }
 
     /// <p>Retrieves the details of a service quota increase request. The response to this command provides the details in the <a>RequestedServiceQuotaChange</a> object. </p>
@@ -2697,9 +2606,7 @@ impl ServiceQuotas for ServiceQuotasClient {
         input: RequestServiceQuotaIncreaseRequest,
     ) -> Result<RequestServiceQuotaIncreaseResponse, RusotoError<RequestServiceQuotaIncreaseError>>
     {
-        let mut request = SignedRequest::new("POST", "servicequotas", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ServiceQuotasV20190624.RequestServiceQuotaIncrease",
@@ -2707,19 +2614,12 @@ impl ServiceQuotas for ServiceQuotasClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RequestServiceQuotaIncreaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RequestServiceQuotaIncreaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RequestServiceQuotaIncreaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RequestServiceQuotaIncreaseResponse, _>()
     }
 }

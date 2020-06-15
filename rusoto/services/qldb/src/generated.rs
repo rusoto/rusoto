@@ -1577,6 +1577,7 @@ impl QldbClient {
 #[async_trait]
 impl Qldb for QldbClient {
     /// <p>Ends a given Amazon QLDB journal stream. Before a stream can be canceled, its current status must be <code>ACTIVE</code>.</p> <p>You can't restart a stream after you cancel it. Canceled QLDB stream resources are subject to a 7-day retention period, so they are automatically deleted after this limit expires.</p>
+    #[allow(unused_mut)]
     async fn cancel_journal_kinesis_stream(
         &self,
         input: CancelJournalKinesisStreamRequest,
@@ -1597,7 +1598,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelJournalKinesisStreamResponse, _>()?;
 
@@ -1609,6 +1610,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Creates a new ledger in your AWS account.</p>
+    #[allow(unused_mut)]
     async fn create_ledger(
         &self,
         input: CreateLedgerRequest,
@@ -1627,7 +1629,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateLedgerResponse, _>()?;
 
@@ -1639,6 +1641,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    #[allow(unused_mut)]
     async fn delete_ledger(
         &self,
         input: DeleteLedgerRequest,
@@ -1654,7 +1657,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1665,6 +1668,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of your original stream creation request.</p>
+    #[allow(unused_mut)]
     async fn describe_journal_kinesis_stream(
         &self,
         input: DescribeJournalKinesisStreamRequest,
@@ -1685,7 +1689,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeJournalKinesisStreamResponse, _>()?;
 
@@ -1697,6 +1701,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
+    #[allow(unused_mut)]
     async fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
@@ -1716,7 +1721,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeJournalS3ExportResponse, _>()?;
 
@@ -1728,6 +1733,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns information about a ledger, including its state and when it was created.</p>
+    #[allow(unused_mut)]
     async fn describe_ledger(
         &self,
         input: DescribeLedgerRequest,
@@ -1743,7 +1749,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeLedgerResponse, _>()?;
 
@@ -1755,6 +1761,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Exports journal contents within a date and time range from a ledger into a specified Amazon Simple Storage Service (Amazon S3) bucket. The data is written as files in Amazon Ion format.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>You can initiate up to two concurrent journal export requests for each ledger. Beyond this limit, journal export requests throw <code>LimitExceededException</code>.</p>
+    #[allow(unused_mut)]
     async fn export_journal_to_s3(
         &self,
         input: ExportJournalToS3Request,
@@ -1773,7 +1780,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ExportJournalToS3Response, _>()?;
 
@@ -1785,6 +1792,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns a journal block object at a specified address in a ledger. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
+    #[allow(unused_mut)]
     async fn get_block(
         &self,
         input: GetBlockRequest,
@@ -1803,7 +1811,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBlockResponse, _>()?;
 
@@ -1815,6 +1823,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns the digest of a ledger at the latest committed block in the journal. The response includes a 256-bit hash value and a block address.</p>
+    #[allow(unused_mut)]
     async fn get_digest(
         &self,
         input: GetDigestRequest,
@@ -1830,7 +1839,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDigestResponse, _>()?;
 
@@ -1842,6 +1851,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns a revision data object for a specified document ID and block address. Also returns a proof of the specified revision for verification if <code>DigestTipAddress</code> is provided.</p>
+    #[allow(unused_mut)]
     async fn get_revision(
         &self,
         input: GetRevisionRequest,
@@ -1860,7 +1870,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRevisionResponse, _>()?;
 
@@ -1872,6 +1882,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
+    #[allow(unused_mut)]
     async fn list_journal_kinesis_streams_for_ledger(
         &self,
         input: ListJournalKinesisStreamsForLedgerRequest,
@@ -1902,7 +1913,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListJournalKinesisStreamsForLedgerResponse, _>()?;
 
@@ -1916,6 +1927,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
@@ -1940,7 +1952,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListJournalS3ExportsResponse, _>()?;
 
@@ -1952,6 +1964,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
@@ -1979,7 +1992,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListJournalS3ExportsForLedgerResponse, _>()?;
 
@@ -1991,6 +2004,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns an array of ledger summaries that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of 100 items and is paginated so that you can retrieve all the items by calling <code>ListLedgers</code> multiple times.</p>
+    #[allow(unused_mut)]
     async fn list_ledgers(
         &self,
         input: ListLedgersRequest,
@@ -2015,7 +2029,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListLedgersResponse, _>()?;
 
@@ -2027,6 +2041,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Returns all tags for a specified Amazon QLDB resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2042,7 +2057,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2054,6 +2069,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Creates a stream for a given Amazon QLDB ledger that delivers the journal data to a specified Amazon Kinesis Data Streams resource. The stream captures every document revision that is committed to your journal and sends it to the Kinesis data stream.</p>
+    #[allow(unused_mut)]
     async fn stream_journal_to_kinesis(
         &self,
         input: StreamJournalToKinesisRequest,
@@ -2075,7 +2091,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StreamJournalToKinesisResponse, _>()?;
 
@@ -2087,6 +2103,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Adds one or more tags to a specified Amazon QLDB resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2105,7 +2122,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -2117,6 +2134,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Removes one or more tags from a specified Amazon QLDB resource. You can specify up to 50 tag keys to remove.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2138,7 +2156,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -2150,6 +2168,7 @@ impl Qldb for QldbClient {
     }
 
     /// <p>Updates properties on a ledger.</p>
+    #[allow(unused_mut)]
     async fn update_ledger(
         &self,
         input: UpdateLedgerRequest,
@@ -2168,7 +2187,7 @@ impl Qldb for QldbClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLedgerResponse, _>()?;
 

@@ -4959,6 +4959,7 @@ impl RobomakerClient {
 #[async_trait]
 impl Robomaker for RobomakerClient {
     /// <p>Describes one or more simulation jobs.</p>
+    #[allow(unused_mut)]
     async fn batch_describe_simulation_job(
         &self,
         input: BatchDescribeSimulationJobRequest,
@@ -4978,7 +4979,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchDescribeSimulationJobResponse, _>()?;
 
@@ -4990,6 +4991,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels the specified deployment job.</p>
+    #[allow(unused_mut)]
     async fn cancel_deployment_job(
         &self,
         input: CancelDeploymentJobRequest,
@@ -5008,7 +5010,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelDeploymentJobResponse, _>()?;
 
@@ -5020,6 +5022,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels the specified simulation job.</p>
+    #[allow(unused_mut)]
     async fn cancel_simulation_job(
         &self,
         input: CancelSimulationJobRequest,
@@ -5038,7 +5041,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelSimulationJobResponse, _>()?;
 
@@ -5050,6 +5053,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels a simulation job batch. When you cancel a simulation job batch, you are also cancelling all of the active simulation jobs created as part of the batch. </p>
+    #[allow(unused_mut)]
     async fn cancel_simulation_job_batch(
         &self,
         input: CancelSimulationJobBatchRequest,
@@ -5068,7 +5072,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelSimulationJobBatchResponse, _>()?;
 
@@ -5080,6 +5084,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
+    #[allow(unused_mut)]
     async fn create_deployment_job(
         &self,
         input: CreateDeploymentJobRequest,
@@ -5098,7 +5103,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeploymentJobResponse, _>()?;
 
@@ -5110,6 +5115,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a fleet, a logical group of robots running the same robot application.</p>
+    #[allow(unused_mut)]
     async fn create_fleet(
         &self,
         input: CreateFleetRequest,
@@ -5128,7 +5134,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFleetResponse, _>()?;
 
@@ -5140,6 +5146,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a robot.</p>
+    #[allow(unused_mut)]
     async fn create_robot(
         &self,
         input: CreateRobotRequest,
@@ -5158,7 +5165,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotResponse, _>()?;
 
@@ -5170,6 +5177,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a robot application. </p>
+    #[allow(unused_mut)]
     async fn create_robot_application(
         &self,
         input: CreateRobotApplicationRequest,
@@ -5188,7 +5196,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotApplicationResponse, _>()?;
 
@@ -5200,6 +5208,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a version of a robot application.</p>
+    #[allow(unused_mut)]
     async fn create_robot_application_version(
         &self,
         input: CreateRobotApplicationVersionRequest,
@@ -5221,7 +5230,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotApplicationVersionResponse, _>()?;
 
@@ -5233,6 +5242,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a simulation application.</p>
+    #[allow(unused_mut)]
     async fn create_simulation_application(
         &self,
         input: CreateSimulationApplicationRequest,
@@ -5252,7 +5262,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationApplicationResponse, _>()?;
 
@@ -5264,6 +5274,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a simulation application with a specific revision id.</p>
+    #[allow(unused_mut)]
     async fn create_simulation_application_version(
         &self,
         input: CreateSimulationApplicationVersionRequest,
@@ -5285,7 +5296,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationApplicationVersionResponse, _>()?;
 
@@ -5299,6 +5310,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p><p>Creates a simulation job.</p> <note> <p>After 90 days, simulation jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
+    #[allow(unused_mut)]
     async fn create_simulation_job(
         &self,
         input: CreateSimulationJobRequest,
@@ -5317,7 +5329,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationJobResponse, _>()?;
 
@@ -5329,6 +5341,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a fleet.</p>
+    #[allow(unused_mut)]
     async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
@@ -5347,7 +5360,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFleetResponse, _>()?;
 
@@ -5359,6 +5372,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a robot.</p>
+    #[allow(unused_mut)]
     async fn delete_robot(
         &self,
         input: DeleteRobotRequest,
@@ -5377,7 +5391,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteRobotResponse, _>()?;
 
@@ -5389,6 +5403,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a robot application.</p>
+    #[allow(unused_mut)]
     async fn delete_robot_application(
         &self,
         input: DeleteRobotApplicationRequest,
@@ -5407,7 +5422,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteRobotApplicationResponse, _>()?;
 
@@ -5419,6 +5434,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a simulation application.</p>
+    #[allow(unused_mut)]
     async fn delete_simulation_application(
         &self,
         input: DeleteSimulationApplicationRequest,
@@ -5438,7 +5454,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSimulationApplicationResponse, _>()?;
 
@@ -5450,6 +5466,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deregisters a robot.</p>
+    #[allow(unused_mut)]
     async fn deregister_robot(
         &self,
         input: DeregisterRobotRequest,
@@ -5468,7 +5485,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeregisterRobotResponse, _>()?;
 
@@ -5480,6 +5497,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a deployment job.</p>
+    #[allow(unused_mut)]
     async fn describe_deployment_job(
         &self,
         input: DescribeDeploymentJobRequest,
@@ -5498,7 +5516,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeploymentJobResponse, _>()?;
 
@@ -5510,6 +5528,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_fleet(
         &self,
         input: DescribeFleetRequest,
@@ -5528,7 +5547,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeFleetResponse, _>()?;
 
@@ -5540,6 +5559,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a robot.</p>
+    #[allow(unused_mut)]
     async fn describe_robot(
         &self,
         input: DescribeRobotRequest,
@@ -5558,7 +5578,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRobotResponse, _>()?;
 
@@ -5570,6 +5590,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a robot application.</p>
+    #[allow(unused_mut)]
     async fn describe_robot_application(
         &self,
         input: DescribeRobotApplicationRequest,
@@ -5588,7 +5609,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRobotApplicationResponse, _>()?;
 
@@ -5600,6 +5621,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation application.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_application(
         &self,
         input: DescribeSimulationApplicationRequest,
@@ -5621,7 +5643,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationApplicationResponse, _>()?;
 
@@ -5633,6 +5655,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation job.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_job(
         &self,
         input: DescribeSimulationJobRequest,
@@ -5651,7 +5674,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationJobResponse, _>()?;
 
@@ -5663,6 +5686,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation job batch.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_job_batch(
         &self,
         input: DescribeSimulationJobBatchRequest,
@@ -5682,7 +5706,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationJobBatchResponse, _>()?;
 
@@ -5694,6 +5718,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
+    #[allow(unused_mut)]
     async fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
@@ -5712,7 +5737,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDeploymentJobsResponse, _>()?;
 
@@ -5724,6 +5749,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
+    #[allow(unused_mut)]
     async fn list_fleets(
         &self,
         input: ListFleetsRequest,
@@ -5742,7 +5768,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFleetsResponse, _>()?;
 
@@ -5754,6 +5780,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
+    #[allow(unused_mut)]
     async fn list_robot_applications(
         &self,
         input: ListRobotApplicationsRequest,
@@ -5772,7 +5799,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRobotApplicationsResponse, _>()?;
 
@@ -5784,6 +5811,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
+    #[allow(unused_mut)]
     async fn list_robots(
         &self,
         input: ListRobotsRequest,
@@ -5802,7 +5830,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRobotsResponse, _>()?;
 
@@ -5814,6 +5842,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_applications(
         &self,
         input: ListSimulationApplicationsRequest,
@@ -5833,7 +5862,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationApplicationsResponse, _>()?;
 
@@ -5845,6 +5874,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_job_batches(
         &self,
         input: ListSimulationJobBatchesRequest,
@@ -5863,7 +5893,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationJobBatchesResponse, _>()?;
 
@@ -5875,6 +5905,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_jobs(
         &self,
         input: ListSimulationJobsRequest,
@@ -5893,7 +5924,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationJobsResponse, _>()?;
 
@@ -5905,6 +5936,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5920,7 +5952,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -5932,6 +5964,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Registers a robot with a fleet.</p>
+    #[allow(unused_mut)]
     async fn register_robot(
         &self,
         input: RegisterRobotRequest,
@@ -5950,7 +5983,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterRobotResponse, _>()?;
 
@@ -5962,6 +5995,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Restarts a running simulation job.</p>
+    #[allow(unused_mut)]
     async fn restart_simulation_job(
         &self,
         input: RestartSimulationJobRequest,
@@ -5980,7 +6014,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestartSimulationJobResponse, _>()?;
 
@@ -5992,6 +6026,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Starts a new simulation job batch. The batch is defined using one or more <code>SimulationJobRequest</code> objects. </p>
+    #[allow(unused_mut)]
     async fn start_simulation_job_batch(
         &self,
         input: StartSimulationJobBatchRequest,
@@ -6010,7 +6045,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartSimulationJobBatchResponse, _>()?;
 
@@ -6022,6 +6057,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Syncrhonizes robots in a fleet to the latest deployment. This is helpful if robots were added after a deployment.</p>
+    #[allow(unused_mut)]
     async fn sync_deployment_job(
         &self,
         input: SyncDeploymentJobRequest,
@@ -6040,7 +6076,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SyncDeploymentJobResponse, _>()?;
 
@@ -6052,6 +6088,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Adds or edits tags for a AWS RoboMaker resource.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty strings. </p> <p>For information about the rules that apply to tag keys and tag values, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6070,7 +6107,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -6082,6 +6119,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Removes the specified tags from the specified AWS RoboMaker resource.</p> <p>To remove a tag, specify the tag key. To change the tag value of an existing tag key, use <a href="https://docs.aws.amazon.com/robomaker/latest/dg/API_TagResource.html"> <code>TagResource</code> </a>. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -6103,7 +6141,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -6115,6 +6153,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Updates a robot application.</p>
+    #[allow(unused_mut)]
     async fn update_robot_application(
         &self,
         input: UpdateRobotApplicationRequest,
@@ -6133,7 +6172,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRobotApplicationResponse, _>()?;
 
@@ -6145,6 +6184,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Updates a simulation application.</p>
+    #[allow(unused_mut)]
     async fn update_simulation_application(
         &self,
         input: UpdateSimulationApplicationRequest,
@@ -6164,7 +6204,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSimulationApplicationResponse, _>()?;
 

@@ -3941,6 +3941,7 @@ impl IotAnalyticsClient {
 #[async_trait]
 impl IotAnalytics for IotAnalyticsClient {
     /// <p>Sends messages to a channel.</p>
+    #[allow(unused_mut)]
     async fn batch_put_message(
         &self,
         input: BatchPutMessageRequest,
@@ -3959,7 +3960,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchPutMessageResponse, _>()?;
 
@@ -3971,6 +3972,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Cancels the reprocessing of data through the pipeline.</p>
+    #[allow(unused_mut)]
     async fn cancel_pipeline_reprocessing(
         &self,
         input: CancelPipelineReprocessingRequest,
@@ -3991,7 +3993,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelPipelineReprocessingResponse, _>()?;
 
@@ -4003,6 +4005,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Creates a channel. A channel collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.</p>
+    #[allow(unused_mut)]
     async fn create_channel(
         &self,
         input: CreateChannelRequest,
@@ -4021,7 +4024,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateChannelResponse, _>()?;
 
@@ -4033,6 +4036,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
+    #[allow(unused_mut)]
     async fn create_dataset(
         &self,
         input: CreateDatasetRequest,
@@ -4051,7 +4055,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDatasetResponse, _>()?;
 
@@ -4063,6 +4067,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
+    #[allow(unused_mut)]
     async fn create_dataset_content(
         &self,
         input: CreateDatasetContentRequest,
@@ -4081,7 +4086,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDatasetContentResponse, _>()?;
 
@@ -4093,6 +4098,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Creates a data store, which is a repository for messages.</p>
+    #[allow(unused_mut)]
     async fn create_datastore(
         &self,
         input: CreateDatastoreRequest,
@@ -4111,7 +4117,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDatastoreResponse, _>()?;
 
@@ -4123,6 +4129,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Creates a pipeline. A pipeline consumes messages from a channel and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    #[allow(unused_mut)]
     async fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
@@ -4141,7 +4148,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePipelineResponse, _>()?;
 
@@ -4153,6 +4160,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Deletes the specified channel.</p>
+    #[allow(unused_mut)]
     async fn delete_channel(
         &self,
         input: DeleteChannelRequest,
@@ -4171,7 +4179,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4182,6 +4190,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
+    #[allow(unused_mut)]
     async fn delete_dataset(
         &self,
         input: DeleteDatasetRequest,
@@ -4200,7 +4209,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4211,6 +4220,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Deletes the content of the specified data set.</p>
+    #[allow(unused_mut)]
     async fn delete_dataset_content(
         &self,
         input: DeleteDatasetContentRequest,
@@ -4235,7 +4245,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4246,6 +4256,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Deletes the specified data store.</p>
+    #[allow(unused_mut)]
     async fn delete_datastore(
         &self,
         input: DeleteDatastoreRequest,
@@ -4264,7 +4275,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4275,6 +4286,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Deletes the specified pipeline.</p>
+    #[allow(unused_mut)]
     async fn delete_pipeline(
         &self,
         input: DeletePipelineRequest,
@@ -4293,7 +4305,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4304,6 +4316,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves information about a channel.</p>
+    #[allow(unused_mut)]
     async fn describe_channel(
         &self,
         input: DescribeChannelRequest,
@@ -4328,7 +4341,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChannelResponse, _>()?;
 
@@ -4340,6 +4353,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves information about a data set.</p>
+    #[allow(unused_mut)]
     async fn describe_dataset(
         &self,
         input: DescribeDatasetRequest,
@@ -4358,7 +4372,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDatasetResponse, _>()?;
 
@@ -4370,6 +4384,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves information about a data store.</p>
+    #[allow(unused_mut)]
     async fn describe_datastore(
         &self,
         input: DescribeDatastoreRequest,
@@ -4394,7 +4409,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDatastoreResponse, _>()?;
 
@@ -4406,6 +4421,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves the current settings of the AWS IoT Analytics logging options.</p>
+    #[allow(unused_mut)]
     async fn describe_logging_options(
         &self,
     ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
@@ -4420,7 +4436,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeLoggingOptionsResponse, _>()?;
 
@@ -4432,6 +4448,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves information about a pipeline.</p>
+    #[allow(unused_mut)]
     async fn describe_pipeline(
         &self,
         input: DescribePipelineRequest,
@@ -4450,7 +4467,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePipelineResponse, _>()?;
 
@@ -4462,6 +4479,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
+    #[allow(unused_mut)]
     async fn get_dataset_content(
         &self,
         input: GetDatasetContentRequest,
@@ -4486,7 +4504,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDatasetContentResponse, _>()?;
 
@@ -4498,6 +4516,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves a list of channels.</p>
+    #[allow(unused_mut)]
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
@@ -4522,7 +4541,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChannelsResponse, _>()?;
 
@@ -4534,6 +4553,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Lists information about data set contents that have been created.</p>
+    #[allow(unused_mut)]
     async fn list_dataset_contents(
         &self,
         input: ListDatasetContentsRequest,
@@ -4567,7 +4587,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDatasetContentsResponse, _>()?;
 
@@ -4579,6 +4599,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves information about data sets.</p>
+    #[allow(unused_mut)]
     async fn list_datasets(
         &self,
         input: ListDatasetsRequest,
@@ -4603,7 +4624,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDatasetsResponse, _>()?;
 
@@ -4615,6 +4636,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves a list of data stores.</p>
+    #[allow(unused_mut)]
     async fn list_datastores(
         &self,
         input: ListDatastoresRequest,
@@ -4639,7 +4661,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDatastoresResponse, _>()?;
 
@@ -4651,6 +4673,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves a list of pipelines.</p>
+    #[allow(unused_mut)]
     async fn list_pipelines(
         &self,
         input: ListPipelinesRequest,
@@ -4675,7 +4698,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPipelinesResponse, _>()?;
 
@@ -4687,6 +4710,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -4706,7 +4730,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -4718,6 +4742,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
+    #[allow(unused_mut)]
     async fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
@@ -4736,7 +4761,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4747,6 +4772,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Simulates the results of running a pipeline activity on a message payload.</p>
+    #[allow(unused_mut)]
     async fn run_pipeline_activity(
         &self,
         input: RunPipelineActivityRequest,
@@ -4765,7 +4791,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RunPipelineActivityResponse, _>()?;
 
@@ -4777,6 +4803,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Retrieves a sample of messages from the specified channel ingested during the specified timeframe. Up to 10 messages can be retrieved.</p>
+    #[allow(unused_mut)]
     async fn sample_channel_data(
         &self,
         input: SampleChannelDataRequest,
@@ -4807,7 +4834,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SampleChannelDataResponse, _>()?;
 
@@ -4819,6 +4846,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Starts the reprocessing of raw message data through the pipeline.</p>
+    #[allow(unused_mut)]
     async fn start_pipeline_reprocessing(
         &self,
         input: StartPipelineReprocessingRequest,
@@ -4841,7 +4869,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartPipelineReprocessingResponse, _>()?;
 
@@ -4853,6 +4881,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -4875,7 +4904,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -4887,6 +4916,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4909,7 +4939,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -4921,6 +4951,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Updates the settings of a channel.</p>
+    #[allow(unused_mut)]
     async fn update_channel(
         &self,
         input: UpdateChannelRequest,
@@ -4942,7 +4973,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4953,6 +4984,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Updates the settings of a data set.</p>
+    #[allow(unused_mut)]
     async fn update_dataset(
         &self,
         input: UpdateDatasetRequest,
@@ -4974,7 +5006,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4985,6 +5017,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Updates the settings of a data store.</p>
+    #[allow(unused_mut)]
     async fn update_datastore(
         &self,
         input: UpdateDatastoreRequest,
@@ -5006,7 +5039,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5017,6 +5050,7 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 
     /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    #[allow(unused_mut)]
     async fn update_pipeline(
         &self,
         input: UpdatePipelineRequest,
@@ -5038,7 +5072,7 @@ impl IotAnalytics for IotAnalyticsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

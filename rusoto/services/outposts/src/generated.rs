@@ -601,6 +601,7 @@ impl OutpostsClient {
 #[async_trait]
 impl Outposts for OutpostsClient {
     /// <p>Creates an Outpost.</p>
+    #[allow(unused_mut)]
     async fn create_outpost(
         &self,
         input: CreateOutpostInput,
@@ -619,7 +620,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateOutpostOutput, _>()?;
 
@@ -631,6 +632,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>Deletes the Outpost.</p>
+    #[allow(unused_mut)]
     async fn delete_outpost(
         &self,
         input: DeleteOutpostInput,
@@ -646,7 +648,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteOutpostOutput, _>()?;
 
@@ -658,6 +660,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>Deletes the site.</p>
+    #[allow(unused_mut)]
     async fn delete_site(
         &self,
         input: DeleteSiteInput,
@@ -673,7 +676,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSiteOutput, _>()?;
 
@@ -685,6 +688,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>Gets information about the specified Outpost.</p>
+    #[allow(unused_mut)]
     async fn get_outpost(
         &self,
         input: GetOutpostInput,
@@ -700,7 +704,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetOutpostOutput, _>()?;
 
@@ -712,6 +716,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>Lists the instance types for the specified Outpost.</p>
+    #[allow(unused_mut)]
     async fn get_outpost_instance_types(
         &self,
         input: GetOutpostInstanceTypesInput,
@@ -739,7 +744,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetOutpostInstanceTypesOutput, _>()?;
 
@@ -751,6 +756,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>List the Outposts for your AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_outposts(
         &self,
         input: ListOutpostsInput,
@@ -775,7 +781,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOutpostsOutput, _>()?;
 
@@ -787,6 +793,7 @@ impl Outposts for OutpostsClient {
     }
 
     /// <p>Lists the sites for the specified AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_sites(
         &self,
         input: ListSitesInput,
@@ -811,7 +818,7 @@ impl Outposts for OutpostsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListSitesOutput, _>()?;
 

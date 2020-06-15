@@ -1050,6 +1050,7 @@ impl PollyClient {
 #[async_trait]
 impl Polly for PollyClient {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    #[allow(unused_mut)]
     async fn delete_lexicon(
         &self,
         input: DeleteLexiconInput,
@@ -1065,7 +1066,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteLexiconOutput, _>()?;
 
@@ -1077,6 +1078,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
+    #[allow(unused_mut)]
     async fn describe_voices(
         &self,
         input: DescribeVoicesInput,
@@ -1107,7 +1109,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeVoicesOutput, _>()?;
 
@@ -1119,6 +1121,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    #[allow(unused_mut)]
     async fn get_lexicon(
         &self,
         input: GetLexiconInput,
@@ -1134,7 +1137,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLexiconOutput, _>()?;
 
@@ -1146,6 +1149,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Retrieves a specific SpeechSynthesisTask object based on its TaskID. This object contains information about the given speech synthesis task, including the status of the task, and a link to the S3 bucket containing the output of the task.</p>
+    #[allow(unused_mut)]
     async fn get_speech_synthesis_task(
         &self,
         input: GetSpeechSynthesisTaskInput,
@@ -1161,7 +1165,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSpeechSynthesisTaskOutput, _>()?;
 
@@ -1173,6 +1177,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    #[allow(unused_mut)]
     async fn list_lexicons(
         &self,
         input: ListLexiconsInput,
@@ -1194,7 +1199,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListLexiconsOutput, _>()?;
 
@@ -1206,6 +1211,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Returns a list of SpeechSynthesisTask objects ordered by their creation date. This operation can filter the tasks by their status, for example, allowing users to list only tasks that are completed.</p>
+    #[allow(unused_mut)]
     async fn list_speech_synthesis_tasks(
         &self,
         input: ListSpeechSynthesisTasksInput,
@@ -1233,7 +1239,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSpeechSynthesisTasksOutput, _>()?;
 
@@ -1245,6 +1251,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
+    #[allow(unused_mut)]
     async fn put_lexicon(
         &self,
         input: PutLexiconInput,
@@ -1263,7 +1270,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutLexiconOutput, _>()?;
 
@@ -1275,6 +1282,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Allows the creation of an asynchronous synthesis task, by starting a new <code>SpeechSynthesisTask</code>. This operation requires all the standard information needed for speech synthesis, plus the name of an Amazon S3 bucket for the service to store the output of the synthesis task and two optional parameters (OutputS3KeyPrefix and SnsTopicArn). Once the synthesis task is created, this operation will return a SpeechSynthesisTask object, which will include an identifier of this task as well as the current status.</p>
+    #[allow(unused_mut)]
     async fn start_speech_synthesis_task(
         &self,
         input: StartSpeechSynthesisTaskInput,
@@ -1293,7 +1301,7 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartSpeechSynthesisTaskOutput, _>()?;
 
@@ -1305,6 +1313,7 @@ impl Polly for PollyClient {
     }
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
+    #[allow(unused_mut)]
     async fn synthesize_speech(
         &self,
         input: SynthesizeSpeechInput,
@@ -1323,19 +1332,16 @@ impl Polly for PollyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = SynthesizeSpeechOutput::default();
             result.audio_stream = Some(response.body);
 
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
-            if let Some(request_characters) = response.headers.get("x-amzn-RequestCharacters") {
-                let value = request_characters.to_owned();
-                result.request_characters = Some(value.parse::<i64>().unwrap())
-            };
+            result.content_type = response.headers.remove("Content-Type");
+            result.request_characters = response
+                .headers
+                .remove("x-amzn-RequestCharacters")
+                .map(|value| value.parse::<i64>().unwrap());
 
             Ok(result)
         } else {

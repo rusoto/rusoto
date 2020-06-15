@@ -554,6 +554,7 @@ impl ConnectParticipantClient {
 #[async_trait]
 impl ConnectParticipant for ConnectParticipantClient {
     /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
+    #[allow(unused_mut)]
     async fn create_participant_connection(
         &self,
         input: CreateParticipantConnectionRequest,
@@ -575,7 +576,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateParticipantConnectionResponse, _>()?;
 
@@ -587,6 +588,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn disconnect_participant(
         &self,
         input: DisconnectParticipantRequest,
@@ -607,7 +609,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisconnectParticipantResponse, _>()?;
 
@@ -619,6 +621,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn get_transcript(
         &self,
         input: GetTranscriptRequest,
@@ -639,7 +642,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTranscriptResponse, _>()?;
 
@@ -651,6 +654,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn send_event(
         &self,
         input: SendEventRequest,
@@ -671,7 +675,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendEventResponse, _>()?;
 
@@ -683,6 +687,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn send_message(
         &self,
         input: SendMessageRequest,
@@ -703,7 +708,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendMessageResponse, _>()?;
 

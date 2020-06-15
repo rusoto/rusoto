@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CloudHsmv2Client {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "cloudhsm", &self.region, request_uri);
+        request.set_endpoint_prefix("cloudhsmv2".to_string());
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster. All backup objects contain the BackupId, BackupState, ClusterId, and CreateTimestamp parameters. Backups that were copied into a destination region additionally contain the CopyTimestamp, SourceBackup, SourceCluster, and SourceRegion paramters. A backup that is pending deletion will include the DeleteTimestamp parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1458,27 +1485,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CopyBackupToRegionRequest,
     ) -> Result<CopyBackupToRegionResponse, RusotoError<CopyBackupToRegionError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.CopyBackupToRegion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CopyBackupToRegionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CopyBackupToRegionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyBackupToRegionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CopyBackupToRegionResponse, _>()
     }
 
     /// <p>Creates a new AWS CloudHSM cluster.</p>
@@ -1486,26 +1503,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CreateClusterRequest,
     ) -> Result<CreateClusterResponse, RusotoError<CreateClusterError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.CreateCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateClusterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateClusterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateClusterResponse, _>()
     }
 
     /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
@@ -1513,26 +1521,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CreateHsmRequest,
     ) -> Result<CreateHsmResponse, RusotoError<CreateHsmError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.CreateHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateHsmResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHsmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHsmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateHsmResponse, _>()
     }
 
     /// <p>Deletes a specified AWS CloudHSM backup. A backup can be restored up to 7 days after the DeleteBackup request is made. For more information on restoring a backup, see <a>RestoreBackup</a>.</p>
@@ -1540,26 +1539,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteBackupRequest,
     ) -> Result<DeleteBackupResponse, RusotoError<DeleteBackupError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteBackupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBackupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteBackupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteBackupResponse, _>()
     }
 
     /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
@@ -1567,26 +1557,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.DeleteCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteClusterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteClusterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteClusterResponse, _>()
     }
 
     /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
@@ -1594,26 +1575,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteHsmRequest,
     ) -> Result<DeleteHsmResponse, RusotoError<DeleteHsmError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.DeleteHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteHsmResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteHsmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteHsmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteHsmResponse, _>()
     }
 
     /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
@@ -1621,26 +1593,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, RusotoError<DescribeBackupsError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.DescribeBackups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeBackupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeBackupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeBackupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeBackupsResponse, _>()
     }
 
     /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
@@ -1648,27 +1611,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.DescribeClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeClustersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeClustersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClustersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeClustersResponse, _>()
     }
 
     /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
@@ -1676,27 +1629,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: InitializeClusterRequest,
     ) -> Result<InitializeClusterResponse, RusotoError<InitializeClusterError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.InitializeCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<InitializeClusterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InitializeClusterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, InitializeClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<InitializeClusterResponse, _>()
     }
 
     /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
@@ -1704,26 +1647,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
     }
 
     /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For mor information on deleting a backup, see <a>DeleteBackup</a>.</p>
@@ -1731,26 +1665,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: RestoreBackupRequest,
     ) -> Result<RestoreBackupResponse, RusotoError<RestoreBackupError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.RestoreBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RestoreBackupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RestoreBackupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreBackupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RestoreBackupResponse, _>()
     }
 
     /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
@@ -1758,26 +1683,17 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
@@ -1785,25 +1701,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
-        request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "BaldrApiService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 }

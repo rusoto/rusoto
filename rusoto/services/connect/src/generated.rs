@@ -3210,6 +3210,7 @@ impl ConnectClient {
 #[async_trait]
 impl Connect for ConnectClient {
     /// <p>Creates a user account for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn create_user(
         &self,
         input: CreateUserRequest,
@@ -3228,7 +3229,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateUserResponse, _>()?;
 
@@ -3240,6 +3241,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Deletes a user account from the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn delete_user(
         &self,
         input: DeleteUserRequest,
@@ -3259,7 +3261,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3270,6 +3272,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Describes the specified user account. You can find the instance ID in the console (it’s the final part of the ARN). The console does not display the user IDs. Instead, list the users and note the IDs provided in the output.</p>
+    #[allow(unused_mut)]
     async fn describe_user(
         &self,
         input: DescribeUserRequest,
@@ -3289,7 +3292,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeUserResponse, _>()?;
 
@@ -3301,6 +3304,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Describes the specified hierarchy group.</p>
+    #[allow(unused_mut)]
     async fn describe_user_hierarchy_group(
         &self,
         input: DescribeUserHierarchyGroupRequest,
@@ -3321,7 +3325,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeUserHierarchyGroupResponse, _>()?;
 
@@ -3333,6 +3337,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Describes the hierarchy structure of the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn describe_user_hierarchy_structure(
         &self,
         input: DescribeUserHierarchyStructureRequest,
@@ -3354,7 +3359,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeUserHierarchyStructureResponse, _>()?;
 
@@ -3366,6 +3371,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Retrieves the contact attributes for the specified contact.</p>
+    #[allow(unused_mut)]
     async fn get_contact_attributes(
         &self,
         input: GetContactAttributesRequest,
@@ -3385,7 +3391,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetContactAttributesResponse, _>()?;
 
@@ -3397,6 +3403,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Gets the real-time metric data from the specified Amazon Connect instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-reports.html">Real-time Metrics Reports</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_current_metric_data(
         &self,
         input: GetCurrentMetricDataRequest,
@@ -3418,7 +3425,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCurrentMetricDataResponse, _>()?;
 
@@ -3430,6 +3437,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Retrieves a token for federation.</p>
+    #[allow(unused_mut)]
     async fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
@@ -3448,7 +3456,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFederationTokenResponse, _>()?;
 
@@ -3460,6 +3468,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Gets historical metric data from the specified Amazon Connect instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/historical-metrics.html">Historical Metrics Reports</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_metric_data(
         &self,
         input: GetMetricDataRequest,
@@ -3481,7 +3490,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMetricDataResponse, _>()?;
 
@@ -3493,6 +3502,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_contact_flows(
         &self,
         input: ListContactFlowsRequest,
@@ -3525,7 +3535,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListContactFlowsResponse, _>()?;
 
@@ -3537,6 +3547,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides information about the hours of operation for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_hours_of_operations(
         &self,
         input: ListHoursOfOperationsRequest,
@@ -3564,7 +3575,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListHoursOfOperationsResponse, _>()?;
 
@@ -3576,6 +3587,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides information about the phone numbers for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_phone_numbers(
         &self,
         input: ListPhoneNumbersRequest,
@@ -3613,7 +3625,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPhoneNumbersResponse, _>()?;
 
@@ -3625,6 +3637,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides information about the queues for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_queues(
         &self,
         input: ListQueuesRequest,
@@ -3657,7 +3670,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListQueuesResponse, _>()?;
 
@@ -3669,6 +3682,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides summary information about the routing profiles for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_routing_profiles(
         &self,
         input: ListRoutingProfilesRequest,
@@ -3696,7 +3710,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRoutingProfilesResponse, _>()?;
 
@@ -3708,6 +3722,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides summary information about the security profiles for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
@@ -3735,7 +3750,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSecurityProfilesResponse, _>()?;
 
@@ -3747,6 +3762,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Lists the tags for the specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3762,7 +3778,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3774,6 +3790,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides summary information about the hierarchy groups for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_user_hierarchy_groups(
         &self,
         input: ListUserHierarchyGroupsRequest,
@@ -3801,7 +3818,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUserHierarchyGroupsResponse, _>()?;
 
@@ -3813,6 +3830,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Provides summary information about the users for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
     async fn list_users(
         &self,
         input: ListUsersRequest,
@@ -3840,7 +3858,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUsersResponse, _>()?;
 
@@ -3852,6 +3870,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients need to subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p>
+    #[allow(unused_mut)]
     async fn start_chat_contact(
         &self,
         input: StartChatContactRequest,
@@ -3870,7 +3889,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartChatContactResponse, _>()?;
 
@@ -3882,6 +3901,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Initiates a contact flow to place an outbound call to a customer.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p>
+    #[allow(unused_mut)]
     async fn start_outbound_voice_contact(
         &self,
         input: StartOutboundVoiceContactRequest,
@@ -3901,7 +3921,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartOutboundVoiceContactResponse, _>()?;
 
@@ -3913,6 +3933,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Ends the specified contact.</p>
+    #[allow(unused_mut)]
     async fn stop_contact(
         &self,
         input: StopContactRequest,
@@ -3931,7 +3952,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopContactResponse, _>()?;
 
@@ -3943,6 +3964,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource type is users.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3961,7 +3983,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3972,6 +3994,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Removes the specified tags from the specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3993,7 +4016,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4004,6 +4027,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    #[allow(unused_mut)]
     async fn update_contact_attributes(
         &self,
         input: UpdateContactAttributesRequest,
@@ -4022,7 +4046,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateContactAttributesResponse, _>()?;
 
@@ -4034,6 +4058,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Assigns the specified hierarchy group to the specified user.</p>
+    #[allow(unused_mut)]
     async fn update_user_hierarchy(
         &self,
         input: UpdateUserHierarchyRequest,
@@ -4056,7 +4081,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4067,6 +4092,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Updates the identity information for the specified user.</p>
+    #[allow(unused_mut)]
     async fn update_user_identity_info(
         &self,
         input: UpdateUserIdentityInfoRequest,
@@ -4089,7 +4115,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4100,6 +4126,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Updates the phone configuration settings for the specified user.</p>
+    #[allow(unused_mut)]
     async fn update_user_phone_config(
         &self,
         input: UpdateUserPhoneConfigRequest,
@@ -4122,7 +4149,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4133,6 +4160,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Assigns the specified routing profile to the specified user.</p>
+    #[allow(unused_mut)]
     async fn update_user_routing_profile(
         &self,
         input: UpdateUserRoutingProfileRequest,
@@ -4155,7 +4183,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4166,6 +4194,7 @@ impl Connect for ConnectClient {
     }
 
     /// <p>Assigns the specified security profiles to the specified user.</p>
+    #[allow(unused_mut)]
     async fn update_user_security_profiles(
         &self,
         input: UpdateUserSecurityProfilesRequest,
@@ -4188,7 +4217,7 @@ impl Connect for ConnectClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

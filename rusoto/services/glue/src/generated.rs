@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl GlueClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "glue", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -13373,27 +13399,18 @@ impl Glue for GlueClient {
         &self,
         input: BatchCreatePartitionRequest,
     ) -> Result<BatchCreatePartitionResponse, RusotoError<BatchCreatePartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchCreatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchCreatePartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchCreatePartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchCreatePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchCreatePartitionResponse, _>()
     }
 
     /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
@@ -13401,27 +13418,18 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteConnectionRequest,
     ) -> Result<BatchDeleteConnectionResponse, RusotoError<BatchDeleteConnectionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteConnectionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDeleteConnectionResponse, _>()
     }
 
     /// <p>Deletes one or more partitions in a batch operation.</p>
@@ -13429,27 +13437,18 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeletePartitionRequest,
     ) -> Result<BatchDeletePartitionResponse, RusotoError<BatchDeletePartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchDeletePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeletePartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeletePartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeletePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDeletePartitionResponse, _>()
     }
 
     /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
@@ -13457,27 +13456,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteTableRequest,
     ) -> Result<BatchDeleteTableResponse, RusotoError<BatchDeleteTableError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteTableResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteTableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteTableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteTableResponse, _>()
     }
 
     /// <p>Deletes a specified batch of versions of a table.</p>
@@ -13485,27 +13474,18 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteTableVersionRequest,
     ) -> Result<BatchDeleteTableVersionResponse, RusotoError<BatchDeleteTableVersionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDeleteTableVersionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDeleteTableVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteTableVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDeleteTableVersionResponse, _>()
     }
 
     /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
@@ -13513,27 +13493,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetCrawlersRequest,
     ) -> Result<BatchGetCrawlersResponse, RusotoError<BatchGetCrawlersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetCrawlers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetCrawlersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetCrawlersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetCrawlersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCrawlersResponse, _>()
     }
 
     /// <p>Returns a list of resource metadata for a given list of development endpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
@@ -13541,27 +13511,18 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetDevEndpointsRequest,
     ) -> Result<BatchGetDevEndpointsResponse, RusotoError<BatchGetDevEndpointsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetDevEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetDevEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetDevEndpointsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetDevEndpointsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetDevEndpointsResponse, _>()
     }
 
     /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
@@ -13569,26 +13530,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetJobsRequest,
     ) -> Result<BatchGetJobsResponse, RusotoError<BatchGetJobsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetJobsResponse, _>()
     }
 
     /// <p>Retrieves partitions in a batch request.</p>
@@ -13596,27 +13548,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetPartitionRequest,
     ) -> Result<BatchGetPartitionResponse, RusotoError<BatchGetPartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetPartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetPartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetPartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetPartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetPartitionResponse, _>()
     }
 
     /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
@@ -13624,27 +13566,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetTriggersRequest,
     ) -> Result<BatchGetTriggersResponse, RusotoError<BatchGetTriggersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetTriggersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetTriggersResponse, _>()
     }
 
     /// <p>Returns a list of resource metadata for a given list of workflow names. After calling the <code>ListWorkflows</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
@@ -13652,27 +13584,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetWorkflowsRequest,
     ) -> Result<BatchGetWorkflowsResponse, RusotoError<BatchGetWorkflowsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchGetWorkflows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetWorkflowsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetWorkflowsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetWorkflowsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetWorkflowsResponse, _>()
     }
 
     /// <p>Stops one or more job runs for a specified job definition.</p>
@@ -13680,26 +13602,17 @@ impl Glue for GlueClient {
         &self,
         input: BatchStopJobRunRequest,
     ) -> Result<BatchStopJobRunResponse, RusotoError<GlueBatchStopJobRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.BatchStopJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchStopJobRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GlueBatchStopJobRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GlueBatchStopJobRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchStopJobRunResponse, _>()
     }
 
     /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
@@ -13707,26 +13620,17 @@ impl Glue for GlueClient {
         &self,
         input: CancelMLTaskRunRequest,
     ) -> Result<CancelMLTaskRunResponse, RusotoError<CancelMLTaskRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CancelMLTaskRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CancelMLTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelMLTaskRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CancelMLTaskRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CancelMLTaskRunResponse, _>()
     }
 
     /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
@@ -13734,27 +13638,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateClassifierRequest,
     ) -> Result<CreateClassifierResponse, RusotoError<CreateClassifierError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateClassifierResponse, _>()
     }
 
     /// <p>Creates a connection definition in the Data Catalog.</p>
@@ -13762,27 +13656,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateConnectionRequest,
     ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateConnectionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionResponse, _>()
     }
 
     /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
@@ -13790,26 +13674,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateCrawlerRequest,
     ) -> Result<CreateCrawlerResponse, RusotoError<CreateCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateCrawlerResponse, _>()
     }
 
     /// <p>Creates a new database in a Data Catalog.</p>
@@ -13817,26 +13692,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateDatabaseRequest,
     ) -> Result<CreateDatabaseResponse, RusotoError<CreateDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDatabaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDatabaseResponse, _>()
     }
 
     /// <p>Creates a new development endpoint.</p>
@@ -13844,27 +13710,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateDevEndpointRequest,
     ) -> Result<CreateDevEndpointResponse, RusotoError<CreateDevEndpointError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDevEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDevEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDevEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDevEndpointResponse, _>()
     }
 
     /// <p>Creates a new job definition.</p>
@@ -13872,26 +13728,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResponse, _>()
     }
 
     /// <p>Creates an AWS Glue machine learning transform. This operation creates the transform and all the necessary parameters to train it.</p> <p>Call this operation as the first step in the process of using a machine learning transform (such as the <code>FindMatches</code> transform) for deduplicating data. You can provide an optional <code>Description</code>, in addition to the parameters that you want to use for your algorithm.</p> <p>You must also specify certain parameters for the tasks that AWS Glue runs on your behalf as part of learning from your data and creating a high-quality machine learning transform. These parameters include <code>Role</code>, and optionally, <code>AllocatedCapacity</code>, <code>Timeout</code>, and <code>MaxRetries</code>. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-jobs-job.html">Jobs</a>.</p>
@@ -13899,27 +13746,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateMLTransformRequest,
     ) -> Result<CreateMLTransformResponse, RusotoError<CreateMLTransformError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateMLTransform");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMLTransformResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMLTransformError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateMLTransformError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateMLTransformResponse, _>()
     }
 
     /// <p>Creates a new partition.</p>
@@ -13927,26 +13764,17 @@ impl Glue for GlueClient {
         &self,
         input: CreatePartitionRequest,
     ) -> Result<CreatePartitionResponse, RusotoError<CreatePartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreatePartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePartitionResponse, _>()
     }
 
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
@@ -13954,26 +13782,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateScriptRequest,
     ) -> Result<CreateScriptResponse, RusotoError<CreateScriptError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateScript");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateScriptResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateScriptError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateScriptError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateScriptResponse, _>()
     }
 
     /// <p>Creates a new security configuration. A security configuration is a set of security properties that can be used by AWS Glue. You can use a security configuration to encrypt data at rest. For information about using security configurations in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/encryption-security-configuration.html">Encrypting Data Written by Crawlers, Jobs, and Development Endpoints</a>.</p>
@@ -13982,27 +13801,18 @@ impl Glue for GlueClient {
         input: CreateSecurityConfigurationRequest,
     ) -> Result<CreateSecurityConfigurationResponse, RusotoError<CreateSecurityConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSecurityConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateSecurityConfigurationResponse, _>()
     }
 
     /// <p>Creates a new table definition in the Data Catalog.</p>
@@ -14010,26 +13820,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateTableRequest,
     ) -> Result<CreateTableResponse, RusotoError<CreateTableError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTableResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTableResponse, _>()
     }
 
     /// <p>Creates a new trigger.</p>
@@ -14037,26 +13838,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateTriggerRequest,
     ) -> Result<CreateTriggerResponse, RusotoError<CreateTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTriggerResponse, _>()
     }
 
     /// <p>Creates a new function definition in the Data Catalog.</p>
@@ -14065,27 +13857,18 @@ impl Glue for GlueClient {
         input: CreateUserDefinedFunctionRequest,
     ) -> Result<CreateUserDefinedFunctionResponse, RusotoError<CreateUserDefinedFunctionError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateUserDefinedFunctionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUserDefinedFunctionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUserDefinedFunctionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateUserDefinedFunctionResponse, _>()
     }
 
     /// <p>Creates a new workflow.</p>
@@ -14093,26 +13876,17 @@ impl Glue for GlueClient {
         &self,
         input: CreateWorkflowRequest,
     ) -> Result<CreateWorkflowResponse, RusotoError<CreateWorkflowError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.CreateWorkflow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkflowResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateWorkflowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateWorkflowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkflowResponse, _>()
     }
 
     /// <p>Removes a classifier from the Data Catalog.</p>
@@ -14120,27 +13894,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteClassifierRequest,
     ) -> Result<DeleteClassifierResponse, RusotoError<DeleteClassifierError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteClassifierResponse, _>()
     }
 
     /// <p>Deletes a connection from the Data Catalog.</p>
@@ -14148,27 +13912,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteConnectionRequest,
     ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteConnectionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionResponse, _>()
     }
 
     /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
@@ -14176,26 +13930,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteCrawlerRequest,
     ) -> Result<DeleteCrawlerResponse, RusotoError<DeleteCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteCrawlerResponse, _>()
     }
 
     /// <p><p>Removes a specified database from a Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
@@ -14203,26 +13948,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteDatabaseRequest,
     ) -> Result<DeleteDatabaseResponse, RusotoError<DeleteDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDatabaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDatabaseResponse, _>()
     }
 
     /// <p>Deletes a specified development endpoint.</p>
@@ -14230,27 +13966,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteDevEndpointRequest,
     ) -> Result<DeleteDevEndpointResponse, RusotoError<DeleteDevEndpointError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDevEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDevEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDevEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDevEndpointResponse, _>()
     }
 
     /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
@@ -14258,26 +13984,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteJobRequest,
     ) -> Result<DeleteJobResponse, RusotoError<DeleteJobError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteJobResponse, _>()
     }
 
     /// <p>Deletes an AWS Glue machine learning transform. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. If you no longer need a transform, you can delete it by calling <code>DeleteMLTransforms</code>. However, any AWS Glue jobs that still reference the deleted transform will no longer succeed.</p>
@@ -14285,27 +14002,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteMLTransformRequest,
     ) -> Result<DeleteMLTransformResponse, RusotoError<DeleteMLTransformError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteMLTransform");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMLTransformResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMLTransformError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMLTransformError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteMLTransformResponse, _>()
     }
 
     /// <p>Deletes a specified partition.</p>
@@ -14313,26 +14020,17 @@ impl Glue for GlueClient {
         &self,
         input: DeletePartitionRequest,
     ) -> Result<DeletePartitionResponse, RusotoError<DeletePartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeletePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeletePartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeletePartitionResponse, _>()
     }
 
     /// <p>Deletes a specified policy.</p>
@@ -14340,27 +14038,18 @@ impl Glue for GlueClient {
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> Result<DeleteResourcePolicyResponse, RusotoError<DeleteResourcePolicyError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourcePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourcePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteResourcePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteResourcePolicyResponse, _>()
     }
 
     /// <p>Deletes a specified security configuration.</p>
@@ -14369,27 +14058,18 @@ impl Glue for GlueClient {
         input: DeleteSecurityConfigurationRequest,
     ) -> Result<DeleteSecurityConfigurationResponse, RusotoError<DeleteSecurityConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSecurityConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSecurityConfigurationResponse, _>()
     }
 
     /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure the immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
@@ -14397,26 +14077,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTableRequest,
     ) -> Result<DeleteTableResponse, RusotoError<DeleteTableError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableResponse, _>()
     }
 
     /// <p>Deletes a specified version of a table.</p>
@@ -14424,27 +14095,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTableVersionRequest,
     ) -> Result<DeleteTableVersionResponse, RusotoError<DeleteTableVersionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTableVersionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTableVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTableVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTableVersionResponse, _>()
     }
 
     /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
@@ -14452,26 +14113,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTriggerRequest,
     ) -> Result<DeleteTriggerResponse, RusotoError<DeleteTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTriggerResponse, _>()
     }
 
     /// <p>Deletes an existing function definition from the Data Catalog.</p>
@@ -14480,27 +14132,18 @@ impl Glue for GlueClient {
         input: DeleteUserDefinedFunctionRequest,
     ) -> Result<DeleteUserDefinedFunctionResponse, RusotoError<DeleteUserDefinedFunctionError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteUserDefinedFunctionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUserDefinedFunctionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUserDefinedFunctionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteUserDefinedFunctionResponse, _>()
     }
 
     /// <p>Deletes a workflow.</p>
@@ -14508,26 +14151,17 @@ impl Glue for GlueClient {
         &self,
         input: DeleteWorkflowRequest,
     ) -> Result<DeleteWorkflowResponse, RusotoError<DeleteWorkflowError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.DeleteWorkflow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkflowResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteWorkflowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteWorkflowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkflowResponse, _>()
     }
 
     /// <p>Retrieves the status of a migration operation.</p>
@@ -14535,27 +14169,18 @@ impl Glue for GlueClient {
         &self,
         input: GetCatalogImportStatusRequest,
     ) -> Result<GetCatalogImportStatusResponse, RusotoError<GetCatalogImportStatusError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetCatalogImportStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCatalogImportStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCatalogImportStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCatalogImportStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCatalogImportStatusResponse, _>()
     }
 
     /// <p>Retrieve a classifier by name.</p>
@@ -14563,26 +14188,17 @@ impl Glue for GlueClient {
         &self,
         input: GetClassifierRequest,
     ) -> Result<GetClassifierResponse, RusotoError<GetClassifierError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetClassifierResponse, _>()
     }
 
     /// <p>Lists all classifier objects in the Data Catalog.</p>
@@ -14590,26 +14206,17 @@ impl Glue for GlueClient {
         &self,
         input: GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, RusotoError<GetClassifiersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetClassifiers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetClassifiersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetClassifiersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetClassifiersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetClassifiersResponse, _>()
     }
 
     /// <p>Retrieves a connection definition from the Data Catalog.</p>
@@ -14617,26 +14224,17 @@ impl Glue for GlueClient {
         &self,
         input: GetConnectionRequest,
     ) -> Result<GetConnectionResponse, RusotoError<GetConnectionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionResponse, _>()
     }
 
     /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
@@ -14644,26 +14242,17 @@ impl Glue for GlueClient {
         &self,
         input: GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, RusotoError<GetConnectionsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConnectionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionsResponse, _>()
     }
 
     /// <p>Retrieves metadata for a specified crawler.</p>
@@ -14671,26 +14260,17 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlerRequest,
     ) -> Result<GetCrawlerResponse, RusotoError<GetCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlerResponse, _>()
     }
 
     /// <p>Retrieves metrics about specified crawlers.</p>
@@ -14698,27 +14278,17 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlerMetricsRequest,
     ) -> Result<GetCrawlerMetricsResponse, RusotoError<GetCrawlerMetricsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetCrawlerMetrics");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCrawlerMetricsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCrawlerMetricsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCrawlerMetricsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlerMetricsResponse, _>()
     }
 
     /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
@@ -14726,26 +14296,17 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlersRequest,
     ) -> Result<GetCrawlersResponse, RusotoError<GetCrawlersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetCrawlers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCrawlersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCrawlersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCrawlersResponse, _>()
     }
 
     /// <p>Retrieves the security configuration for a specified catalog.</p>
@@ -14756,29 +14317,21 @@ impl Glue for GlueClient {
         GetDataCatalogEncryptionSettingsResponse,
         RusotoError<GetDataCatalogEncryptionSettingsError>,
     > {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDataCatalogEncryptionSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataCatalogEncryptionSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataCatalogEncryptionSettingsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetDataCatalogEncryptionSettingsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDataCatalogEncryptionSettingsResponse, _>()
     }
 
     /// <p>Retrieves the definition of a specified database.</p>
@@ -14786,26 +14339,17 @@ impl Glue for GlueClient {
         &self,
         input: GetDatabaseRequest,
     ) -> Result<GetDatabaseResponse, RusotoError<GetDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDatabaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDatabaseResponse, _>()
     }
 
     /// <p>Retrieves all databases defined in a given Data Catalog.</p>
@@ -14813,26 +14357,17 @@ impl Glue for GlueClient {
         &self,
         input: GetDatabasesRequest,
     ) -> Result<GetDatabasesResponse, RusotoError<GetDatabasesError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDatabases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDatabasesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDatabasesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDatabasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDatabasesResponse, _>()
     }
 
     /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
@@ -14840,27 +14375,17 @@ impl Glue for GlueClient {
         &self,
         input: GetDataflowGraphRequest,
     ) -> Result<GetDataflowGraphResponse, RusotoError<GetDataflowGraphError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDataflowGraph");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataflowGraphResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataflowGraphError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDataflowGraphError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDataflowGraphResponse, _>()
     }
 
     /// <p><p>Retrieves information about a specified development endpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
@@ -14868,26 +14393,17 @@ impl Glue for GlueClient {
         &self,
         input: GetDevEndpointRequest,
     ) -> Result<GetDevEndpointResponse, RusotoError<GetDevEndpointError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDevEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointResponse, _>()
     }
 
     /// <p><p>Retrieves all the development endpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
@@ -14895,26 +14411,17 @@ impl Glue for GlueClient {
         &self,
         input: GetDevEndpointsRequest,
     ) -> Result<GetDevEndpointsResponse, RusotoError<GetDevEndpointsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevEndpointsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDevEndpointsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDevEndpointsResponse, _>()
     }
 
     /// <p>Retrieves an existing job definition.</p>
@@ -14922,26 +14429,17 @@ impl Glue for GlueClient {
         &self,
         input: GetJobRequest,
     ) -> Result<GetJobResponse, RusotoError<GetJobError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobResponse, _>()
     }
 
     /// <p>Returns information on a job bookmark entry.</p>
@@ -14949,26 +14447,17 @@ impl Glue for GlueClient {
         &self,
         input: GetJobBookmarkRequest,
     ) -> Result<GetJobBookmarkResponse, RusotoError<GetJobBookmarkError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetJobBookmark");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobBookmarkResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobBookmarkError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobBookmarkError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobBookmarkResponse, _>()
     }
 
     /// <p>Retrieves the metadata for a given job run.</p>
@@ -14976,26 +14465,17 @@ impl Glue for GlueClient {
         &self,
         input: GetJobRunRequest,
     ) -> Result<GetJobRunResponse, RusotoError<GetJobRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunResponse, _>()
     }
 
     /// <p>Retrieves metadata for all runs of a given job definition.</p>
@@ -15003,26 +14483,17 @@ impl Glue for GlueClient {
         &self,
         input: GetJobRunsRequest,
     ) -> Result<GetJobRunsResponse, RusotoError<GetJobRunsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetJobRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobRunsResponse, _>()
     }
 
     /// <p>Retrieves all current job definitions.</p>
@@ -15030,26 +14501,17 @@ impl Glue for GlueClient {
         &self,
         input: GetJobsRequest,
     ) -> Result<GetJobsResponse, RusotoError<GetJobsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobsResponse, _>()
     }
 
     /// <p>Gets details for a specific task run on a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can check the stats of any task run by calling <code>GetMLTaskRun</code> with the <code>TaskRunID</code> and its parent transform's <code>TransformID</code>.</p>
@@ -15057,26 +14519,17 @@ impl Glue for GlueClient {
         &self,
         input: GetMLTaskRunRequest,
     ) -> Result<GetMLTaskRunResponse, RusotoError<GetMLTaskRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetMLTaskRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMLTaskRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMLTaskRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunResponse, _>()
     }
 
     /// <p>Gets a list of runs for a machine learning transform. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can get a sortable, filterable list of machine learning task runs by calling <code>GetMLTaskRuns</code> with their parent transform's <code>TransformID</code> and other optional parameters as documented in this section.</p> <p>This operation returns a list of historic runs and must be paginated.</p>
@@ -15084,26 +14537,17 @@ impl Glue for GlueClient {
         &self,
         input: GetMLTaskRunsRequest,
     ) -> Result<GetMLTaskRunsResponse, RusotoError<GetMLTaskRunsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetMLTaskRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMLTaskRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMLTaskRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMLTaskRunsResponse, _>()
     }
 
     /// <p>Gets an AWS Glue machine learning transform artifact and all its corresponding metadata. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue. You can retrieve their metadata by calling <code>GetMLTransform</code>.</p>
@@ -15111,26 +14555,17 @@ impl Glue for GlueClient {
         &self,
         input: GetMLTransformRequest,
     ) -> Result<GetMLTransformResponse, RusotoError<GetMLTransformError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetMLTransform");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMLTransformError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMLTransformError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformResponse, _>()
     }
 
     /// <p>Gets a sortable, filterable list of existing AWS Glue machine learning transforms. Machine learning transforms are a special type of transform that use machine learning to learn the details of the transformation to be performed by learning from examples provided by humans. These transformations are then saved by AWS Glue, and you can retrieve their metadata by calling <code>GetMLTransforms</code>.</p>
@@ -15138,26 +14573,17 @@ impl Glue for GlueClient {
         &self,
         input: GetMLTransformsRequest,
     ) -> Result<GetMLTransformsResponse, RusotoError<GetMLTransformsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetMLTransforms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMLTransformsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMLTransformsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMLTransformsResponse, _>()
     }
 
     /// <p>Creates mappings.</p>
@@ -15165,26 +14591,17 @@ impl Glue for GlueClient {
         &self,
         input: GetMappingRequest,
     ) -> Result<GetMappingResponse, RusotoError<GetMappingError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetMapping");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMappingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMappingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMappingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMappingResponse, _>()
     }
 
     /// <p>Retrieves information about a specified partition.</p>
@@ -15192,26 +14609,17 @@ impl Glue for GlueClient {
         &self,
         input: GetPartitionRequest,
     ) -> Result<GetPartitionResponse, RusotoError<GetPartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetPartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionResponse, _>()
     }
 
     /// <p>Retrieves information about the partitions in a table.</p>
@@ -15219,26 +14627,17 @@ impl Glue for GlueClient {
         &self,
         input: GetPartitionsRequest,
     ) -> Result<GetPartitionsResponse, RusotoError<GetPartitionsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetPartitions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPartitionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPartitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionsResponse, _>()
     }
 
     /// <p>Gets code to perform a specified mapping.</p>
@@ -15246,52 +14645,33 @@ impl Glue for GlueClient {
         &self,
         input: GetPlanRequest,
     ) -> Result<GetPlanResponse, RusotoError<GetPlanError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetPlan");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPlanError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPlanError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
     }
 
     /// <p>Retrieves a specified resource policy.</p>
     async fn get_resource_policy(
         &self,
     ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetResourcePolicy");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourcePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourcePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetResourcePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetResourcePolicyResponse, _>()
     }
 
     /// <p>Retrieves a specified security configuration.</p>
@@ -15299,27 +14679,18 @@ impl Glue for GlueClient {
         &self,
         input: GetSecurityConfigurationRequest,
     ) -> Result<GetSecurityConfigurationResponse, RusotoError<GetSecurityConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSecurityConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSecurityConfigurationResponse, _>()
     }
 
     /// <p>Retrieves a list of all security configurations.</p>
@@ -15328,27 +14699,18 @@ impl Glue for GlueClient {
         input: GetSecurityConfigurationsRequest,
     ) -> Result<GetSecurityConfigurationsResponse, RusotoError<GetSecurityConfigurationsError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSecurityConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSecurityConfigurationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSecurityConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSecurityConfigurationsResponse, _>()
     }
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
@@ -15356,26 +14718,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTableRequest,
     ) -> Result<GetTableResponse, RusotoError<GetTableError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTableResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTableResponse, _>()
     }
 
     /// <p>Retrieves a specified version of a table.</p>
@@ -15383,26 +14736,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTableVersionRequest,
     ) -> Result<GetTableVersionResponse, RusotoError<GetTableVersionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTableVersionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTableVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTableVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTableVersionResponse, _>()
     }
 
     /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
@@ -15410,27 +14754,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTableVersionsRequest,
     ) -> Result<GetTableVersionsResponse, RusotoError<GetTableVersionsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTableVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTableVersionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTableVersionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTableVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTableVersionsResponse, _>()
     }
 
     /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
@@ -15438,26 +14772,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTablesRequest,
     ) -> Result<GetTablesResponse, RusotoError<GetTablesError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTablesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTablesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTablesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTablesResponse, _>()
     }
 
     /// <p>Retrieves a list of tags associated with a resource.</p>
@@ -15465,26 +14790,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTagsRequest,
     ) -> Result<GetTagsResponse, RusotoError<GetTagsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
     }
 
     /// <p>Retrieves the definition of a trigger.</p>
@@ -15492,26 +14808,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTriggerRequest,
     ) -> Result<GetTriggerResponse, RusotoError<GetTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTriggerResponse, _>()
     }
 
     /// <p>Gets all the triggers associated with a job.</p>
@@ -15519,26 +14826,17 @@ impl Glue for GlueClient {
         &self,
         input: GetTriggersRequest,
     ) -> Result<GetTriggersResponse, RusotoError<GetTriggersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTriggersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTriggersResponse, _>()
     }
 
     /// <p>Retrieves a specified function definition from the Data Catalog.</p>
@@ -15546,27 +14844,18 @@ impl Glue for GlueClient {
         &self,
         input: GetUserDefinedFunctionRequest,
     ) -> Result<GetUserDefinedFunctionResponse, RusotoError<GetUserDefinedFunctionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUserDefinedFunctionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUserDefinedFunctionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUserDefinedFunctionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetUserDefinedFunctionResponse, _>()
     }
 
     /// <p>Retrieves multiple function definitions from the Data Catalog.</p>
@@ -15574,27 +14863,18 @@ impl Glue for GlueClient {
         &self,
         input: GetUserDefinedFunctionsRequest,
     ) -> Result<GetUserDefinedFunctionsResponse, RusotoError<GetUserDefinedFunctionsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunctions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetUserDefinedFunctionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUserDefinedFunctionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUserDefinedFunctionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetUserDefinedFunctionsResponse, _>()
     }
 
     /// <p>Retrieves resource metadata for a workflow.</p>
@@ -15602,26 +14882,17 @@ impl Glue for GlueClient {
         &self,
         input: GetWorkflowRequest,
     ) -> Result<GetWorkflowResponse, RusotoError<GetWorkflowError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetWorkflow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetWorkflowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetWorkflowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowResponse, _>()
     }
 
     /// <p>Retrieves the metadata for a given workflow run. </p>
@@ -15629,26 +14900,17 @@ impl Glue for GlueClient {
         &self,
         input: GetWorkflowRunRequest,
     ) -> Result<GetWorkflowRunResponse, RusotoError<GetWorkflowRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetWorkflowRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetWorkflowRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetWorkflowRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunResponse, _>()
     }
 
     /// <p>Retrieves the workflow run properties which were set during the run.</p>
@@ -15656,27 +14918,18 @@ impl Glue for GlueClient {
         &self,
         input: GetWorkflowRunPropertiesRequest,
     ) -> Result<GetWorkflowRunPropertiesResponse, RusotoError<GetWorkflowRunPropertiesError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetWorkflowRunProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetWorkflowRunPropertiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetWorkflowRunPropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetWorkflowRunPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetWorkflowRunPropertiesResponse, _>()
     }
 
     /// <p>Retrieves metadata for all runs of a given workflow.</p>
@@ -15684,26 +14937,17 @@ impl Glue for GlueClient {
         &self,
         input: GetWorkflowRunsRequest,
     ) -> Result<GetWorkflowRunsResponse, RusotoError<GetWorkflowRunsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.GetWorkflowRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetWorkflowRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetWorkflowRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetWorkflowRunsResponse, _>()
     }
 
     /// <p>Imports an existing Amazon Athena Data Catalog to AWS Glue</p>
@@ -15711,27 +14955,17 @@ impl Glue for GlueClient {
         &self,
         input: ImportCatalogToGlueRequest,
     ) -> Result<ImportCatalogToGlueResponse, RusotoError<ImportCatalogToGlueError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ImportCatalogToGlue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportCatalogToGlueResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportCatalogToGlueError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportCatalogToGlueError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportCatalogToGlueResponse, _>()
     }
 
     /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
@@ -15739,26 +14973,17 @@ impl Glue for GlueClient {
         &self,
         input: ListCrawlersRequest,
     ) -> Result<ListCrawlersResponse, RusotoError<ListCrawlersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListCrawlers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListCrawlersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCrawlersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCrawlersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListCrawlersResponse, _>()
     }
 
     /// <p>Retrieves the names of all <code>DevEndpoint</code> resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
@@ -15766,27 +14991,17 @@ impl Glue for GlueClient {
         &self,
         input: ListDevEndpointsRequest,
     ) -> Result<ListDevEndpointsResponse, RusotoError<ListDevEndpointsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListDevEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDevEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDevEndpointsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDevEndpointsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDevEndpointsResponse, _>()
     }
 
     /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
@@ -15794,26 +15009,17 @@ impl Glue for GlueClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResponse, RusotoError<ListJobsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResponse, _>()
     }
 
     /// <p> Retrieves a sortable, filterable list of existing AWS Glue machine learning transforms in this AWS account, or the resources with the specified tag. This operation takes the optional <code>Tags</code> field, which you can use as a filter of the responses so that tagged resources can be retrieved as a group. If you choose to use tag filtering, only resources with the tags are retrieved. </p>
@@ -15821,27 +15027,17 @@ impl Glue for GlueClient {
         &self,
         input: ListMLTransformsRequest,
     ) -> Result<ListMLTransformsResponse, RusotoError<ListMLTransformsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListMLTransforms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMLTransformsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMLTransformsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMLTransformsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListMLTransformsResponse, _>()
     }
 
     /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.</p>
@@ -15849,26 +15045,17 @@ impl Glue for GlueClient {
         &self,
         input: ListTriggersRequest,
     ) -> Result<ListTriggersResponse, RusotoError<ListTriggersError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTriggersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTriggersResponse, _>()
     }
 
     /// <p>Lists names of workflows created in the account.</p>
@@ -15876,26 +15063,17 @@ impl Glue for GlueClient {
         &self,
         input: ListWorkflowsRequest,
     ) -> Result<ListWorkflowsResponse, RusotoError<ListWorkflowsError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ListWorkflows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListWorkflowsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListWorkflowsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListWorkflowsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListWorkflowsResponse, _>()
     }
 
     /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
@@ -15906,29 +15084,21 @@ impl Glue for GlueClient {
         PutDataCatalogEncryptionSettingsResponse,
         RusotoError<PutDataCatalogEncryptionSettingsError>,
     > {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.PutDataCatalogEncryptionSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDataCatalogEncryptionSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDataCatalogEncryptionSettingsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                PutDataCatalogEncryptionSettingsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutDataCatalogEncryptionSettingsResponse, _>()
     }
 
     /// <p>Sets the Data Catalog resource policy for access control.</p>
@@ -15936,27 +15106,17 @@ impl Glue for GlueClient {
         &self,
         input: PutResourcePolicyRequest,
     ) -> Result<PutResourcePolicyResponse, RusotoError<PutResourcePolicyError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.PutResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutResourcePolicyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResourcePolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutResourcePolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutResourcePolicyResponse, _>()
     }
 
     /// <p>Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.</p>
@@ -15964,27 +15124,18 @@ impl Glue for GlueClient {
         &self,
         input: PutWorkflowRunPropertiesRequest,
     ) -> Result<PutWorkflowRunPropertiesResponse, RusotoError<PutWorkflowRunPropertiesError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.PutWorkflowRunProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutWorkflowRunPropertiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutWorkflowRunPropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutWorkflowRunPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutWorkflowRunPropertiesResponse, _>()
     }
 
     /// <p>Resets a bookmark entry.</p>
@@ -15992,27 +15143,17 @@ impl Glue for GlueClient {
         &self,
         input: ResetJobBookmarkRequest,
     ) -> Result<ResetJobBookmarkResponse, RusotoError<ResetJobBookmarkError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.ResetJobBookmark");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ResetJobBookmarkResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResetJobBookmarkError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ResetJobBookmarkError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResetJobBookmarkResponse, _>()
     }
 
     /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
@@ -16020,26 +15161,17 @@ impl Glue for GlueClient {
         &self,
         input: SearchTablesRequest,
     ) -> Result<SearchTablesResponse, RusotoError<SearchTablesError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.SearchTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchTablesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchTablesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchTablesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchTablesResponse, _>()
     }
 
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
@@ -16047,26 +15179,17 @@ impl Glue for GlueClient {
         &self,
         input: StartCrawlerRequest,
     ) -> Result<StartCrawlerResponse, RusotoError<StartCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartCrawlerResponse, _>()
     }
 
     /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
@@ -16074,27 +15197,18 @@ impl Glue for GlueClient {
         &self,
         input: StartCrawlerScheduleRequest,
     ) -> Result<StartCrawlerScheduleResponse, RusotoError<StartCrawlerScheduleError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartCrawlerScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartCrawlerScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartCrawlerScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartCrawlerScheduleResponse, _>()
     }
 
     /// <p>Begins an asynchronous task to export all labeled data for a particular transform. This task is the only label-related API call that is not part of the typical active learning workflow. You typically use <code>StartExportLabelsTaskRun</code> when you want to work with all of your existing labels at the same time, such as when you want to remove or change labels that were previously submitted as truth. This API operation accepts the <code>TransformId</code> whose labels you want to export and an Amazon Simple Storage Service (Amazon S3) path to export the labels to. The operation returns a <code>TaskRunId</code>. You can check on the status of your task run by calling the <code>GetMLTaskRun</code> API.</p>
@@ -16102,27 +15216,18 @@ impl Glue for GlueClient {
         &self,
         input: StartExportLabelsTaskRunRequest,
     ) -> Result<StartExportLabelsTaskRunResponse, RusotoError<StartExportLabelsTaskRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartExportLabelsTaskRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartExportLabelsTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartExportLabelsTaskRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartExportLabelsTaskRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartExportLabelsTaskRunResponse, _>()
     }
 
     /// <p>Enables you to provide additional labels (examples of truth) to be used to teach the machine learning transform and improve its quality. This API operation is generally used as part of the active learning workflow that starts with the <code>StartMLLabelingSetGenerationTaskRun</code> call and that ultimately results in improving the quality of your machine learning transform. </p> <p>After the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue machine learning will have generated a series of questions for humans to answer. (Answering these questions is often called 'labeling' in the machine learning workflows). In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” After the labeling process is finished, users upload their answers/labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform use the new and improved labels and perform a higher-quality transformation.</p> <p>By default, <code>StartMLLabelingSetGenerationTaskRun</code> continually learns from and combines all labels that you upload unless you set <code>Replace</code> to true. If you set <code>Replace</code> to true, <code>StartImportLabelsTaskRun</code> deletes and forgets all previously uploaded labels and learns only from the exact set that you upload. Replacing labels can be helpful if you realize that you previously uploaded incorrect labels, and you believe that they are having a negative effect on your transform quality.</p> <p>You can check on the status of your task run by calling the <code>GetMLTaskRun</code> operation. </p>
@@ -16130,27 +15235,18 @@ impl Glue for GlueClient {
         &self,
         input: StartImportLabelsTaskRunRequest,
     ) -> Result<StartImportLabelsTaskRunResponse, RusotoError<StartImportLabelsTaskRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartImportLabelsTaskRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartImportLabelsTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartImportLabelsTaskRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartImportLabelsTaskRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartImportLabelsTaskRunResponse, _>()
     }
 
     /// <p>Starts a job run using a job definition.</p>
@@ -16158,26 +15254,17 @@ impl Glue for GlueClient {
         &self,
         input: StartJobRunRequest,
     ) -> Result<StartJobRunResponse, RusotoError<StartJobRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartJobRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartJobRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartJobRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartJobRunResponse, _>()
     }
 
     /// <p>Starts a task to estimate the quality of the transform. </p> <p>When you provide label sets as examples of truth, AWS Glue machine learning uses some of those examples to learn from them. The rest of the labels are used as a test to estimate quality.</p> <p>Returns a unique identifier for the run. You can call <code>GetMLTaskRun</code> to get more information about the stats of the <code>EvaluationTaskRun</code>.</p>
@@ -16185,27 +15272,18 @@ impl Glue for GlueClient {
         &self,
         input: StartMLEvaluationTaskRunRequest,
     ) -> Result<StartMLEvaluationTaskRunResponse, RusotoError<StartMLEvaluationTaskRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartMLEvaluationTaskRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartMLEvaluationTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartMLEvaluationTaskRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartMLEvaluationTaskRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartMLEvaluationTaskRunResponse, _>()
     }
 
     /// <p>Starts the active learning workflow for your machine learning transform to improve the transform's quality by generating label sets and adding labels.</p> <p>When the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue will have generated a "labeling set" or a set of questions for humans to answer.</p> <p>In the case of the <code>FindMatches</code> transform, these questions are of the form, “What is the correct way to group these rows together into groups composed entirely of matching records?” </p> <p>After the labeling process is finished, you can upload your labels with a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code> finishes, all future runs of the machine learning transform will use the new and improved labels and perform a higher-quality transformation.</p>
@@ -16216,9 +15294,7 @@ impl Glue for GlueClient {
         StartMLLabelingSetGenerationTaskRunResponse,
         RusotoError<StartMLLabelingSetGenerationTaskRunError>,
     > {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSGlue.StartMLLabelingSetGenerationTaskRun",
@@ -16226,22 +15302,16 @@ impl Glue for GlueClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartMLLabelingSetGenerationTaskRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartMLLabelingSetGenerationTaskRunError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StartMLLabelingSetGenerationTaskRunError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartMLLabelingSetGenerationTaskRunResponse, _>()
     }
 
     /// <p>Starts an existing trigger. See <a href="https://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
@@ -16249,26 +15319,17 @@ impl Glue for GlueClient {
         &self,
         input: StartTriggerRequest,
     ) -> Result<StartTriggerResponse, RusotoError<StartTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartTriggerResponse, _>()
     }
 
     /// <p>Starts a new run of the specified workflow.</p>
@@ -16276,27 +15337,17 @@ impl Glue for GlueClient {
         &self,
         input: StartWorkflowRunRequest,
     ) -> Result<StartWorkflowRunResponse, RusotoError<StartWorkflowRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StartWorkflowRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartWorkflowRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartWorkflowRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartWorkflowRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartWorkflowRunResponse, _>()
     }
 
     /// <p>If the specified crawler is running, stops the crawl.</p>
@@ -16304,26 +15355,17 @@ impl Glue for GlueClient {
         &self,
         input: StopCrawlerRequest,
     ) -> Result<StopCrawlerResponse, RusotoError<StopCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StopCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopCrawlerResponse, _>()
     }
 
     /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
@@ -16331,27 +15373,17 @@ impl Glue for GlueClient {
         &self,
         input: StopCrawlerScheduleRequest,
     ) -> Result<StopCrawlerScheduleResponse, RusotoError<StopCrawlerScheduleError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StopCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopCrawlerScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopCrawlerScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopCrawlerScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopCrawlerScheduleResponse, _>()
     }
 
     /// <p>Stops a specified trigger.</p>
@@ -16359,26 +15391,17 @@ impl Glue for GlueClient {
         &self,
         input: StopTriggerRequest,
     ) -> Result<StopTriggerResponse, RusotoError<StopTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StopTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopTriggerResponse, _>()
     }
 
     /// <p>Stops the execution of the specified workflow run.</p>
@@ -16386,26 +15409,17 @@ impl Glue for GlueClient {
         &self,
         input: StopWorkflowRunRequest,
     ) -> Result<StopWorkflowRunResponse, RusotoError<StopWorkflowRunError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.StopWorkflowRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopWorkflowRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopWorkflowRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopWorkflowRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopWorkflowRunResponse, _>()
     }
 
     /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
@@ -16413,26 +15427,17 @@ impl Glue for GlueClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes tags from a resource.</p>
@@ -16440,26 +15445,17 @@ impl Glue for GlueClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
@@ -16467,27 +15463,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateClassifierRequest,
     ) -> Result<UpdateClassifierResponse, RusotoError<UpdateClassifierError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateClassifierResponse, _>()
     }
 
     /// <p>Updates a connection definition in the Data Catalog.</p>
@@ -16495,27 +15481,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateConnectionRequest,
     ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateConnectionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateConnectionResponse, _>()
     }
 
     /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
@@ -16523,26 +15499,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateCrawlerRequest,
     ) -> Result<UpdateCrawlerResponse, RusotoError<UpdateCrawlerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateCrawlerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCrawlerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCrawlerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateCrawlerResponse, _>()
     }
 
     /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
@@ -16550,27 +15517,18 @@ impl Glue for GlueClient {
         &self,
         input: UpdateCrawlerScheduleRequest,
     ) -> Result<UpdateCrawlerScheduleResponse, RusotoError<UpdateCrawlerScheduleError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateCrawlerScheduleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCrawlerScheduleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCrawlerScheduleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateCrawlerScheduleResponse, _>()
     }
 
     /// <p>Updates an existing database definition in a Data Catalog.</p>
@@ -16578,26 +15536,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateDatabaseRequest,
     ) -> Result<UpdateDatabaseResponse, RusotoError<UpdateDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDatabaseResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDatabaseResponse, _>()
     }
 
     /// <p>Updates a specified development endpoint.</p>
@@ -16605,27 +15554,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateDevEndpointRequest,
     ) -> Result<UpdateDevEndpointResponse, RusotoError<UpdateDevEndpointError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDevEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDevEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDevEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDevEndpointResponse, _>()
     }
 
     /// <p>Updates an existing job definition.</p>
@@ -16633,26 +15572,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateJobRequest,
     ) -> Result<UpdateJobResponse, RusotoError<UpdateJobError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResponse, _>()
     }
 
     /// <p>Updates an existing machine learning transform. Call this operation to tune the algorithm parameters to achieve better results.</p> <p>After calling this operation, you can call the <code>StartMLEvaluationTaskRun</code> operation to assess how well your new parameters achieved your goals (such as improving the quality of your machine learning transform, or making it more cost-effective).</p>
@@ -16660,27 +15590,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateMLTransformRequest,
     ) -> Result<UpdateMLTransformResponse, RusotoError<UpdateMLTransformError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateMLTransform");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMLTransformResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMLTransformError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateMLTransformError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateMLTransformResponse, _>()
     }
 
     /// <p>Updates a partition.</p>
@@ -16688,26 +15608,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdatePartitionRequest,
     ) -> Result<UpdatePartitionResponse, RusotoError<UpdatePartitionError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdatePartitionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePartitionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdatePartitionResponse, _>()
     }
 
     /// <p>Updates a metadata table in the Data Catalog.</p>
@@ -16715,26 +15626,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateTableRequest,
     ) -> Result<UpdateTableResponse, RusotoError<UpdateTableError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTableResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTableResponse, _>()
     }
 
     /// <p>Updates a trigger definition.</p>
@@ -16742,26 +15644,17 @@ impl Glue for GlueClient {
         &self,
         input: UpdateTriggerRequest,
     ) -> Result<UpdateTriggerResponse, RusotoError<UpdateTriggerError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateTriggerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTriggerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTriggerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTriggerResponse, _>()
     }
 
     /// <p>Updates an existing function definition in the Data Catalog.</p>
@@ -16770,27 +15663,18 @@ impl Glue for GlueClient {
         input: UpdateUserDefinedFunctionRequest,
     ) -> Result<UpdateUserDefinedFunctionResponse, RusotoError<UpdateUserDefinedFunctionError>>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateUserDefinedFunctionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUserDefinedFunctionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateUserDefinedFunctionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateUserDefinedFunctionResponse, _>()
     }
 
     /// <p>Updates an existing workflow.</p>
@@ -16798,25 +15682,16 @@ impl Glue for GlueClient {
         &self,
         input: UpdateWorkflowRequest,
     ) -> Result<UpdateWorkflowResponse, RusotoError<UpdateWorkflowError>> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSGlue.UpdateWorkflow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkflowResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateWorkflowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateWorkflowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkflowResponse, _>()
     }
 }

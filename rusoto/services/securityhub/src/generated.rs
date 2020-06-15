@@ -5852,6 +5852,7 @@ impl SecurityHubClient {
 #[async_trait]
 impl SecurityHub for SecurityHubClient {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from.</p> <p>When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
+    #[allow(unused_mut)]
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
@@ -5870,7 +5871,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AcceptInvitationResponse, _>()?;
 
@@ -5882,6 +5883,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn batch_disable_standards(
         &self,
         input: BatchDisableStandardsRequest,
@@ -5900,7 +5902,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchDisableStandardsResponse, _>()?;
 
@@ -5912,6 +5914,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Enables the standards specified by the provided <code>StandardsArn</code>. To obtain the ARN for a standard, use the <code> <a>DescribeStandards</a> </code> operation.</p> <p>For more information, see the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">Security Standards</a> section of the <i>AWS Security Hub User Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn batch_enable_standards(
         &self,
         input: BatchEnableStandardsRequest,
@@ -5930,7 +5933,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchEnableStandardsResponse, _>()?;
 
@@ -5942,6 +5945,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p><p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub.</p> <p>The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p> <p>After a finding is created, <code>BatchImportFindings</code> cannot be used to update the following finding fields and objects, which Security Hub customers use to manage their investigation workflow.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn batch_import_findings(
         &self,
         input: BatchImportFindingsRequest,
@@ -5960,7 +5964,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchImportFindingsResponse, _>()?;
 
@@ -5972,6 +5976,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Used by Security Hub customers to update information about their investigation into a finding. Requested by master accounts or member accounts. Master accounts can update findings for their account and their member accounts. Member accounts can update findings for their account.</p> <p>Updates from <code>BatchUpdateFindings</code> do not affect the value of <code>UpdatedAt</code> for a finding.</p> <p>Master accounts can use <code>BatchUpdateFindings</code> to update the following finding fields and objects.</p> <ul> <li> <p> <code>Confidence</code> </p> </li> <li> <p> <code>Criticality</code> </p> </li> <li> <p> <code>Note</code> </p> </li> <li> <p> <code>RelatedFindings</code> </p> </li> <li> <p> <code>Severity</code> </p> </li> <li> <p> <code>Types</code> </p> </li> <li> <p> <code>UserDefinedFields</code> </p> </li> <li> <p> <code>VerificationState</code> </p> </li> <li> <p> <code>Workflow</code> </p> </li> </ul> <p>Member accounts can only use <code>BatchUpdateFindings</code> to update the Note object.</p>
+    #[allow(unused_mut)]
     async fn batch_update_findings(
         &self,
         input: BatchUpdateFindingsRequest,
@@ -5990,7 +5995,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdateFindingsResponse, _>()?;
 
@@ -6002,6 +6007,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Creates a custom action target in Security Hub.</p> <p>You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>
+    #[allow(unused_mut)]
     async fn create_action_target(
         &self,
         input: CreateActionTargetRequest,
@@ -6020,7 +6026,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateActionTargetResponse, _>()?;
 
@@ -6032,6 +6038,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation.</p> <p>To group the related findings in the insight, use the <code>GroupByAttribute</code>.</p>
+    #[allow(unused_mut)]
     async fn create_insight(
         &self,
         input: CreateInsightRequest,
@@ -6050,7 +6057,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInsightResponse, _>()?;
 
@@ -6062,6 +6069,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. To enable Security Hub, you can use the <code> <a>EnableSecurityHub</a> </code> operation.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you must use the <code> <a>InviteMembers</a> </code> operation to invite the accounts to enable Security Hub and become member accounts in Security Hub.</p> <p>If the account owner accepts the invitation, the account becomes a member account in Security Hub. A permissions policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start to be sent to both the member and master accounts.</p> <p>To remove the association between the master and member accounts, use the <code> <a>DisassociateFromMasterAccount</a> </code> or <code> <a>DisassociateMembers</a> </code> operation.</p>
+    #[allow(unused_mut)]
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -6080,7 +6088,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMembersResponse, _>()?;
 
@@ -6092,6 +6100,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Declines invitations to become a member account.</p>
+    #[allow(unused_mut)]
     async fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
@@ -6110,7 +6119,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeclineInvitationsResponse, _>()?;
 
@@ -6122,6 +6131,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Deletes a custom action target from Security Hub.</p> <p>Deleting a custom action target does not affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>
+    #[allow(unused_mut)]
     async fn delete_action_target(
         &self,
         input: DeleteActionTargetRequest,
@@ -6140,7 +6150,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteActionTargetResponse, _>()?;
 
@@ -6152,6 +6162,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Deletes the insight specified by the <code>InsightArn</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_insight(
         &self,
         input: DeleteInsightRequest,
@@ -6167,7 +6178,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInsightResponse, _>()?;
 
@@ -6179,6 +6190,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Deletes invitations received by the AWS account to become a member account.</p>
+    #[allow(unused_mut)]
     async fn delete_invitations(
         &self,
         input: DeleteInvitationsRequest,
@@ -6197,7 +6209,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInvitationsResponse, _>()?;
 
@@ -6209,6 +6221,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Deletes the specified member accounts from Security Hub.</p>
+    #[allow(unused_mut)]
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
@@ -6227,7 +6240,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMembersResponse, _>()?;
 
@@ -6239,6 +6252,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of the custom action targets in Security Hub in your account.</p>
+    #[allow(unused_mut)]
     async fn describe_action_targets(
         &self,
         input: DescribeActionTargetsRequest,
@@ -6257,7 +6271,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeActionTargetsResponse, _>()?;
 
@@ -6269,6 +6283,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns details about the Hub resource in your account, including the <code>HubArn</code> and the time when you enabled Security Hub.</p>
+    #[allow(unused_mut)]
     async fn describe_hub(
         &self,
         input: DescribeHubRequest,
@@ -6290,7 +6305,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeHubResponse, _>()?;
 
@@ -6302,6 +6317,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns information about the available products that you can subscribe to and integrate with Security Hub in order to consolidate findings.</p>
+    #[allow(unused_mut)]
     async fn describe_products(
         &self,
         input: DescribeProductsRequest,
@@ -6326,7 +6342,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeProductsResponse, _>()?;
 
@@ -6338,6 +6354,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of the available standards in Security Hub.</p> <p>For each standard, the results include the standard ARN, the name, and a description. </p>
+    #[allow(unused_mut)]
     async fn describe_standards(
         &self,
         input: DescribeStandardsRequest,
@@ -6362,7 +6379,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeStandardsResponse, _>()?;
 
@@ -6374,6 +6391,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of security standards controls.</p> <p>For each control, the results include information about whether it is currently enabled, the severity, and a link to remediation information.</p>
+    #[allow(unused_mut)]
     async fn describe_standards_controls(
         &self,
         input: DescribeStandardsControlsRequest,
@@ -6402,7 +6420,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeStandardsControlsResponse, _>()?;
 
@@ -6414,6 +6432,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Disables the integration of the specified product with Security Hub. After the integration is disabled, findings from that product are no longer sent to Security Hub.</p>
+    #[allow(unused_mut)]
     async fn disable_import_findings_for_product(
         &self,
         input: DisableImportFindingsForProductRequest,
@@ -6435,7 +6454,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisableImportFindingsForProductResponse, _>()?;
 
@@ -6449,6 +6468,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub.</p> <p>When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and cannot be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed.</p> <p>If you want to save your existing findings, you must export them before you disable Security Hub.</p>
+    #[allow(unused_mut)]
     async fn disable_security_hub(
         &self,
     ) -> Result<DisableSecurityHubResponse, RusotoError<DisableSecurityHubError>> {
@@ -6463,7 +6483,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisableSecurityHubResponse, _>()?;
 
@@ -6475,6 +6495,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Disassociates the current Security Hub member account from the associated master account.</p>
+    #[allow(unused_mut)]
     async fn disassociate_from_master_account(
         &self,
     ) -> Result<
@@ -6492,7 +6513,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
 
@@ -6504,6 +6525,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Disassociates the specified member accounts from the associated master account.</p>
+    #[allow(unused_mut)]
     async fn disassociate_members(
         &self,
         input: DisassociateMembersRequest,
@@ -6522,7 +6544,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateMembersResponse, _>()?;
 
@@ -6534,6 +6556,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub.</p> <p>When you enable a product integration, a permissions policy that grants permission for the product to send findings to Security Hub is applied.</p>
+    #[allow(unused_mut)]
     async fn enable_import_findings_for_product(
         &self,
         input: EnableImportFindingsForProductRequest,
@@ -6555,7 +6578,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableImportFindingsForProductResponse, _>()?;
 
@@ -6567,6 +6590,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Enables Security Hub for your account in the current Region or the Region you specify in the request.</p> <p>When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from other services that are integrated with Security Hub.</p> <p>When you use the <code>EnableSecurityHub</code> operation to enable Security Hub, you also automatically enable the following standards.</p> <ul> <li> <p>CIS AWS Foundations</p> </li> <li> <p>AWS Foundational Security Best Practices</p> </li> </ul> <p>You do not enable the Payment Card Industry Data Security Standard (PCI DSS) standard. </p> <p>To not enable the automatically enabled standards, set <code>EnableDefaultStandards</code> to <code>false</code>.</p> <p>After you enable Security Hub, to enable a standard, use the <code> <a>BatchEnableStandards</a> </code> operation. To disable a standard, use the <code> <a>BatchDisableStandards</a> </code> operation.</p> <p>To learn more, see <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html">Setting Up AWS Security Hub</a> in the <i>AWS Security Hub User Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn enable_security_hub(
         &self,
         input: EnableSecurityHubRequest,
@@ -6585,7 +6609,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableSecurityHubResponse, _>()?;
 
@@ -6597,6 +6621,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of the standards that are currently enabled.</p>
+    #[allow(unused_mut)]
     async fn get_enabled_standards(
         &self,
         input: GetEnabledStandardsRequest,
@@ -6615,7 +6640,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetEnabledStandardsResponse, _>()?;
 
@@ -6627,6 +6652,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of findings that match the specified criteria.</p>
+    #[allow(unused_mut)]
     async fn get_findings(
         &self,
         input: GetFindingsRequest,
@@ -6645,7 +6671,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFindingsResponse, _>()?;
 
@@ -6657,6 +6683,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Lists the results of the Security Hub insight specified by the insight ARN.</p>
+    #[allow(unused_mut)]
     async fn get_insight_results(
         &self,
         input: GetInsightResultsRequest,
@@ -6675,7 +6702,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInsightResultsResponse, _>()?;
 
@@ -6687,6 +6714,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Lists and describes insights for the specified insight ARNs.</p>
+    #[allow(unused_mut)]
     async fn get_insights(
         &self,
         input: GetInsightsRequest,
@@ -6705,7 +6733,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInsightsResponse, _>()?;
 
@@ -6717,6 +6745,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>
+    #[allow(unused_mut)]
     async fn get_invitations_count(
         &self,
     ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>> {
@@ -6731,7 +6760,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInvitationsCountResponse, _>()?;
 
@@ -6743,6 +6772,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Provides the details for the Security Hub master account for the current member account. </p>
+    #[allow(unused_mut)]
     async fn get_master_account(
         &self,
     ) -> Result<GetMasterAccountResponse, RusotoError<GetMasterAccountError>> {
@@ -6757,7 +6787,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMasterAccountResponse, _>()?;
 
@@ -6769,6 +6799,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns the details for the Security Hub member accounts for the specified account IDs.</p>
+    #[allow(unused_mut)]
     async fn get_members(
         &self,
         input: GetMembersRequest,
@@ -6787,7 +6818,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMembersResponse, _>()?;
 
@@ -6799,6 +6830,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from.</p> <p>Before you can use this action to invite a member, you must first use the <code> <a>CreateMembers</a> </code> action to create the member account in Security Hub.</p> <p>When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from the member account.</p>
+    #[allow(unused_mut)]
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -6817,7 +6849,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InviteMembersResponse, _>()?;
 
@@ -6829,6 +6861,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Lists all findings-generating solutions (products) that you are subscribed to receive findings from in Security Hub.</p>
+    #[allow(unused_mut)]
     async fn list_enabled_products_for_import(
         &self,
         input: ListEnabledProductsForImportRequest,
@@ -6854,7 +6887,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEnabledProductsForImportResponse, _>()?;
 
@@ -6866,6 +6899,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Lists all Security Hub membership invitations that were sent to the current AWS account. </p>
+    #[allow(unused_mut)]
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
@@ -6890,7 +6924,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInvitationsResponse, _>()?;
 
@@ -6902,6 +6936,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Lists details about all member accounts for the current Security Hub master account.</p>
+    #[allow(unused_mut)]
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -6929,7 +6964,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMembersResponse, _>()?;
 
@@ -6941,6 +6976,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Returns a list of tags associated with a resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -6956,7 +6992,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -6968,6 +7004,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Adds one or more tags to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6986,7 +7023,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -6998,6 +7035,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Removes one or more tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -7019,7 +7057,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -7031,6 +7069,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Updates the name and description of a custom action target in Security Hub.</p>
+    #[allow(unused_mut)]
     async fn update_action_target(
         &self,
         input: UpdateActionTargetRequest,
@@ -7052,7 +7091,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateActionTargetResponse, _>()?;
 
@@ -7064,6 +7103,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p> <code>UpdateFindings</code> is deprecated. Instead of <code>UpdateFindings</code>, use <code>BatchUpdateFindings</code>.</p> <p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>
+    #[allow(unused_mut)]
     async fn update_findings(
         &self,
         input: UpdateFindingsRequest,
@@ -7082,7 +7122,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFindingsResponse, _>()?;
 
@@ -7094,6 +7134,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Updates the Security Hub insight identified by the specified insight ARN.</p>
+    #[allow(unused_mut)]
     async fn update_insight(
         &self,
         input: UpdateInsightRequest,
@@ -7112,7 +7153,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInsightResponse, _>()?;
 
@@ -7124,6 +7165,7 @@ impl SecurityHub for SecurityHubClient {
     }
 
     /// <p>Used to control whether an individual security standard control is enabled or disabled.</p>
+    #[allow(unused_mut)]
     async fn update_standards_control(
         &self,
         input: UpdateStandardsControlRequest,
@@ -7145,7 +7187,7 @@ impl SecurityHub for SecurityHubClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateStandardsControlResponse, _>()?;
 

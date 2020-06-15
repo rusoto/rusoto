@@ -610,6 +610,7 @@ impl IotEventsDataClient {
 #[async_trait]
 impl IotEventsData for IotEventsDataClient {
     /// <p>Sends a set of messages to the AWS IoT Events system. Each message payload is transformed into the input you specify (<code>"inputName"</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed isn't guaranteed. To guarantee ordering, you must send messages one at a time and wait for a successful response.</p>
+    #[allow(unused_mut)]
     async fn batch_put_message(
         &self,
         input: BatchPutMessageRequest,
@@ -629,7 +630,7 @@ impl IotEventsData for IotEventsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchPutMessageResponse, _>()?;
 
@@ -641,6 +642,7 @@ impl IotEventsData for IotEventsDataClient {
     }
 
     /// <p>Updates the state, variable values, and timer settings of one or more detectors (instances) of a specified detector model.</p>
+    #[allow(unused_mut)]
     async fn batch_update_detector(
         &self,
         input: BatchUpdateDetectorRequest,
@@ -660,7 +662,7 @@ impl IotEventsData for IotEventsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdateDetectorResponse, _>()?;
 
@@ -672,6 +674,7 @@ impl IotEventsData for IotEventsDataClient {
     }
 
     /// <p>Returns information about the specified detector (instance).</p>
+    #[allow(unused_mut)]
     async fn describe_detector(
         &self,
         input: DescribeDetectorRequest,
@@ -698,7 +701,7 @@ impl IotEventsData for IotEventsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDetectorResponse, _>()?;
 
@@ -710,6 +713,7 @@ impl IotEventsData for IotEventsDataClient {
     }
 
     /// <p>Lists detectors (the instances of a detector model).</p>
+    #[allow(unused_mut)]
     async fn list_detectors(
         &self,
         input: ListDetectorsRequest,
@@ -742,7 +746,7 @@ impl IotEventsData for IotEventsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorsResponse, _>()?;
 
