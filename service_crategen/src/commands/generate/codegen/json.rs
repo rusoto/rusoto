@@ -35,33 +35,30 @@ impl GenerateProtocol for JsonGenerator {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
-            writeln!(writer,
-                     "
+            writeln!(
+                writer,
+                "
                 {documentation}
                 {method_signature} -> Result<{output_type}, RusotoError<{error_type}>> {{
                     let mut request = self.new_signed_request(\"{http_method}\", \"{request_uri}\");
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                    if response.status.is_success() {{
-                        {ok_response}
-                    }} else {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        Err({error_type}::from_response(response))
-                    }}
+                    let response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
+                    {ok_response}
                 }}
                 ",
-                     documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                     method_signature = generate_method_signature(service, operation),
-                     payload = generate_payload(service, operation),
-                     http_method = operation.http.method,
-                     name = operation.name,
-                     ok_response = generate_ok_response(operation, output_type),
-                     request_uri = operation.http.request_uri,
-                    target_prefix = service.target_prefix().unwrap(),
-                     error_type = error_type_name(service, operation_name),
-                     output_type = output_type)?;
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
+                method_signature = generate_method_signature(service, operation),
+                payload = generate_payload(service, operation),
+                http_method = operation.http.method,
+                name = operation.name,
+                ok_response = generate_ok_response(operation, output_type),
+                request_uri = operation.http.request_uri,
+                target_prefix = service.target_prefix().unwrap(),
+                error_type = error_type_name(service, operation_name),
+                output_type = output_type
+            )?;
         }
         Ok(())
     }
@@ -71,6 +68,7 @@ impl GenerateProtocol for JsonGenerator {
             writer,
             "use rusoto_core::proto;
         use rusoto_core::signature::SignedRequest;
+        use rusoto_core::request::HttpResponse;
         #[allow(unused_imports)]
         use serde::{{Deserialize, Serialize}};"
         )?;
@@ -86,6 +84,20 @@ impl GenerateProtocol for JsonGenerator {
                     request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
 
                     request
+                }}
+
+                async fn sign_and_dispatch<E>(
+                    &self,
+                    request: SignedRequest,
+                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
+                ) -> Result<HttpResponse, RusotoError<E>> {{
+                    let mut response = self.client.sign_and_dispatch(request).await?;
+                    if !response.status.is_success() {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        return Err(from_response(response));
+                    }}
+
+                    Ok(response)
                 }}
             }}
             ",
@@ -179,7 +191,8 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
         format!(
-            "let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            "let mut response = response;
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()",
             output_type = output_type,
         )
