@@ -84,16 +84,16 @@ pub fn generate_response_parser(
                 .expect("failed to get output member shape");
             match payload_shape.shape_type {
                 payload_type
-                if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
-                    {
-                        payload_body_parser(
-                            payload_type,
-                            &mutated_shape_name,
-                            payload_member_name,
-                            has_streaming_payload(output_shape),
-                            parse_non_payload,
-                        )
-                    }
+                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
+                {
+                    payload_body_parser(
+                        payload_type,
+                        &mutated_shape_name,
+                        payload_member_name,
+                        has_streaming_payload(output_shape),
+                        parse_non_payload,
+                    )
+                }
                 _ => xml_body_parser(
                     &output_shape,
                     &mutated_shape_name,
@@ -116,6 +116,7 @@ fn payload_body_parser(
     match payload_type {
         ShapeType::Blob if !streaming => {
             format!("
+                let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
@@ -139,6 +140,7 @@ fn payload_body_parser(
         }
         _ => {
             format!("
+                let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
@@ -181,7 +183,8 @@ fn xml_body_parser(
             ),
         };
         format!(
-        "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            "let mut response = response;
+        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         if xml_response.body.is_empty() {{
             result = {output_shape}::default();
         }} else {{
@@ -194,13 +197,13 @@ fn xml_body_parser(
             let actual_tag_name = peek_at_name(&mut stack)?;
             {deserialize}
         }}",
-        output_shape = output_shape,
-        deserialize = deserialize,
+            output_shape = output_shape,
+            deserialize = deserialize,
         )
     } else {
         format!(
-        "result = {output_shape}::default();",
-        output_shape = output_shape,
+            "result = {output_shape}::default();",
+            output_shape = output_shape,
         )
     };
 
@@ -333,7 +336,7 @@ fn generate_map_deserializer(shape: &Shape) -> String {
             // if flatten, use tag_name
             Some(true) => "tag_name".to_string(),
             _ => format!("\"entry\""),
-        }
+        },
         _ => format!("\"{}\"", entry_location),
     };
 

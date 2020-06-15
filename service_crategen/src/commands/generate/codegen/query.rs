@@ -43,11 +43,7 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     {set_input_params}
 
-                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                    if !response.status.is_success() {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        return Err({error_type}::from_response(response));
-                    }}
+                    let response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
 
                     {parse_payload}
                 }}
@@ -57,7 +53,7 @@ impl GenerateProtocol for QueryGenerator {
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
-                         xml_payload_parser::generate_response_parser(service, operation, false, ""),
+                         xml_payload_parser::generate_response_parser(service, operation, false, "drop(response);"),
                      method_signature = generate_method_signature(operation_name, operation, service),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
@@ -73,6 +69,7 @@ impl GenerateProtocol for QueryGenerator {
             use xml::EventReader;
             use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
+            use rusoto_core::request::HttpResponse;
             use rusoto_core::signature::SignedRequest;
             use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
             use rusoto_core::proto::xml::util::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
@@ -95,6 +92,21 @@ impl GenerateProtocol for QueryGenerator {
                     params.put(\"Version\", \"{api_version}\");
 
                     params
+                }}
+
+
+                async fn sign_and_dispatch<E>(
+                    &self,
+                    request: SignedRequest,
+                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
+                ) -> Result<HttpResponse, RusotoError<E>> {{
+                    let mut response = self.client.sign_and_dispatch(request).await?;
+                    if !response.status.is_success() {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        return Err(from_response(response));
+                    }}
+
+                    Ok(response)
                 }}
             }}
             ",
