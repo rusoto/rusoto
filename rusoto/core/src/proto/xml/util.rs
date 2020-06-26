@@ -91,10 +91,12 @@ pub fn characters<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseError
             return Ok("".to_string());
         }
     }
-    if let Some(Ok(XmlEvent::Characters(data))) = stack.next() {
-        Ok(data)
-    } else {
-        Err(XmlParseError::new("Expected characters"))
+    match stack.next() {
+        Some(Ok(XmlEvent::Characters(data))) |
+        Some(Ok(XmlEvent::CData(data))) => {
+            Ok(data)
+        },
+        _ => Err(XmlParseError::new("Expected characters")),
     }
 }
 

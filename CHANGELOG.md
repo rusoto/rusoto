@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 (Please put changes here)
+- CDATA sections are now treated like strings
 
 ## [0.44.0] - 2020-06-01
 
