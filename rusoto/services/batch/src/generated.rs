@@ -812,7 +812,7 @@ pub struct JobDetail {
     pub retry_strategy: Option<RetryStrategy>,
     /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
-    pub started_at: i64,
+    pub started_at: Option<i64>,
     /// <p><p>The current status for the job.</p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in RUNNABLE Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
