@@ -20,14 +20,13 @@ use std::time::Duration;
 use base64;
 use bytes::Bytes;
 use hex;
-use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
-use sha2::{Digest, Sha256};
+use hmac_sha256::{HMAC, Hash};
 use time::{Date, OffsetDateTime};
 
 use crate::credential::AwsCredentials;
@@ -572,10 +571,8 @@ fn digest_payload(payload: &[u8]) -> (String, usize) {
 }
 
 #[inline]
-fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
-    let mut hmac = Hmac::<Sha256>::new_varkey(secret).expect("failed to create hmac");
-    hmac.input(message);
-    hmac
+fn hmac(secret: &[u8], message: &[u8]) -> [u8; 32] {
+    HMAC::mac(message, secret)
 }
 
 /// Takes a message and signs it using AWS secret, time, region keys and service keys.
@@ -587,18 +584,12 @@ fn sign_string(
     service: &str,
 ) -> String {
     let date_str = date.format("%Y%m%d");
-    let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
-        .result()
-        .code();
-    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes()).result().code();
-    let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes())
-        .result()
-        .code();
-    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request").result().code();
+    let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes());
+    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes());
+    let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes());
+    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request");
     hex::encode(
         hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
-            .result()
-            .code()
             .as_ref(),
     )
 }
@@ -749,7 +740,7 @@ pub fn decode_uri(uri: &str) -> String {
 }
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
-    let h = Sha256::digest(t.as_ref());
+    let h = Hash::hash(t.as_ref());
     hex::encode(h.as_ref())
 }
 
