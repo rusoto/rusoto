@@ -187,9 +187,6 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
         parts.push(generate_payload_member_serialization(service, input_shape));
-        parts.push(
-            generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
-        );
     } else if used_as_request_payload(input_shape) {
         // In Route 53, no operation has "payload" parameter but some API actually requires
         // payload. In that case, the payload should include members whose "location" parameter is
@@ -202,29 +199,13 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
             xmlns = xmlns.uri
         ));
         parts.push("request.set_payload(Some(writer.into_inner()));".to_owned());
-        parts.push(
-            generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
-        );
+    }
+
+    if operation.http_checksum_required.unwrap_or(false) {
+        parts.push("request.set_content_md5_header();".to_owned());
     }
 
     Some(parts.join("\n"))
-}
-
-fn generate_service_specific_code(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    // S3 needs some special handholding.  Others may later.
-    // See `handlers.py` in botocore for more details
-    match service.service_type_name() {
-        "S3" => match &operation.name[..] {
-            "PutBucketTagging"
-            | "PutBucketLifecycle"
-            | "PutBucketLifecycleConfiguration"
-            | "PutBucketCors"
-            | "DeleteObjects"
-            | "PutBucketReplication" => Some("request.set_content_md5_header();".to_owned()),
-            _ => None,
-        },
-        _ => None,
-    }
 }
 
 fn generate_payload_member_serialization(service: &Service, shape: &Shape) -> String {
