@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Access Control List files for the documents in a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessControlListConfiguration {
     /// <p>Path to the AWS S3 bucket that contains the ACL files.</p>
     #[serde(rename = "KeyPath")]
@@ -34,7 +34,7 @@ pub struct AccessControlListConfiguration {
 }
 
 /// <p>Provides information about the column that should be used for filtering the query response by groups.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AclConfiguration {
     /// <p>A list of groups, separated by semi-colons, that filters a query response based on user context. The document is only returned to users that are in one of the groups specified in the <code>UserContext</code> field of the <a>Query</a> operation.</p>
     #[serde(rename = "AllowedGroupsColumnName")]
@@ -42,7 +42,7 @@ pub struct AclConfiguration {
 }
 
 /// <p>An attribute returned from an index query.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdditionalResultAttribute {
     /// <p>The key that identifies the attribute.</p>
@@ -57,7 +57,7 @@ pub struct AdditionalResultAttribute {
 }
 
 /// <p>An attribute returned with a document from a search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdditionalResultAttributeValue {
     /// <p>The text associated with the attribute and information about the highlight to apply to the text.</p>
@@ -67,7 +67,7 @@ pub struct AdditionalResultAttributeValue {
 }
 
 /// <p>Provides filtering the query results based on document attributes.</p> <p>When you use the <code>AndAllFilters</code> or <code>OrAllFilters</code>, filters you can use 2 layers under the first attribute filter. For example, you can use:</p> <p> <code>&lt;AndAllFilters&gt;</code> </p> <ol> <li> <p> <code> &lt;OrAllFilters&gt;</code> </p> </li> <li> <p> <code> &lt;EqualTo&gt;</code> </p> </li> </ol> <p>If you use more than 2 layers, you receive a <code>ValidationException</code> exception with the message "<code>AttributeFilter</code> cannot have a depth of more than 2."</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttributeFilter {
     /// <p>Performs a logical <code>AND</code> operation on all supplied filters.</p>
@@ -112,7 +112,7 @@ pub struct AttributeFilter {
     pub or_all_filters: Option<Vec<AttributeFilter>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteDocumentRequest {
     #[serde(rename = "DataSourceSyncJobMetricTarget")]
@@ -126,7 +126,7 @@ pub struct BatchDeleteDocumentRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteDocumentResponse {
     /// <p>A list of documents that could not be removed from the index. Each entry contains an error message that indicates why the document couldn't be removed from the index.</p>
@@ -136,7 +136,7 @@ pub struct BatchDeleteDocumentResponse {
 }
 
 /// <p>Provides information about documents that could not be removed from an index by the <a>BatchDeleteDocument</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteDocumentResponseFailedDocument {
     /// <p>The error code for why the document couldn't be removed from the index.</p>
@@ -153,7 +153,7 @@ pub struct BatchDeleteDocumentResponseFailedDocument {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutDocumentRequest {
     /// <p>One or more documents to add to the index. </p> <p>Documents have the following file size limits.</p> <ul> <li> <p>5 MB total size for inline documents</p> </li> <li> <p>50 MB total size for files from an S3 bucket</p> </li> <li> <p>5 MB extracted text for any file</p> </li> </ul> <p>For more information about file size and transaction per second quotas, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas</a>.</p>
@@ -168,7 +168,7 @@ pub struct BatchPutDocumentRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutDocumentResponse {
     /// <p>A list of documents that were not added to the index because the document failed a validation check. Each document contains an error message that indicates why the document couldn't be added to the index.</p> <p>If there was an error adding a document to an index the error is reported in your AWS CloudWatch log. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/cloudwatch-logs.html">Monitoring Amazon Kendra with Amazon CloudWatch Logs</a> </p>
@@ -178,7 +178,7 @@ pub struct BatchPutDocumentResponse {
 }
 
 /// <p>Provides information about a document that could not be indexed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPutDocumentResponseFailedDocument {
     /// <p>The type of error that caused the document to fail to be indexed.</p>
@@ -196,7 +196,7 @@ pub struct BatchPutDocumentResponseFailedDocument {
 }
 
 /// <p>Specifies capacity units configured for your index. You can add and remove capacity units to tune an index to your requirements.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CapacityUnitsConfiguration {
     /// <p>The amount of extra query capacity for an index. Each capacity unit provides 0.5 queries per second and 40,000 queries per day.</p>
     #[serde(rename = "QueryCapacityUnits")]
@@ -207,7 +207,7 @@ pub struct CapacityUnitsConfiguration {
 }
 
 /// <p>Gathers information about when a particular result was clicked by a user. Your application uses the <a>SubmitFeedback</a> operation to provide click information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClickFeedback {
     /// <p>The Unix timestamp of the date and time that the result was clicked.</p>
@@ -219,7 +219,7 @@ pub struct ClickFeedback {
 }
 
 /// <p>Provides information about how Amazon Kendra should use the columns of a database in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnConfiguration {
     /// <p>One to five columns that indicate when a document in the database has changed.</p>
     #[serde(rename = "ChangeDetectingColumns")]
@@ -241,7 +241,7 @@ pub struct ColumnConfiguration {
 }
 
 /// <p>Provides the information necessary to connect to a database.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConnectionConfiguration {
     /// <p>The name of the host for the database. Can be either a string (host.subdomain.domain.tld) or an IPv4 or IPv6 address.</p>
     #[serde(rename = "DatabaseHost")]
@@ -260,7 +260,7 @@ pub struct ConnectionConfiguration {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
     /// <p>The connector configuration information that is required to access the repository.</p>
@@ -292,7 +292,7 @@ pub struct CreateDataSourceRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
     /// <p>A unique identifier for the data source.</p>
@@ -300,7 +300,7 @@ pub struct CreateDataSourceResponse {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFaqRequest {
     /// <p>A description of the FAQ.</p>
@@ -325,7 +325,7 @@ pub struct CreateFaqRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFaqResponse {
     /// <p>The unique identifier of the FAQ.</p>
@@ -334,7 +334,7 @@ pub struct CreateFaqResponse {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIndexRequest {
     /// <p>A token that you provide to identify the request to create an index. Multiple calls to the <code>CreateIndex</code> operation with the same client token will create only one index.”</p>
@@ -365,7 +365,7 @@ pub struct CreateIndexRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIndexResponse {
     /// <p>The unique identifier of the index. Use this identifier when you query an index, set up a data source, or index a document.</p>
@@ -375,7 +375,7 @@ pub struct CreateIndexResponse {
 }
 
 /// <p>Configuration information for a Amazon Kendra data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceConfiguration {
     /// <p>Provides information necessary to create a connector for a database.</p>
     #[serde(rename = "DatabaseConfiguration")]
@@ -404,7 +404,7 @@ pub struct DataSourceConfiguration {
 }
 
 /// <p>Summary information for a Amazon Kendra data source. Returned in a call to .</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSourceSummary {
     /// <p>The UNIX datetime that the data source was created.</p>
@@ -434,7 +434,7 @@ pub struct DataSourceSummary {
 }
 
 /// <p>Provides information about a synchronization job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSourceSyncJob {
     /// <p>If the reason that the synchronization failed is due to an error with the underlying data source, this field contains a code that identifies the error.</p>
@@ -472,7 +472,7 @@ pub struct DataSourceSyncJob {
 }
 
 /// <p>Maps a particular data source sync job to a particular data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DataSourceSyncJobMetricTarget {
     /// <p>The ID of the data source that is running the sync job.</p>
@@ -484,7 +484,7 @@ pub struct DataSourceSyncJobMetricTarget {
 }
 
 /// <p>Maps a batch delete document request to a specific data source sync job. This is optional and should only be supplied when documents are deleted by a connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSourceSyncJobMetrics {
     /// <p>The number of documents added from the data source up to now in the data source sync.</p>
@@ -510,7 +510,7 @@ pub struct DataSourceSyncJobMetrics {
 }
 
 /// <p>Maps a column or attribute in the data source to an index field. You must first create the fields in the index using the <a>UpdateIndex</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceToIndexFieldMapping {
     /// <p>The name of the column or attribute in the data source.</p>
     #[serde(rename = "DataSourceFieldName")]
@@ -525,7 +525,7 @@ pub struct DataSourceToIndexFieldMapping {
 }
 
 /// <p>Provides information for connecting to an Amazon VPC.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceVpcConfiguration {
     /// <p>A list of identifiers of security groups within your Amazon VPC. The security groups should enable Amazon Kendra to connect to the data source.</p>
     #[serde(rename = "SecurityGroupIds")]
@@ -536,7 +536,7 @@ pub struct DataSourceVpcConfiguration {
 }
 
 /// <p>Provides the information necessary to connect a database to an index. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatabaseConfiguration {
     /// <p>Information about the database column that provides information for user context filtering.</p>
     #[serde(rename = "AclConfiguration")]
@@ -556,7 +556,7 @@ pub struct DatabaseConfiguration {
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
     /// <p>The unique identifier of the data source to delete.</p>
@@ -567,7 +567,7 @@ pub struct DeleteDataSourceRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFaqRequest {
     /// <p>The identifier of the FAQ to remove.</p>
@@ -578,7 +578,7 @@ pub struct DeleteFaqRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIndexRequest {
     /// <p>The identifier of the index to delete.</p>
@@ -586,7 +586,7 @@ pub struct DeleteIndexRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourceRequest {
     /// <p>The unique identifier of the data source to describe.</p>
@@ -597,7 +597,7 @@ pub struct DescribeDataSourceRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourceResponse {
     /// <p>Information that describes where the data source is located and how the data source is configured. The specific information in the description depends on the data source provider.</p>
@@ -650,7 +650,7 @@ pub struct DescribeDataSourceResponse {
     pub updated_at: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFaqRequest {
     /// <p>The unique identifier of the FAQ.</p>
@@ -661,7 +661,7 @@ pub struct DescribeFaqRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFaqResponse {
     /// <p>The date and time that the FAQ was created.</p>
@@ -705,7 +705,7 @@ pub struct DescribeFaqResponse {
     pub updated_at: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIndexRequest {
     /// <p>The name of the index to describe.</p>
@@ -713,7 +713,7 @@ pub struct DescribeIndexRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
     /// <p>For enterprise edtion indexes, you can choose to use additional capacity to meet the needs of your application. This contains the capacity units used for the index. A 0 for the query capacity or the storage capacity indicates that the index is using the default capacity for the index.</p>
@@ -771,7 +771,7 @@ pub struct DescribeIndexResponse {
 }
 
 /// <p>A document in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Document {
     /// <p>Information to use for user context filtering.</p>
@@ -808,7 +808,7 @@ pub struct Document {
 }
 
 /// <p>A custom attribute value assigned to a document. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentAttribute {
     /// <p>The identifier for the attribute.</p>
     #[serde(rename = "Key")]
@@ -819,7 +819,7 @@ pub struct DocumentAttribute {
 }
 
 /// <p>The value of a custom document attribute. You can only provide one value for a custom attribute.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentAttributeValue {
     /// <p>A date value expressed as seconds from the Unix epoch.</p>
     #[serde(rename = "DateValue")]
@@ -840,7 +840,7 @@ pub struct DocumentAttributeValue {
 }
 
 /// <p>Provides the count of documents that match a particular attribute when doing a faceted search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentAttributeValueCountPair {
     /// <p>The number of documents in the response that have the attribute value for the key.</p>
@@ -854,7 +854,7 @@ pub struct DocumentAttributeValueCountPair {
 }
 
 /// <p>Specifies the properties of a custom index field.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentMetadataConfiguration {
     /// <p>The name of the index field.</p>
     #[serde(rename = "Name")]
@@ -873,7 +873,7 @@ pub struct DocumentMetadataConfiguration {
 }
 
 /// <p>Document metadata files that contain information such as the document access control information, source URI, document author, and custom attributes. Each metadata file contains metadata about a single document.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentsMetadataConfiguration {
     /// <p>A prefix used to filter metadata configuration files in the AWS S3 bucket. The S3 bucket might contain multiple metadata files. Use <code>S3Prefix</code> to include only the desired metadata files.</p>
     #[serde(rename = "S3Prefix")]
@@ -882,7 +882,7 @@ pub struct DocumentsMetadataConfiguration {
 }
 
 /// <p>Information about a document attribute</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Facet {
     /// <p>The unique key for the document attribute.</p>
@@ -892,7 +892,7 @@ pub struct Facet {
 }
 
 /// <p>The facet values for the documents in the response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FacetResult {
     /// <p>The key for the facet values. This is the same as the <code>DocumentAttributeKey</code> provided in the query.</p>
@@ -906,7 +906,7 @@ pub struct FacetResult {
 }
 
 /// <p>Provides statistical information about the FAQ questions and answers contained in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaqStatistics {
     /// <p>The total number of FAQ questions and answers contained in the index.</p>
@@ -915,7 +915,7 @@ pub struct FaqStatistics {
 }
 
 /// <p>Provides information about a frequently asked questions and answer contained in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FaqSummary {
     /// <p>The UNIX datetime that the FAQ was added to the index.</p>
@@ -941,7 +941,7 @@ pub struct FaqSummary {
 }
 
 /// <p>Provides information that you can use to highlight a search result so that your users can quickly identify terms in the response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Highlight {
     /// <p>The zero-based location in the response string where the highlight starts.</p>
@@ -957,7 +957,7 @@ pub struct Highlight {
 }
 
 /// <p>A summary of information about an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IndexConfigurationSummary {
     /// <p>The Unix timestamp when the index was created.</p>
@@ -984,7 +984,7 @@ pub struct IndexConfigurationSummary {
 }
 
 /// <p>Provides information about the number of documents and the number of questions and answers in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IndexStatistics {
     /// <p>The number of question and answer topics in the index.</p>
@@ -995,7 +995,7 @@ pub struct IndexStatistics {
     pub text_document_statistics: TextDocumentStatistics,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourceSyncJobsRequest {
     /// <p>The identifier of the data source.</p>
@@ -1022,7 +1022,7 @@ pub struct ListDataSourceSyncJobsRequest {
     pub status_filter: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourceSyncJobsResponse {
     /// <p>A history of synchronization jobs for the data source.</p>
@@ -1035,7 +1035,7 @@ pub struct ListDataSourceSyncJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
     /// <p>The identifier of the index that contains the data source.</p>
@@ -1051,7 +1051,7 @@ pub struct ListDataSourcesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
     /// <p>If the response is truncated, Amazon Kendra returns this token that you can use in the subsequent request to retrieve the next set of data sources. </p>
@@ -1064,7 +1064,7 @@ pub struct ListDataSourcesResponse {
     pub summary_items: Option<Vec<DataSourceSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFaqsRequest {
     /// <p>The index that contains the FAQ lists.</p>
@@ -1080,7 +1080,7 @@ pub struct ListFaqsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFaqsResponse {
     /// <p>information about the FAQs associated with the specified index.</p>
@@ -1093,7 +1093,7 @@ pub struct ListFaqsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of data sources to return.</p>
@@ -1106,7 +1106,7 @@ pub struct ListIndicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIndicesResponse {
     /// <p>An array of summary information for one or more indexes.</p>
@@ -1119,7 +1119,7 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to get a list of tags for.</p>
@@ -1127,7 +1127,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags associated with the index, FAQ, or data source.</p>
@@ -1137,7 +1137,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Provides configuration information for data sources that connect to OneDrive.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OneDriveConfiguration {
     /// <p>List of regular expressions applied to documents. Items that match the exclusion pattern are not indexed. If you provide both an inclusion pattern and an exclusion pattern, any item that matches the exclusion pattern isn't indexed. </p> <p>The exclusion pattern is applied to the file name.</p>
     #[serde(rename = "ExclusionPatterns")]
@@ -1163,7 +1163,7 @@ pub struct OneDriveConfiguration {
 }
 
 /// <p>User accounts whose documents should be indexed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OneDriveUsers {
     /// <p>A list of users whose documents should be indexed. Specify the user names in email format, for example, <code>username@tenantdomain</code>. If you need to index the documents of more than 100 users, use the <code>OneDriveUserS3Path</code> field to specify the location of a file containing a list of users.</p>
     #[serde(rename = "OneDriveUserList")]
@@ -1176,7 +1176,7 @@ pub struct OneDriveUsers {
 }
 
 /// <p>Provides user and group information for document access filtering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Principal {
     /// <p>Whether to allow or deny access to the principal.</p>
@@ -1190,7 +1190,7 @@ pub struct Principal {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryRequest {
     /// <p>Enables filtered searches based on document attributes. You can only provide one attribute filter; however, the <code>AndAllFilters</code>, <code>NotFilter</code>, and <code>OrAllFilters</code> parameters contain a list of other filters.</p> <p>The <code>AttributeFilter</code> parameter enables you to create a set of filtering rules that a document must satisfy to be included in the query results.</p>
@@ -1225,7 +1225,7 @@ pub struct QueryRequest {
     pub requested_document_attributes: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryResult {
     /// <p>Contains the facet results. A <code>FacetResult</code> contains the counts for each attribute key that was specified in the <code>Facets</code> input parameter.</p>
@@ -1247,7 +1247,7 @@ pub struct QueryResult {
 }
 
 /// <p>A single query result.</p> <p>A query result contains information about a document returned by the query. This includes the original location of the document, a list of attributes assigned to the document, and relevant text from the document that satisfies the query.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryResultItem {
     /// <p>One or more additional attribues associated with the query result.</p>
@@ -1285,7 +1285,7 @@ pub struct QueryResultItem {
 }
 
 /// <p>Provides information for manually tuning the relevance of a field in a search. When a query includes terms that match the field, the results are given a boost in the response based on these tuning parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Relevance {
     /// <p>Specifies the time period that the boost applies to. For example, to make the boost apply to documents with the field value within the last month, you would use "2628000s". Once the field value is beyond the specified range, the effect of the boost drops off. The higher the importance, the faster the effect drops off. If you don't specify a value, the default is 3 months. The value of the field is a numeric string followed by the character "s", for example "86400s" for one day, or "604800s" for one week. </p> <p>Only applies to <code>DATE</code> fields.</p>
     #[serde(rename = "Duration")]
@@ -1310,7 +1310,7 @@ pub struct Relevance {
 }
 
 /// <p>Provides feedback on how relevant a document is to a search. Your application uses the <a>SubmitFeedback</a> operation to provide relevance information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RelevanceFeedback {
     /// <p>Whether to document was relevant or not relevant to the search.</p>
@@ -1322,7 +1322,7 @@ pub struct RelevanceFeedback {
 }
 
 /// <p>Provides configuration information for a data source to index documents in an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3DataSourceConfiguration {
     /// <p>Provides the path to the S3 bucket that contains the user context filtering files for the data source.</p>
     #[serde(rename = "AccessControlListConfiguration")]
@@ -1345,7 +1345,7 @@ pub struct S3DataSourceConfiguration {
 }
 
 /// <p>Information required to find a specific file in an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Path {
     /// <p>The name of the S3 bucket that contains the file.</p>
     #[serde(rename = "Bucket")]
@@ -1356,7 +1356,7 @@ pub struct S3Path {
 }
 
 /// <p>Defines configuration for syncing a Salesforce chatter feed. The contents of the object comes from the Salesforce FeedItem table.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceChatterFeedConfiguration {
     /// <p>The name of the column in the Salesforce FeedItem table that contains the content to index. Typically this is the <code>Body</code> column.</p>
     #[serde(rename = "DocumentDataFieldName")]
@@ -1376,7 +1376,7 @@ pub struct SalesforceChatterFeedConfiguration {
 }
 
 /// <p>Provides configuration information for connecting to a Salesforce data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceConfiguration {
     /// <p>Specifies configuration information for Salesforce chatter feeds.</p>
     #[serde(rename = "ChatterFeedConfiguration")]
@@ -1416,7 +1416,7 @@ pub struct SalesforceConfiguration {
 }
 
 /// <p>Provides configuration information for indexing Salesforce custom articles.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceCustomKnowledgeArticleTypeConfiguration {
     /// <p>The name of the field in the custom knowledge article that contains the document data to index.</p>
     #[serde(rename = "DocumentDataFieldName")]
@@ -1435,7 +1435,7 @@ pub struct SalesforceCustomKnowledgeArticleTypeConfiguration {
 }
 
 /// <p>Specifies configuration information for the knowlege article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceKnowledgeArticleConfiguration {
     /// <p>Provides configuration information for custom Salesforce knowledge articles.</p>
     #[serde(rename = "CustomKnowledgeArticleTypeConfigurations")]
@@ -1453,7 +1453,7 @@ pub struct SalesforceKnowledgeArticleConfiguration {
 }
 
 /// <p>Provides configuration information for standard Salesforce knowledge articles.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceStandardKnowledgeArticleTypeConfiguration {
     /// <p>The name of the field that contains the document data to index.</p>
     #[serde(rename = "DocumentDataFieldName")]
@@ -1469,7 +1469,7 @@ pub struct SalesforceStandardKnowledgeArticleTypeConfiguration {
 }
 
 /// <p>Provides configuration information for processing attachments to Salesforce standard objects. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceStandardObjectAttachmentConfiguration {
     /// <p>The name of the field used for the document title.</p>
     #[serde(rename = "DocumentTitleFieldName")]
@@ -1482,7 +1482,7 @@ pub struct SalesforceStandardObjectAttachmentConfiguration {
 }
 
 /// <p>Specifies confguration information for indexing a single standard object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceStandardObjectConfiguration {
     /// <p>The name of the field in the standard object table that contains the document contents.</p>
     #[serde(rename = "DocumentDataFieldName")]
@@ -1501,7 +1501,7 @@ pub struct SalesforceStandardObjectConfiguration {
 }
 
 /// <p>Provides information about how a custom index field is used during a search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Search {
     /// <p>Determines whether the field is returned in the query response. The default is <code>true</code>.</p>
     #[serde(rename = "Displayable")]
@@ -1518,7 +1518,7 @@ pub struct Search {
 }
 
 /// <p>Provides the identifier of the AWS KMS customer master key (CMK) used to encrypt data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>The identifier of the AWS KMS customer master key (CMK). Amazon Kendra doesn't support asymmetric CMKs.</p>
     #[serde(rename = "KmsKeyId")]
@@ -1527,7 +1527,7 @@ pub struct ServerSideEncryptionConfiguration {
 }
 
 /// <p>Provides configuration information required to connect to a ServiceNow data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowConfiguration {
     /// <p>The ServiceNow instance that the data source connects to. The host endpoint should look like the following: <code>{instance}.service-now.com.</code> </p>
     #[serde(rename = "HostUrl")]
@@ -1549,7 +1549,7 @@ pub struct ServiceNowConfiguration {
 }
 
 /// <p>Provides configuration information for crawling knowledge articles in the ServiceNow site.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowKnowledgeArticleConfiguration {
     /// <p>Indicates whether Amazon Kendra should index attachments to knowledge articles.</p>
     #[serde(rename = "CrawlAttachments")]
@@ -1577,7 +1577,7 @@ pub struct ServiceNowKnowledgeArticleConfiguration {
 }
 
 /// <p>Provides configuration information for crawling service catalog items in the ServiceNow site</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowServiceCatalogConfiguration {
     /// <p>Indicates whether Amazon Kendra should crawl attachments to the service catalog items. </p>
     #[serde(rename = "CrawlAttachments")]
@@ -1605,7 +1605,7 @@ pub struct ServiceNowServiceCatalogConfiguration {
 }
 
 /// <p>Provides configuration information for connecting to a Microsoft SharePoint data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SharePointConfiguration {
     /// <p> <code>TRUE</code> to include attachments to documents stored in your Microsoft SharePoint site in the index; otherwise, <code>FALSE</code>.</p>
     #[serde(rename = "CrawlAttachments")]
@@ -1645,7 +1645,7 @@ pub struct SharePointConfiguration {
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDataSourceSyncJobRequest {
     /// <p>The identifier of the data source to synchronize.</p>
@@ -1656,7 +1656,7 @@ pub struct StartDataSourceSyncJobRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDataSourceSyncJobResponse {
     /// <p>Identifies a particular synchronization job.</p>
@@ -1665,7 +1665,7 @@ pub struct StartDataSourceSyncJobResponse {
     pub execution_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataSourceSyncJobRequest {
     /// <p>The identifier of the data source for which to stop the synchronization jobs.</p>
@@ -1676,7 +1676,7 @@ pub struct StopDataSourceSyncJobRequest {
     pub index_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubmitFeedbackRequest {
     /// <p>Tells Amazon Kendra that a particular search result link was chosen by the user. </p>
@@ -1696,7 +1696,7 @@ pub struct SubmitFeedbackRequest {
 }
 
 /// <p>A list of key/value pairs that identify an index, FAQ, or data source. Tag keys and values can consist of Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key for the tag. Keys are not case sensitive and must be unique for the index, FAQ, or data source.</p>
     #[serde(rename = "Key")]
@@ -1706,7 +1706,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to tag.</p>
@@ -1717,12 +1717,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Provides information about text documents indexed in an index.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TextDocumentStatistics {
     /// <p>The total size, in bytes, of the indexed documents.</p>
@@ -1734,7 +1734,7 @@ pub struct TextDocumentStatistics {
 }
 
 /// <p>Provides text and information about where to highlight the text.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TextWithHighlights {
     /// <p>The beginning and end of the text that should be highlighted.</p>
@@ -1748,7 +1748,7 @@ pub struct TextWithHighlights {
 }
 
 /// <p>Provides a range of time.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimeRange {
     /// <p>The UNIX datetime of the end of the time range.</p>
@@ -1761,7 +1761,7 @@ pub struct TimeRange {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to remove the tag from.</p>
@@ -1772,11 +1772,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
     #[serde(rename = "Configuration")]
@@ -1806,7 +1806,7 @@ pub struct UpdateDataSourceRequest {
     pub schedule: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexRequest {
     /// <p>Sets the number of addtional storage and query capacity units that should be used by the index. You can change the capacity of the index up to 5 times per day.</p> <p>If you are using extra storage units, you can't reduce the storage capacity below that required to meet the storage needs for your index.</p>

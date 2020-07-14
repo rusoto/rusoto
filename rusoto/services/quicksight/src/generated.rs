@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The active AWS Identity and Access Management (IAM) policy assignment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActiveIAMPolicyAssignment {
     /// <p>A name for the IAM policy assignment.</p>
@@ -40,7 +40,7 @@ pub struct ActiveIAMPolicyAssignment {
 }
 
 /// <p>Ad hoc (one-time) filtering option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdHocFilteringOption {
     /// <p>Availability status.</p>
@@ -50,7 +50,7 @@ pub struct AdHocFilteringOption {
 }
 
 /// <p>Amazon Elasticsearch Service parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AmazonElasticsearchParameters {
     /// <p>The Amazon Elasticsearch Service domain.</p>
     #[serde(rename = "Domain")]
@@ -58,7 +58,7 @@ pub struct AmazonElasticsearchParameters {
 }
 
 /// <p>Amazon Athena parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AthenaParameters {
     /// <p>The workgroup that Amazon Athena uses.</p>
     #[serde(rename = "WorkGroup")]
@@ -67,7 +67,7 @@ pub struct AthenaParameters {
 }
 
 /// <p>Amazon Aurora parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuroraParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -81,7 +81,7 @@ pub struct AuroraParameters {
 }
 
 /// <p>Amazon Aurora with PostgreSQL compatibility parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuroraPostgreSqlParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -95,7 +95,7 @@ pub struct AuroraPostgreSqlParameters {
 }
 
 /// <p>AWS IoT Analytics parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsIotAnalyticsParameters {
     /// <p>Dataset name.</p>
     #[serde(rename = "DataSetName")]
@@ -103,7 +103,7 @@ pub struct AwsIotAnalyticsParameters {
 }
 
 /// <p>A calculated column for a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CalculatedColumn {
     /// <p>A unique ID to identify a calculated column. During a dataset update, if the column ID of a calculated column matches that of an existing calculated column, Amazon QuickSight preserves the existing calculated column.</p>
     #[serde(rename = "ColumnId")]
@@ -116,7 +116,7 @@ pub struct CalculatedColumn {
     pub expression: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelIngestionRequest {
     /// <p>The AWS account ID.</p>
@@ -130,7 +130,7 @@ pub struct CancelIngestionRequest {
     pub ingestion_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelIngestionResponse {
     /// <p>The Amazon Resource Name (ARN) for the data ingestion.</p>
@@ -152,7 +152,7 @@ pub struct CancelIngestionResponse {
 }
 
 /// <p>A transform operation that casts a column to a different type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CastColumnTypeOperation {
     /// <p>Column name.</p>
     #[serde(rename = "ColumnName")]
@@ -167,7 +167,7 @@ pub struct CastColumnTypeOperation {
 }
 
 /// <p>Groupings of columns that work together in certain Amazon QuickSight features. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnGroup {
     /// <p>Geospatial column group that denotes a hierarchy.</p>
     #[serde(rename = "GeoSpatialColumnGroup")]
@@ -176,7 +176,7 @@ pub struct ColumnGroup {
 }
 
 /// <p>A structure describing the name, data type, and geographic role of the columns.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnGroupColumnSchema {
     /// <p>The name of the column group's column schema.</p>
@@ -186,7 +186,7 @@ pub struct ColumnGroupColumnSchema {
 }
 
 /// <p>The column group schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnGroupSchema {
     /// <p>A structure containing the list of schemas for column group columns.</p>
@@ -200,7 +200,7 @@ pub struct ColumnGroupSchema {
 }
 
 /// <p>The column schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnSchema {
     /// <p>The data type of the column schema.</p>
@@ -218,7 +218,7 @@ pub struct ColumnSchema {
 }
 
 /// <p>A tag for a column in a <code>TagColumnOperation</code> structure. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnTag {
     /// <p>A geospatial role for a column.</p>
     #[serde(rename = "ColumnGeographicRole")]
@@ -227,14 +227,14 @@ pub struct ColumnTag {
 }
 
 /// <p>A transform operation that creates calculated columns. Columns created in one such operation form a lexical closure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateColumnsOperation {
     /// <p>Calculated columns to create.</p>
     #[serde(rename = "Columns")]
     pub columns: Vec<CalculatedColumn>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDashboardRequest {
     /// <p>The ID of the AWS account where you want to create the dashboard.</p>
@@ -271,7 +271,7 @@ pub struct CreateDashboardRequest {
     pub version_description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDashboardResponse {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
@@ -300,7 +300,7 @@ pub struct CreateDashboardResponse {
     pub version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSetRequest {
     /// <p>The AWS account ID.</p>
@@ -340,7 +340,7 @@ pub struct CreateDataSetRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSetResponse {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -369,7 +369,7 @@ pub struct CreateDataSetResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataSourceRequest {
     /// <p>The AWS account ID.</p>
@@ -410,7 +410,7 @@ pub struct CreateDataSourceRequest {
     pub vpc_connection_properties: Option<VpcConnectionProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
@@ -435,7 +435,7 @@ pub struct CreateDataSourceResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupMembershipRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -452,7 +452,7 @@ pub struct CreateGroupMembershipRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupMembershipResponse {
     /// <p>The group member.</p>
@@ -470,7 +470,7 @@ pub struct CreateGroupMembershipResponse {
 }
 
 /// <p>The request object for this operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -489,7 +489,7 @@ pub struct CreateGroupRequest {
 }
 
 /// <p>The response object for this operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The name of the group.</p>
@@ -506,7 +506,7 @@ pub struct CreateGroupResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIAMPolicyAssignmentRequest {
     /// <p>The name of the assignment. It must be unique within an AWS account.</p>
@@ -531,7 +531,7 @@ pub struct CreateIAMPolicyAssignmentRequest {
     pub policy_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIAMPolicyAssignmentResponse {
     /// <p>The ID for the assignment.</p>
@@ -564,7 +564,7 @@ pub struct CreateIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIngestionRequest {
     /// <p>The AWS account ID.</p>
@@ -578,7 +578,7 @@ pub struct CreateIngestionRequest {
     pub ingestion_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIngestionResponse {
     /// <p>The Amazon Resource Name (ARN) for the data ingestion.</p>
@@ -603,7 +603,7 @@ pub struct CreateIngestionResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateAliasRequest {
     /// <p>The name that you want to give to the template alias that you're creating. Don't start the alias name with the <code>$</code> character. Alias names that start with <code>$</code> are reserved by QuickSight. </p>
@@ -620,7 +620,7 @@ pub struct CreateTemplateAliasRequest {
     pub template_version_number: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTemplateAliasResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -637,7 +637,7 @@ pub struct CreateTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTemplateRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -667,7 +667,7 @@ pub struct CreateTemplateRequest {
     pub version_description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTemplateResponse {
     /// <p>The ARN for the template.</p>
@@ -697,7 +697,7 @@ pub struct CreateTemplateResponse {
 }
 
 /// <p>The combination of user name and password that are used as credentials.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CredentialPair {
     /// <p>Password.</p>
@@ -709,7 +709,7 @@ pub struct CredentialPair {
 }
 
 /// <p>A physical table type built from the results of the custom SQL query.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomSql {
     /// <p>The column schema from the SQL query result set.</p>
     #[serde(rename = "Columns")]
@@ -727,7 +727,7 @@ pub struct CustomSql {
 }
 
 /// <p>Dashboard.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dashboard {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -761,7 +761,7 @@ pub struct Dashboard {
 }
 
 /// <p>Dashboard error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DashboardError {
     /// <p>Message.</p>
@@ -775,7 +775,7 @@ pub struct DashboardError {
 }
 
 /// <p>Dashboard publish options.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashboardPublishOptions {
     /// <p>Ad hoc (one-time) filtering option.</p>
@@ -793,7 +793,7 @@ pub struct DashboardPublishOptions {
 }
 
 /// <p>A filter that you apply when searching for dashboards. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashboardSearchFilter {
     /// <p>The name of the value that you want to use as a filter. For example, <code>"Name": "QUICKSIGHT_USER"</code>. </p>
@@ -810,7 +810,7 @@ pub struct DashboardSearchFilter {
 }
 
 /// <p>Dashboard source entity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashboardSourceEntity {
     /// <p>Source template.</p>
@@ -820,7 +820,7 @@ pub struct DashboardSourceEntity {
 }
 
 /// <p>Dashboard source template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashboardSourceTemplate {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -832,7 +832,7 @@ pub struct DashboardSourceTemplate {
 }
 
 /// <p>Dashboard summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DashboardSummary {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -866,7 +866,7 @@ pub struct DashboardSummary {
 }
 
 /// <p>Dashboard version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DashboardVersion {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -900,7 +900,7 @@ pub struct DashboardVersion {
 }
 
 /// <p>Dashboard version summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DashboardVersionSummary {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -930,7 +930,7 @@ pub struct DashboardVersionSummary {
 }
 
 /// <p>Dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSet {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -984,7 +984,7 @@ pub struct DataSet {
 }
 
 /// <p>Dataset configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSetConfiguration {
     /// <p>A structure containing the list of column group schemas.</p>
@@ -1002,7 +1002,7 @@ pub struct DataSetConfiguration {
 }
 
 /// <p>Dataset reference.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DataSetReference {
     /// <p>Dataset Amazon Resource Name (ARN).</p>
@@ -1014,7 +1014,7 @@ pub struct DataSetReference {
 }
 
 /// <p>Dataset schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSetSchema {
     /// <p>A structure containing the list of column schemas.</p>
@@ -1024,7 +1024,7 @@ pub struct DataSetSchema {
 }
 
 /// <p>Dataset summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSetSummary {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -1058,7 +1058,7 @@ pub struct DataSetSummary {
 }
 
 /// <p>The structure of a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSource {
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
@@ -1108,7 +1108,7 @@ pub struct DataSource {
 }
 
 /// <p>Data source credentials.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DataSourceCredentials {
     /// <p>Credential pair.</p>
@@ -1118,7 +1118,7 @@ pub struct DataSourceCredentials {
 }
 
 /// <p>Error information for the data source creation or update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSourceErrorInfo {
     /// <p>Error message.</p>
@@ -1132,7 +1132,7 @@ pub struct DataSourceErrorInfo {
 }
 
 /// <p>The parameters that Amazon QuickSight uses to connect to your underlying data source. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceParameters {
     /// <p>Amazon Elasticsearch Service parameters.</p>
     #[serde(rename = "AmazonElasticsearchParameters")]
@@ -1213,7 +1213,7 @@ pub struct DataSourceParameters {
 }
 
 /// <p>Date time parameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DateTimeParameter {
     /// <p>A display name for the dataset.</p>
@@ -1225,7 +1225,7 @@ pub struct DateTimeParameter {
 }
 
 /// <p>Decimal parameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DecimalParameter {
     /// <p>A display name for the dataset.</p>
@@ -1236,7 +1236,7 @@ pub struct DecimalParameter {
     pub values: Vec<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDashboardRequest {
     /// <p>The ID of the AWS account that contains the dashboard that you're deleting.</p>
@@ -1251,7 +1251,7 @@ pub struct DeleteDashboardRequest {
     pub version_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDashboardResponse {
     /// <p>The Secure Socket Layer (SSL) properties that apply for the resource.</p>
@@ -1272,7 +1272,7 @@ pub struct DeleteDashboardResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSetRequest {
     /// <p>The AWS account ID.</p>
@@ -1283,7 +1283,7 @@ pub struct DeleteDataSetRequest {
     pub data_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSetResponse {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -1304,7 +1304,7 @@ pub struct DeleteDataSetResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataSourceRequest {
     /// <p>The AWS account ID.</p>
@@ -1315,7 +1315,7 @@ pub struct DeleteDataSourceRequest {
     pub data_source_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSourceResponse {
     /// <p>The Amazon Resource Name (ARN) of the data source that you deleted.</p>
@@ -1336,7 +1336,7 @@ pub struct DeleteDataSourceResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupMembershipRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1353,7 +1353,7 @@ pub struct DeleteGroupMembershipRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupMembershipResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1366,7 +1366,7 @@ pub struct DeleteGroupMembershipResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1380,7 +1380,7 @@ pub struct DeleteGroupRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1393,7 +1393,7 @@ pub struct DeleteGroupResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIAMPolicyAssignmentRequest {
     /// <p>The name of the assignment. </p>
@@ -1407,7 +1407,7 @@ pub struct DeleteIAMPolicyAssignmentRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIAMPolicyAssignmentResponse {
     /// <p>The name of the assignment. </p>
@@ -1424,7 +1424,7 @@ pub struct DeleteIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateAliasRequest {
     /// <p>The name for the template alias. If you name a specific alias, you delete the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. </p>
@@ -1438,7 +1438,7 @@ pub struct DeleteTemplateAliasRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTemplateAliasResponse {
     /// <p>The name for the template alias.</p>
@@ -1463,7 +1463,7 @@ pub struct DeleteTemplateAliasResponse {
     pub template_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateRequest {
     /// <p>The ID of the AWS account that contains the template that you're deleting.</p>
@@ -1478,7 +1478,7 @@ pub struct DeleteTemplateRequest {
     pub version_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTemplateResponse {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -1500,7 +1500,7 @@ pub struct DeleteTemplateResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserByPrincipalIdRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1514,7 +1514,7 @@ pub struct DeleteUserByPrincipalIdRequest {
     pub principal_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserByPrincipalIdResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1527,7 +1527,7 @@ pub struct DeleteUserByPrincipalIdResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1541,7 +1541,7 @@ pub struct DeleteUserRequest {
     pub user_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1554,7 +1554,7 @@ pub struct DeleteUserResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDashboardPermissionsRequest {
     /// <p>The ID of the AWS account that contains the dashboard that you're describing permissions for.</p>
@@ -1565,7 +1565,7 @@ pub struct DescribeDashboardPermissionsRequest {
     pub dashboard_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDashboardPermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
@@ -1590,7 +1590,7 @@ pub struct DescribeDashboardPermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDashboardRequest {
     /// <p>The alias name.</p>
@@ -1609,7 +1609,7 @@ pub struct DescribeDashboardRequest {
     pub version_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDashboardResponse {
     /// <p>Information about the dashboard.</p>
@@ -1626,7 +1626,7 @@ pub struct DescribeDashboardResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSetPermissionsRequest {
     /// <p>The AWS account ID.</p>
@@ -1637,7 +1637,7 @@ pub struct DescribeDataSetPermissionsRequest {
     pub data_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSetPermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -1662,7 +1662,7 @@ pub struct DescribeDataSetPermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSetRequest {
     /// <p>The AWS account ID.</p>
@@ -1673,7 +1673,7 @@ pub struct DescribeDataSetRequest {
     pub data_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSetResponse {
     /// <p>Information on the dataset.</p>
@@ -1690,7 +1690,7 @@ pub struct DescribeDataSetResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourcePermissionsRequest {
     /// <p>The AWS account ID.</p>
@@ -1701,7 +1701,7 @@ pub struct DescribeDataSourcePermissionsRequest {
     pub data_source_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourcePermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
@@ -1726,7 +1726,7 @@ pub struct DescribeDataSourcePermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDataSourceRequest {
     /// <p>The AWS account ID.</p>
@@ -1737,7 +1737,7 @@ pub struct DescribeDataSourceRequest {
     pub data_source_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDataSourceResponse {
     /// <p>The information on the data source.</p>
@@ -1754,7 +1754,7 @@ pub struct DescribeDataSourceResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1768,7 +1768,7 @@ pub struct DescribeGroupRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupResponse {
     /// <p>The name of the group.</p>
@@ -1785,7 +1785,7 @@ pub struct DescribeGroupResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIAMPolicyAssignmentRequest {
     /// <p>The name of the assignment. </p>
@@ -1799,7 +1799,7 @@ pub struct DescribeIAMPolicyAssignmentRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIAMPolicyAssignmentResponse {
     /// <p>Information describing the IAM policy assignment.</p>
@@ -1816,7 +1816,7 @@ pub struct DescribeIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIngestionRequest {
     /// <p>The AWS account ID.</p>
@@ -1830,7 +1830,7 @@ pub struct DescribeIngestionRequest {
     pub ingestion_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIngestionResponse {
     /// <p>Information about the ingestion.</p>
@@ -1847,7 +1847,7 @@ pub struct DescribeIngestionResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplateAliasRequest {
     /// <p>The name of the template alias that you want to describe. If you name a specific alias, you describe the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. The keyword <code>$PUBLISHED</code> doesn't apply to templates.</p>
@@ -1861,7 +1861,7 @@ pub struct DescribeTemplateAliasRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateAliasResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1878,7 +1878,7 @@ pub struct DescribeTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplatePermissionsRequest {
     /// <p>The ID of the AWS account that contains the template that you're describing.</p>
@@ -1889,7 +1889,7 @@ pub struct DescribeTemplatePermissionsRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplatePermissionsResponse {
     /// <p>A list of resource permissions to be set on the template. </p>
@@ -1914,7 +1914,7 @@ pub struct DescribeTemplatePermissionsResponse {
     pub template_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTemplateRequest {
     /// <p>The alias of the template that you want to describe. If you name a specific alias, you describe the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. The keyword <code>$PUBLISHED</code> doesn't apply to templates.</p>
@@ -1933,7 +1933,7 @@ pub struct DescribeTemplateRequest {
     pub version_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateResponse {
     /// <p>The HTTP status of the request.</p>
@@ -1946,7 +1946,7 @@ pub struct DescribeTemplateResponse {
     pub template: Option<Template>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -1960,7 +1960,7 @@ pub struct DescribeUserRequest {
     pub user_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -1978,7 +1978,7 @@ pub struct DescribeUserResponse {
 }
 
 /// <p>Error information for the SPICE ingestion of a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorInfo {
     /// <p>Error message.</p>
@@ -1992,7 +1992,7 @@ pub struct ErrorInfo {
 }
 
 /// <p>Export to .csv option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportToCSVOption {
     /// <p>Availability status.</p>
@@ -2002,7 +2002,7 @@ pub struct ExportToCSVOption {
 }
 
 /// <p>A transform operation that filters rows based on a condition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FilterOperation {
     /// <p>An expression that must evaluate to a Boolean value. Rows for which the expression evaluates to true are kept in the dataset.</p>
     #[serde(rename = "ConditionExpression")]
@@ -2010,7 +2010,7 @@ pub struct FilterOperation {
 }
 
 /// <p>Geospatial column group that denotes a hierarchy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GeoSpatialColumnGroup {
     /// <p>Columns in this hierarchy.</p>
     #[serde(rename = "Columns")]
@@ -2023,7 +2023,7 @@ pub struct GeoSpatialColumnGroup {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDashboardEmbedUrlRequest {
     /// <p>The ID for the AWS account that contains the dashboard that you're embedding.</p>
@@ -2053,7 +2053,7 @@ pub struct GetDashboardEmbedUrlRequest {
     pub user_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDashboardEmbedUrlResponse {
     /// <p>An URL that you can put into your server-side webpage to embed your dashboard. This URL is valid for 5 minutes, and the resulting session is valid for 10 hours. The API provides the URL with an <code>auth_code</code> value that enables a single sign-on session. </p>
@@ -2071,7 +2071,7 @@ pub struct GetDashboardEmbedUrlResponse {
 }
 
 /// <p>A <i>group</i> in Amazon QuickSight consists of a set of users. You can use groups to make it easier to manage access and security. Currently, an Amazon QuickSight subscription can't contain more than 500 Amazon QuickSight groups.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
     /// <p>The Amazon Resource Name (ARN) for the group.</p>
@@ -2093,7 +2093,7 @@ pub struct Group {
 }
 
 /// <p>A member of an Amazon QuickSight group. Currently, group members must be users. Groups can't be members of another group. .</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupMember {
     /// <p>The Amazon Resource Name (ARN) for the group member (user).</p>
@@ -2107,7 +2107,7 @@ pub struct GroupMember {
 }
 
 /// <p>An IAM policy assignment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IAMPolicyAssignment {
     /// <p>Assignment ID.</p>
@@ -2137,7 +2137,7 @@ pub struct IAMPolicyAssignment {
 }
 
 /// <p>IAM policy assignment summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IAMPolicyAssignmentSummary {
     /// <p>Assignment name.</p>
@@ -2151,7 +2151,7 @@ pub struct IAMPolicyAssignmentSummary {
 }
 
 /// <p>Information about the SPICE ingestion for a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ingestion {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -2196,7 +2196,7 @@ pub struct Ingestion {
 }
 
 /// <p>Metadata for a column that is used as the input of a transform operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputColumn {
     /// <p>The name of this column in the underlying data source.</p>
     #[serde(rename = "Name")]
@@ -2207,7 +2207,7 @@ pub struct InputColumn {
 }
 
 /// <p>Integer parameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IntegerParameter {
     /// <p>A display name for the dataset.</p>
@@ -2219,7 +2219,7 @@ pub struct IntegerParameter {
 }
 
 /// <p>Jira parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JiraParameters {
     /// <p>The base URL of the Jira site.</p>
     #[serde(rename = "SiteBaseUrl")]
@@ -2227,7 +2227,7 @@ pub struct JiraParameters {
 }
 
 /// <p>Join instruction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JoinInstruction {
     /// <p>Left operand.</p>
     #[serde(rename = "LeftOperand")]
@@ -2243,7 +2243,7 @@ pub struct JoinInstruction {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardVersionsRequest {
     /// <p>The ID of the AWS account that contains the dashboard that you're listing versions for.</p>
@@ -2262,7 +2262,7 @@ pub struct ListDashboardVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDashboardVersionsResponse {
     /// <p>A structure that contains information about each version of the dashboard.</p>
@@ -2283,7 +2283,7 @@ pub struct ListDashboardVersionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDashboardsRequest {
     /// <p>The ID of the AWS account that contains the dashboards that you're listing.</p>
@@ -2299,7 +2299,7 @@ pub struct ListDashboardsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDashboardsResponse {
     /// <p>A structure that contains all of the dashboards shared with the user. This structure provides basic information about the dashboards.</p>
@@ -2320,7 +2320,7 @@ pub struct ListDashboardsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSetsRequest {
     /// <p>The AWS account ID.</p>
@@ -2336,7 +2336,7 @@ pub struct ListDataSetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSetsResponse {
     /// <p>The list of dataset summaries.</p>
@@ -2357,7 +2357,7 @@ pub struct ListDataSetsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataSourcesRequest {
     /// <p>The AWS account ID.</p>
@@ -2373,7 +2373,7 @@ pub struct ListDataSourcesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
     /// <p>A list of data sources.</p>
@@ -2394,7 +2394,7 @@ pub struct ListDataSourcesResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupMembershipsRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -2416,7 +2416,7 @@ pub struct ListGroupMembershipsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupMembershipsResponse {
     /// <p>The list of the members of the group.</p>
@@ -2437,7 +2437,7 @@ pub struct ListGroupMembershipsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -2456,7 +2456,7 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>The list of the groups.</p>
@@ -2477,7 +2477,7 @@ pub struct ListGroupsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIAMPolicyAssignmentsForUserRequest {
     /// <p>The ID of the AWS account that contains the assignments.</p>
@@ -2499,7 +2499,7 @@ pub struct ListIAMPolicyAssignmentsForUserRequest {
     pub user_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIAMPolicyAssignmentsForUserResponse {
     /// <p>The active assignments for this user.</p>
@@ -2520,7 +2520,7 @@ pub struct ListIAMPolicyAssignmentsForUserResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIAMPolicyAssignmentsRequest {
     /// <p>The status of the assignments.</p>
@@ -2543,7 +2543,7 @@ pub struct ListIAMPolicyAssignmentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIAMPolicyAssignmentsResponse {
     /// <p>Information describing the IAM policy assignments.</p>
@@ -2564,7 +2564,7 @@ pub struct ListIAMPolicyAssignmentsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIngestionsRequest {
     /// <p>The AWS account ID.</p>
@@ -2583,7 +2583,7 @@ pub struct ListIngestionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIngestionsResponse {
     /// <p>A list of the ingestions.</p>
@@ -2604,7 +2604,7 @@ pub struct ListIngestionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want a list of tags for.</p>
@@ -2612,7 +2612,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -2629,7 +2629,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplateAliasesRequest {
     /// <p>The ID of the AWS account that contains the template aliases that you're listing.</p>
@@ -2648,7 +2648,7 @@ pub struct ListTemplateAliasesRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplateAliasesResponse {
     /// <p>The token for the next set of results, or null if there are no more results.</p>
@@ -2669,7 +2669,7 @@ pub struct ListTemplateAliasesResponse {
     pub template_alias_list: Option<Vec<TemplateAlias>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplateVersionsRequest {
     /// <p>The ID of the AWS account that contains the templates that you're listing.</p>
@@ -2688,7 +2688,7 @@ pub struct ListTemplateVersionsRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplateVersionsResponse {
     /// <p>The token for the next set of results, or null if there are no more results.</p>
@@ -2709,7 +2709,7 @@ pub struct ListTemplateVersionsResponse {
     pub template_version_summary_list: Option<Vec<TemplateVersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTemplatesRequest {
     /// <p>The ID of the AWS account that contains the templates that you're listing.</p>
@@ -2725,7 +2725,7 @@ pub struct ListTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTemplatesResponse {
     /// <p>The token for the next set of results, or null if there are no more results.</p>
@@ -2746,7 +2746,7 @@ pub struct ListTemplatesResponse {
     pub template_summary_list: Option<Vec<TemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserGroupsRequest {
     /// <p>The AWS account ID that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -2768,7 +2768,7 @@ pub struct ListUserGroupsRequest {
     pub user_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUserGroupsResponse {
     /// <p>The list of groups the user is a member of.</p>
@@ -2789,7 +2789,7 @@ pub struct ListUserGroupsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -2808,7 +2808,7 @@ pub struct ListUsersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>A pagination token that can be used in a subsequent request.</p>
@@ -2830,7 +2830,7 @@ pub struct ListUsersResponse {
 }
 
 /// <p>A <i>logical table</i> is a unit that joins and that data transformations operate on. A logical table has a source, which can be either a physical table or result of a join. When a logical table points to a physical table, the logical table acts as a mutable copy of that physical table through transform operations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogicalTable {
     /// <p>A display name for the logical table.</p>
     #[serde(rename = "Alias")]
@@ -2845,7 +2845,7 @@ pub struct LogicalTable {
 }
 
 /// <p>Information about the source of a logical table. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogicalTableSource {
     /// <p>Specifies the result of a join of two logical tables.</p>
     #[serde(rename = "JoinInstruction")]
@@ -2858,7 +2858,7 @@ pub struct LogicalTableSource {
 }
 
 /// <p>Amazon S3 manifest file location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ManifestFileLocation {
     /// <p>Amazon S3 bucket.</p>
     #[serde(rename = "Bucket")]
@@ -2869,7 +2869,7 @@ pub struct ManifestFileLocation {
 }
 
 /// <p>MariaDB parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MariaDbParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -2883,7 +2883,7 @@ pub struct MariaDbParameters {
 }
 
 /// <p>MySQL parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MySqlParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -2897,7 +2897,7 @@ pub struct MySqlParameters {
 }
 
 /// <p>Output column.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputColumn {
     /// <p>A display name for the dataset.</p>
@@ -2911,7 +2911,7 @@ pub struct OutputColumn {
 }
 
 /// <p>Parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Parameters {
     /// <p>DateTime parameters.</p>
@@ -2933,7 +2933,7 @@ pub struct Parameters {
 }
 
 /// <p>A view of a data source that contains information about the shape of the data in the underlying source. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PhysicalTable {
     /// <p>A physical table type built from the results of the custom SQL query.</p>
     #[serde(rename = "CustomSql")]
@@ -2950,7 +2950,7 @@ pub struct PhysicalTable {
 }
 
 /// <p>PostgreSQL parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PostgreSqlParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -2964,7 +2964,7 @@ pub struct PostgreSqlParameters {
 }
 
 /// <p>Presto parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PrestoParameters {
     /// <p>Catalog.</p>
     #[serde(rename = "Catalog")]
@@ -2978,7 +2978,7 @@ pub struct PrestoParameters {
 }
 
 /// <p>A transform operation that projects columns. Operations that come after a projection can only refer to projected columns.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProjectOperation {
     /// <p>Projected columns.</p>
     #[serde(rename = "ProjectedColumns")]
@@ -2986,7 +2986,7 @@ pub struct ProjectOperation {
 }
 
 /// <p>Information about a queued dataset SPICE ingestion.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueueInfo {
     /// <p>The ID of the ongoing ingestion. The queued ingestion is waiting for the ongoing ingestion to complete.</p>
@@ -2998,7 +2998,7 @@ pub struct QueueInfo {
 }
 
 /// <p>Amazon RDS parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RdsParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -3009,7 +3009,7 @@ pub struct RdsParameters {
 }
 
 /// <p>Amazon Redshift parameters. The <code>ClusterId</code> field can be blank if <code>Host</code> and <code>Port</code> are both set. The <code>Host</code> and <code>Port</code> fields can be blank if the <code>ClusterId</code> field is set.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RedshiftParameters {
     /// <p>Cluster ID. This field can be blank if the <code>Host</code> and <code>Port</code> are provided.</p>
     #[serde(rename = "ClusterId")]
@@ -3028,7 +3028,7 @@ pub struct RedshiftParameters {
     pub port: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -3060,7 +3060,7 @@ pub struct RegisterUserRequest {
     pub user_role: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterUserResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -3082,7 +3082,7 @@ pub struct RegisterUserResponse {
 }
 
 /// <p>A physical table type for relational data sources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RelationalTable {
     /// <p>The Amazon Resource Name (ARN) for the data source.</p>
     #[serde(rename = "DataSourceArn")]
@@ -3100,7 +3100,7 @@ pub struct RelationalTable {
 }
 
 /// <p>A transform operation that renames a column.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RenameColumnOperation {
     /// <p>The name of the column to be renamed.</p>
     #[serde(rename = "ColumnName")]
@@ -3111,7 +3111,7 @@ pub struct RenameColumnOperation {
 }
 
 /// <p>Permission for the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourcePermission {
     /// <p>The action to grant or revoke permissions on, for example <code>"quicksight:DescribeDashboard"</code>.</p>
     #[serde(rename = "Actions")]
@@ -3122,7 +3122,7 @@ pub struct ResourcePermission {
 }
 
 /// <p>Information about rows for a data set SPICE ingestion.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RowInfo {
     /// <p>The number of rows that were not ingested.</p>
@@ -3136,7 +3136,7 @@ pub struct RowInfo {
 }
 
 /// <p>The row-level security configuration for the dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RowLevelPermissionDataSet {
     /// <p>The Amazon Resource Name (ARN) of the permission dataset.</p>
     #[serde(rename = "Arn")]
@@ -3147,7 +3147,7 @@ pub struct RowLevelPermissionDataSet {
 }
 
 /// <p>S3 parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Parameters {
     /// <p>Location of the Amazon S3 manifest file. This is NULL if the manifest file was uploaded in the console.</p>
     #[serde(rename = "ManifestFileLocation")]
@@ -3155,7 +3155,7 @@ pub struct S3Parameters {
 }
 
 /// <p>A physical table type for as S3 data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Source {
     /// <p>The amazon Resource Name (ARN) for the data source.</p>
     #[serde(rename = "DataSourceArn")]
@@ -3169,7 +3169,7 @@ pub struct S3Source {
     pub upload_settings: Option<UploadSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchDashboardsRequest {
     /// <p>The ID of the AWS account that contains the user whose dashboards you're searching for. </p>
@@ -3188,7 +3188,7 @@ pub struct SearchDashboardsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchDashboardsResponse {
     /// <p>The list of dashboards owned by the user specified in <code>Filters</code> in your request.</p>
@@ -3210,7 +3210,7 @@ pub struct SearchDashboardsResponse {
 }
 
 /// <p>ServiceNow parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowParameters {
     /// <p>URL of the base site.</p>
     #[serde(rename = "SiteBaseUrl")]
@@ -3218,7 +3218,7 @@ pub struct ServiceNowParameters {
 }
 
 /// <p>Sheet controls option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SheetControlsOption {
     /// <p>Visibility state.</p>
@@ -3228,7 +3228,7 @@ pub struct SheetControlsOption {
 }
 
 /// <p>Snowflake parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SnowflakeParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -3242,7 +3242,7 @@ pub struct SnowflakeParameters {
 }
 
 /// <p>Spark parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SparkParameters {
     /// <p>Host.</p>
     #[serde(rename = "Host")]
@@ -3253,7 +3253,7 @@ pub struct SparkParameters {
 }
 
 /// <p>SQL Server parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SqlServerParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -3267,7 +3267,7 @@ pub struct SqlServerParameters {
 }
 
 /// <p>Secure Socket Layer (SSL) properties that apply when QuickSight connects to your underlying data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SslProperties {
     /// <p>A Boolean option to control whether SSL should be disabled.</p>
     #[serde(rename = "DisableSsl")]
@@ -3276,7 +3276,7 @@ pub struct SslProperties {
 }
 
 /// <p>String parameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StringParameter {
     /// <p>A display name for the dataset.</p>
@@ -3288,7 +3288,7 @@ pub struct StringParameter {
 }
 
 /// <p>The key or keys of the key-value pairs for the resource tag or tags assigned to the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>Tag key.</p>
     #[serde(rename = "Key")]
@@ -3299,7 +3299,7 @@ pub struct Tag {
 }
 
 /// <p>A transform operation that tags a column with additional information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagColumnOperation {
     /// <p>The column that this operation acts on.</p>
     #[serde(rename = "ColumnName")]
@@ -3309,7 +3309,7 @@ pub struct TagColumnOperation {
     pub tags: Vec<ColumnTag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
@@ -3320,7 +3320,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -3334,7 +3334,7 @@ pub struct TagResourceResponse {
 }
 
 /// <p>A template object. A <i>template</i> is an entity in QuickSight that encapsulates the metadata required to create an analysis and that you can use to create a dashboard. A template adds a layer of abstraction by using placeholders to replace the dataset associated with the analysis. You can use templates to create dashboards by replacing dataset placeholders with datasets that follow the same schema that was used to create the source analysis and template.</p> <p>You can share templates across AWS accounts by allowing users in other AWS accounts to create a template or a dashboard from an existing template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Template {
     /// <p>The Amazon Resource Name (ARN) of the template.</p>
@@ -3364,7 +3364,7 @@ pub struct Template {
 }
 
 /// <p>The template alias.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateAlias {
     /// <p>The display name of the template alias.</p>
@@ -3382,7 +3382,7 @@ pub struct TemplateAlias {
 }
 
 /// <p>List of errors that occurred when the template version creation failed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateError {
     /// <p>Description of the error type.</p>
@@ -3396,7 +3396,7 @@ pub struct TemplateError {
 }
 
 /// <p>The source analysis of the template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TemplateSourceAnalysis {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3408,7 +3408,7 @@ pub struct TemplateSourceAnalysis {
 }
 
 /// <p>The source entity of the template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TemplateSourceEntity {
     /// <p>The source analysis, if it is based on an analysis.</p>
@@ -3422,7 +3422,7 @@ pub struct TemplateSourceEntity {
 }
 
 /// <p>The source template of the template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TemplateSourceTemplate {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3431,7 +3431,7 @@ pub struct TemplateSourceTemplate {
 }
 
 /// <p>The template summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateSummary {
     /// <p>A summary of a template.</p>
@@ -3461,7 +3461,7 @@ pub struct TemplateSummary {
 }
 
 /// <p>A version of a template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateVersion {
     /// <p>The time that this template version was created.</p>
@@ -3495,7 +3495,7 @@ pub struct TemplateVersion {
 }
 
 /// <p>The template version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateVersionSummary {
     /// <p>The ARN of the template version.</p>
@@ -3521,7 +3521,7 @@ pub struct TemplateVersionSummary {
 }
 
 /// <p>Teradata parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TeradataParameters {
     /// <p>Database.</p>
     #[serde(rename = "Database")]
@@ -3535,7 +3535,7 @@ pub struct TeradataParameters {
 }
 
 /// <p>A data transformation on a logical table. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TransformOperation {
     /// <p>A transform operation that casts a column to a different type.</p>
     #[serde(rename = "CastColumnTypeOperation")]
@@ -3564,7 +3564,7 @@ pub struct TransformOperation {
 }
 
 /// <p>Twitter parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TwitterParameters {
     /// <p>Maximum number of rows to query Twitter.</p>
     #[serde(rename = "MaxRows")]
@@ -3574,7 +3574,7 @@ pub struct TwitterParameters {
     pub query: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to untag.</p>
@@ -3585,7 +3585,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -3598,7 +3598,7 @@ pub struct UntagResourceResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardPermissionsRequest {
     /// <p>The ID of the AWS account that contains the dashboard whose permissions you're updating.</p>
@@ -3617,7 +3617,7 @@ pub struct UpdateDashboardPermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardPermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
@@ -3642,7 +3642,7 @@ pub struct UpdateDashboardPermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardPublishedVersionRequest {
     /// <p>The ID of the AWS account that contains the dashboard that you're updating.</p>
@@ -3656,7 +3656,7 @@ pub struct UpdateDashboardPublishedVersionRequest {
     pub version_number: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardPublishedVersionResponse {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
@@ -3677,7 +3677,7 @@ pub struct UpdateDashboardPublishedVersionResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDashboardRequest {
     /// <p>The ID of the AWS account that contains the dashboard that you're updating.</p>
@@ -3706,7 +3706,7 @@ pub struct UpdateDashboardRequest {
     pub version_description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDashboardResponse {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3735,7 +3735,7 @@ pub struct UpdateDashboardResponse {
     pub version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSetPermissionsRequest {
     /// <p>The AWS account ID.</p>
@@ -3754,7 +3754,7 @@ pub struct UpdateDataSetPermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSetPermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -3775,7 +3775,7 @@ pub struct UpdateDataSetPermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSetRequest {
     /// <p>The AWS account ID.</p>
@@ -3807,7 +3807,7 @@ pub struct UpdateDataSetRequest {
     pub row_level_permission_data_set: Option<RowLevelPermissionDataSet>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSetResponse {
     /// <p>The Amazon Resource Name (ARN) of the dataset.</p>
@@ -3836,7 +3836,7 @@ pub struct UpdateDataSetResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourcePermissionsRequest {
     /// <p>The AWS account ID.</p>
@@ -3855,7 +3855,7 @@ pub struct UpdateDataSourcePermissionsRequest {
     pub revoke_permissions: Option<Vec<ResourcePermission>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourcePermissionsResponse {
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
@@ -3876,7 +3876,7 @@ pub struct UpdateDataSourcePermissionsResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDataSourceRequest {
     /// <p>The AWS account ID.</p>
@@ -3906,7 +3906,7 @@ pub struct UpdateDataSourceRequest {
     pub vpc_connection_properties: Option<VpcConnectionProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourceResponse {
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
@@ -3931,7 +3931,7 @@ pub struct UpdateDataSourceResponse {
     pub update_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -3949,7 +3949,7 @@ pub struct UpdateGroupRequest {
     pub namespace: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {
     /// <p>The name of the group.</p>
@@ -3966,7 +3966,7 @@ pub struct UpdateGroupResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIAMPolicyAssignmentRequest {
     /// <p>The name of the assignment. This name must be unique within an AWS account.</p>
@@ -3992,7 +3992,7 @@ pub struct UpdateIAMPolicyAssignmentRequest {
     pub policy_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIAMPolicyAssignmentResponse {
     /// <p>The ID of the assignment.</p>
@@ -4025,7 +4025,7 @@ pub struct UpdateIAMPolicyAssignmentResponse {
     pub status: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplateAliasRequest {
     /// <p>The alias of the template that you want to update. If you name a specific alias, you update the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. The keyword <code>$PUBLISHED</code> doesn't apply to templates.</p>
@@ -4042,7 +4042,7 @@ pub struct UpdateTemplateAliasRequest {
     pub template_version_number: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplateAliasResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -4059,7 +4059,7 @@ pub struct UpdateTemplateAliasResponse {
     pub template_alias: Option<TemplateAlias>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplatePermissionsRequest {
     /// <p>The ID of the AWS account that contains the template.</p>
@@ -4078,7 +4078,7 @@ pub struct UpdateTemplatePermissionsRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplatePermissionsResponse {
     /// <p>A list of resource permissions to be set on the template.</p>
@@ -4103,7 +4103,7 @@ pub struct UpdateTemplatePermissionsResponse {
     pub template_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTemplateRequest {
     /// <p>The ID of the AWS account that contains the template that you're updating.</p>
@@ -4125,7 +4125,7 @@ pub struct UpdateTemplateRequest {
     pub version_description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTemplateResponse {
     /// <p>The Amazon Resource Name (ARN) for the template.</p>
@@ -4154,7 +4154,7 @@ pub struct UpdateTemplateResponse {
     pub version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
@@ -4174,7 +4174,7 @@ pub struct UpdateUserRequest {
     pub user_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
     /// <p>The AWS request ID for this operation.</p>
@@ -4192,7 +4192,7 @@ pub struct UpdateUserResponse {
 }
 
 /// <p>Information about the format for a source file or files.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UploadSettings {
     /// <p>Whether the file has a header row, or the files each have a header row.</p>
     #[serde(rename = "ContainsHeader")]
@@ -4217,7 +4217,7 @@ pub struct UploadSettings {
 }
 
 /// <p>A registered user of Amazon QuickSight. Currently, an Amazon QuickSight subscription can't contain more than 20 million users.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The active status of user. When you create an Amazon QuickSight user that’s not an IAM user or an Active Directory user, that user is inactive until they sign in and provide a password.</p>
@@ -4251,7 +4251,7 @@ pub struct User {
 }
 
 /// <p>VPC connection properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VpcConnectionProperties {
     /// <p>The Amazon Resource Name (ARN) for the VPC connection.</p>
     #[serde(rename = "VpcConnectionArn")]

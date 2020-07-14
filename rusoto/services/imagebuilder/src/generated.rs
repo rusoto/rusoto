@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p> Details of an EC2 AMI. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ami {
     /// <p>The description of the EC2 AMI. </p>
@@ -51,7 +51,7 @@ pub struct Ami {
 }
 
 /// <p> Define and configure the output AMIs of the pipeline. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AmiDistributionConfiguration {
     /// <p>The tags to apply to AMIs distributed to this Region. </p>
     #[serde(rename = "amiTags")]
@@ -71,7 +71,7 @@ pub struct AmiDistributionConfiguration {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelImageCreationRequest {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -82,7 +82,7 @@ pub struct CancelImageCreationRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelImageCreationResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -100,7 +100,7 @@ pub struct CancelImageCreationResponse {
 }
 
 /// <p>A detailed view of a component.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Component {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -162,7 +162,7 @@ pub struct Component {
 }
 
 /// <p> Configuration details of the component. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComponentConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the component. </p>
     #[serde(rename = "componentArn")]
@@ -170,7 +170,7 @@ pub struct ComponentConfiguration {
 }
 
 /// <p>A high-level summary of a component.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComponentSummary {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -220,7 +220,7 @@ pub struct ComponentSummary {
 }
 
 /// <p>A high-level overview of a component semantic version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComponentVersion {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -261,7 +261,7 @@ pub struct ComponentVersion {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComponentRequest {
     /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component.</p>
@@ -306,7 +306,7 @@ pub struct CreateComponentRequest {
     pub uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComponentResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -323,7 +323,7 @@ pub struct CreateComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionConfigurationRequest {
     /// <p> The idempotency token of the distribution configuration. </p>
@@ -345,7 +345,7 @@ pub struct CreateDistributionConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDistributionConfigurationResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -362,7 +362,7 @@ pub struct CreateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImagePipelineRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -407,7 +407,7 @@ pub struct CreateImagePipelineRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImagePipelineResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -424,7 +424,7 @@ pub struct CreateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRecipeRequest {
     /// <p>The block device mappings of the image recipe. </p>
@@ -456,7 +456,7 @@ pub struct CreateImageRecipeRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageRecipeResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -473,7 +473,7 @@ pub struct CreateImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -503,7 +503,7 @@ pub struct CreateImageRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -520,7 +520,7 @@ pub struct CreateImageResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInfrastructureConfigurationRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -570,7 +570,7 @@ pub struct CreateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInfrastructureConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -587,7 +587,7 @@ pub struct CreateInfrastructureConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComponentRequest {
     /// <p>The Amazon Resource Name (ARN) of the component build version to delete. </p>
@@ -595,7 +595,7 @@ pub struct DeleteComponentRequest {
     pub component_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComponentResponse {
     /// <p>The Amazon Resource Name (ARN) of the component build version that was deleted. </p>
@@ -608,7 +608,7 @@ pub struct DeleteComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration to delete. </p>
@@ -616,7 +616,7 @@ pub struct DeleteDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDistributionConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was deleted. </p>
@@ -629,7 +629,7 @@ pub struct DeleteDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImagePipelineRequest {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline to delete. </p>
@@ -637,7 +637,7 @@ pub struct DeleteImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImagePipelineResponse {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline that was deleted. </p>
@@ -650,7 +650,7 @@ pub struct DeleteImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe to delete. </p>
@@ -658,7 +658,7 @@ pub struct DeleteImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageRecipeResponse {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that was deleted. </p>
@@ -671,7 +671,7 @@ pub struct DeleteImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
     /// <p>The Amazon Resource Name (ARN) of the image to delete. </p>
@@ -679,7 +679,7 @@ pub struct DeleteImageRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResponse {
     /// <p>The Amazon Resource Name (ARN) of the image that was deleted. </p>
@@ -692,7 +692,7 @@ pub struct DeleteImageResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInfrastructureConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration to delete. </p>
@@ -700,7 +700,7 @@ pub struct DeleteInfrastructureConfigurationRequest {
     pub infrastructure_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInfrastructureConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was deleted. </p>
@@ -714,7 +714,7 @@ pub struct DeleteInfrastructureConfigurationResponse {
 }
 
 /// <p> Defines the settings for a specific Region. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Distribution {
     /// <p>The specific AMI settings (for example, launch permissions, AMI tags). </p>
     #[serde(rename = "amiDistributionConfiguration")]
@@ -730,7 +730,7 @@ pub struct Distribution {
 }
 
 /// <p>A distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DistributionConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration.</p>
@@ -767,7 +767,7 @@ pub struct DistributionConfiguration {
 }
 
 /// <p>A high-level overview of a distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DistributionConfigurationSummary {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration.</p>
@@ -797,7 +797,7 @@ pub struct DistributionConfigurationSummary {
 }
 
 /// <p>Amazon EBS-specific block device mapping specifications.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EbsInstanceBlockDeviceSpecification {
     /// <p>Use to configure delete on termination of the associated device.</p>
     #[serde(rename = "deleteOnTermination")]
@@ -830,7 +830,7 @@ pub struct EbsInstanceBlockDeviceSpecification {
 }
 
 /// <p>A filter name and value pair that is used to return a more specific list of results from a list operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case-sensitive. </p>
@@ -843,7 +843,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the component whose policy you want to retrieve. </p>
@@ -851,7 +851,7 @@ pub struct GetComponentPolicyRequest {
     pub component_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentPolicyResponse {
     /// <p>The component policy. </p>
@@ -864,7 +864,7 @@ pub struct GetComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentRequest {
     /// <p>The Amazon Resource Name (ARN) of the component that you want to retrieve. Regex requires "/\d+$" suffix.</p>
@@ -872,7 +872,7 @@ pub struct GetComponentRequest {
     pub component_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentResponse {
     /// <p>The component object associated with the specified ARN. </p>
@@ -885,7 +885,7 @@ pub struct GetComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to retrieve. </p>
@@ -893,7 +893,7 @@ pub struct GetDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionConfigurationResponse {
     /// <p>The distribution configuration object. </p>
@@ -906,7 +906,7 @@ pub struct GetDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePipelineRequest {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to retrieve. </p>
@@ -914,7 +914,7 @@ pub struct GetImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePipelineResponse {
     /// <p>The image pipeline object. </p>
@@ -927,7 +927,7 @@ pub struct GetImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image whose policy you want to retrieve. </p>
@@ -935,7 +935,7 @@ pub struct GetImagePolicyRequest {
     pub image_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePolicyResponse {
     /// <p>The image policy object. </p>
@@ -948,7 +948,7 @@ pub struct GetImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe whose policy you want to retrieve. </p>
@@ -956,7 +956,7 @@ pub struct GetImageRecipePolicyRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipePolicyResponse {
     /// <p>The image recipe policy object. </p>
@@ -969,7 +969,7 @@ pub struct GetImageRecipePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that you want to retrieve. </p>
@@ -977,7 +977,7 @@ pub struct GetImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipeResponse {
     /// <p>The image recipe object. </p>
@@ -990,7 +990,7 @@ pub struct GetImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRequest {
     /// <p>The Amazon Resource Name (ARN) of the image that you want to retrieve. </p>
@@ -998,7 +998,7 @@ pub struct GetImageRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageResponse {
     /// <p>The image object. </p>
@@ -1012,7 +1012,7 @@ pub struct GetImageResponse {
 }
 
 /// <p> GetInfrastructureConfiguration request object. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInfrastructureConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to retrieve. </p>
@@ -1021,7 +1021,7 @@ pub struct GetInfrastructureConfigurationRequest {
 }
 
 /// <p>GetInfrastructureConfiguration response object. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInfrastructureConfigurationResponse {
     /// <p>The infrastructure configuration object. </p>
@@ -1035,7 +1035,7 @@ pub struct GetInfrastructureConfigurationResponse {
 }
 
 /// <p>An image build version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Image {
     /// <p>The Amazon Resource Name (ARN) of the image.</p>
@@ -1105,7 +1105,7 @@ pub struct Image {
 }
 
 /// <p>Details of an image pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImagePipeline {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline.</p>
@@ -1175,7 +1175,7 @@ pub struct ImagePipeline {
 }
 
 /// <p>An image recipe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageRecipe {
     /// <p>The Amazon Resource Name (ARN) of the image recipe.</p>
@@ -1225,7 +1225,7 @@ pub struct ImageRecipe {
 }
 
 /// <p>A summary of an image recipe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageRecipeSummary {
     /// <p>The Amazon Resource Name (ARN) of the image recipe.</p>
@@ -1259,7 +1259,7 @@ pub struct ImageRecipeSummary {
 }
 
 /// <p> Image state shows the image status and the reason for that status. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageState {
     /// <p>The reason for the image's status. </p>
@@ -1273,7 +1273,7 @@ pub struct ImageState {
 }
 
 /// <p>An image summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageSummary {
     /// <p>The Amazon Resource Name (ARN) of the image.</p>
@@ -1319,7 +1319,7 @@ pub struct ImageSummary {
 }
 
 /// <p>Image tests configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageTestsConfiguration {
     /// <p>Defines if tests should be executed when building this image.</p>
     #[serde(rename = "imageTestsEnabled")]
@@ -1332,7 +1332,7 @@ pub struct ImageTestsConfiguration {
 }
 
 /// <p>An image semantic version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageVersion {
     /// <p>The Amazon Resource Name (ARN) of the image semantic version.</p>
@@ -1365,7 +1365,7 @@ pub struct ImageVersion {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportComponentRequest {
     /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component. </p>
@@ -1412,7 +1412,7 @@ pub struct ImportComponentRequest {
     pub uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportComponentResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -1430,7 +1430,7 @@ pub struct ImportComponentResponse {
 }
 
 /// <p>Details of the infrastructure configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InfrastructureConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration.</p>
@@ -1492,7 +1492,7 @@ pub struct InfrastructureConfiguration {
 }
 
 /// <p>The infrastructure used when building EC2 AMIs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InfrastructureConfigurationSummary {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration.</p>
@@ -1522,7 +1522,7 @@ pub struct InfrastructureConfigurationSummary {
 }
 
 /// <p>Defines block device mappings for the instance used to configure your image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceBlockDeviceMapping {
     /// <p>The device to which these mappings apply.</p>
     #[serde(rename = "deviceName")]
@@ -1543,7 +1543,7 @@ pub struct InstanceBlockDeviceMapping {
 }
 
 /// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LaunchPermissionConfiguration {
     /// <p>The name of the group. </p>
     #[serde(rename = "userGroups")]
@@ -1555,7 +1555,7 @@ pub struct LaunchPermissionConfiguration {
     pub user_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentBuildVersionsRequest {
     /// <p>The component version Amazon Resource Name (ARN) whose versions you want to list. </p>
@@ -1571,7 +1571,7 @@ pub struct ListComponentBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentBuildVersionsResponse {
     /// <p>The list of component summaries for the specified semantic version. </p>
@@ -1588,7 +1588,7 @@ pub struct ListComponentBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentsRequest {
     /// <p>The filters. </p>
@@ -1609,7 +1609,7 @@ pub struct ListComponentsRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentsResponse {
     /// <p>The list of component semantic versions. </p>
@@ -1626,7 +1626,7 @@ pub struct ListComponentsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
     /// <p>The filters. </p>
@@ -1643,7 +1643,7 @@ pub struct ListDistributionConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDistributionConfigurationsResponse {
     /// <p>The list of distributions. </p>
@@ -1660,7 +1660,7 @@ pub struct ListDistributionConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageBuildVersionsRequest {
     /// <p>The filters. </p>
@@ -1680,7 +1680,7 @@ pub struct ListImageBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageBuildVersionsResponse {
     /// <p>The list of image build versions. </p>
@@ -1697,7 +1697,7 @@ pub struct ListImageBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelineImagesRequest {
     /// <p>The filters. </p>
@@ -1717,7 +1717,7 @@ pub struct ListImagePipelineImagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelineImagesResponse {
     /// <p>The list of images built by this pipeline. </p>
@@ -1734,7 +1734,7 @@ pub struct ListImagePipelineImagesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelinesRequest {
     /// <p>The filters. </p>
@@ -1751,7 +1751,7 @@ pub struct ListImagePipelinesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelinesResponse {
     /// <p>The list of image pipelines. </p>
@@ -1768,7 +1768,7 @@ pub struct ListImagePipelinesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageRecipesRequest {
     /// <p>The filters. </p>
@@ -1789,7 +1789,7 @@ pub struct ListImageRecipesRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageRecipesResponse {
     /// <p>The list of image pipelines. </p>
@@ -1806,7 +1806,7 @@ pub struct ListImageRecipesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
     /// <p>The filters. </p>
@@ -1827,7 +1827,7 @@ pub struct ListImagesRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
     /// <p>The list of image semantic versions. </p>
@@ -1844,7 +1844,7 @@ pub struct ListImagesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInfrastructureConfigurationsRequest {
     /// <p>The filters. </p>
@@ -1861,7 +1861,7 @@ pub struct ListInfrastructureConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInfrastructureConfigurationsResponse {
     /// <p>The list of infrastructure configurations. </p>
@@ -1878,7 +1878,7 @@ pub struct ListInfrastructureConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to retrieve. </p>
@@ -1886,7 +1886,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags for the specified resource. </p>
@@ -1896,7 +1896,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Logging configuration defines where Image Builder uploads your logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Logging {
     /// <p>The Amazon S3 logging configuration.</p>
     #[serde(rename = "s3Logs")]
@@ -1905,7 +1905,7 @@ pub struct Logging {
 }
 
 /// <p>The resources produced by this image. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputResources {
     /// <p>The EC2 AMIs created by this image. </p>
@@ -1914,7 +1914,7 @@ pub struct OutputResources {
     pub amis: Option<Vec<Ami>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComponentPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the component that this policy should be applied to. </p>
@@ -1925,7 +1925,7 @@ pub struct PutComponentPolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComponentPolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the component that this policy was applied to. </p>
@@ -1938,7 +1938,7 @@ pub struct PutComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImagePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image that this policy should be applied to. </p>
@@ -1949,7 +1949,7 @@ pub struct PutImagePolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImagePolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the image that this policy was applied to. </p>
@@ -1962,7 +1962,7 @@ pub struct PutImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRecipePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy should be applied to. </p>
@@ -1973,7 +1973,7 @@ pub struct PutImageRecipePolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageRecipePolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy was applied to. </p>
@@ -1987,7 +1987,7 @@ pub struct PutImageRecipePolicyResponse {
 }
 
 /// <p>Amazon S3 logging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Logs {
     /// <p>The Amazon S3 bucket in which to store the logs.</p>
     #[serde(rename = "s3BucketName")]
@@ -2000,7 +2000,7 @@ pub struct S3Logs {
 }
 
 /// <p>A schedule configures how often and when a pipeline will automatically create a new image. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
     /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, EC2 Image Builder will build a new image only when there are known changes pending. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time.</p>
     #[serde(rename = "pipelineExecutionStartCondition")]
@@ -2012,7 +2012,7 @@ pub struct Schedule {
     pub schedule_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImagePipelineExecutionRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2023,7 +2023,7 @@ pub struct StartImagePipelineExecutionRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImagePipelineExecutionResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -2040,7 +2040,7 @@ pub struct StartImagePipelineExecutionResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag. </p>
@@ -2051,11 +2051,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to untag. </p>
@@ -2066,11 +2066,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionConfigurationRequest {
     /// <p>The idempotency token of the distribution configuration. </p>
@@ -2088,7 +2088,7 @@ pub struct UpdateDistributionConfigurationRequest {
     pub distributions: Vec<Distribution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2105,7 +2105,7 @@ pub struct UpdateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImagePipelineRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2146,7 +2146,7 @@ pub struct UpdateImagePipelineRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImagePipelineResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2163,7 +2163,7 @@ pub struct UpdateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInfrastructureConfigurationRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2209,7 +2209,7 @@ pub struct UpdateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInfrastructureConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>

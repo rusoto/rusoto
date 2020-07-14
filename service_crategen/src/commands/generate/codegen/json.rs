@@ -1,8 +1,10 @@
 use inflector::Inflector;
 use std::io::Write;
 
-use super::{error_type_name, FileWriter, GenerateProtocol, IoResult};
-use crate::botocore::Operation;
+use super::{
+    error_type_name, eventstream_field_name, get_rust_type, FileWriter, GenerateProtocol, IoResult,
+};
+use crate::botocore::{Operation, Shape};
 use crate::Service;
 
 pub struct JsonGenerator;
@@ -63,7 +65,7 @@ impl GenerateProtocol for JsonGenerator {
                          .unwrap_or_else(|| "".to_owned()),
                      http_method = operation.http.method,
                      name = operation.name,
-                     ok_response = generate_ok_response(operation, output_type),
+                     ok_response = generate_ok_response(service, operation, output_type),
                      request_uri = operation.http.request_uri,
                      target_prefix = service.target_prefix().unwrap(),
                      json_version = service.json_version().unwrap(),
@@ -74,17 +76,27 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
-        let res = writeln!(
+        let serde_imports = vec!["Deserialize", "Serialize"];
+
+        writeln!(
             writer,
-            "use rusoto_core::proto;
-        use rusoto_core::signature::SignedRequest;
-        #[allow(unused_imports)]
-        use serde::{{Deserialize, Serialize}};"
-        );
+            "use rusoto_core::proto;\
+            use rusoto_core::signature::SignedRequest;\
+            #[allow(unused_imports)]\
+            use serde::{{{serde_imports}}};",
+            serde_imports = serde_imports.join(", "),
+        )?;
         if service.needs_serde_json_crate() {
-            return writeln!(writer, "use serde_json;");
+            writeln!(writer, "use serde_json;")?;
         }
-        res
+        if service.has_event_streams() {
+            writeln!(
+                writer,
+                "use rusoto_core::event_stream::{{DeserializeEvent, EventStream}};"
+            )?;
+        }
+
+        Ok(())
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {
@@ -97,6 +109,65 @@ impl GenerateProtocol for JsonGenerator {
 
     fn timestamp_type(&self) -> &'static str {
         "f64"
+    }
+
+    fn generate_event_enum_deserialize_impl(
+        &self,
+        service: &Service<'_>,
+        name: &str,
+        shape: &Shape,
+    ) -> String {
+        let match_arms = shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
+            if member.deprecated == Some(true) {
+                return None;
+            }
+
+            let member_shape = service.shape_for_member(member).unwrap();
+            let rs_type = get_rust_type(
+                service,
+                &member.shape,
+                member_shape,
+                member.streaming(),
+                self.timestamp_type(),
+            );
+
+            Some(
+                format!(
+                    "\"{member_name}\" => {name}::{member_name}({rs_type}::deserialize(deserializer)?),",
+                    name = name,
+                    rs_type = rs_type,
+                    member_name = member_name,
+                )
+            )
+        })
+            .chain(
+                std::iter::once(
+                    format!(
+                        "_ => Err(RusotoError::ParseError({err_fmt}))?",
+                        err_fmt = "format!(\"Invalid event type: {}\", event_type)",
+                    )
+                )
+            )
+            .collect::<Vec<String>>().join("\n");
+
+        format!(
+            "impl DeserializeEvent for {name} {{
+                fn deserialize_event(
+                    event_type: &str,
+                    data: &[u8],
+                ) -> Result<Self, RusotoError<()>> {{
+                    let deserializer = &mut serde_json::Deserializer::from_slice(data);
+
+                    let deserialized = match event_type {{
+                        {match_arms}
+                    }};
+                    Ok(deserialized)
+                }}
+            }}
+            ",
+            name = name,
+            match_arms = match_arms,
+        )
     }
 }
 
@@ -160,13 +231,23 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
         .map(|docs| crate::doco::Item(docs).to_string())
 }
 
-fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
+fn generate_ok_response(service: &Service<'_>, operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
-        format!(
-            "let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()",
-            output_type = output_type,
-        )
+        let output_shape = service.get_shape(output_type).unwrap();
+
+        if let Some(eventstream_field) = eventstream_field_name(service, output_shape) {
+            format!(
+                "Ok({output_type} {{ {eventstream_field}: EventStream::new(response) }})",
+                output_type = output_type,
+                eventstream_field = eventstream_field,
+            )
+        } else {
+            format!(
+                "let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()",
+                output_type = output_type,
+            )
+        }
     } else {
         "std::mem::drop(response);\nOk(())".to_owned()
     }

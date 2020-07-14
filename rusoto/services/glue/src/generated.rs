@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
     /// <p>The job arguments used when this trigger fires. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
@@ -53,7 +53,7 @@ pub struct Action {
     pub timeout: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreatePartitionRequest {
     /// <p>The ID of the catalog in which the partition is to be created. Currently, this should be the AWS account ID.</p>
@@ -71,7 +71,7 @@ pub struct BatchCreatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreatePartitionResponse {
     /// <p>The errors encountered when trying to create the requested partitions.</p>
@@ -80,7 +80,7 @@ pub struct BatchCreatePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
@@ -92,7 +92,7 @@ pub struct BatchDeleteConnectionRequest {
     pub connection_name_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteConnectionResponse {
     /// <p>A map of the names of connections that were not successfully deleted to error details.</p>
@@ -105,7 +105,7 @@ pub struct BatchDeleteConnectionResponse {
     pub succeeded: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
@@ -123,7 +123,7 @@ pub struct BatchDeletePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeletePartitionResponse {
     /// <p>The errors encountered when trying to delete the requested partitions.</p>
@@ -132,7 +132,7 @@ pub struct BatchDeletePartitionResponse {
     pub errors: Option<Vec<PartitionError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
@@ -147,7 +147,7 @@ pub struct BatchDeleteTableRequest {
     pub tables_to_delete: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteTableResponse {
     /// <p>A list of errors encountered in attempting to delete the specified tables.</p>
@@ -156,7 +156,7 @@ pub struct BatchDeleteTableResponse {
     pub errors: Option<Vec<TableError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
@@ -174,7 +174,7 @@ pub struct BatchDeleteTableVersionRequest {
     pub version_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteTableVersionResponse {
     /// <p>A list of errors encountered while trying to delete the specified table versions.</p>
@@ -183,7 +183,7 @@ pub struct BatchDeleteTableVersionResponse {
     pub errors: Option<Vec<TableVersionError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCrawlersRequest {
     /// <p>A list of crawler names, which might be the names returned from the <code>ListCrawlers</code> operation.</p>
@@ -191,7 +191,7 @@ pub struct BatchGetCrawlersRequest {
     pub crawler_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetCrawlersResponse {
     /// <p>A list of crawler definitions.</p>
@@ -204,7 +204,7 @@ pub struct BatchGetCrawlersResponse {
     pub crawlers_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDevEndpointsRequest {
     /// <p>The list of <code>DevEndpoint</code> names, which might be the names returned from the <code>ListDevEndpoint</code> operation.</p>
@@ -212,7 +212,7 @@ pub struct BatchGetDevEndpointsRequest {
     pub dev_endpoint_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDevEndpointsResponse {
     /// <p>A list of <code>DevEndpoint</code> definitions.</p>
@@ -225,7 +225,7 @@ pub struct BatchGetDevEndpointsResponse {
     pub dev_endpoints_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetJobsRequest {
     /// <p>A list of job names, which might be the names returned from the <code>ListJobs</code> operation.</p>
@@ -233,7 +233,7 @@ pub struct BatchGetJobsRequest {
     pub job_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetJobsResponse {
     /// <p>A list of job definitions.</p>
@@ -246,7 +246,7 @@ pub struct BatchGetJobsResponse {
     pub jobs_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetPartitionRequest {
     /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
@@ -264,7 +264,7 @@ pub struct BatchGetPartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetPartitionResponse {
     /// <p>A list of the requested partitions.</p>
@@ -277,7 +277,7 @@ pub struct BatchGetPartitionResponse {
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetTriggersRequest {
     /// <p>A list of trigger names, which may be the names returned from the <code>ListTriggers</code> operation.</p>
@@ -285,7 +285,7 @@ pub struct BatchGetTriggersRequest {
     pub trigger_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetTriggersResponse {
     /// <p>A list of trigger definitions.</p>
@@ -298,7 +298,7 @@ pub struct BatchGetTriggersResponse {
     pub triggers_not_found: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetWorkflowsRequest {
     /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
@@ -310,7 +310,7 @@ pub struct BatchGetWorkflowsRequest {
     pub names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetWorkflowsResponse {
     /// <p>A list of names of workflows not found.</p>
@@ -324,7 +324,7 @@ pub struct BatchGetWorkflowsResponse {
 }
 
 /// <p>Records an error that occurred when attempting to stop a specified job run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStopJobRunError {
     /// <p>Specifies details about the error that was encountered.</p>
@@ -341,7 +341,7 @@ pub struct BatchStopJobRunError {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchStopJobRunRequest {
     /// <p>The name of the job definition for which to stop job runs.</p>
@@ -352,7 +352,7 @@ pub struct BatchStopJobRunRequest {
     pub job_run_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStopJobRunResponse {
     /// <p>A list of the errors that were encountered in trying to stop <code>JobRuns</code>, including the <code>JobRunId</code> for which each error was encountered and details about the error.</p>
@@ -366,7 +366,7 @@ pub struct BatchStopJobRunResponse {
 }
 
 /// <p>Records a successful request to stop a specified <code>JobRun</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchStopJobRunSuccessfulSubmission {
     /// <p>The name of the job definition used in the job run that was stopped.</p>
@@ -379,7 +379,7 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMLTaskRunRequest {
     /// <p>A unique identifier for the task run.</p>
@@ -390,7 +390,7 @@ pub struct CancelMLTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelMLTaskRunResponse {
     /// <p>The status for this run.</p>
@@ -408,7 +408,7 @@ pub struct CancelMLTaskRunResponse {
 }
 
 /// <p>Specifies a table definition in the AWS Glue Data Catalog.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CatalogEntry {
     /// <p>The database in which the table metadata resides.</p>
@@ -420,7 +420,7 @@ pub struct CatalogEntry {
 }
 
 /// <p>A structure containing migration status information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CatalogImportStatus {
     /// <p> <code>True</code> if the migration has completed, or <code>False</code> otherwise.</p>
@@ -438,7 +438,7 @@ pub struct CatalogImportStatus {
 }
 
 /// <p>Specifies an AWS Glue Data Catalog target.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CatalogTarget {
     /// <p>The name of the database to be synchronized.</p>
     #[serde(rename = "DatabaseName")]
@@ -449,7 +449,7 @@ pub struct CatalogTarget {
 }
 
 /// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle. If it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue provides, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, a <code>JSON</code> classifier, or a custom <code>CSV</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Classifier {
     /// <p>A classifier for comma-separated values (CSV).</p>
@@ -471,7 +471,7 @@ pub struct Classifier {
 }
 
 /// <p>Specifies how Amazon CloudWatch data should be encrypted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchEncryption {
     /// <p>The encryption mode to use for CloudWatch data.</p>
     #[serde(rename = "CloudWatchEncryptionMode")]
@@ -484,7 +484,7 @@ pub struct CloudWatchEncryption {
 }
 
 /// <p>Represents a directional edge in a directed acyclic graph (DAG).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeGenEdge {
     /// <p>The ID of the node at which the edge starts.</p>
     #[serde(rename = "Source")]
@@ -499,7 +499,7 @@ pub struct CodeGenEdge {
 }
 
 /// <p>Represents a node in a directed acyclic graph (DAG)</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeGenNode {
     /// <p>Properties of the node, in the form of name-value pairs.</p>
     #[serde(rename = "Args")]
@@ -517,7 +517,7 @@ pub struct CodeGenNode {
 }
 
 /// <p>An argument or property of a node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CodeGenNodeArg {
     /// <p>The name of the argument or property.</p>
     #[serde(rename = "Name")]
@@ -532,7 +532,7 @@ pub struct CodeGenNodeArg {
 }
 
 /// <p>A column in a <code>Table</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Column {
     /// <p>A free-form text comment.</p>
     #[serde(rename = "Comment")]
@@ -552,7 +552,7 @@ pub struct Column {
 }
 
 /// <p>Defines a condition under which a trigger fires.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>The state of the crawler to which this condition applies.</p>
     #[serde(rename = "CrawlState")]
@@ -577,7 +577,7 @@ pub struct Condition {
 }
 
 /// <p>The confusion matrix shows you what your transform is predicting accurately and what types of errors it is making.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Confusion_matrix">Confusion matrix</a> in Wikipedia.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfusionMatrix {
     /// <p>The number of matches in the data that the transform didn't find, in the confusion matrix for your transform.</p>
@@ -599,7 +599,7 @@ pub struct ConfusionMatrix {
 }
 
 /// <p>Defines a connection to a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
     /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP_SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> </ul></p>
@@ -641,7 +641,7 @@ pub struct Connection {
 }
 
 /// <p>A structure that is used to specify a connection to create or update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
@@ -668,7 +668,7 @@ pub struct ConnectionInput {
 }
 
 /// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your AWS KMS key. It then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set AWS KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only administrators to have decrypt permission on the password key.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConnectionPasswordEncryption {
     /// <p>An AWS KMS key that is used to encrypt the connection password. </p> <p>If connection password protection is enabled, the caller of <code>CreateConnection</code> and <code>UpdateConnection</code> needs at least <code>kms:Encrypt</code> permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog. </p> <p>You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.</p>
     #[serde(rename = "AwsKmsKeyId")]
@@ -680,7 +680,7 @@ pub struct ConnectionPasswordEncryption {
 }
 
 /// <p>Specifies the connections used by a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConnectionsList {
     /// <p>A list of connections used by the job.</p>
     #[serde(rename = "Connections")]
@@ -689,7 +689,7 @@ pub struct ConnectionsList {
 }
 
 /// <p>The details of a crawl in the workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Crawl {
     /// <p>The date and time on which the crawl completed.</p>
@@ -719,7 +719,7 @@ pub struct Crawl {
 }
 
 /// <p>Specifies a crawler program that examines a data source and uses classifiers to try to determine its schema. If successful, the crawler records metadata concerning the data source in the AWS Glue Data Catalog.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Crawler {
     /// <p>A list of UTF-8 strings that specify the custom classifiers that are associated with the crawler.</p>
@@ -793,7 +793,7 @@ pub struct Crawler {
 }
 
 /// <p>Metrics for a specified crawler.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CrawlerMetrics {
     /// <p>The name of the crawler.</p>
@@ -831,7 +831,7 @@ pub struct CrawlerMetrics {
 }
 
 /// <p>The details of a Crawler node present in the workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CrawlerNodeDetails {
     /// <p>A list of crawls represented by the crawl node.</p>
@@ -841,7 +841,7 @@ pub struct CrawlerNodeDetails {
 }
 
 /// <p>Specifies data stores to crawl.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CrawlerTargets {
     /// <p>Specifies AWS Glue Data Catalog targets.</p>
     #[serde(rename = "CatalogTargets")]
@@ -861,7 +861,7 @@ pub struct CrawlerTargets {
     pub s3_targets: Option<Vec<S3Target>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClassifierRequest {
     /// <p>A <code>CsvClassifier</code> object specifying the classifier to create.</p>
@@ -882,11 +882,11 @@ pub struct CreateClassifierRequest {
     pub xml_classifier: Option<CreateXMLClassifierRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClassifierResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectionRequest {
     /// <p>The ID of the Data Catalog in which to create the connection. If none is provided, the AWS account ID is used by default.</p>
@@ -898,11 +898,11 @@ pub struct CreateConnectionRequest {
     pub connection_input: ConnectionInput,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCrawlerRequest {
     /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
@@ -952,12 +952,12 @@ pub struct CreateCrawlerRequest {
     pub targets: CrawlerTargets,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCrawlerResponse {}
 
 /// <p>Specifies a custom CSV classifier for <code>CreateClassifier</code> to create.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCsvClassifierRequest {
     /// <p>Enables the processing of files that contain only one column.</p>
@@ -989,7 +989,7 @@ pub struct CreateCsvClassifierRequest {
     pub quote_symbol: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatabaseRequest {
     /// <p>The ID of the Data Catalog in which to create the database. If none is provided, the AWS account ID is used by default.</p>
@@ -1001,11 +1001,11 @@ pub struct CreateDatabaseRequest {
     pub database_input: DatabaseInput,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatabaseResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevEndpointRequest {
     /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p>
@@ -1068,7 +1068,7 @@ pub struct CreateDevEndpointRequest {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevEndpointResponse {
     /// <p>The map of arguments used to configure this <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
@@ -1150,7 +1150,7 @@ pub struct CreateDevEndpointResponse {
 }
 
 /// <p>Specifies a <code>grok</code> classifier for <code>CreateClassifier</code> to create.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGrokClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
@@ -1168,7 +1168,7 @@ pub struct CreateGrokClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
     /// <p>The <code>JobCommand</code> that executes this job.</p>
@@ -1242,7 +1242,7 @@ pub struct CreateJobRequest {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>The unique name that was provided for this job definition.</p>
@@ -1252,7 +1252,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJsonClassifierRequest {
     /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
@@ -1263,7 +1263,7 @@ pub struct CreateJsonClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMLTransformRequest {
     /// <p>A description of the machine learning transform that is being defined. The default is an empty string.</p>
@@ -1312,7 +1312,7 @@ pub struct CreateMLTransformRequest {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMLTransformResponse {
     /// <p>A unique identifier that is generated for the transform.</p>
@@ -1321,7 +1321,7 @@ pub struct CreateMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePartitionRequest {
     /// <p>The AWS account ID of the catalog in which the partition is to be created.</p>
@@ -1339,11 +1339,11 @@ pub struct CreatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePartitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateScriptRequest {
     /// <p>A list of the edges in the DAG.</p>
@@ -1360,7 +1360,7 @@ pub struct CreateScriptRequest {
     pub language: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScriptResponse {
     /// <p>The Python script generated from the DAG.</p>
@@ -1373,7 +1373,7 @@ pub struct CreateScriptResponse {
     pub scala_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityConfigurationRequest {
     /// <p>The encryption configuration for the new security configuration.</p>
@@ -1384,7 +1384,7 @@ pub struct CreateSecurityConfigurationRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityConfigurationResponse {
     /// <p>The time at which the new security configuration was created.</p>
@@ -1397,7 +1397,7 @@ pub struct CreateSecurityConfigurationResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTableRequest {
     /// <p>The ID of the Data Catalog in which to create the <code>Table</code>. If none is supplied, the AWS account ID is used by default.</p>
@@ -1412,11 +1412,11 @@ pub struct CreateTableRequest {
     pub table_input: TableInput,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTableResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTriggerRequest {
     /// <p>The actions initiated by this trigger when it fires.</p>
@@ -1454,7 +1454,7 @@ pub struct CreateTriggerRequest {
     pub workflow_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTriggerResponse {
     /// <p>The name of the trigger.</p>
@@ -1463,7 +1463,7 @@ pub struct CreateTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog in which to create the function. If none is provided, the AWS account ID is used by default.</p>
@@ -1478,11 +1478,11 @@ pub struct CreateUserDefinedFunctionRequest {
     pub function_input: UserDefinedFunctionInput,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserDefinedFunctionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkflowRequest {
     /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
@@ -1502,7 +1502,7 @@ pub struct CreateWorkflowRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkflowResponse {
     /// <p>The name of the workflow which was provided as part of the request.</p>
@@ -1512,7 +1512,7 @@ pub struct CreateWorkflowResponse {
 }
 
 /// <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateXMLClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches.</p>
@@ -1528,7 +1528,7 @@ pub struct CreateXMLClassifierRequest {
 }
 
 /// <p>A classifier for custom <code>CSV</code> content.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CsvClassifier {
     /// <p>Enables the processing of files that contain only one column.</p>
@@ -1573,7 +1573,7 @@ pub struct CsvClassifier {
 }
 
 /// <p>Contains configuration information for maintaining Data Catalog security.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataCatalogEncryptionSettings {
     /// <p>When connection password protection is enabled, the Data Catalog uses a customer-provided key to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p>
     #[serde(rename = "ConnectionPasswordEncryption")]
@@ -1586,7 +1586,7 @@ pub struct DataCatalogEncryptionSettings {
 }
 
 /// <p>The AWS Lake Formation principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakePrincipal {
     /// <p>An identifier for the AWS Lake Formation principal.</p>
     #[serde(rename = "DataLakePrincipalIdentifier")]
@@ -1595,7 +1595,7 @@ pub struct DataLakePrincipal {
 }
 
 /// <p>The <code>Database</code> object represents a logical grouping of tables that might reside in a Hive metastore or an RDBMS.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Database {
     /// <p>Creates a set of default permissions on the table for principals. </p>
@@ -1624,7 +1624,7 @@ pub struct Database {
 }
 
 /// <p>The structure used to create or update a database.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DatabaseInput {
     /// <p>Creates a set of default permissions on the table for principals. </p>
@@ -1648,7 +1648,7 @@ pub struct DatabaseInput {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClassifierRequest {
     /// <p>Name of the classifier to remove.</p>
@@ -1656,11 +1656,11 @@ pub struct DeleteClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClassifierResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
@@ -1672,11 +1672,11 @@ pub struct DeleteConnectionRequest {
     pub connection_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCrawlerRequest {
     /// <p>The name of the crawler to remove.</p>
@@ -1684,11 +1684,11 @@ pub struct DeleteCrawlerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCrawlerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
@@ -1700,11 +1700,11 @@ pub struct DeleteDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDatabaseResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevEndpointRequest {
     /// <p>The name of the <code>DevEndpoint</code>.</p>
@@ -1712,11 +1712,11 @@ pub struct DeleteDevEndpointRequest {
     pub endpoint_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDevEndpointResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
     /// <p>The name of the job definition to delete.</p>
@@ -1724,7 +1724,7 @@ pub struct DeleteJobRequest {
     pub job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResponse {
     /// <p>The name of the job definition that was deleted.</p>
@@ -1733,7 +1733,7 @@ pub struct DeleteJobResponse {
     pub job_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMLTransformRequest {
     /// <p>The unique identifier of the transform to delete.</p>
@@ -1741,7 +1741,7 @@ pub struct DeleteMLTransformRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMLTransformResponse {
     /// <p>The unique identifier of the transform that was deleted.</p>
@@ -1750,7 +1750,7 @@ pub struct DeleteMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be deleted resides. If none is provided, the AWS account ID is used by default.</p>
@@ -1768,11 +1768,11 @@ pub struct DeletePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePartitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcePolicyRequest {
     /// <p>The hash value returned when this policy was set.</p>
@@ -1781,11 +1781,11 @@ pub struct DeleteResourcePolicyRequest {
     pub policy_hash_condition: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcePolicyResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationRequest {
     /// <p>The name of the security configuration to delete.</p>
@@ -1793,11 +1793,11 @@ pub struct DeleteSecurityConfigurationRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
@@ -1812,11 +1812,11 @@ pub struct DeleteTableRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTableResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
@@ -1834,11 +1834,11 @@ pub struct DeleteTableVersionRequest {
     pub version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTableVersionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTriggerRequest {
     /// <p>The name of the trigger to delete.</p>
@@ -1846,7 +1846,7 @@ pub struct DeleteTriggerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTriggerResponse {
     /// <p>The name of the trigger that was deleted.</p>
@@ -1855,7 +1855,7 @@ pub struct DeleteTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be deleted is located. If none is supplied, the AWS account ID is used by default.</p>
@@ -1870,11 +1870,11 @@ pub struct DeleteUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserDefinedFunctionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkflowRequest {
     /// <p>Name of the workflow to be deleted.</p>
@@ -1882,7 +1882,7 @@ pub struct DeleteWorkflowRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkflowResponse {
     /// <p>Name of the workflow specified in input.</p>
@@ -1892,7 +1892,7 @@ pub struct DeleteWorkflowResponse {
 }
 
 /// <p>A development endpoint where a developer can remotely debug extract, transform, and load (ETL) scripts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevEndpoint {
     /// <p>A map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
@@ -1998,7 +1998,7 @@ pub struct DevEndpoint {
 }
 
 /// <p>Custom libraries to be loaded into a development endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DevEndpointCustomLibraries {
     /// <p><p>The path to one or more Java <code>.jar</code> files in an S3 bucket that should be loaded in your <code>DevEndpoint</code>.</p> <note> <p>You can only use pure Java/Scala libraries with a <code>DevEndpoint</code>.</p> </note></p>
@@ -2012,7 +2012,7 @@ pub struct DevEndpointCustomLibraries {
 }
 
 /// <p>Specifies an Amazon DynamoDB table to crawl.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDBTarget {
     /// <p>The name of the DynamoDB table to crawl.</p>
     #[serde(rename = "Path")]
@@ -2021,7 +2021,7 @@ pub struct DynamoDBTarget {
 }
 
 /// <p>An edge represents a directed connection between two AWS Glue components which are part of the workflow the edge belongs to.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Edge {
     /// <p>The unique of the node within the workflow where the edge ends.</p>
@@ -2035,7 +2035,7 @@ pub struct Edge {
 }
 
 /// <p>Specifies the encryption-at-rest configuration for the Data Catalog.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionAtRest {
     /// <p>The encryption-at-rest mode for encrypting Data Catalog data.</p>
     #[serde(rename = "CatalogEncryptionMode")]
@@ -2047,7 +2047,7 @@ pub struct EncryptionAtRest {
 }
 
 /// <p>Specifies an encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionConfiguration {
     /// <p>The encryption configuration for Amazon CloudWatch.</p>
     #[serde(rename = "CloudWatchEncryption")]
@@ -2064,7 +2064,7 @@ pub struct EncryptionConfiguration {
 }
 
 /// <p>Contains details about an error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The code associated with this error.</p>
@@ -2078,7 +2078,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>Evaluation metrics provide an estimate of the quality of your machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationMetrics {
     /// <p>The evaluation metrics for the find matches algorithm.</p>
@@ -2091,7 +2091,7 @@ pub struct EvaluationMetrics {
 }
 
 /// <p>An execution property of a job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExecutionProperty {
     /// <p>The maximum number of concurrent runs allowed for the job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>
     #[serde(rename = "MaxConcurrentRuns")]
@@ -2100,7 +2100,7 @@ pub struct ExecutionProperty {
 }
 
 /// <p>Specifies configuration properties for an exporting labels task run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportLabelsTaskRunProperties {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path where you will export the labels.</p>
@@ -2110,7 +2110,7 @@ pub struct ExportLabelsTaskRunProperties {
 }
 
 /// <p>The evaluation metrics for the find matches algorithm. The quality of your machine learning transform is measured by getting your transform to predict some matches and comparing the results to known matches from the same dataset. The quality metrics are based on a subset of your data, so they are not precise.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindMatchesMetrics {
     /// <p>The area under the precision/recall curve (AUPRC) is a single number measuring the overall quality of the transform, that is independent of the choice made for precision vs. recall. Higher values indicate that you have a more attractive precision vs. recall tradeoff.</p> <p>For more information, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall">Precision and recall</a> in Wikipedia.</p>
@@ -2136,7 +2136,7 @@ pub struct FindMatchesMetrics {
 }
 
 /// <p>The parameters to configure the find matches transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FindMatchesParameters {
     /// <p>The value that is selected when tuning your transform for a balance between accuracy and cost. A value of 0.5 means that the system balances accuracy and cost concerns. A value of 1.0 means a bias purely for accuracy, which typically results in a higher cost, sometimes substantially higher. A value of 0.0 means a bias purely for cost, which results in a less accurate <code>FindMatches</code> transform, sometimes with unacceptable accuracy.</p> <p>Accuracy measures how well the transform finds true positives and true negatives. Increasing accuracy requires more machine resources and cost. But it also results in increased recall. </p> <p>Cost measures how many compute resources, and thus money, are consumed to run the transform.</p>
     #[serde(rename = "AccuracyCostTradeoff")]
@@ -2157,7 +2157,7 @@ pub struct FindMatchesParameters {
 }
 
 /// <p>Specifies configuration properties for a Find Matches task run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindMatchesTaskRunProperties {
     /// <p>The job ID for the Find Matches task run.</p>
@@ -2174,7 +2174,7 @@ pub struct FindMatchesTaskRunProperties {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCatalogImportStatusRequest {
     /// <p>The ID of the catalog to migrate. Currently, this should be the AWS account ID.</p>
@@ -2183,7 +2183,7 @@ pub struct GetCatalogImportStatusRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCatalogImportStatusResponse {
     /// <p>The status of the specified catalog migration.</p>
@@ -2192,7 +2192,7 @@ pub struct GetCatalogImportStatusResponse {
     pub import_status: Option<CatalogImportStatus>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifierRequest {
     /// <p>Name of the classifier to retrieve.</p>
@@ -2200,7 +2200,7 @@ pub struct GetClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetClassifierResponse {
     /// <p>The requested classifier.</p>
@@ -2209,7 +2209,7 @@ pub struct GetClassifierResponse {
     pub classifier: Option<Classifier>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClassifiersRequest {
     /// <p>The size of the list to return (optional).</p>
@@ -2222,7 +2222,7 @@ pub struct GetClassifiersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetClassifiersResponse {
     /// <p>The requested list of classifier objects.</p>
@@ -2235,7 +2235,7 @@ pub struct GetClassifiersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
@@ -2251,7 +2251,7 @@ pub struct GetConnectionRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionResponse {
     /// <p>The requested connection definition.</p>
@@ -2261,7 +2261,7 @@ pub struct GetConnectionResponse {
 }
 
 /// <p>Filters the connection definitions that are returned by the <code>GetConnections</code> API operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsFilter {
     /// <p>The type of connections to return. Currently, only JDBC is supported; SFTP is not supported.</p>
@@ -2274,7 +2274,7 @@ pub struct GetConnectionsFilter {
     pub match_criteria: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsRequest {
     /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
@@ -2299,7 +2299,7 @@ pub struct GetConnectionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectionsResponse {
     /// <p>A list of requested connection definitions.</p>
@@ -2312,7 +2312,7 @@ pub struct GetConnectionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerMetricsRequest {
     /// <p>A list of the names of crawlers about which to retrieve metrics.</p>
@@ -2329,7 +2329,7 @@ pub struct GetCrawlerMetricsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlerMetricsResponse {
     /// <p>A list of metrics for the specified crawler.</p>
@@ -2342,7 +2342,7 @@ pub struct GetCrawlerMetricsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlerRequest {
     /// <p>The name of the crawler to retrieve metadata for.</p>
@@ -2350,7 +2350,7 @@ pub struct GetCrawlerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlerResponse {
     /// <p>The metadata for the specified crawler.</p>
@@ -2359,7 +2359,7 @@ pub struct GetCrawlerResponse {
     pub crawler: Option<Crawler>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCrawlersRequest {
     /// <p>The number of crawlers to return on each call.</p>
@@ -2372,7 +2372,7 @@ pub struct GetCrawlersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCrawlersResponse {
     /// <p>A list of crawler metadata.</p>
@@ -2385,7 +2385,7 @@ pub struct GetCrawlersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataCatalogEncryptionSettingsRequest {
     /// <p>The ID of the Data Catalog to retrieve the security configuration for. If none is provided, the AWS account ID is used by default.</p>
@@ -2394,7 +2394,7 @@ pub struct GetDataCatalogEncryptionSettingsRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataCatalogEncryptionSettingsResponse {
     /// <p>The requested security configuration.</p>
@@ -2403,7 +2403,7 @@ pub struct GetDataCatalogEncryptionSettingsResponse {
     pub data_catalog_encryption_settings: Option<DataCatalogEncryptionSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the database resides. If none is provided, the AWS account ID is used by default.</p>
@@ -2415,7 +2415,7 @@ pub struct GetDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatabaseResponse {
     /// <p>The definition of the specified database in the Data Catalog.</p>
@@ -2424,7 +2424,7 @@ pub struct GetDatabaseResponse {
     pub database: Option<Database>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDatabasesRequest {
     /// <p>The ID of the Data Catalog from which to retrieve <code>Databases</code>. If none is provided, the AWS account ID is used by default.</p>
@@ -2441,7 +2441,7 @@ pub struct GetDatabasesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatabasesResponse {
     /// <p>A list of <code>Database</code> objects from the specified catalog.</p>
@@ -2453,7 +2453,7 @@ pub struct GetDatabasesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataflowGraphRequest {
     /// <p>The Python script to transform.</p>
@@ -2462,7 +2462,7 @@ pub struct GetDataflowGraphRequest {
     pub python_script: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataflowGraphResponse {
     /// <p>A list of the edges in the resulting DAG.</p>
@@ -2475,7 +2475,7 @@ pub struct GetDataflowGraphResponse {
     pub dag_nodes: Option<Vec<CodeGenNode>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointRequest {
     /// <p>Name of the <code>DevEndpoint</code> to retrieve information for.</p>
@@ -2483,7 +2483,7 @@ pub struct GetDevEndpointRequest {
     pub endpoint_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevEndpointResponse {
     /// <p>A <code>DevEndpoint</code> definition.</p>
@@ -2492,7 +2492,7 @@ pub struct GetDevEndpointResponse {
     pub dev_endpoint: Option<DevEndpoint>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevEndpointsRequest {
     /// <p>The maximum size of information to return.</p>
@@ -2505,7 +2505,7 @@ pub struct GetDevEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevEndpointsResponse {
     /// <p>A list of <code>DevEndpoint</code> definitions.</p>
@@ -2518,7 +2518,7 @@ pub struct GetDevEndpointsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
@@ -2530,7 +2530,7 @@ pub struct GetJobBookmarkRequest {
     pub run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobBookmarkResponse {
     /// <p>A structure that defines a point that a job can resume processing.</p>
@@ -2539,7 +2539,7 @@ pub struct GetJobBookmarkResponse {
     pub job_bookmark_entry: Option<JobBookmarkEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>The name of the job definition to retrieve.</p>
@@ -2547,7 +2547,7 @@ pub struct GetJobRequest {
     pub job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
     /// <p>The requested job definition.</p>
@@ -2556,7 +2556,7 @@ pub struct GetJobResponse {
     pub job: Option<Job>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunRequest {
     /// <p>Name of the job definition being run.</p>
@@ -2571,7 +2571,7 @@ pub struct GetJobRunRequest {
     pub run_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobRunResponse {
     /// <p>The requested job-run metadata.</p>
@@ -2580,7 +2580,7 @@ pub struct GetJobRunResponse {
     pub job_run: Option<JobRun>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRunsRequest {
     /// <p>The name of the job definition for which to retrieve all job runs.</p>
@@ -2596,7 +2596,7 @@ pub struct GetJobRunsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobRunsResponse {
     /// <p>A list of job-run metadata objects.</p>
@@ -2609,7 +2609,7 @@ pub struct GetJobRunsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobsRequest {
     /// <p>The maximum size of the response.</p>
@@ -2622,7 +2622,7 @@ pub struct GetJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobsResponse {
     /// <p>A list of job definitions.</p>
@@ -2635,7 +2635,7 @@ pub struct GetJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunRequest {
     /// <p>The unique identifier of the task run.</p>
@@ -2646,7 +2646,7 @@ pub struct GetMLTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTaskRunResponse {
     /// <p>The date and time when this task run was completed.</p>
@@ -2691,7 +2691,7 @@ pub struct GetMLTaskRunResponse {
     pub transform_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTaskRunsRequest {
     /// <p>The filter criteria, in the <code>TaskRunFilterCriteria</code> structure, for the task run.</p>
@@ -2715,7 +2715,7 @@ pub struct GetMLTaskRunsRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTaskRunsResponse {
     /// <p>A pagination token, if more results are available.</p>
@@ -2728,7 +2728,7 @@ pub struct GetMLTaskRunsResponse {
     pub task_runs: Option<Vec<TaskRun>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformRequest {
     /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
@@ -2736,7 +2736,7 @@ pub struct GetMLTransformRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTransformResponse {
     /// <p>The date and time when the transform was created.</p>
@@ -2813,7 +2813,7 @@ pub struct GetMLTransformResponse {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMLTransformsRequest {
     /// <p>The filter transformation criteria.</p>
@@ -2834,7 +2834,7 @@ pub struct GetMLTransformsRequest {
     pub sort: Option<TransformSortCriteria>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMLTransformsResponse {
     /// <p>A pagination token, if more results are available.</p>
@@ -2846,7 +2846,7 @@ pub struct GetMLTransformsResponse {
     pub transforms: Vec<MLTransform>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMappingRequest {
     /// <p>Parameters for the mapping.</p>
@@ -2862,7 +2862,7 @@ pub struct GetMappingRequest {
     pub source: CatalogEntry,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMappingResponse {
     /// <p>A list of mappings to the specified targets.</p>
@@ -2870,7 +2870,7 @@ pub struct GetMappingResponse {
     pub mapping: Vec<MappingEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionRequest {
     /// <p>The ID of the Data Catalog where the partition in question resides. If none is provided, the AWS account ID is used by default.</p>
@@ -2888,7 +2888,7 @@ pub struct GetPartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPartitionResponse {
     /// <p>The requested information, in the form of a <code>Partition</code> object.</p>
@@ -2897,7 +2897,7 @@ pub struct GetPartitionResponse {
     pub partition: Option<Partition>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPartitionsRequest {
     /// <p>The ID of the Data Catalog where the partitions in question reside. If none is provided, the AWS account ID is used by default.</p>
@@ -2928,7 +2928,7 @@ pub struct GetPartitionsRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPartitionsResponse {
     /// <p>A continuation token, if the returned list of partitions does not include the last one.</p>
@@ -2941,7 +2941,7 @@ pub struct GetPartitionsResponse {
     pub partitions: Option<Vec<Partition>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlanRequest {
     /// <p>The programming language of the code to perform the mapping.</p>
@@ -2964,7 +2964,7 @@ pub struct GetPlanRequest {
     pub source: CatalogEntry,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPlanResponse {
     /// <p>A Python script to perform the mapping.</p>
@@ -2977,11 +2977,11 @@ pub struct GetPlanResponse {
     pub scala_code: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePolicyRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePolicyResponse {
     /// <p>The date and time at which the policy was created.</p>
@@ -3002,7 +3002,7 @@ pub struct GetResourcePolicyResponse {
     pub update_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationRequest {
     /// <p>The name of the security configuration to retrieve.</p>
@@ -3010,7 +3010,7 @@ pub struct GetSecurityConfigurationRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecurityConfigurationResponse {
     /// <p>The requested security configuration.</p>
@@ -3019,7 +3019,7 @@ pub struct GetSecurityConfigurationResponse {
     pub security_configuration: Option<SecurityConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSecurityConfigurationsRequest {
     /// <p>The maximum number of results to return.</p>
@@ -3032,7 +3032,7 @@ pub struct GetSecurityConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSecurityConfigurationsResponse {
     /// <p>A continuation token, if there are more security configurations to return.</p>
@@ -3045,7 +3045,7 @@ pub struct GetSecurityConfigurationsResponse {
     pub security_configurations: Option<Vec<SecurityConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
@@ -3060,7 +3060,7 @@ pub struct GetTableRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableResponse {
     /// <p>The <code>Table</code> object that defines the specified table.</p>
@@ -3069,7 +3069,7 @@ pub struct GetTableResponse {
     pub table: Option<Table>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
@@ -3088,7 +3088,7 @@ pub struct GetTableVersionRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableVersionResponse {
     /// <p>The requested table version.</p>
@@ -3097,7 +3097,7 @@ pub struct GetTableVersionResponse {
     pub table_version: Option<TableVersion>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTableVersionsRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
@@ -3120,7 +3120,7 @@ pub struct GetTableVersionsRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTableVersionsResponse {
     /// <p>A continuation token, if the list of available versions does not include the last one.</p>
@@ -3133,7 +3133,7 @@ pub struct GetTableVersionsResponse {
     pub table_versions: Option<Vec<TableVersion>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTablesRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is provided, the AWS account ID is used by default.</p>
@@ -3157,7 +3157,7 @@ pub struct GetTablesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTablesResponse {
     /// <p>A continuation token, present if the current list segment is not the last.</p>
@@ -3170,7 +3170,7 @@ pub struct GetTablesResponse {
     pub table_list: Option<Vec<Table>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource for which to retrieve tags.</p>
@@ -3178,7 +3178,7 @@ pub struct GetTagsRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
     /// <p>The requested tags.</p>
@@ -3187,7 +3187,7 @@ pub struct GetTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggerRequest {
     /// <p>The name of the trigger to retrieve.</p>
@@ -3195,7 +3195,7 @@ pub struct GetTriggerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTriggerResponse {
     /// <p>The requested trigger definition.</p>
@@ -3204,7 +3204,7 @@ pub struct GetTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTriggersRequest {
     /// <p>The name of the job to retrieve triggers for. The trigger that can start this job is returned, and if there is no such trigger, all triggers are returned.</p>
@@ -3221,7 +3221,7 @@ pub struct GetTriggersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTriggersResponse {
     /// <p>A continuation token, if not all the requested triggers have yet been returned.</p>
@@ -3234,7 +3234,7 @@ pub struct GetTriggersResponse {
     pub triggers: Option<Vec<Trigger>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be retrieved is located. If none is provided, the AWS account ID is used by default.</p>
@@ -3249,7 +3249,7 @@ pub struct GetUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserDefinedFunctionResponse {
     /// <p>The requested function definition.</p>
@@ -3258,7 +3258,7 @@ pub struct GetUserDefinedFunctionResponse {
     pub user_defined_function: Option<UserDefinedFunction>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserDefinedFunctionsRequest {
     /// <p>The ID of the Data Catalog where the functions to be retrieved are located. If none is provided, the AWS account ID is used by default.</p>
@@ -3282,7 +3282,7 @@ pub struct GetUserDefinedFunctionsRequest {
     pub pattern: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserDefinedFunctionsResponse {
     /// <p>A continuation token, if the list of functions returned does not include the last requested function.</p>
@@ -3295,7 +3295,7 @@ pub struct GetUserDefinedFunctionsResponse {
     pub user_defined_functions: Option<Vec<UserDefinedFunction>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRequest {
     /// <p>Specifies whether to include a graph when returning the workflow resource metadata.</p>
@@ -3307,7 +3307,7 @@ pub struct GetWorkflowRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowResponse {
     /// <p>The resource metadata for the workflow.</p>
@@ -3316,7 +3316,7 @@ pub struct GetWorkflowResponse {
     pub workflow: Option<Workflow>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunPropertiesRequest {
     /// <p>Name of the workflow which was run.</p>
@@ -3327,7 +3327,7 @@ pub struct GetWorkflowRunPropertiesRequest {
     pub run_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunPropertiesResponse {
     /// <p>The workflow run properties which were set during the specified run.</p>
@@ -3336,7 +3336,7 @@ pub struct GetWorkflowRunPropertiesResponse {
     pub run_properties: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunRequest {
     /// <p>Specifies whether to include the workflow graph in response or not.</p>
@@ -3351,7 +3351,7 @@ pub struct GetWorkflowRunRequest {
     pub run_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunResponse {
     /// <p>The requested workflow run metadata.</p>
@@ -3360,7 +3360,7 @@ pub struct GetWorkflowRunResponse {
     pub run: Option<WorkflowRun>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWorkflowRunsRequest {
     /// <p>Specifies whether to include the workflow graph in response or not.</p>
@@ -3380,7 +3380,7 @@ pub struct GetWorkflowRunsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWorkflowRunsResponse {
     /// <p>A continuation token, if not all requested workflow runs have been returned.</p>
@@ -3394,7 +3394,7 @@ pub struct GetWorkflowRunsResponse {
 }
 
 /// <p>The database and table in the AWS Glue Data Catalog that is used for input or output data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlueTable {
     /// <p>A unique identifier for the AWS Glue Data Catalog.</p>
     #[serde(rename = "CatalogId")]
@@ -3413,7 +3413,7 @@ pub struct GlueTable {
 }
 
 /// <p>A classifier that uses <code>grok</code> patterns.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrokClassifier {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, and so on.</p>
@@ -3443,7 +3443,7 @@ pub struct GrokClassifier {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportCatalogToGlueRequest {
     /// <p>The ID of the catalog to import. Currently, this should be the AWS account ID.</p>
@@ -3452,12 +3452,12 @@ pub struct ImportCatalogToGlueRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportCatalogToGlueResponse {}
 
 /// <p>Specifies configuration properties for an importing labels task run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportLabelsTaskRunProperties {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path from where you will import the labels.</p>
@@ -3471,7 +3471,7 @@ pub struct ImportLabelsTaskRunProperties {
 }
 
 /// <p>Specifies a JDBC data store to crawl.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JdbcTarget {
     /// <p>The name of the connection to use to connect to the JDBC target.</p>
     #[serde(rename = "ConnectionName")]
@@ -3488,7 +3488,7 @@ pub struct JdbcTarget {
 }
 
 /// <p>Specifies a job definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>The <code>JobCommand</code> that executes this job.</p>
@@ -3570,7 +3570,7 @@ pub struct Job {
 }
 
 /// <p>Defines a point that a job can resume processing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobBookmarkEntry {
     /// <p>The attempt ID number.</p>
@@ -3604,7 +3604,7 @@ pub struct JobBookmarkEntry {
 }
 
 /// <p>Specifies how job bookmark data should be encrypted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobBookmarksEncryption {
     /// <p>The encryption mode to use for job bookmarks data.</p>
     #[serde(rename = "JobBookmarksEncryptionMode")]
@@ -3617,7 +3617,7 @@ pub struct JobBookmarksEncryption {
 }
 
 /// <p>Specifies code executed when a job is run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobCommand {
     /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>.</p>
     #[serde(rename = "Name")]
@@ -3634,7 +3634,7 @@ pub struct JobCommand {
 }
 
 /// <p>The details of a Job node present in the workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobNodeDetails {
     /// <p>The information for the job runs represented by the job node.</p>
@@ -3644,7 +3644,7 @@ pub struct JobNodeDetails {
 }
 
 /// <p>Contains information about a job run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobRun {
     /// <p>The job arguments associated with this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
@@ -3734,7 +3734,7 @@ pub struct JobRun {
 }
 
 /// <p>Specifies information used to update an existing job definition. The previous job definition is completely overwritten by this information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JobUpdate {
     /// <p>The <code>JobCommand</code> that executes this job (required).</p>
@@ -3804,7 +3804,7 @@ pub struct JobUpdate {
 }
 
 /// <p>A classifier for <code>JSON</code> content.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JsonClassifier {
     /// <p>The time that this classifier was registered.</p>
@@ -3828,7 +3828,7 @@ pub struct JsonClassifier {
 }
 
 /// <p>Specifies configuration properties for a labeling set generation task run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelingSetGenerationTaskRunProperties {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path where you will generate the labeling set.</p>
@@ -3838,7 +3838,7 @@ pub struct LabelingSetGenerationTaskRunProperties {
 }
 
 /// <p>Status and error information about the most recent crawl.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LastCrawlInfo {
     /// <p>If an error occurred, the error information about the last crawl.</p>
@@ -3867,7 +3867,7 @@ pub struct LastCrawlInfo {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCrawlersRequest {
     /// <p>The maximum size of a list to return.</p>
@@ -3884,7 +3884,7 @@ pub struct ListCrawlersRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCrawlersResponse {
     /// <p>The names of all crawlers in the account, or the crawlers with the specified tags.</p>
@@ -3897,7 +3897,7 @@ pub struct ListCrawlersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevEndpointsRequest {
     /// <p>The maximum size of a list to return.</p>
@@ -3914,7 +3914,7 @@ pub struct ListDevEndpointsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevEndpointsResponse {
     /// <p>The names of all the <code>DevEndpoint</code>s in the account, or the <code>DevEndpoint</code>s with the specified tags.</p>
@@ -3927,7 +3927,7 @@ pub struct ListDevEndpointsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The maximum size of a list to return.</p>
@@ -3944,7 +3944,7 @@ pub struct ListJobsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>The names of all jobs in the account, or the jobs with the specified tags.</p>
@@ -3957,7 +3957,7 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMLTransformsRequest {
     /// <p>A <code>TransformFilterCriteria</code> used to filter the machine learning transforms.</p>
@@ -3982,7 +3982,7 @@ pub struct ListMLTransformsRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMLTransformsResponse {
     /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
@@ -3994,7 +3994,7 @@ pub struct ListMLTransformsResponse {
     pub transform_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTriggersRequest {
     /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job is returned. If there is no such trigger, all triggers are returned.</p>
@@ -4015,7 +4015,7 @@ pub struct ListTriggersRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTriggersResponse {
     /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
@@ -4028,7 +4028,7 @@ pub struct ListTriggersResponse {
     pub trigger_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkflowsRequest {
     /// <p>The maximum size of a list to return.</p>
@@ -4041,7 +4041,7 @@ pub struct ListWorkflowsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkflowsResponse {
     /// <p>A continuation token, if not all workflow names have been returned.</p>
@@ -4055,7 +4055,7 @@ pub struct ListWorkflowsResponse {
 }
 
 /// <p>The location of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Location {
     /// <p>An Amazon DynamoDB table location.</p>
@@ -4073,7 +4073,7 @@ pub struct Location {
 }
 
 /// <p>A structure for a machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MLTransform {
     /// <p>A timestamp. The time and date that this machine learning transform was created.</p>
@@ -4151,7 +4151,7 @@ pub struct MLTransform {
 }
 
 /// <p>Defines a mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MappingEntry {
     /// <p>The source path.</p>
     #[serde(rename = "SourcePath")]
@@ -4180,7 +4180,7 @@ pub struct MappingEntry {
 }
 
 /// <p>A node represents an AWS Glue component like Trigger, Job etc. which is part of a workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
     /// <p>Details of the crawler when the node represents a crawler.</p>
@@ -4210,7 +4210,7 @@ pub struct Node {
 }
 
 /// <p>Specifies configuration properties of a notification.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NotificationProperty {
     /// <p>After a job run starts, the number of minutes to wait before sending a job run delay notification.</p>
     #[serde(rename = "NotifyDelayAfter")]
@@ -4219,7 +4219,7 @@ pub struct NotificationProperty {
 }
 
 /// <p>Specifies the sort order of a sorted column.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Order {
     /// <p>The name of the column.</p>
     #[serde(rename = "Column")]
@@ -4230,7 +4230,7 @@ pub struct Order {
 }
 
 /// <p>Represents a slice of table data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Partition {
     /// <p>The time at which the partition was created.</p>
@@ -4268,7 +4268,7 @@ pub struct Partition {
 }
 
 /// <p>Contains information about a partition error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PartitionError {
     /// <p>The details about the partition error.</p>
@@ -4282,7 +4282,7 @@ pub struct PartitionError {
 }
 
 /// <p>The structure used to create and update a partition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PartitionInput {
     /// <p>The last time at which the partition was accessed.</p>
@@ -4308,7 +4308,7 @@ pub struct PartitionInput {
 }
 
 /// <p>Contains a list of values defining partitions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PartitionValueList {
     /// <p>The list of values.</p>
     #[serde(rename = "Values")]
@@ -4316,7 +4316,7 @@ pub struct PartitionValueList {
 }
 
 /// <p>Specifies the physical requirements for a connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PhysicalConnectionRequirements {
     /// <p>The connection's Availability Zone. This field is redundant because the specified subnet implies the Availability Zone to be used. Currently the field must be populated, but it will be deprecated in the future.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -4333,7 +4333,7 @@ pub struct PhysicalConnectionRequirements {
 }
 
 /// <p>A job run that was used in the predicate of a conditional trigger that triggered this job run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Predecessor {
     /// <p>The name of the job definition used by the predecessor job run.</p>
@@ -4347,7 +4347,7 @@ pub struct Predecessor {
 }
 
 /// <p>Defines the predicate of the trigger, which determines when it fires.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Predicate {
     /// <p>A list of the conditions that determine when the trigger will fire.</p>
     #[serde(rename = "Conditions")]
@@ -4360,7 +4360,7 @@ pub struct Predicate {
 }
 
 /// <p>Permissions granted to a principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PrincipalPermissions {
     /// <p>The permissions that are granted to the principal.</p>
     #[serde(rename = "Permissions")]
@@ -4373,7 +4373,7 @@ pub struct PrincipalPermissions {
 }
 
 /// <p>Defines a property predicate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PropertyPredicate {
     /// <p>The comparator used to compare this property to others.</p>
@@ -4390,7 +4390,7 @@ pub struct PropertyPredicate {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataCatalogEncryptionSettingsRequest {
     /// <p>The ID of the Data Catalog to set the security configuration for. If none is provided, the AWS account ID is used by default.</p>
@@ -4402,11 +4402,11 @@ pub struct PutDataCatalogEncryptionSettingsRequest {
     pub data_catalog_encryption_settings: DataCatalogEncryptionSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDataCatalogEncryptionSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
     /// <p>A value of <code>MUST_EXIST</code> is used to update a policy. A value of <code>NOT_EXIST</code> is used to create a new policy. If a value of <code>NONE</code> or a null value is used, the call will not depend on the existence of a policy.</p>
@@ -4422,7 +4422,7 @@ pub struct PutResourcePolicyRequest {
     pub policy_in_json: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutResourcePolicyResponse {
     /// <p>A hash of the policy that has just been set. This must be included in a subsequent call that overwrites or updates this policy.</p>
@@ -4431,7 +4431,7 @@ pub struct PutResourcePolicyResponse {
     pub policy_hash: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutWorkflowRunPropertiesRequest {
     /// <p>Name of the workflow which was run.</p>
@@ -4445,11 +4445,11 @@ pub struct PutWorkflowRunPropertiesRequest {
     pub run_properties: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWorkflowRunPropertiesResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
@@ -4461,7 +4461,7 @@ pub struct ResetJobBookmarkRequest {
     pub run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetJobBookmarkResponse {
     /// <p>The reset bookmark entry.</p>
@@ -4471,7 +4471,7 @@ pub struct ResetJobBookmarkResponse {
 }
 
 /// <p>The URIs for function resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceUri {
     /// <p>The type of the resource.</p>
     #[serde(rename = "ResourceType")]
@@ -4484,7 +4484,7 @@ pub struct ResourceUri {
 }
 
 /// <p>Specifies how Amazon Simple Storage Service (Amazon S3) data should be encrypted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Encryption {
     /// <p>The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.</p>
     #[serde(rename = "KmsKeyArn")]
@@ -4497,7 +4497,7 @@ pub struct S3Encryption {
 }
 
 /// <p>Specifies a data store in Amazon Simple Storage Service (Amazon S3).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Target {
     /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
@@ -4510,7 +4510,7 @@ pub struct S3Target {
 }
 
 /// <p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Schedule {
     /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
@@ -4524,7 +4524,7 @@ pub struct Schedule {
 }
 
 /// <p>A policy that specifies update and deletion behaviors for the crawler.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SchemaChangePolicy {
     /// <p>The deletion behavior when the crawler finds a deleted object.</p>
     #[serde(rename = "DeleteBehavior")]
@@ -4537,7 +4537,7 @@ pub struct SchemaChangePolicy {
 }
 
 /// <p>A key-value pair representing a column and data type that this transform can run against. The <code>Schema</code> parameter of the <code>MLTransform</code> may contain up to 100 of these structures.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SchemaColumn {
     /// <p>The type of data in the column.</p>
     #[serde(rename = "DataType")]
@@ -4549,7 +4549,7 @@ pub struct SchemaColumn {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTablesRequest {
     /// <p>A unique identifier, consisting of <code> <i>account_id</i>/datalake</code>.</p>
@@ -4578,7 +4578,7 @@ pub struct SearchTablesRequest {
     pub sort_criteria: Option<Vec<SortCriterion>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchTablesResponse {
     /// <p>A continuation token, present if the current list segment is not the last.</p>
@@ -4592,7 +4592,7 @@ pub struct SearchTablesResponse {
 }
 
 /// <p>Specifies a security configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityConfiguration {
     /// <p>The time at which this security configuration was created.</p>
@@ -4610,7 +4610,7 @@ pub struct SecurityConfiguration {
 }
 
 /// <p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Segment {
     /// <p>The zero-based index number of the segment. For example, if the total number of segments is 4, <code>SegmentNumber</code> values range from 0 through 3.</p>
@@ -4622,7 +4622,7 @@ pub struct Segment {
 }
 
 /// <p>Information about a serialization/deserialization program (SerDe) that serves as an extractor and loader.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SerDeInfo {
     /// <p>Name of the SerDe.</p>
     #[serde(rename = "Name")]
@@ -4639,7 +4639,7 @@ pub struct SerDeInfo {
 }
 
 /// <p>Specifies skewed values in a table. Skewed values are those that occur with very high frequency.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SkewedInfo {
     /// <p>A list of names of columns that contain skewed values.</p>
     #[serde(rename = "SkewedColumnNames")]
@@ -4656,7 +4656,7 @@ pub struct SkewedInfo {
 }
 
 /// <p>Specifies a field to sort by and a sort order.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriterion {
     /// <p>The name of the field on which to sort.</p>
@@ -4669,7 +4669,7 @@ pub struct SortCriterion {
     pub sort: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerRequest {
     /// <p>Name of the crawler to start.</p>
@@ -4677,11 +4677,11 @@ pub struct StartCrawlerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCrawlerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCrawlerScheduleRequest {
     /// <p>Name of the crawler to schedule.</p>
@@ -4689,11 +4689,11 @@ pub struct StartCrawlerScheduleRequest {
     pub crawler_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCrawlerScheduleResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartExportLabelsTaskRunRequest {
     /// <p>The Amazon S3 path where you export the labels.</p>
@@ -4704,7 +4704,7 @@ pub struct StartExportLabelsTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartExportLabelsTaskRunResponse {
     /// <p>The unique identifier for the task run.</p>
@@ -4713,7 +4713,7 @@ pub struct StartExportLabelsTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportLabelsTaskRunRequest {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path from where you import the labels.</p>
@@ -4728,7 +4728,7 @@ pub struct StartImportLabelsTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportLabelsTaskRunResponse {
     /// <p>The unique identifier for the task run.</p>
@@ -4737,7 +4737,7 @@ pub struct StartImportLabelsTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRunRequest {
     /// <p>The job arguments specifically for this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
@@ -4777,7 +4777,7 @@ pub struct StartJobRunRequest {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobRunResponse {
     /// <p>The ID assigned to this job run.</p>
@@ -4786,7 +4786,7 @@ pub struct StartJobRunResponse {
     pub job_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLEvaluationTaskRunRequest {
     /// <p>The unique identifier of the machine learning transform.</p>
@@ -4794,7 +4794,7 @@ pub struct StartMLEvaluationTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMLEvaluationTaskRunResponse {
     /// <p>The unique identifier associated with this run.</p>
@@ -4803,7 +4803,7 @@ pub struct StartMLEvaluationTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMLLabelingSetGenerationTaskRunRequest {
     /// <p>The Amazon Simple Storage Service (Amazon S3) path where you generate the labeling set.</p>
@@ -4814,7 +4814,7 @@ pub struct StartMLLabelingSetGenerationTaskRunRequest {
     pub transform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMLLabelingSetGenerationTaskRunResponse {
     /// <p>The unique run identifier that is associated with this task run.</p>
@@ -4823,7 +4823,7 @@ pub struct StartMLLabelingSetGenerationTaskRunResponse {
     pub task_run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTriggerRequest {
     /// <p>The name of the trigger to start.</p>
@@ -4831,7 +4831,7 @@ pub struct StartTriggerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTriggerResponse {
     /// <p>The name of the trigger that was started.</p>
@@ -4840,7 +4840,7 @@ pub struct StartTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkflowRunRequest {
     /// <p>The name of the workflow to start.</p>
@@ -4848,7 +4848,7 @@ pub struct StartWorkflowRunRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartWorkflowRunResponse {
     /// <p>An Id for the new run.</p>
@@ -4857,7 +4857,7 @@ pub struct StartWorkflowRunResponse {
     pub run_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerRequest {
     /// <p>Name of the crawler to stop.</p>
@@ -4865,11 +4865,11 @@ pub struct StopCrawlerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopCrawlerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopCrawlerScheduleRequest {
     /// <p>Name of the crawler whose schedule state to set.</p>
@@ -4877,11 +4877,11 @@ pub struct StopCrawlerScheduleRequest {
     pub crawler_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopCrawlerScheduleResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTriggerRequest {
     /// <p>The name of the trigger to stop.</p>
@@ -4889,7 +4889,7 @@ pub struct StopTriggerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTriggerResponse {
     /// <p>The name of the trigger that was stopped.</p>
@@ -4898,7 +4898,7 @@ pub struct StopTriggerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkflowRunRequest {
     /// <p>The name of the workflow to stop.</p>
@@ -4909,12 +4909,12 @@ pub struct StopWorkflowRunRequest {
     pub run_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopWorkflowRunResponse {}
 
 /// <p>Describes the physical storage of table data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StorageDescriptor {
     /// <p>A list of reducer grouping columns, clustering columns, and bucketing columns in the table.</p>
     #[serde(rename = "BucketColumns")]
@@ -4967,7 +4967,7 @@ pub struct StorageDescriptor {
 }
 
 /// <p>Represents a collection of related data organized in columns and rows.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Table {
     /// <p>The time when the table definition was created in the Data Catalog.</p>
@@ -5040,7 +5040,7 @@ pub struct Table {
 }
 
 /// <p>An error record for table operations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableError {
     /// <p>The details about the error.</p>
@@ -5054,7 +5054,7 @@ pub struct TableError {
 }
 
 /// <p>A structure used to define a table.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TableInput {
     /// <p>A description of the table.</p>
@@ -5107,7 +5107,7 @@ pub struct TableInput {
 }
 
 /// <p>Specifies a version of a table.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableVersion {
     /// <p>The table in question.</p>
@@ -5121,7 +5121,7 @@ pub struct TableVersion {
 }
 
 /// <p>An error record for table-version operations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TableVersionError {
     /// <p>The details about the error.</p>
@@ -5138,7 +5138,7 @@ pub struct TableVersionError {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the AWS Glue resource to which to add the tags. For more information about AWS Glue resource ARNs, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a>.</p>
@@ -5149,12 +5149,12 @@ pub struct TagResourceRequest {
     pub tags_to_add: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>The sampling parameters that are associated with the machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskRun {
     /// <p>The last point in time that the requested task run was completed.</p>
@@ -5200,7 +5200,7 @@ pub struct TaskRun {
 }
 
 /// <p>The criteria that are used to filter the task runs for the machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TaskRunFilterCriteria {
     /// <p>Filter on task runs started after this date.</p>
@@ -5222,7 +5222,7 @@ pub struct TaskRunFilterCriteria {
 }
 
 /// <p>The configuration properties for the task run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskRunProperties {
     /// <p>The configuration properties for an exporting labels task run.</p>
@@ -5248,7 +5248,7 @@ pub struct TaskRunProperties {
 }
 
 /// <p>The sorting criteria that are used to sort the list of task runs for the machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TaskRunSortCriteria {
     /// <p>The column to be used to sort the list of task runs for the machine learning transform.</p>
@@ -5260,7 +5260,7 @@ pub struct TaskRunSortCriteria {
 }
 
 /// <p>The criteria used to filter the machine learning transforms.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransformFilterCriteria {
     /// <p>The time and date after which the transforms were created.</p>
@@ -5302,7 +5302,7 @@ pub struct TransformFilterCriteria {
 }
 
 /// <p>The algorithm-specific parameters that are associated with the machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TransformParameters {
     /// <p>The parameters for the find matches algorithm.</p>
     #[serde(rename = "FindMatchesParameters")]
@@ -5314,7 +5314,7 @@ pub struct TransformParameters {
 }
 
 /// <p>The sorting criteria that are associated with the machine learning transform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TransformSortCriteria {
     /// <p>The column to be used in the sorting criteria that are associated with the machine learning transform.</p>
@@ -5326,7 +5326,7 @@ pub struct TransformSortCriteria {
 }
 
 /// <p>Information about a specific trigger.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Trigger {
     /// <p>The actions initiated by this trigger.</p>
@@ -5368,7 +5368,7 @@ pub struct Trigger {
 }
 
 /// <p>The details of a Trigger node present in the workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TriggerNodeDetails {
     /// <p>The information of the trigger represented by the trigger node.</p>
@@ -5378,7 +5378,7 @@ pub struct TriggerNodeDetails {
 }
 
 /// <p>A structure used to provide information used to update a trigger. This object updates the previous trigger definition by overwriting it completely.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TriggerUpdate {
     /// <p>The actions initiated by this trigger.</p>
@@ -5403,7 +5403,7 @@ pub struct TriggerUpdate {
     pub schedule: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which to remove the tags.</p>
@@ -5414,11 +5414,11 @@ pub struct UntagResourceRequest {
     pub tags_to_remove: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClassifierRequest {
     /// <p>A <code>CsvClassifier</code> object with updated fields.</p>
@@ -5439,11 +5439,11 @@ pub struct UpdateClassifierRequest {
     pub xml_classifier: Option<UpdateXMLClassifierRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClassifierResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
@@ -5458,11 +5458,11 @@ pub struct UpdateConnectionRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerRequest {
     /// <p>A list of custom classifiers that the user has registered. By default, all built-in classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
@@ -5510,11 +5510,11 @@ pub struct UpdateCrawlerRequest {
     pub targets: Option<CrawlerTargets>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCrawlerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCrawlerScheduleRequest {
     /// <p>The name of the crawler whose schedule to update.</p>
@@ -5526,12 +5526,12 @@ pub struct UpdateCrawlerScheduleRequest {
     pub schedule: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCrawlerScheduleResponse {}
 
 /// <p>Specifies a custom CSV classifier to be updated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCsvClassifierRequest {
     /// <p>Enables the processing of files that contain only one column.</p>
@@ -5563,7 +5563,7 @@ pub struct UpdateCsvClassifierRequest {
     pub quote_symbol: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatabaseRequest {
     /// <p>The ID of the Data Catalog in which the metadata database resides. If none is provided, the AWS account ID is used by default.</p>
@@ -5578,11 +5578,11 @@ pub struct UpdateDatabaseRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDatabaseResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevEndpointRequest {
     /// <p>The map of arguments to add the map of arguments used to configure the <code>DevEndpoint</code>.</p> <p>Valid arguments are:</p> <ul> <li> <p> <code>"--enable-glue-datacatalog": ""</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "3"</code> </p> </li> <li> <p> <code>"GLUE_PYTHON_VERSION": "2"</code> </p> </li> </ul> <p>You can specify a version of Python support for development endpoints by using the <code>Arguments</code> parameter in the <code>CreateDevEndpoint</code> or <code>UpdateDevEndpoint</code> APIs. If no arguments are provided, the version defaults to Python 2.</p>
@@ -5618,12 +5618,12 @@ pub struct UpdateDevEndpointRequest {
     pub update_etl_libraries: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevEndpointResponse {}
 
 /// <p>Specifies a grok classifier to update when passed to <code>UpdateClassifier</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGrokClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
@@ -5643,7 +5643,7 @@ pub struct UpdateGrokClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobRequest {
     /// <p>The name of the job definition to update.</p>
@@ -5654,7 +5654,7 @@ pub struct UpdateJobRequest {
     pub job_update: JobUpdate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobResponse {
     /// <p>Returns the name of the updated job definition.</p>
@@ -5664,7 +5664,7 @@ pub struct UpdateJobResponse {
 }
 
 /// <p>Specifies a JSON classifier to be updated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJsonClassifierRequest {
     /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
@@ -5676,7 +5676,7 @@ pub struct UpdateJsonClassifierRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMLTransformRequest {
     /// <p>A description of the transform. The default is an empty string.</p>
@@ -5724,7 +5724,7 @@ pub struct UpdateMLTransformRequest {
     pub worker_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMLTransformResponse {
     /// <p>The unique identifier for the transform that was updated.</p>
@@ -5733,7 +5733,7 @@ pub struct UpdateMLTransformResponse {
     pub transform_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is provided, the AWS account ID is used by default.</p>
@@ -5754,11 +5754,11 @@ pub struct UpdatePartitionRequest {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePartitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is provided, the AWS account ID is used by default.</p>
@@ -5777,11 +5777,11 @@ pub struct UpdateTableRequest {
     pub table_input: TableInput,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTableResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTriggerRequest {
     /// <p>The name of the trigger to update.</p>
@@ -5792,7 +5792,7 @@ pub struct UpdateTriggerRequest {
     pub trigger_update: TriggerUpdate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTriggerResponse {
     /// <p>The resulting trigger definition.</p>
@@ -5801,7 +5801,7 @@ pub struct UpdateTriggerResponse {
     pub trigger: Option<Trigger>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserDefinedFunctionRequest {
     /// <p>The ID of the Data Catalog where the function to be updated is located. If none is provided, the AWS account ID is used by default.</p>
@@ -5819,11 +5819,11 @@ pub struct UpdateUserDefinedFunctionRequest {
     pub function_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserDefinedFunctionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkflowRequest {
     /// <p>A collection of properties to be used as part of each execution of the workflow.</p>
@@ -5839,7 +5839,7 @@ pub struct UpdateWorkflowRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkflowResponse {
     /// <p>The name of the workflow which was specified in input.</p>
@@ -5849,7 +5849,7 @@ pub struct UpdateWorkflowResponse {
 }
 
 /// <p>Specifies an XML classifier to be updated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateXMLClassifierRequest {
     /// <p>An identifier of the data format that the classifier matches.</p>
@@ -5866,7 +5866,7 @@ pub struct UpdateXMLClassifierRequest {
 }
 
 /// <p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserDefinedFunction {
     /// <p>The Java class that contains the function code.</p>
@@ -5896,7 +5896,7 @@ pub struct UserDefinedFunction {
 }
 
 /// <p>A structure used to create or update a user-defined function.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserDefinedFunctionInput {
     /// <p>The Java class that contains the function code.</p>
@@ -5922,7 +5922,7 @@ pub struct UserDefinedFunctionInput {
 }
 
 /// <p>A workflow represents a flow in which AWS Glue components should be executed to complete a logical task.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Workflow {
     /// <p>The date and time when the workflow was created.</p>
@@ -5956,7 +5956,7 @@ pub struct Workflow {
 }
 
 /// <p>A workflow graph represents the complete workflow containing all the AWS Glue components present in the workflow and all the directed connections between them.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowGraph {
     /// <p>A list of all the directed connections between the nodes belonging to the workflow.</p>
@@ -5970,7 +5970,7 @@ pub struct WorkflowGraph {
 }
 
 /// <p>A workflow run is an execution of a workflow providing all the runtime information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowRun {
     /// <p>The date and time when the workflow run completed.</p>
@@ -6008,7 +6008,7 @@ pub struct WorkflowRun {
 }
 
 /// <p>Workflow run statistics provides statistics about the workflow run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowRunStatistics {
     /// <p>Total number of Actions which have failed.</p>
@@ -6038,7 +6038,7 @@ pub struct WorkflowRunStatistics {
 }
 
 /// <p>A classifier for <code>XML</code> content.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct XMLClassifier {
     /// <p>An identifier of the data format that the classifier matches.</p>

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelChangeSetRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code>.</p>
@@ -36,7 +36,7 @@ pub struct CancelChangeSetRequest {
     pub change_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelChangeSetResponse {
     /// <p>The ARN associated with the change set referenced in this request.</p>
@@ -50,7 +50,7 @@ pub struct CancelChangeSetResponse {
 }
 
 /// <p>An object that contains the <code>ChangeType</code>, <code>Details</code>, and <code>Entity</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Change {
     /// <p>Change types are single string values that describe your intention for the change. Each change type is unique for each <code>EntityType</code> provided in the change's scope.</p>
@@ -65,7 +65,7 @@ pub struct Change {
 }
 
 /// <p>A summary of a change set returned in a list of change sets when the <code>ListChangeSets</code> action is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangeSetSummaryListItem {
     /// <p>The ARN associated with the unique identifier for the change set referenced in this request.</p>
@@ -99,7 +99,7 @@ pub struct ChangeSetSummaryListItem {
 }
 
 /// <p>This object is a container for common summary information about the change. The summary doesn't contain the whole change structure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangeSummary {
     /// <p>The type of the change.</p>
@@ -116,7 +116,7 @@ pub struct ChangeSummary {
     pub error_detail_list: Option<Vec<ErrorDetail>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChangeSetRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -127,7 +127,7 @@ pub struct DescribeChangeSetRequest {
     pub change_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChangeSetResponse {
     /// <p>An array of <code>ChangeSummary</code> objects.</p>
@@ -164,7 +164,7 @@ pub struct DescribeChangeSetResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -175,7 +175,7 @@ pub struct DescribeEntityRequest {
     pub entity_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityResponse {
     /// <p>This stringified JSON object includes the details of the entity.</p>
@@ -201,7 +201,7 @@ pub struct DescribeEntityResponse {
 }
 
 /// <p>A product entity contains data that describes your product, its supported features, and how it can be used or launched by your customer. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Entity {
     /// <p>The identifier for the entity.</p>
     #[serde(rename = "Identifier")]
@@ -213,7 +213,7 @@ pub struct Entity {
 }
 
 /// <p>This object is a container for common summary information about the entity. The summary doesn't contain the whole entity structure, but it does contain information common across all entities.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntitySummary {
     /// <p>The ARN associated with the unique identifier for the entity.</p>
@@ -243,7 +243,7 @@ pub struct EntitySummary {
 }
 
 /// <p>Details about the error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The error code that identifies the type of error.</p>
@@ -257,7 +257,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>A filter object, used to optionally filter results from calls to the <code>ListEntities</code> and <code>ListChangeSets</code> actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>For <code>ListEntities</code>, the supported value for this is an <code>EntityId</code>.</p> <p>For <code>ListChangeSets</code>, the supported values are as follows:</p>
@@ -270,7 +270,7 @@ pub struct Filter {
     pub value_list: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangeSetsRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -294,7 +294,7 @@ pub struct ListChangeSetsRequest {
     pub sort: Option<Sort>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChangeSetsResponse {
     /// <p> Array of <code>ChangeSetSummaryListItem</code> objects.</p>
@@ -307,7 +307,7 @@ pub struct ListChangeSetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -334,7 +334,7 @@ pub struct ListEntitiesRequest {
     pub sort: Option<Sort>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesResponse {
     /// <p> Array of <code>EntitySummary</code> object.</p>
@@ -348,7 +348,7 @@ pub struct ListEntitiesResponse {
 }
 
 /// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Sort {
     /// <p>For <code>ListEntities</code>, supported attributes include <code>LastModifiedDate</code> (default), <code>Visibility</code>, <code>EntityId</code>, and <code>Name</code>.</p> <p>For <code>ListChangeSets</code>, supported attributes include <code>StartTime</code> and <code>EndTime</code>.</p>
@@ -361,7 +361,7 @@ pub struct Sort {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChangeSetRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -380,7 +380,7 @@ pub struct StartChangeSetRequest {
     pub client_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChangeSetResponse {
     /// <p>The ARN associated to the unique identifier generated for the request.</p>

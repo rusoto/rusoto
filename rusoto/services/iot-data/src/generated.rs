@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 /// <p>The input for the DeleteThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThingShadowRequest {
     /// <p>The name of the thing.</p>
@@ -34,14 +34,14 @@ pub struct DeleteThingShadowRequest {
 }
 
 /// <p>The output from the DeleteThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct DeleteThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
     pub payload: bytes::Bytes,
 }
 
 /// <p>The input for the GetThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThingShadowRequest {
     /// <p>The name of the thing.</p>
@@ -50,14 +50,14 @@ pub struct GetThingShadowRequest {
 }
 
 /// <p>The output from the GetThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
     pub payload: Option<bytes::Bytes>,
 }
 
 /// <p>The input for the Publish operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublishRequest {
     /// <p>The state information, in JSON format.</p>
@@ -79,7 +79,7 @@ pub struct PublishRequest {
 }
 
 /// <p>The input for the UpdateThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThingShadowRequest {
     /// <p>The state information, in JSON format.</p>
@@ -96,7 +96,7 @@ pub struct UpdateThingShadowRequest {
 }
 
 /// <p>The output from the UpdateThingShadow operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct UpdateThingShadowResponse {
     /// <p>The state information, in JSON format.</p>
     pub payload: Option<bytes::Bytes>,

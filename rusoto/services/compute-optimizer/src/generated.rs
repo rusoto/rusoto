@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Describes the configuration of an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupConfiguration {
     /// <p>The desired capacity, or number of instances, for the Auto Scaling group.</p>
@@ -47,7 +47,7 @@ pub struct AutoScalingGroupConfiguration {
 }
 
 /// <p>Describes an Auto Scaling group recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupRecommendation {
     /// <p>The AWS account ID of the Auto Scaling group.</p>
@@ -89,7 +89,7 @@ pub struct AutoScalingGroupRecommendation {
 }
 
 /// <p>Describes a recommendation option for an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupRecommendationOption {
     /// <p>An array of objects that describe an Auto Scaling group configuration.</p>
@@ -111,7 +111,7 @@ pub struct AutoScalingGroupRecommendationOption {
 }
 
 /// <p>Describes a filter that returns a more specific list of recommendations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to filter the results to a specific findings classification.</p> <p>Specify <code>RecommendationSourceType</code> to filter the results to a specific resource type.</p>
@@ -124,7 +124,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoScalingGroupRecommendationsRequest {
     /// <p>The AWS account IDs for which to return Auto Scaling group recommendations.</p> <p>Only one account ID can be specified per request.</p>
@@ -149,7 +149,7 @@ pub struct GetAutoScalingGroupRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutoScalingGroupRecommendationsResponse {
     /// <p>An array of objects that describe Auto Scaling group recommendations.</p>
@@ -166,7 +166,7 @@ pub struct GetAutoScalingGroupRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2InstanceRecommendationsRequest {
     /// <p>The AWS account IDs for which to return instance recommendations.</p> <p>Only one account ID can be specified per request.</p>
@@ -191,7 +191,7 @@ pub struct GetEC2InstanceRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2InstanceRecommendationsResponse {
     /// <p>An array of objects that describe errors of the request.</p> <p>For example, an error is returned if you request recommendations for an instance of an unsupported instance family.</p>
@@ -208,7 +208,7 @@ pub struct GetEC2InstanceRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2RecommendationProjectedMetricsRequest {
     /// <p>The time stamp of the last projected metrics data point to return.</p>
@@ -228,7 +228,7 @@ pub struct GetEC2RecommendationProjectedMetricsRequest {
     pub stat: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2RecommendationProjectedMetricsResponse {
     /// <p>An array of objects that describe a projected metrics.</p>
@@ -237,11 +237,11 @@ pub struct GetEC2RecommendationProjectedMetricsResponse {
     pub recommended_option_projected_metrics: Option<Vec<RecommendedOptionProjectedMetric>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnrollmentStatusRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEnrollmentStatusResponse {
     /// <p>Confirms the enrollment status of member accounts within the organization, if the account is a master account of an organization.</p>
@@ -259,7 +259,7 @@ pub struct GetEnrollmentStatusResponse {
 }
 
 /// <p>Describes an error experienced when getting recommendations.</p> <p>For example, an error is returned if you request recommendations for an unsupported Auto Scaling group, or if you request recommendations for an instance of an unsupported instance family.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationError {
     /// <p>The error code.</p>
@@ -276,7 +276,7 @@ pub struct GetRecommendationError {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationSummariesRequest {
     /// <p>The AWS account IDs for which to return recommendation summaries.</p> <p>Only one account ID can be specified per request.</p>
@@ -293,7 +293,7 @@ pub struct GetRecommendationSummariesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationSummariesResponse {
     /// <p>The token to use to advance to the next page of recommendation summaries.</p> <p>This value is null when there are no more pages of recommendation summaries to return.</p>
@@ -307,7 +307,7 @@ pub struct GetRecommendationSummariesResponse {
 }
 
 /// <p>Describes an Amazon EC2 instance recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceRecommendation {
     /// <p>The AWS account ID of the instance recommendation.</p>
@@ -353,7 +353,7 @@ pub struct InstanceRecommendation {
 }
 
 /// <p>Describes a recommendation option for an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceRecommendationOption {
     /// <p>The instance type of the instance recommendation.</p>
@@ -375,7 +375,7 @@ pub struct InstanceRecommendationOption {
 }
 
 /// <p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectedMetric {
     /// <p><p>The name of the projected utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
@@ -393,7 +393,7 @@ pub struct ProjectedMetric {
 }
 
 /// <p>Describes the source of a recommendation, such as an Amazon EC2 instance or Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendationSource {
     /// <p>The Amazon Resource Name (ARN) of the recommendation source.</p>
@@ -407,7 +407,7 @@ pub struct RecommendationSource {
 }
 
 /// <p>A summary of a recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendationSummary {
     /// <p>The AWS account ID of the recommendation summary.</p>
@@ -425,7 +425,7 @@ pub struct RecommendationSummary {
 }
 
 /// <p>Describes a projected utilization metric of a recommendation option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendedOptionProjectedMetric {
     /// <p>An array of objects that describe a projected utilization metric.</p>
@@ -443,7 +443,7 @@ pub struct RecommendedOptionProjectedMetric {
 }
 
 /// <p>The summary of a recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Summary {
     /// <p>The finding classification of the recommendation.</p>
@@ -456,7 +456,7 @@ pub struct Summary {
     pub value: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnrollmentStatusRequest {
     /// <p>Indicates whether to enroll member accounts within the organization, if the account is a master account of an organization.</p>
@@ -468,7 +468,7 @@ pub struct UpdateEnrollmentStatusRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnrollmentStatusResponse {
     /// <p>The enrollment status of the account.</p>
@@ -482,7 +482,7 @@ pub struct UpdateEnrollmentStatusResponse {
 }
 
 /// <p>Describes a utilization metric of a resource, such as an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtilizationMetric {
     /// <p><p>The name of the utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>

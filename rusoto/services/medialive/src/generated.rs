@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Aac Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AacSettings {
     /// <p>Average bitrate in bits/second. Valid values depend on rate control mode and profile.</p>
     #[serde(rename = "Bitrate")]
@@ -69,7 +69,7 @@ pub struct AacSettings {
 }
 
 /// <p>Ac3 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Ac3Settings {
     /// <p>Average bitrate in bits/second. Valid bitrates depend on the coding mode.</p>
     #[serde(rename = "Bitrate")]
@@ -102,7 +102,7 @@ pub struct Ac3Settings {
 }
 
 /// <p>Archive Container Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveContainerSettings {
     #[serde(rename = "M2tsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -110,7 +110,7 @@ pub struct ArchiveContainerSettings {
 }
 
 /// <p>Archive Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveGroupSettings {
     /// <p>A directory and base filename where archive files should be written.</p>
     #[serde(rename = "Destination")]
@@ -122,7 +122,7 @@ pub struct ArchiveGroupSettings {
 }
 
 /// <p>Archive Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveOutputSettings {
     /// <p>Settings specific to the container type of the file.</p>
     #[serde(rename = "ContainerSettings")]
@@ -138,15 +138,15 @@ pub struct ArchiveOutputSettings {
 }
 
 /// <p>Arib Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AribDestinationSettings {}
 
 /// <p>Arib Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AribSourceSettings {}
 
 /// <p>Audio Channel Mapping</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioChannelMapping {
     /// <p>Indices and gain values for each input channel that should be remixed into this output channel.</p>
     #[serde(rename = "InputChannelLevels")]
@@ -157,7 +157,7 @@ pub struct AudioChannelMapping {
 }
 
 /// <p>Audio Codec Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioCodecSettings {
     #[serde(rename = "AacSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -177,7 +177,7 @@ pub struct AudioCodecSettings {
 }
 
 /// <p>Audio Description</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioDescription {
     /// <p>Advanced audio normalization settings.</p>
     #[serde(rename = "AudioNormalizationSettings")]
@@ -223,7 +223,7 @@ pub struct AudioDescription {
 }
 
 /// <p>Audio Language Selection</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioLanguageSelection {
     /// <p>Selects a specific three-letter language code from within an audio source.</p>
     #[serde(rename = "LanguageCode")]
@@ -235,7 +235,7 @@ pub struct AudioLanguageSelection {
 }
 
 /// <p>Audio Normalization Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioNormalizationSettings {
     /// <p>Audio normalization algorithm to use. itu17701 conforms to the CALM Act specification, itu17702 conforms to the EBU R-128 specification.</p>
     #[serde(rename = "Algorithm")]
@@ -252,7 +252,7 @@ pub struct AudioNormalizationSettings {
 }
 
 /// <p>Audio Only Hls Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioOnlyHlsSettings {
     /// <p>Specifies the group to which the audio Rendition belongs.</p>
     #[serde(rename = "AudioGroupId")]
@@ -287,7 +287,7 @@ pub struct AudioOnlyHlsSettings {
 }
 
 /// <p>Audio Pid Selection</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioPidSelection {
     /// <p>Selects a specific PID from within a source.</p>
     #[serde(rename = "Pid")]
@@ -295,7 +295,7 @@ pub struct AudioPidSelection {
 }
 
 /// <p>Audio Selector</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioSelector {
     /// <p>The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.</p>
     #[serde(rename = "Name")]
@@ -307,7 +307,7 @@ pub struct AudioSelector {
 }
 
 /// <p>Audio Selector Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioSelectorSettings {
     #[serde(rename = "AudioLanguageSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -321,7 +321,7 @@ pub struct AudioSelectorSettings {
 }
 
 /// <p>Audio Track</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioTrack {
     /// <p>1-based integer value that maps to a specific audio track</p>
     #[serde(rename = "Track")]
@@ -329,7 +329,7 @@ pub struct AudioTrack {
 }
 
 /// <p>Audio Track Selection</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioTrackSelection {
     /// <p>Selects one or more unique audio tracks from within an mp4 source.</p>
     #[serde(rename = "Tracks")]
@@ -337,7 +337,7 @@ pub struct AudioTrackSelection {
 }
 
 /// <p>The settings for Automatic Input Failover.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutomaticInputFailoverSettings {
     /// <p>Input preference when deciding which input to make active when a previously failed input has recovered.</p>
     #[serde(rename = "InputPreference")]
@@ -349,7 +349,7 @@ pub struct AutomaticInputFailoverSettings {
 }
 
 /// <p>Avail Blanking</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvailBlanking {
     /// <p>Blanking image to be used. Leave empty for solid black. Only bmp and png images are supported.</p>
     #[serde(rename = "AvailBlankingImage")]
@@ -362,7 +362,7 @@ pub struct AvailBlanking {
 }
 
 /// <p>Avail Configuration</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvailConfiguration {
     /// <p>Ad avail settings.</p>
     #[serde(rename = "AvailSettings")]
@@ -371,7 +371,7 @@ pub struct AvailConfiguration {
 }
 
 /// <p>Avail Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvailSettings {
     #[serde(rename = "Scte35SpliceInsert")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -382,7 +382,7 @@ pub struct AvailSettings {
 }
 
 /// <p>A list of schedule actions to create (in a request) or that have been created (in a response).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchScheduleActionCreateRequest {
     /// <p>A list of schedule actions to create.</p>
@@ -391,7 +391,7 @@ pub struct BatchScheduleActionCreateRequest {
 }
 
 /// <p>List of actions that have been created in the schedule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchScheduleActionCreateResult {
     /// <p>List of actions that have been created in the schedule.</p>
@@ -400,7 +400,7 @@ pub struct BatchScheduleActionCreateResult {
 }
 
 /// <p>A list of schedule actions to delete.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchScheduleActionDeleteRequest {
     /// <p>A list of schedule actions to delete.</p>
@@ -409,7 +409,7 @@ pub struct BatchScheduleActionDeleteRequest {
 }
 
 /// <p>List of actions that have been deleted from the schedule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchScheduleActionDeleteResult {
     /// <p>List of actions that have been deleted from the schedule.</p>
@@ -418,7 +418,7 @@ pub struct BatchScheduleActionDeleteResult {
 }
 
 /// <p>List of actions to create and list of actions to delete.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateScheduleRequest {
     /// <p>Id of the channel whose schedule is being updated.</p>
@@ -435,7 +435,7 @@ pub struct BatchUpdateScheduleRequest {
 }
 
 /// <p>Placeholder documentation for BatchUpdateScheduleResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateScheduleResponse {
     /// <p>Schedule actions created in the schedule.</p>
@@ -449,7 +449,7 @@ pub struct BatchUpdateScheduleResponse {
 }
 
 /// <p>Blackout Slate</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlackoutSlate {
     /// <p>Blackout slate image to be used. Leave empty for solid black. Only bmp and png images are supported.</p>
     #[serde(rename = "BlackoutSlateImage")]
@@ -474,7 +474,7 @@ pub struct BlackoutSlate {
 }
 
 /// <p>Burn In Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BurnInDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "Alignment")]
@@ -547,7 +547,7 @@ pub struct BurnInDestinationSettings {
 }
 
 /// <p>Caption Description</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionDescription {
     /// <p>Specifies which input caption selector to use as a caption source when generating output captions. This field should match a captionSelector name.</p>
     #[serde(rename = "CaptionSelectorName")]
@@ -570,7 +570,7 @@ pub struct CaptionDescription {
 }
 
 /// <p>Caption Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionDestinationSettings {
     #[serde(rename = "AribDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -611,7 +611,7 @@ pub struct CaptionDestinationSettings {
 }
 
 /// <p>Maps a caption channel to an ISO 693-2 language code (http://www.loc.gov/standards/iso639-2), with an optional description.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionLanguageMapping {
     /// <p>The closed caption channel being described by this CaptionLanguageMapping.  Each channel mapping must have a unique channel number (maximum of 4)</p>
     #[serde(rename = "CaptionChannel")]
@@ -625,7 +625,7 @@ pub struct CaptionLanguageMapping {
 }
 
 /// <p>Output groups for this Live Event. Output groups contain information about where streams should be distributed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSelector {
     /// <p>When specified this field indicates the three letter language code of the caption track to extract from the source.</p>
     #[serde(rename = "LanguageCode")]
@@ -641,7 +641,7 @@ pub struct CaptionSelector {
 }
 
 /// <p>Caption Selector Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSelectorSettings {
     #[serde(rename = "AribSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -664,7 +664,7 @@ pub struct CaptionSelectorSettings {
 }
 
 /// <p>Placeholder documentation for Channel</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
     /// <p>The unique arn of the channel.</p>
@@ -729,7 +729,7 @@ pub struct Channel {
 }
 
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelEgressEndpoint {
     /// <p>Public IP of where a channel&#39;s output comes from</p>
@@ -739,7 +739,7 @@ pub struct ChannelEgressEndpoint {
 }
 
 /// <p>Placeholder documentation for ChannelSummary</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelSummary {
     /// <p>The unique arn of the channel.</p>
@@ -797,11 +797,11 @@ pub struct ChannelSummary {
 }
 
 /// <p>Passthrough applies no color space conversion to the output</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColorSpacePassthroughSettings {}
 
 /// <p>A request to create a channel</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
@@ -846,7 +846,7 @@ pub struct CreateChannelRequest {
 }
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
     #[serde(rename = "Channel")]
@@ -855,7 +855,7 @@ pub struct CreateChannelResponse {
 }
 
 /// <p>The name of the input</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputRequest {
     /// <p>Destination settings for PUSH type inputs.</p>
@@ -908,7 +908,7 @@ pub struct CreateInputRequest {
 }
 
 /// <p>Placeholder documentation for CreateInputResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputResponse {
     #[serde(rename = "Input")]
@@ -917,7 +917,7 @@ pub struct CreateInputResponse {
 }
 
 /// <p>The IPv4 CIDRs to whitelist for this Input Security Group</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputSecurityGroupRequest {
     /// <p>A collection of key-value pairs.</p>
@@ -931,7 +931,7 @@ pub struct CreateInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for CreateInputSecurityGroupResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
@@ -940,7 +940,7 @@ pub struct CreateInputSecurityGroupResponse {
 }
 
 /// <p>A request to create a program in a multiplex.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultiplexProgramRequest {
     /// <p>ID of the multiplex where the program is to be created.</p>
@@ -959,7 +959,7 @@ pub struct CreateMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for CreateMultiplexProgramResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMultiplexProgramResponse {
     /// <p>The newly created multiplex program.</p>
@@ -969,7 +969,7 @@ pub struct CreateMultiplexProgramResponse {
 }
 
 /// <p>A request to create a multiplex.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultiplexRequest {
     /// <p>A list of availability zones for the multiplex. You must specify exactly two.</p>
@@ -992,7 +992,7 @@ pub struct CreateMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for CreateMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMultiplexResponse {
     /// <p>The newly created multiplex.</p>
@@ -1002,7 +1002,7 @@ pub struct CreateMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for CreateTagsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     #[serde(rename = "ResourceArn")]
@@ -1013,7 +1013,7 @@ pub struct CreateTagsRequest {
 }
 
 /// <p>Placeholder documentation for DeleteChannelRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>Unique ID of the channel.</p>
@@ -1022,7 +1022,7 @@ pub struct DeleteChannelRequest {
 }
 
 /// <p>Placeholder documentation for DeleteChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {
     /// <p>The unique arn of the channel.</p>
@@ -1087,7 +1087,7 @@ pub struct DeleteChannelResponse {
 }
 
 /// <p>Placeholder documentation for DeleteInputRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputRequest {
     /// <p>Unique ID of the input</p>
@@ -1096,12 +1096,12 @@ pub struct DeleteInputRequest {
 }
 
 /// <p>Placeholder documentation for DeleteInputResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputSecurityGroupRequest {
     /// <p>The Input Security Group to delete</p>
@@ -1110,12 +1110,12 @@ pub struct DeleteInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputSecurityGroupResponse {}
 
 /// <p>Placeholder documentation for DeleteMultiplexProgramRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMultiplexProgramRequest {
     /// <p>The ID of the multiplex that the program belongs to.</p>
@@ -1127,7 +1127,7 @@ pub struct DeleteMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexProgramResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMultiplexProgramResponse {
     /// <p>The MediaLive channel associated with the program.</p>
@@ -1149,7 +1149,7 @@ pub struct DeleteMultiplexProgramResponse {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMultiplexRequest {
     /// <p>The ID of the multiplex.</p>
@@ -1158,7 +1158,7 @@ pub struct DeleteMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for DeleteMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMultiplexResponse {
     /// <p>The unique arn of the multiplex.</p>
@@ -1204,7 +1204,7 @@ pub struct DeleteMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteReservationRequest {
     /// <p>Unique reservation ID, e.g. &#39;1234567&#39;</p>
@@ -1213,7 +1213,7 @@ pub struct DeleteReservationRequest {
 }
 
 /// <p>Placeholder documentation for DeleteReservationResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
@@ -1291,7 +1291,7 @@ pub struct DeleteReservationResponse {
 }
 
 /// <p>Placeholder documentation for DeleteScheduleRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteScheduleRequest {
     /// <p>Id of the channel whose schedule is being deleted.</p>
@@ -1300,12 +1300,12 @@ pub struct DeleteScheduleRequest {
 }
 
 /// <p>Placeholder documentation for DeleteScheduleResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     #[serde(rename = "ResourceArn")]
@@ -1316,7 +1316,7 @@ pub struct DeleteTagsRequest {
 }
 
 /// <p>Placeholder documentation for DescribeChannelRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>channel ID</p>
@@ -1325,7 +1325,7 @@ pub struct DescribeChannelRequest {
 }
 
 /// <p>Placeholder documentation for DescribeChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The unique arn of the channel.</p>
@@ -1390,7 +1390,7 @@ pub struct DescribeChannelResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputDeviceRequest {
     /// <p>The unique ID of this input device. For example, hd-123456789abcdef.</p>
@@ -1399,7 +1399,7 @@ pub struct DescribeInputDeviceRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputDeviceResponse {
     /// <p>The unique ARN of the input device.</p>
@@ -1445,7 +1445,7 @@ pub struct DescribeInputDeviceResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputRequest {
     /// <p>Unique ID of the input</p>
@@ -1454,7 +1454,7 @@ pub struct DescribeInputRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputResponse {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
@@ -1520,7 +1520,7 @@ pub struct DescribeInputResponse {
 }
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputSecurityGroupRequest {
     /// <p>The id of the Input Security Group to describe</p>
@@ -1529,7 +1529,7 @@ pub struct DescribeInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputSecurityGroupResponse {
     /// <p>Unique ARN of Input Security Group</p>
@@ -1559,7 +1559,7 @@ pub struct DescribeInputSecurityGroupResponse {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexProgramRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMultiplexProgramRequest {
     /// <p>The ID of the multiplex that the program belongs to.</p>
@@ -1571,7 +1571,7 @@ pub struct DescribeMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexProgramResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMultiplexProgramResponse {
     /// <p>The MediaLive channel associated with the program.</p>
@@ -1593,7 +1593,7 @@ pub struct DescribeMultiplexProgramResponse {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMultiplexRequest {
     /// <p>The ID of the multiplex.</p>
@@ -1602,7 +1602,7 @@ pub struct DescribeMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for DescribeMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMultiplexResponse {
     /// <p>The unique arn of the multiplex.</p>
@@ -1648,7 +1648,7 @@ pub struct DescribeMultiplexResponse {
 }
 
 /// <p>Placeholder documentation for DescribeOfferingRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOfferingRequest {
     /// <p>Unique offering ID, e.g. &#39;87654321&#39;</p>
@@ -1657,7 +1657,7 @@ pub struct DescribeOfferingRequest {
 }
 
 /// <p>Placeholder documentation for DescribeOfferingResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOfferingResponse {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
@@ -1707,7 +1707,7 @@ pub struct DescribeOfferingResponse {
 }
 
 /// <p>Placeholder documentation for DescribeReservationRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservationRequest {
     /// <p>Unique reservation ID, e.g. &#39;1234567&#39;</p>
@@ -1716,7 +1716,7 @@ pub struct DescribeReservationRequest {
 }
 
 /// <p>Placeholder documentation for DescribeReservationResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
@@ -1794,7 +1794,7 @@ pub struct DescribeReservationResponse {
 }
 
 /// <p>Placeholder documentation for DescribeScheduleRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScheduleRequest {
     /// <p>Id of the channel whose schedule is being updated.</p>
@@ -1809,7 +1809,7 @@ pub struct DescribeScheduleRequest {
 }
 
 /// <p>Placeholder documentation for DescribeScheduleResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScheduleResponse {
     /// <p>The next token; for use in pagination.</p>
@@ -1823,7 +1823,7 @@ pub struct DescribeScheduleResponse {
 }
 
 /// <p>DVB Network Information Table (NIT)</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbNitSettings {
     /// <p>The numeric value placed in the Network Information Table (NIT).</p>
     #[serde(rename = "NetworkId")]
@@ -1838,7 +1838,7 @@ pub struct DvbNitSettings {
 }
 
 /// <p>DVB Service Description Table (SDT)</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSdtSettings {
     /// <p>Selects method of inserting SDT information into output stream. The sdtFollow setting copies SDT information from input stream to output stream. The sdtFollowIfPresent setting copies SDT information from input stream to output stream if SDT information is present in the input, otherwise it will fall back on the user-defined values. The sdtManual setting means user will enter the SDT information. The sdtNone setting means output stream will not contain SDT information.</p>
     #[serde(rename = "OutputSdt")]
@@ -1859,7 +1859,7 @@ pub struct DvbSdtSettings {
 }
 
 /// <p>Dvb Sub Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSubDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  This option is not valid for source captions that are STL or 608/embedded.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "Alignment")]
@@ -1932,7 +1932,7 @@ pub struct DvbSubDestinationSettings {
 }
 
 /// <p>Dvb Sub Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSubSourceSettings {
     /// <p>When using DVB-Sub with Burn-In or SMPTE-TT, use this PID for the source content. Unused for DVB-Sub passthrough. All DVB-Sub content is passed through, regardless of selectors.</p>
     #[serde(rename = "Pid")]
@@ -1941,7 +1941,7 @@ pub struct DvbSubSourceSettings {
 }
 
 /// <p>DVB Time and Date Table (SDT)</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbTdtSettings {
     /// <p>The number of milliseconds between instances of this table in the output transport stream.</p>
     #[serde(rename = "RepInterval")]
@@ -1950,7 +1950,7 @@ pub struct DvbTdtSettings {
 }
 
 /// <p>Eac3 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Eac3Settings {
     /// <p>When set to attenuate3Db, applies a 3 dB attenuation to the surround channels. Only used for 3/2 coding mode.</p>
     #[serde(rename = "AttenuationControl")]
@@ -2035,15 +2035,15 @@ pub struct Eac3Settings {
 }
 
 /// <p>Embedded Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedDestinationSettings {}
 
 /// <p>Embedded Plus Scte20 Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedPlusScte20DestinationSettings {}
 
 /// <p>Embedded Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedSourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
     #[serde(rename = "Convert608To708")]
@@ -2064,7 +2064,7 @@ pub struct EmbeddedSourceSettings {
 }
 
 /// <p>Encoder Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncoderSettings {
     #[serde(rename = "AudioDescriptions")]
     pub audio_descriptions: Vec<AudioDescription>,
@@ -2102,7 +2102,7 @@ pub struct EncoderSettings {
 }
 
 /// <p>Fec Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FecOutputSettings {
     /// <p>Parameter D from SMPTE 2022-1. The height of the FEC protection matrix.  The number of transport stream packets per column error correction packet. Must be between 4 and 20, inclusive.</p>
     #[serde(rename = "ColumnDepth")]
@@ -2119,7 +2119,7 @@ pub struct FecOutputSettings {
 }
 
 /// <p>Start time for the action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FixedModeScheduleActionStartSettings {
     /// <p>Start time for the action to start in the channel. (Not the time for the action to be added to the schedule: actions are always added to the schedule immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits (for example, mm might be 01) except for the two constants &quot;T&quot; for time and &quot;Z&quot; for &quot;UTC format&quot;.</p>
     #[serde(rename = "Time")]
@@ -2127,7 +2127,7 @@ pub struct FixedModeScheduleActionStartSettings {
 }
 
 /// <p>Fmp4 Hls Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Fmp4HlsSettings {
     /// <p>List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by &#39;,&#39;.</p>
     #[serde(rename = "AudioRenditionSets")]
@@ -2144,7 +2144,7 @@ pub struct Fmp4HlsSettings {
 }
 
 /// <p>Settings to specify if an action follows another.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FollowModeScheduleActionStartSettings {
     /// <p>Identifies whether this action starts relative to the start or relative to the end of the reference action.</p>
     #[serde(rename = "FollowPoint")]
@@ -2155,7 +2155,7 @@ pub struct FollowModeScheduleActionStartSettings {
 }
 
 /// <p>Frame Capture Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureGroupSettings {
     /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling<em>) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling</em>). The final file names consist of the prefix from the destination field (for example, &quot;curling_&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curlingLow.00001.jpg</p>
     #[serde(rename = "Destination")]
@@ -2163,7 +2163,7 @@ pub struct FrameCaptureGroupSettings {
 }
 
 /// <p>Frame Capture Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureOutputSettings {
     /// <p>Required if the output group contains more than one output. This modifier forms part of the output file name.</p>
     #[serde(rename = "NameModifier")]
@@ -2172,7 +2172,7 @@ pub struct FrameCaptureOutputSettings {
 }
 
 /// <p>Frame Capture Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureSettings {
     /// <p>The frequency at which to capture frames for inclusion in the output. May be specified in either seconds or milliseconds, as specified by captureIntervalUnits.</p>
     #[serde(rename = "CaptureInterval")]
@@ -2184,7 +2184,7 @@ pub struct FrameCaptureSettings {
 }
 
 /// <p>Global Configuration</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlobalConfiguration {
     /// <p>Value to set the initial audio gain for the Live Event.</p>
     #[serde(rename = "InitialAudioGain")]
@@ -2216,7 +2216,7 @@ pub struct GlobalConfiguration {
 }
 
 /// <p>H264 Color Space Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264ColorSpaceSettings {
     #[serde(rename = "ColorSpacePassthroughSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2230,7 +2230,7 @@ pub struct H264ColorSpaceSettings {
 }
 
 /// <p>H264 Filter Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264FilterSettings {
     #[serde(rename = "TemporalFilterSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2238,7 +2238,7 @@ pub struct H264FilterSettings {
 }
 
 /// <p>H264 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264Settings {
     /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
     #[serde(rename = "AdaptiveQuantization")]
@@ -2439,7 +2439,7 @@ pub struct H264Settings {
 }
 
 /// <p>H265 Color Space Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H265ColorSpaceSettings {
     #[serde(rename = "ColorSpacePassthroughSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2456,7 +2456,7 @@ pub struct H265ColorSpaceSettings {
 }
 
 /// <p>H265 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H265Settings {
     /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
     #[serde(rename = "AdaptiveQuantization")]
@@ -2585,7 +2585,7 @@ pub struct H265Settings {
 }
 
 /// <p>Hdr10 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Hdr10Settings {
     /// <p>Maximum Content Light Level
     /// An integer metadata value defining the maximum light level, in nits,
@@ -2602,7 +2602,7 @@ pub struct Hdr10Settings {
 }
 
 /// <p>Hls Akamai Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsAkamaiSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
     #[serde(rename = "ConnectionRetryInterval")]
@@ -2635,7 +2635,7 @@ pub struct HlsAkamaiSettings {
 }
 
 /// <p>Hls Basic Put Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsBasicPutSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
     #[serde(rename = "ConnectionRetryInterval")]
@@ -2656,7 +2656,7 @@ pub struct HlsBasicPutSettings {
 }
 
 /// <p>Hls Cdn Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsCdnSettings {
     #[serde(rename = "HlsAkamaiSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2673,7 +2673,7 @@ pub struct HlsCdnSettings {
 }
 
 /// <p>Hls Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsGroupSettings {
     /// <p>Choose one or more ad marker types to pass SCTE35 signals through to this group of Apple HLS outputs.</p>
     #[serde(rename = "AdMarkers")]
@@ -2858,7 +2858,7 @@ pub struct HlsGroupSettings {
 }
 
 /// <p>Settings for the action to insert a user-defined ID3 tag in each HLS segment</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsId3SegmentTaggingScheduleActionSettings {
     /// <p>ID3 tag to insert into each segment. Supports special keyword identifiers to substitute in segment-related values.\nSupported keyword identifiers: https://docs.aws.amazon.com/medialive/latest/ug/variable-data-identifiers.html</p>
     #[serde(rename = "Tag")]
@@ -2866,7 +2866,7 @@ pub struct HlsId3SegmentTaggingScheduleActionSettings {
 }
 
 /// <p>Hls Input Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsInputSettings {
     /// <p>When specified the HLS stream with the m3u8 BANDWIDTH that most closely matches this value will be chosen, otherwise the highest bandwidth stream in the m3u8 will be chosen.  The bitrate is specified in bits per second, as in an HLS manifest.</p>
     #[serde(rename = "Bandwidth")]
@@ -2887,7 +2887,7 @@ pub struct HlsInputSettings {
 }
 
 /// <p>Hls Media Store Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsMediaStoreSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
     #[serde(rename = "ConnectionRetryInterval")]
@@ -2912,7 +2912,7 @@ pub struct HlsMediaStoreSettings {
 }
 
 /// <p>Hls Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsOutputSettings {
     /// <p>Only applicable when this output is referencing an H.265 video description.
     /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
@@ -2933,7 +2933,7 @@ pub struct HlsOutputSettings {
 }
 
 /// <p>Hls Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsSettings {
     #[serde(rename = "AudioOnlyHlsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2947,7 +2947,7 @@ pub struct HlsSettings {
 }
 
 /// <p>Settings for the action to emit HLS metadata</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsTimedMetadataScheduleActionSettings {
     /// <p>Base64 string formatted according to the ID3 specification: http://id3.org/id3v2.4.0-structure</p>
     #[serde(rename = "Id3")]
@@ -2955,7 +2955,7 @@ pub struct HlsTimedMetadataScheduleActionSettings {
 }
 
 /// <p>Hls Webdav Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsWebdavSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
     #[serde(rename = "ConnectionRetryInterval")]
@@ -2980,11 +2980,11 @@ pub struct HlsWebdavSettings {
 }
 
 /// <p>Settings to configure an action so that it occurs as soon as possible.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImmediateModeScheduleActionStartSettings {}
 
 /// <p>Placeholder documentation for Input</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Input {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
@@ -3050,7 +3050,7 @@ pub struct Input {
 }
 
 /// <p>Placeholder documentation for InputAttachment</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputAttachment {
     /// <p>User-specified settings for defining what the conditions are for declaring the input unhealthy and failing over to a different input.</p>
     #[serde(rename = "AutomaticInputFailoverSettings")]
@@ -3071,7 +3071,7 @@ pub struct InputAttachment {
 }
 
 /// <p>Input Channel Level</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputChannelLevel {
     /// <p>Remixing value. Units are in dB and acceptable values are within the range from -60 (mute) and 6 dB.</p>
     #[serde(rename = "Gain")]
@@ -3082,7 +3082,7 @@ pub struct InputChannelLevel {
 }
 
 /// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputClippingSettings {
     /// <p>The source of the timecodes in the source being clipped.</p>
     #[serde(rename = "InputTimecodeSource")]
@@ -3098,7 +3098,7 @@ pub struct InputClippingSettings {
 }
 
 /// <p>The settings for a PUSH type input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDestination {
     /// <p>The system-generated static IP address of endpoint.
@@ -3121,7 +3121,7 @@ pub struct InputDestination {
 }
 
 /// <p>Endpoint settings for a PUSH type input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputDestinationRequest {
     /// <p>A unique name for the location the RTMP stream is being pushed
@@ -3132,7 +3132,7 @@ pub struct InputDestinationRequest {
 }
 
 /// <p>The properties for a VPC type input destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDestinationVpc {
     /// <p>The availability zone of the Input destination.</p>
@@ -3146,7 +3146,7 @@ pub struct InputDestinationVpc {
 }
 
 /// <p>Configurable settings for the input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputDeviceConfigurableSettings {
     /// <p>The input source that you want to use. If the device has a source connected to only one of its input ports, or if you don&#39;t care which source the device sends, specify Auto. If the device has sources connected to both its input ports, and you want to use a specific source, specify the source.</p>
@@ -3160,7 +3160,7 @@ pub struct InputDeviceConfigurableSettings {
 }
 
 /// <p>Settings that describe the active source from the input device, and the video characteristics of that source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDeviceHdSettings {
     /// <p>If you specified Auto as the configured input, specifies which of the sources is currently active (SDI or HDMI).</p>
@@ -3198,7 +3198,7 @@ pub struct InputDeviceHdSettings {
 }
 
 /// <p>The network settings for the input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDeviceNetworkSettings {
     /// <p>The DNS addresses of the input device.</p>
@@ -3224,7 +3224,7 @@ pub struct InputDeviceNetworkSettings {
 }
 
 /// <p>Settings for an input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputDeviceRequest {
     /// <p>The unique ID for the device.</p>
@@ -3234,7 +3234,7 @@ pub struct InputDeviceRequest {
 }
 
 /// <p>Settings for an input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDeviceSettings {
     /// <p>The unique ID for the device.</p>
     #[serde(rename = "Id")]
@@ -3243,7 +3243,7 @@ pub struct InputDeviceSettings {
 }
 
 /// <p>Details of the input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputDeviceSummary {
     /// <p>The unique ARN of the input device.</p>
@@ -3289,7 +3289,7 @@ pub struct InputDeviceSummary {
 }
 
 /// <p>Input Location</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputLocation {
     /// <p>key used to extract the password from EC2 Parameter store</p>
     #[serde(rename = "PasswordParam")]
@@ -3305,7 +3305,7 @@ pub struct InputLocation {
 }
 
 /// <p>Input Loss Behavior</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputLossBehavior {
     /// <p>Documentation update needed</p>
     #[serde(rename = "BlackFrameMsec")]
@@ -3330,7 +3330,7 @@ pub struct InputLossBehavior {
 }
 
 /// <p>An Input Security Group</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputSecurityGroup {
     /// <p>Unique ARN of Input Security Group</p>
@@ -3360,7 +3360,7 @@ pub struct InputSecurityGroup {
 }
 
 /// <p>Live Event input parameters. There can be multiple inputs in a single Live Event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputSettings {
     /// <p>Used to select the audio stream to decode for inputs that have multiple available.</p>
     #[serde(rename = "AudioSelectors")]
@@ -3410,7 +3410,7 @@ pub struct InputSettings {
 }
 
 /// <p>The settings for a PULL type input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputSource {
     /// <p>The key used to extract the password from EC2 Parameter store.</p>
@@ -3429,7 +3429,7 @@ pub struct InputSource {
 }
 
 /// <p>Settings for for a PULL type input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSourceRequest {
     /// <p>The key used to extract the password from EC2 Parameter store.</p>
@@ -3448,7 +3448,7 @@ pub struct InputSourceRequest {
 }
 
 /// <p>Placeholder documentation for InputSpecification</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputSpecification {
     /// <p>Input codec</p>
     #[serde(rename = "Codec")]
@@ -3465,7 +3465,7 @@ pub struct InputSpecification {
 }
 
 /// <p>Settings for the &quot;switch input&quot; action: to switch from ingesting one input to ingesting another input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputSwitchScheduleActionSettings {
     /// <p>The name of the input attachment (not the name of the input!) to switch to. The name is specified in the channel configuration.</p>
     #[serde(rename = "InputAttachmentNameReference")]
@@ -3484,7 +3484,7 @@ pub struct InputSwitchScheduleActionSettings {
 /// When this property is specified, the input destination addresses will be created in a VPC rather than with public Internet addresses.
 /// This property requires setting the roleArn property on Input creation.
 /// Not compatible with the inputSecurityGroups property.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputVpcRequest {
     /// <p>A list of up to 5 EC2 VPC security group IDs to attach to the Input VPC network interfaces.
@@ -3499,7 +3499,7 @@ pub struct InputVpcRequest {
 }
 
 /// <p>Whitelist rule</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputWhitelistRule {
     /// <p>The IPv4 CIDR that&#39;s whitelisted.</p>
@@ -3509,7 +3509,7 @@ pub struct InputWhitelistRule {
 }
 
 /// <p>An IPv4 CIDR to whitelist.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputWhitelistRuleCidr {
     /// <p>The IPv4 CIDR to whitelist.</p>
@@ -3519,7 +3519,7 @@ pub struct InputWhitelistRuleCidr {
 }
 
 /// <p>Key Provider Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KeyProviderSettings {
     #[serde(rename = "StaticKeySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3527,7 +3527,7 @@ pub struct KeyProviderSettings {
 }
 
 /// <p>Placeholder documentation for ListChannelsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     #[serde(rename = "MaxResults")]
@@ -3539,7 +3539,7 @@ pub struct ListChannelsRequest {
 }
 
 /// <p>Placeholder documentation for ListChannelsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
     #[serde(rename = "Channels")]
@@ -3551,7 +3551,7 @@ pub struct ListChannelsResponse {
 }
 
 /// <p>Placeholder documentation for ListInputDevicesRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputDevicesRequest {
     #[serde(rename = "MaxResults")]
@@ -3563,7 +3563,7 @@ pub struct ListInputDevicesRequest {
 }
 
 /// <p>Placeholder documentation for ListInputDevicesResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputDevicesResponse {
     /// <p>The list of input devices.</p>
@@ -3577,7 +3577,7 @@ pub struct ListInputDevicesResponse {
 }
 
 /// <p>Placeholder documentation for ListInputSecurityGroupsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputSecurityGroupsRequest {
     #[serde(rename = "MaxResults")]
@@ -3589,7 +3589,7 @@ pub struct ListInputSecurityGroupsRequest {
 }
 
 /// <p>Placeholder documentation for ListInputSecurityGroupsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputSecurityGroupsResponse {
     /// <p>List of input security groups</p>
@@ -3602,7 +3602,7 @@ pub struct ListInputSecurityGroupsResponse {
 }
 
 /// <p>Placeholder documentation for ListInputsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputsRequest {
     #[serde(rename = "MaxResults")]
@@ -3614,7 +3614,7 @@ pub struct ListInputsRequest {
 }
 
 /// <p>Placeholder documentation for ListInputsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputsResponse {
     #[serde(rename = "Inputs")]
@@ -3626,7 +3626,7 @@ pub struct ListInputsResponse {
 }
 
 /// <p>Placeholder documentation for ListMultiplexProgramsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultiplexProgramsRequest {
     /// <p>The maximum number of items to return.</p>
@@ -3643,7 +3643,7 @@ pub struct ListMultiplexProgramsRequest {
 }
 
 /// <p>Placeholder documentation for ListMultiplexProgramsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMultiplexProgramsResponse {
     /// <p>List of multiplex programs.</p>
@@ -3657,7 +3657,7 @@ pub struct ListMultiplexProgramsResponse {
 }
 
 /// <p>Placeholder documentation for ListMultiplexesRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultiplexesRequest {
     /// <p>The maximum number of items to return.</p>
@@ -3671,7 +3671,7 @@ pub struct ListMultiplexesRequest {
 }
 
 /// <p>Placeholder documentation for ListMultiplexesResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMultiplexesResponse {
     /// <p>List of multiplexes.</p>
@@ -3685,7 +3685,7 @@ pub struct ListMultiplexesResponse {
 }
 
 /// <p>Placeholder documentation for ListOfferingsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
     /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
@@ -3737,7 +3737,7 @@ pub struct ListOfferingsRequest {
 }
 
 /// <p>Placeholder documentation for ListOfferingsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResponse {
     /// <p>Token to retrieve the next page of results</p>
@@ -3751,7 +3751,7 @@ pub struct ListOfferingsResponse {
 }
 
 /// <p>Placeholder documentation for ListReservationsRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReservationsRequest {
     /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
@@ -3795,7 +3795,7 @@ pub struct ListReservationsRequest {
 }
 
 /// <p>Placeholder documentation for ListReservationsResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReservationsResponse {
     /// <p>Token to retrieve the next page of results</p>
@@ -3809,7 +3809,7 @@ pub struct ListReservationsResponse {
 }
 
 /// <p>Placeholder documentation for ListTagsForResourceRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "ResourceArn")]
@@ -3817,7 +3817,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>Placeholder documentation for ListTagsForResourceResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
@@ -3826,7 +3826,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>M2ts Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct M2tsSettings {
     /// <p>When set to drop, output audio streams will be removed from the program if the selected input audio stream is removed from the input. This allows the output audio configuration to dynamically change based on input configuration. If this is set to encodeSilence, all output audio streams will output encoded silence when not connected to an active input stream.</p>
     #[serde(rename = "AbsentInputAudioBehavior")]
@@ -4023,7 +4023,7 @@ pub struct M2tsSettings {
 }
 
 /// <p>Settings information for the .m3u8 container</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct M3u8Settings {
     /// <p>The number of audio frames to insert for each PES packet.</p>
     #[serde(rename = "AudioFramesPerPes")]
@@ -4096,7 +4096,7 @@ pub struct M3u8Settings {
 }
 
 /// <p>The settings for a MediaConnect Flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MediaConnectFlow {
     /// <p>The unique ARN of the MediaConnect Flow being used as a source.</p>
@@ -4106,7 +4106,7 @@ pub struct MediaConnectFlow {
 }
 
 /// <p>The settings for a MediaConnect Flow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MediaConnectFlowRequest {
     /// <p>The ARN of the MediaConnect Flow that you want to use as a source.</p>
@@ -4116,7 +4116,7 @@ pub struct MediaConnectFlowRequest {
 }
 
 /// <p>Media Package Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MediaPackageGroupSettings {
     /// <p>MediaPackage channel destination.</p>
     #[serde(rename = "Destination")]
@@ -4124,7 +4124,7 @@ pub struct MediaPackageGroupSettings {
 }
 
 /// <p>MediaPackage Output Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MediaPackageOutputDestinationSettings {
     /// <p>ID of the channel in MediaPackage that is the destination for this output group. You do not need to specify the individual inputs in MediaPackage; MediaLive will handle the connection of the two MediaLive pipelines to the two MediaPackage inputs. The MediaPackage channel and MediaLive channel must be in the same region.</p>
     #[serde(rename = "ChannelId")]
@@ -4133,11 +4133,11 @@ pub struct MediaPackageOutputDestinationSettings {
 }
 
 /// <p>Media Package Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MediaPackageOutputSettings {}
 
 /// <p>Mp2 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mp2Settings {
     /// <p>Average bitrate in bits/second.</p>
     #[serde(rename = "Bitrate")]
@@ -4154,7 +4154,7 @@ pub struct Mp2Settings {
 }
 
 /// <p>Ms Smooth Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MsSmoothGroupSettings {
     /// <p>The ID to include in each message in the sparse track. Ignored if sparseTrackType is NONE.</p>
     #[serde(rename = "AcquisitionPointId")]
@@ -4246,7 +4246,7 @@ pub struct MsSmoothGroupSettings {
 }
 
 /// <p>Ms Smooth Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MsSmoothOutputSettings {
     /// <p>Only applicable when this output is referencing an H.265 video description.
     /// Specifies whether MP4 segments should be packaged as HEV1 or HVC1.</p>
@@ -4260,7 +4260,7 @@ pub struct MsSmoothOutputSettings {
 }
 
 /// <p>The multiplex object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Multiplex {
     /// <p>The unique arn of the multiplex.</p>
@@ -4306,11 +4306,11 @@ pub struct Multiplex {
 }
 
 /// <p>Multiplex Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexGroupSettings {}
 
 /// <p>Multiplex MediaConnect output destination settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexMediaConnectOutputDestinationSettings {
     /// <p>The MediaConnect entitlement ARN available as a Flow source.</p>
@@ -4320,7 +4320,7 @@ pub struct MultiplexMediaConnectOutputDestinationSettings {
 }
 
 /// <p>Multiplex output destination settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexOutputDestination {
     /// <p>Multiplex MediaConnect output destination settings.</p>
@@ -4330,7 +4330,7 @@ pub struct MultiplexOutputDestination {
 }
 
 /// <p>Multiplex Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexOutputSettings {
     /// <p>Destination is a Multiplex.</p>
     #[serde(rename = "Destination")]
@@ -4338,7 +4338,7 @@ pub struct MultiplexOutputSettings {
 }
 
 /// <p>The multiplex program object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexProgram {
     /// <p>The MediaLive channel associated with the program.</p>
@@ -4360,7 +4360,7 @@ pub struct MultiplexProgram {
 }
 
 /// <p>Multiplex Program Input Destination Settings for outputting a Channel to a Multiplex</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexProgramChannelDestinationSettings {
     /// <p>The ID of the Multiplex that the encoder is providing output to. You do not need to specify the individual inputs to the Multiplex; MediaLive will handle the connection of the two MediaLive pipelines to the two Multiplex instances.
     /// The Multiplex must be in the same region as the Channel.</p>
@@ -4374,7 +4374,7 @@ pub struct MultiplexProgramChannelDestinationSettings {
 }
 
 /// <p>Packet identifiers map for a given Multiplex program.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexProgramPacketIdentifiersMap {
     #[serde(rename = "AudioPids")]
@@ -4419,7 +4419,7 @@ pub struct MultiplexProgramPacketIdentifiersMap {
 }
 
 /// <p>Transport stream service descriptor configuration for the Multiplex program.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexProgramServiceDescriptor {
     /// <p>Name of the provider.</p>
     #[serde(rename = "ProviderName")]
@@ -4430,7 +4430,7 @@ pub struct MultiplexProgramServiceDescriptor {
 }
 
 /// <p>Multiplex Program settings configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexProgramSettings {
     /// <p>Indicates which pipeline is preferred by the multiplex for program ingest.</p>
     #[serde(rename = "PreferredChannelPipeline")]
@@ -4450,7 +4450,7 @@ pub struct MultiplexProgramSettings {
 }
 
 /// <p>Placeholder documentation for MultiplexProgramSummary</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexProgramSummary {
     /// <p>The MediaLive Channel associated with the program.</p>
@@ -4464,7 +4464,7 @@ pub struct MultiplexProgramSummary {
 }
 
 /// <p>Contains configuration for a Multiplex event</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexSettings {
     /// <p>Maximum video buffer delay in milliseconds.</p>
     #[serde(rename = "MaximumVideoBufferDelayMilliseconds")]
@@ -4483,7 +4483,7 @@ pub struct MultiplexSettings {
 }
 
 /// <p>Contains summary configuration for a Multiplex event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexSettingsSummary {
     /// <p>Transport stream bit rate.</p>
@@ -4493,7 +4493,7 @@ pub struct MultiplexSettingsSummary {
 }
 
 /// <p>Statmux rate control settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexStatmuxVideoSettings {
     /// <p>Maximum statmux bitrate.</p>
     #[serde(rename = "MaximumBitrate")]
@@ -4506,7 +4506,7 @@ pub struct MultiplexStatmuxVideoSettings {
 }
 
 /// <p>Placeholder documentation for MultiplexSummary</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MultiplexSummary {
     /// <p>The unique arn of the multiplex.</p>
@@ -4548,7 +4548,7 @@ pub struct MultiplexSummary {
 }
 
 /// <p>The video configuration for each program in a multiplex.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MultiplexVideoSettings {
     /// <p>The constant bitrate configuration for the video encode.
     /// When this field is defined, StatmuxSettings must be undefined.</p>
@@ -4563,7 +4563,7 @@ pub struct MultiplexVideoSettings {
 }
 
 /// <p>Network source to transcode. Must be accessible to the Elemental Live node that is running the live event through a network connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NetworkInputSettings {
     /// <p>Specifies HLS input settings when the uri is for a HLS manifest.</p>
     #[serde(rename = "HlsInputSettings")]
@@ -4576,7 +4576,7 @@ pub struct NetworkInputSettings {
 }
 
 /// <p>Nielsen Configuration</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NielsenConfiguration {
     /// <p>Enter the Distributor ID assigned to your organization by Nielsen.</p>
     #[serde(rename = "DistributorId")]
@@ -4589,7 +4589,7 @@ pub struct NielsenConfiguration {
 }
 
 /// <p>Reserved resources available for purchase</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Offering {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
@@ -4639,7 +4639,7 @@ pub struct Offering {
 }
 
 /// <p>Output settings. There can be multiple outputs within a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Output {
     /// <p>The names of the AudioDescriptions used as audio sources for this output.</p>
     #[serde(rename = "AudioDescriptionNames")]
@@ -4663,7 +4663,7 @@ pub struct Output {
 }
 
 /// <p>Placeholder documentation for OutputDestination</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDestination {
     /// <p>User-specified id. This is used in an output group or an output.</p>
     #[serde(rename = "Id")]
@@ -4684,7 +4684,7 @@ pub struct OutputDestination {
 }
 
 /// <p>Placeholder documentation for OutputDestinationSettings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDestinationSettings {
     /// <p>key used to extract the password from EC2 Parameter store</p>
     #[serde(rename = "PasswordParam")]
@@ -4705,7 +4705,7 @@ pub struct OutputDestinationSettings {
 }
 
 /// <p>Output groups for this Live Event. Output groups contain information about where streams should be distributed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputGroup {
     /// <p>Custom output group name optionally defined by the user.  Only letters, numbers, and the underscore character allowed; only 32 characters allowed.</p>
     #[serde(rename = "Name")]
@@ -4719,7 +4719,7 @@ pub struct OutputGroup {
 }
 
 /// <p>Output Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputGroupSettings {
     #[serde(rename = "ArchiveGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4748,7 +4748,7 @@ pub struct OutputGroupSettings {
 }
 
 /// <p>Reference to an OutputDestination ID defined in the channel</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputLocationRef {
     #[serde(rename = "DestinationRefId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4756,7 +4756,7 @@ pub struct OutputLocationRef {
 }
 
 /// <p>Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputSettings {
     #[serde(rename = "ArchiveOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4785,11 +4785,11 @@ pub struct OutputSettings {
 }
 
 /// <p>Pass Through Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PassThroughSettings {}
 
 /// <p>Settings for the action to set pause state of a channel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PauseStateScheduleActionSettings {
     #[serde(rename = "Pipelines")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4797,7 +4797,7 @@ pub struct PauseStateScheduleActionSettings {
 }
 
 /// <p>Runtime details of a pipeline when a channel is running.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PipelineDetail {
     /// <p>The name of the active input attachment currently being ingested by this pipeline.</p>
@@ -4815,7 +4815,7 @@ pub struct PipelineDetail {
 }
 
 /// <p>Settings for pausing a pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PipelinePauseStateSettings {
     /// <p>Pipeline ID to pause (&quot;PIPELINE<em>0&quot; or &quot;PIPELINE</em>1&quot;).</p>
     #[serde(rename = "PipelineId")]
@@ -4823,7 +4823,7 @@ pub struct PipelinePauseStateSettings {
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
     /// <p>Number of resources</p>
@@ -4851,7 +4851,7 @@ pub struct PurchaseOfferingRequest {
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResponse {
     #[serde(rename = "Reservation")]
@@ -4860,15 +4860,15 @@ pub struct PurchaseOfferingResponse {
 }
 
 /// <p>Rec601 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rec601Settings {}
 
 /// <p>Rec709 Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rec709Settings {}
 
 /// <p>Remix Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemixSettings {
     /// <p>Mapping of input channels to output channels, with appropriate gain adjustments.</p>
     #[serde(rename = "ChannelMappings")]
@@ -4885,7 +4885,7 @@ pub struct RemixSettings {
 }
 
 /// <p>Reserved resources available to use</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Reservation {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
@@ -4963,7 +4963,7 @@ pub struct Reservation {
 }
 
 /// <p>Resource configuration (codec, resolution, bitrate, ...)</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservationResourceSpecification {
     /// <p>Channel class, e.g. &#39;STANDARD&#39;</p>
@@ -5001,11 +5001,11 @@ pub struct ReservationResourceSpecification {
 }
 
 /// <p>Rtmp Caption Info Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RtmpCaptionInfoDestinationSettings {}
 
 /// <p>Rtmp Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RtmpGroupSettings {
     /// <p>Authentication scheme to use when connecting with CDN</p>
     #[serde(rename = "AuthenticationScheme")]
@@ -5039,7 +5039,7 @@ pub struct RtmpGroupSettings {
 }
 
 /// <p>Rtmp Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RtmpOutputSettings {
     /// <p>If set to verifyAuthenticity, verify the tls certificate chain to a trusted Certificate Authority (CA).  This will cause rtmps outputs with self-signed certificates to fail.</p>
     #[serde(rename = "CertificateMode")]
@@ -5059,7 +5059,7 @@ pub struct RtmpOutputSettings {
 }
 
 /// <p>Contains information on a single schedule action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScheduleAction {
     /// <p>The name of the action, must be unique within the schedule. This name provides the main reference to an action once it is added to the schedule. A name is unique if it is no longer in the schedule. The schedule is automatically cleaned up to remove actions with a start time of more than 1 hour ago (approximately) so at that point a name can be reused.</p>
     #[serde(rename = "ActionName")]
@@ -5073,7 +5073,7 @@ pub struct ScheduleAction {
 }
 
 /// <p>Holds the settings for a single schedule action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScheduleActionSettings {
     /// <p>Action to insert HLS ID3 segment tagging</p>
     #[serde(rename = "HlsId3SegmentTaggingSettings")]
@@ -5114,7 +5114,7 @@ pub struct ScheduleActionSettings {
 }
 
 /// <p>Settings to specify when an action should occur. Only one of the options must be selected.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScheduleActionStartSettings {
     /// <p>Option for specifying the start time for an action.</p>
     #[serde(rename = "FixedModeScheduleActionStartSettings")]
@@ -5132,11 +5132,11 @@ pub struct ScheduleActionStartSettings {
 }
 
 /// <p>Scte20 Plus Embedded Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte20PlusEmbeddedDestinationSettings {}
 
 /// <p>Scte20 Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte20SourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
     #[serde(rename = "Convert608To708")]
@@ -5149,11 +5149,11 @@ pub struct Scte20SourceSettings {
 }
 
 /// <p>Scte27 Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte27DestinationSettings {}
 
 /// <p>Scte27 Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte27SourceSettings {
     /// <p>The pid field is used in conjunction with the caption selector languageCode field as follows:
     /// - Specify PID and Language: Extracts captions from that PID; the language is &quot;informational&quot;.
@@ -5166,7 +5166,7 @@ pub struct Scte27SourceSettings {
 }
 
 /// <p>Corresponds to SCTE-35 delivery<em>not</em>restricted_flag parameter. To declare delivery restrictions, include this element and its four &quot;restriction&quot; flags. To declare that there are no restrictions, omit this element.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35DeliveryRestrictions {
     /// <p>Corresponds to SCTE-35 archive<em>allowed</em>flag.</p>
     #[serde(rename = "ArchiveAllowedFlag")]
@@ -5183,7 +5183,7 @@ pub struct Scte35DeliveryRestrictions {
 }
 
 /// <p>Holds one set of SCTE-35 Descriptor Settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35Descriptor {
     /// <p>SCTE-35 Descriptor Settings.</p>
     #[serde(rename = "Scte35DescriptorSettings")]
@@ -5191,7 +5191,7 @@ pub struct Scte35Descriptor {
 }
 
 /// <p>SCTE-35 Descriptor settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35DescriptorSettings {
     /// <p>SCTE-35 Segmentation Descriptor.</p>
     #[serde(rename = "SegmentationDescriptorScte35DescriptorSettings")]
@@ -5199,7 +5199,7 @@ pub struct Scte35DescriptorSettings {
 }
 
 /// <p>Settings for a SCTE-35 return<em>to</em>network message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35ReturnToNetworkScheduleActionSettings {
     /// <p>The splice<em>event</em>id for the SCTE-35 splice_insert, as defined in SCTE-35.</p>
     #[serde(rename = "SpliceEventId")]
@@ -5207,7 +5207,7 @@ pub struct Scte35ReturnToNetworkScheduleActionSettings {
 }
 
 /// <p>Corresponds to SCTE-35 segmentation_descriptor.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35SegmentationDescriptor {
     /// <p>Holds the four SCTE-35 delivery restriction parameters.</p>
     #[serde(rename = "DeliveryRestrictions")]
@@ -5254,7 +5254,7 @@ pub struct Scte35SegmentationDescriptor {
 }
 
 /// <p>Scte35 Splice Insert</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35SpliceInsert {
     /// <p>When specified, this offset (in milliseconds) is added to the input Ad Avail PTS time. This only applies to embedded SCTE 104/35 messages and does not apply to OOB messages.</p>
     #[serde(rename = "AdAvailOffset")]
@@ -5271,7 +5271,7 @@ pub struct Scte35SpliceInsert {
 }
 
 /// <p>Settings for a SCTE-35 splice_insert message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35SpliceInsertScheduleActionSettings {
     /// <p>Optional, the duration for the splice<em>insert, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. If you enter a duration, there is an expectation that the downstream system can read the duration and cue in at that time. If you do not enter a duration, the splice</em>insert will continue indefinitely and there is an expectation that you will enter a return<em>to</em>network to end the splice_insert at the appropriate time.</p>
     #[serde(rename = "Duration")]
@@ -5283,7 +5283,7 @@ pub struct Scte35SpliceInsertScheduleActionSettings {
 }
 
 /// <p>Scte35 Time Signal Apos</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35TimeSignalApos {
     /// <p>When specified, this offset (in milliseconds) is added to the input Ad Avail PTS time. This only applies to embedded SCTE 104/35 messages and does not apply to OOB messages.</p>
     #[serde(rename = "AdAvailOffset")]
@@ -5300,7 +5300,7 @@ pub struct Scte35TimeSignalApos {
 }
 
 /// <p>Settings for a SCTE-35 time_signal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte35TimeSignalScheduleActionSettings {
     /// <p>The list of SCTE-35 descriptors accompanying the SCTE-35 time_signal.</p>
     #[serde(rename = "Scte35Descriptors")]
@@ -5308,11 +5308,11 @@ pub struct Scte35TimeSignalScheduleActionSettings {
 }
 
 /// <p>Smpte Tt Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SmpteTtDestinationSettings {}
 
 /// <p>Standard Hls Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StandardHlsSettings {
     /// <p>List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by &#39;,&#39;.</p>
     #[serde(rename = "AudioRenditionSets")]
@@ -5323,7 +5323,7 @@ pub struct StandardHlsSettings {
 }
 
 /// <p>Placeholder documentation for StartChannelRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChannelRequest {
     /// <p>A request to start a channel</p>
@@ -5332,7 +5332,7 @@ pub struct StartChannelRequest {
 }
 
 /// <p>Placeholder documentation for StartChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChannelResponse {
     /// <p>The unique arn of the channel.</p>
@@ -5397,7 +5397,7 @@ pub struct StartChannelResponse {
 }
 
 /// <p>Placeholder documentation for StartMultiplexRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMultiplexRequest {
     /// <p>The ID of the multiplex.</p>
@@ -5406,7 +5406,7 @@ pub struct StartMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for StartMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMultiplexResponse {
     /// <p>The unique arn of the multiplex.</p>
@@ -5452,7 +5452,7 @@ pub struct StartMultiplexResponse {
 }
 
 /// <p>Settings to identify the start of the clip.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StartTimecode {
     /// <p>The timecode for the frame where you want to start the clip. Optional; if not specified, the clip starts at first frame in the file. Enter the timecode as HH:MM:SS:FF or HH:MM:SS;FF.</p>
     #[serde(rename = "Timecode")]
@@ -5461,7 +5461,7 @@ pub struct StartTimecode {
 }
 
 /// <p>Settings for the action to activate a static image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StaticImageActivateScheduleActionSettings {
     /// <p>The duration in milliseconds for the image to remain on the video. If omitted or set to 0 the duration is unlimited and the image will remain until it is explicitly deactivated.</p>
     #[serde(rename = "Duration")]
@@ -5505,7 +5505,7 @@ pub struct StaticImageActivateScheduleActionSettings {
 }
 
 /// <p>Settings for the action to deactivate the image in a specific layer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StaticImageDeactivateScheduleActionSettings {
     /// <p>The time in milliseconds for the image to fade out. Default is 0 (no fade-out).</p>
     #[serde(rename = "FadeOut")]
@@ -5518,7 +5518,7 @@ pub struct StaticImageDeactivateScheduleActionSettings {
 }
 
 /// <p>Static Key Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StaticKeySettings {
     /// <p>The URL of the license server used for protecting content.</p>
     #[serde(rename = "KeyProviderServer")]
@@ -5530,7 +5530,7 @@ pub struct StaticKeySettings {
 }
 
 /// <p>Placeholder documentation for StopChannelRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopChannelRequest {
     /// <p>A request to stop a running channel</p>
@@ -5539,7 +5539,7 @@ pub struct StopChannelRequest {
 }
 
 /// <p>Placeholder documentation for StopChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopChannelResponse {
     /// <p>The unique arn of the channel.</p>
@@ -5604,7 +5604,7 @@ pub struct StopChannelResponse {
 }
 
 /// <p>Placeholder documentation for StopMultiplexRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMultiplexRequest {
     /// <p>The ID of the multiplex.</p>
@@ -5613,7 +5613,7 @@ pub struct StopMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for StopMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMultiplexResponse {
     /// <p>The unique arn of the multiplex.</p>
@@ -5659,7 +5659,7 @@ pub struct StopMultiplexResponse {
 }
 
 /// <p>Settings to identify the end of the clip.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StopTimecode {
     /// <p>If you specify a StopTimecode in an input (in order to clip the file), you can specify if you want the clip to exclude (the default) or include the frame specified by the timecode.</p>
     #[serde(rename = "LastFrameClippingBehavior")]
@@ -5672,11 +5672,11 @@ pub struct StopTimecode {
 }
 
 /// <p>Teletext Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TeletextDestinationSettings {}
 
 /// <p>Teletext Source Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TeletextSourceSettings {
     /// <p>Specifies the teletext page number within the data stream from which to extract captions. Range of 0x100 (256) to 0x8FF (2303). Unused for passthrough. Should be specified as a hexadecimal string with no &quot;0x&quot; prefix.</p>
     #[serde(rename = "PageNumber")]
@@ -5685,7 +5685,7 @@ pub struct TeletextSourceSettings {
 }
 
 /// <p>Temporal Filter Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TemporalFilterSettings {
     /// <p>If you enable this filter, the results are the following:
     /// - If the source content is noisy (it contains excessive digital artifacts), the filter cleans up the source.
@@ -5700,7 +5700,7 @@ pub struct TemporalFilterSettings {
 }
 
 /// <p>Timecode Config</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimecodeConfig {
     /// <p>Identifies the source for the timecode that will be associated with the events outputs.
     /// -Embedded (embedded): Initialize the output timecode with timecode from the the source.  If no embedded timecode is detected in the source, the system falls back to using &quot;Start at 0&quot; (zerobased).
@@ -5715,7 +5715,7 @@ pub struct TimecodeConfig {
 }
 
 /// <p>Ttml Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TtmlDestinationSettings {
     /// <p>When set to passthrough, passes through style and position information from a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or TTML output.</p>
     #[serde(rename = "StyleControl")]
@@ -5724,7 +5724,7 @@ pub struct TtmlDestinationSettings {
 }
 
 /// <p>Udp Container Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UdpContainerSettings {
     #[serde(rename = "M2tsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5732,7 +5732,7 @@ pub struct UdpContainerSettings {
 }
 
 /// <p>Udp Group Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UdpGroupSettings {
     /// <p>Specifies behavior of last resort when input video is lost, and no more backup inputs are available. When dropTs is selected the entire transport stream will stop being emitted.  When dropProgram is selected the program can be dropped from the transport stream (and replaced with null packets to meet the TS bitrate requirement).  Or, when emitProgram is chosen the transport stream will continue to be produced normally with repeat frames, black frames, or slate frames substituted for the absent input video.</p>
     #[serde(rename = "InputLossAction")]
@@ -5749,7 +5749,7 @@ pub struct UdpGroupSettings {
 }
 
 /// <p>Udp Output Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UdpOutputSettings {
     /// <p>UDP output buffering in milliseconds. Larger values increase latency through the transcoder but simultaneously assist the transcoder in maintaining a constant, low-jitter UDP/RTP output while accommodating clock recovery, input switching, input disruptions, picture reordering, etc.</p>
     #[serde(rename = "BufferMsec")]
@@ -5767,7 +5767,7 @@ pub struct UdpOutputSettings {
 }
 
 /// <p>Channel class that the channel should be updated to.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelClassRequest {
     /// <p>The channel class that you wish to update this channel to use.</p>
@@ -5783,7 +5783,7 @@ pub struct UpdateChannelClassRequest {
 }
 
 /// <p>Placeholder documentation for UpdateChannelClassResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelClassResponse {
     #[serde(rename = "Channel")]
@@ -5792,7 +5792,7 @@ pub struct UpdateChannelClassResponse {
 }
 
 /// <p>A request to update a channel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>channel ID</p>
@@ -5828,7 +5828,7 @@ pub struct UpdateChannelRequest {
 }
 
 /// <p>Placeholder documentation for UpdateChannelResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
     #[serde(rename = "Channel")]
@@ -5837,7 +5837,7 @@ pub struct UpdateChannelResponse {
 }
 
 /// <p>A request to update an input device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputDeviceRequest {
     /// <p>The settings that you want to apply to the input device.</p>
@@ -5854,7 +5854,7 @@ pub struct UpdateInputDeviceRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputDeviceResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputDeviceResponse {
     /// <p>The unique ARN of the input device.</p>
@@ -5900,7 +5900,7 @@ pub struct UpdateInputDeviceResponse {
 }
 
 /// <p>A request to update an input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputRequest {
     /// <p>Destination settings for PUSH type inputs.</p>
@@ -5941,7 +5941,7 @@ pub struct UpdateInputRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputResponse {
     #[serde(rename = "Input")]
@@ -5950,7 +5950,7 @@ pub struct UpdateInputResponse {
 }
 
 /// <p>The request to update some combination of the Input Security Group name and the IPv4 CIDRs the Input Security Group should allow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputSecurityGroupRequest {
     /// <p>The id of the Input Security Group to update.</p>
@@ -5967,7 +5967,7 @@ pub struct UpdateInputSecurityGroupRequest {
 }
 
 /// <p>Placeholder documentation for UpdateInputSecurityGroupResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
@@ -5976,7 +5976,7 @@ pub struct UpdateInputSecurityGroupResponse {
 }
 
 /// <p>A request to update a program in a multiplex.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMultiplexProgramRequest {
     /// <p>The ID of the multiplex of the program to update.</p>
@@ -5992,7 +5992,7 @@ pub struct UpdateMultiplexProgramRequest {
 }
 
 /// <p>Placeholder documentation for UpdateMultiplexProgramResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMultiplexProgramResponse {
     /// <p>The updated multiplex program.</p>
@@ -6002,7 +6002,7 @@ pub struct UpdateMultiplexProgramResponse {
 }
 
 /// <p>A request to update a multiplex.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMultiplexRequest {
     /// <p>ID of the multiplex to update.</p>
@@ -6019,7 +6019,7 @@ pub struct UpdateMultiplexRequest {
 }
 
 /// <p>Placeholder documentation for UpdateMultiplexResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMultiplexResponse {
     /// <p>The updated multiplex.</p>
@@ -6029,7 +6029,7 @@ pub struct UpdateMultiplexResponse {
 }
 
 /// <p>Request to update a reservation</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateReservationRequest {
     /// <p>Name of the reservation</p>
@@ -6042,7 +6042,7 @@ pub struct UpdateReservationRequest {
 }
 
 /// <p>Placeholder documentation for UpdateReservationResponse</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
@@ -6051,7 +6051,7 @@ pub struct UpdateReservationResponse {
 }
 
 /// <p>Placeholder documentation for ValidationError</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ValidationError {
     /// <p>Path to the source of the error.</p>
     pub element_path: Option<String>,
@@ -6060,7 +6060,7 @@ pub struct ValidationError {
 }
 
 /// <p>Video Codec Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoCodecSettings {
     #[serde(rename = "FrameCaptureSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6074,7 +6074,7 @@ pub struct VideoCodecSettings {
 }
 
 /// <p>Video settings for this stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoDescription {
     /// <p>Video codec settings.</p>
     #[serde(rename = "CodecSettings")]
@@ -6106,7 +6106,7 @@ pub struct VideoDescription {
 }
 
 /// <p>Specifies a particular video stream within an input source. An input may have only a single video selector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelector {
     /// <p>Specifies the color space of an input. This setting works in tandem with colorSpaceUsage and a video description&#39;s colorSpaceSettingsChoice to determine if any conversion will be performed.</p>
     #[serde(rename = "ColorSpace")]
@@ -6123,7 +6123,7 @@ pub struct VideoSelector {
 }
 
 /// <p>Video Selector Pid</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelectorPid {
     /// <p>Selects a specific PID from within a video source.</p>
     #[serde(rename = "Pid")]
@@ -6132,7 +6132,7 @@ pub struct VideoSelectorPid {
 }
 
 /// <p>Video Selector Program Id</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelectorProgramId {
     /// <p>Selects a specific program from within a multi-program transport stream. If the program doesn&#39;t exist, the first program within the transport stream will be selected by default.</p>
     #[serde(rename = "ProgramId")]
@@ -6141,7 +6141,7 @@ pub struct VideoSelectorProgramId {
 }
 
 /// <p>Video Selector Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelectorSettings {
     #[serde(rename = "VideoSelectorPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6152,7 +6152,7 @@ pub struct VideoSelectorSettings {
 }
 
 /// <p>Webvtt Destination Settings</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebvttDestinationSettings {}
 
 /// Errors returned by BatchUpdateSchedule

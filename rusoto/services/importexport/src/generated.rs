@@ -37,7 +37,7 @@ use xml::reader::ParserConfig;
 use xml::EventReader;
 
 /// <p>A discrete item that contains the description and URL of an artifact (such as a PDF).</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Artifact {
     pub description: Option<String>,
@@ -86,7 +86,7 @@ impl ArtifactListDeserializer {
     }
 }
 /// <p>Input structure for the CancelJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelJobInput {
     pub api_version: Option<String>,
@@ -110,7 +110,7 @@ impl CancelJobInputSerializer {
 }
 
 /// <p>Output structure for the CancelJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CancelJobOutput {
     pub success: Option<bool>,
@@ -148,7 +148,7 @@ impl CarrierDeserializer {
     }
 }
 /// <p>Input structure for the CreateJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
@@ -180,7 +180,7 @@ impl CreateJobInputSerializer {
 }
 
 /// <p>Output structure for the CreateJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
@@ -294,7 +294,7 @@ impl GenericStringDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetShippingLabelInput {
     pub api_version: Option<String>,
@@ -357,7 +357,7 @@ impl GetShippingLabelInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetShippingLabelOutput {
     pub shipping_label_url: Option<String>,
@@ -390,7 +390,7 @@ impl GetShippingLabelOutputDeserializer {
     }
 }
 /// <p>Input structure for the GetStatus operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStatusInput {
     pub api_version: Option<String>,
@@ -414,7 +414,7 @@ impl GetStatusInputSerializer {
 }
 
 /// <p>Output structure for the GetStatus operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStatusOutput {
     pub artifact_list: Option<Vec<Artifact>>,
@@ -551,7 +551,7 @@ impl IsTruncatedDeserializer {
     }
 }
 /// <p>Representation of a job returned by the ListJobs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Job {
     pub creation_date: Option<String>,
@@ -644,7 +644,7 @@ impl JobsListDeserializer {
     }
 }
 /// <p>Input structure for the ListJobs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
@@ -674,7 +674,7 @@ impl ListJobsInputSerializer {
 }
 
 /// <p>Output structure for the ListJobs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
@@ -839,7 +839,7 @@ impl URLDeserializer {
     }
 }
 /// <p>Input structure for the UpateJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
@@ -869,7 +869,7 @@ impl UpdateJobInputSerializer {
 }
 
 /// <p>Output structure for the UpateJob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,

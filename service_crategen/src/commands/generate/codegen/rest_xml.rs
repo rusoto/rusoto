@@ -83,7 +83,7 @@ impl GenerateProtocol for RestXmlGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let imports = "
             use std::str::{FromStr};
             use std::io::Write;
@@ -103,7 +103,16 @@ impl GenerateProtocol for RestXmlGenerator {
             "
             .to_owned();
 
-        writeln!(writer, "{}", imports)
+        writeln!(writer, "{}", imports)?;
+
+        if service.has_event_streams() {
+            writeln!(
+                writer,
+                "use rusoto_core::event_stream::{{DeserializeEvent, EventStream}};"
+            )?;
+        }
+
+        Ok(())
     }
 
     fn generate_serializer(
@@ -148,6 +157,10 @@ impl GenerateProtocol for RestXmlGenerator {
         shape: &Shape,
         service: &Service<'_>,
     ) -> Option<String> {
+        if shape.eventstream() {
+            return None;
+        }
+
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(
             name, &ty, shape, service,

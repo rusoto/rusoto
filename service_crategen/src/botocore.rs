@@ -202,6 +202,7 @@ pub struct Shape {
     pub aws_box: Option<bool>,
     pub documentation: Option<String>,
     pub error: Option<HttpError>,
+    pub eventstream: Option<bool>,
     pub exception: Option<bool>,
     pub fault: Option<bool>,
     pub flattened: Option<bool>,
@@ -266,6 +267,10 @@ impl<'a> Shape {
                 .as_ref()
                 .unwrap()
                 .contains(&String::from(field))
+    }
+
+    pub fn eventstream(&self) -> bool {
+        self.eventstream.unwrap_or(false)
     }
 
     pub fn exception(&self) -> bool {

@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A MediaPackage VOD Asset resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssetShallow {
     /// <p>The ARN of the Asset.</p>
@@ -63,14 +63,14 @@ pub struct AssetShallow {
 }
 
 /// <p>A CMAF encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A CMAF packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,7 +86,7 @@ pub struct CmafPackage {
 }
 
 /// <p>A new MediaPackage VOD Asset configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssetRequest {
     /// <p>The unique identifier for the Asset.</p>
@@ -110,7 +110,7 @@ pub struct CreateAssetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssetResponse {
     /// <p>The ARN of the Asset.</p>
@@ -151,7 +151,7 @@ pub struct CreateAssetResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingConfiguration resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingConfigurationRequest {
     #[serde(rename = "CmafPackage")]
@@ -177,7 +177,7 @@ pub struct CreatePackagingConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingConfigurationResponse {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -210,7 +210,7 @@ pub struct CreatePackagingConfigurationResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingGroup resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingGroupRequest {
     /// <p>The ID of the PackagingGroup.</p>
@@ -221,7 +221,7 @@ pub struct CreatePackagingGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingGroupResponse {
     /// <p>The ARN of the PackagingGroup.</p>
@@ -242,14 +242,14 @@ pub struct CreatePackagingGroupResponse {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A DASH manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashManifest {
     /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
     #[serde(rename = "ManifestLayout")]
@@ -273,7 +273,7 @@ pub struct DashManifest {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashPackage {
     /// <p>A list of DASH manifest configurations.</p>
     #[serde(rename = "DashManifests")]
@@ -299,7 +299,7 @@ pub struct DashPackage {
     pub segment_template_format: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssetRequest {
     /// <p>The ID of the MediaPackage VOD Asset resource to delete.</p>
@@ -307,11 +307,11 @@ pub struct DeleteAssetRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingConfigurationRequest {
     /// <p>The ID of the MediaPackage VOD PackagingConfiguration resource to delete.</p>
@@ -319,11 +319,11 @@ pub struct DeletePackagingConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingGroupRequest {
     /// <p>The ID of the MediaPackage VOD PackagingGroup resource to delete.</p>
@@ -331,11 +331,11 @@ pub struct DeletePackagingGroupRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssetRequest {
     /// <p>The ID of an MediaPackage VOD Asset resource.</p>
@@ -343,7 +343,7 @@ pub struct DescribeAssetRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssetResponse {
     /// <p>The ARN of the Asset.</p>
@@ -383,7 +383,7 @@ pub struct DescribeAssetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingConfigurationRequest {
     /// <p>The ID of a MediaPackage VOD PackagingConfiguration resource.</p>
@@ -391,7 +391,7 @@ pub struct DescribePackagingConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingConfigurationResponse {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -423,7 +423,7 @@ pub struct DescribePackagingConfigurationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingGroupRequest {
     /// <p>The ID of a MediaPackage VOD PackagingGroup resource.</p>
@@ -431,7 +431,7 @@ pub struct DescribePackagingGroupRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingGroupResponse {
     /// <p>The ARN of the PackagingGroup.</p>
@@ -452,7 +452,7 @@ pub struct DescribePackagingGroupResponse {
 }
 
 /// <p>The endpoint URL used to access an Asset using one PackagingConfiguration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EgressEndpoint {
     /// <p>The ID of the PackagingConfiguration being applied to the Asset.</p>
@@ -466,7 +466,7 @@ pub struct EgressEndpoint {
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsEncryption {
     /// <p>A constant initialization vector for encryption (optional).
     /// When not specified the initialization vector will be periodically rotated.</p>
@@ -482,7 +482,7 @@ pub struct HlsEncryption {
 }
 
 /// <p>An HTTP Live Streaming (HLS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsManifest {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -523,7 +523,7 @@ pub struct HlsManifest {
 }
 
 /// <p>An HTTP Live Streaming (HLS) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -542,7 +542,7 @@ pub struct HlsPackage {
     pub use_audio_rendition_group: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssetsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -559,7 +559,7 @@ pub struct ListAssetsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssetsResponse {
     /// <p>A list of MediaPackage VOD Asset resources.</p>
@@ -572,7 +572,7 @@ pub struct ListAssetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingConfigurationsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -589,7 +589,7 @@ pub struct ListPackagingConfigurationsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingConfigurationsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
@@ -602,7 +602,7 @@ pub struct ListPackagingConfigurationsResponse {
     pub packaging_configurations: Option<Vec<PackagingConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingGroupsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -615,7 +615,7 @@ pub struct ListPackagingGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingGroupsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
@@ -628,14 +628,14 @@ pub struct ListPackagingGroupsResponse {
     pub packaging_groups: Option<Vec<PackagingGroup>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
@@ -644,14 +644,14 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssManifest {
     /// <p>An optional string to include in the name of the manifest.</p>
     #[serde(rename = "ManifestName")]
@@ -663,7 +663,7 @@ pub struct MssManifest {
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) PackagingConfiguration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -678,7 +678,7 @@ pub struct MssPackage {
 }
 
 /// <p>A MediaPackage VOD PackagingConfiguration resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackagingConfiguration {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -711,7 +711,7 @@ pub struct PackagingConfiguration {
 }
 
 /// <p>A MediaPackage VOD PackagingGroup resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackagingGroup {
     /// <p>The ARN of the PackagingGroup.</p>
@@ -732,7 +732,7 @@ pub struct PackagingGroup {
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpekeKeyProvider {
     /// <p>An Amazon Resource Name (ARN) of an IAM role that AWS Elemental
     /// MediaPackage will assume when accessing the key provider service.</p>
@@ -747,7 +747,7 @@ pub struct SpekeKeyProvider {
 }
 
 /// <p>A StreamSelection configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamSelection {
     /// <p>The maximum video bitrate (bps) to include in output.</p>
     #[serde(rename = "MaxVideoBitsPerSecond")]
@@ -763,7 +763,7 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     #[serde(rename = "ResourceArn")]
@@ -772,7 +772,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     #[serde(rename = "ResourceArn")]

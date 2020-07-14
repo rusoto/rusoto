@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGrantPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -36,7 +36,7 @@ pub struct BatchGrantPermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGrantPermissionsResponse {
     /// <p>A list of failures to grant permissions to the resources.</p>
@@ -46,7 +46,7 @@ pub struct BatchGrantPermissionsResponse {
 }
 
 /// <p>A list of failures when performing a batch grant or batch revoke operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPermissionsFailureEntry {
     /// <p>An error message that applies to the failure of the entry.</p>
@@ -60,7 +60,7 @@ pub struct BatchPermissionsFailureEntry {
 }
 
 /// <p>A permission to a resource granted by batch operation to the principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchPermissionsRequestEntry {
     /// <p>A unique identifier for the batch permissions request entry.</p>
     #[serde(rename = "Id")]
@@ -83,7 +83,7 @@ pub struct BatchPermissionsRequestEntry {
     pub resource: Option<Resource>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchRevokePermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -95,7 +95,7 @@ pub struct BatchRevokePermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchRevokePermissionsResponse {
     /// <p>A list of failures to revoke permissions to the resources.</p>
@@ -105,11 +105,11 @@ pub struct BatchRevokePermissionsResponse {
 }
 
 /// <p>A structure for the catalog object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CatalogResource {}
 
 /// <p>A wildcard object, consisting of an optional list of excluded column names or indexes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnWildcard {
     /// <p>Excludes column names. Any column with this name will be excluded.</p>
     #[serde(rename = "ExcludedColumnNames")]
@@ -118,7 +118,7 @@ pub struct ColumnWildcard {
 }
 
 /// <p>The AWS Lake Formation principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakePrincipal {
     /// <p>An identifier for the AWS Lake Formation principal.</p>
     #[serde(rename = "DataLakePrincipalIdentifier")]
@@ -127,7 +127,7 @@ pub struct DataLakePrincipal {
 }
 
 /// <p>The AWS Lake Formation principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakeSettings {
     /// <p>A list of up to three principal permissions entries for default create database permissions.</p>
     #[serde(rename = "CreateDatabaseDefaultPermissions")]
@@ -144,7 +144,7 @@ pub struct DataLakeSettings {
 }
 
 /// <p>A structure for a data location object where permissions are granted or revoked. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLocationResource {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the data location resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -152,14 +152,14 @@ pub struct DataLocationResource {
 }
 
 /// <p>A structure for the database object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatabaseResource {
     /// <p>The name of the database resource. Unique to the Data Catalog.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to deregister.</p>
@@ -167,11 +167,11 @@ pub struct DeregisterResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
     /// <p>The resource ARN.</p>
@@ -179,7 +179,7 @@ pub struct DescribeResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceResponse {
     /// <p>A structure containing information about an AWS Lake Formation resource.</p>
@@ -189,7 +189,7 @@ pub struct DescribeResourceResponse {
 }
 
 /// <p>Contains details about an error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The code associated with this error.</p>
@@ -203,7 +203,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>This structure describes the filtering of columns in a table based on a filter condition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterCondition {
     /// <p>The comparison operator used in the filter condition.</p>
@@ -220,7 +220,7 @@ pub struct FilterCondition {
     pub string_value_list: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataLakeSettingsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -229,7 +229,7 @@ pub struct GetDataLakeSettingsRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataLakeSettingsResponse {
     /// <p>A list of AWS Lake Formation principals. </p>
@@ -238,7 +238,7 @@ pub struct GetDataLakeSettingsResponse {
     pub data_lake_settings: Option<DataLakeSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePermissionsForPathRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -258,7 +258,7 @@ pub struct GetEffectivePermissionsForPathRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEffectivePermissionsForPathResponse {
     /// <p>A continuation token, if this is not the first call to retrieve this list.</p>
@@ -271,7 +271,7 @@ pub struct GetEffectivePermissionsForPathResponse {
     pub permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -293,11 +293,11 @@ pub struct GrantPermissionsRequest {
     pub resource: Resource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantPermissionsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -326,7 +326,7 @@ pub struct ListPermissionsRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
     /// <p>A continuation token, if this is not the first call to retrieve this list.</p>
@@ -339,7 +339,7 @@ pub struct ListPermissionsResponse {
     pub principal_resource_permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>Any applicable row-level and/or column-level filtering conditions for the resources.</p>
@@ -356,7 +356,7 @@ pub struct ListResourcesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
     /// <p>A continuation token, if this is not the first call to retrieve these resources.</p>
@@ -370,7 +370,7 @@ pub struct ListResourcesResponse {
 }
 
 /// <p>Permissions granted to a principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PrincipalPermissions {
     /// <p>The permissions that are granted to the principal.</p>
     #[serde(rename = "Permissions")]
@@ -383,7 +383,7 @@ pub struct PrincipalPermissions {
 }
 
 /// <p>The permissions granted or revoked on a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrincipalResourcePermissions {
     /// <p>The permissions to be granted or revoked on the resource.</p>
@@ -404,7 +404,7 @@ pub struct PrincipalResourcePermissions {
     pub resource: Option<Resource>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataLakeSettingsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -416,11 +416,11 @@ pub struct PutDataLakeSettingsRequest {
     pub data_lake_settings: DataLakeSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDataLakeSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to register.</p>
@@ -436,12 +436,12 @@ pub struct RegisterResourceRequest {
     pub use_service_linked_role: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterResourceResponse {}
 
 /// <p>A structure for the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Resource {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
     #[serde(rename = "Catalog")]
@@ -466,7 +466,7 @@ pub struct Resource {
 }
 
 /// <p>A structure containing information about an AWS Lake Formation resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceInfo {
     /// <p>The date and time the resource was last modified.</p>
@@ -483,7 +483,7 @@ pub struct ResourceInfo {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokePermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -505,12 +505,12 @@ pub struct RevokePermissionsRequest {
     pub resource: Resource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokePermissionsResponse {}
 
 /// <p>A structure for the table object. A table is a metadata definition that represents your data. You can Grant and Revoke table privileges to a principal. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableResource {
     /// <p>The name of the database for the table. Unique to a Data Catalog. A database is a set of associated table definitions organized into a logical group. You can Grant and Revoke database privileges to a principal. </p>
     #[serde(rename = "DatabaseName")]
@@ -521,7 +521,7 @@ pub struct TableResource {
 }
 
 /// <p>A structure for a table with columns object. This object is only used when granting a SELECT permission.</p> <p>This object must take a value for at least one of <code>ColumnsNames</code>, <code>ColumnsIndexes</code>, or <code>ColumnsWildcard</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableWithColumnsResource {
     /// <p>The list of column names for the table. At least one of <code>ColumnNames</code> or <code>ColumnWildcard</code> is required.</p>
     #[serde(rename = "ColumnNames")]
@@ -541,7 +541,7 @@ pub struct TableWithColumnsResource {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>The resource ARN.</p>
@@ -552,7 +552,7 @@ pub struct UpdateResourceRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceResponse {}
 

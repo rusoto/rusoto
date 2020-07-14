@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonalizedRankingRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for generating the personalized ranking.</p>
@@ -42,7 +42,7 @@ pub struct GetPersonalizedRankingRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPersonalizedRankingResponse {
     /// <p>A list of items in order of most likely interest to the user. The maximum is 500.</p>
@@ -51,7 +51,7 @@ pub struct GetPersonalizedRankingResponse {
     pub personalized_ranking: Option<Vec<PredictedItem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationsRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.</p>
@@ -75,7 +75,7 @@ pub struct GetRecommendationsRequest {
     pub user_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationsResponse {
     /// <p>A list of recommendations sorted in ascending order by prediction score. There can be a maximum of 500 items in the list.</p>
@@ -85,7 +85,7 @@ pub struct GetRecommendationsResponse {
 }
 
 /// <p>An object that identifies an item.</p> <p>The and APIs return a list of <code>PredictedItem</code>s.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PredictedItem {
     /// <p>The recommended item ID.</p>

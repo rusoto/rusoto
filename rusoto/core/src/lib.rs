@@ -28,6 +28,7 @@ mod client;
 mod error;
 mod stream;
 
+pub mod event_stream;
 pub mod param;
 #[doc(hidden)]
 pub mod region;

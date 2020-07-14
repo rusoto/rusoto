@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A collection of accounts and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountAggregationSource {
     /// <p>The 12-digit account ID of the account being aggregated. </p>
     #[serde(rename = "AccountIds")]
@@ -41,7 +41,7 @@ pub struct AccountAggregationSource {
 }
 
 /// <p>Indicates whether an AWS Config rule is compliant based on account ID, region, compliance, and rule name.</p> <p>A rule is compliant if all of the resources that the rule evaluated comply with it. It is noncompliant if any of these resources do not comply.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceByConfigRule {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -63,7 +63,7 @@ pub struct AggregateComplianceByConfigRule {
 }
 
 /// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceCount {
     /// <p>The number of compliant and noncompliant AWS Config rules.</p>
@@ -77,7 +77,7 @@ pub struct AggregateComplianceCount {
 }
 
 /// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateEvaluationResult {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -111,7 +111,7 @@ pub struct AggregateEvaluationResult {
 }
 
 /// <p>The details that identify a resource that is collected by AWS Config aggregator, including the resource type, ID, (if available) the custom resource name, the source account, and source region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AggregateResourceIdentifier {
     /// <p>The ID of the AWS resource.</p>
     #[serde(rename = "ResourceId")]
@@ -132,7 +132,7 @@ pub struct AggregateResourceIdentifier {
 }
 
 /// <p>The current sync status between the source and the aggregator account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregatedSourceStatus {
     /// <p>The region authorized to collect aggregated data.</p>
@@ -166,7 +166,7 @@ pub struct AggregatedSourceStatus {
 }
 
 /// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregationAuthorization {
     /// <p>The Amazon Resource Name (ARN) of the aggregation object.</p>
@@ -188,7 +188,7 @@ pub struct AggregationAuthorization {
 }
 
 /// <p>The detailed configuration of a specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BaseConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
@@ -249,7 +249,7 @@ pub struct BaseConfigurationItem {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -260,7 +260,7 @@ pub struct BatchGetAggregateResourceConfigRequest {
     pub resource_identifiers: Vec<AggregateResourceIdentifier>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetAggregateResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
@@ -273,7 +273,7 @@ pub struct BatchGetAggregateResourceConfigResponse {
     pub unprocessed_resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetResourceConfigRequest {
     /// <p>A list of resource keys to be processed with the current request. Each element in the list consists of the resource type and resource ID.</p>
@@ -281,7 +281,7 @@ pub struct BatchGetResourceConfigRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
@@ -295,7 +295,7 @@ pub struct BatchGetResourceConfigResponse {
 }
 
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Compliance {
     /// <p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>
@@ -309,7 +309,7 @@ pub struct Compliance {
 }
 
 /// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByConfigRule {
     /// <p>Indicates whether the AWS Config rule is compliant.</p>
@@ -323,7 +323,7 @@ pub struct ComplianceByConfigRule {
 }
 
 /// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByResource {
     /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
@@ -341,7 +341,7 @@ pub struct ComplianceByResource {
 }
 
 /// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceContributorCount {
     /// <p>Indicates whether the maximum count is reached.</p>
@@ -355,7 +355,7 @@ pub struct ComplianceContributorCount {
 }
 
 /// <p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummary {
     /// <p>The time that AWS Config created the compliance summary.</p>
@@ -373,7 +373,7 @@ pub struct ComplianceSummary {
 }
 
 /// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummaryByResourceType {
     /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each.</p>
@@ -387,7 +387,7 @@ pub struct ComplianceSummaryByResourceType {
 }
 
 /// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigExportDeliveryInfo {
     /// <p>The time of the last attempted delivery.</p>
@@ -417,7 +417,7 @@ pub struct ConfigExportDeliveryInfo {
 }
 
 /// <p>An AWS Config rule represents an AWS Lambda function that you create for a custom rule or a predefined function for an AWS managed rule. The function evaluates configuration items to assess whether your AWS resources comply with your desired configurations. This function can run when AWS Config detects a configuration change to an AWS resource and at a periodic frequency that you choose (for example, every 24 hours).</p> <note> <p>You can use the AWS CLI and AWS SDKs if you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </note> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigRule {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleArn")]
@@ -461,7 +461,7 @@ pub struct ConfigRule {
 }
 
 /// <p>Filters the compliance results based on account ID, region, compliance type, and rule name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigRuleComplianceFilters {
     /// <p>The 12-digit account ID of the source account. </p>
@@ -483,7 +483,7 @@ pub struct ConfigRuleComplianceFilters {
 }
 
 /// <p>Filters the results based on the account IDs and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigRuleComplianceSummaryFilters {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -497,7 +497,7 @@ pub struct ConfigRuleComplianceSummaryFilters {
 }
 
 /// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigRuleEvaluationStatus {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
@@ -550,7 +550,7 @@ pub struct ConfigRuleEvaluationStatus {
 }
 
 /// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for AWS Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigSnapshotDeliveryProperties {
     /// <p>The frequency with which AWS Config delivers configuration snapshots.</p>
     #[serde(rename = "deliveryFrequency")]
@@ -559,7 +559,7 @@ pub struct ConfigSnapshotDeliveryProperties {
 }
 
 /// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigStreamDeliveryInfo {
     /// <p>The error code from the last attempted delivery.</p>
@@ -581,7 +581,7 @@ pub struct ConfigStreamDeliveryInfo {
 }
 
 /// <p>The details about the configuration aggregator, including information about source accounts, regions, and metadata of the aggregator. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationAggregator {
     /// <p>Provides a list of source accounts and regions to be aggregated.</p>
@@ -611,7 +611,7 @@ pub struct ConfigurationAggregator {
 }
 
 /// <p>A list that contains detailed configurations of a specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
@@ -689,7 +689,7 @@ pub struct ConfigurationItem {
 }
 
 /// <p>An object that represents the recording of configuration changes of an AWS resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigurationRecorder {
     /// <p>The name of the recorder. By default, AWS Config automatically assigns the name "default" when creating the configuration recorder. You cannot change the assigned name.</p>
     #[serde(rename = "name")]
@@ -706,7 +706,7 @@ pub struct ConfigurationRecorder {
 }
 
 /// <p>The current status of the configuration recorder.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationRecorderStatus {
     /// <p>The error code indicating that the recording failed.</p>
@@ -744,7 +744,7 @@ pub struct ConfigurationRecorderStatus {
 }
 
 /// <p>Filters the conformance pack by compliance types and AWS Config rule names.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackComplianceFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -758,7 +758,7 @@ pub struct ConformancePackComplianceFilters {
 }
 
 /// <p>Summary includes the name and status of the conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackComplianceSummary {
     /// <p>The status of the conformance pack. The allowed values are COMPLIANT and NON_COMPLIANT. </p>
@@ -770,7 +770,7 @@ pub struct ConformancePackComplianceSummary {
 }
 
 /// <p>Returns details of a conformance pack. A conformance pack is a collection of AWS Config rules and remediation actions that can be easily deployed in an account and a region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackDetail {
     /// <p>Amazon Resource Name (ARN) of the conformance pack.</p>
@@ -804,7 +804,7 @@ pub struct ConformancePackDetail {
 }
 
 /// <p>Filters a conformance pack by AWS Config rule names, compliance types, AWS resource types, and resource IDs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackEvaluationFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -826,7 +826,7 @@ pub struct ConformancePackEvaluationFilters {
 }
 
 /// <p>The details of a conformance pack evaluation. Provides AWS Config rule and AWS resource type that was evaluated, the compliance of the conformance pack, related time stamps, and supplementary information. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackEvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance. </p>
@@ -847,7 +847,7 @@ pub struct ConformancePackEvaluationResult {
 }
 
 /// <p>Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 128 characters, and values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConformancePackInputParameter {
     /// <p>One part of a key-value pair.</p>
     #[serde(rename = "ParameterName")]
@@ -858,7 +858,7 @@ pub struct ConformancePackInputParameter {
 }
 
 /// <p>Compliance information of one or more AWS Config rules within a conformance pack. You can filter using AWS Config rule names and compliance types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackRuleCompliance {
     /// <p>Compliance of the AWS Config rule</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -872,7 +872,7 @@ pub struct ConformancePackRuleCompliance {
 }
 
 /// <p>Status details of a conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackStatusDetail {
     /// <p>Amazon Resource Name (ARN) of comformance pack.</p>
@@ -903,7 +903,7 @@ pub struct ConformancePackStatusDetail {
     pub stack_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAggregationAuthorizationRequest {
     /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
@@ -915,7 +915,7 @@ pub struct DeleteAggregationAuthorizationRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigRuleRequest {
     /// <p>The name of the AWS Config rule that you want to delete.</p>
@@ -923,7 +923,7 @@ pub struct DeleteConfigRuleRequest {
     pub config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationAggregatorRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -932,7 +932,7 @@ pub struct DeleteConfigurationAggregatorRequest {
 }
 
 /// <p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationRecorderRequest {
     /// <p>The name of the configuration recorder to be deleted. You can retrieve the name of your configuration recorder by using the <code>DescribeConfigurationRecorders</code> action.</p>
@@ -940,7 +940,7 @@ pub struct DeleteConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConformancePackRequest {
     /// <p>Name of the conformance pack you want to delete.</p>
@@ -949,7 +949,7 @@ pub struct DeleteConformancePackRequest {
 }
 
 /// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data, in JSON format. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeliveryChannelRequest {
     /// <p>The name of the delivery channel to delete.</p>
@@ -958,7 +958,7 @@ pub struct DeleteDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationResultsRequest {
     /// <p>The name of the AWS Config rule for which you want to delete the evaluation results.</p>
@@ -967,11 +967,11 @@ pub struct DeleteEvaluationResultsRequest {
 }
 
 /// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEvaluationResultsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConfigRuleRequest {
     /// <p>The name of organization config rule that you want to delete.</p>
@@ -979,7 +979,7 @@ pub struct DeleteOrganizationConfigRuleRequest {
     pub organization_config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConformancePackRequest {
     /// <p>The name of organization conformance pack that you want to delete.</p>
@@ -987,7 +987,7 @@ pub struct DeleteOrganizationConformancePackRequest {
     pub organization_conformance_pack_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePendingAggregationRequestRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
@@ -998,7 +998,7 @@ pub struct DeletePendingAggregationRequestRequest {
     pub requester_aws_region: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationConfigurationRequest {
     /// <p>The name of the AWS Config rule for which you want to delete remediation configuration.</p>
@@ -1010,11 +1010,11 @@ pub struct DeleteRemediationConfigurationRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule for which you want to delete remediation exception configuration.</p>
@@ -1025,7 +1025,7 @@ pub struct DeleteRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationExceptionsResponse {
     /// <p>Returns a list of failed delete remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
@@ -1034,7 +1034,7 @@ pub struct DeleteRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedDeleteRemediationExceptionsBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceConfigRequest {
     /// <p>Unique identifier of the resource.</p>
@@ -1045,7 +1045,7 @@ pub struct DeleteResourceConfigRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionConfigurationRequest {
     /// <p>The name of the retention configuration to delete.</p>
@@ -1054,7 +1054,7 @@ pub struct DeleteRetentionConfigurationRequest {
 }
 
 /// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeliverConfigSnapshotRequest {
     /// <p>The name of the delivery channel through which the snapshot is delivered.</p>
@@ -1063,7 +1063,7 @@ pub struct DeliverConfigSnapshotRequest {
 }
 
 /// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliverConfigSnapshotResponse {
     /// <p>The ID of the snapshot that is being created.</p>
@@ -1073,7 +1073,7 @@ pub struct DeliverConfigSnapshotResponse {
 }
 
 /// <p>The channel through which AWS Config delivers notifications and updated configuration states.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeliveryChannel {
     /// <p>The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.</p>
     #[serde(rename = "configSnapshotDeliveryProperties")]
@@ -1098,7 +1098,7 @@ pub struct DeliveryChannel {
 }
 
 /// <p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliveryChannelStatus {
     /// <p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>
@@ -1119,7 +1119,7 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregateComplianceByConfigRulesRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -1139,7 +1139,7 @@ pub struct DescribeAggregateComplianceByConfigRulesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregateComplianceByConfigRulesResponse {
     /// <p>Returns a list of AggregateComplianceByConfigRule object.</p>
@@ -1152,7 +1152,7 @@ pub struct DescribeAggregateComplianceByConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregationAuthorizationsRequest {
     /// <p>The maximum number of AggregationAuthorizations returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
@@ -1165,7 +1165,7 @@ pub struct DescribeAggregationAuthorizationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregationAuthorizationsResponse {
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -1179,7 +1179,7 @@ pub struct DescribeAggregationAuthorizationsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -1197,7 +1197,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByConfigRuleResponse {
     /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
@@ -1211,7 +1211,7 @@ pub struct DescribeComplianceByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
@@ -1237,7 +1237,7 @@ pub struct DescribeComplianceByResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
@@ -1251,7 +1251,7 @@ pub struct DescribeComplianceByResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
     /// <p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>
@@ -1269,7 +1269,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     /// <p>Status information about your AWS managed Config rules.</p>
@@ -1283,7 +1283,7 @@ pub struct DescribeConfigRuleEvaluationStatusResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRulesRequest {
     /// <p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>
@@ -1297,7 +1297,7 @@ pub struct DescribeConfigRulesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRulesResponse {
     /// <p>The details about your AWS Config rules.</p>
@@ -1310,7 +1310,7 @@ pub struct DescribeConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -1330,7 +1330,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     pub update_status: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     /// <p>Returns an AggregatedSourceStatus object. </p>
@@ -1343,7 +1343,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorsRequest {
     /// <p>The name of the configuration aggregators.</p>
@@ -1360,7 +1360,7 @@ pub struct DescribeConfigurationAggregatorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorsResponse {
     /// <p>Returns a ConfigurationAggregators object.</p>
@@ -1374,7 +1374,7 @@ pub struct DescribeConfigurationAggregatorsResponse {
 }
 
 /// <p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecorderStatusRequest {
     /// <p>The name(s) of the configuration recorder. If the name is not specified, the action returns the current status of all the configuration recorders associated with the account.</p>
@@ -1384,7 +1384,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecorderStatusResponse {
     /// <p>A list that contains status of the specified recorders.</p>
@@ -1394,7 +1394,7 @@ pub struct DescribeConfigurationRecorderStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecordersRequest {
     /// <p>A list of configuration recorder names.</p>
@@ -1404,7 +1404,7 @@ pub struct DescribeConfigurationRecordersRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecordersResponse {
     /// <p>A list that contains the descriptions of the specified configuration recorders.</p>
@@ -1413,7 +1413,7 @@ pub struct DescribeConfigurationRecordersResponse {
     pub configuration_recorders: Option<Vec<ConfigurationRecorder>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackComplianceRequest {
     /// <p>Name of the conformance pack.</p>
@@ -1433,7 +1433,7 @@ pub struct DescribeConformancePackComplianceRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackComplianceResponse {
     /// <p>Name of the conformance pack.</p>
@@ -1448,7 +1448,7 @@ pub struct DescribeConformancePackComplianceResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackStatusRequest {
     /// <p>Comma-separated list of conformance pack names.</p>
@@ -1465,7 +1465,7 @@ pub struct DescribeConformancePackStatusRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackStatusResponse {
     /// <p>A list of <code>ConformancePackStatusDetail</code> objects.</p>
@@ -1478,7 +1478,7 @@ pub struct DescribeConformancePackStatusResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePacksRequest {
     /// <p>Comma-separated list of conformance pack names for which you want details. If you do not specify any names, AWS Config returns details for all your conformance packs. </p>
@@ -1495,7 +1495,7 @@ pub struct DescribeConformancePacksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePacksResponse {
     /// <p>Returns a list of <code>ConformancePackDetail</code> objects.</p>
@@ -1509,7 +1509,7 @@ pub struct DescribeConformancePacksResponse {
 }
 
 /// <p>The input for the <a>DeliveryChannelStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelStatusRequest {
     /// <p>A list of delivery channel names.</p>
@@ -1519,7 +1519,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelStatusResponse {
     /// <p>A list that contains the status of a specified delivery channel.</p>
@@ -1529,7 +1529,7 @@ pub struct DescribeDeliveryChannelStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeDeliveryChannels</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelsRequest {
     /// <p>A list of delivery channel names.</p>
@@ -1539,7 +1539,7 @@ pub struct DescribeDeliveryChannelsRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelsResponse {
     /// <p>A list that contains the descriptions of the specified delivery channel.</p>
@@ -1548,7 +1548,7 @@ pub struct DescribeDeliveryChannelsResponse {
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRuleStatusesRequest {
     /// <p>The maximum number of <code>OrganizationConfigRuleStatuses</code> returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1565,7 +1565,7 @@ pub struct DescribeOrganizationConfigRuleStatusesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRuleStatusesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1578,7 +1578,7 @@ pub struct DescribeOrganizationConfigRuleStatusesResponse {
     pub organization_config_rule_statuses: Option<Vec<OrganizationConfigRuleStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRulesRequest {
     /// <p>The maximum number of organization config rules returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1595,7 +1595,7 @@ pub struct DescribeOrganizationConfigRulesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRulesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1608,7 +1608,7 @@ pub struct DescribeOrganizationConfigRulesResponse {
     pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePackStatusesRequest {
     /// <p>The maximum number of OrganizationConformancePackStatuses returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100. </p>
@@ -1625,7 +1625,7 @@ pub struct DescribeOrganizationConformancePackStatusesRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePackStatusesResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1638,7 +1638,7 @@ pub struct DescribeOrganizationConformancePackStatusesResponse {
     pub organization_conformance_pack_statuses: Option<Vec<OrganizationConformancePackStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePacksRequest {
     /// <p>The maximum number of organization config packs returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1655,7 +1655,7 @@ pub struct DescribeOrganizationConformancePacksRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePacksResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1668,7 +1668,7 @@ pub struct DescribeOrganizationConformancePacksResponse {
     pub organization_conformance_packs: Option<Vec<OrganizationConformancePack>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingAggregationRequestsRequest {
     /// <p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
@@ -1681,7 +1681,7 @@ pub struct DescribePendingAggregationRequestsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingAggregationRequestsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1694,7 +1694,7 @@ pub struct DescribePendingAggregationRequestsResponse {
     pub pending_aggregation_requests: Option<Vec<PendingAggregationRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationConfigurationsRequest {
     /// <p>A list of AWS Config rule names of remediation configurations for which you want details. </p>
@@ -1702,7 +1702,7 @@ pub struct DescribeRemediationConfigurationsRequest {
     pub config_rule_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationConfigurationsResponse {
     /// <p>Returns a remediation configuration object.</p>
@@ -1711,7 +1711,7 @@ pub struct DescribeRemediationConfigurationsResponse {
     pub remediation_configurations: Option<Vec<RemediationConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule.</p>
@@ -1731,7 +1731,7 @@ pub struct DescribeRemediationExceptionsRequest {
     pub resource_keys: Option<Vec<RemediationExceptionResourceKey>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExceptionsResponse {
     /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
@@ -1744,7 +1744,7 @@ pub struct DescribeRemediationExceptionsResponse {
     pub remediation_exceptions: Option<Vec<RemediationException>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExecutionStatusRequest {
     /// <p>A list of AWS Config rule names.</p>
@@ -1764,7 +1764,7 @@ pub struct DescribeRemediationExecutionStatusRequest {
     pub resource_keys: Option<Vec<ResourceKey>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExecutionStatusResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1777,7 +1777,7 @@ pub struct DescribeRemediationExecutionStatusResponse {
     pub remediation_execution_statuses: Option<Vec<RemediationExecutionStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRetentionConfigurationsRequest {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1790,7 +1790,7 @@ pub struct DescribeRetentionConfigurationsRequest {
     pub retention_configuration_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRetentionConfigurationsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1804,7 +1804,7 @@ pub struct DescribeRetentionConfigurationsResponse {
 }
 
 /// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Evaluation {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
     #[serde(rename = "Annotation")]
@@ -1825,7 +1825,7 @@ pub struct Evaluation {
 }
 
 /// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
@@ -1855,7 +1855,7 @@ pub struct EvaluationResult {
 }
 
 /// <p>Uniquely identifies an evaluation result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultIdentifier {
     /// <p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>
@@ -1869,7 +1869,7 @@ pub struct EvaluationResultIdentifier {
 }
 
 /// <p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultQualifier {
     /// <p>The name of the AWS Config rule that was used in the evaluation.</p>
@@ -1887,7 +1887,7 @@ pub struct EvaluationResultQualifier {
 }
 
 /// <p>The controls that AWS Config uses for executing remediations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExecutionControls {
     /// <p>A SsmControls object.</p>
     #[serde(rename = "SsmControls")]
@@ -1896,7 +1896,7 @@ pub struct ExecutionControls {
 }
 
 /// <p>List of each of the failed delete remediation exceptions with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedDeleteRemediationExceptionsBatch {
     /// <p>Returns remediation exception resource key object of the failed items.</p>
@@ -1910,7 +1910,7 @@ pub struct FailedDeleteRemediationExceptionsBatch {
 }
 
 /// <p>List of each of the failed remediations with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedRemediationBatch {
     /// <p>Returns remediation configurations of the failed items.</p>
@@ -1924,7 +1924,7 @@ pub struct FailedRemediationBatch {
 }
 
 /// <p>List of each of the failed remediation exceptions with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedRemediationExceptionBatch {
     /// <p>Returns remediation exception resource key object of the failed items.</p>
@@ -1938,7 +1938,7 @@ pub struct FailedRemediationExceptionBatch {
 }
 
 /// <p>Details about the fields such as name of the field.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FieldInfo {
     /// <p>Name of the field.</p>
@@ -1947,7 +1947,7 @@ pub struct FieldInfo {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -1976,7 +1976,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     /// <p>Returns an AggregateEvaluationResults object.</p>
@@ -1989,7 +1989,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2013,7 +2013,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     /// <p>Returns a list of AggregateComplianceCounts object.</p>
@@ -2030,7 +2030,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateDiscoveredResourceCountsRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2054,7 +2054,7 @@ pub struct GetAggregateDiscoveredResourceCountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateDiscoveredResourceCountsResponse {
     /// <p>The key passed into the request object. If <code>GroupByKey</code> is not provided, the result will be empty.</p>
@@ -2074,7 +2074,7 @@ pub struct GetAggregateDiscoveredResourceCountsResponse {
     pub total_discovered_resources: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2085,7 +2085,7 @@ pub struct GetAggregateResourceConfigRequest {
     pub resource_identifier: AggregateResourceIdentifier,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateResourceConfigResponse {
     /// <p>Returns a <code>ConfigurationItem</code> object.</p>
@@ -2095,7 +2095,7 @@ pub struct GetAggregateResourceConfigResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -2116,7 +2116,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
@@ -2130,7 +2130,7 @@ pub struct GetComplianceDetailsByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -2150,7 +2150,7 @@ pub struct GetComplianceDetailsByResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
@@ -2164,7 +2164,7 @@ pub struct GetComplianceDetailsByResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
@@ -2174,7 +2174,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceSummaryByResourceTypeRequest {
     /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>. You can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
@@ -2184,7 +2184,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
@@ -2193,7 +2193,7 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceDetailsRequest {
     /// <p>Name of the conformance pack.</p>
@@ -2213,7 +2213,7 @@ pub struct GetConformancePackComplianceDetailsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceDetailsResponse {
     /// <p>Name of the conformance pack.</p>
@@ -2229,7 +2229,7 @@ pub struct GetConformancePackComplianceDetailsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceSummaryRequest {
     /// <p>Names of conformance packs.</p>
@@ -2245,7 +2245,7 @@ pub struct GetConformancePackComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceSummaryResponse {
     /// <p>A list of <code>ConformancePackComplianceSummary</code> objects. </p>
@@ -2258,7 +2258,7 @@ pub struct GetConformancePackComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredResourceCountsRequest {
     /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
@@ -2275,7 +2275,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredResourceCountsResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
@@ -2292,7 +2292,7 @@ pub struct GetDiscoveredResourceCountsResponse {
     pub total_discovered_resources: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusRequest {
     /// <p>A <code>StatusDetailFilters</code> object.</p>
@@ -2312,7 +2312,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusRequest {
     pub organization_config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2325,7 +2325,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConformancePackDetailedStatusRequest {
     /// <p>An <code>OrganizationResourceDetailedStatusFilters</code> object.</p>
@@ -2345,7 +2345,7 @@ pub struct GetOrganizationConformancePackDetailedStatusRequest {
     pub organization_conformance_pack_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConformancePackDetailedStatusResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2360,7 +2360,7 @@ pub struct GetOrganizationConformancePackDetailedStatusResponse {
 }
 
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceConfigHistoryRequest {
     /// <p>The chronological order for configuration items listed. By default, the results are listed in reverse chronological order.</p>
@@ -2392,7 +2392,7 @@ pub struct GetResourceConfigHistoryRequest {
 }
 
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceConfigHistoryResponse {
     /// <p>A list that contains the configuration history of one or more resources.</p>
@@ -2406,7 +2406,7 @@ pub struct GetResourceConfigHistoryResponse {
 }
 
 /// <p>The count of resources that are grouped by the group name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupedResourceCount {
     /// <p>The name of the group that can be region, account ID, or resource type. For example, region1, region2 if the region was chosen as <code>GroupByKey</code>.</p>
@@ -2417,7 +2417,7 @@ pub struct GroupedResourceCount {
     pub resource_count: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAggregateDiscoveredResourcesRequest {
     /// <p>The name of the configuration aggregator. </p>
@@ -2440,7 +2440,7 @@ pub struct ListAggregateDiscoveredResourcesRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAggregateDiscoveredResourcesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -2454,7 +2454,7 @@ pub struct ListAggregateDiscoveredResourcesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
     /// <p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>
@@ -2483,7 +2483,7 @@ pub struct ListDiscoveredResourcesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoveredResourcesResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
@@ -2496,7 +2496,7 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of tags returned on each page. The limit maximum is 50. You cannot specify a number greater than 50. If you specify 0, AWS Config uses the default. </p>
@@ -2512,7 +2512,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2526,7 +2526,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Organization config rule creation or deletion status in each member account. This includes the name of the rule, the status, error code and error message when the rule creation or deletion failed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberAccountStatus {
     /// <p>The 12-digit account ID of a member account.</p>
@@ -2553,7 +2553,7 @@ pub struct MemberAccountStatus {
 }
 
 /// <p>This object contains regions to set up the aggregator and an IAM role to retrieve organization details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationAggregationSource {
     /// <p>If true, aggregate existing AWS Config regions and future regions.</p>
     #[serde(rename = "AllAwsRegions")]
@@ -2569,7 +2569,7 @@ pub struct OrganizationAggregationSource {
 }
 
 /// <p>An organization config rule that has information about config rules that AWS Config creates in member accounts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConfigRule {
     /// <p>A comma-separated list of accounts excluded from organization config rule.</p>
@@ -2597,7 +2597,7 @@ pub struct OrganizationConfigRule {
 }
 
 /// <p>Returns the status for an organization config rule in an organization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConfigRuleStatus {
     /// <p>An error code that is returned when organization config rule creation or deletion has failed.</p>
@@ -2621,7 +2621,7 @@ pub struct OrganizationConfigRuleStatus {
 }
 
 /// <p>An organization conformance pack that has information about conformance packs that AWS Config creates in member accounts. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePack {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -2651,7 +2651,7 @@ pub struct OrganizationConformancePack {
 }
 
 /// <p>Organization conformance pack creation or deletion status in each member account. This includes the name of the conformance pack, the status, error code and error message when the conformance pack creation or deletion failed. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePackDetailedStatus {
     /// <p>The 12-digit account ID of a member account.</p>
@@ -2678,7 +2678,7 @@ pub struct OrganizationConformancePackDetailedStatus {
 }
 
 /// <p>Returns the status for an organization conformance pack in an organization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePackStatus {
     /// <p>An error code that is returned when organization conformance pack creation or deletion has failed in a member account. </p>
@@ -2702,7 +2702,7 @@ pub struct OrganizationConformancePackStatus {
 }
 
 /// <p>An object that specifies organization custom rule metadata such as resource type, resource ID of AWS resource, Lamdba function ARN, and organization trigger types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationCustomRuleMetadata {
     /// <p>The description that you provide for organization config rule.</p>
     #[serde(rename = "Description")]
@@ -2741,7 +2741,7 @@ pub struct OrganizationCustomRuleMetadata {
 }
 
 /// <p>An object that specifies organization managed rule metadata such as resource type and ID of AWS resource along with the rule identifier. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationManagedRuleMetadata {
     /// <p>The description that you provide for organization config rule.</p>
     #[serde(rename = "Description")]
@@ -2777,7 +2777,7 @@ pub struct OrganizationManagedRuleMetadata {
 }
 
 /// <p>Status filter object to filter results based on specific member account ID or status type for an organization conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OrganizationResourceDetailedStatusFilters {
     /// <p>The 12-digit account ID of the member account within an organization.</p>
@@ -2791,7 +2791,7 @@ pub struct OrganizationResourceDetailedStatusFilters {
 }
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingAggregationRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
@@ -2804,7 +2804,7 @@ pub struct PendingAggregationRequest {
     pub requester_aws_region: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAggregationAuthorizationRequest {
     /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
@@ -2819,7 +2819,7 @@ pub struct PutAggregationAuthorizationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAggregationAuthorizationResponse {
     /// <p>Returns an AggregationAuthorization object. </p>
@@ -2828,7 +2828,7 @@ pub struct PutAggregationAuthorizationResponse {
     pub aggregation_authorization: Option<AggregationAuthorization>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigRuleRequest {
     /// <p>The rule that you want to add to your account.</p>
@@ -2840,7 +2840,7 @@ pub struct PutConfigRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationAggregatorRequest {
     /// <p>A list of AccountAggregationSource object. </p>
@@ -2860,7 +2860,7 @@ pub struct PutConfigurationAggregatorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationAggregatorResponse {
     /// <p>Returns a ConfigurationAggregator object.</p>
@@ -2870,7 +2870,7 @@ pub struct PutConfigurationAggregatorResponse {
 }
 
 /// <p>The input for the <a>PutConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationRecorderRequest {
     /// <p>The configuration recorder object that records each configuration change made to the resources.</p>
@@ -2878,7 +2878,7 @@ pub struct PutConfigurationRecorderRequest {
     pub configuration_recorder: ConfigurationRecorder,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConformancePackRequest {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -2905,7 +2905,7 @@ pub struct PutConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConformancePackResponse {
     /// <p>ARN of the conformance pack.</p>
@@ -2915,7 +2915,7 @@ pub struct PutConformancePackResponse {
 }
 
 /// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDeliveryChannelRequest {
     /// <p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket and to an Amazon SNS topic.</p>
@@ -2924,7 +2924,7 @@ pub struct PutDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEvaluationsRequest {
     /// <p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>
@@ -2941,7 +2941,7 @@ pub struct PutEvaluationsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEvaluationsResponse {
     /// <p>Requests that failed because of a client or server error.</p>
@@ -2950,7 +2950,7 @@ pub struct PutEvaluationsResponse {
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConfigRuleRequest {
     /// <p>A comma-separated list of accounts that you want to exclude from an organization config rule.</p>
@@ -2970,7 +2970,7 @@ pub struct PutOrganizationConfigRuleRequest {
     pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConfigRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of an organization config rule.</p>
@@ -2979,7 +2979,7 @@ pub struct PutOrganizationConfigRuleResponse {
     pub organization_config_rule_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConformancePackRequest {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -3010,7 +3010,7 @@ pub struct PutOrganizationConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConformancePackResponse {
     /// <p>ARN of the organization conformance pack.</p>
@@ -3019,7 +3019,7 @@ pub struct PutOrganizationConformancePackResponse {
     pub organization_conformance_pack_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationConfigurationsRequest {
     /// <p>A list of remediation configuration objects.</p>
@@ -3027,7 +3027,7 @@ pub struct PutRemediationConfigurationsRequest {
     pub remediation_configurations: Vec<RemediationConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationConfigurationsResponse {
     /// <p>Returns a list of failed remediation batch objects.</p>
@@ -3036,7 +3036,7 @@ pub struct PutRemediationConfigurationsResponse {
     pub failed_batches: Option<Vec<FailedRemediationBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule for which you want to create remediation exception.</p>
@@ -3055,7 +3055,7 @@ pub struct PutRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationExceptionsResponse {
     /// <p>Returns a list of failed remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
@@ -3064,7 +3064,7 @@ pub struct PutRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedRemediationExceptionBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceConfigRequest {
     /// <p><p>The configuration object of the resource in valid JSON format. It must match the schema registered with AWS CloudFormation.</p> <note> <p>The configuration JSON must not exceed 64 KB.</p> </note></p>
@@ -3089,7 +3089,7 @@ pub struct PutResourceConfigRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionConfigurationRequest {
     /// <p><p>Number of days AWS Config stores your historical information.</p> <note> <p>Currently, only applicable to the configuration item history.</p> </note></p>
@@ -3097,7 +3097,7 @@ pub struct PutRetentionConfigurationRequest {
     pub retention_period_in_days: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionConfigurationResponse {
     /// <p>Returns a retention configuration object.</p>
@@ -3107,7 +3107,7 @@ pub struct PutRetentionConfigurationResponse {
 }
 
 /// <p>Details about the query.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryInfo {
     /// <p>Returns a <code>FieldInfo</code> object.</p>
@@ -3117,7 +3117,7 @@ pub struct QueryInfo {
 }
 
 /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported Resource Types</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordingGroup {
     /// <p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it starts recording resources of that type automatically.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>
     #[serde(rename = "allSupported")]
@@ -3134,7 +3134,7 @@ pub struct RecordingGroup {
 }
 
 /// <p>The relationship of the related resource to the main resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Relationship {
     /// <p>The type of relationship with the related resource.</p>
@@ -3156,7 +3156,7 @@ pub struct Relationship {
 }
 
 /// <p>An object that represents the details about the remediation configuration that includes the remediation action, parameters, and data to execute the action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationConfiguration {
     /// <p>Amazon Resource Name (ARN) of remediation configuration.</p>
     #[serde(rename = "Arn")]
@@ -3206,7 +3206,7 @@ pub struct RemediationConfiguration {
 }
 
 /// <p>An object that represents the details about the remediation exception. The details include the rule name, an explanation of an exception, the time when the exception will be deleted, the resource ID, and resource type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationException {
     /// <p>The name of the AWS Config rule.</p>
@@ -3229,7 +3229,7 @@ pub struct RemediationException {
 }
 
 /// <p>The details that identify a resource within AWS Config, including the resource type and resource ID. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationExceptionResourceKey {
     /// <p>The ID of the resource (for example., sg-xxxxxx).</p>
     #[serde(rename = "ResourceId")]
@@ -3242,7 +3242,7 @@ pub struct RemediationExceptionResourceKey {
 }
 
 /// <p>Provides details of the current status of the invoked remediation action for that resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStatus {
     /// <p>Start time when the remediation was executed.</p>
@@ -3267,7 +3267,7 @@ pub struct RemediationExecutionStatus {
 }
 
 /// <p>Name of the step from the SSM document.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStep {
     /// <p>An error message if the step was interrupted during execution.</p>
@@ -3293,7 +3293,7 @@ pub struct RemediationExecutionStep {
 }
 
 /// <p>The value is either a dynamic (resource) value or a static value. You must select either a dynamic value or a static value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationParameterValue {
     /// <p>The value is dynamic and changes at run-time.</p>
     #[serde(rename = "ResourceValue")]
@@ -3306,7 +3306,7 @@ pub struct RemediationParameterValue {
 }
 
 /// <p>An object that contains the resource type and the number of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceCount {
     /// <p>The number of resources.</p>
@@ -3320,7 +3320,7 @@ pub struct ResourceCount {
 }
 
 /// <p>Filters the resource count based on account ID, region, and resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceCountFilters {
     /// <p>The 12-digit ID of the account.</p>
@@ -3338,7 +3338,7 @@ pub struct ResourceCountFilters {
 }
 
 /// <p>Filters the results by resource account ID, region, resource ID, and resource name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceFilters {
     /// <p>The 12-digit source account ID.</p>
@@ -3360,7 +3360,7 @@ pub struct ResourceFilters {
 }
 
 /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The time that the resource was deleted.</p>
@@ -3382,7 +3382,7 @@ pub struct ResourceIdentifier {
 }
 
 /// <p>The details that identify a resource within AWS Config, including the resource type and resource ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceKey {
     /// <p>The ID of the resource (for example., sg-xxxxxx). </p>
     #[serde(rename = "resourceId")]
@@ -3393,7 +3393,7 @@ pub struct ResourceKey {
 }
 
 /// <p>The dynamic value of the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceValue {
     /// <p>The value is a resource ID.</p>
     #[serde(rename = "Value")]
@@ -3401,7 +3401,7 @@ pub struct ResourceValue {
 }
 
 /// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetentionConfiguration {
     /// <p>The name of the retention configuration object.</p>
@@ -3413,7 +3413,7 @@ pub struct RetentionConfiguration {
 }
 
 /// <p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scope {
     /// <p>The ID of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>
     #[serde(rename = "ComplianceResourceId")]
@@ -3433,7 +3433,7 @@ pub struct Scope {
     pub tag_value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -3455,7 +3455,7 @@ pub struct SelectAggregateResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectAggregateResourceConfigResponse {
     /// <p>The nextToken string returned in a previous request that you use to request the next page of results in a paginated response. </p>
@@ -3471,7 +3471,7 @@ pub struct SelectAggregateResourceConfigResponse {
     pub results: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectResourceConfigRequest {
     /// <p>The SQL query <code>SELECT</code> command.</p>
@@ -3487,7 +3487,7 @@ pub struct SelectResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectResourceConfigResponse {
     /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response. </p>
@@ -3505,7 +3505,7 @@ pub struct SelectResourceConfigResponse {
 }
 
 /// <p>Provides the AWS Config rule owner (AWS or customer), the rule identifier, and the events that trigger the evaluation of your AWS resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Source {
     /// <p>Indicates whether AWS or the customer owns and manages the AWS Config rule.</p>
     #[serde(rename = "Owner")]
@@ -3520,7 +3520,7 @@ pub struct Source {
 }
 
 /// <p>Provides the source and the message types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic. You can specify the parameter values for <code>SourceDetail</code> only for custom rules. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceDetail {
     /// <p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>
     #[serde(rename = "EventSource")]
@@ -3537,7 +3537,7 @@ pub struct SourceDetail {
 }
 
 /// <p>AWS Systems Manager (SSM) specific remediation controls.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SsmControls {
     /// <p>The maximum percentage of remediation actions allowed to run in parallel on the non-compliant resources for that specific rule. You can specify a percentage, such as 10%. The default value is 10. </p>
     #[serde(rename = "ConcurrentExecutionRatePercentage")]
@@ -3550,7 +3550,7 @@ pub struct SsmControls {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigRulesEvaluationRequest {
     /// <p>The list of names of AWS Config rules that you want to run evaluations for.</p>
@@ -3560,12 +3560,12 @@ pub struct StartConfigRulesEvaluationRequest {
 }
 
 /// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartConfigRulesEvaluationResponse {}
 
 /// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigurationRecorderRequest {
     /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
@@ -3573,7 +3573,7 @@ pub struct StartConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRemediationExecutionRequest {
     /// <p>The list of names of AWS Config rules that you want to run remediation execution for.</p>
@@ -3584,7 +3584,7 @@ pub struct StartRemediationExecutionRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRemediationExecutionResponse {
     /// <p>For resources that have failed to start execution, the API returns a resource key object.</p>
@@ -3598,7 +3598,7 @@ pub struct StartRemediationExecutionResponse {
 }
 
 /// <p>The static value of the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StaticValue {
     /// <p>A list of values. For example, the ARN of the assumed role. </p>
     #[serde(rename = "Values")]
@@ -3606,7 +3606,7 @@ pub struct StaticValue {
 }
 
 /// <p>Status filter object to filter results based on specific member account ID or status type for an organization config rule. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatusDetailFilters {
     /// <p>The 12-digit account ID of the member account within an organization.</p>
@@ -3620,7 +3620,7 @@ pub struct StatusDetailFilters {
 }
 
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopConfigurationRecorderRequest {
     /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
@@ -3629,7 +3629,7 @@ pub struct StopConfigurationRecorderRequest {
 }
 
 /// <p>The tags for the resource. The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -3641,7 +3641,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the supported resources are <code>ConfigRule</code>, <code>ConfigurationAggregator</code> and <code>AggregatorAuthorization</code>.</p>
@@ -3652,7 +3652,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the supported resources are <code>ConfigRule</code>, <code>ConfigurationAggregator</code> and <code>AggregatorAuthorization</code>.</p>

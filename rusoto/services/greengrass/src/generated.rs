@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoleToGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -36,7 +36,7 @@ pub struct AssociateRoleToGroupRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateRoleToGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role ARN was associated with the group.</p>
@@ -45,7 +45,7 @@ pub struct AssociateRoleToGroupResponse {
     pub associated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateServiceRoleToAccountRequest {
     /// <p>The ARN of the service role you wish to associate with your account.</p>
@@ -53,7 +53,7 @@ pub struct AssociateServiceRoleToAccountRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceRoleToAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
@@ -63,7 +63,7 @@ pub struct AssociateServiceRoleToAccountResponse {
 }
 
 /// <p>Information about a bulk deployment. You cannot start a new bulk deployment while another one is still running or in a non-terminal state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeployment {
     /// <p>The ARN of the bulk deployment.</p>
@@ -81,7 +81,7 @@ pub struct BulkDeployment {
 }
 
 /// <p>Relevant metrics on input records processed during bulk deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeploymentMetrics {
     /// <p>The total number of records that returned a non-retryable error. For example, this can occur if a group record from the input file uses an invalid format or specifies a nonexistent group version, or if the execution role doesn&#39;t grant permission to deploy a group or group version.</p>
@@ -99,7 +99,7 @@ pub struct BulkDeploymentMetrics {
 }
 
 /// <p>Information about an individual group deployment in a bulk deployment operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeploymentResult {
     /// <p>The time, in ISO format, when the deployment was created.</p>
@@ -137,7 +137,7 @@ pub struct BulkDeploymentResult {
 }
 
 /// <p>Information about a Greengrass core&#39;s connectivity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConnectivityInfo {
     /// <p>The endpoint for the Greengrass core. Can be an IP address or DNS.</p>
     #[serde(rename = "HostAddress")]
@@ -158,7 +158,7 @@ pub struct ConnectivityInfo {
 }
 
 /// <p>Information about a connector. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Connector {
     /// <p>The ARN of the connector.</p>
     #[serde(rename = "ConnectorArn")]
@@ -173,7 +173,7 @@ pub struct Connector {
 }
 
 /// <p>Information about the connector definition version, which is a container for connectors.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConnectorDefinitionVersion {
     /// <p>A list of references to connectors in this version, with their corresponding configuration settings.</p>
     #[serde(rename = "Connectors")]
@@ -182,7 +182,7 @@ pub struct ConnectorDefinitionVersion {
 }
 
 /// <p>Information about a core.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Core {
     /// <p>The ARN of the certificate associated with the core.</p>
     #[serde(rename = "CertificateArn")]
@@ -200,7 +200,7 @@ pub struct Core {
 }
 
 /// <p>Information about a core definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CoreDefinitionVersion {
     /// <p>A list of cores in the core definition version.</p>
     #[serde(rename = "Cores")]
@@ -208,7 +208,7 @@ pub struct CoreDefinitionVersion {
     pub cores: Option<Vec<Core>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -229,7 +229,7 @@ pub struct CreateConnectorDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -262,7 +262,7 @@ pub struct CreateConnectorDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConnectorDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -278,7 +278,7 @@ pub struct CreateConnectorDefinitionVersionRequest {
     pub connectors: Option<Vec<Connector>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -300,7 +300,7 @@ pub struct CreateConnectorDefinitionVersionResponse {
 }
 
 /// <p>Information needed to create a core definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -321,7 +321,7 @@ pub struct CreateCoreDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -354,7 +354,7 @@ pub struct CreateCoreDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCoreDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -370,7 +370,7 @@ pub struct CreateCoreDefinitionVersionRequest {
     pub cores: Option<Vec<Core>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -391,7 +391,7 @@ pub struct CreateCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -414,7 +414,7 @@ pub struct CreateDeploymentRequest {
     pub group_version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>The ARN of the deployment.</p>
@@ -427,7 +427,7 @@ pub struct CreateDeploymentResponse {
     pub deployment_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -448,7 +448,7 @@ pub struct CreateDeviceDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -481,7 +481,7 @@ pub struct CreateDeviceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -497,7 +497,7 @@ pub struct CreateDeviceDefinitionVersionRequest {
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -518,7 +518,7 @@ pub struct CreateDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -539,7 +539,7 @@ pub struct CreateFunctionDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -573,7 +573,7 @@ pub struct CreateFunctionDefinitionResponse {
 }
 
 /// <p>Information needed to create a function definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFunctionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -593,7 +593,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
     pub functions: Option<Vec<Function>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -614,7 +614,7 @@ pub struct CreateFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupCertificateAuthorityRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -626,7 +626,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupCertificateAuthorityResponse {
     /// <p>The ARN of the group certificate authority.</p>
@@ -635,7 +635,7 @@ pub struct CreateGroupCertificateAuthorityResponse {
     pub group_certificate_authority_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -656,7 +656,7 @@ pub struct CreateGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The ARN of the definition.</p>
@@ -689,7 +689,7 @@ pub struct CreateGroupResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -729,7 +729,7 @@ pub struct CreateGroupVersionRequest {
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -750,7 +750,7 @@ pub struct CreateGroupVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -771,7 +771,7 @@ pub struct CreateLoggerDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -804,7 +804,7 @@ pub struct CreateLoggerDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLoggerDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -820,7 +820,7 @@ pub struct CreateLoggerDefinitionVersionRequest {
     pub loggers: Option<Vec<Logger>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -841,7 +841,7 @@ pub struct CreateLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -862,7 +862,7 @@ pub struct CreateResourceDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -895,7 +895,7 @@ pub struct CreateResourceDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -911,7 +911,7 @@ pub struct CreateResourceDefinitionVersionRequest {
     pub resources: Option<Vec<Resource>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -932,7 +932,7 @@ pub struct CreateResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSoftwareUpdateJobRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -954,7 +954,7 @@ pub struct CreateSoftwareUpdateJobRequest {
     pub update_targets_operating_system: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSoftwareUpdateJobResponse {
     /// <p>The IoT Job ARN corresponding to this update.</p>
@@ -971,7 +971,7 @@ pub struct CreateSoftwareUpdateJobResponse {
     pub platform_software_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -992,7 +992,7 @@ pub struct CreateSubscriptionDefinitionRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -1025,7 +1025,7 @@ pub struct CreateSubscriptionDefinitionResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSubscriptionDefinitionVersionRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -1041,7 +1041,7 @@ pub struct CreateSubscriptionDefinitionVersionRequest {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
@@ -1063,7 +1063,7 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
 }
 
 /// <p>Information about a definition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefinitionInformation {
     /// <p>The ARN of the definition.</p>
@@ -1100,7 +1100,7 @@ pub struct DefinitionInformation {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
@@ -1108,11 +1108,11 @@ pub struct DeleteConnectorDefinitionRequest {
     pub connector_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectorDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
@@ -1120,11 +1120,11 @@ pub struct DeleteCoreDefinitionRequest {
     pub core_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCoreDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
@@ -1132,11 +1132,11 @@ pub struct DeleteDeviceDefinitionRequest {
     pub device_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
@@ -1144,11 +1144,11 @@ pub struct DeleteFunctionDefinitionRequest {
     pub function_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFunctionDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1156,11 +1156,11 @@ pub struct DeleteGroupRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
@@ -1168,11 +1168,11 @@ pub struct DeleteLoggerDefinitionRequest {
     pub logger_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoggerDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
@@ -1180,11 +1180,11 @@ pub struct DeleteResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
@@ -1192,12 +1192,12 @@ pub struct DeleteSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriptionDefinitionResponse {}
 
 /// <p>Information about a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>The time, in milliseconds since the epoch, when the deployment was created.</p>
@@ -1223,7 +1223,7 @@ pub struct Deployment {
 }
 
 /// <p>Information about a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Device {
     /// <p>The ARN of the certificate associated with the device.</p>
     #[serde(rename = "CertificateArn")]
@@ -1241,7 +1241,7 @@ pub struct Device {
 }
 
 /// <p>Information about a device definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceDefinitionVersion {
     /// <p>A list of devices in the definition version.</p>
     #[serde(rename = "Devices")]
@@ -1249,7 +1249,7 @@ pub struct DeviceDefinitionVersion {
     pub devices: Option<Vec<Device>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRoleFromGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1257,7 +1257,7 @@ pub struct DisassociateRoleFromGroupRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateRoleFromGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role was disassociated from the group.</p>
@@ -1266,11 +1266,11 @@ pub struct DisassociateRoleFromGroupResponse {
     pub disassociated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceRoleFromAccountResponse {
     /// <p>The time when the service role was disassociated from the account.</p>
@@ -1280,7 +1280,7 @@ pub struct DisassociateServiceRoleFromAccountResponse {
 }
 
 /// <p>Details about the error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>A detailed error code.</p>
@@ -1294,7 +1294,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>Information about a Lambda function.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Function {
     /// <p>The ARN of the Lambda function.</p>
     #[serde(rename = "FunctionArn")]
@@ -1310,7 +1310,7 @@ pub struct Function {
 }
 
 /// <p>The configuration of the Lambda function.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionConfiguration {
     /// <p>The expected encoding type of the input payload for the function. The default is &#39;&#39;json&#39;&#39;.</p>
     #[serde(rename = "EncodingType")]
@@ -1343,7 +1343,7 @@ pub struct FunctionConfiguration {
 }
 
 /// <p>The environment configuration of the function.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionConfigurationEnvironment {
     /// <p>If true, the Lambda function is allowed to access the host&#39;s /sys folder. Use this when the Lambda function needs to read device information from /sys. This setting applies only when you run the Lambda function in a Greengrass container.</p>
     #[serde(rename = "AccessSysfs")]
@@ -1364,7 +1364,7 @@ pub struct FunctionConfigurationEnvironment {
 }
 
 /// <p>The default configuration that applies to all Lambda functions in the group. Individual Lambda functions can override these settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionDefaultConfig {
     #[serde(rename = "Execution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1372,7 +1372,7 @@ pub struct FunctionDefaultConfig {
 }
 
 /// <p>Configuration information that specifies how a Lambda function runs. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionDefaultExecutionConfig {
     #[serde(rename = "IsolationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1383,7 +1383,7 @@ pub struct FunctionDefaultExecutionConfig {
 }
 
 /// <p>Information about a function definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionDefinitionVersion {
     /// <p>The default configuration that applies to all Lambda functions in this function definition version. Individual Lambda functions can override these settings.</p>
     #[serde(rename = "DefaultConfig")]
@@ -1396,7 +1396,7 @@ pub struct FunctionDefinitionVersion {
 }
 
 /// <p>Configuration information that specifies how a Lambda function runs. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionExecutionConfig {
     #[serde(rename = "IsolationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1407,7 +1407,7 @@ pub struct FunctionExecutionConfig {
 }
 
 /// <p>Specifies the user and group whose permissions are used when running the Lambda function. You can specify one or both values to override the default values. We recommend that you avoid running as root unless absolutely necessary to minimize the risk of unintended changes or malicious attacks. To run as root, you must set &#39;&#39;IsolationMode&#39;&#39; to &#39;&#39;NoContainer&#39;&#39; and update config.json in &#39;&#39;greengrass-root/config&#39;&#39; to set &#39;&#39;allowFunctionsToRunAsRoot&#39;&#39; to &#39;&#39;yes&#39;&#39;.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FunctionRunAsConfig {
     /// <p>The group ID whose permissions are used to run a Lambda function.</p>
     #[serde(rename = "Gid")]
@@ -1419,7 +1419,7 @@ pub struct FunctionRunAsConfig {
     pub uid: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssociatedRoleRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1427,7 +1427,7 @@ pub struct GetAssociatedRoleRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociatedRoleResponse {
     /// <p>The time when the role was associated with the group.</p>
@@ -1440,7 +1440,7 @@ pub struct GetAssociatedRoleResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBulkDeploymentStatusRequest {
     /// <p>The ID of the bulk deployment.</p>
@@ -1448,7 +1448,7 @@ pub struct GetBulkDeploymentStatusRequest {
     pub bulk_deployment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBulkDeploymentStatusResponse {
     /// <p>Relevant metrics on input records processed during bulk deployment.</p>
@@ -1477,7 +1477,7 @@ pub struct GetBulkDeploymentStatusResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectivityInfoRequest {
     /// <p>The thing name.</p>
@@ -1485,7 +1485,7 @@ pub struct GetConnectivityInfoRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectivityInfoResponse {
     /// <p>Connectivity info list.</p>
@@ -1498,7 +1498,7 @@ pub struct GetConnectivityInfoResponse {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
@@ -1506,7 +1506,7 @@ pub struct GetConnectorDefinitionRequest {
     pub connector_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -1543,7 +1543,7 @@ pub struct GetConnectorDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectorDefinitionVersionRequest {
     /// <p>The ID of the connector definition.</p>
@@ -1558,7 +1558,7 @@ pub struct GetConnectorDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionVersionResponse {
     /// <p>The ARN of the connector definition version.</p>
@@ -1587,7 +1587,7 @@ pub struct GetConnectorDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
@@ -1595,7 +1595,7 @@ pub struct GetCoreDefinitionRequest {
     pub core_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -1632,7 +1632,7 @@ pub struct GetCoreDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCoreDefinitionVersionRequest {
     /// <p>The ID of the core definition.</p>
@@ -1643,7 +1643,7 @@ pub struct GetCoreDefinitionVersionRequest {
     pub core_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionVersionResponse {
     /// <p>The ARN of the core definition version.</p>
@@ -1672,7 +1672,7 @@ pub struct GetCoreDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentStatusRequest {
     /// <p>The ID of the deployment.</p>
@@ -1683,7 +1683,7 @@ pub struct GetDeploymentStatusRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
     /// <p>The status of the deployment: &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Building&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
@@ -1708,7 +1708,7 @@ pub struct GetDeploymentStatusResponse {
     pub updated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
@@ -1716,7 +1716,7 @@ pub struct GetDeviceDefinitionRequest {
     pub device_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -1753,7 +1753,7 @@ pub struct GetDeviceDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceDefinitionVersionRequest {
     /// <p>The ID of the device definition.</p>
@@ -1768,7 +1768,7 @@ pub struct GetDeviceDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionVersionResponse {
     /// <p>The ARN of the device definition version.</p>
@@ -1797,7 +1797,7 @@ pub struct GetDeviceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
@@ -1805,7 +1805,7 @@ pub struct GetFunctionDefinitionRequest {
     pub function_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -1842,7 +1842,7 @@ pub struct GetFunctionDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFunctionDefinitionVersionRequest {
     /// <p>The ID of the Lambda function definition.</p>
@@ -1857,7 +1857,7 @@ pub struct GetFunctionDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionVersionResponse {
     /// <p>The ARN of the function definition version.</p>
@@ -1886,7 +1886,7 @@ pub struct GetFunctionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateAuthorityRequest {
     /// <p>The ID of the certificate authority.</p>
@@ -1897,7 +1897,7 @@ pub struct GetGroupCertificateAuthorityRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateAuthorityResponse {
     /// <p>The ARN of the certificate authority for the group.</p>
@@ -1914,7 +1914,7 @@ pub struct GetGroupCertificateAuthorityResponse {
     pub pem_encoded_certificate: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupCertificateConfigurationRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1922,7 +1922,7 @@ pub struct GetGroupCertificateConfigurationRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
@@ -1939,7 +1939,7 @@ pub struct GetGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1947,7 +1947,7 @@ pub struct GetGroupRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>The ARN of the definition.</p>
@@ -1984,7 +1984,7 @@ pub struct GetGroupResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupVersionRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -1995,7 +1995,7 @@ pub struct GetGroupVersionRequest {
     pub group_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupVersionResponse {
     /// <p>The ARN of the group version.</p>
@@ -2020,7 +2020,7 @@ pub struct GetGroupVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
@@ -2028,7 +2028,7 @@ pub struct GetLoggerDefinitionRequest {
     pub logger_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -2065,7 +2065,7 @@ pub struct GetLoggerDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLoggerDefinitionVersionRequest {
     /// <p>The ID of the logger definition.</p>
@@ -2080,7 +2080,7 @@ pub struct GetLoggerDefinitionVersionRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionVersionResponse {
     /// <p>The ARN of the logger definition version.</p>
@@ -2105,7 +2105,7 @@ pub struct GetLoggerDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionRequest {
     /// <p>The ID of the resource definition.</p>
@@ -2113,7 +2113,7 @@ pub struct GetResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -2150,7 +2150,7 @@ pub struct GetResourceDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceDefinitionVersionRequest {
     /// <p>The ID of the resource definition.</p>
@@ -2161,7 +2161,7 @@ pub struct GetResourceDefinitionVersionRequest {
     pub resource_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionVersionResponse {
     /// <p>Arn of the resource definition version.</p>
@@ -2186,11 +2186,11 @@ pub struct GetResourceDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceRoleForAccountRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceRoleForAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
@@ -2203,7 +2203,7 @@ pub struct GetServiceRoleForAccountResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionRequest {
     /// <p>The ID of the subscription definition.</p>
@@ -2211,7 +2211,7 @@ pub struct GetSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
@@ -2248,7 +2248,7 @@ pub struct GetSubscriptionDefinitionResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSubscriptionDefinitionVersionRequest {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2263,7 +2263,7 @@ pub struct GetSubscriptionDefinitionVersionRequest {
     pub subscription_definition_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the subscription definition version.</p>
@@ -2293,7 +2293,7 @@ pub struct GetSubscriptionDefinitionVersionResponse {
 }
 
 /// <p>Information about a certificate authority for a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupCertificateAuthorityProperties {
     /// <p>The ARN of the certificate authority for the group.</p>
@@ -2307,7 +2307,7 @@ pub struct GroupCertificateAuthorityProperties {
 }
 
 /// <p>Information about a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupInformation {
     /// <p>The ARN of the group.</p>
@@ -2341,7 +2341,7 @@ pub struct GroupInformation {
 }
 
 /// <p>Group owner related settings for local resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GroupOwnerSetting {
     /// <p>If true, AWS IoT Greengrass automatically adds the specified Linux OS group owner of the resource to the Lambda process privileges. Thus the Lambda process will have the file access permissions of the added Linux group.</p>
     #[serde(rename = "AutoAddGroupOwner")]
@@ -2354,7 +2354,7 @@ pub struct GroupOwnerSetting {
 }
 
 /// <p>Information about a group version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GroupVersion {
     /// <p>The ARN of the connector definition version for this group.</p>
     #[serde(rename = "ConnectorDefinitionVersionArn")]
@@ -2386,7 +2386,7 @@ pub struct GroupVersion {
     pub subscription_definition_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentDetailedReportsRequest {
     /// <p>The ID of the bulk deployment.</p>
@@ -2402,7 +2402,7 @@ pub struct ListBulkDeploymentDetailedReportsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentDetailedReportsResponse {
     /// <p>A list of the individual group deployments in the bulk deployment operation.</p>
@@ -2415,7 +2415,7 @@ pub struct ListBulkDeploymentDetailedReportsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBulkDeploymentsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2428,7 +2428,7 @@ pub struct ListBulkDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentsResponse {
     /// <p>A list of bulk deployments.</p>
@@ -2441,7 +2441,7 @@ pub struct ListBulkDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionVersionsRequest {
     /// <p>The ID of the connector definition.</p>
@@ -2457,7 +2457,7 @@ pub struct ListConnectorDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2470,7 +2470,7 @@ pub struct ListConnectorDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectorDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2483,7 +2483,7 @@ pub struct ListConnectorDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2496,7 +2496,7 @@ pub struct ListConnectorDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionVersionsRequest {
     /// <p>The ID of the core definition.</p>
@@ -2512,7 +2512,7 @@ pub struct ListCoreDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2525,7 +2525,7 @@ pub struct ListCoreDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCoreDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2538,7 +2538,7 @@ pub struct ListCoreDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2551,7 +2551,7 @@ pub struct ListCoreDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -2567,7 +2567,7 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsResponse {
     /// <p>A list of deployments for the requested groups.</p>
@@ -2580,7 +2580,7 @@ pub struct ListDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionVersionsRequest {
     /// <p>The ID of the device definition.</p>
@@ -2596,7 +2596,7 @@ pub struct ListDeviceDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2609,7 +2609,7 @@ pub struct ListDeviceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2622,7 +2622,7 @@ pub struct ListDeviceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2635,7 +2635,7 @@ pub struct ListDeviceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionVersionsRequest {
     /// <p>The ID of the Lambda function definition.</p>
@@ -2651,7 +2651,7 @@ pub struct ListFunctionDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2664,7 +2664,7 @@ pub struct ListFunctionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFunctionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2677,7 +2677,7 @@ pub struct ListFunctionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2690,7 +2690,7 @@ pub struct ListFunctionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupCertificateAuthoritiesRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -2698,7 +2698,7 @@ pub struct ListGroupCertificateAuthoritiesRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupCertificateAuthoritiesResponse {
     /// <p>A list of certificate authorities associated with the group.</p>
@@ -2707,7 +2707,7 @@ pub struct ListGroupCertificateAuthoritiesResponse {
     pub group_certificate_authorities: Option<Vec<GroupCertificateAuthorityProperties>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupVersionsRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -2723,7 +2723,7 @@ pub struct ListGroupVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2736,7 +2736,7 @@ pub struct ListGroupVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2749,7 +2749,7 @@ pub struct ListGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>Information about a group.</p>
@@ -2762,7 +2762,7 @@ pub struct ListGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionVersionsRequest {
     /// <p>The ID of the logger definition.</p>
@@ -2778,7 +2778,7 @@ pub struct ListLoggerDefinitionVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2791,7 +2791,7 @@ pub struct ListLoggerDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLoggerDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2804,7 +2804,7 @@ pub struct ListLoggerDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2817,7 +2817,7 @@ pub struct ListLoggerDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2833,7 +2833,7 @@ pub struct ListResourceDefinitionVersionsRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2846,7 +2846,7 @@ pub struct ListResourceDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2859,7 +2859,7 @@ pub struct ListResourceDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2872,7 +2872,7 @@ pub struct ListResourceDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionVersionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2888,7 +2888,7 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2901,7 +2901,7 @@ pub struct ListSubscriptionDefinitionVersionsResponse {
     pub versions: Option<Vec<VersionInformation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSubscriptionDefinitionsRequest {
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2914,7 +2914,7 @@ pub struct ListSubscriptionDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionsResponse {
     /// <p>Information about a definition.</p>
@@ -2927,7 +2927,7 @@ pub struct ListSubscriptionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -2935,7 +2935,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "tags")]
@@ -2944,7 +2944,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Attributes that define a local device resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LocalDeviceResourceData {
     /// <p>Group/owner related settings for local resources.</p>
     #[serde(rename = "GroupOwnerSetting")]
@@ -2957,7 +2957,7 @@ pub struct LocalDeviceResourceData {
 }
 
 /// <p>Attributes that define a local volume resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LocalVolumeResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -2974,7 +2974,7 @@ pub struct LocalVolumeResourceData {
 }
 
 /// <p>Information about a logger</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Logger {
     /// <p>The component that will be subject to logging.</p>
     #[serde(rename = "Component")]
@@ -2995,7 +2995,7 @@ pub struct Logger {
 }
 
 /// <p>Information about a logger definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggerDefinitionVersion {
     /// <p>A list of loggers.</p>
     #[serde(rename = "Loggers")]
@@ -3004,7 +3004,7 @@ pub struct LoggerDefinitionVersion {
 }
 
 /// <p>Information needed to reset deployments.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetDeploymentsRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -3020,7 +3020,7 @@ pub struct ResetDeploymentsRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetDeploymentsResponse {
     /// <p>The ARN of the deployment.</p>
@@ -3034,7 +3034,7 @@ pub struct ResetDeploymentsResponse {
 }
 
 /// <p>Information about a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Resource {
     /// <p>The resource ID, used to refer to a resource in the Lambda function configuration. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
     #[serde(rename = "Id")]
@@ -3048,7 +3048,7 @@ pub struct Resource {
 }
 
 /// <p>A policy used by the function to access a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceAccessPolicy {
     /// <p>The permissions that the Lambda function has to the resource. Can be one of &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
     #[serde(rename = "Permission")]
@@ -3060,7 +3060,7 @@ pub struct ResourceAccessPolicy {
 }
 
 /// <p>A container for resource data. The container takes only one of the following supported resource data types: &#39;&#39;LocalDeviceResourceData&#39;&#39;, &#39;&#39;LocalVolumeResourceData&#39;&#39;, &#39;&#39;SageMakerMachineLearningModelResourceData&#39;&#39;, &#39;&#39;S3MachineLearningModelResourceData&#39;&#39;, &#39;&#39;SecretsManagerSecretResourceData&#39;&#39;.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceDataContainer {
     /// <p>Attributes that define the local device resource.</p>
     #[serde(rename = "LocalDeviceResourceData")]
@@ -3086,7 +3086,7 @@ pub struct ResourceDataContainer {
 }
 
 /// <p>Information about a resource definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceDefinitionVersion {
     /// <p>A list of resources.</p>
     #[serde(rename = "Resources")]
@@ -3095,7 +3095,7 @@ pub struct ResourceDefinitionVersion {
 }
 
 /// <p>The owner setting for downloaded machine learning resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceDownloadOwnerSetting {
     /// <p>The group owner of the resource. This is the name of an existing Linux OS group on the system or a GID. The group&#39;s permissions are added to the Lambda process.</p>
     #[serde(rename = "GroupOwner")]
@@ -3106,7 +3106,7 @@ pub struct ResourceDownloadOwnerSetting {
 }
 
 /// <p>Attributes that define an Amazon S3 machine learning resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3MachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -3122,7 +3122,7 @@ pub struct S3MachineLearningModelResourceData {
 }
 
 /// <p>Attributes that define an Amazon SageMaker machine learning resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SageMakerMachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
@@ -3138,7 +3138,7 @@ pub struct SageMakerMachineLearningModelResourceData {
 }
 
 /// <p>Attributes that define a secret resource, which references a secret from AWS Secrets Manager. AWS IoT Greengrass stores a local, encrypted copy of the secret on the Greengrass core, where it can be securely accessed by connectors and Lambda functions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SecretsManagerSecretResourceData {
     /// <p>The ARN of the Secrets Manager secret to make available on the core. The value of the secret&#39;s latest version (represented by the &#39;&#39;AWSCURRENT&#39;&#39; staging label) is included by default.</p>
     #[serde(rename = "ARN")]
@@ -3150,7 +3150,7 @@ pub struct SecretsManagerSecretResourceData {
     pub additional_staging_labels_to_download: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBulkDeploymentRequest {
     /// <p>A client token used to correlate requests and responses.</p>
@@ -3169,7 +3169,7 @@ pub struct StartBulkDeploymentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBulkDeploymentResponse {
     /// <p>The ARN of the bulk deployment.</p>
@@ -3182,7 +3182,7 @@ pub struct StartBulkDeploymentResponse {
     pub bulk_deployment_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBulkDeploymentRequest {
     /// <p>The ID of the bulk deployment.</p>
@@ -3190,12 +3190,12 @@ pub struct StopBulkDeploymentRequest {
     pub bulk_deployment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBulkDeploymentResponse {}
 
 /// <p>Information about a subscription.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Subscription {
     /// <p>A descriptive or arbitrary ID for the subscription. This value must be unique within the subscription definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
@@ -3212,7 +3212,7 @@ pub struct Subscription {
 }
 
 /// <p>Information about a subscription definition version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SubscriptionDefinitionVersion {
     /// <p>A list of subscriptions.</p>
     #[serde(rename = "Subscriptions")]
@@ -3221,7 +3221,7 @@ pub struct SubscriptionDefinitionVersion {
 }
 
 /// <p>A map of the key-value pairs for the resource tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3232,7 +3232,7 @@ pub struct TagResourceRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3244,7 +3244,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Connectivity information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectivityInfoRequest {
     /// <p>A list of connectivity info.</p>
@@ -3256,7 +3256,7 @@ pub struct UpdateConnectivityInfoRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectivityInfoResponse {
     /// <p>A message about the connectivity info update request.</p>
@@ -3269,7 +3269,7 @@ pub struct UpdateConnectivityInfoResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectorDefinitionRequest {
     /// <p>The ID of the connector definition.</p>
@@ -3281,11 +3281,11 @@ pub struct UpdateConnectorDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectorDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
@@ -3297,11 +3297,11 @@ pub struct UpdateCoreDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCoreDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceDefinitionRequest {
     /// <p>The ID of the device definition.</p>
@@ -3313,11 +3313,11 @@ pub struct UpdateDeviceDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFunctionDefinitionRequest {
     /// <p>The ID of the Lambda function definition.</p>
@@ -3329,11 +3329,11 @@ pub struct UpdateFunctionDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFunctionDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupCertificateConfigurationRequest {
     /// <p>The amount of time remaining before the certificate expires, in milliseconds.</p>
@@ -3345,7 +3345,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
@@ -3362,7 +3362,7 @@ pub struct UpdateGroupCertificateConfigurationResponse {
     pub group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
@@ -3374,11 +3374,11 @@ pub struct UpdateGroupRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLoggerDefinitionRequest {
     /// <p>The ID of the logger definition.</p>
@@ -3390,11 +3390,11 @@ pub struct UpdateLoggerDefinitionRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLoggerDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceDefinitionRequest {
     /// <p>The name of the definition.</p>
@@ -3406,11 +3406,11 @@ pub struct UpdateResourceDefinitionRequest {
     pub resource_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSubscriptionDefinitionRequest {
     /// <p>The name of the definition.</p>
@@ -3422,12 +3422,12 @@ pub struct UpdateSubscriptionDefinitionRequest {
     pub subscription_definition_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
 
 /// <p>Information about a version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VersionInformation {
     /// <p>The ARN of the version.</p>
