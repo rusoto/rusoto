@@ -39,7 +39,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                         None
                     } else if shape.required(member_name) {
                         Some(format!("request.add_header(\"{location_name}\", 
-                                      &input.{field_name});",
+                                      &input.{field_name}.to_string());",
                                      location_name = location_name,
                                      field_name = generate_field_name(member_name)))
                     } else {
