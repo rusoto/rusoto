@@ -108,8 +108,7 @@ impl<'b> Service<'b> {
             | "AWS IoT Data Plane"
             | "Amazon SageMaker Runtime"
             | "Amazon WorkMail Message Flow"
-            | "SSO"
-            | "Amazon EBS" => false,
+            | "SSO" => false,
             _ => true,
         }
     }
