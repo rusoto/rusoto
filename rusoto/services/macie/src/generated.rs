@@ -27,7 +27,7 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateMemberAccountRequest {
-    /// <p>The ID of the AWS account that you want to associate with Amazon Macie as a member account.</p>
+    /// <p>The ID of the AWS account that you want to associate with Amazon Macie Classic as a member account.</p>
     #[serde(rename = "memberAccountId")]
     pub member_account_id: String,
 }
@@ -35,11 +35,11 @@ pub struct AssociateMemberAccountRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateS3ResourcesRequest {
-    /// <p>The ID of the Amazon Macie member account whose resources you want to associate with Macie. </p>
+    /// <p>The ID of the Amazon Macie Classic member account whose resources you want to associate with Macie Classic. </p>
     #[serde(rename = "memberAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_account_id: Option<String>,
-    /// <p>The S3 resources that you want to associate with Amazon Macie for monitoring and data classification. </p>
+    /// <p>The S3 resources that you want to associate with Amazon Macie Classic for monitoring and data classification. </p>
     #[serde(rename = "s3Resources")]
     pub s_3_resources: Vec<S3ResourceClassification>,
 }
@@ -47,16 +47,16 @@ pub struct AssociateS3ResourcesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateS3ResourcesResult {
-    /// <p>S3 resources that couldn't be associated with Amazon Macie. An error code and an error message are provided for each failed item. </p>
+    /// <p>S3 resources that couldn't be associated with Amazon Macie Classic. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_s3_resources: Option<Vec<FailedS3Resource>>,
 }
 
-/// <p>The classification type that Amazon Macie applies to the associated S3 resources. </p>
+/// <p>The classification type that Amazon Macie Classic applies to the associated S3 resources. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClassificationType {
-    /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie begins performing continuous classification after a bucket is successfully associated with Amazon Macie. </p>
+    /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie Classic begins performing continuous classification after a bucket is successfully associated with Amazon Macie Classic. </p>
     #[serde(rename = "continuous")]
     pub continuous: String,
     /// <p>A one-time classification of all of the existing objects in a specified S3 bucket. </p>
@@ -64,11 +64,11 @@ pub struct ClassificationType {
     pub one_time: String,
 }
 
-/// <p>The classification type that Amazon Macie applies to the associated S3 resources. At least one of the classification types (oneTime or continuous) must be specified. </p>
+/// <p>The classification type that Amazon Macie Classic applies to the associated S3 resources. At least one of the classification types (oneTime or continuous) must be specified. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassificationTypeUpdate {
-    /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie begins performing continuous classification after a bucket is successfully associated with Amazon Macie. </p>
+    /// <p>A continuous classification of the objects that are added to a specified S3 bucket. Amazon Macie Classic begins performing continuous classification after a bucket is successfully associated with Amazon Macie Classic. </p>
     #[serde(rename = "continuous")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub continuous: Option<String>,
@@ -81,7 +81,7 @@ pub struct ClassificationTypeUpdate {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMemberAccountRequest {
-    /// <p>The ID of the member account that you want to remove from Amazon Macie.</p>
+    /// <p>The ID of the member account that you want to remove from Amazon Macie Classic.</p>
     #[serde(rename = "memberAccountId")]
     pub member_account_id: String,
 }
@@ -89,10 +89,10 @@ pub struct DisassociateMemberAccountRequest {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateS3ResourcesRequest {
-    /// <p>The S3 resources (buckets or prefixes) that you want to remove from being monitored and classified by Amazon Macie. </p>
+    /// <p>The S3 resources (buckets or prefixes) that you want to remove from being monitored and classified by Amazon Macie Classic. </p>
     #[serde(rename = "associatedS3Resources")]
     pub associated_s3_resources: Vec<S3Resource>,
-    /// <p>The ID of the Amazon Macie member account whose resources you want to remove from being monitored by Amazon Macie. </p>
+    /// <p>The ID of the Amazon Macie Classic member account whose resources you want to remove from being monitored by Amazon Macie Classic. </p>
     #[serde(rename = "memberAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_account_id: Option<String>,
@@ -101,7 +101,7 @@ pub struct DisassociateS3ResourcesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateS3ResourcesResult {
-    /// <p>S3 resources that couldn't be removed from being monitored and classified by Amazon Macie. An error code and an error message are provided for each failed item. </p>
+    /// <p>S3 resources that couldn't be removed from being monitored and classified by Amazon Macie Classic. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_s3_resources: Option<Vec<FailedS3Resource>>,
@@ -141,7 +141,7 @@ pub struct ListMemberAccountsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMemberAccountsResult {
-    /// <p>A list of the Amazon Macie member accounts returned by the action. The current master account is also included in this list. </p>
+    /// <p>A list of the Amazon Macie Classic member accounts returned by the action. The current master account is also included in this list. </p>
     #[serde(rename = "memberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_accounts: Option<Vec<MemberAccount>>,
@@ -158,7 +158,7 @@ pub struct ListS3ResourcesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The Amazon Macie member account ID whose associated S3 resources you want to list. </p>
+    /// <p>The Amazon Macie Classic member account ID whose associated S3 resources you want to list. </p>
     #[serde(rename = "memberAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_account_id: Option<String>,
@@ -181,11 +181,11 @@ pub struct ListS3ResourcesResult {
     pub s_3_resources: Option<Vec<S3ResourceClassification>>,
 }
 
-/// <p>Contains information about the Amazon Macie member account.</p>
+/// <p>Contains information about the Amazon Macie Classic member account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberAccount {
-    /// <p>The AWS account ID of the Amazon Macie member account.</p>
+    /// <p>The AWS account ID of the Amazon Macie Classic member account.</p>
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -203,16 +203,16 @@ pub struct S3Resource {
     pub prefix: Option<String>,
 }
 
-/// <p>The S3 resources that you want to associate with Amazon Macie for monitoring and data classification. This data type is used as a request parameter in the AssociateS3Resources action and a response parameter in the ListS3Resources action. </p>
+/// <p>The S3 resources that you want to associate with Amazon Macie Classic for monitoring and data classification. This data type is used as a request parameter in the AssociateS3Resources action and a response parameter in the ListS3Resources action. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3ResourceClassification {
-    /// <p>The name of the S3 bucket that you want to associate with Amazon Macie.</p>
+    /// <p>The name of the S3 bucket that you want to associate with Amazon Macie Classic.</p>
     #[serde(rename = "bucketName")]
     pub bucket_name: String,
-    /// <p>The classification type that you want to specify for the resource associated with Amazon Macie. </p>
+    /// <p>The classification type that you want to specify for the resource associated with Amazon Macie Classic. </p>
     #[serde(rename = "classificationType")]
     pub classification_type: ClassificationType,
-    /// <p>The prefix of the S3 bucket that you want to associate with Amazon Macie.</p>
+    /// <p>The prefix of the S3 bucket that you want to associate with Amazon Macie Classic.</p>
     #[serde(rename = "prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
@@ -225,7 +225,7 @@ pub struct S3ResourceClassificationUpdate {
     /// <p>The name of the S3 bucket whose classification types you want to update.</p>
     #[serde(rename = "bucketName")]
     pub bucket_name: String,
-    /// <p>The classification type that you want to update for the resource associated with Amazon Macie. </p>
+    /// <p>The classification type that you want to update for the resource associated with Amazon Macie Classic. </p>
     #[serde(rename = "classificationTypeUpdate")]
     pub classification_type_update: ClassificationTypeUpdate,
     /// <p>The prefix of the S3 bucket whose classification types you want to update.</p>
@@ -237,7 +237,7 @@ pub struct S3ResourceClassificationUpdate {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateS3ResourcesRequest {
-    /// <p>The AWS ID of the Amazon Macie member account whose S3 resources' classification types you want to update. </p>
+    /// <p>The AWS ID of the Amazon Macie Classic member account whose S3 resources' classification types you want to update. </p>
     #[serde(rename = "memberAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_account_id: Option<String>,
@@ -554,43 +554,43 @@ impl Error for UpdateS3ResourcesError {}
 /// Trait representing the capabilities of the Amazon Macie API. Amazon Macie clients implement this trait.
 #[async_trait]
 pub trait Macie {
-    /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
+    /// <p>Associates a specified AWS account with Amazon Macie Classic as a member account.</p>
     async fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
     ) -> Result<(), RusotoError<AssociateMemberAccountError>>;
 
-    /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
+    /// <p>Associates specified S3 resources with Amazon Macie Classic for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie Classic for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie Classic for the specified member account. </p>
     async fn associate_s3_resources(
         &self,
         input: AssociateS3ResourcesRequest,
     ) -> Result<AssociateS3ResourcesResult, RusotoError<AssociateS3ResourcesError>>;
 
-    /// <p>Removes the specified member account from Amazon Macie.</p>
+    /// <p>Removes the specified member account from Amazon Macie Classic.</p>
     async fn disassociate_member_account(
         &self,
         input: DisassociateMemberAccountRequest,
     ) -> Result<(), RusotoError<DisassociateMemberAccountError>>;
 
-    /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
+    /// <p>Removes specified S3 resources from being monitored by Amazon Macie Classic. If memberAccountId isn't specified, the action removes specified S3 resources from Macie Classic for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie Classic for the specified member account.</p>
     async fn disassociate_s3_resources(
         &self,
         input: DisassociateS3ResourcesRequest,
     ) -> Result<DisassociateS3ResourcesResult, RusotoError<DisassociateS3ResourcesError>>;
 
-    /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
+    /// <p>Lists all Amazon Macie Classic member accounts for the current Amazon Macie Classic master account.</p>
     async fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
     ) -> Result<ListMemberAccountsResult, RusotoError<ListMemberAccountsError>>;
 
-    /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
+    /// <p>Lists all the S3 resources associated with Amazon Macie Classic. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie Classic for the specified member account. </p>
     async fn list_s3_resources(
         &self,
         input: ListS3ResourcesRequest,
     ) -> Result<ListS3ResourcesResult, RusotoError<ListS3ResourcesError>>;
 
-    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
+    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the specified member account. </p>
     async fn update_s3_resources(
         &self,
         input: UpdateS3ResourcesRequest,
@@ -636,7 +636,7 @@ impl MacieClient {
 
 #[async_trait]
 impl Macie for MacieClient {
-    /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
+    /// <p>Associates a specified AWS account with Amazon Macie Classic as a member account.</p>
     async fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
@@ -663,7 +663,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
+    /// <p>Associates specified S3 resources with Amazon Macie Classic for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie Classic for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie Classic for the specified member account. </p>
     async fn associate_s3_resources(
         &self,
         input: AssociateS3ResourcesRequest,
@@ -691,7 +691,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Removes the specified member account from Amazon Macie.</p>
+    /// <p>Removes the specified member account from Amazon Macie Classic.</p>
     async fn disassociate_member_account(
         &self,
         input: DisassociateMemberAccountRequest,
@@ -718,7 +718,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
+    /// <p>Removes specified S3 resources from being monitored by Amazon Macie Classic. If memberAccountId isn't specified, the action removes specified S3 resources from Macie Classic for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie Classic for the specified member account.</p>
     async fn disassociate_s3_resources(
         &self,
         input: DisassociateS3ResourcesRequest,
@@ -746,7 +746,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
+    /// <p>Lists all Amazon Macie Classic member accounts for the current Amazon Macie Classic master account.</p>
     async fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
@@ -774,7 +774,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
+    /// <p>Lists all the S3 resources associated with Amazon Macie Classic. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie Classic for the specified member account. </p>
     async fn list_s3_resources(
         &self,
         input: ListS3ResourcesRequest,
@@ -801,7 +801,7 @@ impl Macie for MacieClient {
         }
     }
 
-    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
+    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie Classic for the specified member account. </p>
     async fn update_s3_resources(
         &self,
         input: UpdateS3ResourcesRequest,

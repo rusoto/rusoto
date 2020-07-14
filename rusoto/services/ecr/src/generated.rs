@@ -975,6 +975,10 @@ pub struct ListTagsForResourceResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRequest {
+    /// <p>The image digest of the image manifest corresponding to the image.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
     /// <p>The image manifest corresponding to the image to be uploaded.</p>
     #[serde(rename = "imageManifest")]
     pub image_manifest: String,
@@ -2326,6 +2330,8 @@ impl Error for ListTagsForResourceError {}
 pub enum PutImageError {
     /// <p>The specified image has already been pushed, and there were no changes to the manifest or image tag after the last push.</p>
     ImageAlreadyExists(String),
+    /// <p>The specified image digest does not match the digest that Amazon ECR calculated for the image.</p>
+    ImageDigestDoesNotMatch(String),
     /// <p>The specified image is tagged with a tag that already exists. The repository is configured for tag immutability.</p>
     ImageTagAlreadyExists(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
@@ -2348,6 +2354,9 @@ impl PutImageError {
             match err.typ.as_str() {
                 "ImageAlreadyExistsException" => {
                     return RusotoError::Service(PutImageError::ImageAlreadyExists(err.msg))
+                }
+                "ImageDigestDoesNotMatchException" => {
+                    return RusotoError::Service(PutImageError::ImageDigestDoesNotMatch(err.msg))
                 }
                 "ImageTagAlreadyExistsException" => {
                     return RusotoError::Service(PutImageError::ImageTagAlreadyExists(err.msg))
@@ -2380,6 +2389,7 @@ impl fmt::Display for PutImageError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutImageError::ImageAlreadyExists(ref cause) => write!(f, "{}", cause),
+            PutImageError::ImageDigestDoesNotMatch(ref cause) => write!(f, "{}", cause),
             PutImageError::ImageTagAlreadyExists(ref cause) => write!(f, "{}", cause),
             PutImageError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             PutImageError::LayersNotFound(ref cause) => write!(f, "{}", cause),

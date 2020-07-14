@@ -29,6 +29,10 @@ use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupJob {
+    /// <p>The account ID that owns the backup job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -115,7 +119,7 @@ pub struct BackupPlan {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackupPlanInput {
-    /// <p>The display name of a backup plan.</p>
+    /// <p>The optional display name of a backup plan.</p>
     #[serde(rename = "BackupPlanName")]
     pub backup_plan_name: String,
     /// <p>An array of <code>BackupRule</code> objects, each of which specifies a scheduled task that is used to back up a selection of resources.</p>
@@ -373,11 +377,15 @@ pub struct CopyAction {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyJob {
+    /// <p>The account ID that owns the copy job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of a copy job.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_size_in_bytes: Option<i64>,
-    /// <p>The date and time a copy job is completed, in Unix format and Coordinated Universal Time (UTC). The value of CompletionDate is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM. </p>
+    /// <p>The date and time a copy job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CompletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<f64>,
@@ -388,7 +396,7 @@ pub struct CopyJob {
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<RecoveryPointCreator>,
-    /// <p>The date and time a copy job is created, in Unix format and Coordinated Universal Time (UTC). The value of CreationDate is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM. </p>
+    /// <p>The date and time a copy job is created, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -555,7 +563,7 @@ pub struct DeleteBackupPlanOutput {
     #[serde(rename = "BackupPlanId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_plan_id: Option<String>,
-    /// <p>The date and time a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>DeletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
@@ -622,6 +630,10 @@ pub struct DescribeBackupJobInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupJobOutput {
+    /// <p>Returns the account ID that owns the backup job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -642,7 +654,7 @@ pub struct DescribeBackupJobOutput {
     #[serde(rename = "BytesTransferred")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bytes_transferred: Option<i64>,
-    /// <p>The date and time that a job to create a backup job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a job to create a backup job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CompletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<f64>,
@@ -879,6 +891,10 @@ pub struct DescribeRestoreJobInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRestoreJobOutput {
+    /// <p>Returns the account ID that owns the restore job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of the restored resource.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -911,6 +927,10 @@ pub struct DescribeRestoreJobOutput {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
+    /// <p>Returns metadata associated with a restore job listed by resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
     #[serde(rename = "RestoreJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -919,7 +939,7 @@ pub struct DescribeRestoreJobOutput {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed message explaining the status of a job to restore a recovery point.</p>
+    /// <p>A message showing the status of a job to restore a recovery point.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
@@ -1011,7 +1031,7 @@ pub struct GetBackupPlanOutput {
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
-    /// <p>The date and time that a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>DeletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
@@ -1146,7 +1166,7 @@ pub struct GetRecoveryPointRestoreMetadataOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSupportedResourceTypesOutput {
-    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>DDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> </ul></p>
+    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -1168,6 +1188,10 @@ pub struct Lifecycle {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only backup jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
     /// <p>Returns only backup jobs that will be stored in the specified backup vault. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "ByBackupVaultName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1184,7 +1208,7 @@ pub struct ListBackupJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1358,6 +1382,10 @@ pub struct ListBackupVaultsOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCopyJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only copy jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
     /// <p>Returns only copy jobs that were created after the specified date.</p>
     #[serde(rename = "ByCreatedAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1374,7 +1402,7 @@ pub struct ListCopyJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1512,6 +1540,22 @@ pub struct ListRecoveryPointsByResourceOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRestoreJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only restore jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
+    /// <p>Returns only restore jobs that were created after the specified date.</p>
+    #[serde(rename = "ByCreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_created_after: Option<f64>,
+    /// <p>Returns only restore jobs that were created before the specified date.</p>
+    #[serde(rename = "ByCreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_created_before: Option<f64>,
+    /// <p>Returns only restore jobs associated with the specified job status.</p>
+    #[serde(rename = "ByStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_status: Option<String>,
     /// <p>The maximum number of items to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1734,6 +1778,10 @@ pub struct RecoveryPointCreator {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreJobsListMember {
+    /// <p>The account ID that owns the restore job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of the restored resource.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1766,6 +1814,10 @@ pub struct RestoreJobsListMember {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
+    /// <p>The resource type of the listed restore jobs; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
     #[serde(rename = "RestoreJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1884,7 +1936,7 @@ pub struct StartRestoreJobInput {
     /// <p>An ARN that uniquely identifies a recovery point; for example, <code>arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45</code>.</p>
     #[serde(rename = "RecoveryPointArn")]
     pub recovery_point_arn: String,
-    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>DDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> </ul></p>
+    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -3445,8 +3497,6 @@ impl Error for GetSupportedResourceTypesError {}
 pub enum ListBackupJobsError {
     /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
     InvalidParameterValue(String),
-    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
-    InvalidRequest(String),
     /// <p>The request failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
 }
@@ -3459,9 +3509,6 @@ impl ListBackupJobsError {
                     return RusotoError::Service(ListBackupJobsError::InvalidParameterValue(
                         err.msg,
                     ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListBackupJobsError::InvalidRequest(err.msg))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListBackupJobsError::ServiceUnavailable(err.msg))
@@ -3478,7 +3525,6 @@ impl fmt::Display for ListBackupJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListBackupJobsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
-            ListBackupJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListBackupJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -4769,7 +4815,7 @@ pub trait Backup {
         input: DescribeRecoveryPointInput,
     ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>>;
 
-    /// <p>Returns the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>>;
@@ -4971,7 +5017,7 @@ pub trait Backup {
         input: UpdateRecoveryPointLifecycleInput,
     ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>;
 
-    /// <p>Updates the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,
@@ -5438,7 +5484,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>> {
@@ -5782,6 +5828,9 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
         if let Some(ref x) = input.by_backup_vault_name {
             params.put("backupVaultName", x);
         }
@@ -6025,6 +6074,9 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
         if let Some(ref x) = input.by_created_after {
             params.put("createdAfter", x);
         }
@@ -6214,6 +6266,18 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
+        if let Some(ref x) = input.by_created_after {
+            params.put("createdAfter", x);
+        }
+        if let Some(ref x) = input.by_created_before {
+            params.put("createdBefore", x);
+        }
+        if let Some(ref x) = input.by_status {
+            params.put("status", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -6584,7 +6648,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Updates the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,

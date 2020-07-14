@@ -66,6 +66,23 @@ pub struct BatchGetQueryExecutionOutput {
     pub unprocessed_query_execution_ids: Option<Vec<UnprocessedQueryExecutionId>>,
 }
 
+/// <p>Contains metadata for a column in a table.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Column {
+    /// <p>Optional information about the column.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<String>,
+    /// <p>The name of the column.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The data type of the column.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>Information about the columns in a query execution result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -109,6 +126,33 @@ pub struct ColumnInfo {
     #[serde(rename = "Type")]
     pub type_: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDataCatalogInput {
+    /// <p>A description of the data catalog to be created.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the data catalog to create. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p><p>Specifies the Lambda function or functions to use for creating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of comma separated tags to add to the data catalog that is created.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The type of data catalog to create: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDataCatalogOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -159,7 +203,7 @@ pub struct CreateWorkGroupInput {
     /// <p>The workgroup name.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>One or more tags, separated by commas, that you want to attach to the workgroup as you create it.</p>
+    /// <p>A list of comma separated tags to add to the workgroup that is created.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -168,6 +212,57 @@ pub struct CreateWorkGroupInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkGroupOutput {}
+
+/// <p>Contains information about a data catalog in an AWS account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataCatalog {
+    /// <p>An optional description of the data catalog.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the data catalog. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p><p>Specifies the Lambda function or functions to use for the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of data catalog: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+/// <p>The summary information for the data catalog, which includes its name and type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataCatalogSummary {
+    /// <p>The name of the data catalog.</p>
+    #[serde(rename = "CatalogName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_name: Option<String>,
+    /// <p>The data catalog type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Contains metadata information for a database in a data catalog.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Database {
+    /// <p>An optional description of the database.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the database.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A set of custom key/value pairs.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+}
 
 /// <p>A piece of data (a field in the table).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -178,6 +273,18 @@ pub struct Datum {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub var_char_value: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDataCatalogInput {
+    /// <p>The name of the data catalog to delete.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteDataCatalogOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -221,6 +328,43 @@ pub struct EncryptionConfiguration {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDataCatalogInput {
+    /// <p>The name of the data catalog to return.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDataCatalogOutput {
+    /// <p>The data catalog returned.</p>
+    #[serde(rename = "DataCatalog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_catalog: Option<DataCatalog>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDatabaseInput {
+    /// <p>The name of the data catalog that contains the database to return.</p>
+    #[serde(rename = "CatalogName")]
+    pub catalog_name: String,
+    /// <p>The name of the database to return.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDatabaseOutput {
+    /// <p>The database returned.</p>
+    #[serde(rename = "Database")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database: Option<Database>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamedQueryInput {
     /// <p>The unique ID of the query. Use <a>ListNamedQueries</a> to get query IDs.</p>
     #[serde(rename = "NamedQueryId")]
@@ -260,7 +404,7 @@ pub struct GetQueryResultsInput {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -272,7 +416,7 @@ pub struct GetQueryResultsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueryResultsOutput {
-    /// <p>A token to be used by the next request if this request is truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -284,6 +428,29 @@ pub struct GetQueryResultsOutput {
     #[serde(rename = "UpdateCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetTableMetadataInput {
+    /// <p>The name of the data catalog that contains the database and table metadata to return.</p>
+    #[serde(rename = "CatalogName")]
+    pub catalog_name: String,
+    /// <p>The name of the database that contains the table metadata to return.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the table for which metadata is returned.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetTableMetadataOutput {
+    /// <p>An object that contains table metadata.</p>
+    #[serde(rename = "TableMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_metadata: Option<TableMetadata>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -305,16 +472,71 @@ pub struct GetWorkGroupOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDataCatalogsInput {
+    /// <p>Specifies the maximum number of data catalogs to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDataCatalogsOutput {
+    /// <p>A summary list of data catalogs.</p>
+    #[serde(rename = "DataCatalogsSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_catalogs_summary: Option<Vec<DataCatalogSummary>>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDatabasesInput {
+    /// <p>The name of the data catalog that contains the databases to return.</p>
+    #[serde(rename = "CatalogName")]
+    pub catalog_name: String,
+    /// <p>Specifies the maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDatabasesOutput {
+    /// <p>A list of databases from a data catalog.</p>
+    #[serde(rename = "DatabaseList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_list: Option<Vec<Database>>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamedQueriesInput {
     /// <p>The maximum number of queries to return in this request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the workgroup from which the named queries are returned. If a workgroup is not specified, the saved queries for the primary workgroup are returned.</p>
+    /// <p>The name of the workgroup from which the named queries are being returned. If a workgroup is not specified, the saved queries for the primary workgroup are returned.</p>
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_group: Option<String>,
@@ -327,7 +549,7 @@ pub struct ListNamedQueriesOutput {
     #[serde(rename = "NamedQueryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_ids: Option<Vec<String>>,
-    /// <p>A token to be used by the next request if this request is truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -340,11 +562,11 @@ pub struct ListQueryExecutionsInput {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that specifies where to start pagination if a previous request was truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the workgroup from which queries are returned. If a workgroup is not specified, a list of available query execution IDs for the queries in the primary workgroup is returned.</p>
+    /// <p>The name of the workgroup from which queries are being returned. If a workgroup is not specified, a list of available query execution IDs for the queries in the primary workgroup is returned.</p>
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_group: Option<String>,
@@ -365,16 +587,52 @@ pub struct ListQueryExecutionsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct ListTagsForResourceInput {
-    /// <p>The maximum number of results to be returned per request that lists the tags for the workgroup resource.</p>
+pub struct ListTableMetadataInput {
+    /// <p>The name of the data catalog for which table metadata should be returned.</p>
+    #[serde(rename = "CatalogName")]
+    pub catalog_name: String,
+    /// <p>The name of the database for which table metadata should be returned.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A regex filter that pattern-matches table names. If no expression is supplied, metadata for all tables are listed.</p>
+    #[serde(rename = "Expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression: Option<String>,
+    /// <p>Specifies the maximum number of results to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of results, or null if there are no additional results for this request, where the request lists the tags for the workgroup resource with the specified ARN.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Lists the tags for the workgroup resource with the specified ARN.</p>
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTableMetadataOutput {
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the NextToken from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of table metadata.</p>
+    #[serde(rename = "TableMetadataList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_metadata_list: Option<Vec<TableMetadata>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceInput {
+    /// <p>The maximum number of results to be returned per request that lists the tags for the resource.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no additional results for this request, where the request lists the tags for the resource with the specified ARN.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Lists the tags for the resource with the specified ARN.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
 }
@@ -386,7 +644,7 @@ pub struct ListTagsForResourceOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of tags associated with this workgroup.</p>
+    /// <p>The list of tags associated with the specified resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -399,7 +657,7 @@ pub struct ListWorkGroupsInput {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to be used by the next request if this request is truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -408,7 +666,7 @@ pub struct ListWorkGroupsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkGroupsOutput {
-    /// <p>A token to be used by the next request if this request is truncated.</p>
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -483,10 +741,14 @@ pub struct QueryExecution {
     pub work_group: Option<String>,
 }
 
-/// <p>The database in which the query execution occurs.</p>
+/// <p>The database and data catalog context in which the query execution occurs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryExecutionContext {
-    /// <p>The name of the database.</p>
+    /// <p>The name of the data catalog used in the query execution.</p>
+    #[serde(rename = "Catalog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog: Option<String>,
+    /// <p>The name of the database used in the query execution.</p>
     #[serde(rename = "Database")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<String>,
@@ -534,7 +796,7 @@ pub struct QueryExecutionStatus {
     #[serde(rename = "CompletionDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date_time: Option<f64>,
-    /// <p>The state of query execution. <code>QUEUED</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>RUNNING</code> indicates that the query is in execution phase. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution. </p>
+    /// <p><p>The state of query execution. <code>QUEUED</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>RUNNING</code> indicates that the query is in execution phase. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution.</p> <note> <p>Athena automatically retries your queries in cases of certain transient errors. As a result, you may see the query state transition from <code>RUNNING</code> or <code>FAILED</code> to <code>QUEUED</code>. </p> </note></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -583,7 +845,7 @@ pub struct ResultConfigurationUpdates {
     pub remove_output_location: Option<bool>,
 }
 
-/// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>
+/// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types. To return a <code>ResultSet</code> object, use <a>GetQueryResults</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultSet {
@@ -597,7 +859,7 @@ pub struct ResultSet {
     pub rows: Option<Vec<Row>>,
 }
 
-/// <p>The metadata that describes the column structure and data types of a table of query results. </p>
+/// <p>The metadata that describes the column structure and data types of a table of query results. To return a <code>ResultSetMetadata</code> object, use <a>GetQueryResults</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResultSetMetadata {
@@ -662,7 +924,40 @@ pub struct StopQueryExecutionInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopQueryExecutionOutput {}
 
-/// <p>A tag that you can add to a resource. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize workgroups in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. The maximum tag key length is 128 Unicode characters in UTF-8. The maximum tag value length is 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. </p>
+/// <p>Contains metadata for a table.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TableMetadata {
+    /// <p>A list of the columns in the table.</p>
+    #[serde(rename = "Columns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub columns: Option<Vec<Column>>,
+    /// <p>The time that the table was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The last time the table was accessed.</p>
+    #[serde(rename = "LastAccessTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_access_time: Option<f64>,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A set of custom key/value pairs for table properties.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of the partition keys in the table.</p>
+    #[serde(rename = "PartitionKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_keys: Option<Vec<Column>>,
+    /// <p>The type of table. In Athena, only <code>EXTERNAL_TABLE</code> is supported.</p>
+    #[serde(rename = "TableType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_type: Option<String>,
+}
+
+/// <p>A label that you assign to a resource. In Athena, a resource can be a workgroup or data catalog. Each tag consists of a key and an optional value, both of which you define. For example, you can use tags to categorize Athena workgroups or data catalogs by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups or data catalogs in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">Tagging Best Practices</a>. Tag keys can be from 1 to 128 UTF-8 Unicode characters, and tag values can be from 0 to 256 UTF-8 Unicode characters. Tags can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one tag, separate them by commas. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>A tag key. The tag key length is from 1 to 128 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys are case-sensitive and must be unique per resource. </p>
@@ -678,10 +973,10 @@ pub struct Tag {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
-    /// <p>Requests that one or more tags are added to the resource (such as a workgroup) for the specified ARN.</p>
+    /// <p>Specifies the ARN of the Athena resource (workgroup or data catalog) to which tags are to be added.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
-    /// <p>One or more tags, separated by commas, to be added to the resource, such as a workgroup.</p>
+    /// <p>A collection of one or more tags, separated by commas, to be added to an Athena workgroup or data catalog resource.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -729,10 +1024,10 @@ pub struct UnprocessedQueryExecutionId {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
-    /// <p>Removes one or more tags from the workgroup resource for the specified ARN.</p>
+    /// <p>Specifies the ARN of the resource from which tags are to be removed.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
-    /// <p>Removes the tags associated with one or more tag keys from the workgroup resource.</p>
+    /// <p>A comma-separated list of one or more tag keys whose tags are to be removed from the specified resource.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -740,6 +1035,29 @@ pub struct UntagResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDataCatalogInput {
+    /// <p>New or modified text that describes the data catalog.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the data catalog to update. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p><p>Specifies the Lambda function or functions to use for updating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the type of data catalog to update. Specify <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDataCatalogOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -943,6 +1261,42 @@ impl fmt::Display for BatchGetQueryExecutionError {
     }
 }
 impl Error for BatchGetQueryExecutionError {}
+/// Errors returned by CreateDataCatalog
+#[derive(Debug, PartialEq)]
+pub enum CreateDataCatalogError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl CreateDataCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDataCatalogError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateDataCatalogError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateDataCatalogError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDataCatalogError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDataCatalogError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateDataCatalogError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDataCatalogError {}
 /// Errors returned by CreateNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum CreateNamedQueryError {
@@ -1015,6 +1369,42 @@ impl fmt::Display for CreateWorkGroupError {
     }
 }
 impl Error for CreateWorkGroupError {}
+/// Errors returned by DeleteDataCatalog
+#[derive(Debug, PartialEq)]
+pub enum DeleteDataCatalogError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl DeleteDataCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDataCatalogError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteDataCatalogError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteDataCatalogError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDataCatalogError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDataCatalogError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteDataCatalogError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDataCatalogError {}
 /// Errors returned by DeleteNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamedQueryError {
@@ -1087,6 +1477,84 @@ impl fmt::Display for DeleteWorkGroupError {
     }
 }
 impl Error for DeleteWorkGroupError {}
+/// Errors returned by GetDataCatalog
+#[derive(Debug, PartialEq)]
+pub enum GetDataCatalogError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl GetDataCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataCatalogError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetDataCatalogError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetDataCatalogError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDataCatalogError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDataCatalogError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetDataCatalogError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDataCatalogError {}
+/// Errors returned by GetDatabase
+#[derive(Debug, PartialEq)]
+pub enum GetDatabaseError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>An exception that Athena received when it called a custom metastore. Occurs if the error is not caused by user input (<code>InvalidRequestException</code>) or from the Athena platform (<code>InternalServerException</code>). For example, if a user-created Lambda function is missing permissions, the Lambda <code>4XX</code> exception is returned in a <code>MetadataException</code>.</p>
+    Metadata(String),
+}
+
+impl GetDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabaseError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetDatabaseError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetDatabaseError::InvalidRequest(err.msg))
+                }
+                "MetadataException" => {
+                    return RusotoError::Service(GetDatabaseError::Metadata(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDatabaseError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDatabaseError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetDatabaseError::Metadata(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDatabaseError {}
 /// Errors returned by GetNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum GetNamedQueryError {
@@ -1195,6 +1663,48 @@ impl fmt::Display for GetQueryResultsError {
     }
 }
 impl Error for GetQueryResultsError {}
+/// Errors returned by GetTableMetadata
+#[derive(Debug, PartialEq)]
+pub enum GetTableMetadataError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>An exception that Athena received when it called a custom metastore. Occurs if the error is not caused by user input (<code>InvalidRequestException</code>) or from the Athena platform (<code>InternalServerException</code>). For example, if a user-created Lambda function is missing permissions, the Lambda <code>4XX</code> exception is returned in a <code>MetadataException</code>.</p>
+    Metadata(String),
+}
+
+impl GetTableMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetTableMetadataError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetTableMetadataError::InvalidRequest(err.msg))
+                }
+                "MetadataException" => {
+                    return RusotoError::Service(GetTableMetadataError::Metadata(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetTableMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetTableMetadataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetTableMetadataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetTableMetadataError::Metadata(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetTableMetadataError {}
 /// Errors returned by GetWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum GetWorkGroupError {
@@ -1231,6 +1741,84 @@ impl fmt::Display for GetWorkGroupError {
     }
 }
 impl Error for GetWorkGroupError {}
+/// Errors returned by ListDataCatalogs
+#[derive(Debug, PartialEq)]
+pub enum ListDataCatalogsError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl ListDataCatalogsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDataCatalogsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListDataCatalogsError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDataCatalogsError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDataCatalogsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDataCatalogsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListDataCatalogsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDataCatalogsError {}
+/// Errors returned by ListDatabases
+#[derive(Debug, PartialEq)]
+pub enum ListDatabasesError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>An exception that Athena received when it called a custom metastore. Occurs if the error is not caused by user input (<code>InvalidRequestException</code>) or from the Athena platform (<code>InternalServerException</code>). For example, if a user-created Lambda function is missing permissions, the Lambda <code>4XX</code> exception is returned in a <code>MetadataException</code>.</p>
+    Metadata(String),
+}
+
+impl ListDatabasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatabasesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListDatabasesError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDatabasesError::InvalidRequest(err.msg))
+                }
+                "MetadataException" => {
+                    return RusotoError::Service(ListDatabasesError::Metadata(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDatabasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDatabasesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListDatabasesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDatabasesError::Metadata(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDatabasesError {}
 /// Errors returned by ListNamedQueries
 #[derive(Debug, PartialEq)]
 pub enum ListNamedQueriesError {
@@ -1303,6 +1891,48 @@ impl fmt::Display for ListQueryExecutionsError {
     }
 }
 impl Error for ListQueryExecutionsError {}
+/// Errors returned by ListTableMetadata
+#[derive(Debug, PartialEq)]
+pub enum ListTableMetadataError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>An exception that Athena received when it called a custom metastore. Occurs if the error is not caused by user input (<code>InvalidRequestException</code>) or from the Athena platform (<code>InternalServerException</code>). For example, if a user-created Lambda function is missing permissions, the Lambda <code>4XX</code> exception is returned in a <code>MetadataException</code>.</p>
+    Metadata(String),
+}
+
+impl ListTableMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTableMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListTableMetadataError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTableMetadataError::InvalidRequest(err.msg))
+                }
+                "MetadataException" => {
+                    return RusotoError::Service(ListTableMetadataError::Metadata(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTableMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTableMetadataError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTableMetadataError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTableMetadataError::Metadata(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTableMetadataError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1545,6 +2175,42 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateDataCatalog
+#[derive(Debug, PartialEq)]
+pub enum UpdateDataCatalogError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl UpdateDataCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataCatalogError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateDataCatalogError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateDataCatalogError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDataCatalogError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDataCatalogError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateDataCatalogError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDataCatalogError {}
 /// Errors returned by UpdateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkGroupError {
@@ -1596,6 +2262,12 @@ pub trait Athena {
         input: BatchGetQueryExecutionInput,
     ) -> Result<BatchGetQueryExecutionOutput, RusotoError<BatchGetQueryExecutionError>>;
 
+    /// <p>Creates (registers) a data catalog with the specified name and properties. Catalogs created are visible to all users of the same AWS account.</p>
+    async fn create_data_catalog(
+        &self,
+        input: CreateDataCatalogInput,
+    ) -> Result<CreateDataCatalogOutput, RusotoError<CreateDataCatalogError>>;
+
     /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn create_named_query(
         &self,
@@ -1608,6 +2280,12 @@ pub trait Athena {
         input: CreateWorkGroupInput,
     ) -> Result<CreateWorkGroupOutput, RusotoError<CreateWorkGroupError>>;
 
+    /// <p>Deletes a data catalog.</p>
+    async fn delete_data_catalog(
+        &self,
+        input: DeleteDataCatalogInput,
+    ) -> Result<DeleteDataCatalogOutput, RusotoError<DeleteDataCatalogError>>;
+
     /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn delete_named_query(
         &self,
@@ -1619,6 +2297,18 @@ pub trait Athena {
         &self,
         input: DeleteWorkGroupInput,
     ) -> Result<DeleteWorkGroupOutput, RusotoError<DeleteWorkGroupError>>;
+
+    /// <p>Returns the specified data catalog.</p>
+    async fn get_data_catalog(
+        &self,
+        input: GetDataCatalogInput,
+    ) -> Result<GetDataCatalogOutput, RusotoError<GetDataCatalogError>>;
+
+    /// <p>Returns a database object for the specfied database and data catalog.</p>
+    async fn get_database(
+        &self,
+        input: GetDatabaseInput,
+    ) -> Result<GetDatabaseOutput, RusotoError<GetDatabaseError>>;
 
     /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
     async fn get_named_query(
@@ -1638,13 +2328,31 @@ pub trait Athena {
         input: GetQueryResultsInput,
     ) -> Result<GetQueryResultsOutput, RusotoError<GetQueryResultsError>>;
 
+    /// <p>Returns table metadata for the specified catalog, database, and table.</p>
+    async fn get_table_metadata(
+        &self,
+        input: GetTableMetadataInput,
+    ) -> Result<GetTableMetadataOutput, RusotoError<GetTableMetadataError>>;
+
     /// <p>Returns information about the workgroup with the specified name.</p>
     async fn get_work_group(
         &self,
         input: GetWorkGroupInput,
     ) -> Result<GetWorkGroupOutput, RusotoError<GetWorkGroupError>>;
 
-    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Lists the data catalogs in the current AWS account.</p>
+    async fn list_data_catalogs(
+        &self,
+        input: ListDataCatalogsInput,
+    ) -> Result<ListDataCatalogsOutput, RusotoError<ListDataCatalogsError>>;
+
+    /// <p>Lists the databases in the specified data catalog.</p>
+    async fn list_databases(
+        &self,
+        input: ListDatabasesInput,
+    ) -> Result<ListDatabasesOutput, RusotoError<ListDatabasesError>>;
+
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
@@ -1656,7 +2364,13 @@ pub trait Athena {
         input: ListQueryExecutionsInput,
     ) -> Result<ListQueryExecutionsOutput, RusotoError<ListQueryExecutionsError>>;
 
-    /// <p>Lists the tags associated with this workgroup.</p>
+    /// <p>Lists the metadata for the tables in the specified data catalog database.</p>
+    async fn list_table_metadata(
+        &self,
+        input: ListTableMetadataInput,
+    ) -> Result<ListTableMetadataOutput, RusotoError<ListTableMetadataError>>;
+
+    /// <p>Lists the tags associated with an Athena workgroup or data catalog resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -1668,7 +2382,7 @@ pub trait Athena {
         input: ListWorkGroupsInput,
     ) -> Result<ListWorkGroupsOutput, RusotoError<ListWorkGroupsError>>;
 
-    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran. Running queries against an external catalog requires <a>GetDataCatalog</a> permission to the catalog. For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
@@ -1680,17 +2394,23 @@ pub trait Athena {
         input: StopQueryExecutionInput,
     ) -> Result<StopQueryExecutionOutput, RusotoError<StopQueryExecutionError>>;
 
-    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
+    /// <p>Adds one or more tags to an Athena resource. A tag is a label that you assign to a resource. In Athena, a resource can be a workgroup or data catalog. Each tag consists of a key and an optional value, both of which you define. For example, you can use tags to categorize Athena workgroups or data catalogs by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups or data catalogs in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">Tagging Best Practices</a>. Tag keys can be from 1 to 128 UTF-8 Unicode characters, and tag values can be from 0 to 256 UTF-8 Unicode characters. Tags can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one tag, separate them by commas.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>>;
 
-    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
+    /// <p>Removes one or more tags from a data catalog or workgroup resource.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates the data catalog that has the specified name.</p>
+    async fn update_data_catalog(
+        &self,
+        input: UpdateDataCatalogInput,
+    ) -> Result<UpdateDataCatalogOutput, RusotoError<UpdateDataCatalogError>>;
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
     async fn update_work_group(
@@ -1794,6 +2514,33 @@ impl Athena for AthenaClient {
         }
     }
 
+    /// <p>Creates (registers) a data catalog with the specified name and properties. Catalogs created are visible to all users of the same AWS account.</p>
+    async fn create_data_catalog(
+        &self,
+        input: CreateDataCatalogInput,
+    ) -> Result<CreateDataCatalogOutput, RusotoError<CreateDataCatalogError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.CreateDataCatalog");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateDataCatalogOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateDataCatalogError::from_response(response))
+        }
+    }
+
     /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn create_named_query(
         &self,
@@ -1848,6 +2595,33 @@ impl Athena for AthenaClient {
         }
     }
 
+    /// <p>Deletes a data catalog.</p>
+    async fn delete_data_catalog(
+        &self,
+        input: DeleteDataCatalogInput,
+    ) -> Result<DeleteDataCatalogOutput, RusotoError<DeleteDataCatalogError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.DeleteDataCatalog");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDataCatalogOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteDataCatalogError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn delete_named_query(
         &self,
@@ -1899,6 +2673,60 @@ impl Athena for AthenaClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteWorkGroupError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the specified data catalog.</p>
+    async fn get_data_catalog(
+        &self,
+        input: GetDataCatalogInput,
+    ) -> Result<GetDataCatalogOutput, RusotoError<GetDataCatalogError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.GetDataCatalog");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDataCatalogOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDataCatalogError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a database object for the specfied database and data catalog.</p>
+    async fn get_database(
+        &self,
+        input: GetDatabaseInput,
+    ) -> Result<GetDatabaseOutput, RusotoError<GetDatabaseError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.GetDatabase");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetDatabaseOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDatabaseError::from_response(response))
         }
     }
 
@@ -1983,6 +2811,33 @@ impl Athena for AthenaClient {
         }
     }
 
+    /// <p>Returns table metadata for the specified catalog, database, and table.</p>
+    async fn get_table_metadata(
+        &self,
+        input: GetTableMetadataInput,
+    ) -> Result<GetTableMetadataOutput, RusotoError<GetTableMetadataError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.GetTableMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<GetTableMetadataOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetTableMetadataError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about the workgroup with the specified name.</p>
     async fn get_work_group(
         &self,
@@ -2010,7 +2865,61 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Lists the data catalogs in the current AWS account.</p>
+    async fn list_data_catalogs(
+        &self,
+        input: ListDataCatalogsInput,
+    ) -> Result<ListDataCatalogsOutput, RusotoError<ListDataCatalogsError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.ListDataCatalogs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListDataCatalogsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDataCatalogsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the databases in the specified data catalog.</p>
+    async fn list_databases(
+        &self,
+        input: ListDatabasesInput,
+    ) -> Result<ListDatabasesOutput, RusotoError<ListDatabasesError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.ListDatabases");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListDatabasesOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListDatabasesError::from_response(response))
+        }
+    }
+
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
@@ -2065,7 +2974,34 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Lists the tags associated with this workgroup.</p>
+    /// <p>Lists the metadata for the tables in the specified data catalog database.</p>
+    async fn list_table_metadata(
+        &self,
+        input: ListTableMetadataInput,
+    ) -> Result<ListTableMetadataOutput, RusotoError<ListTableMetadataError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.ListTableMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListTableMetadataOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTableMetadataError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the tags associated with an Athena workgroup or data catalog resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceInput,
@@ -2120,7 +3056,7 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran. Running queries against an external catalog requires <a>GetDataCatalog</a> permission to the catalog. For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
@@ -2176,7 +3112,7 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
+    /// <p>Adds one or more tags to an Athena resource. A tag is a label that you assign to a resource. In Athena, a resource can be a workgroup or data catalog. Each tag consists of a key and an optional value, both of which you define. For example, you can use tags to categorize Athena workgroups or data catalogs by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups or data catalogs in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">Tagging Best Practices</a>. Tag keys can be from 1 to 128 UTF-8 Unicode characters, and tag values can be from 0 to 256 UTF-8 Unicode characters. Tags can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one tag, separate them by commas.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -2203,7 +3139,7 @@ impl Athena for AthenaClient {
         }
     }
 
-    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
+    /// <p>Removes one or more tags from a data catalog or workgroup resource.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
@@ -2227,6 +3163,33 @@ impl Athena for AthenaClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the data catalog that has the specified name.</p>
+    async fn update_data_catalog(
+        &self,
+        input: UpdateDataCatalogInput,
+    ) -> Result<UpdateDataCatalogOutput, RusotoError<UpdateDataCatalogError>> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.UpdateDataCatalog");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDataCatalogOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateDataCatalogError::from_response(response))
         }
     }
 

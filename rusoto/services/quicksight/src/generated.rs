@@ -102,6 +102,15 @@ pub struct AwsIotAnalyticsParameters {
     pub data_set_name: String,
 }
 
+/// <p>The display options for tile borders for visuals.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BorderStyle {
+    /// <p>The option to enable display of borders for visuals.</p>
+    #[serde(rename = "Show")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub show: Option<bool>,
+}
+
 /// <p>A calculated column for a dataset.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CalculatedColumn {
@@ -217,7 +226,7 @@ pub struct ColumnSchema {
     pub name: Option<String>,
 }
 
-/// <p>A tag for a column in a <code>TagColumnOperation</code> structure. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
+/// <p>A tag for a column in a <a>TagColumnOperation</a> structure. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ColumnTag {
     /// <p>A geospatial role for a column.</p>
@@ -243,14 +252,14 @@ pub struct CreateDashboardRequest {
     /// <p>The ID for the dashboard, also added to the IAM policy.</p>
     #[serde(rename = "DashboardId")]
     pub dashboard_id: String,
-    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. The sheet controls pane is collapsed by default when set to true. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
+    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
     #[serde(rename = "DashboardPublishOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dashboard_publish_options: Option<DashboardPublishOptions>,
     /// <p>The display name of the dashboard.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A structure that contains the parameters of the dashboard. These are parameter overrides for a dashboard. A dashboard can have any type of parameters, and some parameters might accept multiple values. You can use the dashboard permissions structure described following to override two string parameters that accept multiple values. </p>
+    /// <p>The parameters for the creation of the dashboard, which you want to use to override the default settings. A dashboard can have any type of parameters, and some parameters might accept multiple values. </p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Parameters>,
@@ -258,13 +267,17 @@ pub struct CreateDashboardRequest {
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<ResourcePermission>>,
-    /// <p>The source entity from which the dashboard is created. The source entity accepts the Amazon Resource Name (ARN) of the source template or analysis and also references the replacement datasets for the placeholders set when creating the template. The replacement datasets need to follow the same schema as the datasets for which placeholders were created when creating the template. </p> <p>If you are creating a dashboard from a source entity in a different AWS account, use the ARN of the source template.</p>
+    /// <p>The entity that you are using as a source when you create the dashboard. In <code>SourceEntity</code>, you specify the type of object you're using as source. You can only create a dashboard from a template, so you use a <code>SourceTemplate</code> entity. If you need to create a dashboard from an analysis, first convert the analysis to a template by using the <a>CreateTemplate</a> API operation. For <code>SourceTemplate</code>, specify the Amazon Resource Name (ARN) of the source template. The <code>SourceTemplate</code>ARN can contain any AWS Account and any QuickSight-supported AWS Region. </p> <p>Use the <code>DataSetReferences</code> entity within <code>SourceTemplate</code> to list the replacement datasets for the placeholders listed in the original. The schema in each dataset must match its placeholder. </p>
     #[serde(rename = "SourceEntity")]
     pub source_entity: DashboardSourceEntity,
     /// <p>Contains a map of the key-value pairs for the resource tag or tags assigned to the dashboard.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p>The Amazon Resource Name (ARN) of the theme that is being used for this dashboard. If you add a value for this field, it overrides the value that is used in the source entity. The theme ARN must exist in the same AWS account where you create the dashboard.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
     /// <p>A description for the first version of the dashboard being created.</p>
     #[serde(rename = "VersionDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,7 +287,7 @@ pub struct CreateDashboardRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDashboardResponse {
-    /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
+    /// <p>The ARN of the dashboard.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -651,7 +664,7 @@ pub struct CreateTemplateRequest {
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<ResourcePermission>>,
-    /// <p>The Amazon Resource Name (ARN) of the source entity from which this template is being created. Currently, you can create a template from an analysis or another template. If the ARN is for an analysis, include its dataset references. </p>
+    /// <p>The entity that you are using as a source when you create the template. In <code>SourceEntity</code>, you specify the type of object you're using as source: <code>SourceTemplate</code> for a template or <code>SourceAnalysis</code> for an analysis. Both of these require an Amazon Resource Name (ARN). For <code>SourceTemplate</code>, specify the ARN of the source template. For <code>SourceAnalysis</code>, specify the ARN of the source analysis. The <code>SourceTemplate</code> ARN can contain any AWS Account and any QuickSight-supported AWS Region. </p> <p>Use the <code>DataSetReferences</code> entity within <code>SourceTemplate</code> or <code>SourceAnalysis</code> to list the replacement datasets for the placeholders listed in the original. The schema in each dataset must match its placeholder. </p>
     #[serde(rename = "SourceEntity")]
     pub source_entity: TemplateSourceEntity,
     /// <p>Contains a map of the key-value pairs for the resource tag or tags assigned to the resource.</p>
@@ -696,10 +709,109 @@ pub struct CreateTemplateResponse {
     pub version_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateThemeAliasRequest {
+    /// <p>The name that you want to give to the theme alias that you are creating. The alias name can't begin with a <code>$</code>. Alias names that start with <code>$</code> are reserved by Amazon QuickSight. </p>
+    #[serde(rename = "AliasName")]
+    pub alias_name: String,
+    /// <p>The ID of the AWS account that contains the theme for the new theme alias.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>An ID for the theme alias.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>The version number of the theme.</p>
+    #[serde(rename = "ThemeVersionNumber")]
+    pub theme_version_number: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateThemeAliasResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>Information about the theme alias.</p>
+    #[serde(rename = "ThemeAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_alias: Option<ThemeAlias>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateThemeRequest {
+    /// <p>The ID of the AWS account where you want to store the new theme. </p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID of the theme that a custom theme will inherit from. All themes inherit from one of the starting themes defined by Amazon QuickSight. For a list of the starting themes, use <code>ListThemes</code> or choose <b>Themes</b> from within a QuickSight analysis. </p>
+    #[serde(rename = "BaseThemeId")]
+    pub base_theme_id: String,
+    /// <p>The theme configuration, which contains the theme display properties.</p>
+    #[serde(rename = "Configuration")]
+    pub configuration: ThemeConfiguration,
+    /// <p>A display name for the theme.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A valid grouping of resource permissions to apply to the new theme. </p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>A map of the key-value pairs for the resource tag or tags that you want to add to the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>An ID for the theme that you want to create. The theme ID is unique per AWS Region in each AWS account.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>A description of the first version of the theme that you're creating. Every time <code>UpdateTheme</code> is called, a new version is created. Each version of the theme has a description of the version in the <code>VersionDescription</code> field.</p>
+    #[serde(rename = "VersionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_description: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateThemeResponse {
+    /// <p>The Amazon Resource Name (ARN) for the theme.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The theme creation status.</p>
+    #[serde(rename = "CreationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_status: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The ID of the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the new theme.</p>
+    #[serde(rename = "VersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_arn: Option<String>,
+}
+
 /// <p>The combination of user name and password that are used as credentials.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CredentialPair {
+    /// <p>A set of alternate data source parameters that you want to share for these credentials. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allowlist. If the structures are an exact match, the request is allowed to use the new data source with the existing credentials. If the <code>AlternateDataSourceParameters</code> list is null, the <code>DataSourceParameters</code> originally used with these <code>Credentials</code> is automatically allowed.</p>
+    #[serde(rename = "AlternateDataSourceParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternate_data_source_parameters: Option<Vec<DataSourceParameters>>,
     /// <p>Password.</p>
     #[serde(rename = "Password")]
     pub password: String,
@@ -750,7 +862,7 @@ pub struct Dashboard {
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
-    /// <p>A display name for the dataset.</p>
+    /// <p>A display name for the dashboard.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -796,14 +908,14 @@ pub struct DashboardPublishOptions {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DashboardSearchFilter {
-    /// <p>The name of the value that you want to use as a filter. For example, <code>"Name": "QUICKSIGHT_USER"</code>. </p>
+    /// <p>The name of the value that you want to use as a filter, for example, <code>"Name": "QUICKSIGHT_USER"</code>. </p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The comparison operator that you want to use as a filter. For example, <code>"Operator": "StringEquals"</code>.</p>
+    /// <p>The comparison operator that you want to use as a filter, for example, <code>"Operator": "StringEquals"</code>.</p>
     #[serde(rename = "Operator")]
     pub operator: String,
-    /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter. For example, <code>"Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>. </p>
+    /// <p>The value of the named item, in this case <code>QUICKSIGHT_USER</code>, that you want to use as a filter, for example, <code>"Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1"</code>. </p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -877,6 +989,10 @@ pub struct DashboardVersion {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
+    /// <p>The Amazon Resource Numbers (ARNs) for the datasets that are associated with a version of the dashboard.</p>
+    #[serde(rename = "DataSetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_set_arns: Option<Vec<String>>,
     /// <p>Description.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -927,6 +1043,23 @@ pub struct DashboardVersionSummary {
     #[serde(rename = "VersionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_number: Option<i64>,
+}
+
+/// <p>The theme colors that are used for data colors in charts. The colors description is a hexidecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DataColorPalette {
+    /// <p>The hexadecimal codes for the colors.</p>
+    #[serde(rename = "Colors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub colors: Option<Vec<String>>,
+    /// <p>The hexadecimal code of a color that applies to charts where a lack of data is highlighted.</p>
+    #[serde(rename = "EmptyFillColor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub empty_fill_color: Option<String>,
+    /// <p>The minimum and maximum hexadecimal codes that describe a color gradient. </p>
+    #[serde(rename = "MinMaxGradient")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_max_gradient: Option<Vec<String>>,
 }
 
 /// <p>Dataset.</p>
@@ -1061,6 +1194,10 @@ pub struct DataSetSummary {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSource {
+    /// <p>A set of alternate data source parameters that you want to share for the credentials stored with this data source. The credentials are applied in tandem with the data source parameters when you copy a data source by using a create or update request. The API compares the <code>DataSourceParameters</code> structure that's in the request with the structures in the <code>AlternateDataSourceParameters</code> allowlist. If the structures are an exact match, the request is allowed to use the credentials from this existing data source. If the <code>AlternateDataSourceParameters</code> list is null, the <code>Credentials</code> originally used with this <code>DataSourceParameters</code> are automatically allowed.</p>
+    #[serde(rename = "AlternateDataSourceParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternate_data_source_parameters: Option<Vec<DataSourceParameters>>,
     /// <p>The Amazon Resource Name (ARN) of the data source.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1107,11 +1244,15 @@ pub struct DataSource {
     pub vpc_connection_properties: Option<VpcConnectionProperties>,
 }
 
-/// <p>Data source credentials.</p>
+/// <p>Data source credentials. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DataSourceCredentials {
-    /// <p>Credential pair.</p>
+    /// <p>The Amazon Resource Name (ARN) of a data source that has the credential pair that you want to use. When <code>CopySourceArn</code> is not null, the credential pair from the data source in the ARN is used as the credentials for the <code>DataSourceCredentials</code> structure.</p>
+    #[serde(rename = "CopySourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_source_arn: Option<String>,
+    /// <p>Credential pair. For more information, see <a>CredentialPair</a>.</p>
     #[serde(rename = "CredentialPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credential_pair: Option<CredentialPair>,
@@ -1427,7 +1568,7 @@ pub struct DeleteIAMPolicyAssignmentResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTemplateAliasRequest {
-    /// <p>The name for the template alias. If you name a specific alias, you delete the version that the alias points to. You can specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. </p>
+    /// <p>The name for the template alias. To delete a specific alias, you delete the version that the alias points to. You can specify the alias name, or specify the latest version of the template by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. </p>
     #[serde(rename = "AliasName")]
     pub alias_name: String,
     /// <p>The ID of the AWS account that contains the item to delete.</p>
@@ -1445,7 +1586,7 @@ pub struct DeleteTemplateAliasResponse {
     #[serde(rename = "AliasName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias_name: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    /// <p>The Amazon Resource Name (ARN) of the template you want to delete.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1497,6 +1638,81 @@ pub struct DeleteTemplateResponse {
     #[serde(rename = "TemplateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteThemeAliasRequest {
+    /// <p>The unique name for the theme alias to delete.</p>
+    #[serde(rename = "AliasName")]
+    pub alias_name: String,
+    /// <p>The ID of the AWS account that contains the theme alias to delete.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID for the theme that the specified alias is for.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteThemeAliasResponse {
+    /// <p>The name for the theme alias.</p>
+    #[serde(rename = "AliasName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the theme resource using the deleted alias.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>An ID for the theme associated with the deletion.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteThemeRequest {
+    /// <p>The ID of the AWS account that contains the theme that you're deleting.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>An ID for the theme that you want to delete.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>The version of the theme that you want to delete. </p> <p> <b>Note:</b> If you don't provide a version number, you're using this call to <code>DeleteTheme</code> to delete all versions of the theme.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteThemeResponse {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>An ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
 }
 
 /// <p><p/></p>
@@ -1936,6 +2152,9 @@ pub struct DescribeTemplateRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTemplateResponse {
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
     /// <p>The HTTP status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1944,6 +2163,109 @@ pub struct DescribeTemplateResponse {
     #[serde(rename = "Template")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template: Option<Template>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeThemeAliasRequest {
+    /// <p>The name of the theme alias that you want to describe.</p>
+    #[serde(rename = "AliasName")]
+    pub alias_name: String,
+    /// <p>The ID of the AWS account that contains the theme alias that you're describing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeThemeAliasResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>Information about the theme alias.</p>
+    #[serde(rename = "ThemeAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_alias: Option<ThemeAlias>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeThemePermissionsRequest {
+    /// <p>The ID of the AWS account that contains the theme that you're describing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID for the theme that you want to describe permissions for.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeThemePermissionsResponse {
+    /// <p>A list of resource permissions set on the theme. </p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the theme.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeThemeRequest {
+    /// <p>The alias of the theme that you want to describe. If you name a specific alias, you describe the version that the alias points to. You can specify the latest version of the theme by providing the keyword <code>$LATEST</code> in the <code>AliasName</code> parameter. The keyword <code>$PUBLISHED</code> doesn't apply to themes.</p>
+    #[serde(rename = "AliasName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_name: Option<String>,
+    /// <p>The ID of the AWS account that contains the theme that you're describing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>The version number for the version to describe. If a <code>VersionNumber</code> parameter value isn't provided, the latest version of the theme is described.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeThemeResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The information about the theme that you are describing.</p>
+    #[serde(rename = "Theme")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme: Option<Theme>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2056,7 +2378,7 @@ pub struct GetDashboardEmbedUrlRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDashboardEmbedUrlResponse {
-    /// <p>An URL that you can put into your server-side webpage to embed your dashboard. This URL is valid for 5 minutes, and the resulting session is valid for 10 hours. The API provides the URL with an <code>auth_code</code> value that enables a single sign-on session. </p>
+    /// <p>A single-use URL that you can put into your server-side webpage to embed your dashboard. This URL is valid for 5 minutes. The API provides the URL with an <code>auth_code</code> value that enables one (and only one) sign-on to a user session that is valid for 10 hours. </p>
     #[serde(rename = "EmbedUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed_url: Option<String>,
@@ -2106,7 +2428,16 @@ pub struct GroupMember {
     pub member_name: Option<String>,
 }
 
-/// <p>An IAM policy assignment.</p>
+/// <p>The display options for gutter spacing between tiles on a sheet.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GutterStyle {
+    /// <p>This Boolean value controls whether to display a gutter space between sheet tiles. </p>
+    #[serde(rename = "Show")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub show: Option<bool>,
+}
+
+/// <p>An AWS Identity and Access Management (IAM) policy assignment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IAMPolicyAssignment {
@@ -2302,7 +2633,7 @@ pub struct ListDashboardsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDashboardsResponse {
-    /// <p>A structure that contains all of the dashboards shared with the user. This structure provides basic information about the dashboards.</p>
+    /// <p>A structure that contains all of the dashboards in your AWS account. This structure provides basic information about the dashboards.</p>
     #[serde(rename = "DashboardSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dashboard_summary_list: Option<Vec<DashboardSummary>>,
@@ -2748,6 +3079,127 @@ pub struct ListTemplatesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListThemeAliasesRequest {
+    /// <p>The ID of the AWS account that contains the theme aliases that you're listing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListThemeAliasesResponse {
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>A structure containing the list of the theme's aliases.</p>
+    #[serde(rename = "ThemeAliasList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_alias_list: Option<Vec<ThemeAlias>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListThemeVersionsRequest {
+    /// <p>The ID of the AWS account that contains the themes that you're listing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListThemeVersionsResponse {
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>A structure containing a list of all the versions of the specified theme.</p>
+    #[serde(rename = "ThemeVersionSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_version_summary_list: Option<Vec<ThemeVersionSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListThemesRequest {
+    /// <p>The ID of the AWS account that contains the themes that you're listing.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>The type of themes that you want to list. Valid options include the following:</p> <ul> <li> <p> <code>ALL (default)</code>- Display all existing themes.</p> </li> <li> <p> <code>CUSTOM</code> - Display only the themes created by people using Amazon QuickSight.</p> </li> <li> <p> <code>QUICKSIGHT</code> - Display only the starting themes defined by QuickSight.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListThemesResponse {
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>Information about the themes in the list.</p>
+    #[serde(rename = "ThemeSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_summary_list: Option<Vec<ThemeSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserGroupsRequest {
     /// <p>The AWS account ID that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
@@ -2866,6 +3318,15 @@ pub struct ManifestFileLocation {
     /// <p>Amazon S3 key that identifies an object.</p>
     #[serde(rename = "Key")]
     pub key: String,
+}
+
+/// <p>The display options for margins around the outside edge of sheets.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MarginStyle {
+    /// <p>This Boolean value controls whether to display sheet margins.</p>
+    #[serde(rename = "Show")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub show: Option<bool>,
 }
 
 /// <p>MariaDB parameters.</p>
@@ -3047,7 +3508,7 @@ pub struct RegisterUserRequest {
     /// <p>The namespace. Currently, you should set this to <code>default</code>.</p>
     #[serde(rename = "Namespace")]
     pub namespace: String,
-    /// <p>You need to use this parameter only when you register one or more users using an assumed IAM role. You don't need to provide the session name for other scenarios, for example when you are registering an IAM user or an Amazon QuickSight user. You can register multiple users using the same IAM role if each user has a different session name. For more information on assuming IAM roles, see <a href="https://docs.aws.example.com/cli/latest/reference/sts/assume-role.html"> <code>assume-role</code> </a> in the <i>AWS CLI Reference.</i> </p>
+    /// <p>You need to use this parameter only when you register one or more users using an assumed IAM role. You don't need to provide the session name for other scenarios, for example when you are registering an IAM user or an Amazon QuickSight user. You can register multiple users using the same IAM role if each user has a different session name. For more information on assuming IAM roles, see <a href="https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sts/assume-role.html"> <code>assume-role</code> </a> in the <i>AWS CLI Reference.</i> </p>
     #[serde(rename = "SessionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_name: Option<String>,
@@ -3116,7 +3577,7 @@ pub struct ResourcePermission {
     /// <p>The action to grant or revoke permissions on, for example <code>"quicksight:DescribeDashboard"</code>.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
-    /// <p>The Amazon Resource Name (ARN) of an Amazon QuickSight user or group, or an IAM ARN. If you are using cross-account resource sharing, this is the IAM ARN of an account root. Otherwise, it is the ARN of a QuickSight user or group. .</p>
+    /// <p><p>The Amazon Resource Name (ARN) of the principal. This can be one of the following:</p> <ul> <li> <p>The ARN of an Amazon QuickSight user, group, or namespace. (This is most common.)</p> </li> <li> <p>The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight ARN. Use this option only to share resources (templates) across AWS accounts. (This is less common.) </p> </li> </ul></p>
     #[serde(rename = "Principal")]
     pub principal: String,
 }
@@ -3175,7 +3636,7 @@ pub struct SearchDashboardsRequest {
     /// <p>The ID of the AWS account that contains the user whose dashboards you're searching for. </p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
-    /// <p>The filters to apply to the search. Currently, you can search only by user name. For example, <code>"Filters": [ { "Name": "QUICKSIGHT_USER", "Operator": "StringEquals", "Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1" } ]</code> </p>
+    /// <p>The filters to apply to the search. Currently, you can search only by user name, for example, <code>"Filters": [ { "Name": "QUICKSIGHT_USER", "Operator": "StringEquals", "Value": "arn:aws:quicksight:us-east-1:1:user/default/UserName1" } ]</code> </p>
     #[serde(rename = "Filters")]
     pub filters: Vec<DashboardSearchFilter>,
     /// <p>The maximum number of results to be returned per request.</p>
@@ -3225,6 +3686,19 @@ pub struct SheetControlsOption {
     #[serde(rename = "VisibilityState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility_state: Option<String>,
+}
+
+/// <p>The theme display options for sheets. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SheetStyle {
+    /// <p>The display options for tiles.</p>
+    #[serde(rename = "Tile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tile: Option<TileStyle>,
+    /// <p>The layout options for tiles.</p>
+    #[serde(rename = "TileLayout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tile_layout: Option<TileLayoutStyle>,
 }
 
 /// <p>Snowflake parameters.</p>
@@ -3498,7 +3972,7 @@ pub struct TemplateVersion {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TemplateVersionSummary {
-    /// <p>The ARN of the template version.</p>
+    /// <p>The Amazon Resource Name (ARN) of the template version.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -3532,6 +4006,204 @@ pub struct TeradataParameters {
     /// <p>Port.</p>
     #[serde(rename = "Port")]
     pub port: i64,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Theme {
+    /// <p>The Amazon Resource Name (ARN) of the theme.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the theme was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The date and time that the theme was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The name that the user gives to the theme.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The identifier that the user gives to the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+    /// <p>The type of theme, based on how it was created. Valid values include: <code>QUICKSIGHT</code> and <code>CUSTOM</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<ThemeVersion>,
+}
+
+/// <p>An alias for a theme.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ThemeAlias {
+    /// <p>The display name of the theme alias.</p>
+    #[serde(rename = "AliasName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the theme alias.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The version number of the theme alias.</p>
+    #[serde(rename = "ThemeVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_version_number: Option<i64>,
+}
+
+/// <p>The theme configuration. This configuration contains all of the display properties for a theme.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ThemeConfiguration {
+    /// <p>Color properties that apply to chart data colors.</p>
+    #[serde(rename = "DataColorPalette")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_color_palette: Option<DataColorPalette>,
+    /// <p>Display options related to sheets.</p>
+    #[serde(rename = "Sheet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sheet: Option<SheetStyle>,
+    /// <p>Color properties that apply to the UI and to charts, excluding the colors that apply to data. </p>
+    #[serde(rename = "UIColorPalette")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ui_color_palette: Option<UIColorPalette>,
+}
+
+/// <p>Theme error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ThemeError {
+    /// <p>The error message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The type of error.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The theme summary.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ThemeSummary {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that this theme was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The last date and time that this theme was updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The latest version number for the theme. </p>
+    #[serde(rename = "LatestVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version_number: Option<i64>,
+    /// <p>the display name for the theme.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID of the theme. This ID is unique per AWS Region for each AWS account.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+}
+
+/// <p>A version of a theme.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ThemeVersion {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The Amazon QuickSight-defined ID of the theme that a custom theme inherits from. All themes initially inherit from a default QuickSight theme.</p>
+    #[serde(rename = "BaseThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_theme_id: Option<String>,
+    /// <p>The theme configuration, which contains all the theme display properties.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ThemeConfiguration>,
+    /// <p>The date and time that this theme version was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The description of the theme.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Errors associated with the theme.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ThemeError>>,
+    /// <p>The status of the theme version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The version number of the theme.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+/// <p>The theme version.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ThemeVersionSummary {
+    /// <p>The Amazon Resource Name (ARN) of the theme version.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that this theme version was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The description of the theme version.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The status of the theme version.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The version number of the theme version.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+/// <p>The display options for the layout of tiles on a sheet.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TileLayoutStyle {
+    /// <p>The gutter settings that apply between tiles. </p>
+    #[serde(rename = "Gutter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gutter: Option<GutterStyle>,
+    /// <p>The margin settings that apply around the outside edge of sheets.</p>
+    #[serde(rename = "Margin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub margin: Option<MarginStyle>,
+}
+
+/// <p>Display options related to tiles on a sheet.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TileStyle {
+    /// <p>The border around a tile.</p>
+    #[serde(rename = "Border")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub border: Option<BorderStyle>,
 }
 
 /// <p>A data transformation on a logical table. This is a variant type structure. For this structure to be valid, only one of the attributes can be non-null.</p>
@@ -3572,6 +4244,75 @@ pub struct TwitterParameters {
     /// <p>Twitter query string.</p>
     #[serde(rename = "Query")]
     pub query: String,
+}
+
+/// <p>The theme colors that apply to UI and to charts, excluding data colors. The colors description is a hexidecimal color code that consists of six alphanumerical characters, prefixed with <code>#</code>, for example #37BFF5. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html">Using Themes in Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide.</i> </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UIColorPalette {
+    /// <p>This color is that applies to selected states and buttons.</p>
+    #[serde(rename = "Accent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accent: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the accent color.</p>
+    #[serde(rename = "AccentForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accent_foreground: Option<String>,
+    /// <p>The color that applies to error messages.</p>
+    #[serde(rename = "Danger")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub danger: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the error color.</p>
+    #[serde(rename = "DangerForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub danger_foreground: Option<String>,
+    /// <p>The color that applies to the names of fields that are identified as dimensions.</p>
+    #[serde(rename = "Dimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the dimension color.</p>
+    #[serde(rename = "DimensionForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_foreground: Option<String>,
+    /// <p>The color that applies to the names of fields that are identified as measures.</p>
+    #[serde(rename = "Measure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub measure: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the measure color.</p>
+    #[serde(rename = "MeasureForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub measure_foreground: Option<String>,
+    /// <p>The background color that applies to visuals and other high emphasis UI.</p>
+    #[serde(rename = "PrimaryBackground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_background: Option<String>,
+    /// <p>The color of text and other foreground elements that appear over the primary background regions, such as grid lines, borders, table banding, icons, and so on.</p>
+    #[serde(rename = "PrimaryForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_foreground: Option<String>,
+    /// <p>The background color that applies to the sheet background and sheet controls.</p>
+    #[serde(rename = "SecondaryBackground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_background: Option<String>,
+    /// <p>The foreground color that applies to any sheet title, sheet control text, or UI that appears over the secondary background.</p>
+    #[serde(rename = "SecondaryForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_foreground: Option<String>,
+    /// <p>The color that applies to success messages, for example the check mark for a successful download.</p>
+    #[serde(rename = "Success")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the success color.</p>
+    #[serde(rename = "SuccessForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_foreground: Option<String>,
+    /// <p>This color that applies to warning and informational messages.</p>
+    #[serde(rename = "Warning")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warning: Option<String>,
+    /// <p>The foreground color that applies to any text or other elements that appear over the warning color.</p>
+    #[serde(rename = "WarningForeground")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub warning_foreground: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3686,20 +4427,24 @@ pub struct UpdateDashboardRequest {
     /// <p>The ID for the dashboard.</p>
     #[serde(rename = "DashboardId")]
     pub dashboard_id: String,
-    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. The sheet controls pane is collapsed by default when set to true. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
+    /// <p><p>Options for publishing the dashboard when you create it:</p> <ul> <li> <p> <code>AvailabilityStatus</code> for <code>AdHocFilteringOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. When this is set to <code>DISABLED</code>, QuickSight disables the left filter pane on the published dashboard, which can be used for ad hoc (one-time) filtering. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>AvailabilityStatus</code> for <code>ExportToCSVOption</code> - This status can be either <code>ENABLED</code> or <code>DISABLED</code>. The visual option to export data to .csv format isn&#39;t enabled when this is set to <code>DISABLED</code>. This option is <code>ENABLED</code> by default. </p> </li> <li> <p> <code>VisibilityState</code> for <code>SheetControlsOption</code> - This visibility state can be either <code>COLLAPSED</code> or <code>EXPANDED</code>. This option is <code>COLLAPSED</code> by default. </p> </li> </ul></p>
     #[serde(rename = "DashboardPublishOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dashboard_publish_options: Option<DashboardPublishOptions>,
     /// <p>The display name of the dashboard.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A structure that contains the parameters of the dashboard.</p>
+    /// <p>A structure that contains the parameters of the dashboard. These are parameter overrides for a dashboard. A dashboard can have any type of parameters, and some parameters might accept multiple values.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Parameters>,
-    /// <p>The template or analysis from which the dashboard is created. The <code>SouceTemplate</code> entity accepts the Amazon Resource Name (ARN) of the template and also references to replacement datasets for the placeholders set when creating the template. The replacement datasets need to follow the same schema as the datasets for which placeholders were created when creating the template.</p>
+    /// <p>The entity that you are using as a source when you update the dashboard. In <code>SourceEntity</code>, you specify the type of object you're using as source. You can only update a dashboard from a template, so you use a <code>SourceTemplate</code> entity. If you need to update a dashboard from an analysis, first convert the analysis to a template by using the <a>CreateTemplate</a> API operation. For <code>SourceTemplate</code>, specify the Amazon Resource Name (ARN) of the source template. The <code>SourceTemplate</code> ARN can contain any AWS Account and any QuickSight-supported AWS Region. </p> <p>Use the <code>DataSetReferences</code> entity within <code>SourceTemplate</code> to list the replacement datasets for the placeholders listed in the original. The schema in each dataset must match its placeholder. </p>
     #[serde(rename = "SourceEntity")]
     pub source_entity: DashboardSourceEntity,
+    /// <p>The Amazon Resource Name (ARN) of the theme that is being used for this dashboard. If you add a value for this field, it overrides the value that was originally associated with the entity. The theme ARN must exist in the same AWS account where you create the dashboard.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
     /// <p>A description for the first version of the dashboard being created.</p>
     #[serde(rename = "VersionDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4113,7 +4858,7 @@ pub struct UpdateTemplateRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The source QuickSight entity from which this template is being updated. You can currently update templates from an Analysis or another template.</p>
+    /// <p>The entity that you are using as a source when you update the template. In <code>SourceEntity</code>, you specify the type of object you're using as source: <code>SourceTemplate</code> for a template or <code>SourceAnalysis</code> for an analysis. Both of these require an Amazon Resource Name (ARN). For <code>SourceTemplate</code>, specify the ARN of the source template. For <code>SourceAnalysis</code>, specify the ARN of the source analysis. The <code>SourceTemplate</code> ARN can contain any AWS Account and any QuickSight-supported AWS Region. </p> <p>Use the <code>DataSetReferences</code> entity within <code>SourceTemplate</code> or <code>SourceAnalysis</code> to list the replacement datasets for the placeholders listed in the original. The schema in each dataset must match its placeholder. </p>
     #[serde(rename = "SourceEntity")]
     pub source_entity: TemplateSourceEntity,
     /// <p>The ID for the template.</p>
@@ -4149,6 +4894,139 @@ pub struct UpdateTemplateResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_id: Option<String>,
     /// <p>The ARN for the template, including the version information of the first version.</p>
+    #[serde(rename = "VersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateThemeAliasRequest {
+    /// <p>The name of the theme alias that you want to update.</p>
+    #[serde(rename = "AliasName")]
+    pub alias_name: String,
+    /// <p>The ID of the AWS account that contains the theme alias that you're updating.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>The version number of the theme that the alias should reference.</p>
+    #[serde(rename = "ThemeVersionNumber")]
+    pub theme_version_number: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateThemeAliasResponse {
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>Information about the theme alias.</p>
+    #[serde(rename = "ThemeAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_alias: Option<ThemeAlias>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateThemePermissionsRequest {
+    /// <p>The ID of the AWS account that contains the theme.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>A list of resource permissions to be granted for the theme.</p>
+    #[serde(rename = "GrantPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grant_permissions: Option<Vec<ResourcePermission>>,
+    /// <p>A list of resource permissions to be revoked from the theme.</p>
+    #[serde(rename = "RevokePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revoke_permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateThemePermissionsResponse {
+    /// <p>The resulting list of resource permissions for the theme.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the theme.</p>
+    #[serde(rename = "ThemeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_arn: Option<String>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateThemeRequest {
+    /// <p>The ID of the AWS account that contains the theme that you're updating.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The theme ID, defined by Amazon QuickSight, that a custom theme inherits from. All themes initially inherit from a default QuickSight theme.</p>
+    #[serde(rename = "BaseThemeId")]
+    pub base_theme_id: String,
+    /// <p>The theme configuration, which contains the theme display properties.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ThemeConfiguration>,
+    /// <p>The name for the theme.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    pub theme_id: String,
+    /// <p>A description of the theme version that you're updating Every time that you call <code>UpdateTheme</code>, you create a new version of the theme. Each version of the theme maintains a description of the version in <code>VersionDescription</code>.</p>
+    #[serde(rename = "VersionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_description: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateThemeResponse {
+    /// <p>The Amazon Resource Name (ARN) for the theme.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The creation status of the theme.</p>
+    #[serde(rename = "CreationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_status: Option<String>,
+    /// <p>The AWS request ID for this operation.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    /// <p>The ID for the theme.</p>
+    #[serde(rename = "ThemeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub theme_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the new version of the theme.</p>
     #[serde(rename = "VersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_arn: Option<String>,
@@ -4853,6 +5731,8 @@ impl Error for CreateIngestionError {}
 pub enum CreateTemplateError {
     /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
     AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
     /// <p>One or more parameters has a value that isn't valid.</p>
@@ -4875,6 +5755,9 @@ impl CreateTemplateError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTemplateError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateTemplateError::Conflict(err.msg))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateTemplateError::InternalFailure(err.msg))
@@ -4913,6 +5796,7 @@ impl fmt::Display for CreateTemplateError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateTemplateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
             CreateTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
             CreateTemplateError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             CreateTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -4994,6 +5878,154 @@ impl fmt::Display for CreateTemplateAliasError {
     }
 }
 impl Error for CreateTemplateAliasError {}
+/// Errors returned by CreateTheme
+#[derive(Debug, PartialEq)]
+pub enum CreateThemeError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl CreateThemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThemeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateThemeError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateThemeError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateThemeError::InvalidParameterValue(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateThemeError::LimitExceeded(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateThemeError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateThemeError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateThemeError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(CreateThemeError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateThemeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateThemeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateThemeError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateThemeError {}
+/// Errors returned by CreateThemeAlias
+#[derive(Debug, PartialEq)]
+pub enum CreateThemeAliasError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl CreateThemeAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThemeAliasError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateThemeAliasError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateThemeAliasError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateThemeAliasError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateThemeAliasError::LimitExceeded(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateThemeAliasError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateThemeAliasError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateThemeAliasError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(CreateThemeAliasError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateThemeAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateThemeAliasError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateThemeAliasError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateThemeAliasError {}
 /// Errors returned by DeleteDashboard
 #[derive(Debug, PartialEq)]
 pub enum DeleteDashboardError {
@@ -5465,6 +6497,8 @@ impl Error for DeleteTemplateError {}
 /// Errors returned by DeleteTemplateAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteTemplateAliasError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
     /// <p>One or more resources can't be found.</p>
@@ -5479,6 +6513,9 @@ impl DeleteTemplateAliasError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTemplateAliasError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteTemplateAliasError::Conflict(err.msg))
+                }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteTemplateAliasError::InternalFailure(err.msg))
                 }
@@ -5506,6 +6543,7 @@ impl fmt::Display for DeleteTemplateAliasError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteTemplateAliasError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteTemplateAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
             DeleteTemplateAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteTemplateAliasError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -5514,6 +6552,136 @@ impl fmt::Display for DeleteTemplateAliasError {
     }
 }
 impl Error for DeleteTemplateAliasError {}
+/// Errors returned by DeleteTheme
+#[derive(Debug, PartialEq)]
+pub enum DeleteThemeError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DeleteThemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThemeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteThemeError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteThemeError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteThemeError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteThemeError::InvalidParameterValue(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteThemeError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteThemeError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DeleteThemeError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteThemeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteThemeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteThemeError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteThemeError {}
+/// Errors returned by DeleteThemeAlias
+#[derive(Debug, PartialEq)]
+pub enum DeleteThemeAliasError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DeleteThemeAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThemeAliasError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DeleteThemeAliasError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteThemeAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteThemeAliasError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteThemeAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteThemeAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteThemeAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteThemeAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteThemeAliasError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteThemeAliasError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -6446,6 +7614,212 @@ impl fmt::Display for DescribeTemplatePermissionsError {
     }
 }
 impl Error for DescribeTemplatePermissionsError {}
+/// Errors returned by DescribeTheme
+#[derive(Debug, PartialEq)]
+pub enum DescribeThemeError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeThemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeThemeError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeThemeError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DescribeThemeError::InvalidParameterValue(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(DescribeThemeError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeThemeError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeThemeError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DescribeThemeError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeThemeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeThemeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThemeError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeThemeError {}
+/// Errors returned by DescribeThemeAlias
+#[derive(Debug, PartialEq)]
+pub enum DescribeThemeAliasError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeThemeAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemeAliasError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DescribeThemeAliasError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeThemeAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeThemeAliasError::Conflict(ref cause) => write!(f, "{}", cause),
+            DescribeThemeAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThemeAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeThemeAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThemeAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThemeAliasError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeThemeAliasError {}
+/// Errors returned by DescribeThemePermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeThemePermissionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeThemePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeThemePermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeThemePermissionsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeThemePermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeThemePermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeThemePermissionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeThemePermissionsError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        DescribeThemePermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeThemePermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeThemePermissionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeThemePermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeThemePermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeThemePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeThemePermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeThemePermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeThemePermissionsError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -7297,6 +8671,8 @@ impl Error for ListTagsForResourceError {}
 pub enum ListTemplateAliasesError {
     /// <p>An internal failure occurred.</p>
     InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
     /// <p>One or more resources can't be found.</p>
     ResourceNotFound(String),
     /// <p>Access is throttled.</p>
@@ -7311,6 +8687,11 @@ impl ListTemplateAliasesError {
             match err.typ.as_str() {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTemplateAliasesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListTemplateAliasesError::InvalidNextToken(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTemplateAliasesError::ResourceNotFound(
@@ -7337,6 +8718,7 @@ impl fmt::Display for ListTemplateAliasesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListTemplateAliasesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListTemplateAliasesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
             ListTemplateAliasesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListTemplateAliasesError::Throttling(ref cause) => write!(f, "{}", cause),
             ListTemplateAliasesError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
@@ -7476,6 +8858,212 @@ impl fmt::Display for ListTemplatesError {
     }
 }
 impl Error for ListTemplatesError {}
+/// Errors returned by ListThemeAliases
+#[derive(Debug, PartialEq)]
+pub enum ListThemeAliasesError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListThemeAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemeAliasesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(ListThemeAliasesError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListThemeAliasesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListThemeAliasesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListThemeAliasesError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListThemeAliasesError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThemeAliasesError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListThemeAliasesError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListThemeAliasesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListThemeAliasesError::Conflict(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThemeAliasesError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListThemeAliasesError {}
+/// Errors returned by ListThemeVersions
+#[derive(Debug, PartialEq)]
+pub enum ListThemeVersionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListThemeVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemeVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListThemeVersionsError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListThemeVersionsError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListThemeVersionsError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListThemeVersionsError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListThemeVersionsError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThemeVersionsError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListThemeVersionsError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListThemeVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListThemeVersionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThemeVersionsError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListThemeVersionsError {}
+/// Errors returned by ListThemes
+#[derive(Debug, PartialEq)]
+pub enum ListThemesError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListThemesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThemesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListThemesError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListThemesError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListThemesError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListThemesError::InvalidParameterValue(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListThemesError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListThemesError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListThemesError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListThemesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListThemesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListThemesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListThemesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListThemesError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListThemesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListThemesError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListThemesError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListThemesError {}
 /// Errors returned by ListUserGroups
 #[derive(Debug, PartialEq)]
 pub enum ListUserGroupsError {
@@ -8726,6 +10314,218 @@ impl fmt::Display for UpdateTemplatePermissionsError {
     }
 }
 impl Error for UpdateTemplatePermissionsError {}
+/// Errors returned by UpdateTheme
+#[derive(Debug, PartialEq)]
+pub enum UpdateThemeError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateThemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateThemeError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateThemeError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateThemeError::InvalidParameterValue(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateThemeError::LimitExceeded(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(UpdateThemeError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateThemeError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateThemeError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(UpdateThemeError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateThemeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateThemeError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateThemeError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateThemeError {}
+/// Errors returned by UpdateThemeAlias
+#[derive(Debug, PartialEq)]
+pub enum UpdateThemeAliasError {
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateThemeAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemeAliasError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(UpdateThemeAliasError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateThemeAliasError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateThemeAliasError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateThemeAliasError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateThemeAliasError {}
+/// Errors returned by UpdateThemePermissions
+#[derive(Debug, PartialEq)]
+pub enum UpdateThemePermissionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateThemePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThemePermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateThemePermissionsError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateThemePermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateThemePermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateThemePermissionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateThemePermissionsError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        UpdateThemePermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateThemePermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateThemePermissionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateThemePermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateThemePermissionsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateThemePermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateThemePermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateThemePermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateThemePermissionsError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
@@ -8795,7 +10595,7 @@ pub trait Quicksight {
         input: CancelIngestionRequest,
     ) -> Result<CancelIngestionResponse, RusotoError<CancelIngestionError>>;
 
-    /// <p>Creates a dashboard from a template. To first create a template, see the CreateTemplate API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
+    /// <p>Creates a dashboard from a template. To first create a template, see the <a>CreateTemplate</a> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
     async fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
@@ -8831,7 +10631,7 @@ pub trait Quicksight {
         input: CreateIAMPolicyAssignmentRequest,
     ) -> Result<CreateIAMPolicyAssignmentResponse, RusotoError<CreateIAMPolicyAssignmentError>>;
 
-    /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.example.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
+    /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
     async fn create_ingestion(
         &self,
         input: CreateIngestionRequest,
@@ -8848,6 +10648,18 @@ pub trait Quicksight {
         &self,
         input: CreateTemplateAliasRequest,
     ) -> Result<CreateTemplateAliasResponse, RusotoError<CreateTemplateAliasError>>;
+
+    /// <p>Creates a theme.</p> <p>A <i>theme</i> is set of configuration options for color and layout. Themes apply to analyses and dashboards. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html">Using Themes in Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide</i>.</p>
+    async fn create_theme(
+        &self,
+        input: CreateThemeRequest,
+    ) -> Result<CreateThemeResponse, RusotoError<CreateThemeError>>;
+
+    /// <p>Creates a theme alias for a theme.</p>
+    async fn create_theme_alias(
+        &self,
+        input: CreateThemeAliasRequest,
+    ) -> Result<CreateThemeAliasResponse, RusotoError<CreateThemeAliasError>>;
 
     /// <p>Deletes a dashboard.</p>
     async fn delete_dashboard(
@@ -8896,6 +10708,18 @@ pub trait Quicksight {
         &self,
         input: DeleteTemplateAliasRequest,
     ) -> Result<DeleteTemplateAliasResponse, RusotoError<DeleteTemplateAliasError>>;
+
+    /// <p>Deletes a theme.</p>
+    async fn delete_theme(
+        &self,
+        input: DeleteThemeRequest,
+    ) -> Result<DeleteThemeResponse, RusotoError<DeleteThemeError>>;
+
+    /// <p>Deletes the version of the theme that the specified theme alias points to. If you provide a specific alias, you delete the version of the theme that the alias points to.</p>
+    async fn delete_theme_alias(
+        &self,
+        input: DeleteThemeAliasRequest,
+    ) -> Result<DeleteThemeAliasResponse, RusotoError<DeleteThemeAliasError>>;
 
     /// <p>Deletes the Amazon QuickSight user that is associated with the identity of the AWS Identity and Access Management (IAM) user or role that's making the call. The IAM user isn't deleted as a result of this call. </p>
     async fn delete_user(
@@ -8984,13 +10808,31 @@ pub trait Quicksight {
         input: DescribeTemplatePermissionsRequest,
     ) -> Result<DescribeTemplatePermissionsResponse, RusotoError<DescribeTemplatePermissionsError>>;
 
+    /// <p>Describes a theme.</p>
+    async fn describe_theme(
+        &self,
+        input: DescribeThemeRequest,
+    ) -> Result<DescribeThemeResponse, RusotoError<DescribeThemeError>>;
+
+    /// <p>Describes the alias for a theme.</p>
+    async fn describe_theme_alias(
+        &self,
+        input: DescribeThemeAliasRequest,
+    ) -> Result<DescribeThemeAliasResponse, RusotoError<DescribeThemeAliasError>>;
+
+    /// <p>Describes the read and write permissions for a theme.</p>
+    async fn describe_theme_permissions(
+        &self,
+        input: DescribeThemePermissionsRequest,
+    ) -> Result<DescribeThemePermissionsResponse, RusotoError<DescribeThemePermissionsError>>;
+
     /// <p>Returns information about a user, given the user name. </p>
     async fn describe_user(
         &self,
         input: DescribeUserRequest,
     ) -> Result<DescribeUserResponse, RusotoError<DescribeUserError>>;
 
-    /// <p>Generates a server-side embeddable URL and authorization code. For this process to work properly, first configure the dashboards and user permissions. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user’s browser.</p>
+    /// <p>Generates a URL and authorization code that you can embed in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p>
     async fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
@@ -9076,6 +10918,24 @@ pub trait Quicksight {
         &self,
         input: ListTemplatesRequest,
     ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>>;
+
+    /// <p>Lists all the aliases of a theme.</p>
+    async fn list_theme_aliases(
+        &self,
+        input: ListThemeAliasesRequest,
+    ) -> Result<ListThemeAliasesResponse, RusotoError<ListThemeAliasesError>>;
+
+    /// <p>Lists all the versions of the themes in the current AWS account.</p>
+    async fn list_theme_versions(
+        &self,
+        input: ListThemeVersionsRequest,
+    ) -> Result<ListThemeVersionsResponse, RusotoError<ListThemeVersionsError>>;
+
+    /// <p>Lists all the themes in the current AWS account.</p>
+    async fn list_themes(
+        &self,
+        input: ListThemesRequest,
+    ) -> Result<ListThemesResponse, RusotoError<ListThemesError>>;
 
     /// <p>Lists the Amazon QuickSight groups that an Amazon QuickSight user is a member of.</p>
     async fn list_user_groups(
@@ -9188,6 +11048,24 @@ pub trait Quicksight {
         input: UpdateTemplatePermissionsRequest,
     ) -> Result<UpdateTemplatePermissionsResponse, RusotoError<UpdateTemplatePermissionsError>>;
 
+    /// <p>Updates a theme.</p>
+    async fn update_theme(
+        &self,
+        input: UpdateThemeRequest,
+    ) -> Result<UpdateThemeResponse, RusotoError<UpdateThemeError>>;
+
+    /// <p>Updates an alias of a theme.</p>
+    async fn update_theme_alias(
+        &self,
+        input: UpdateThemeAliasRequest,
+    ) -> Result<UpdateThemeAliasResponse, RusotoError<UpdateThemeAliasError>>;
+
+    /// <p><p>Updates the resource permissions for a theme. Permissions apply to the action to grant or revoke permissions on, for example <code>&quot;quicksight:DescribeTheme&quot;</code>.</p> <p>Theme permissions apply in groupings. Valid groupings include the following for the three levels of permissions, which are user, owner, or no permissions: </p> <ul> <li> <p>User</p> <ul> <li> <p> <code>&quot;quicksight:DescribeTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeAliases&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeVersions&quot;</code> </p> </li> </ul> </li> <li> <p>Owner</p> <ul> <li> <p> <code>&quot;quicksight:DescribeTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeAliases&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeVersions&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DeleteTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:CreateThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DeleteThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateThemePermissions&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemePermissions&quot;</code> </p> </li> </ul> </li> <li> <p>To specify no permissions, omit the permissions list.</p> </li> </ul></p>
+    async fn update_theme_permissions(
+        &self,
+        input: UpdateThemePermissionsRequest,
+    ) -> Result<UpdateThemePermissionsResponse, RusotoError<UpdateThemePermissionsError>>;
+
     /// <p>Updates an Amazon QuickSight user.</p>
     async fn update_user(
         &self,
@@ -9267,7 +11145,7 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Creates a dashboard from a template. To first create a template, see the CreateTemplate API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
+    /// <p>Creates a dashboard from a template. To first create a template, see the <a>CreateTemplate</a> API operation.</p> <p>A dashboard is an entity in QuickSight that identifies QuickSight reports, created from analyses. You can share QuickSight dashboards. With the right permissions, you can create scheduled email reports from them. The <code>CreateDashboard</code>, <code>DescribeDashboard</code>, and <code>ListDashboardsByUser</code> API operations act on the dashboard entity. If you have the correct permissions, you can create a dashboard from a template that exists in a different AWS account.</p>
     async fn create_dashboard(
         &self,
         input: CreateDashboardRequest,
@@ -9469,7 +11347,7 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.example.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
+    /// <p>Creates and starts a new SPICE ingestion on a dataset</p> <p>Any ingestions operating on tagged datasets inherit the same tags automatically for use in access control. For an example, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/">How do I create an IAM policy to control access to Amazon EC2 resources using tags?</a> in the AWS Knowledge Center. Tags are visible on the tagged dataset, but not on the ingestion resource.</p>
     async fn create_ingestion(
         &self,
         input: CreateIngestionRequest,
@@ -9570,6 +11448,77 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateTemplateAliasError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a theme.</p> <p>A <i>theme</i> is set of configuration options for color and layout. Themes apply to analyses and dashboards. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html">Using Themes in Amazon QuickSight</a> in the <i>Amazon QuickSight User Guide</i>.</p>
+    async fn create_theme(
+        &self,
+        input: CreateThemeRequest,
+    ) -> Result<CreateThemeResponse, RusotoError<CreateThemeError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateThemeResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateThemeError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a theme alias for a theme.</p>
+    async fn create_theme_alias(
+        &self,
+        input: CreateThemeAliasRequest,
+    ) -> Result<CreateThemeAliasResponse, RusotoError<CreateThemeAliasError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
+            alias_name = input.alias_name,
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateThemeAliasResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateThemeAliasError::from_response(response))
         }
     }
 
@@ -9833,6 +11782,77 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteTemplateAliasError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a theme.</p>
+    async fn delete_theme(
+        &self,
+        input: DeleteThemeRequest,
+    ) -> Result<DeleteThemeResponse, RusotoError<DeleteThemeError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_number {
+            params.put("version-number", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteThemeResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThemeError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the version of the theme that the specified theme alias points to. If you provide a specific alias, you delete the version of the theme that the alias points to.</p>
+    async fn delete_theme_alias(
+        &self,
+        input: DeleteThemeAliasRequest,
+    ) -> Result<DeleteThemeAliasResponse, RusotoError<DeleteThemeAliasError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
+            alias_name = input.alias_name,
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteThemeAliasResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteThemeAliasError::from_response(response))
         }
     }
 
@@ -10310,6 +12330,112 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>Describes a theme.</p>
+    async fn describe_theme(
+        &self,
+        input: DescribeThemeRequest,
+    ) -> Result<DescribeThemeResponse, RusotoError<DescribeThemeError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.alias_name {
+            params.put("alias-name", x);
+        }
+        if let Some(ref x) = input.version_number {
+            params.put("version-number", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThemeResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThemeError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the alias for a theme.</p>
+    async fn describe_theme_alias(
+        &self,
+        input: DescribeThemeAliasRequest,
+    ) -> Result<DescribeThemeAliasResponse, RusotoError<DescribeThemeAliasError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
+            alias_name = input.alias_name,
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThemeAliasResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThemeAliasError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the read and write permissions for a theme.</p>
+    async fn describe_theme_permissions(
+        &self,
+        input: DescribeThemePermissionsRequest,
+    ) -> Result<DescribeThemePermissionsResponse, RusotoError<DescribeThemePermissionsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/permissions",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeThemePermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeThemePermissionsError::from_response(response))
+        }
+    }
+
     /// <p>Returns information about a user, given the user name. </p>
     async fn describe_user(
         &self,
@@ -10343,7 +12469,7 @@ impl Quicksight for QuicksightClient {
         }
     }
 
-    /// <p>Generates a server-side embeddable URL and authorization code. For this process to work properly, first configure the dashboards and user permissions. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user’s browser.</p>
+    /// <p>Generates a URL and authorization code that you can embed in your web server code. Before you use this command, make sure that you have configured the dashboards and permissions. </p> <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not from the user's browser. The following rules apply to the combination of URL and authorization code:</p> <ul> <li> <p>They must be used together.</p> </li> <li> <p>They can be used one time only.</p> </li> <li> <p>They are valid for 5 minutes after you run this command.</p> </li> <li> <p>The resulting user session is valid for 10 hours.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight User Guide</i> or <a href="https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html">Embedding Amazon QuickSight Dashboards</a> in the <i>Amazon QuickSight API Reference</i>.</p>
     async fn get_dashboard_embed_url(
         &self,
         input: GetDashboardEmbedUrlRequest,
@@ -10912,6 +13038,131 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTemplatesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the aliases of a theme.</p>
+    async fn list_theme_aliases(
+        &self,
+        input: ListThemeAliasesRequest,
+    ) -> Result<ListThemeAliasesResponse, RusotoError<ListThemeAliasesError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/aliases",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-result", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThemeAliasesResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThemeAliasesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the versions of the themes in the current AWS account.</p>
+    async fn list_theme_versions(
+        &self,
+        input: ListThemeVersionsRequest,
+    ) -> Result<ListThemeVersionsResponse, RusotoError<ListThemeVersionsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/versions",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThemeVersionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThemeVersionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the themes in the current AWS account.</p>
+    async fn list_themes(
+        &self,
+        input: ListThemesRequest,
+    ) -> Result<ListThemesResponse, RusotoError<ListThemesError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.type_ {
+            params.put("type", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListThemesResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListThemesError::from_response(response))
         }
     }
 
@@ -11559,6 +13810,112 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateTemplatePermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a theme.</p>
+    async fn update_theme(
+        &self,
+        input: UpdateThemeRequest,
+    ) -> Result<UpdateThemeResponse, RusotoError<UpdateThemeError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThemeResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThemeError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an alias of a theme.</p>
+    async fn update_theme_alias(
+        &self,
+        input: UpdateThemeAliasRequest,
+    ) -> Result<UpdateThemeAliasResponse, RusotoError<UpdateThemeAliasError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/aliases/{alias_name}",
+            alias_name = input.alias_name,
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThemeAliasResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThemeAliasError::from_response(response))
+        }
+    }
+
+    /// <p><p>Updates the resource permissions for a theme. Permissions apply to the action to grant or revoke permissions on, for example <code>&quot;quicksight:DescribeTheme&quot;</code>.</p> <p>Theme permissions apply in groupings. Valid groupings include the following for the three levels of permissions, which are user, owner, or no permissions: </p> <ul> <li> <p>User</p> <ul> <li> <p> <code>&quot;quicksight:DescribeTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeAliases&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeVersions&quot;</code> </p> </li> </ul> </li> <li> <p>Owner</p> <ul> <li> <p> <code>&quot;quicksight:DescribeTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeAliases&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:ListThemeVersions&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DeleteTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateTheme&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:CreateThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DeleteThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateThemeAlias&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:UpdateThemePermissions&quot;</code> </p> </li> <li> <p> <code>&quot;quicksight:DescribeThemePermissions&quot;</code> </p> </li> </ul> </li> <li> <p>To specify no permissions, omit the permissions list.</p> </li> </ul></p>
+    async fn update_theme_permissions(
+        &self,
+        input: UpdateThemePermissionsRequest,
+    ) -> Result<UpdateThemePermissionsResponse, RusotoError<UpdateThemePermissionsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/themes/{theme_id}/permissions",
+            aws_account_id = input.aws_account_id,
+            theme_id = input.theme_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThemePermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThemePermissionsError::from_response(response))
         }
     }
 

@@ -338,6 +338,10 @@ pub struct CreateIntentVersionResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>Configuration information, if any, for connectin an Amazon Kendra index with the <code>AMAZON.KendraSearchIntent</code> intent.</p>
+    #[serde(rename = "kendraConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kendra_configuration: Option<KendraConfiguration>,
     /// <p>The date that the intent was updated. </p>
     #[serde(rename = "lastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1094,6 +1098,10 @@ pub struct GetIntentResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>Configuration information, if any, to connect to an Amazon Kendra index with the <code>AMAZON.KendraSearchIntent</code> intent.</p>
+    #[serde(rename = "kendraConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kendra_configuration: Option<KendraConfiguration>,
     /// <p>The date that the intent was updated. When you create a resource, the creation date and the last updated date are the same. </p>
     #[serde(rename = "lastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1360,6 +1368,21 @@ pub struct IntentMetadata {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Provides configuration information for the AMAZON.KendraSearchIntent intent. When you use this intent, Amazon Lex searches the specified Amazon Kendra index and returns documents from the index that match the user's utterance. For more information, see <a href="http://docs.aws.amazon.com/lex/latest/dg/built-in-intent-kendra-search.html"> AMAZON.KendraSearchIntent</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct KendraConfiguration {
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Kendra index that you want the AMAZON.KendraSearchIntent intent to search. The index must be in the same account and Region as the Amazon Lex bot. If the Amazon Kendra index does not exist, you get an exception when you call the <code>PutIntent</code> operation.</p>
+    #[serde(rename = "kendraIndex")]
+    pub kendra_index: String,
+    /// <p>A query filter that Amazon Lex sends to Amazon Kendra to filter the response from the query. The filter is in the format defined by Amazon Kendra. For more information, see <a href="http://docs.aws.amazon.com/kendra/latest/dg/filtering.html">Filtering queries</a>.</p> <p>You can override this filter string with a new filter string at runtime.</p>
+    #[serde(rename = "queryFilterString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_filter_string: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that has permission to search the Amazon Kendra index. The role must be in the same account and Region as the Amazon Lex bot. If the role does not exist, you get an exception when you call the <code>PutIntent</code> operation.</p>
+    #[serde(rename = "role")]
+    pub role: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1695,6 +1718,10 @@ pub struct PutIntentRequest {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>Configuration information required to use the <code>AMAZON.KendraSearchIntent</code> intent to connect to an Amazon Kendra index. For more information, see <a href="http://docs.aws.amazon.com/lex/latest/dg/built-in-intent-kendra-search.html"> AMAZON.KendraSearchIntent</a>.</p>
+    #[serde(rename = "kendraConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kendra_configuration: Option<KendraConfiguration>,
     /// <p>The name of the intent. The name is <i>not</i> case sensitive. </p> <p>The name can't match a built-in intent name, or a built-in intent name with "AMAZON." removed. For example, because there is a built-in intent called <code>AMAZON.HelpIntent</code>, you can't create a custom intent called <code>HelpIntent</code>.</p> <p>For a list of built-in intents, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -1755,6 +1782,10 @@ pub struct PutIntentResponse {
     #[serde(rename = "fulfillmentActivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fulfillment_activity: Option<FulfillmentActivity>,
+    /// <p>Configuration information, if any, required to connect to an Amazon Kendra index and use the <code>AMAZON.KendraSearchIntent</code> intent.</p>
+    #[serde(rename = "kendraConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kendra_configuration: Option<KendraConfiguration>,
     /// <p>The date that the intent was updated. When you create a resource, the creation date and last update dates are the same.</p>
     #[serde(rename = "lastUpdatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1893,7 +1924,7 @@ pub struct Slot {
     #[serde(rename = "obfuscationSetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub obfuscation_setting: Option<String>,
-    /// <p> Directs Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Lex elicits values is arbitrary.</p>
+    /// <p> Directs Amazon Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Amazon Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Amazon Lex elicits values is arbitrary.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,

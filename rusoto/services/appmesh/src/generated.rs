@@ -113,6 +113,51 @@ pub struct ClientPolicyTls {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateGatewayRouteInput {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
+    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name to use for the gateway route.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The name of the service mesh to create the gateway route in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The gateway route specification to apply.</p>
+    #[serde(rename = "spec")]
+    pub spec: GatewayRouteSpec,
+    /// <p>Optional metadata that you can apply to the gateway route to assist with categorization
+    /// and organization. Each tag consists of a key and an optional value, both of which you
+    /// define. Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// a maximum length of 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<TagRef>>,
+    /// <p>The name of the virtual gateway to associate the gateway route with. If the virtual
+    /// gateway is in a shared mesh, then you must be the owner of the virtual gateway
+    /// resource.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateGatewayRouteOutput {
+    /// <p>The full description of your gateway route following the create call.</p>
+    #[serde(rename = "gatewayRoute")]
+    pub gateway_route: GatewayRouteData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -156,7 +201,7 @@ pub struct CreateRouteInput {
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
     /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -189,6 +234,46 @@ pub struct CreateRouteOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateVirtualGatewayInput {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
+    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name of the service mesh to create the virtual gateway in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
+    /// the account that you specify must share the mesh with your account before you can create
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The virtual gateway specification to apply.</p>
+    #[serde(rename = "spec")]
+    pub spec: VirtualGatewaySpec,
+    /// <p>Optional metadata that you can apply to the virtual gateway to assist with
+    /// categorization and organization. Each tag consists of a key and an optional value, both of
+    /// which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have
+    /// a maximum length of 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<TagRef>>,
+    /// <p>The name to use for the virtual gateway.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateVirtualGatewayOutput {
+    /// <p>The full description of your virtual gateway following the create call.</p>
+    #[serde(rename = "virtualGateway")]
+    pub virtual_gateway: VirtualGatewayData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -200,7 +285,7 @@ pub struct CreateVirtualNodeInput {
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
     /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -240,7 +325,7 @@ pub struct CreateVirtualRouterInput {
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
     /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -280,7 +365,7 @@ pub struct CreateVirtualServiceInput {
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then
     /// the account that you specify must share the mesh with your account before you can create
-    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the resource in the service mesh. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -309,6 +394,33 @@ pub struct CreateVirtualServiceOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteGatewayRouteInput {
+    /// <p>The name of the gateway route to delete.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The name of the service mesh to delete the gateway route from.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The name of the virtual gateway to delete the route from.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteGatewayRouteOutput {
+    /// <p>The gateway route that was deleted.</p>
+    #[serde(rename = "gatewayRoute")]
+    pub gateway_route: GatewayRouteData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeshInput {
     /// <p>The name of the service mesh to delete.</p>
     #[serde(rename = "meshName")]
@@ -330,7 +442,7 @@ pub struct DeleteRouteInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -352,12 +464,36 @@ pub struct DeleteRouteOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteVirtualGatewayInput {
+    /// <p>The name of the service mesh to delete the virtual gateway from.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The name of the virtual gateway to delete.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteVirtualGatewayOutput {
+    /// <p>The virtual gateway that was deleted.</p>
+    #[serde(rename = "virtualGateway")]
+    pub virtual_gateway: VirtualGatewayData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
     /// <p>The name of the service mesh to delete the virtual node in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -381,7 +517,7 @@ pub struct DeleteVirtualRouterInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -405,7 +541,7 @@ pub struct DeleteVirtualServiceInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -424,12 +560,39 @@ pub struct DeleteVirtualServiceOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeGatewayRouteInput {
+    /// <p>The name of the gateway route to describe.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The name of the service mesh that the gateway route resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The name of the virtual gateway that the gateway route is associated with.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeGatewayRouteOutput {
+    /// <p>The full description of your gateway route.</p>
+    #[serde(rename = "gatewayRoute")]
+    pub gateway_route: GatewayRouteData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMeshInput {
     /// <p>The name of the service mesh to describe.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -450,7 +613,7 @@ pub struct DescribeRouteInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -472,12 +635,36 @@ pub struct DescribeRouteOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeVirtualGatewayInput {
+    /// <p>The name of the service mesh that the gateway route resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The name of the virtual gateway to describe.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeVirtualGatewayOutput {
+    /// <p>The full description of your virtual gateway.</p>
+    #[serde(rename = "virtualGateway")]
+    pub virtual_gateway: VirtualGatewayData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeVirtualNodeInput {
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -501,7 +688,7 @@ pub struct DescribeVirtualRouterInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -525,7 +712,7 @@ pub struct DescribeVirtualServiceInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -594,6 +781,135 @@ pub struct FileAccessLog {
     pub path: String,
 }
 
+/// <p>An object that represents a gateway route returned by a describe operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GatewayRouteData {
+    /// <p>The name of the gateway route.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The name of the service mesh that the resource resides in. </p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    #[serde(rename = "metadata")]
+    pub metadata: ResourceMetadata,
+    /// <p>The specifications of the gateway route.</p>
+    #[serde(rename = "spec")]
+    pub spec: GatewayRouteSpec,
+    /// <p>The status of the gateway route.</p>
+    #[serde(rename = "status")]
+    pub status: GatewayRouteStatus,
+    /// <p>The virtual gateway that the gateway route is associated with.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+/// <p>An object that represents a gateway route returned by a list operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GatewayRouteRef {
+    /// <p>The full Amazon Resource Name (ARN) for the gateway route.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    /// <p>The name of the gateway route.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
+    /// <p>The name of the service mesh that the resource resides in. </p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
+    #[serde(rename = "version")]
+    pub version: i64,
+    /// <p>The virtual gateway that the gateway route is associated with.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+/// <p>An object that represents a gateway route specification. Specify one gateway route
+/// type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GatewayRouteSpec {
+    /// <p>An object that represents the specification of a gRPC gateway route.</p>
+    #[serde(rename = "grpcRoute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc_route: Option<GrpcGatewayRoute>,
+    /// <p>An object that represents the specification of an HTTP/2 gateway route.</p>
+    #[serde(rename = "http2Route")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_2_route: Option<HttpGatewayRoute>,
+    /// <p>An object that represents the specification of an HTTP gateway route.</p>
+    #[serde(rename = "httpRoute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_route: Option<HttpGatewayRoute>,
+}
+
+/// <p>An object that represents the current status of a gateway route.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GatewayRouteStatus {
+    /// <p>The current status for the gateway route.</p>
+    #[serde(rename = "status")]
+    pub status: String,
+}
+
+/// <p>An object that represents a gateway route target.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GatewayRouteTarget {
+    /// <p>An object that represents a virtual service gateway route target.</p>
+    #[serde(rename = "virtualService")]
+    pub virtual_service: GatewayRouteVirtualService,
+}
+
+/// <p>An object that represents the virtual service that traffic is routed to.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GatewayRouteVirtualService {
+    /// <p>The name of the virtual service that traffic is routed to.</p>
+    #[serde(rename = "virtualServiceName")]
+    pub virtual_service_name: String,
+}
+
+/// <p>An object that represents a gRPC gateway route.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcGatewayRoute {
+    /// <p>An object that represents the action to take if a match is determined.</p>
+    #[serde(rename = "action")]
+    pub action: GrpcGatewayRouteAction,
+    /// <p>An object that represents the criteria for determining a request match.</p>
+    #[serde(rename = "match")]
+    pub route_match: Option<GrpcGatewayRouteMatch>,
+}
+
+/// <p>An object that represents the action to take if a match is determined.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcGatewayRouteAction {
+    /// <p>An object that represents the target that traffic is routed to when a request matches the gateway route.</p>
+    #[serde(rename = "target")]
+    pub target: GatewayRouteTarget,
+}
+
+/// <p>An object that represents the criteria for determining a request match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcGatewayRouteMatch {
+    /// <p>The fully qualified domain name for the service to match from the request.</p>
+    #[serde(rename = "serviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
+}
+
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GrpcRetryPolicy {
@@ -653,6 +969,10 @@ pub struct GrpcRoute {
     #[serde(rename = "retryPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_policy: Option<GrpcRetryPolicy>,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<GrpcTimeout>,
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
@@ -722,6 +1042,19 @@ pub struct GrpcRouteMetadataMatchMethod {
     pub suffix: Option<String>,
 }
 
+/// <p>An object that represents types of timeouts. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GrpcTimeout {
+    /// <p>An object that represents an idle timeout. An idle timeout bounds the amount of time that a connection may be idle. The default value is none.</p>
+    #[serde(rename = "idle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle: Option<Duration>,
+    /// <p>An object that represents a per request timeout. The default value is 15 seconds. If you set a higher timeout, then make sure that the higher value is set for each App Mesh resource in a conversation. For example, if a virtual node backend uses a virtual router provider to route to another virtual node, then the timeout should be greater than 15 seconds for the source and destination virtual node and the route.</p>
+    #[serde(rename = "perRequest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub per_request: Option<Duration>,
+}
+
 /// <p>An object that represents the method and value to match with the header value sent in a
 /// request. Specify one match method.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -783,6 +1116,38 @@ pub struct HealthCheckPolicy {
     pub unhealthy_threshold: i64,
 }
 
+/// <p>An object that represents an HTTP gateway route.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpGatewayRoute {
+    /// <p>An object that represents the action to take if a match is determined.</p>
+    #[serde(rename = "action")]
+    pub action: HttpGatewayRouteAction,
+    /// <p>An object that represents the criteria for determining a request match.</p>
+    #[serde(rename = "match")]
+    pub route_match: Option<HttpGatewayRouteMatch>,
+}
+
+/// <p>An object that represents the action to take if a match is determined.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpGatewayRouteAction {
+    /// <p>An object that represents the target that traffic is routed to when a request matches the gateway route.</p>
+    #[serde(rename = "target")]
+    pub target: GatewayRouteTarget,
+}
+
+/// <p>An object that represents the criteria for determining a request match.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpGatewayRouteMatch {
+    /// <p>Specifies the path to match requests with. This parameter must always start with
+    /// <code>/</code>, which by itself matches all requests to the virtual service name. You
+    /// can also match for path-based routing of requests. For example, if your virtual service
+    /// name is <code>my-service.local</code> and you want the route to match requests to
+    /// <code>my-service.local/metrics</code>, your prefix should be
+    /// <code>/metrics</code>.</p>
+    #[serde(rename = "prefix")]
+    pub prefix: String,
+}
+
 /// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpRetryPolicy {
@@ -838,6 +1203,10 @@ pub struct HttpRoute {
     #[serde(rename = "retryPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_policy: Option<HttpRetryPolicy>,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<HttpTimeout>,
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
@@ -888,6 +1257,67 @@ pub struct HttpRouteMatch {
     #[serde(rename = "scheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
+}
+
+/// <p>An object that represents types of timeouts. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpTimeout {
+    #[serde(rename = "idle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle: Option<Duration>,
+    #[serde(rename = "perRequest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub per_request: Option<Duration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListGatewayRoutesInput {
+    /// <p>The maximum number of results returned by <code>ListGatewayRoutes</code> in paginated
+    /// output. When you use this parameter, <code>ListGatewayRoutes</code> returns only
+    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
+    /// element. You can see the remaining results of the initial request by sending another
+    /// <code>ListGatewayRoutes</code> request with the returned <code>nextToken</code> value.
+    /// This value can be between 1 and 100. If you don't use this
+    /// parameter, <code>ListGatewayRoutes</code> returns up to 100 results and a
+    /// <code>nextToken</code> value if applicable.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The name of the service mesh to list gateway routes in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated
+    /// <code>ListGatewayRoutes</code> request where <code>limit</code> was used and the results
+    /// exceeded the value of that parameter. Pagination continues from the end of the previous
+    /// results that returned the <code>nextToken</code> value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the virtual gateway to list gateway routes in.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListGatewayRoutesOutput {
+    /// <p>The list of existing gateway routes for the specified service mesh and virtual
+    /// gateway.</p>
+    #[serde(rename = "gatewayRoutes")]
+    pub gateway_routes: Vec<GatewayRouteRef>,
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListGatewayRoutes</code>
+    /// request. When the results of a <code>ListGatewayRoutes</code> request exceed
+    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
+    /// value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -952,7 +1382,7 @@ pub struct ListRoutesInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1026,6 +1456,52 @@ pub struct ListTagsForResourceOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListVirtualGatewaysInput {
+    /// <p>The maximum number of results returned by <code>ListVirtualGateways</code> in paginated
+    /// output. When you use this parameter, <code>ListVirtualGateways</code> returns only
+    /// <code>limit</code> results in a single page along with a <code>nextToken</code> response
+    /// element. You can see the remaining results of the initial request by sending another
+    /// <code>ListVirtualGateways</code> request with the returned <code>nextToken</code> value.
+    /// This value can be between 1 and 100. If you don't use this
+    /// parameter, <code>ListVirtualGateways</code> returns up to 100 results and
+    /// a <code>nextToken</code> value if applicable.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The name of the service mesh to list virtual gateways in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated
+    /// <code>ListVirtualGateways</code> request where <code>limit</code> was used and the
+    /// results exceeded the value of that parameter. Pagination continues from the end of the
+    /// previous results that returned the <code>nextToken</code> value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListVirtualGatewaysOutput {
+    /// <p>The <code>nextToken</code> value to include in a future <code>ListVirtualGateways</code>
+    /// request. When the results of a <code>ListVirtualGateways</code> request exceed
+    /// <code>limit</code>, you can use this value to retrieve the next page of results. This
+    /// value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of existing virtual gateways for the specified service mesh.</p>
+    #[serde(rename = "virtualGateways")]
+    pub virtual_gateways: Vec<VirtualGatewayRef>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVirtualNodesInput {
     /// <p>The maximum number of results returned by <code>ListVirtualNodes</code> in paginated
     /// output. When you use this parameter, <code>ListVirtualNodes</code> returns only
@@ -1042,7 +1518,7 @@ pub struct ListVirtualNodesInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1088,7 +1564,7 @@ pub struct ListVirtualRoutersInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1134,7 +1610,7 @@ pub struct ListVirtualServicesInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1172,10 +1648,34 @@ pub struct Listener {
     /// <p>The port mapping information for the listener.</p>
     #[serde(rename = "portMapping")]
     pub port_mapping: PortMapping,
+    /// <p>An object that represents timeouts for different protocols.</p>
+    #[serde(rename = "timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<ListenerTimeout>,
     /// <p>A reference to an object that represents the Transport Layer Security (TLS) properties for a listener.</p>
     #[serde(rename = "tls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tls: Option<ListenerTls>,
+}
+
+/// <p>An object that represents timeouts for different protocols.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ListenerTimeout {
+    #[serde(rename = "grpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grpc: Option<GrpcTimeout>,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "http")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http: Option<HttpTimeout>,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "http2")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_2: Option<HttpTimeout>,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "tcp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcp: Option<TcpTimeout>,
 }
 
 /// <p>An object that represents the Transport Layer Security (TLS) properties for a listener.</p>
@@ -1287,21 +1787,24 @@ pub struct MeshRef {
     /// <p>The full Amazon Resource Name (ARN) of the service mesh.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The name of the service mesh.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
 }
@@ -1350,18 +1853,17 @@ pub struct ResourceMetadata {
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The unique identifier for the resource.</p>
     #[serde(rename = "uid")]
     pub uid: String,
-    /// <p>The version of the resource. Resources are created at version 1, and this version is
-    /// incremented each time that they're updated.</p>
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
 }
@@ -1397,24 +1899,27 @@ pub struct RouteRef {
     /// <p>The full Amazon Resource Name (ARN) for the route.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The name of the service mesh that the route resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
     /// <p>The name of the route.</p>
     #[serde(rename = "routeName")]
     pub route_name: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
     /// <p>The virtual router that the route is associated with.</p>
@@ -1510,6 +2015,10 @@ pub struct TcpRoute {
     /// <p>The action to take if a match is determined.</p>
     #[serde(rename = "action")]
     pub action: TcpRouteAction,
+    /// <p>An object that represents types of timeouts. </p>
+    #[serde(rename = "timeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<TcpTimeout>,
 }
 
 /// <p>An object that represents the action to take if a match is determined.</p>
@@ -1518,6 +2027,14 @@ pub struct TcpRouteAction {
     /// <p>An object that represents the targets that traffic is routed to when a request matches the route.</p>
     #[serde(rename = "weightedTargets")]
     pub weighted_targets: Vec<WeightedTarget>,
+}
+
+/// <p>An object that represents types of timeouts. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TcpTimeout {
+    #[serde(rename = "idle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle: Option<Duration>,
 }
 
 /// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
@@ -1577,6 +2094,41 @@ pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateGatewayRouteInput {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
+    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name of the gateway route to update.</p>
+    #[serde(rename = "gatewayRouteName")]
+    pub gateway_route_name: String,
+    /// <p>The name of the service mesh that the gateway route resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The new gateway route specification to apply. This overwrites the existing data.</p>
+    #[serde(rename = "spec")]
+    pub spec: GatewayRouteSpec,
+    /// <p>The name of the virtual gateway that the gateway route is associated with.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateGatewayRouteOutput {
+    /// <p>A full description of the gateway route that was updated.</p>
+    #[serde(rename = "gatewayRoute")]
+    pub gateway_route: GatewayRouteData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMeshInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1611,7 +2163,7 @@ pub struct UpdateRouteInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1636,6 +2188,39 @@ pub struct UpdateRouteOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateVirtualGatewayInput {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
+    /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
+    #[serde(rename = "clientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name of the service mesh that the virtual gateway resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mesh_owner: Option<String>,
+    /// <p>The new virtual gateway specification to apply. This overwrites the existing
+    /// data.</p>
+    #[serde(rename = "spec")]
+    pub spec: VirtualGatewaySpec,
+    /// <p>The name of the virtual gateway to update.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateVirtualGatewayOutput {
+    /// <p>A full description of the virtual gateway that was updated.</p>
+    #[serde(rename = "virtualGateway")]
+    pub virtual_gateway: VirtualGatewayData,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVirtualNodeInput {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the
     /// request. Up to 36 letters, numbers, hyphens, and underscores are allowed.</p>
@@ -1646,7 +2231,7 @@ pub struct UpdateVirtualNodeInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1678,7 +2263,7 @@ pub struct UpdateVirtualRouterInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1710,7 +2295,7 @@ pub struct UpdateVirtualServiceInput {
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mesh_owner: Option<String>,
@@ -1729,6 +2314,315 @@ pub struct UpdateVirtualServiceOutput {
     /// <p>A full description of the virtual service that was updated.</p>
     #[serde(rename = "virtualService")]
     pub virtual_service: VirtualServiceData,
+}
+
+/// <p>The access log configuration for a virtual gateway.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayAccessLog {
+    /// <p>The file object to send virtual gateway access logs to.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<VirtualGatewayFileAccessLog>,
+}
+
+/// <p>An object that represents the default properties for a backend.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayBackendDefaults {
+    /// <p>A reference to an object that represents a client policy.</p>
+    #[serde(rename = "clientPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_policy: Option<VirtualGatewayClientPolicy>,
+}
+
+/// <p>An object that represents a client policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayClientPolicy {
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) client policy.</p>
+    #[serde(rename = "tls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls: Option<VirtualGatewayClientPolicyTls>,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayClientPolicyTls {
+    /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't
+    /// specified.</p>
+    #[serde(rename = "enforce")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce: Option<bool>,
+    /// <p>One or more ports that the policy is enforced for.</p>
+    #[serde(rename = "ports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ports: Option<Vec<i64>>,
+    /// <p>A reference to an object that represents a TLS validation context.</p>
+    #[serde(rename = "validation")]
+    pub validation: VirtualGatewayTlsValidationContext,
+}
+
+/// <p>An object that represents a virtual gateway returned by a describe operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VirtualGatewayData {
+    /// <p>The name of the service mesh that the virtual gateway resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    #[serde(rename = "metadata")]
+    pub metadata: ResourceMetadata,
+    /// <p>The specifications of the virtual gateway.</p>
+    #[serde(rename = "spec")]
+    pub spec: VirtualGatewaySpec,
+    /// <p>The current status of the virtual gateway.</p>
+    #[serde(rename = "status")]
+    pub status: VirtualGatewayStatus,
+    /// <p>The name of the virtual gateway.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+/// <p>An object that represents an access log file.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayFileAccessLog {
+    /// <p>The file path to write access logs to. You can use <code>/dev/stdout</code> to send
+    /// access logs to standard out and configure your Envoy container to use a log driver, such as
+    /// <code>awslogs</code>, to export the access logs to a log storage service such as Amazon
+    /// CloudWatch Logs. You can also specify a path in the Envoy container's file system to write
+    /// the files to disk.</p>
+    #[serde(rename = "path")]
+    pub path: String,
+}
+
+/// <p>An object that represents the health check policy for a virtual gateway's
+/// listener.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayHealthCheckPolicy {
+    /// <p>The number of consecutive successful health checks that must occur before declaring the
+    /// listener healthy.</p>
+    #[serde(rename = "healthyThreshold")]
+    pub healthy_threshold: i64,
+    /// <p>The time period in milliseconds between each health check execution.</p>
+    #[serde(rename = "intervalMillis")]
+    pub interval_millis: i64,
+    /// <p>The destination path for the health check request. This value is only used if the
+    /// specified protocol is HTTP or HTTP/2. For any other protocol, this value is ignored.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The destination port for the health check request. This port must match the port defined
+    /// in the <a>PortMapping</a> for the listener.</p>
+    #[serde(rename = "port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p>The protocol for the health check request. If you specify <code>grpc</code>, then your
+    /// service must conform to the <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">GRPC Health
+    /// Checking Protocol</a>.</p>
+    #[serde(rename = "protocol")]
+    pub protocol: String,
+    /// <p>The amount of time to wait when receiving a response from the health check, in
+    /// milliseconds.</p>
+    #[serde(rename = "timeoutMillis")]
+    pub timeout_millis: i64,
+    /// <p>The number of consecutive failed health checks that must occur before declaring a
+    /// virtual gateway unhealthy.</p>
+    #[serde(rename = "unhealthyThreshold")]
+    pub unhealthy_threshold: i64,
+}
+
+/// <p>An object that represents a listener for a virtual gateway.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayListener {
+    /// <p>The health check information for the listener.</p>
+    #[serde(rename = "healthCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check: Option<VirtualGatewayHealthCheckPolicy>,
+    /// <p>The port mapping information for the listener.</p>
+    #[serde(rename = "portMapping")]
+    pub port_mapping: VirtualGatewayPortMapping,
+    /// <p>A reference to an object that represents the Transport Layer Security (TLS) properties for the listener.</p>
+    #[serde(rename = "tls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls: Option<VirtualGatewayListenerTls>,
+}
+
+/// <p>An object that represents the Transport Layer Security (TLS) properties for a listener.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayListenerTls {
+    /// <p>An object that represents a Transport Layer Security (TLS) certificate.</p>
+    #[serde(rename = "certificate")]
+    pub certificate: VirtualGatewayListenerTlsCertificate,
+    /// <p>Specify one of the following modes.</p>
+    ///
+    /// <pre><code>     &lt;ul&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;STRICT – Listener only accepts connections with TLS
+    /// enabled. &lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;PERMISSIVE – Listener accepts connections with or
+    /// without TLS enabled.&lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;li&gt;
+    /// &lt;p&gt;
+    /// &lt;b/&gt;DISABLED – Listener only accepts connections without
+    /// TLS. &lt;/p&gt;
+    /// &lt;/li&gt;
+    /// &lt;/ul&gt;
+    /// </code></pre>
+    #[serde(rename = "mode")]
+    pub mode: String,
+}
+
+/// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayListenerTlsAcmCertificate {
+    /// <p>The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+    #[serde(rename = "certificateArn")]
+    pub certificate_arn: String,
+}
+
+/// <p>An object that represents a listener's Transport Layer Security (TLS) certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayListenerTlsCertificate {
+    /// <p>A reference to an object that represents an AWS Certicate Manager (ACM) certificate.</p>
+    #[serde(rename = "acm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acm: Option<VirtualGatewayListenerTlsAcmCertificate>,
+    /// <p>A reference to an object that represents a local file certificate.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<VirtualGatewayListenerTlsFileCertificate>,
+}
+
+/// <p>An object that represents a local file certificate.
+/// The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayListenerTlsFileCertificate {
+    /// <p>The certificate chain for the certificate.</p>
+    #[serde(rename = "certificateChain")]
+    pub certificate_chain: String,
+    /// <p>The private key for a certificate stored on the file system of the mesh endpoint that
+    /// the proxy is running on.</p>
+    #[serde(rename = "privateKey")]
+    pub private_key: String,
+}
+
+/// <p>An object that represents logging information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayLogging {
+    /// <p>The access log configuration.</p>
+    #[serde(rename = "accessLog")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log: Option<VirtualGatewayAccessLog>,
+}
+
+/// <p>An object that represents a port mapping.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayPortMapping {
+    /// <p>The port used for the port mapping. Specify one protocol.</p>
+    #[serde(rename = "port")]
+    pub port: i64,
+    /// <p>The protocol used for the port mapping.</p>
+    #[serde(rename = "protocol")]
+    pub protocol: String,
+}
+
+/// <p>An object that represents a virtual gateway returned by a list operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VirtualGatewayRef {
+    /// <p>The full Amazon Resource Name (ARN) for the resource.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
+    #[serde(rename = "createdAt")]
+    pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    pub last_updated_at: f64,
+    /// <p>The name of the service mesh that the resource resides in.</p>
+    #[serde(rename = "meshName")]
+    pub mesh_name: String,
+    /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "meshOwner")]
+    pub mesh_owner: String,
+    /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
+    #[serde(rename = "resourceOwner")]
+    pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
+    #[serde(rename = "version")]
+    pub version: i64,
+    /// <p>The name of the resource.</p>
+    #[serde(rename = "virtualGatewayName")]
+    pub virtual_gateway_name: String,
+}
+
+/// <p>An object that represents the specification of a service mesh resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewaySpec {
+    /// <p>A reference to an object that represents the defaults for backends.</p>
+    #[serde(rename = "backendDefaults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backend_defaults: Option<VirtualGatewayBackendDefaults>,
+    /// <p>The listeners that the mesh endpoint is expected to receive inbound traffic from. You
+    /// can specify one listener.</p>
+    #[serde(rename = "listeners")]
+    pub listeners: Vec<VirtualGatewayListener>,
+    #[serde(rename = "logging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging: Option<VirtualGatewayLogging>,
+}
+
+/// <p>An object that represents the status of the mesh resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VirtualGatewayStatus {
+    /// <p>The current status.</p>
+    #[serde(rename = "status")]
+    pub status: String,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayTlsValidationContext {
+    /// <p>A reference to an object that represents a TLS validation context trust.</p>
+    #[serde(rename = "trust")]
+    pub trust: VirtualGatewayTlsValidationContextTrust,
+}
+
+/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
+/// certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayTlsValidationContextAcmTrust {
+    /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
+    #[serde(rename = "certificateAuthorityArns")]
+    pub certificate_authority_arns: Vec<String>,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayTlsValidationContextFileTrust {
+    /// <p>The certificate trust chain for a certificate stored on the file system of the virtual
+    /// node that the proxy is running on.</p>
+    #[serde(rename = "certificateChain")]
+    pub certificate_chain: String,
+}
+
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VirtualGatewayTlsValidationContextTrust {
+    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM)
+    /// certificate.</p>
+    #[serde(rename = "acm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acm: Option<VirtualGatewayTlsValidationContextAcmTrust>,
+    /// <p>An object that represents a TLS validation context trust for a local file.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<VirtualGatewayTlsValidationContextFileTrust>,
 }
 
 /// <p>An object that represents a virtual node returned by a describe operation.</p>
@@ -1759,21 +2653,24 @@ pub struct VirtualNodeRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual node.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual node resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
     /// <p>The name of the virtual node.</p>
@@ -1861,21 +2758,24 @@ pub struct VirtualRouterRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual router.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual router resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
     /// <p>The name of the virtual router.</p>
@@ -1962,21 +2862,24 @@ pub struct VirtualServiceRef {
     /// <p>The full Amazon Resource Name (ARN) for the virtual service.</p>
     #[serde(rename = "arn")]
     pub arn: String,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was created.</p>
     #[serde(rename = "createdAt")]
     pub created_at: f64,
+    /// <p>The Unix epoch timestamp in seconds for when the resource was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     pub last_updated_at: f64,
     /// <p>The name of the service mesh that the virtual service resides in.</p>
     #[serde(rename = "meshName")]
     pub mesh_name: String,
     /// <p>The AWS IAM account ID of the service mesh owner. If the account ID is not your own, then it's
-    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the account that shared the mesh with your account. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "meshOwner")]
     pub mesh_owner: String,
     /// <p>The AWS IAM account ID of the resource owner. If the account ID is not your own, then it's
-    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with Shared Meshes</a>.</p>
+    /// the ID of the mesh owner or of another account that the mesh is shared with. For more information about mesh sharing, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/sharing.html">Working with shared meshes</a>.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
+    /// <p>The version of the resource. Resources are created at version 1, and this version is incremented each time that they're updated.</p>
     #[serde(rename = "version")]
     pub version: i64,
     /// <p>The name of the virtual service.</p>
@@ -2017,6 +2920,87 @@ pub struct WeightedTarget {
     pub weight: i64,
 }
 
+/// Errors returned by CreateGatewayRoute
+#[derive(Debug, PartialEq)]
+pub enum CreateGatewayRouteError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>The request contains a client token that was used for a previous update resource call
+    /// with different specifications. Try the request again with a new client token.</p>
+    Conflict(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl CreateGatewayRouteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGatewayRouteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateGatewayRouteError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateGatewayRouteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateGatewayRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateGatewayRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateGatewayRouteError {}
 /// Errors returned by CreateMesh
 #[derive(Debug, PartialEq)]
 pub enum CreateMeshError {
@@ -2171,6 +3155,89 @@ impl fmt::Display for CreateRouteError {
     }
 }
 impl Error for CreateRouteError {}
+/// Errors returned by CreateVirtualGateway
+#[derive(Debug, PartialEq)]
+pub enum CreateVirtualGatewayError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>The request contains a client token that was used for a previous update resource call
+    /// with different specifications. Try the request again with a new client token.</p>
+    Conflict(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl CreateVirtualGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualGatewayError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateVirtualGatewayError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateVirtualGatewayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateVirtualGatewayError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateVirtualGatewayError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateVirtualGatewayError {}
 /// Errors returned by CreateVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum CreateVirtualNodeError {
@@ -2416,6 +3483,80 @@ impl fmt::Display for CreateVirtualServiceError {
     }
 }
 impl Error for CreateVirtualServiceError {}
+/// Errors returned by DeleteGatewayRoute
+#[derive(Debug, PartialEq)]
+pub enum DeleteGatewayRouteError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
+    ResourceInUse(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteGatewayRouteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayRouteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::NotFound(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::ResourceInUse(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteGatewayRouteError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteGatewayRouteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteGatewayRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteGatewayRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteGatewayRouteError {}
 /// Errors returned by DeleteMesh
 #[derive(Debug, PartialEq)]
 pub enum DeleteMeshError {
@@ -2556,6 +3697,82 @@ impl fmt::Display for DeleteRouteError {
     }
 }
 impl Error for DeleteRouteError {}
+/// Errors returned by DeleteVirtualGateway
+#[derive(Debug, PartialEq)]
+pub enum DeleteVirtualGatewayError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>You can't delete the specified resource because it's in use or required by another
+    /// resource.</p>
+    ResourceInUse(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl DeleteVirtualGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualGatewayError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::NotFound(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::ResourceInUse(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteVirtualGatewayError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteVirtualGatewayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteVirtualGatewayError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteVirtualGatewayError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteVirtualGatewayError {}
 /// Errors returned by DeleteVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualNodeError {
@@ -2780,6 +3997,75 @@ impl fmt::Display for DeleteVirtualServiceError {
     }
 }
 impl Error for DeleteVirtualServiceError {}
+/// Errors returned by DescribeGatewayRoute
+#[derive(Debug, PartialEq)]
+pub enum DescribeGatewayRouteError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeGatewayRouteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGatewayRouteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeGatewayRouteError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeGatewayRouteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeGatewayRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeGatewayRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeGatewayRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeGatewayRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeGatewayRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeGatewayRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeGatewayRouteError {}
 /// Errors returned by DescribeMesh
 #[derive(Debug, PartialEq)]
 pub enum DescribeMeshError {
@@ -2906,6 +4192,75 @@ impl fmt::Display for DescribeRouteError {
     }
 }
 impl Error for DescribeRouteError {}
+/// Errors returned by DescribeVirtualGateway
+#[derive(Debug, PartialEq)]
+pub enum DescribeVirtualGatewayError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl DescribeVirtualGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualGatewayError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeVirtualGatewayError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeVirtualGatewayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeVirtualGatewayError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewayError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewayError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeVirtualGatewayError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeVirtualGatewayError {}
 /// Errors returned by DescribeVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualNodeError {
@@ -3111,6 +4466,73 @@ impl fmt::Display for DescribeVirtualServiceError {
     }
 }
 impl Error for DescribeVirtualServiceError {}
+/// Errors returned by ListGatewayRoutes
+#[derive(Debug, PartialEq)]
+pub enum ListGatewayRoutesError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl ListGatewayRoutesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewayRoutesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListGatewayRoutesError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListGatewayRoutesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListGatewayRoutesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListGatewayRoutesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListGatewayRoutesError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListGatewayRoutesError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListGatewayRoutesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListGatewayRoutesError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListGatewayRoutesError {}
 /// Errors returned by ListMeshes
 #[derive(Debug, PartialEq)]
 pub enum ListMeshesError {
@@ -3304,6 +4726,73 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by ListVirtualGateways
+#[derive(Debug, PartialEq)]
+pub enum ListVirtualGatewaysError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl ListVirtualGatewaysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualGatewaysError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListVirtualGatewaysError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListVirtualGatewaysError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListVirtualGatewaysError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListVirtualGatewaysError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListVirtualGatewaysError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListVirtualGatewaysError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListVirtualGatewaysError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListVirtualGatewaysError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListVirtualGatewaysError {}
 /// Errors returned by ListVirtualNodes
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualNodesError {
@@ -3637,6 +5126,87 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateGatewayRoute
+#[derive(Debug, PartialEq)]
+pub enum UpdateGatewayRouteError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>The request contains a client token that was used for a previous update resource call
+    /// with different specifications. Try the request again with a new client token.</p>
+    Conflict(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateGatewayRouteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayRouteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateGatewayRouteError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateGatewayRouteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateGatewayRouteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateGatewayRouteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateGatewayRouteError {}
 /// Errors returned by UpdateMesh
 #[derive(Debug, PartialEq)]
 pub enum UpdateMeshError {
@@ -3784,6 +5354,89 @@ impl fmt::Display for UpdateRouteError {
     }
 }
 impl Error for UpdateRouteError {}
+/// Errors returned by UpdateVirtualGateway
+#[derive(Debug, PartialEq)]
+pub enum UpdateVirtualGatewayError {
+    /// <p>The request syntax was malformed. Check your request syntax and try again.</p>
+    BadRequest(String),
+    /// <p>The request contains a client token that was used for a previous update resource call
+    /// with different specifications. Try the request again with a new client token.</p>
+    Conflict(String),
+    /// <p>You don't have permissions to perform this action.</p>
+    Forbidden(String),
+    /// <p>The request processing has failed because of an unknown error, exception, or
+    /// failure.</p>
+    InternalServerError(String),
+    /// <p>You have exceeded a service limit for your account. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/service-quotas.html">Service
+    /// Limits</a> in the <i>AWS App Mesh User Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist. Check your request syntax and try again.</p>
+    NotFound(String),
+    /// <p>The request has failed due to a temporary failure of the service.</p>
+    ServiceUnavailable(String),
+    /// <p>The maximum request rate permitted by the App Mesh APIs has been exceeded for your
+    /// account. For best results, use an increasing or variable sleep interval between
+    /// requests.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateVirtualGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVirtualGatewayError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateVirtualGatewayError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateVirtualGatewayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateVirtualGatewayError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateVirtualGatewayError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateVirtualGatewayError {}
 /// Errors returned by UpdateVirtualNode
 #[derive(Debug, PartialEq)]
 pub enum UpdateVirtualNodeError {
@@ -4032,6 +5685,17 @@ impl Error for UpdateVirtualServiceError {}
 /// Trait representing the capabilities of the AWS App Mesh API. AWS App Mesh clients implement this trait.
 #[async_trait]
 pub trait AppMesh {
+    /// <p>Creates a gateway route.</p>
+    ///
+    /// <pre><code>     &lt;p&gt;A gateway route is attached to a virtual gateway and routes traffic to an existing
+    /// virtual service. If a route matches a request, it can distribute traffic to a target virtual service.&lt;/p&gt;
+    /// &lt;p&gt;For more information about gateway routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html&quot;&gt;Gateway routes&lt;/a&gt;.&lt;/p&gt;
+    /// </code></pre>
+    async fn create_gateway_route(
+        &self,
+        input: CreateGatewayRouteInput,
+    ) -> Result<CreateGatewayRouteOutput, RusotoError<CreateGatewayRouteError>>;
+
     /// <p>Creates a service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
@@ -4055,6 +5719,19 @@ pub trait AppMesh {
         &self,
         input: CreateRouteInput,
     ) -> Result<CreateRouteOutput, RusotoError<CreateRouteError>>;
+
+    /// <p>Creates a virtual gateway.</p>
+    ///
+    /// <pre><code>     &lt;p&gt;A virtual gateway allows resources outside your mesh to communicate to resources that
+    /// are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS
+    /// task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which
+    /// represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual gateways, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html&quot;&gt;Virtual gateways&lt;/a&gt;.&lt;/p&gt;
+    /// </code></pre>
+    async fn create_virtual_gateway(
+        &self,
+        input: CreateVirtualGatewayInput,
+    ) -> Result<CreateVirtualGatewayOutput, RusotoError<CreateVirtualGatewayError>>;
 
     /// <p>Creates a virtual node within a service mesh.</p>
     ///
@@ -4112,6 +5789,12 @@ pub trait AppMesh {
         input: CreateVirtualServiceInput,
     ) -> Result<CreateVirtualServiceOutput, RusotoError<CreateVirtualServiceError>>;
 
+    /// <p>Deletes an existing gateway route.</p>
+    async fn delete_gateway_route(
+        &self,
+        input: DeleteGatewayRouteInput,
+    ) -> Result<DeleteGatewayRouteOutput, RusotoError<DeleteGatewayRouteError>>;
+
     /// <p>Deletes an existing service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
@@ -4127,6 +5810,13 @@ pub trait AppMesh {
         &self,
         input: DeleteRouteInput,
     ) -> Result<DeleteRouteOutput, RusotoError<DeleteRouteError>>;
+
+    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway
+    /// routes are associated to it.</p>
+    async fn delete_virtual_gateway(
+        &self,
+        input: DeleteVirtualGatewayInput,
+    ) -> Result<DeleteVirtualGatewayOutput, RusotoError<DeleteVirtualGatewayError>>;
 
     /// <p>Deletes an existing virtual node.</p>
     ///
@@ -4154,6 +5844,12 @@ pub trait AppMesh {
         input: DeleteVirtualServiceInput,
     ) -> Result<DeleteVirtualServiceOutput, RusotoError<DeleteVirtualServiceError>>;
 
+    /// <p>Describes an existing gateway route.</p>
+    async fn describe_gateway_route(
+        &self,
+        input: DescribeGatewayRouteInput,
+    ) -> Result<DescribeGatewayRouteOutput, RusotoError<DescribeGatewayRouteError>>;
+
     /// <p>Describes an existing service mesh.</p>
     async fn describe_mesh(
         &self,
@@ -4165,6 +5861,12 @@ pub trait AppMesh {
         &self,
         input: DescribeRouteInput,
     ) -> Result<DescribeRouteOutput, RusotoError<DescribeRouteError>>;
+
+    /// <p>Describes an existing virtual gateway.</p>
+    async fn describe_virtual_gateway(
+        &self,
+        input: DescribeVirtualGatewayInput,
+    ) -> Result<DescribeVirtualGatewayOutput, RusotoError<DescribeVirtualGatewayError>>;
 
     /// <p>Describes an existing virtual node.</p>
     async fn describe_virtual_node(
@@ -4184,6 +5886,13 @@ pub trait AppMesh {
         input: DescribeVirtualServiceInput,
     ) -> Result<DescribeVirtualServiceOutput, RusotoError<DescribeVirtualServiceError>>;
 
+    /// <p>Returns a list of existing gateway routes that are associated to a virtual
+    /// gateway.</p>
+    async fn list_gateway_routes(
+        &self,
+        input: ListGatewayRoutesInput,
+    ) -> Result<ListGatewayRoutesOutput, RusotoError<ListGatewayRoutesError>>;
+
     /// <p>Returns a list of existing service meshes.</p>
     async fn list_meshes(
         &self,
@@ -4201,6 +5910,12 @@ pub trait AppMesh {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Returns a list of existing virtual gateways in a service mesh.</p>
+    async fn list_virtual_gateways(
+        &self,
+        input: ListVirtualGatewaysInput,
+    ) -> Result<ListVirtualGatewaysOutput, RusotoError<ListVirtualGatewaysError>>;
 
     /// <p>Returns a list of existing virtual nodes.</p>
     async fn list_virtual_nodes(
@@ -4235,6 +5950,13 @@ pub trait AppMesh {
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
 
+    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a
+    /// service mesh.</p>
+    async fn update_gateway_route(
+        &self,
+        input: UpdateGatewayRouteInput,
+    ) -> Result<UpdateGatewayRouteOutput, RusotoError<UpdateGatewayRouteError>>;
+
     /// <p>Updates an existing service mesh.</p>
     async fn update_mesh(
         &self,
@@ -4246,6 +5968,12 @@ pub trait AppMesh {
         &self,
         input: UpdateRouteInput,
     ) -> Result<UpdateRouteOutput, RusotoError<UpdateRouteError>>;
+
+    /// <p>Updates an existing virtual gateway in a specified service mesh.</p>
+    async fn update_virtual_gateway(
+        &self,
+        input: UpdateVirtualGatewayInput,
+    ) -> Result<UpdateVirtualGatewayOutput, RusotoError<UpdateVirtualGatewayError>>;
 
     /// <p>Updates an existing virtual node in a specified service mesh.</p>
     async fn update_virtual_node(
@@ -4305,6 +6033,51 @@ impl AppMeshClient {
 
 #[async_trait]
 impl AppMesh for AppMeshClient {
+    /// <p>Creates a gateway route.</p>
+    ///
+    /// <pre><code>     &lt;p&gt;A gateway route is attached to a virtual gateway and routes traffic to an existing
+    /// virtual service. If a route matches a request, it can distribute traffic to a target virtual service.&lt;/p&gt;
+    /// &lt;p&gt;For more information about gateway routes, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/gateway-routes.html&quot;&gt;Gateway routes&lt;/a&gt;.&lt;/p&gt;
+    /// </code></pre>
+    async fn create_gateway_route(
+        &self,
+        input: CreateGatewayRouteInput,
+    ) -> Result<CreateGatewayRouteOutput, RusotoError<CreateGatewayRouteError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes",
+            mesh_name = input.mesh_name,
+            virtual_gateway_name = input.virtual_gateway_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateGatewayRouteOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateGatewayRouteError::from_response(response))
+        }
+    }
+
     /// <p>Creates a service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt; A service mesh is a logical boundary for network traffic between services that are
@@ -4384,6 +6157,52 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateRouteError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a virtual gateway.</p>
+    ///
+    /// <pre><code>     &lt;p&gt;A virtual gateway allows resources outside your mesh to communicate to resources that
+    /// are inside your mesh. The virtual gateway represents an Envoy proxy running in an Amazon ECS
+    /// task, in a Kubernetes service, or on an Amazon EC2 instance. Unlike a virtual node, which
+    /// represents an Envoy running with an application, a virtual gateway represents Envoy deployed by itself.&lt;/p&gt;
+    /// &lt;p&gt;For more information about virtual gateways, see &lt;a href=&quot;https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_gateways.html&quot;&gt;Virtual gateways&lt;/a&gt;.&lt;/p&gt;
+    /// </code></pre>
+    async fn create_virtual_gateway(
+        &self,
+        input: CreateVirtualGatewayInput,
+    ) -> Result<CreateVirtualGatewayOutput, RusotoError<CreateVirtualGatewayError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateways",
+            mesh_name = input.mesh_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateVirtualGatewayOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateVirtualGatewayError::from_response(response))
         }
     }
 
@@ -4542,6 +6361,39 @@ impl AppMesh for AppMeshClient {
         }
     }
 
+    /// <p>Deletes an existing gateway route.</p>
+    async fn delete_gateway_route(
+        &self,
+        input: DeleteGatewayRouteInput,
+    ) -> Result<DeleteGatewayRouteOutput, RusotoError<DeleteGatewayRouteError>> {
+        let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
+
+        let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteGatewayRouteOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteGatewayRouteError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an existing service mesh.</p>
     ///
     /// <pre><code>     &lt;p&gt;You must delete all resources (virtual services, routes, virtual routers, and virtual
@@ -4608,6 +6460,44 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRouteError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an existing virtual gateway. You cannot delete a virtual gateway if any gateway
+    /// routes are associated to it.</p>
+    async fn delete_virtual_gateway(
+        &self,
+        input: DeleteVirtualGatewayInput,
+    ) -> Result<DeleteVirtualGatewayOutput, RusotoError<DeleteVirtualGatewayError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
+            mesh_name = input.mesh_name,
+            virtual_gateway_name = input.virtual_gateway_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteVirtualGatewayOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVirtualGatewayError::from_response(response))
         }
     }
 
@@ -4730,6 +6620,39 @@ impl AppMesh for AppMeshClient {
         }
     }
 
+    /// <p>Describes an existing gateway route.</p>
+    async fn describe_gateway_route(
+        &self,
+        input: DescribeGatewayRouteInput,
+    ) -> Result<DescribeGatewayRouteOutput, RusotoError<DescribeGatewayRouteError>> {
+        let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
+
+        let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeGatewayRouteOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeGatewayRouteError::from_response(response))
+        }
+    }
+
     /// <p>Describes an existing service mesh.</p>
     async fn describe_mesh(
         &self,
@@ -4798,6 +6721,43 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeRouteError::from_response(response))
+        }
+    }
+
+    /// <p>Describes an existing virtual gateway.</p>
+    async fn describe_virtual_gateway(
+        &self,
+        input: DescribeVirtualGatewayInput,
+    ) -> Result<DescribeVirtualGatewayOutput, RusotoError<DescribeVirtualGatewayError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
+            mesh_name = input.mesh_name,
+            virtual_gateway_name = input.virtual_gateway_name
+        );
+
+        let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeVirtualGatewayOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeVirtualGatewayError::from_response(response))
         }
     }
 
@@ -4909,6 +6869,50 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeVirtualServiceError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of existing gateway routes that are associated to a virtual
+    /// gateway.</p>
+    async fn list_gateway_routes(
+        &self,
+        input: ListGatewayRoutesInput,
+    ) -> Result<ListGatewayRoutesOutput, RusotoError<ListGatewayRoutesError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes",
+            mesh_name = input.mesh_name,
+            virtual_gateway_name = input.virtual_gateway_name
+        );
+
+        let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListGatewayRoutesOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListGatewayRoutesError::from_response(response))
         }
     }
 
@@ -5025,6 +7029,48 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of existing virtual gateways in a service mesh.</p>
+    async fn list_virtual_gateways(
+        &self,
+        input: ListVirtualGatewaysInput,
+    ) -> Result<ListVirtualGatewaysOutput, RusotoError<ListVirtualGatewaysError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateways",
+            mesh_name = input.mesh_name
+        );
+
+        let mut request = SignedRequest::new("GET", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListVirtualGatewaysOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListVirtualGatewaysError::from_response(response))
         }
     }
 
@@ -5225,6 +7271,43 @@ impl AppMesh for AppMeshClient {
         }
     }
 
+    /// <p>Updates an existing gateway route that is associated to a specified virtual gateway in a
+    /// service mesh.</p>
+    async fn update_gateway_route(
+        &self,
+        input: UpdateGatewayRouteInput,
+    ) -> Result<UpdateGatewayRouteOutput, RusotoError<UpdateGatewayRouteError>> {
+        let request_uri = format!("/v20190125/meshes/{mesh_name}/virtualGateway/{virtual_gateway_name}/gatewayRoutes/{gateway_route_name}", gateway_route_name = input.gateway_route_name, mesh_name = input.mesh_name, virtual_gateway_name = input.virtual_gateway_name);
+
+        let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateGatewayRouteOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateGatewayRouteError::from_response(response))
+        }
+    }
+
     /// <p>Updates an existing service mesh.</p>
     async fn update_mesh(
         &self,
@@ -5293,6 +7376,46 @@ impl AppMesh for AppMeshClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRouteError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an existing virtual gateway in a specified service mesh.</p>
+    async fn update_virtual_gateway(
+        &self,
+        input: UpdateVirtualGatewayInput,
+    ) -> Result<UpdateVirtualGatewayOutput, RusotoError<UpdateVirtualGatewayError>> {
+        let request_uri = format!(
+            "/v20190125/meshes/{mesh_name}/virtualGateways/{virtual_gateway_name}",
+            mesh_name = input.mesh_name,
+            virtual_gateway_name = input.virtual_gateway_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "appmesh", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.mesh_owner {
+            params.put("meshOwner", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateVirtualGatewayOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateVirtualGatewayError::from_response(response))
         }
     }
 

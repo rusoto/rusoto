@@ -152,6 +152,10 @@ pub struct Association {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationDescription {
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    #[serde(rename = "ApplyOnlyAtCronInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_only_at_cron_interval: Option<bool>,
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -397,6 +401,10 @@ pub struct AssociationStatus {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationVersionInfo {
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    #[serde(rename = "ApplyOnlyAtCronInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_only_at_cron_interval: Option<bool>,
     /// <p>The ID created by the system when the association was created.</p>
     #[serde(rename = "AssociationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1190,6 +1198,10 @@ pub struct CreateAssociationBatchRequest {
 /// <p>Describes the association of a Systems Manager SSM document and an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    #[serde(rename = "ApplyOnlyAtCronInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_only_at_cron_interval: Option<bool>,
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1259,6 +1271,10 @@ pub struct CreateAssociationBatchResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationRequest {
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    #[serde(rename = "ApplyOnlyAtCronInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_only_at_cron_interval: Option<bool>,
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1339,7 +1355,7 @@ pub struct CreateDocumentRequest {
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    /// <p><p>A name for the Systems Manager document.</p> <important> <p>You can&#39;t use the following strings as document name prefixes. These are reserved by AWS for use as document name prefixes:</p> <ul> <li> <p> <code>aws</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
+    /// <p><p>A name for the Systems Manager document.</p> <important> <p>You can&#39;t use the following strings as document name prefixes. These are reserved by AWS for use as document name prefixes:</p> <ul> <li> <p> <code>aws-</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A list of SSM documents required by a document. This parameter is used exclusively by AWS AppConfig. When a user creates an AppConfig configuration in an SSM document, the user must also specify a required document for validation purposes. In this case, an <code>ApplicationConfiguration</code> document requires an <code>ApplicationConfigurationSchema</code> document for validation purposes. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig.html">AWS AppConfig</a> in the <i>AWS Systems Manager User Guide</i>.</p>
@@ -1399,6 +1415,10 @@ pub struct CreateMaintenanceWindowRequest {
     /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     pub schedule: String,
+    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run on the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(0 30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
+    #[serde(rename = "ScheduleOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_offset: Option<i64>,
     /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3766,6 +3786,10 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The number of days to wait to run a maintenance window after the scheduled CRON expression date and time.</p>
+    #[serde(rename = "ScheduleOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_offset: Option<i64>,
     /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5302,6 +5326,10 @@ pub struct MaintenanceWindowIdentity {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The number of days to wait to run a maintenance window after the scheduled CRON expression date and time.</p>
+    #[serde(rename = "ScheduleOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_offset: Option<i64>,
     /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6353,7 +6381,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p>The data type for a String parameter. Supported data types include plain text and Amazon Machine Image IDs.</p> <p> <b>The following data type values are supported.</b> </p> <ul> <li> <p> <code>text</code> </p> </li> <li> <p> <code>aws:ec2:image</code> </p> </li> </ul> <p>When you create a String parameter and specify <code>aws:ec2:image</code>, Systems Manager validates the parameter value you provide against that data type. The required format is <code>ami-12345abcdeEXAMPLE</code>. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html">Native parameter support for Amazon Machine Image IDs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The data type for a <code>String</code> parameter. Supported data types include plain text and Amazon Machine Image IDs.</p> <p> <b>The following data type values are supported.</b> </p> <ul> <li> <p> <code>text</code> </p> </li> <li> <p> <code>aws:ec2:image</code> </p> </li> </ul> <p>When you create a <code>String</code> parameter and specify <code>aws:ec2:image</code>, Systems Manager validates the parameter value is in the required format, such as <code>ami-12345abcdeEXAMPLE</code>, and that the specified AMI is available in your AWS account. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html">Native parameter support for Amazon Machine Image IDs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "DataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_type: Option<String>,
@@ -6384,7 +6412,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
-    /// <p><p>The type of parameter that you want to add to the system.</p> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates or in the China Regions.</p> </note></p>
+    /// <p><p>The type of parameter that you want to add to the system.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates or in the China Regions.</p> </note> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <important> <p>Specifying a parameter type is not required when updating a parameter. You must specify a parameter type when creating a parameter.</p> </important></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -7179,7 +7207,7 @@ pub struct StartAutomationExecutionResult {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSessionRequest {
-    /// <p>The name of the SSM document to define the parameters and plugin settings for the session. For example, <code>SSM-SessionManagerRunShell</code>. If no document name is provided, a shell to the instance is launched by default.</p>
+    /// <p>The name of the SSM document to define the parameters and plugin settings for the session. For example, <code>SSM-SessionManagerRunShell</code>. You can call the <a>GetDocument</a> API to verify the document exists before attempting to start a session. If no document name is provided, a shell to the instance is launched by default.</p>
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
@@ -7400,6 +7428,10 @@ pub struct TerminateSessionResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationRequest {
+    /// <p>By default, when you update an association, the system runs it immediately after it is updated and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you update it.</p> <p>Also, if you specified this option when you created the association, you can reset it. To do so, specify the <code>no-apply-only-at-cron-interval</code> parameter when you update the association from the command line. This parameter forces the association to run immediately after updating it and according to the interval specified.</p>
+    #[serde(rename = "ApplyOnlyAtCronInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_only_at_cron_interval: Option<bool>,
     /// <p>The ID of the association you want to update. </p>
     #[serde(rename = "AssociationId")]
     pub association_id: String,
@@ -7588,6 +7620,10 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(0 30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
+    #[serde(rename = "ScheduleOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_offset: Option<i64>,
     /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7636,6 +7672,10 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The number of days to wait to run a maintenance window after the scheduled CRON expression date and time.</p>
+    #[serde(rename = "ScheduleOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_offset: Option<i64>,
     /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14647,7 +14687,7 @@ pub trait Ssm {
         input: CreateActivationRequest,
     ) -> Result<CreateActivationResult, RusotoError<CreateActivationError>>;
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
+    /// <p>A State Manager association defines the state that you want to maintain on your instances. For example, an association can specify that anti-virus software must be installed and running on your instances, or that certain ports must be closed. For static targets, the association specifies a schedule for when the configuration is reapplied. For dynamic targets, such as an AWS Resource Group or an AWS Autoscaling Group, State Manager applies the configuration when new instances are added to the group. The association also specifies actions to take when applying the configuration. For example, an association for anti-virus software might run once a day. If the software is not installed, then State Manager installs it. If the software is installed, but the service is not running, then the association might instruct State Manager to start the service. </p>
     async fn create_association(
         &self,
         input: CreateAssociationRequest,
@@ -15578,7 +15618,7 @@ impl Ssm for SsmClient {
         }
     }
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
+    /// <p>A State Manager association defines the state that you want to maintain on your instances. For example, an association can specify that anti-virus software must be installed and running on your instances, or that certain ports must be closed. For static targets, the association specifies a schedule for when the configuration is reapplied. For dynamic targets, such as an AWS Resource Group or an AWS Autoscaling Group, State Manager applies the configuration when new instances are added to the group. The association also specifies actions to take when applying the configuration. For example, an association for anti-virus software might run once a day. If the software is not installed, then State Manager installs it. If the software is installed, but the service is not running, then the association might instruct State Manager to start the service. </p>
     async fn create_association(
         &self,
         input: CreateAssociationRequest,

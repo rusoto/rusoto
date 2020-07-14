@@ -38,6 +38,19 @@ pub struct AvailSuppression {
     pub value: Option<String>,
 }
 
+/// <p>The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Bumper {
+    /// <p>The URL for the end bumper asset. </p>
+    #[serde(rename = "EndUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_url: Option<String>,
+    /// <p>The URL for the start bumper asset. </p>
+    #[serde(rename = "StartUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_url: Option<String>,
+}
+
 /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CdnConfiguration {
@@ -114,6 +127,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "AvailSuppression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_suppression: Option<AvailSuppression>,
+    /// <p>The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. </p>
+    #[serde(rename = "Bumper")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bumper: Option<Bumper>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,6 +268,10 @@ pub struct PlaybackConfiguration {
     #[serde(rename = "AvailSuppression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_suppression: Option<AvailSuppression>,
+    /// <p>The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. </p>
+    #[serde(rename = "Bumper")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bumper: Option<Bumper>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -312,6 +333,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "AvailSuppression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_suppression: Option<AvailSuppression>,
+    /// <p>The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. </p>
+    #[serde(rename = "Bumper")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bumper: Option<Bumper>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,6 +386,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "AvailSuppression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_suppression: Option<AvailSuppression>,
+    /// <p>The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. </p>
+    #[serde(rename = "Bumper")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bumper: Option<Bumper>,
     /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
     #[serde(rename = "CdnConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]

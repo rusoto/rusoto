@@ -36,6 +36,18 @@ use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::EventReader;
 
+#[allow(dead_code)]
+struct AccessAdvisorUsageGranularityTypeDeserializer;
+impl AccessAdvisorUsageGranularityTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>An object that contains details about when a principal in the reported AWS Organizations entity last attempted to access an AWS service. A principal can be an IAM user, an IAM role, or the AWS account root user within the reported Organizations entity.</p> <p>This data type is a response element in the <a>GetOrganizationsAccessReport</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -2864,6 +2876,8 @@ impl GenerateOrganizationsAccessReportResponseDeserializer {
 pub struct GenerateServiceLastAccessedDetailsRequest {
     /// <p>The ARN of the IAM resource (user, group, role, or managed policy) used to generate information about when the resource was last used in an attempt to access an AWS service.</p>
     pub arn: String,
+    /// <p>The level of detail that you want to generate. You can specify whether you want to generate information about the last attempt to access services or actions. If you specify service-level granularity, this operation generates only service data. If you specify action-level granularity, it generates service and action data. If you don't include this optional parameter, the operation generates service data.</p>
+    pub granularity: Option<String>,
 }
 
 /// Serialize `GenerateServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
@@ -2876,6 +2890,9 @@ impl GenerateServiceLastAccessedDetailsRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+        if let Some(ref field_value) = obj.granularity {
+            params.put(&format!("{}{}", prefix, "Granularity"), &field_value);
+        }
     }
 }
 
@@ -4157,7 +4174,7 @@ impl GetServiceLastAccessedDetailsRequestSerializer {
 pub struct GetServiceLastAccessedDetailsResponse {
     /// <p>An object that contains details about the reason the operation failed.</p>
     pub error: Option<ErrorDetails>,
-    /// <p><p/> <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p></p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the generated report job was completed or failed.</p> <p>This field is null if the job is still in progress, as indicated by a job status value of <code>IN_PROGRESS</code>.</p>
     pub job_completion_date: String,
@@ -4165,6 +4182,8 @@ pub struct GetServiceLastAccessedDetailsResponse {
     pub job_creation_date: String,
     /// <p>The status of the job.</p>
     pub job_status: String,
+    /// <p>The type of job. Service jobs return information about when each service was last accessed. Action jobs also include information about when tracked actions within the service were last accessed.</p>
+    pub job_type: Option<String>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
     /// <p> A <code>ServiceLastAccessed</code> object that contains details about the most recent attempt to access the service.</p>
@@ -4202,6 +4221,12 @@ impl GetServiceLastAccessedDetailsResponseDeserializer {
                     "JobStatus" => {
                         obj.job_status =
                             JobStatusTypeDeserializer::deserialize("JobStatus", stack)?;
+                    }
+                    "JobType" => {
+                        obj.job_type =
+                            Some(AccessAdvisorUsageGranularityTypeDeserializer::deserialize(
+                                "JobType", stack,
+                            )?);
                     }
                     "Marker" => {
                         obj.marker = Some(ResponseMarkerTypeDeserializer::deserialize(
@@ -9458,12 +9483,16 @@ pub struct ServiceLastAccessed {
     pub last_authenticated: Option<String>,
     /// <p>The ARN of the authenticated entity (user or role) that last attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
     pub last_authenticated_entity: Option<String>,
+    /// <p>The Region from which the authenticated entity (user or role) last attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_authenticated_region: Option<String>,
     /// <p>The name of the service in which access was attempted.</p>
     pub service_name: String,
     /// <p>The namespace of the service in which access was attempted.</p> <p>To learn the service namespace of a service, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_actions-resources-contextkeys.html">Actions, Resources, and Condition Keys for AWS Services</a> in the <i>IAM User Guide</i>. Choose the name of the service to view details for that service. In the first paragraph, find the service prefix. For example, <code>(service prefix: a4b)</code>. For more information about service namespaces, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub service_namespace: String,
     /// <p>The total number of authenticated principals (root user, IAM users, or IAM roles) that have attempted to access the service.</p> <p>This field is null if no principals attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
     pub total_authenticated_entities: Option<i64>,
+    /// <p>An object that contains details about the most recent attempt to access a tracked action within the service.</p> <p>This field is null if there no tracked actions or if the principal did not use the tracked actions within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>. This field is also null if the report was generated at the service level and not the action level. For more information, see the <code>Granularity</code> field in <a>GenerateServiceLastAccessedDetails</a>.</p>
+    pub tracked_actions_last_accessed: Option<Vec<TrackedActionLastAccessed>>,
 }
 
 #[allow(dead_code)]
@@ -9488,6 +9517,12 @@ impl ServiceLastAccessedDeserializer {
                         stack,
                     )?);
                 }
+                "LastAuthenticatedRegion" => {
+                    obj.last_authenticated_region = Some(StringTypeDeserializer::deserialize(
+                        "LastAuthenticatedRegion",
+                        stack,
+                    )?);
+                }
                 "ServiceName" => {
                     obj.service_name =
                         ServiceNameTypeDeserializer::deserialize("ServiceName", stack)?;
@@ -9501,6 +9536,14 @@ impl ServiceLastAccessedDeserializer {
                         "TotalAuthenticatedEntities",
                         stack,
                     )?);
+                }
+                "TrackedActionsLastAccessed" => {
+                    obj.tracked_actions_last_accessed
+                        .get_or_insert(vec![])
+                        .extend(TrackedActionsLastAccessedDeserializer::deserialize(
+                            "TrackedActionsLastAccessed",
+                            stack,
+                        )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -10006,7 +10049,7 @@ pub struct SimulatePrincipalPolicyRequest {
     pub marker: Option<String>,
     /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p><p>The IAM permissions boundary policy to simulate. The permissions boundary sets the maximum permissions that the entity can have. You can input only one permissions boundary when you pass a policy to this operation. An IAM entity can only have one permissions boundary in effect at a time. For example, if a permissions boundary is attached to an entity and you pass in a different permissions boundary policy using this parameter, then the new permission boundary policy is used for the simulation. For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Entities</a> in the <i>IAM User Guide</i>. The policy input is specified as a string containing the complete, valid JSON text of a permissions boundary policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (<code>\u0020</code>) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through <code>\u00FF</code>)</p> </li> <li> <p>The special characters tab (<code>\u0009</code>), line feed (<code>\u000A</code>), and carriage return (<code>\u000D</code>)</p> </li> </ul></p>
+    /// <p><p>The IAM permissions boundary policy to simulate. The permissions boundary sets the maximum permissions that the entity can have. You can input only one permissions boundary when you pass a policy to this operation. An IAM entity can only have one permissions boundary in effect at a time. For example, if a permissions boundary is attached to an entity and you pass in a different permissions boundary policy using this parameter, then the new permissions boundary policy is used for the simulation. For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Entities</a> in the <i>IAM User Guide</i>. The policy input is specified as a string containing the complete, valid JSON text of a permissions boundary policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (<code>\u0020</code>) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through <code>\u00FF</code>)</p> </li> <li> <p>The special characters tab (<code>\u0009</code>), line feed (<code>\u000A</code>), and carriage return (<code>\u000D</code>)</p> </li> </ul></p>
     pub permissions_boundary_policy_input_list: Option<Vec<String>>,
     /// <p><p>An optional list of additional policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (<code>\u0020</code>) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through <code>\u00FF</code>)</p> </li> <li> <p>The special characters tab (<code>\u0009</code>), line feed (<code>\u000A</code>), and carriage return (<code>\u000D</code>)</p> </li> </ul></p>
     pub policy_input_list: Option<Vec<String>>,
@@ -10439,6 +10482,81 @@ impl ThumbprintTypeDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+/// <p>Contains details about the most recent attempt to access an action within the service.</p> <p>This data type is used as a response element in the <a>GetServiceLastAccessedDetails</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct TrackedActionLastAccessed {
+    /// <p>The name of the tracked action to which access was attempted. Tracked actions are actions that report activity to IAM.</p>
+    pub action_name: Option<String>,
+    pub last_accessed_entity: Option<String>,
+    /// <p>The Region from which the authenticated entity (user or role) last attempted to access the tracked action. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_accessed_region: Option<String>,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when an authenticated entity most recently attempted to access the tracked service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_accessed_time: Option<String>,
+}
+
+#[allow(dead_code)]
+struct TrackedActionLastAccessedDeserializer;
+impl TrackedActionLastAccessedDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrackedActionLastAccessed, XmlParseError> {
+        deserialize_elements::<_, TrackedActionLastAccessed, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ActionName" => {
+                        obj.action_name =
+                            Some(StringTypeDeserializer::deserialize("ActionName", stack)?);
+                    }
+                    "LastAccessedEntity" => {
+                        obj.last_accessed_entity = Some(ArnTypeDeserializer::deserialize(
+                            "LastAccessedEntity",
+                            stack,
+                        )?);
+                    }
+                    "LastAccessedRegion" => {
+                        obj.last_accessed_region = Some(StringTypeDeserializer::deserialize(
+                            "LastAccessedRegion",
+                            stack,
+                        )?);
+                    }
+                    "LastAccessedTime" => {
+                        obj.last_accessed_time = Some(DateTypeDeserializer::deserialize(
+                            "LastAccessedTime",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct TrackedActionsLastAccessedDeserializer;
+impl TrackedActionsLastAccessedDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TrackedActionLastAccessed>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TrackedActionLastAccessedDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -11519,7 +11637,7 @@ impl VirtualMFADeviceListTypeDeserializer {
 pub enum AddClientIDToOpenIDConnectProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11605,7 +11723,7 @@ impl Error for AddClientIDToOpenIDConnectProviderError {}
 pub enum AddRoleToInstanceProfileError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11681,7 +11799,7 @@ impl Error for AddRoleToInstanceProfileError {}
 /// Errors returned by AddUserToGroup
 #[derive(Debug, PartialEq)]
 pub enum AddUserToGroupError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11743,7 +11861,7 @@ impl Error for AddUserToGroupError {}
 pub enum AttachGroupPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11819,7 +11937,7 @@ impl Error for AttachGroupPolicyError {}
 pub enum AttachRolePolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11903,7 +12021,7 @@ impl Error for AttachRolePolicyError {}
 pub enum AttachUserPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -11981,7 +12099,7 @@ pub enum ChangePasswordError {
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because the type of user for the transaction was incorrect.</p>
     InvalidUserType(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12063,7 +12181,7 @@ impl Error for ChangePasswordError {}
 /// Errors returned by CreateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum CreateAccessKeyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12125,7 +12243,7 @@ impl Error for CreateAccessKeyError {}
 pub enum CreateAccountAliasError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -12185,7 +12303,7 @@ impl Error for CreateAccountAliasError {}
 pub enum CreateGroupError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12253,7 +12371,7 @@ impl Error for CreateGroupError {}
 pub enum CreateInstanceProfileError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -12313,7 +12431,7 @@ impl Error for CreateInstanceProfileError {}
 pub enum CreateLoginProfileError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12391,7 +12509,7 @@ pub enum CreateOpenIDConnectProviderError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -12465,7 +12583,7 @@ pub enum CreatePolicyError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -12539,7 +12657,7 @@ impl Error for CreatePolicyError {}
 pub enum CreatePolicyVersionError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -12619,7 +12737,7 @@ pub enum CreateRoleError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -12701,7 +12819,7 @@ pub enum CreateSAMLProviderError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -12767,7 +12885,7 @@ impl Error for CreateSAMLProviderError {}
 pub enum CreateServiceLinkedRoleError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12833,7 +12951,7 @@ impl Error for CreateServiceLinkedRoleError {}
 /// Errors returned by CreateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum CreateServiceSpecificCredentialError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12911,7 +13029,7 @@ pub enum CreateUserError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -12991,7 +13109,7 @@ impl Error for CreateUserError {}
 pub enum CreateVirtualMFADeviceError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -13051,7 +13169,7 @@ impl Error for CreateVirtualMFADeviceError {}
 pub enum DeactivateMFADeviceError {
     /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13121,7 +13239,7 @@ impl Error for DeactivateMFADeviceError {}
 /// Errors returned by DeleteAccessKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccessKeyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13181,7 +13299,7 @@ impl Error for DeleteAccessKeyError {}
 /// Errors returned by DeleteAccountAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountAliasError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13241,7 +13359,7 @@ impl Error for DeleteAccountAliasError {}
 /// Errors returned by DeleteAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteAccountPasswordPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13305,7 +13423,7 @@ impl Error for DeleteAccountPasswordPolicyError {}
 pub enum DeleteGroupError {
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13371,7 +13489,7 @@ impl Error for DeleteGroupError {}
 /// Errors returned by DeleteGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13433,7 +13551,7 @@ impl Error for DeleteGroupPolicyError {}
 pub enum DeleteInstanceProfileError {
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13501,7 +13619,7 @@ impl Error for DeleteInstanceProfileError {}
 pub enum DeleteLoginProfileError {
     /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13637,7 +13755,7 @@ pub enum DeletePolicyError {
     DeleteConflict(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13713,7 +13831,7 @@ pub enum DeletePolicyVersionError {
     DeleteConflict(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13789,7 +13907,7 @@ pub enum DeleteRoleError {
     ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -13937,7 +14055,7 @@ impl Error for DeleteRolePermissionsBoundaryError {}
 /// Errors returned by DeleteRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14007,7 +14125,7 @@ impl Error for DeleteRolePolicyError {}
 pub enum DeleteSAMLProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14119,7 +14237,7 @@ impl Error for DeleteSSHPublicKeyError {}
 pub enum DeleteServerCertificateError {
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14185,7 +14303,7 @@ impl Error for DeleteServerCertificateError {}
 /// Errors returned by DeleteServiceLinkedRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceLinkedRoleError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14293,7 +14411,7 @@ impl Error for DeleteServiceSpecificCredentialError {}
 /// Errors returned by DeleteSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteSigningCertificateError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14357,7 +14475,7 @@ pub enum DeleteUserError {
     ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14485,7 +14603,7 @@ impl Error for DeleteUserPermissionsBoundaryError {}
 /// Errors returned by DeleteUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14547,7 +14665,7 @@ impl Error for DeleteUserPolicyError {}
 pub enum DeleteVirtualMFADeviceError {
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14615,7 +14733,7 @@ impl Error for DeleteVirtualMFADeviceError {}
 pub enum DetachGroupPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14683,7 +14801,7 @@ impl Error for DetachGroupPolicyError {}
 pub enum DetachRolePolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14759,7 +14877,7 @@ impl Error for DetachRolePolicyError {}
 pub enum DetachUserPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14831,7 +14949,7 @@ pub enum EnableMFADeviceError {
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
     InvalidAuthenticationCode(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -14913,7 +15031,7 @@ impl Error for EnableMFADeviceError {}
 /// Errors returned by GenerateCredentialReport
 #[derive(Debug, PartialEq)]
 pub enum GenerateCredentialReportError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17857,7 +17975,7 @@ impl Error for ListVirtualMFADevicesError {}
 /// Errors returned by PutGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutGroupPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -18011,7 +18129,7 @@ impl Error for PutRolePermissionsBoundaryError {}
 /// Errors returned by PutRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRolePolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -18161,7 +18279,7 @@ impl Error for PutUserPermissionsBoundaryError {}
 /// Errors returned by PutUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutUserPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -18303,7 +18421,7 @@ impl Error for RemoveClientIDFromOpenIDConnectProviderError {}
 /// Errors returned by RemoveRoleFromInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum RemoveRoleFromInstanceProfileError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -18379,7 +18497,7 @@ impl Error for RemoveRoleFromInstanceProfileError {}
 /// Errors returned by RemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveUserFromGroupError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -18487,7 +18605,7 @@ impl Error for ResetServiceSpecificCredentialError {}
 pub enum ResyncMFADeviceError {
     /// <p>The request was rejected because the authentication code was not recognized. The error message describes the specific error.</p>
     InvalidAuthenticationCode(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -18555,7 +18673,7 @@ impl Error for ResyncMFADeviceError {}
 pub enum SetDefaultPolicyVersionError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -18787,7 +18905,7 @@ pub enum TagRoleError {
     ConcurrentModification(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -18863,7 +18981,7 @@ pub enum TagUserError {
     ConcurrentModification(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19055,7 +19173,7 @@ impl Error for UntagUserError {}
 /// Errors returned by UpdateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccessKeyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19115,7 +19233,7 @@ impl Error for UpdateAccessKeyError {}
 /// Errors returned by UpdateAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountPasswordPolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -19189,7 +19307,7 @@ impl Error for UpdateAccountPasswordPolicyError {}
 /// Errors returned by UpdateAssumeRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssumeRolePolicyError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
@@ -19271,7 +19389,7 @@ impl Error for UpdateAssumeRolePolicyError {}
 pub enum UpdateGroupError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19339,7 +19457,7 @@ impl Error for UpdateGroupError {}
 pub enum UpdateLoginProfileError {
     /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19613,7 +19731,7 @@ impl Error for UpdateRoleDescriptionError {}
 pub enum UpdateSAMLProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19725,7 +19843,7 @@ impl Error for UpdateSSHPublicKeyError {}
 pub enum UpdateServerCertificateError {
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19839,7 +19957,7 @@ impl Error for UpdateServiceSpecificCredentialError {}
 /// Errors returned by UpdateSigningCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateSigningCertificateError {
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19905,7 +20023,7 @@ pub enum UpdateUserError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -19987,7 +20105,7 @@ pub enum UploadSSHPublicKeyError {
     DuplicateSSHPublicKey(String),
     /// <p>The request was rejected because the public key is malformed or otherwise invalid.</p>
     InvalidPublicKey(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
@@ -20067,7 +20185,7 @@ pub enum UploadServerCertificateError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because the public key certificate and the private key do not match.</p>
     KeyPairMismatch(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
     MalformedCertificate(String),
@@ -20147,7 +20265,7 @@ pub enum UploadSigningCertificateError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because the certificate is invalid.</p>
     InvalidCertificate(String),
-    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limitations. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
     /// <p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
     MalformedCertificate(String),
@@ -20249,7 +20367,7 @@ pub trait Iam {
         input: AddClientIDToOpenIDConnectProviderRequest,
     ) -> Result<(), RusotoError<AddClientIDToOpenIDConnectProviderError>>;
 
-    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role. (The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.) You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     async fn add_role_to_instance_profile(
         &self,
         input: AddRoleToInstanceProfileRequest,
@@ -20285,7 +20403,7 @@ pub trait Iam {
         input: ChangePasswordRequest,
     ) -> Result<(), RusotoError<ChangePasswordError>>;
 
-    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     async fn create_access_key(
         &self,
         input: CreateAccessKeyRequest,
@@ -20297,13 +20415,13 @@ pub trait Iam {
         input: CreateAccountAliasRequest,
     ) -> Result<(), RusotoError<CreateAccountAliasError>>;
 
-    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new group.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_group(
         &self,
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
 
-    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_instance_profile(
         &self,
         input: CreateInstanceProfileRequest,
@@ -20333,7 +20451,7 @@ pub trait Iam {
         input: CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, RusotoError<CreatePolicyVersionError>>;
 
-    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_role(
         &self,
         input: CreateRoleRequest,
@@ -20360,13 +20478,13 @@ pub trait Iam {
         RusotoError<CreateServiceSpecificCredentialError>,
     >;
 
-    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new IAM user for your AWS account.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_user(
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
-    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
+    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
     async fn create_virtual_mfa_device(
         &self,
         input: CreateVirtualMFADeviceRequest,
@@ -20553,7 +20671,7 @@ pub trait Iam {
         RusotoError<GenerateOrganizationsAccessReportError>,
     >;
 
-    /// <p>Generates a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt.</p> <p>The <code>JobId</code> returned by <code>GenerateServiceLastAccessedDetail</code> must be used by the same role within a session, or by the same user when used to call <code>GetServiceLastAccessedDetail</code>.</p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Generates a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt.</p> <p>The <code>JobId</code> returned by <code>GenerateServiceLastAccessedDetail</code> must be used by the same role within a session, or by the same user when used to call <code>GetServiceLastAccessedDetail</code>.</p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service and action last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Permissions Using Service Last Accessed Data</a> in the <i>IAM User Guide</i>.</p>
     async fn generate_service_last_accessed_details(
         &self,
         input: GenerateServiceLastAccessedDetailsRequest,
@@ -20582,7 +20700,7 @@ pub trait Iam {
         &self,
     ) -> Result<GetAccountPasswordPolicyResponse, RusotoError<GetAccountPasswordPolicyError>>;
 
-    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn get_account_summary(
         &self,
     ) -> Result<GetAccountSummaryResponse, RusotoError<GetAccountSummaryError>>;
@@ -20682,7 +20800,7 @@ pub trait Iam {
         input: GetServerCertificateRequest,
     ) -> Result<GetServerCertificateResponse, RusotoError<GetServerCertificateError>>;
 
-    /// <p>Retrieves a service last accessed report that was created using the <code>GenerateServiceLastAccessedDetails</code> operation. You can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code> to retrieve the status of your report job. When the report is complete, you can retrieve the generated report. The report includes a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
+    /// <p>Retrieves a service last accessed report that was created using the <code>GenerateServiceLastAccessedDetails</code> operation. You can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code> to retrieve the status of your report job. When the report is complete, you can retrieve the generated report. The report includes a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p> <p>If you specified <code>ACTION_LEVEL</code> granularity when you generated the report, this operation returns service and action last accessed data. This includes the most recent access attempt for each tracked action within a service. Otherwise, this operation returns only service data.</p> <p>For more information about service and action last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Permissions Using Service Last Accessed Data</a> in the <i>IAM User Guide</i>.</p>
     async fn get_service_last_accessed_details(
         &self,
         input: GetServiceLastAccessedDetailsRequest,
@@ -21166,7 +21284,7 @@ impl Iam for IamClient {
         Ok(())
     }
 
-    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role. (The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.) You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     async fn add_role_to_instance_profile(
         &self,
         input: AddRoleToInstanceProfileRequest,
@@ -21334,7 +21452,7 @@ impl Iam for IamClient {
         Ok(())
     }
 
-    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     async fn create_access_key(
         &self,
         input: CreateAccessKeyRequest,
@@ -21410,7 +21528,7 @@ impl Iam for IamClient {
         Ok(())
     }
 
-    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new group.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -21455,7 +21573,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_instance_profile(
         &self,
         input: CreateInstanceProfileRequest,
@@ -21694,7 +21812,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_role(
         &self,
         input: CreateRoleRequest,
@@ -21888,7 +22006,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Creates a new IAM user for your AWS account.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn create_user(
         &self,
         input: CreateUserRequest,
@@ -21933,7 +22051,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
+    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
     async fn create_virtual_mfa_device(
         &self,
         input: CreateVirtualMFADeviceRequest,
@@ -22886,7 +23004,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p>Generates a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt.</p> <p>The <code>JobId</code> returned by <code>GenerateServiceLastAccessedDetail</code> must be used by the same role within a session, or by the same user when used to call <code>GetServiceLastAccessedDetail</code>.</p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Generates a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt.</p> <p>The <code>JobId</code> returned by <code>GenerateServiceLastAccessedDetail</code> must be used by the same role within a session, or by the same user when used to call <code>GetServiceLastAccessedDetail</code>.</p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service and action last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Permissions Using Service Last Accessed Data</a> in the <i>IAM User Guide</i>.</p>
     async fn generate_service_last_accessed_details(
         &self,
         input: GenerateServiceLastAccessedDetailsRequest,
@@ -23085,7 +23203,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p>The number and size of IAM resources in an AWS account are limited. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html">IAM and STS Quotas</a> in the <i>IAM User Guide</i>.</p>
     async fn get_account_summary(
         &self,
     ) -> Result<GetAccountSummaryResponse, RusotoError<GetAccountSummaryError>> {
@@ -23893,7 +24011,7 @@ impl Iam for IamClient {
         Ok(result)
     }
 
-    /// <p>Retrieves a service last accessed report that was created using the <code>GenerateServiceLastAccessedDetails</code> operation. You can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code> to retrieve the status of your report job. When the report is complete, you can retrieve the generated report. The report includes a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
+    /// <p>Retrieves a service last accessed report that was created using the <code>GenerateServiceLastAccessedDetails</code> operation. You can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code> to retrieve the status of your report job. When the report is complete, you can retrieve the generated report. The report includes a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p> <p>If you specified <code>ACTION_LEVEL</code> granularity when you generated the report, this operation returns service and action last accessed data. This includes the most recent access attempt for each tracked action within a service. Otherwise, this operation returns only service data.</p> <p>For more information about service and action last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Permissions Using Service Last Accessed Data</a> in the <i>IAM User Guide</i>.</p>
     async fn get_service_last_accessed_details(
         &self,
         input: GetServiceLastAccessedDetailsRequest,

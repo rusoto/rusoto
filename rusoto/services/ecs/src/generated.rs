@@ -126,7 +126,7 @@ pub struct CapacityProvider {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The current status of the capacity provider. Only capacity providers in an <code>ACTIVE</code> state can be used in a cluster.</p>
+    /// <p>The current status of the capacity provider. Only capacity providers in an <code>ACTIVE</code> state can be used in a cluster. When a capacity provider is successfully deleted, it will have an <code>INACTIVE</code> status.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -134,6 +134,14 @@ pub struct CapacityProvider {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+    /// <p><p>The update status of the capacity provider. The following are the possible states that will be returned.</p> <dl> <dt>DELETE<em>IN</em>PROGRESS</dt> <dd> <p>The capacity provider is in the process of being deleted.</p> </dd> <dt>DELETE<em>COMPLETE</dt> <dd> <p>The capacity provider has been successfully deleted and will have an <code>INACTIVE</code> status.</p> </dd> <dt>DELETE</em>FAILED</dt> <dd> <p>The capacity provider was unable to be deleted. The update status reason will provide further details about why the delete failed.</p> </dd> </dl></p>
+    #[serde(rename = "updateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_status: Option<String>,
+    /// <p>The update status reason. This provides further details about the update status for the capacity provider.</p>
+    #[serde(rename = "updateStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_status_reason: Option<String>,
 }
 
 /// <p>The details of a capacity provider strategy.</p>
@@ -440,7 +448,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "systemControls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub system_controls: Option<Vec<SystemControl>>,
-    /// <p><p>A list of <code>ulimits</code> to set in the container. This parameter maps to <code>Ulimits</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--ulimit</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. Valid naming values are displayed in the <a>Ulimit</a> data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version --format &#39;{{.Server.APIVersion}}&#39;</code> </p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
+    /// <p><p>A list of <code>ulimits</code> to set in the container. If a ulimit value is specified in a task definition, it will override the default values set by Docker. This parameter maps to <code>Ulimits</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--ulimit</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. Valid naming values are displayed in the <a>Ulimit</a> data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version --format &#39;{{.Server.APIVersion}}&#39;</code> </p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "ulimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ulimits: Option<Vec<Ulimit>>,
@@ -869,6 +877,22 @@ pub struct DeleteAttributesResponse {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<Attribute>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCapacityProviderRequest {
+    /// <p>The short name or full Amazon Resource Name (ARN) of the capacity provider to delete.</p>
+    #[serde(rename = "capacityProvider")]
+    pub capacity_provider: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCapacityProviderResponse {
+    #[serde(rename = "capacityProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider: Option<CapacityProvider>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1547,7 +1571,7 @@ pub struct ListAccountSettingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The resource name you want to list the account settings for.</p>
+    /// <p>The name of the account setting you want to list the settings for.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2204,7 +2228,7 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the task execution role that the Amazon ECS container agent and the Docker daemon can assume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the task execution role that grants the Amazon ECS container agent permission to make AWS API calls on your behalf. The task execution IAM role is required depending on the requirements of your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html">Amazon ECS task execution IAM role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_role_arn: Option<String>,
@@ -2998,7 +3022,7 @@ pub struct TaskDefinition {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the task execution role that containers in this task can assume. All containers in this task are granted the permissions that are specified in this role.</p>
+    /// <p>The Amazon Resource Name (ARN) of the task execution role that grants the Amazon ECS container agent permission to make AWS API calls on your behalf. The task execution IAM role is required depending on the requirements of your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html">Amazon ECS task execution IAM role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_role_arn: Option<String>,
@@ -3088,7 +3112,7 @@ pub struct TaskOverride {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the task execution role that the Amazon ECS container agent and the Docker daemon can assume.</p>
+    /// <p>The Amazon Resource Name (ARN) of the task execution IAM role override for the task.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_role_arn: Option<String>,
@@ -3439,18 +3463,18 @@ pub struct VersionInfo {
     pub docker_version: Option<String>,
 }
 
-/// <p>A data volume used in a task definition. For tasks that use a Docker volume, specify a <code>DockerVolumeConfiguration</code>. For tasks that use a bind mount host volume, specify a <code>host</code> and optional <code>sourcePath</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html">Using Data Volumes in Tasks</a>.</p>
+/// <p>A data volume used in a task definition. For tasks that use Amazon Elastic File System (Amazon EFS) file storage, specify an <code>efsVolumeConfiguration</code>. For tasks that use a Docker volume, specify a <code>DockerVolumeConfiguration</code>. For tasks that use a bind mount host volume, specify a <code>host</code> and optional <code>sourcePath</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html">Using Data Volumes in Tasks</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Volume {
     /// <p>This parameter is specified when you are using Docker volumes. Docker volumes are only supported when you are using the EC2 launch type. Windows containers only support the use of the <code>local</code> driver. To use bind mounts, specify the <code>host</code> parameter instead.</p>
     #[serde(rename = "dockerVolumeConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub docker_volume_configuration: Option<DockerVolumeConfiguration>,
-    /// <p><p>This parameter is specified when you are using an Amazon Elastic File System (Amazon EFS) file storage. Amazon EFS file systems are only supported when you are using the EC2 launch type.</p> <important> <p> <code>EFSVolumeConfiguration</code> remains in preview and is a Beta Service as defined by and subject to the Beta Service Participation Service Terms located at <a href="https://aws.amazon.com/service-terms">https://aws.amazon.com/service-terms</a> (&quot;Beta Terms&quot;). These Beta Terms apply to your participation in this preview of <code>EFSVolumeConfiguration</code>.</p> </important></p>
+    /// <p>This parameter is specified when you are using an Amazon Elastic File System file system for task storage.</p>
     #[serde(rename = "efsVolumeConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub efs_volume_configuration: Option<EFSVolumeConfiguration>,
-    /// <p>This parameter is specified when you are using bind mount host volumes. Bind mount host volumes are supported when you are using either the EC2 or Fargate launch types. The contents of the <code>host</code> parameter determine whether your bind mount host volume persists on the host container instance and where it is stored. If the <code>host</code> parameter is empty, then the Docker daemon assigns a host path for your data volume. However, the data is not guaranteed to persist after the containers associated with it stop running.</p> <p>Windows containers can mount whole directories on the same drive as <code>$env:ProgramData</code>. Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount <code>C:\my\path:C:\my\path</code> and <code>D:\:D:\</code>, but not <code>D:\my\path:C:\my\path</code> or <code>D:\:C:\my\path</code>.</p>
+    /// <p>This parameter is specified when you are using bind mount host volumes. The contents of the <code>host</code> parameter determine whether your bind mount host volume persists on the host container instance and where it is stored. If the <code>host</code> parameter is empty, then the Docker daemon assigns a host path for your data volume. However, the data is not guaranteed to persist after the containers associated with it stop running.</p> <p>Windows containers can mount whole directories on the same drive as <code>$env:ProgramData</code>. Windows containers cannot mount directories on a different drive, and mount point cannot be across drives. For example, you can mount <code>C:\my\path:C:\my\path</code> and <code>D:\:D:\</code>, but not <code>D:\my\path:C:\my\path</code> or <code>D:\:C:\my\path</code>.</p>
     #[serde(rename = "host")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host: Option<HostVolumeProperties>,
@@ -3484,6 +3508,8 @@ pub enum CreateCapacityProviderError {
     LimitExceeded(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
+    /// <p>There is already a current Amazon ECS container agent update in progress on the specified container instance. If the container agent becomes disconnected while it is in a transitional stage, such as <code>PENDING</code> or <code>STAGING</code>, the update process can get stuck in that state. However, when the agent reconnects, it resumes where it stopped previously.</p>
+    UpdateInProgress(String),
 }
 
 impl CreateCapacityProviderError {
@@ -3506,6 +3532,11 @@ impl CreateCapacityProviderError {
                 "ServerException" => {
                     return RusotoError::Service(CreateCapacityProviderError::Server(err.msg))
                 }
+                "UpdateInProgressException" => {
+                    return RusotoError::Service(CreateCapacityProviderError::UpdateInProgress(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -3521,6 +3552,7 @@ impl fmt::Display for CreateCapacityProviderError {
             CreateCapacityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             CreateCapacityProviderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateCapacityProviderError::Server(ref cause) => write!(f, "{}", cause),
+            CreateCapacityProviderError::UpdateInProgress(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -3817,6 +3849,50 @@ impl fmt::Display for DeleteAttributesError {
     }
 }
 impl Error for DeleteAttributesError {}
+/// Errors returned by DeleteCapacityProvider
+#[derive(Debug, PartialEq)]
+pub enum DeleteCapacityProviderError {
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+}
+
+impl DeleteCapacityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCapacityProviderError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DeleteCapacityProviderError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteCapacityProviderError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DeleteCapacityProviderError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCapacityProviderError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCapacityProviderError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteCapacityProviderError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteCapacityProviderError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCapacityProviderError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -6126,6 +6202,12 @@ pub trait Ecs {
         input: DeleteAttributesRequest,
     ) -> Result<DeleteAttributesResponse, RusotoError<DeleteAttributesError>>;
 
+    /// <p>Deletes the specified capacity provider.</p> <note> <p>The <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers are reserved and cannot be deleted. You can disassociate them from a cluster using either the <a>PutClusterCapacityProviders</a> API or by deleting the cluster.</p> </note> <p>Prior to a capacity provider being deleted, the capacity provider must be removed from the capacity provider strategy from all services. The <a>UpdateService</a> API can be used to remove a capacity provider from a service's capacity provider strategy. When updating a service, the <code>forceNewDeployment</code> option can be used to ensure that any tasks using the Amazon EC2 instance capacity provided by the capacity provider are transitioned to use the capacity from the remaining capacity providers. Only capacity providers that are not associated with a cluster can be deleted. To remove a capacity provider from a cluster, you can either use <a>PutClusterCapacityProviders</a> or delete the cluster.</p>
+    async fn delete_capacity_provider(
+        &self,
+        input: DeleteCapacityProviderRequest,
+    ) -> Result<DeleteCapacityProviderResponse, RusotoError<DeleteCapacityProviderError>>;
+
     /// <p>Deletes the specified cluster. The cluster will transition to the <code>INACTIVE</code> state. Clusters with an <code>INACTIVE</code> status may remain discoverable in your account for a period of time. However, this behavior is subject to change in the future, so you should not rely on <code>INACTIVE</code> clusters persisting.</p> <p>You must deregister all container instances from this cluster before you may delete it. You can list the container instances in a cluster with <a>ListContainerInstances</a> and deregister them with <a>DeregisterContainerInstance</a>.</p>
     async fn delete_cluster(
         &self,
@@ -6601,6 +6683,37 @@ impl Ecs for EcsClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAttributesError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified capacity provider.</p> <note> <p>The <code>FARGATE</code> and <code>FARGATE_SPOT</code> capacity providers are reserved and cannot be deleted. You can disassociate them from a cluster using either the <a>PutClusterCapacityProviders</a> API or by deleting the cluster.</p> </note> <p>Prior to a capacity provider being deleted, the capacity provider must be removed from the capacity provider strategy from all services. The <a>UpdateService</a> API can be used to remove a capacity provider from a service's capacity provider strategy. When updating a service, the <code>forceNewDeployment</code> option can be used to ensure that any tasks using the Amazon EC2 instance capacity provided by the capacity provider are transitioned to use the capacity from the remaining capacity providers. Only capacity providers that are not associated with a cluster can be deleted. To remove a capacity provider from a cluster, you can either use <a>PutClusterCapacityProviders</a> or delete the cluster.</p>
+    async fn delete_capacity_provider(
+        &self,
+        input: DeleteCapacityProviderRequest,
+    ) -> Result<DeleteCapacityProviderResponse, RusotoError<DeleteCapacityProviderError>> {
+        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.DeleteCapacityProvider",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteCapacityProviderResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteCapacityProviderError::from_response(response))
         }
     }
 

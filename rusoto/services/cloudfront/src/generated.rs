@@ -373,7 +373,7 @@ impl BooleanSerializer {
     }
 }
 
-/// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to serve objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current quota (formerly known as limit) on the number of cache behaviors that you can add to a distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you don’t want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don’t include an empty <code>CacheBehavior</code> element because this is invalid.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -383,7 +383,7 @@ pub struct CacheBehavior {
     pub compress: Option<bool>,
     /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for this cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
     /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
     pub forwarded_values: ForwardedValues,
@@ -397,11 +397,11 @@ pub struct CacheBehavior {
     pub path_pattern: String,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they match this cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>. </p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -1439,7 +1439,7 @@ pub struct CreateCloudFrontOriginAccessIdentityResult {
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
     /// <p>The current version of the origin access identity created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new origin access identity just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/origin-access-identity/cloudfront/E74FTE3AJFJ256A</code>.</p>
+    /// <p>The fully qualified URI of the new origin access identity just created.</p>
     pub location: Option<String>,
 }
 
@@ -1478,7 +1478,7 @@ pub struct CreateDistributionResult {
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new distribution resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1515,7 +1515,7 @@ pub struct CreateDistributionWithTagsResult {
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>. </p>
+    /// <p>The fully qualified URI of the new distribution resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1550,7 +1550,7 @@ pub struct CreateFieldLevelEncryptionConfigResult {
     pub e_tag: Option<String>,
     /// <p>Returned when you create a new field-level encryption configuration.</p>
     pub field_level_encryption: Option<FieldLevelEncryption>,
-    /// <p>The fully qualified URI of the new configuration resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/field-level-encryption-config/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new configuration resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1585,7 +1585,7 @@ pub struct CreateFieldLevelEncryptionProfileResult {
     pub e_tag: Option<String>,
     /// <p>Returned when you create a new field-level encryption profile.</p>
     pub field_level_encryption_profile: Option<FieldLevelEncryptionProfile>,
-    /// <p>The fully qualified URI of the new profile resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/field-level-encryption-profile/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new profile resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1657,7 +1657,7 @@ pub struct CreatePublicKeyRequest {
 pub struct CreatePublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new public key resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/cloudfront-public-key/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new public key resource just created.</p>
     pub location: Option<String>,
     /// <p>Returned when you add a public key.</p>
     pub public_key: Option<PublicKey>,
@@ -1691,7 +1691,7 @@ pub struct CreateStreamingDistributionRequest {
 pub struct CreateStreamingDistributionResult {
     /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
+    /// <p>The fully qualified URI of the new streaming distribution resource just created.</p>
     pub location: Option<String>,
     /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
@@ -1728,7 +1728,7 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 pub struct CreateStreamingDistributionWithTagsResult {
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
+    /// <p>The fully qualified URI of the new streaming distribution resource just created.</p>
     pub location: Option<String>,
     /// <p>The streaming distribution's information. </p>
     pub streaming_distribution: Option<StreamingDistribution>,
@@ -2008,22 +2008,22 @@ impl CustomHeadersSerializer {
     }
 }
 
-/// <p>A custom origin or an Amazon S3 bucket configured as a website endpoint.</p>
+/// <p>A custom origin. A custom origin is any origin that is <i>not</i> an Amazon S3 bucket, with one exception. An Amazon S3 bucket that is <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">configured with static website hosting</a> <i>is</i> a custom origin.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomOriginConfig {
-    /// <p>The HTTP port the custom origin listens on.</p>
+    /// <p>The HTTP port that CloudFront uses to connect to the origin. Specify the HTTP port that the origin listens on.</p>
     pub http_port: i64,
-    /// <p>The HTTPS port the custom origin listens on.</p>
+    /// <p>The HTTPS port that CloudFront uses to connect to the origin. Specify the HTTPS port that the origin listens on.</p>
     pub https_port: i64,
-    /// <p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
+    /// <p>Specifies how long, in seconds, CloudFront persists its connection to the origin. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 5 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginKeepaliveTimeout">Origin Keep-alive Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_keepalive_timeout: Option<i64>,
-    /// <p>The origin protocol policy to apply to your origin.</p>
+    /// <p><p>Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Valid values are:</p> <ul> <li> <p> <code>http-only</code> – CloudFront always uses HTTP to connect to the origin.</p> </li> <li> <p> <code>match-viewer</code> – CloudFront connects to the origin using the same protocol that the viewer used to connect to CloudFront.</p> </li> <li> <p> <code>https-only</code> – CloudFront always uses HTTPS to connect to the origin.</p> </li> </ul></p>
     pub origin_protocol_policy: String,
-    /// <p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
+    /// <p>Specifies how long, in seconds, CloudFront waits for a response from the origin. This is also known as the <i>origin response timeout</i>. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 30 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginResponseTimeout">Origin Response Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_read_timeout: Option<i64>,
-    /// <p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>
+    /// <p>Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS. Valid values include <code>SSLv3</code>, <code>TLSv1</code>, <code>TLSv1.1</code>, and <code>TLSv1.2</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols">Minimum Origin SSL Protocol</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_ssl_protocols: Option<OriginSslProtocols>,
 }
 
@@ -2129,7 +2129,7 @@ impl CustomOriginConfigSerializer {
     }
 }
 
-/// <p>A complex type that describes the default cache behavior if you don't specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
+/// <p>A complex type that describes the default cache behavior if you don’t specify a <code>CacheBehavior</code> element or if request URLs don’t match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2139,7 +2139,7 @@ pub struct DefaultCacheBehavior {
     pub compress: Option<bool>,
     /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for the default cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
     /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
     pub forwarded_values: ForwardedValues,
@@ -2151,11 +2151,11 @@ pub struct DefaultCacheBehavior {
     pub min_ttl: i64,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they use the default cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -5720,22 +5720,26 @@ impl MinimumProtocolVersionSerializer {
     }
 }
 
-/// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files. This can also be an origin group, if you've created an origin group. You must specify at least one origin or origin group.</p> <p>For the current limit on the number of origins or origin groups that you can specify for a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
+/// <p>An origin.</p> <p>An origin is the location where content is stored, and from which CloudFront gets content to serve to viewers. To specify an origin:</p> <ul> <li> <p>Use the <code>S3OriginConfig</code> type to specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting.</p> </li> <li> <p>Use the <code>CustomOriginConfig</code> type to specify various other kinds of content containers or HTTP servers, including:</p> <ul> <li> <p>An Amazon S3 bucket that is configured with static website hosting</p> </li> <li> <p>An Elastic Load Balancing load balancer</p> </li> <li> <p>An AWS Elemental MediaPackage origin</p> </li> <li> <p>An AWS Elemental MediaStore container</p> </li> <li> <p>Any other HTTP server, running on an Amazon EC2 instance or any other kind of host</p> </li> </ul> </li> </ul> <p>For the current maximum number of origins that you can specify per distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions">General Quotas on Web Distributions</a> in the <i>Amazon CloudFront Developer Guide</i> (quotas were formerly referred to as limits).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origin {
-    /// <p>A complex type that contains names and values for the custom headers that you want.</p>
+    /// <p>The number of times that CloudFront attempts to connect to the origin. The minimum number is 1, the maximum is 3, and the default (if you don’t specify otherwise) is 3.</p> <p>For a custom origin (including an Amazon S3 bucket that’s configured with static website hosting), this value also specifies the number of times that CloudFront attempts to get a response from the origin, in the case of an <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginResponseTimeout">Origin Response Timeout</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#origin-connection-attempts">Origin Connection Attempts</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub connection_attempts: Option<i64>,
+    /// <p>The number of seconds that CloudFront waits when trying to establish a connection to the origin. The minimum timeout is 1 second, the maximum is 10 seconds, and the default (if you don’t specify otherwise) is 10 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#origin-connection-timeout">Origin Connection Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub connection_timeout: Option<i64>,
+    /// <p>A list of HTTP header names and values that CloudFront adds to requests it sends to the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html">Adding Custom Headers to Origin Requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub custom_headers: Option<CustomHeaders>,
-    /// <p>A complex type that contains information about a custom origin. If the origin is an Amazon S3 bucket, use the <code>S3OriginConfig</code> element instead.</p>
+    /// <p>Use this type to specify an origin that is a content container or HTTP server, including an Amazon S3 bucket that is configured with static website hosting. To specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting, use the <code>S3OriginConfig</code> type instead.</p>
     pub custom_origin_config: Option<CustomOriginConfig>,
-    /// <p><p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>. If you set up your bucket to be configured as a website endpoint, enter the Amazon S3 static website hosting endpoint for the bucket.</p> <p>For more information about specifying this value for different types of origins, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName">Origin Domain Name</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, don&#39;t specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul></p>
+    /// <p>The domain name for the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName">Origin Domain Name</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub domain_name: String,
-    /// <p>A unique identifier for the origin or origin group. The value of <code>Id</code> must be unique within the distribution.</p> <p>When you specify the value of <code>TargetOriginId</code> for the default cache behavior or for another cache behavior, you indicate the origin to which you want the cache behavior to route requests by specifying the value of the <code>Id</code> element for that origin. When a request matches the path pattern for that cache behavior, CloudFront routes the request to the specified origin. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>A unique identifier for the origin. This value must be unique within the distribution.</p> <p>Use this value to specify the <code>TargetOriginId</code> in a <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>.</p>
     pub id: String,
-    /// <p>An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. When you include the <code>OriginPath</code> element, specify the directory name, beginning with a <code>/</code>. CloudFront appends the directory name to the value of <code>DomainName</code>, for example, <code>example.com/production</code>. Do not include a <code>/</code> at the end of the directory name.</p> <p>For example, suppose you've specified the following values for your distribution:</p> <ul> <li> <p> <code>DomainName</code>: An Amazon S3 bucket named <code>myawsbucket</code>.</p> </li> <li> <p> <code>OriginPath</code>: <code>/production</code> </p> </li> <li> <p> <code>CNAME</code>: <code>example.com</code> </p> </li> </ul> <p>When a user enters <code>example.com/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/index.html</code>.</p> <p>When a user enters <code>example.com/acme/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/acme/index.html</code>.</p>
+    /// <p>An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath">Origin Path</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_path: Option<String>,
-    /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
+    /// <p>Use this type to specify an origin that is an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting. To specify any other type of origin, including an Amazon S3 bucket that is configured with static website hosting, use the <code>CustomOriginConfig</code> type instead.</p>
     pub s3_origin_config: Option<S3OriginConfig>,
 }
 
@@ -5746,6 +5750,18 @@ impl OriginDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Origin, XmlParseError> {
         deserialize_elements::<_, Origin, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ConnectionAttempts" => {
+                    obj.connection_attempts = Some(IntegerDeserializer::deserialize(
+                        "ConnectionAttempts",
+                        stack,
+                    )?);
+                }
+                "ConnectionTimeout" => {
+                    obj.connection_timeout = Some(IntegerDeserializer::deserialize(
+                        "ConnectionTimeout",
+                        stack,
+                    )?);
+                }
                 "CustomHeaders" => {
                     obj.custom_headers = Some(CustomHeadersDeserializer::deserialize(
                         "CustomHeaders",
@@ -5792,6 +5808,22 @@ impl OriginSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.connection_attempts {
+            writer.write(xml::writer::XmlEvent::start_element("ConnectionAttempts"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.connection_timeout {
+            writer.write(xml::writer::XmlEvent::start_element("ConnectionTimeout"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
         if let Some(ref value) = obj.custom_headers {
             &CustomHeadersSerializer::serialize(&mut writer, "CustomHeaders", value)?;
         }
@@ -7321,7 +7353,7 @@ impl S3OriginSerializer {
     }
 }
 
-/// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
+/// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin or an S3 bucket that is configured as a website endpoint, use the <code>CustomOriginConfig</code> element instead.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8710,7 +8742,7 @@ impl UpdateStreamingDistributionResultDeserializer {
         })
     }
 }
-/// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p> <p>If the distribution doesn’t use <code>Aliases</code> (also known as alternate domain names or CNAMEs)—that is, if the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>—set <code>CloudFrontDefaultCertificate</code> to <code>true</code> and leave all other fields empty.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), use the fields in this type to specify the following settings:</p> <ul> <li> <p>Which viewers the distribution accepts HTTPS connections from: only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a> (recommended), or all viewers including those that don’t support SNI.</p> <ul> <li> <p>To accept HTTPS connections from only viewers that support SNI, set <code>SSLSupportMethod</code> to <code>sni-only</code>. This is recommended. Most browsers and clients released after 2010 support SNI. </p> </li> <li> <p>To accept HTTPS connections from all viewers, including those that don’t support SNI, set <code>SSLSupportMethod</code> to <code>vip</code>. This is not recommended, and results in additional monthly charges from CloudFront. </p> </li> </ul> </li> <li> <p>The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for <code>MinimumProtocolVersion</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p>The location of the SSL/TLS certificate, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a> (recommended) or <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>. You specify the location by setting a value in one of the following fields (not both):</p> <ul> <li> <p> <code>ACMCertificateArn</code> </p> </li> <li> <p> <code>IAMCertificateId</code> </p> </li> </ul> </li> </ul> <p>All distributions support HTTPS connections from viewers. To require viewers to use HTTPS only, or to redirect them from HTTP to HTTPS, use <code>ViewerProtocolPolicy</code> in the <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>. To specify how CloudFront should use SSL/TLS to communicate with your custom origin, use <code>CustomOriginConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html">Using HTTPS with CloudFront</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html"> Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p> <p>If the distribution doesn’t use <code>Aliases</code> (also known as alternate domain names or CNAMEs)—that is, if the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>—set <code>CloudFrontDefaultCertificate</code> to <code>true</code> and leave all other fields empty.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), use the fields in this type to specify the following settings:</p> <ul> <li> <p>Which viewers the distribution accepts HTTPS connections from: only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a> (recommended), or all viewers including those that don’t support SNI.</p> <ul> <li> <p>To accept HTTPS connections from only viewers that support SNI, set <code>SSLSupportMethod</code> to <code>sni-only</code>. This is recommended. Most browsers and clients support SNI. </p> </li> <li> <p>To accept HTTPS connections from all viewers, including those that don’t support SNI, set <code>SSLSupportMethod</code> to <code>vip</code>. This is not recommended, and results in additional monthly charges from CloudFront. </p> </li> </ul> </li> <li> <p>The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for <code>MinimumProtocolVersion</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p>The location of the SSL/TLS certificate, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a> (recommended) or <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>. You specify the location by setting a value in one of the following fields (not both):</p> <ul> <li> <p> <code>ACMCertificateArn</code> </p> </li> <li> <p> <code>IAMCertificateId</code> </p> </li> </ul> </li> </ul> <p>All distributions support HTTPS connections from viewers. To require viewers to use HTTPS only, or to redirect them from HTTP to HTTPS, use <code>ViewerProtocolPolicy</code> in the <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>. To specify how CloudFront should use SSL/TLS to communicate with your custom origin, use <code>CustomOriginConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html">Using HTTPS with CloudFront</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html"> Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8721,9 +8753,9 @@ pub struct ViewerCertificate {
     pub cloud_front_default_certificate: Option<bool>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>, provide the ID of the IAM certificate.</p> <p>If you specify an IAM certificate ID, you must also specify values for <code>MinimumProtocolVerison</code> and <code>SSLSupportMethod</code>. </p>
     pub iam_certificate_id: Option<String>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>We recommend that you specify <code>TLSv1.2_2018</code> unless your viewers are using browsers or devices that don’t support TLSv1.2.</p> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
     pub minimum_protocol_version: Option<String>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients released after 2010 support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
     pub ssl_support_method: Option<String>,
 }
 
@@ -8871,7 +8903,7 @@ pub enum CreateCloudFrontOriginAccessIdentityError {
     CloudFrontOriginAccessIdentityAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
@@ -8930,7 +8962,7 @@ pub enum CreateDistributionError {
     IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -9098,7 +9130,7 @@ pub enum CreateDistributionWithTagsError {
     IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -9265,7 +9297,7 @@ pub enum CreateFieldLevelEncryptionConfigError {
     FieldLevelEncryptionConfigAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
@@ -9329,7 +9361,7 @@ pub enum CreateFieldLevelEncryptionProfileError {
     FieldLevelEncryptionProfileSizeExceeded(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
@@ -9391,7 +9423,7 @@ pub enum CreateInvalidationError {
     BatchTooLarge(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
@@ -9481,7 +9513,7 @@ impl Error for CreateInvalidationError {}
 /// Errors returned by CreatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicKeyError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified public key already exists.</p>
     PublicKeyAlreadyExists(String),
@@ -9547,7 +9579,7 @@ pub enum CreateStreamingDistributionError {
     CNAMEAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
@@ -9713,7 +9745,7 @@ pub enum CreateStreamingDistributionWithTagsError {
     CNAMEAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
@@ -9818,7 +9850,7 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     InvalidIfMatchVersion(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -9881,7 +9913,7 @@ pub enum DeleteDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -9957,7 +9989,7 @@ pub enum DeleteFieldLevelEncryptionConfigError {
     InvalidIfMatchVersion(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -10055,7 +10087,7 @@ pub enum DeleteFieldLevelEncryptionProfileError {
     InvalidIfMatchVersion(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -10147,7 +10179,7 @@ pub enum DeletePublicKeyError {
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified public key is in use. </p>
     PublicKeyInUse(String),
@@ -10223,7 +10255,7 @@ pub enum DeleteStreamingDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified CloudFront distribution is not disabled. You must disable the distribution before you can delete it.</p>
     StreamingDistributionNotDisabled(String),
@@ -11009,7 +11041,7 @@ impl Error for GetStreamingDistributionConfigError {}
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11059,7 +11091,7 @@ impl Error for ListCloudFrontOriginAccessIdentitiesError {}
 /// Errors returned by ListDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11103,7 +11135,7 @@ impl Error for ListDistributionsError {}
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>A web ACL ID specified is not valid. To specify a web ACL created using the latest version of AWS WAF, use the ACL ARN, for example <code>arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/473e64fd-f30b-4765-81a0-62ad96dd167a</code>. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example <code>473e64fd-f30b-4765-81a0-62ad96dd167a</code>.</p>
     InvalidWebACLId(String),
@@ -11157,7 +11189,7 @@ impl Error for ListDistributionsByWebACLIdError {}
 /// Errors returned by ListFieldLevelEncryptionConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionConfigsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11207,7 +11239,7 @@ impl Error for ListFieldLevelEncryptionConfigsError {}
 /// Errors returned by ListFieldLevelEncryptionProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionProfilesError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11259,7 +11291,7 @@ impl Error for ListFieldLevelEncryptionProfilesError {}
 pub enum ListInvalidationsError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
@@ -11317,7 +11349,7 @@ impl Error for ListInvalidationsError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11361,7 +11393,7 @@ impl Error for ListPublicKeysError {}
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11409,7 +11441,7 @@ impl Error for ListStreamingDistributionsError {}
 pub enum ListTagsForResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11477,7 +11509,7 @@ impl Error for ListTagsForResourceError {}
 pub enum TagResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11545,7 +11577,7 @@ impl Error for TagResourceError {}
 pub enum UntagResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11617,7 +11649,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11625,7 +11657,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     MissingBody(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -11699,7 +11731,7 @@ pub enum UpdateDistributionError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -11747,7 +11779,7 @@ pub enum UpdateDistributionError {
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
@@ -11863,7 +11895,7 @@ pub enum UpdateFieldLevelEncryptionConfigError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11871,7 +11903,7 @@ pub enum UpdateFieldLevelEncryptionConfigError {
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>No profile specified for the field-level encryption query argument.</p>
     QueryArgProfileEmpty(String),
@@ -11938,7 +11970,7 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11946,7 +11978,7 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     NoSuchFieldLevelEncryptionProfile(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The maximum number of encryption entities for field-level encryption have been created.</p>
     TooManyFieldLevelEncryptionEncryptionEntities(String),
@@ -12008,13 +12040,13 @@ pub enum UpdatePublicKeyError {
     CannotChangeImmutablePublicKeyFields(String),
     /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
     IllegalUpdate(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -12106,7 +12138,7 @@ pub enum UpdateStreamingDistributionError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -12116,7 +12148,7 @@ pub enum UpdateStreamingDistributionError {
     MissingBody(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyStreamingDistributionCNAMEs(String),

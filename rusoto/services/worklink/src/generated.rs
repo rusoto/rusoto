@@ -19,6 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
@@ -108,12 +109,16 @@ pub struct CreateFleetRequest {
     #[serde(rename = "OptimizeForEndUserLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub optimize_for_end_user_location: Option<bool>,
+    /// <p> The tags to add to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_arn: Option<String>,
@@ -281,7 +286,7 @@ pub struct DescribeDomainResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetMetadataRequest {
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     pub fleet_arn: String,
 }
@@ -317,6 +322,10 @@ pub struct DescribeFleetMetadataResponse {
     #[serde(rename = "OptimizeForEndUserLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub optimize_for_end_user_location: Option<bool>,
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -462,11 +471,11 @@ pub struct FleetSummary {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The name to display.</p>
+    /// <p>The name of the fleet to display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_arn: Option<String>,
@@ -482,6 +491,10 @@ pub struct FleetSummary {
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -566,6 +579,23 @@ pub struct ListFleetsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -670,6 +700,36 @@ pub struct SignOutUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignOutUserResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of tag keys to remove from the resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2000,6 +2060,8 @@ pub enum ListDomainsError {
     InternalServerError(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit.</p>
     TooManyRequests(String),
     /// <p>You are not authorized to perform this action.</p>
@@ -2015,6 +2077,9 @@ impl ListDomainsError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDomainsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListDomainsError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListDomainsError::TooManyRequests(err.msg))
@@ -2035,6 +2100,7 @@ impl fmt::Display for ListDomainsError {
         match *self {
             ListDomainsError::InternalServerError(ref cause) => write!(f, "{}", cause),
             ListDomainsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListDomainsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
             ListDomainsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
@@ -2089,6 +2155,36 @@ impl fmt::Display for ListFleetsError {
     }
 }
 impl Error for ListFleetsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebsiteAuthorizationProviders
 #[derive(Debug, PartialEq)]
 pub enum ListWebsiteAuthorizationProvidersError {
@@ -2399,6 +2495,66 @@ impl fmt::Display for SignOutUserError {
     }
 }
 impl Error for SignOutUserError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAuditStreamConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuditStreamConfigurationError {
@@ -2961,6 +3117,12 @@ pub trait Worklink {
         input: ListFleetsRequest,
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
 
+    /// <p>Retrieves a list of tags for the specified resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
     async fn list_website_authorization_providers(
         &self,
@@ -2996,6 +3158,18 @@ pub trait Worklink {
         &self,
         input: SignOutUserRequest,
     ) -> Result<SignOutUserResponse, RusotoError<SignOutUserError>>;
+
+    /// <p>Adds or overwrites one or more tags for the specified resource, such as a fleet. Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the audit stream configuration for the fleet.</p>
     async fn update_audit_stream_configuration(
@@ -3698,6 +3872,33 @@ impl Worklink for WorklinkClient {
         }
     }
 
+    /// <p>Retrieves a list of tags for the specified resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
     async fn list_website_authorization_providers(
         &self,
@@ -3855,6 +4056,69 @@ impl Worklink for WorklinkClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SignOutUserError::from_response(response))
+        }
+    }
+
+    /// <p>Adds or overwrites one or more tags for the specified resource, such as a fleet. Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

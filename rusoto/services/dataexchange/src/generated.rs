@@ -443,7 +443,8 @@ pub struct ExportAssetsToS3ResponseDetails {
 pub struct ExportServerSideEncryption {
     /// <p>The Amazon Resource Name (ARN) of the the AWS KMS key you want to use to encrypt the Amazon S3 objects. This parameter is required if you choose aws:kms as an encryption type.</p>
     #[serde(rename = "KmsKeyArn")]
-    pub kms_key_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
     /// <p>The type of server side encryption used for encrypting the objects in Amazon S3.</p>
     #[serde(rename = "Type")]
     pub type_: String,

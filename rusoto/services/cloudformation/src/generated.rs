@@ -3772,6 +3772,8 @@ impl ListImportsOutputDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStackInstancesInput {
+    /// <p>The status that stack instances are filtered by.</p>
+    pub filters: Option<Vec<StackInstanceFilter>>,
     /// <p>The maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results.</p>
     pub max_results: Option<i64>,
     /// <p>If the previous request didn't return all of the remaining results, the response's <code>NextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListStackInstances</code> again and assign that token to the request object's <code>NextToken</code> parameter. If there are no remaining results, the previous response object's <code>NextToken</code> parameter is set to <code>null</code>.</p>
@@ -3793,6 +3795,13 @@ impl ListStackInstancesInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.filters {
+            StackInstanceFiltersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filters"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.max_results {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
@@ -5418,7 +5427,7 @@ impl RegionListSerializer {
 pub struct RegisterTypeInput {
     /// <p>A unique identifier that acts as an idempotency key for this registration request. Specifying a client request token prevents CloudFormation from generating more than one version of a type from the same registeration request, even if the request is submitted multiple times. </p>
     pub client_request_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an <i> <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM execution role</a> </i> that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role for CloudFormation to assume when invoking the resource provider. If your resource type calls AWS APIs in any of its handlers, you must create an <i> <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM execution role</a> </i> that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. When CloudFormation needs to invoke the resource provider handler, CloudFormation assumes this execution role to create a temporary session token, which it then passes to the resource provider handler, thereby supplying your resource provider with the appropriate credentials.</p>
     pub execution_role_arn: Option<String>,
     /// <p>Specifies logging configuration information for a type.</p>
     pub logging_config: Option<LoggingConfig>,
@@ -5941,7 +5950,7 @@ pub struct ResourceToImport {
     pub logical_resource_id: String,
     /// <p>A key-value pair that identifies the target resource. The key is an identifier property (for example, <code>BucketName</code> for <code>AWS::S3::Bucket</code> resources) and the value is the actual property value (for example, <code>MyS3Bucket</code>).</p>
     pub resource_identifier: ::std::collections::HashMap<String, String>,
-    /// <p>The type of resource to import into your stack, such as <code>AWS::S3::Bucket</code>. </p>
+    /// <p>The type of resource to import into your stack, such as <code>AWS::S3::Bucket</code>. For a list of supported resource types, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import-supported-resources.html">Resources that support import operations</a> in the AWS CloudFormation User Guide.</p>
     pub resource_type: String,
 }
 
@@ -6804,7 +6813,7 @@ pub struct StackInstance {
     pub drift_status: Option<String>,
     /// <p>Most recent time when CloudFormation performed a drift detection operation on the stack instance. This value will be <code>NULL</code> for any stack instance on which drift detection has not yet been performed.</p>
     pub last_drift_check_timestamp: Option<String>,
-    /// <p>Reserved for internal use. No data returned.</p>
+    /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
     pub organizational_unit_id: Option<String>,
     /// <p>A list of parameters from the stack set template whose values have been overridden in this stack instance.</p>
     pub parameter_overrides: Option<Vec<Parameter>>,
@@ -6812,6 +6821,8 @@ pub struct StackInstance {
     pub region: Option<String>,
     /// <p>The ID of the stack instance.</p>
     pub stack_id: Option<String>,
+    /// <p>The detailed status of the stack instance.</p>
+    pub stack_instance_status: Option<StackInstanceComprehensiveStatus>,
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
     /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
@@ -6863,6 +6874,13 @@ impl StackInstanceDeserializer {
                 "StackId" => {
                     obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                 }
+                "StackInstanceStatus" => {
+                    obj.stack_instance_status =
+                        Some(StackInstanceComprehensiveStatusDeserializer::deserialize(
+                            "StackInstanceStatus",
+                            stack,
+                        )?);
+                }
                 "StackSetId" => {
                     obj.stack_set_id =
                         Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
@@ -6882,6 +6900,92 @@ impl StackInstanceDeserializer {
         })
     }
 }
+/// <p>The detailed status of the stack instance.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StackInstanceComprehensiveStatus {
+    /// <ul> <li> <p> <code>CANCELLED</code>: The operation in the specified account and Region has been cancelled. This is either because a user has stopped the stack set operation, or because the failure tolerance of the stack set operation has been exceeded.</p> </li> <li> <p> <code>FAILED</code>: The operation in the specified account and Region failed. If the stack set operation fails in enough accounts within a Region, the failure tolerance for the stack set operation as a whole might be exceeded.</p> </li> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>PENDING</code>: The operation in the specified account and Region has yet to start.</p> </li> <li> <p> <code>RUNNING</code>: The operation in the specified account and Region is currently in progress.</p> </li> <li> <p> <code>SUCCEEDED</code>: The operation in the specified account and Region completed successfully.</p> </li> </ul>
+    pub detailed_status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct StackInstanceComprehensiveStatusDeserializer;
+impl StackInstanceComprehensiveStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StackInstanceComprehensiveStatus, XmlParseError> {
+        deserialize_elements::<_, StackInstanceComprehensiveStatus, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DetailedStatus" => {
+                        obj.detailed_status =
+                            Some(StackInstanceDetailedStatusDeserializer::deserialize(
+                                "DetailedStatus",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct StackInstanceDetailedStatusDeserializer;
+impl StackInstanceDetailedStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>The status that stack instances are filtered by.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StackInstanceFilter {
+    /// <p>The type of filter to apply.</p>
+    pub name: Option<String>,
+    /// <p>The status to filter by.</p>
+    pub values: Option<String>,
+}
+
+/// Serialize `StackInstanceFilter` contents to a `SignedRequest`.
+struct StackInstanceFilterSerializer;
+impl StackInstanceFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StackInstanceFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.name {
+            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+        }
+        if let Some(ref field_value) = obj.values {
+            params.put(&format!("{}{}", prefix, "Values"), &field_value);
+        }
+    }
+}
+
+/// Serialize `StackInstanceFilters` contents to a `SignedRequest`.
+struct StackInstanceFiltersSerializer;
+impl StackInstanceFiltersSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<StackInstanceFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            StackInstanceFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 #[allow(dead_code)]
 struct StackInstanceStatusDeserializer;
 impl StackInstanceStatusDeserializer {
@@ -6924,12 +7028,14 @@ pub struct StackInstanceSummary {
     pub drift_status: Option<String>,
     /// <p>Most recent time when CloudFormation performed a drift detection operation on the stack instance. This value will be <code>NULL</code> for any stack instance on which drift detection has not yet been performed.</p>
     pub last_drift_check_timestamp: Option<String>,
-    /// <p>Reserved for internal use. No data returned.</p>
+    /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
     pub organizational_unit_id: Option<String>,
     /// <p>The name of the AWS Region that the stack instance is associated with.</p>
     pub region: Option<String>,
     /// <p>The ID of the stack instance.</p>
     pub stack_id: Option<String>,
+    /// <p>The detailed status of the stack instance.</p>
+    pub stack_instance_status: Option<StackInstanceComprehensiveStatus>,
     /// <p>The name or unique ID of the stack set that the stack instance is associated with.</p>
     pub stack_set_id: Option<String>,
     /// <p><p>The status of the stack instance, in terms of its synchronization with its associated stack set.</p> <ul> <li> <p> <code>INOPERABLE</code>: A <code>DeleteStackInstances</code> operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further <code>UpdateStackSet</code> operations. You might need to perform a <code>DeleteStackInstances</code> operation, with <code>RetainStacks</code> set to <code>true</code>, to delete the stack instance, and then delete the stack manually.</p> </li> <li> <p> <code>OUTDATED</code>: The stack isn&#39;t currently up to date with the stack set because:</p> <ul> <li> <p>The associated stack failed during a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation. </p> </li> <li> <p>The stack was part of a <code>CreateStackSet</code> or <code>UpdateStackSet</code> operation that failed or was stopped before the stack was created or updated. </p> </li> </ul> </li> <li> <p> <code>CURRENT</code>: The stack is currently up to date with the stack set.</p> </li> </ul></p>
@@ -6975,6 +7081,13 @@ impl StackInstanceSummaryDeserializer {
                 }
                 "StackId" => {
                     obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
+                }
+                "StackInstanceStatus" => {
+                    obj.stack_instance_status =
+                        Some(StackInstanceComprehensiveStatusDeserializer::deserialize(
+                            "StackInstanceStatus",
+                            stack,
+                        )?);
                 }
                 "StackSetId" => {
                     obj.stack_set_id =
@@ -7548,7 +7661,7 @@ pub struct StackSet {
     pub description: Option<String>,
     /// <p>The name of the IAM execution role used to create or update the stack set. </p> <p>Use customized execution roles to control which stack resources users and groups can include in their stack sets. </p>
     pub execution_role_name: Option<String>,
-    /// <p>Reserved for internal use. No data returned.</p>
+    /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
     pub organizational_unit_ids: Option<Vec<String>>,
     /// <p>A list of input parameters for a stack set.</p>
     pub parameters: Option<Vec<Parameter>>,
@@ -7958,7 +8071,7 @@ pub struct StackSetOperationPreferences {
     pub failure_tolerance_count: Option<i64>,
     /// <p>The percentage of accounts, per Region, for which this stack operation can fail before AWS CloudFormation stops the operation in that Region. If the operation is stopped in a Region, AWS CloudFormation doesn't attempt the operation in any subsequent Regions.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds <i>down</i> to the next whole number.</p> <p>Conditional: You must specify either <code>FailureToleranceCount</code> or <code>FailureTolerancePercentage</code>, but not both.</p>
     pub failure_tolerance_percentage: Option<i64>,
-    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>—<code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code> .</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
+    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>. <code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code>.</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
     pub max_concurrent_count: Option<i64>,
     /// <p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, CloudFormation sets the number as one instead.</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
     pub max_concurrent_percentage: Option<i64>,
@@ -8100,7 +8213,7 @@ pub struct StackSetOperationResultSummary {
     pub account: Option<String>,
     /// <p>The results of the account gate function AWS CloudFormation invokes, if present, before proceeding with stack set operations in an account</p>
     pub account_gate_result: Option<AccountGateResult>,
-    /// <p>Reserved for internal use. No data returned.</p>
+    /// <p>[<code>Service-managed</code> permissions] The organization root ID or organizational unit (OU) IDs that you specified for <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DeploymentTargets.html">DeploymentTargets</a>.</p>
     pub organizational_unit_id: Option<String>,
     /// <p>The name of the AWS Region for this operation result.</p>
     pub region: Option<String>,
@@ -12493,7 +12606,7 @@ pub trait CloudFormation {
         input: ListImportsInput,
     ) -> Result<ListImportsOutput, RusotoError<ListImportsError>>;
 
-    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region.</p>
+    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region, or that have a specific status.</p>
     async fn list_stack_instances(
         &self,
         input: ListStackInstancesInput,
@@ -14186,7 +14299,7 @@ impl CloudFormation for CloudFormationClient {
         Ok(result)
     }
 
-    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region.</p>
+    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or Region, or that have a specific status.</p>
     async fn list_stack_instances(
         &self,
         input: ListStackInstancesInput,

@@ -109,8 +109,7 @@ pub struct AssociatePhoneNumberWithUserResponse {}
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>If true, associates the provided phone numbers with the provided Amazon Chime Voice Connector Group and removes any previously existing associations. If false, does not associate any phone numbers that have previously existing associations.</p>
     #[serde(rename = "ForceAssociate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -134,8 +133,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
 pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>If true, associates the provided phone numbers with the provided Amazon Chime Voice Connector and removes any previously existing associations. If false, does not associate any phone numbers that have previously existing associations.</p>
     #[serde(rename = "ForceAssociate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -494,7 +492,7 @@ pub struct CreateMeetingRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -516,6 +514,53 @@ pub struct CreateMeetingRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingResponse {
     /// <p>The meeting information, including the meeting ID and <code>MediaPlacement</code>.</p>
+    #[serde(rename = "Meeting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting: Option<Meeting>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMeetingWithAttendeesRequest {
+    /// <p>The request containing the attendees to create.</p>
+    #[serde(rename = "Attendees")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attendees: Option<Vec<CreateAttendeeRequestItem>>,
+    /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The external meeting ID.</p>
+    #[serde(rename = "ExternalMeetingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_meeting_id: Option<String>,
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    #[serde(rename = "MediaRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_region: Option<String>,
+    /// <p>Reserved.</p>
+    #[serde(rename = "MeetingHostId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_host_id: Option<String>,
+    #[serde(rename = "NotificationsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications_configuration: Option<MeetingNotificationConfiguration>,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMeetingWithAttendeesResponse {
+    /// <p>The attendee information, including attendees IDs and join tokens.</p>
+    #[serde(rename = "Attendees")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attendees: Option<Vec<Attendee>>,
+    /// <p>If the action fails for one or more of the attendees in the request, a list of the attendees is returned, along with error codes and error messages.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ChimeCreateAttendeeError>>,
     #[serde(rename = "Meeting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting: Option<Meeting>,
@@ -722,6 +767,21 @@ pub struct Credential {
     pub username: Option<String>,
 }
 
+/// <p>The Dialed Number Identification Service (DNIS) emergency calling configuration details associated with an Amazon Chime Voice Connector's emergency calling configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DNISEmergencyCallingConfiguration {
+    /// <p>The country from which emergency calls are allowed, in ISO 3166-1 alpha-2 format.</p>
+    #[serde(rename = "CallingCountry")]
+    pub calling_country: String,
+    /// <p>The DNIS phone number to route emergency calls to, in E.164 format.</p>
+    #[serde(rename = "EmergencyPhoneNumber")]
+    pub emergency_phone_number: String,
+    /// <p>The DNIS phone number to route test emergency calls to, in E.164 format.</p>
+    #[serde(rename = "TestPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_phone_number: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountRequest {
@@ -810,6 +870,14 @@ pub struct DeleteRoomRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorGroupRequest {
     /// <p>The Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "VoiceConnectorGroupId")]
@@ -853,8 +921,7 @@ pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
 pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
     /// <p>The RFC2617 compliant username associated with the SIP credentials, in US-ASCII format.</p>
     #[serde(rename = "Usernames")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub usernames: Option<Vec<String>>,
+    pub usernames: Vec<String>,
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
@@ -888,8 +955,7 @@ pub struct DisassociatePhoneNumberFromUserResponse {}
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>The Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "VoiceConnectorGroupId")]
     pub voice_connector_group_id: String,
@@ -909,8 +975,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
 pub struct DisassociatePhoneNumbersFromVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
@@ -939,6 +1004,15 @@ pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
+
+/// <p>The emergency calling configuration details associated with an Amazon Chime Voice Connector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EmergencyCallingConfiguration {
+    /// <p>The Dialed Number Identification Service (DNIS) emergency calling configuration details.</p>
+    #[serde(rename = "DNIS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dnis: Option<Vec<DNISEmergencyCallingConfiguration>>,
+}
 
 /// <p>The configuration that allows a bot to receive outgoing events. Can be either an HTTPS endpoint or a Lambda function ARN.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1239,6 +1313,23 @@ pub struct GetUserSettingsResponse {
     #[serde(rename = "UserSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_settings: Option<UserSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetVoiceConnectorEmergencyCallingConfigurationResponse {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1947,7 +2038,7 @@ pub struct Meeting {
     pub meeting_id: Option<String>,
 }
 
-/// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur.</p>
+/// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur. The Amazon Chime SDK supports resource targets located in the US East (N. Virginia) AWS Region (<code>us-east-1</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeetingNotificationConfiguration {
@@ -2364,6 +2455,26 @@ pub struct PutRetentionSettingsResponse {
     #[serde(rename = "RetentionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_settings: Option<RetentionSettings>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    pub emergency_calling_configuration: EmergencyCallingConfiguration,
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutVoiceConnectorEmergencyCallingConfigurationResponse {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4532,6 +4643,94 @@ impl fmt::Display for CreateMeetingError {
     }
 }
 impl Error for CreateMeetingError {}
+/// Errors returned by CreateMeetingWithAttendees
+#[derive(Debug, PartialEq)]
+pub enum CreateMeetingWithAttendeesError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateMeetingWithAttendeesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateMeetingWithAttendeesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateMeetingWithAttendeesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMeetingWithAttendeesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMeetingWithAttendeesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMeetingWithAttendeesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateMeetingWithAttendeesError {}
 /// Errors returned by CreatePhoneNumberOrder
 #[derive(Debug, PartialEq)]
 pub enum CreatePhoneNumberOrderError {
@@ -5714,6 +5913,110 @@ impl fmt::Display for DeleteVoiceConnectorError {
     }
 }
 impl Error for DeleteVoiceConnectorError {}
+/// Errors returned by DeleteVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by DeleteVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorGroupError {
@@ -7726,6 +8029,110 @@ impl fmt::Display for GetVoiceConnectorError {
     }
 }
 impl Error for GetVoiceConnectorError {}
+/// Errors returned by GetVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by GetVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorGroupError {
@@ -9696,6 +10103,110 @@ impl fmt::Display for PutRetentionSettingsError {
     }
 }
 impl Error for PutRetentionSettingsError {}
+/// Errors returned by PutVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by PutVoiceConnectorLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorLoggingConfigurationError {
@@ -12102,11 +12613,17 @@ pub trait Chime {
         input: CreateBotRequest,
     ) -> Result<CreateBotResponse, RusotoError<CreateBotError>>;
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
     ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>>;
+
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    async fn create_meeting_with_attendees(
+        &self,
+        input: CreateMeetingWithAttendeesRequest,
+    ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>;
 
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
     async fn create_phone_number_order(
@@ -12204,13 +12721,19 @@ pub trait Chime {
         input: DeleteVoiceConnectorRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorError>>;
 
+    /// <p>Deletes the emergency calling configuration details from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_voice_connector_emergency_calling_configuration(
+        &self,
+        input: DeleteVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError>>;
+
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
     async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorGroupError>>;
 
-    /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the origination settings.</p> </note></p>
     async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
@@ -12228,7 +12751,7 @@ pub trait Chime {
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorStreamingConfigurationError>>;
 
-    /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the termination settings.</p> </note></p>
     async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
@@ -12369,6 +12892,15 @@ pub trait Chime {
         &self,
         input: GetVoiceConnectorRequest,
     ) -> Result<GetVoiceConnectorResponse, RusotoError<GetVoiceConnectorError>>;
+
+    /// <p>Gets the emergency calling configuration details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_voice_connector_emergency_calling_configuration(
+        &self,
+        input: GetVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        GetVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
+    >;
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
     async fn get_voice_connector_group(
@@ -12544,6 +13076,15 @@ pub trait Chime {
         input: PutRetentionSettingsRequest,
     ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>>;
 
+    /// <p>Puts emergency calling configuration details to the specified Amazon Chime Voice Connector, such as emergency phone numbers and calling countries. Origination and termination settings must be enabled for the Amazon Chime Voice Connector before emergency calling can be configured.</p>
+    async fn put_voice_connector_emergency_calling_configuration(
+        &self,
+        input: PutVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        PutVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError>,
+    >;
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn put_voice_connector_logging_configuration(
         &self,
@@ -12553,7 +13094,7 @@ pub trait Chime {
         RusotoError<PutVoiceConnectorLoggingConfigurationError>,
     >;
 
-    /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off origination settings.</p> </note></p>
     async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
@@ -12574,7 +13115,7 @@ pub trait Chime {
         RusotoError<PutVoiceConnectorStreamingConfigurationError>,
     >;
 
-    /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off termination settings.</p> </note></p>
     async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
@@ -13279,7 +13820,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
@@ -13306,6 +13847,41 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateMeetingError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    async fn create_meeting_with_attendees(
+        &self,
+        input: CreateMeetingWithAttendeesRequest,
+    ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>
+    {
+        let request_uri = "/meetings";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "create-attendees");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMeetingWithAttendeesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMeetingWithAttendeesError::from_response(response))
         }
     }
 
@@ -13799,6 +14375,35 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Deletes the emergency calling configuration details from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_voice_connector_emergency_calling_configuration(
+        &self,
+        input: DeleteVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
     async fn delete_voice_connector_group(
         &self,
@@ -13828,7 +14433,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the origination settings.</p> </note></p>
     async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
@@ -13917,7 +14522,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the termination settings.</p> </note></p>
     async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
@@ -14612,6 +15217,40 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetVoiceConnectorError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the emergency calling configuration details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_voice_connector_emergency_calling_configuration(
+        &self,
+        input: GetVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        GetVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorEmergencyCallingConfigurationResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
         }
     }
 
@@ -15581,6 +16220,43 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Puts emergency calling configuration details to the specified Amazon Chime Voice Connector, such as emergency phone numbers and calling countries. Origination and termination settings must be enabled for the Amazon Chime Voice Connector before emergency calling can be configured.</p>
+    async fn put_voice_connector_emergency_calling_configuration(
+        &self,
+        input: PutVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        PutVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorEmergencyCallingConfigurationResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn put_voice_connector_logging_configuration(
         &self,
@@ -15619,7 +16295,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off origination settings.</p> </note></p>
     async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
@@ -15724,7 +16400,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off termination settings.</p> </note></p>
     async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,

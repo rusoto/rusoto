@@ -38,6 +38,10 @@ pub struct CreateHttpNamespaceRequest {
     /// <p>The name that you want to assign to this namespace.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The tags to add to the namespace. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -63,6 +67,10 @@ pub struct CreatePrivateDnsNamespaceRequest {
     /// <p>The name that you want to assign to this namespace. When you create a private DNS namespace, AWS Cloud Map automatically creates an Amazon Route 53 private hosted zone that has the same name as the namespace.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The tags to add to the namespace. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the Amazon VPC that you want to associate the namespace with.</p>
     #[serde(rename = "Vpc")]
     pub vpc: String,
@@ -91,6 +99,10 @@ pub struct CreatePublicDnsNamespaceRequest {
     /// <p>The name that you want to assign to this namespace.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The tags to add to the namespace. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -132,6 +144,10 @@ pub struct CreateServiceRequest {
     #[serde(rename = "NamespaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_id: Option<String>,
+    /// <p>The tags to add to the service. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -581,6 +597,23 @@ pub struct ListServicesResponse {
     pub services: Option<Vec<ServiceSummary>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to retrieve tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags that are assigned to the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>A complex type that contains information about a specified namespace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -761,7 +794,7 @@ pub struct OperationSummary {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterInstanceRequest {
-    /// <p>A string map that contains the following information for the service that you specify in <code>ServiceId</code>:</p> <ul> <li> <p>The attributes that apply to the records that are defined in the service. </p> </li> <li> <p>For each attribute, the applicable value.</p> </li> </ul> <p>Supported attribute keys include the following:</p> <p> <b>AWS_ALIAS_DNS_NAME</b> </p> <p> <b/> </p> <p>If you want AWS Cloud Map to create an Amazon Route 53 alias record that routes traffic to an Elastic Load Balancing load balancer, specify the DNS name that is associated with the load balancer. For information about how to get the DNS name, see "DNSName" in the topic <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html">AliasTarget</a> in the <i>Route 53 API Reference</i>.</p> <p>Note the following:</p> <ul> <li> <p>The configuration for the service that is specified by <code>ServiceId</code> must include settings for an A record, an AAAA record, or both.</p> </li> <li> <p>In the service that is specified by <code>ServiceId</code>, the value of <code>RoutingPolicy</code> must be <code>WEIGHTED</code>.</p> </li> <li> <p>If the service that is specified by <code>ServiceId</code> includes <code>HealthCheckConfig</code> settings, AWS Cloud Map will create the Route 53 health check, but it won't associate the health check with the alias record.</p> </li> <li> <p>Auto naming currently doesn't support creating alias records that route traffic to AWS resources other than ELB load balancers.</p> </li> <li> <p>If you specify a value for <code>AWS_ALIAS_DNS_NAME</code>, don't specify values for any of the <code>AWS_INSTANCE</code> attributes.</p> </li> </ul> <p> <b>AWS_INIT_HEALTH_STATUS</b> </p> <p>If the service configuration includes <code>HealthCheckCustomConfig</code>, you can optionally use <code>AWS_INIT_HEALTH_STATUS</code> to specify the initial status of the custom health check, <code>HEALTHY</code> or <code>UNHEALTHY</code>. If you don't specify a value for <code>AWS_INIT_HEALTH_STATUS</code>, the initial status is <code>HEALTHY</code>.</p> <p> <b>AWS_INSTANCE_CNAME</b> </p> <p>If the service configuration includes a CNAME record, the domain name that you want Route 53 to return in response to DNS queries, for example, <code>example.com</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an CNAME record.</p> <p> <b>AWS_INSTANCE_IPV4</b> </p> <p>If the service configuration includes an A record, the IPv4 address that you want Route 53 to return in response to DNS queries, for example, <code>192.0.2.44</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an A record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_IPV6</b> </p> <p>If the service configuration includes an AAAA record, the IPv6 address that you want Route 53 to return in response to DNS queries, for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an AAAA record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_PORT</b> </p> <p>If the service includes an SRV record, the value that you want Route 53 to return for the port.</p> <p>If the service includes <code>HealthCheckConfig</code>, the port on the endpoint that you want Route 53 to send requests to. </p> <p>This value is required if you specified settings for an SRV record or a Route 53 health check when you created the service.</p> <p> <b>Custom attributes</b> </p> <p>You can add up to 30 custom attributes. For each key-value pair, the maximum length of the attribute name is 255 characters, and the maximum length of the attribute value is 1,024 characters. </p>
+    /// <p>A string map that contains the following information for the service that you specify in <code>ServiceId</code>:</p> <ul> <li> <p>The attributes that apply to the records that are defined in the service. </p> </li> <li> <p>For each attribute, the applicable value.</p> </li> </ul> <p>Supported attribute keys include the following:</p> <p> <b>AWS_ALIAS_DNS_NAME</b> </p> <p> <b/> </p> <p>If you want AWS Cloud Map to create an Amazon Route 53 alias record that routes traffic to an Elastic Load Balancing load balancer, specify the DNS name that is associated with the load balancer. For information about how to get the DNS name, see "DNSName" in the topic <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html">AliasTarget</a> in the <i>Route 53 API Reference</i>.</p> <p>Note the following:</p> <ul> <li> <p>The configuration for the service that is specified by <code>ServiceId</code> must include settings for an A record, an AAAA record, or both.</p> </li> <li> <p>In the service that is specified by <code>ServiceId</code>, the value of <code>RoutingPolicy</code> must be <code>WEIGHTED</code>.</p> </li> <li> <p>If the service that is specified by <code>ServiceId</code> includes <code>HealthCheckConfig</code> settings, AWS Cloud Map will create the Route 53 health check, but it won't associate the health check with the alias record.</p> </li> <li> <p>Auto naming currently doesn't support creating alias records that route traffic to AWS resources other than ELB load balancers.</p> </li> <li> <p>If you specify a value for <code>AWS_ALIAS_DNS_NAME</code>, don't specify values for any of the <code>AWS_INSTANCE</code> attributes.</p> </li> </ul> <p> <b>AWS_INIT_HEALTH_STATUS</b> </p> <p>If the service configuration includes <code>HealthCheckCustomConfig</code>, you can optionally use <code>AWS_INIT_HEALTH_STATUS</code> to specify the initial status of the custom health check, <code>HEALTHY</code> or <code>UNHEALTHY</code>. If you don't specify a value for <code>AWS_INIT_HEALTH_STATUS</code>, the initial status is <code>HEALTHY</code>.</p> <p> <b>AWS_INSTANCE_CNAME</b> </p> <p>If the service configuration includes a CNAME record, the domain name that you want Route 53 to return in response to DNS queries, for example, <code>example.com</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an CNAME record.</p> <p> <b>AWS_INSTANCE_IPV4</b> </p> <p>If the service configuration includes an A record, the IPv4 address that you want Route 53 to return in response to DNS queries, for example, <code>192.0.2.44</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an A record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_IPV6</b> </p> <p>If the service configuration includes an AAAA record, the IPv6 address that you want Route 53 to return in response to DNS queries, for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an AAAA record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_PORT</b> </p> <p>If the service includes an SRV record, the value that you want Route 53 to return for the port.</p> <p>If the service includes <code>HealthCheckConfig</code>, the port on the endpoint that you want Route 53 to send requests to. </p> <p>This value is required if you specified settings for an SRV record or a Route 53 health check when you created the service.</p> <p> <b>Custom attributes</b> </p> <p>You can add up to 30 custom attributes. For each key-value pair, the maximum length of the attribute name is 255 characters, and the maximum length of the attribute value is 1,024 characters. Total size of all provided attributes (sum of all keys and values) must not exceed 5,000 characters.</p>
     #[serde(rename = "Attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>A unique string that identifies the request and that allows failed <code>RegisterInstance</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CreatorRequestId</code> string every time you submit a <code>RegisterInstance</code> request if you're registering additional instances for the same namespace and service. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp.</p>
@@ -845,7 +878,8 @@ pub struct ServiceChange {
     pub description: Option<String>,
     /// <p>A complex type that contains information about the Route 53 DNS records that you want AWS Cloud Map to create when you register an instance.</p>
     #[serde(rename = "DnsConfig")]
-    pub dns_config: DnsConfigChange,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_config: Option<DnsConfigChange>,
     #[serde(rename = "HealthCheckConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_config: Option<HealthCheckConfig>,
@@ -906,6 +940,47 @@ pub struct ServiceSummary {
     pub name: Option<String>,
 }
 
+/// <p>A custom key-value pair associated with a resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key identifier, or name, of the tag.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The string value that's associated with the key of the tag. You can set the value of a tag to an empty string, but you can't set the value of a tag to null.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to retrieve tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the specified resource. Specifying the tag key is required. You can set the value of a tag to an empty string, but you can't set the value of a tag to null.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to retrieve tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag keys to remove from the specified resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceCustomHealthStatusRequest {
@@ -951,6 +1026,8 @@ pub enum CreateHttpNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
+    /// <p>The list of tags on the resource is over the limit. The maximum number of tags that can be applied to a resource is 50.</p>
+    TooManyTags(String),
 }
 
 impl CreateHttpNamespaceError {
@@ -975,6 +1052,9 @@ impl CreateHttpNamespaceError {
                         err.msg,
                     ))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateHttpNamespaceError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -990,6 +1070,7 @@ impl fmt::Display for CreateHttpNamespaceError {
             CreateHttpNamespaceError::InvalidInput(ref cause) => write!(f, "{}", cause),
             CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateHttpNamespaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1005,6 +1086,8 @@ pub enum CreatePrivateDnsNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
+    /// <p>The list of tags on the resource is over the limit. The maximum number of tags that can be applied to a resource is 50.</p>
+    TooManyTags(String),
 }
 
 impl CreatePrivateDnsNamespaceError {
@@ -1031,6 +1114,11 @@ impl CreatePrivateDnsNamespaceError {
                         CreatePrivateDnsNamespaceError::ResourceLimitExceeded(err.msg),
                     )
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreatePrivateDnsNamespaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1050,6 +1138,7 @@ impl fmt::Display for CreatePrivateDnsNamespaceError {
             CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreatePrivateDnsNamespaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1065,6 +1154,8 @@ pub enum CreatePublicDnsNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
+    /// <p>The list of tags on the resource is over the limit. The maximum number of tags that can be applied to a resource is 50.</p>
+    TooManyTags(String),
 }
 
 impl CreatePublicDnsNamespaceError {
@@ -1091,6 +1182,11 @@ impl CreatePublicDnsNamespaceError {
                         CreatePublicDnsNamespaceError::ResourceLimitExceeded(err.msg),
                     )
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreatePublicDnsNamespaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1110,6 +1206,7 @@ impl fmt::Display for CreatePublicDnsNamespaceError {
             CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => {
                 write!(f, "{}", cause)
             }
+            CreatePublicDnsNamespaceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1125,6 +1222,8 @@ pub enum CreateServiceError {
     ResourceLimitExceeded(String),
     /// <p>The service can't be created because a service with the same name already exists.</p>
     ServiceAlreadyExists(String),
+    /// <p>The list of tags on the resource is over the limit. The maximum number of tags that can be applied to a resource is 50.</p>
+    TooManyTags(String),
 }
 
 impl CreateServiceError {
@@ -1143,6 +1242,9 @@ impl CreateServiceError {
                 "ServiceAlreadyExists" => {
                     return RusotoError::Service(CreateServiceError::ServiceAlreadyExists(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateServiceError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1158,6 +1260,7 @@ impl fmt::Display for CreateServiceError {
             CreateServiceError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
             CreateServiceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateServiceError::ServiceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateServiceError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1313,6 +1416,8 @@ pub enum DiscoverInstancesError {
     InvalidInput(String),
     /// <p>No namespace exists with the specified ID.</p>
     NamespaceNotFound(String),
+    /// <p>The operation can't be completed because you've reached the limit on the number of requests.</p>
+    RequestLimitExceeded(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
 }
@@ -1326,6 +1431,11 @@ impl DiscoverInstancesError {
                 }
                 "NamespaceNotFound" => {
                     return RusotoError::Service(DiscoverInstancesError::NamespaceNotFound(err.msg))
+                }
+                "RequestLimitExceeded" => {
+                    return RusotoError::Service(DiscoverInstancesError::RequestLimitExceeded(
+                        err.msg,
+                    ))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(DiscoverInstancesError::ServiceNotFound(err.msg))
@@ -1343,6 +1453,7 @@ impl fmt::Display for DiscoverInstancesError {
         match *self {
             DiscoverInstancesError::InvalidInput(ref cause) => write!(f, "{}", cause),
             DiscoverInstancesError::NamespaceNotFound(ref cause) => write!(f, "{}", cause),
+            DiscoverInstancesError::RequestLimitExceeded(ref cause) => write!(f, "{}", cause),
             DiscoverInstancesError::ServiceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1672,6 +1783,44 @@ impl fmt::Display for ListServicesError {
     }
 }
 impl Error for ListServicesError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
+    InvalidInput(String),
+    /// <p>The operation can't be completed because the resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInput" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RegisterInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterInstanceError {
@@ -1728,6 +1877,84 @@ impl fmt::Display for RegisterInstanceError {
     }
 }
 impl Error for RegisterInstanceError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
+    InvalidInput(String),
+    /// <p>The operation can't be completed because the resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The list of tags on the resource is over the limit. The maximum number of tags that can be applied to a resource is 50.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInput" => {
+                    return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
+    InvalidInput(String),
+    /// <p>The operation can't be completed because the resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInput" => {
+                    return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateInstanceCustomHealthStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceCustomHealthStatusError {
@@ -1941,11 +2168,29 @@ pub trait ServiceDiscovery {
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>>;
 
+    /// <p>Lists tags for the specified resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html">CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     async fn register_instance(
         &self,
         input: RegisterInstanceRequest,
     ) -> Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>>;
+
+    /// <p>Adds one or more tags to the specified resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_HealthCheckCustomConfig.html">HealthCheckCustomConfig</a>.</p>
     async fn update_instance_custom_health_status(
@@ -2486,6 +2731,37 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         }
     }
 
+    /// <p>Lists tags for the specified resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Route53AutoNaming_v20170314.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html">CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
     async fn register_instance(
         &self,
@@ -2514,6 +2790,60 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(RegisterInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Adds one or more tags to the specified resource.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Route53AutoNaming_v20170314.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Route53AutoNaming_v20170314.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

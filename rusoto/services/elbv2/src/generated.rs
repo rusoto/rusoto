@@ -346,6 +346,48 @@ impl AllocationIdDeserializer {
     }
 }
 #[allow(dead_code)]
+struct AlpnPolicyNameDeserializer;
+impl AlpnPolicyNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AlpnPolicyValueDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `AlpnPolicyName` contents to a `SignedRequest`.
+struct AlpnPolicyNameSerializer;
+impl AlpnPolicyNameSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct AlpnPolicyValueDeserializer;
+impl AlpnPolicyValueDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
 struct AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer;
 impl AuthenticateCognitoActionAuthenticationRequestExtraParamsDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -1280,6 +1322,8 @@ impl ConditionFieldNameDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateListenerInput {
+    /// <p>[TLS listeners] The name of the Application-Layer Protocol Negotiation (ALPN) policy. You can specify one policy name. The following are the possible values:</p> <ul> <li> <p> <code>HTTP1Only</code> </p> </li> <li> <p> <code>HTTP2Only</code> </p> </li> <li> <p> <code>HTTP2Optional</code> </p> </li> <li> <p> <code>HTTP2Preferred</code> </p> </li> <li> <p> <code>None</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#alpn-policies">ALPN Policies</a> in the <i>Network Load Balancers Guide</i>.</p>
+    pub alpn_policy: Option<Vec<String>>,
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list for the listener, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
@@ -1303,6 +1347,13 @@ impl CreateListenerInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.alpn_policy {
+            AlpnPolicyNameSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AlpnPolicy"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.certificates {
             CertificateListSerializer::serialize(
                 params,
@@ -3222,6 +3273,8 @@ impl ListOfStringSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Listener {
+    /// <p>[TLS listener] The name of the Application-Layer Protocol Negotiation (ALPN) policy.</p>
+    pub alpn_policy: Option<Vec<String>>,
     /// <p>[HTTPS or TLS listener] The default certificate for the listener.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The default actions for the listener.</p>
@@ -3248,6 +3301,11 @@ impl ListenerDeserializer {
     ) -> Result<Listener, XmlParseError> {
         deserialize_elements::<_, Listener, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "AlpnPolicy" => {
+                    obj.alpn_policy.get_or_insert(vec![]).extend(
+                        AlpnPolicyNameDeserializer::deserialize("AlpnPolicy", stack)?,
+                    );
+                }
                 "Certificates" => {
                     obj.certificates.get_or_insert(vec![]).extend(
                         CertificateListDeserializer::deserialize("Certificates", stack)?,
@@ -3828,6 +3886,8 @@ impl MaxDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyListenerInput {
+    /// <p>[TLS listeners] The name of the Application-Layer Protocol Negotiation (ALPN) policy. You can specify one policy name. The following are the possible values:</p> <ul> <li> <p> <code>HTTP1Only</code> </p> </li> <li> <p> <code>HTTP2Only</code> </p> </li> <li> <p> <code>HTTP2Optional</code> </p> </li> <li> <p> <code>HTTP2Preferred</code> </p> </li> <li> <p> <code>None</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#alpn-policies">ALPN Policies</a> in the <i>Network Load Balancers Guide</i>.</p>
+    pub alpn_policy: Option<Vec<String>>,
     /// <p>[HTTPS and TLS listeners] The default certificate for the listener. You must provide exactly one certificate. Set <code>CertificateArn</code> to the certificate ARN but do not set <code>IsDefault</code>.</p> <p>To create a certificate list, use <a>AddListenerCertificates</a>.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>The actions for the default rule. The rule must include one forward action or one or more fixed-response actions.</p> <p>If the action type is <code>forward</code>, you specify one or more target groups. The protocol of the target group must be HTTP or HTTPS for an Application Load Balancer. The protocol of the target group must be TCP, TLS, UDP, or TCP_UDP for a Network Load Balancer.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you authenticate users through an identity provider that is OpenID Connect (OIDC) compliant.</p> <p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you authenticate users through the user pools supported by Amazon Cognito.</p> <p>[Application Load Balancer] If the action type is <code>redirect</code>, you redirect specified client requests from one URL to another.</p> <p>[Application Load Balancer] If the action type is <code>fixed-response</code>, you drop specified client requests and return a custom HTTP response.</p>
@@ -3851,6 +3911,13 @@ impl ModifyListenerInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.alpn_policy {
+            AlpnPolicyNameSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AlpnPolicy"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.certificates {
             CertificateListSerializer::serialize(
                 params,
@@ -6064,7 +6131,7 @@ impl TargetGroupArnsSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGroupAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible values are <code>lb<em>cookie</code> for Application Load Balancers or <code>source</em>ip</code> for Network Load Balancers.</p> </li> </ul> <p>The following attributes are supported by Application Load Balancers if the target is not a Lambda function:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives a linearly increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the target is a Lambda function.</p> <ul> <li> <p> <code>lambda.multi</em>value<em>headers.enabled</code> - Indicates whether the request and response headers exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount of time, in seconds, for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds. If the target is a Lambda function, this attribute is not supported.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible values are <code>lb<em>cookie</code> for Application Load Balancers or <code>source</em>ip</code> for Network Load Balancers.</p> </li> </ul> <p>The following attributes are supported only if the load balancer is an Application Load Balancer and the target is an instance or an IP address:</p> <ul> <li> <p> <code>load<em>balancing.algorithm.type</code> - The load balancing algorithm determines how the load balancer selects targets when routing requests. The value is <code>round</em>robin</code> or <code>least<em>outstanding</em>requests</code>. The default is <code>round<em>robin</code>.</p> </li> <li> <p> <code>slow</em>start.duration<em>seconds</code> - The time period, in seconds, during which a newly registered target receives an increasing share of the traffic to the target group. After this time period ends, the target receives its full share of traffic. The range is 30-900 seconds (15 minutes). Slow start mode is disabled by default.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration<em>seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul> <p>The following attribute is supported only if the load balancer is an Application Load Balancer and the target is a Lambda function:</p> <ul> <li> <p> <code>lambda.multi</em>value<em>headers.enabled</code> - Indicates whether the request and response headers that are exchanged between the load balancer and the Lambda function include arrays of values or strings. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>. If the value is <code>false</code> and the request contains a duplicate header field name or query parameter key, the load balancer uses the last value sent by the client.</p> </li> </ul> <p>The following attribute is supported only by Network Load Balancers:</p> <ul> <li> <p> <code>proxy</em>protocol_v2.enabled</code> - Indicates whether Proxy Protocol version 2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -6710,6 +6777,8 @@ impl Error for AddTagsError {}
 /// Errors returned by CreateListener
 #[derive(Debug, PartialEq)]
 pub enum CreateListenerError {
+    /// <p>The specified ALPN policy is not supported.</p>
+    ALPNPolicyNotSupported(String),
     /// <p>The specified certificate does not exist.</p>
     CertificateNotFound(String),
     /// <p>A listener with the specified port already exists.</p>
@@ -6752,6 +6821,11 @@ impl CreateListenerError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ALPNPolicyNotFound" => {
+                        return RusotoError::Service(CreateListenerError::ALPNPolicyNotSupported(
+                            parsed_error.message,
+                        ))
+                    }
                     "CertificateNotFound" => {
                         return RusotoError::Service(CreateListenerError::CertificateNotFound(
                             parsed_error.message,
@@ -6855,6 +6929,7 @@ impl fmt::Display for CreateListenerError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateListenerError::ALPNPolicyNotSupported(ref cause) => write!(f, "{}", cause),
             CreateListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
             CreateListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
             CreateListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),
@@ -8072,6 +8147,8 @@ impl Error for DescribeTargetHealthError {}
 /// Errors returned by ModifyListener
 #[derive(Debug, PartialEq)]
 pub enum ModifyListenerError {
+    /// <p>The specified ALPN policy is not supported.</p>
+    ALPNPolicyNotSupported(String),
     /// <p>The specified certificate does not exist.</p>
     CertificateNotFound(String),
     /// <p>A listener with the specified port already exists.</p>
@@ -8114,6 +8191,11 @@ impl ModifyListenerError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ALPNPolicyNotFound" => {
+                        return RusotoError::Service(ModifyListenerError::ALPNPolicyNotSupported(
+                            parsed_error.message,
+                        ))
+                    }
                     "CertificateNotFound" => {
                         return RusotoError::Service(ModifyListenerError::CertificateNotFound(
                             parsed_error.message,
@@ -8217,6 +8299,7 @@ impl fmt::Display for ModifyListenerError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            ModifyListenerError::ALPNPolicyNotSupported(ref cause) => write!(f, "{}", cause),
             ModifyListenerError::CertificateNotFound(ref cause) => write!(f, "{}", cause),
             ModifyListenerError::DuplicateListener(ref cause) => write!(f, "{}", cause),
             ModifyListenerError::IncompatibleProtocols(ref cause) => write!(f, "{}", cause),

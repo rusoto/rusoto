@@ -183,7 +183,7 @@ pub struct ClusterMetadata {
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
+    /// <p><p>The type of AWS Snowball device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -255,10 +255,10 @@ pub struct CreateClusterRequest {
     /// <p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href="https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
-    /// <p>The type of AWS Snowball device to use for this cluster. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
+    /// <p><p>The type of AWS Snowball device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -292,6 +292,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Defines the device configuration for an AWS Snowcone job.</p>
+    #[serde(rename = "DeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_configuration: Option<DeviceConfiguration>,
     /// <p>The forwarding address ID for a job. This field is not supported in most regions.</p>
     #[serde(rename = "ForwardingAddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -324,7 +328,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
+    /// <p>The type of AWS Snowball device to use for this job. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -444,6 +448,15 @@ pub struct DescribeJobResult {
     #[serde(rename = "SubJobMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sub_job_metadata: Option<Vec<JobMetadata>>,
+}
+
+/// <p>The container for <code>SnowconeDeviceConfiguration</code>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeviceConfiguration {
+    /// <p>Returns information about the device configuration for an AWS Snowcone job.</p>
+    #[serde(rename = "SnowconeDeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snowcone_device_configuration: Option<SnowconeDeviceConfiguration>,
 }
 
 /// <p>A JSON-formatted object that contains the IDs for an Amazon Machine Image (AMI), including the Amazon EC2 AMI ID and the Snowball Edge AMI ID. Each AMI has these two IDs to simplify identifying the AMI in both the AWS Cloud and on the device.</p>
@@ -620,6 +633,9 @@ pub struct JobMetadata {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(rename = "DeviceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_configuration: Option<DeviceConfiguration>,
     /// <p>The ID of the address that you want a job shipped to, after it will be shipped to its primary address. This field is not supported in most regions.</p>
     #[serde(rename = "ForwardingAddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -886,10 +902,18 @@ pub struct ShippingDetails {
     pub shipping_option: Option<String>,
 }
 
+/// <p>Specifies the device configuration for an AWS Snowcone job. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SnowconeDeviceConfiguration {
+    /// <p>Configures the wireless connection for the AWS Snowcone device.</p>
+    #[serde(rename = "WirelessConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wireless_connection: Option<WirelessConnection>,
+}
+
 /// <p>The tax documents required in your AWS Region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TaxDocuments {
-    /// <p>The tax documents required in AWS Regions in India.</p>
     #[serde(rename = "IND")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ind: Option<INDTaxDocuments>,
@@ -978,6 +1002,15 @@ pub struct UpdateJobRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobResult {}
+
+/// <p>Configures the wireless connection on an AWS Snowcone device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WirelessConnection {
+    /// <p>Enables the Wi-Fi adapter on an AWS Snowcone device.</p>
+    #[serde(rename = "IsWifiEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_wifi_enabled: Option<bool>,
+}
 
 /// Errors returned by CancelCluster
 #[derive(Debug, PartialEq)]
@@ -1104,7 +1137,7 @@ impl Error for CreateAddressError {}
 pub enum CreateClusterError {
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
-    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One or more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
@@ -1156,7 +1189,7 @@ pub enum CreateJobError {
     ClusterLimitExceeded(String),
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
-    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One or more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
@@ -1600,7 +1633,7 @@ impl Error for ListJobsError {}
 pub enum UpdateClusterError {
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
-    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One or more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),
@@ -1658,7 +1691,7 @@ pub enum UpdateJobError {
     ClusterLimitExceeded(String),
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
-    /// <p>Job or cluster creation failed. One ore more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    /// <p>Job or cluster creation failed. One or more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
     InvalidInputCombination(String),
     /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
     InvalidJobState(String),

@@ -425,6 +425,23 @@ pub struct EventSource {
     pub state: Option<String>,
 }
 
+/// <p>These are custom parameter to be used when the target is an API Gateway REST APIs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HttpParameters {
+    /// <p>The headers that need to be sent as part of request invoking the API Gateway REST API.</p>
+    #[serde(rename = "HeaderParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The path parameter values to be used to populate API Gateway REST API path wildcards ("*").</p>
+    #[serde(rename = "PathParameterValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_parameter_values: Option<Vec<String>>,
+    /// <p>The query string keys/values that need to be sent as part of request invoking the API Gateway REST API.</p>
+    #[serde(rename = "QueryStringParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string_parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputTransformer {
@@ -1144,6 +1161,10 @@ pub struct Target {
     #[serde(rename = "EcsParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ecs_parameters: Option<EcsParameters>,
+    /// <p>Contains the HTTP parameters to use when the target is a API Gateway REST endpoint.</p> <p>If you specify an API Gateway REST API as a target, you can use this parameter to specify headers, path parameter, query string keys/values as part of your target invoking request.</p>
+    #[serde(rename = "HttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_parameters: Option<HttpParameters>,
     /// <p>The ID of the target.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -1221,6 +1242,8 @@ pub enum ActivateEventSourceError {
     Internal(String),
     /// <p>The specified state is not a valid state for an event source.</p>
     InvalidState(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
 }
@@ -1239,6 +1262,11 @@ impl ActivateEventSourceError {
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(ActivateEventSourceError::InvalidState(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(ActivateEventSourceError::OperationDisabled(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ActivateEventSourceError::ResourceNotFound(
@@ -1259,6 +1287,7 @@ impl fmt::Display for ActivateEventSourceError {
             ActivateEventSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
             ActivateEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
             ActivateEventSourceError::InvalidState(ref cause) => write!(f, "{}", cause),
+            ActivateEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             ActivateEventSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1275,6 +1304,8 @@ pub enum CreateEventBusError {
     InvalidState(String),
     /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
     LimitExceeded(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>The resource you are trying to create already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>An entity that you specified does not exist.</p>
@@ -1299,6 +1330,9 @@ impl CreateEventBusError {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateEventBusError::LimitExceeded(err.msg))
                 }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(CreateEventBusError::OperationDisabled(err.msg))
+                }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateEventBusError::ResourceAlreadyExists(
                         err.msg,
@@ -1322,6 +1356,7 @@ impl fmt::Display for CreateEventBusError {
             CreateEventBusError::Internal(ref cause) => write!(f, "{}", cause),
             CreateEventBusError::InvalidState(ref cause) => write!(f, "{}", cause),
             CreateEventBusError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEventBusError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             CreateEventBusError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateEventBusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -1337,6 +1372,8 @@ pub enum CreatePartnerEventSourceError {
     Internal(String),
     /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
     LimitExceeded(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>The resource you are trying to create already exists.</p>
     ResourceAlreadyExists(String),
 }
@@ -1355,6 +1392,11 @@ impl CreatePartnerEventSourceError {
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePartnerEventSourceError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(CreatePartnerEventSourceError::OperationDisabled(
                         err.msg,
                     ))
                 }
@@ -1379,6 +1421,7 @@ impl fmt::Display for CreatePartnerEventSourceError {
             }
             CreatePartnerEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
             CreatePartnerEventSourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreatePartnerEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             CreatePartnerEventSourceError::ResourceAlreadyExists(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1395,6 +1438,8 @@ pub enum DeactivateEventSourceError {
     Internal(String),
     /// <p>The specified state is not a valid state for an event source.</p>
     InvalidState(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
 }
@@ -1413,6 +1458,11 @@ impl DeactivateEventSourceError {
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(DeactivateEventSourceError::InvalidState(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(DeactivateEventSourceError::OperationDisabled(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeactivateEventSourceError::ResourceNotFound(
@@ -1433,6 +1483,7 @@ impl fmt::Display for DeactivateEventSourceError {
             DeactivateEventSourceError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
             DeactivateEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
             DeactivateEventSourceError::InvalidState(ref cause) => write!(f, "{}", cause),
+            DeactivateEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             DeactivateEventSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1483,6 +1534,8 @@ pub enum DeletePartnerEventSourceError {
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
 }
 
 impl DeletePartnerEventSourceError {
@@ -1496,6 +1549,11 @@ impl DeletePartnerEventSourceError {
                 }
                 "InternalException" => {
                     return RusotoError::Service(DeletePartnerEventSourceError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(DeletePartnerEventSourceError::OperationDisabled(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1512,6 +1570,7 @@ impl fmt::Display for DeletePartnerEventSourceError {
                 write!(f, "{}", cause)
             }
             DeletePartnerEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
+            DeletePartnerEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1605,6 +1664,8 @@ impl Error for DescribeEventBusError {}
 pub enum DescribeEventSourceError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
 }
@@ -1615,6 +1676,11 @@ impl DescribeEventSourceError {
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribeEventSourceError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(DescribeEventSourceError::OperationDisabled(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEventSourceError::ResourceNotFound(
@@ -1633,6 +1699,7 @@ impl fmt::Display for DescribeEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             DescribeEventSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1643,6 +1710,8 @@ impl Error for DescribeEventSourceError {}
 pub enum DescribePartnerEventSourceError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
 }
@@ -1655,6 +1724,11 @@ impl DescribePartnerEventSourceError {
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(DescribePartnerEventSourceError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(
+                        DescribePartnerEventSourceError::OperationDisabled(err.msg),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePartnerEventSourceError::ResourceNotFound(
@@ -1673,6 +1747,7 @@ impl fmt::Display for DescribePartnerEventSourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribePartnerEventSourceError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribePartnerEventSourceError::OperationDisabled(ref cause) => write!(f, "{}", cause),
             DescribePartnerEventSourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1845,6 +1920,8 @@ impl Error for ListEventBusesError {}
 pub enum ListEventSourcesError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
 }
 
 impl ListEventSourcesError {
@@ -1853,6 +1930,9 @@ impl ListEventSourcesError {
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListEventSourcesError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(ListEventSourcesError::OperationDisabled(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1866,6 +1946,7 @@ impl fmt::Display for ListEventSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListEventSourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListEventSourcesError::OperationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1875,6 +1956,8 @@ impl Error for ListEventSourcesError {}
 pub enum ListPartnerEventSourceAccountsError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
 }
@@ -1889,6 +1972,11 @@ impl ListPartnerEventSourceAccountsError {
                     return RusotoError::Service(ListPartnerEventSourceAccountsError::Internal(
                         err.msg,
                     ))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(
+                        ListPartnerEventSourceAccountsError::OperationDisabled(err.msg),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
@@ -1907,6 +1995,9 @@ impl fmt::Display for ListPartnerEventSourceAccountsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPartnerEventSourceAccountsError::Internal(ref cause) => write!(f, "{}", cause),
+            ListPartnerEventSourceAccountsError::OperationDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
             ListPartnerEventSourceAccountsError::ResourceNotFound(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -1919,6 +2010,8 @@ impl Error for ListPartnerEventSourceAccountsError {}
 pub enum ListPartnerEventSourcesError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
 }
 
 impl ListPartnerEventSourcesError {
@@ -1927,6 +2020,11 @@ impl ListPartnerEventSourcesError {
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(ListPartnerEventSourcesError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(ListPartnerEventSourcesError::OperationDisabled(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1940,6 +2038,7 @@ impl fmt::Display for ListPartnerEventSourcesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListPartnerEventSourcesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListPartnerEventSourcesError::OperationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -2127,6 +2226,8 @@ impl Error for PutEventsError {}
 pub enum PutPartnerEventsError {
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>The operation you are attempting is not available in this region.</p>
+    OperationDisabled(String),
 }
 
 impl PutPartnerEventsError {
@@ -2135,6 +2236,9 @@ impl PutPartnerEventsError {
             match err.typ.as_str() {
                 "InternalException" => {
                     return RusotoError::Service(PutPartnerEventsError::Internal(err.msg))
+                }
+                "OperationDisabledException" => {
+                    return RusotoError::Service(PutPartnerEventsError::OperationDisabled(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2148,6 +2252,7 @@ impl fmt::Display for PutPartnerEventsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             PutPartnerEventsError::Internal(ref cause) => write!(f, "{}", cause),
+            PutPartnerEventsError::OperationDisabled(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -2690,7 +2795,7 @@ pub trait EventBridge {
         input: PutPartnerEventsRequest,
     ) -> Result<PutPartnerEventsResponse, RusotoError<PutPartnerEventsError>>;
 
-    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have an EventBridge rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
+    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. Amazon EventBridge (CloudWatch Events) rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have an EventBridge rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
     async fn put_permission(
         &self,
         input: PutPermissionRequest,
@@ -2702,7 +2807,7 @@ pub trait EventBridge {
         input: PutRuleRequest,
     ) -> Result<PutRuleResponse, RusotoError<PutRuleError>>;
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -2732,7 +2837,7 @@ pub trait EventBridge {
         input: TestEventPatternRequest,
     ) -> Result<TestEventPatternResponse, RusotoError<TestEventPatternError>>;
 
-    /// <p>Removes one or more tags from the specified EventBridge resource. In CloudWatch Events, rules and event buses can be tagged.</p>
+    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events, rules and event buses can be tagged.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3414,7 +3519,7 @@ impl EventBridge for EventBridgeClient {
         }
     }
 
-    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have an EventBridge rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
+    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to the specified <i>event bus</i>. Amazon EventBridge (CloudWatch Events) rules in your account are triggered by these events arriving to an event bus in your account. </p> <p>For another account to send events to your account, that external account must have an EventBridge rule with your account's event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
     async fn put_permission(
         &self,
         input: PutPermissionRequest,
@@ -3468,7 +3573,7 @@ impl EventBridge for EventBridgeClient {
         }
     }
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -3604,7 +3709,7 @@ impl EventBridge for EventBridgeClient {
         }
     }
 
-    /// <p>Removes one or more tags from the specified EventBridge resource. In CloudWatch Events, rules and event buses can be tagged.</p>
+    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events, rules and event buses can be tagged.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,

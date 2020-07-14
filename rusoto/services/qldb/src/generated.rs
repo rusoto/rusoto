@@ -52,7 +52,7 @@ pub struct CreateLedgerRequest {
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
-    /// <p>The name of the ledger that you want to create. The name must be unique among all of your ledgers in the current AWS Region.</p>
+    /// <p>The name of the ledger that you want to create. The name must be unique among all of your ledgers in the current AWS Region.</p> <p>Naming constraints for ledger names are defined in <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming">Quotas in Amazon QLDB</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The permissions mode to assign to the ledger that you want to create.</p>
@@ -354,7 +354,7 @@ pub struct JournalS3ExportDescription {
 /// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your Amazon QLDB journal stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisConfiguration {
-    /// <p>Enables QLDB to publish multiple stream records in a single Kinesis Data Streams record. To learn more, see <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html">KPL Key Concepts</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
+    /// <p>Enables QLDB to publish multiple data records in a single Kinesis Data Streams record. To learn more, see <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html">KPL Key Concepts</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "AggregationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregation_enabled: Option<bool>,
@@ -537,7 +537,7 @@ pub struct S3ExportConfiguration {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamJournalToKinesisRequest {
-    /// <p>The exclusive date and time that specifies when the stream ends. If you keep this parameter blank, the stream runs indefinitely until you cancel it.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p>
+    /// <p>The exclusive date and time that specifies when the stream ends. If you don't define this parameter, the stream runs indefinitely until you cancel it.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p>
     #[serde(rename = "ExclusiveEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusive_end_time: Option<f64>,
@@ -553,7 +553,7 @@ pub struct StreamJournalToKinesisRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that grants QLDB permissions for a journal stream to write data records to a Kinesis Data Streams resource.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
-    /// <p>The name that you want to assign to the QLDB journal stream. User-defined names can help identify and indicate the purpose of a stream.</p> <p>Your stream name must be unique among other <i>active</i> streams for a given ledger. If you try to create a stream with the same name and configuration of an active, existing stream for the same ledger, QLDB simply returns the existing stream. Stream names have the same naming constraints as ledger names, as defined in <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming">Quotas in Amazon QLDB</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    /// <p>The name that you want to assign to the QLDB journal stream. User-defined names can help identify and indicate the purpose of a stream.</p> <p>Your stream name must be unique among other <i>active</i> streams for a given ledger. Stream names have the same naming constraints as ledger names, as defined in <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming">Quotas in Amazon QLDB</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
     /// <p>The key-value pairs to add as tags to the stream that you want to create. Tag keys are case sensitive. Tag values are case sensitive and can be null.</p>
@@ -638,7 +638,7 @@ pub struct UpdateLedgerResponse {
     pub state: Option<String>,
 }
 
-/// <p>A structure that can contain an Amazon Ion value in multiple encoding formats.</p>
+/// <p>A structure that can contain a value in multiple encoding formats.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ValueHolder {
     /// <p>An Amazon Ion plaintext value contained in a <code>ValueHolder</code> structure.</p>
@@ -1458,7 +1458,7 @@ pub trait Qldb {
         input: ExportJournalToS3Request,
     ) -> Result<ExportJournalToS3Response, RusotoError<ExportJournalToS3Error>>;
 
-    /// <p>Returns a journal block object at a specified address in a ledger. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
+    /// <p>Returns a block object at a specified address in a journal. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>For information about the data contents in a block, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/journal-contents.html">Journal contents</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
     async fn get_block(
         &self,
         input: GetBlockRequest,
@@ -1512,7 +1512,7 @@ pub trait Qldb {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Creates a stream for a given Amazon QLDB ledger that delivers the journal data to a specified Amazon Kinesis Data Streams resource. The stream captures every document revision that is committed to your journal and sends it to the Kinesis data stream.</p>
+    /// <p>Creates a journal stream for a given Amazon QLDB ledger. The stream captures every document revision that is committed to the ledger's journal and delivers the data to a specified Amazon Kinesis Data Streams resource.</p>
     async fn stream_journal_to_kinesis(
         &self,
         input: StreamJournalToKinesisRequest,
@@ -1784,7 +1784,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns a journal block object at a specified address in a ledger. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
+    /// <p>Returns a block object at a specified address in a journal. Also returns a proof of the specified block for verification if <code>DigestTipAddress</code> is provided.</p> <p>For information about the data contents in a block, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/journal-contents.html">Journal contents</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the specified ledger doesn't exist or is in <code>DELETING</code> status, then throws <code>ResourceNotFoundException</code>.</p> <p>If the specified ledger is in <code>CREATING</code> status, then throws <code>ResourcePreconditionNotMetException</code>.</p> <p>If no block exists with the specified address, then throws <code>InvalidParameterException</code>.</p>
     async fn get_block(
         &self,
         input: GetBlockRequest,
@@ -2053,7 +2053,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Creates a stream for a given Amazon QLDB ledger that delivers the journal data to a specified Amazon Kinesis Data Streams resource. The stream captures every document revision that is committed to your journal and sends it to the Kinesis data stream.</p>
+    /// <p>Creates a journal stream for a given Amazon QLDB ledger. The stream captures every document revision that is committed to the ledger's journal and delivers the data to a specified Amazon Kinesis Data Streams resource.</p>
     async fn stream_journal_to_kinesis(
         &self,
         input: StreamJournalToKinesisRequest,

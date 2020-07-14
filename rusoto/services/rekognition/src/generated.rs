@@ -46,6 +46,28 @@ pub struct Asset {
     pub ground_truth_manifest: Option<GroundTruthManifest>,
 }
 
+/// <p>Metadata information about an audio stream. An array of <code>AudioMetadata</code> objects for the audio streams found in a stored video is returned by <a>GetSegmentDetection</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AudioMetadata {
+    /// <p>The audio codec used to encode or decode the audio stream. </p>
+    #[serde(rename = "Codec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec: Option<String>,
+    /// <p>The duration of the audio stream in milliseconds.</p>
+    #[serde(rename = "DurationMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_millis: Option<i64>,
+    /// <p>The number of audio channels in the segement.</p>
+    #[serde(rename = "NumberOfChannels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_channels: Option<i64>,
+    /// <p>The sample rate for the audio stream.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
+}
+
 /// <p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -507,7 +529,7 @@ pub struct DescribeProjectVersionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project that contains the models you want to describe.</p>
     #[serde(rename = "ProjectArn")]
     pub project_arn: String,
-    /// <p>A list of model version names that you want to describe. You can add up to 10 model version names to the list. If you don't specify a value, all model descriptions are returned.</p>
+    /// <p>A list of model version names that you want to describe. You can add up to 10 model version names to the list. If you don't specify a value, all model descriptions are returned. A version name is part of a model (ProjectVersion) ARN. For example, <code>my-model.2020-01-21T09.10.15</code> is the version name in the following ARN. <code>arn:aws:rekognition:us-east-1:123456789012:project/getting-started/version/<i>my-model.2020-01-21T09.10.15</i>/1234567890123</code>.</p>
     #[serde(rename = "VersionNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_names: Option<Vec<String>>,
@@ -1307,8 +1329,57 @@ pub struct GetPersonTrackingResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSegmentDetectionRequest {
+    /// <p>Job identifier for the text detection operation for which you want results returned. You get the job identifer from an initial call to <code>StartSegmentDetection</code>.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>Maximum number of results to return per paginated call. The largest value you can specify is 1000.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of text.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSegmentDetectionResponse {
+    /// <p>An array of objects. There can be multiple audio streams. Each <code>AudioMetadata</code> object contains metadata for a single audio stream. Audio information in an <code>AudioMetadata</code> objects includes the audio codec, the number of audio channels, the duration of the audio stream, and the sample rate. Audio metadata is returned in each page of information returned by <code>GetSegmentDetection</code>.</p>
+    #[serde(rename = "AudioMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_metadata: Option<Vec<AudioMetadata>>,
+    /// <p>Current status of the segment detection job.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>If the previous response was incomplete (because there are more labels to retrieve), Amazon Rekognition Video returns a pagination token in the response. You can use this pagination token to retrieve the next set of text.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of segments detected in a video.</p>
+    #[serde(rename = "Segments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segments: Option<Vec<SegmentDetection>>,
+    /// <p>An array containing the segment types requested in the call to <code>StartSegmentDetection</code>. </p>
+    #[serde(rename = "SelectedSegmentTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_segment_types: Option<Vec<SegmentTypeInfo>>,
+    /// <p>If the job fails, <code>StatusMessage</code> provides a descriptive error message.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>Currently, Amazon Rekognition Video returns a single object in the <code>VideoMetadata</code> array. The object contains information about the video stream in the input file that Amazon Rekognition Video chose to analyze. The <code>VideoMetadata</code> object includes the video codec, video format and other information. Video metadata is returned in each page of information returned by <code>GetSegmentDetection</code>.</p>
+    #[serde(rename = "VideoMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_metadata: Option<Vec<VideoMetadata>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTextDetectionRequest {
-    /// <p>Job identifier for the label detection operation for which you want results returned. You get the job identifer from an initial call to <code>StartTextDetection</code>.</p>
+    /// <p>Job identifier for the text detection operation for which you want results returned. You get the job identifer from an initial call to <code>StartTextDetection</code>.</p>
     #[serde(rename = "JobId")]
     pub job_id: String,
     /// <p>Maximum number of results to return per paginated call. The largest value you can specify is 1000.</p>
@@ -1383,7 +1454,7 @@ pub struct HumanLoopConfig {
     #[serde(rename = "DataAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_attributes: Option<HumanLoopDataAttributes>,
-    /// <p>The Amazon Resource Name (ARN) of the flow definition.</p>
+    /// <p>The Amazon Resource Name (ARN) of the flow definition. You can create a flow definition by using the Amazon Sagemaker <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateFlowDefinition.html">CreateFlowDefinition</a> Operation. </p>
     #[serde(rename = "FlowDefinitionArn")]
     pub flow_definition_arn: String,
     /// <p>The name of the human review used for this image. This should be kept unique within a region.</p>
@@ -2020,6 +2091,76 @@ pub struct SearchFacesResponse {
     pub searched_face_id: Option<String>,
 }
 
+/// <p>A technical cue or shot detection segment detected in a video. An array of <code>SegmentDetection</code> objects containing all segments detected in a stored video is returned by <a>GetSegmentDetection</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SegmentDetection {
+    /// <p>The duration of the detected segment in milliseconds. </p>
+    #[serde(rename = "DurationMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_millis: Option<i64>,
+    /// <p>The duration of the timecode for the detected segment in SMPTE format.</p>
+    #[serde(rename = "DurationSMPTE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_smpte: Option<String>,
+    /// <p>The frame-accurate SMPTE timecode, from the start of a video, for the end of a detected segment. <code>EndTimecode</code> is in <i>HH:MM:SS:fr</i> format (and <i>;fr</i> for drop frame-rates).</p>
+    #[serde(rename = "EndTimecodeSMPTE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_timecode_smpte: Option<String>,
+    /// <p>The end time of the detected segment, in milliseconds, from the start of the video.</p>
+    #[serde(rename = "EndTimestampMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_timestamp_millis: Option<i64>,
+    /// <p>If the segment is a shot detection, contains information about the shot detection.</p>
+    #[serde(rename = "ShotSegment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shot_segment: Option<ShotSegment>,
+    /// <p>The frame-accurate SMPTE timecode, from the start of a video, for the start of a detected segment. <code>StartTimecode</code> is in <i>HH:MM:SS:fr</i> format (and <i>;fr</i> for drop frame-rates). </p>
+    #[serde(rename = "StartTimecodeSMPTE")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_timecode_smpte: Option<String>,
+    /// <p>The start time of the detected segment in milliseconds from the start of the video.</p>
+    #[serde(rename = "StartTimestampMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_timestamp_millis: Option<i64>,
+    /// <p>If the segment is a technical cue, contains information about the technical cue.</p>
+    #[serde(rename = "TechnicalCueSegment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub technical_cue_segment: Option<TechnicalCueSegment>,
+    /// <p>The type of the segment. Valid values are <code>TECHNICAL_CUE</code> and <code>SHOT</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information about the type of a segment requested in a call to <a>StartSegmentDetection</a>. An array of <code>SegmentTypeInfo</code> objects is returned by the response from <a>GetSegmentDetection</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SegmentTypeInfo {
+    /// <p>The version of the model used to detect segments.</p>
+    #[serde(rename = "ModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_version: Option<String>,
+    /// <p>The type of a segment (technical cue or shot detection).</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information about a shot detection segment detected in a video. For more information, see <a>SegmentDetection</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ShotSegment {
+    /// <p>The confidence that Amazon Rekognition Video has in the accuracy of the detected segment.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>An Identifier for a shot detection segment detected in a video </p>
+    #[serde(rename = "Index")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index: Option<i64>,
+}
+
 /// <p>Indicates whether or not the face is smiling, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2247,6 +2388,65 @@ pub struct StartProjectVersionResponse {
     pub status: Option<String>,
 }
 
+/// <p>Filters applied to the technical cue or shot detection segments. For more information, see <a>StartSegmentDetection</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartSegmentDetectionFilters {
+    /// <p>Filters that are specific to shot detections.</p>
+    #[serde(rename = "ShotFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shot_filter: Option<StartShotDetectionFilter>,
+    /// <p>Filters that are specific to technical cues.</p>
+    #[serde(rename = "TechnicalCueFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub technical_cue_filter: Option<StartTechnicalCueDetectionFilter>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartSegmentDetectionRequest {
+    /// <p>Idempotent token used to identify the start request. If you use the same token with multiple <code>StartSegmentDetection</code> requests, the same <code>JobId</code> is returned. Use <code>ClientRequestToken</code> to prevent the same job from being accidently started more than once. </p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>Filters for technical cue or shot detection.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<StartSegmentDetectionFilters>,
+    /// <p>An identifier you specify that's returned in the completion notification that's published to your Amazon Simple Notification Service topic. For example, you can use <code>JobTag</code> to group related jobs and identify them in the completion notification.</p>
+    #[serde(rename = "JobTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_tag: Option<String>,
+    /// <p>The ARN of the Amazon SNS topic to which you want Amazon Rekognition Video to publish the completion status of the segment detection operation.</p>
+    #[serde(rename = "NotificationChannel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_channel: Option<NotificationChannel>,
+    /// <p>An array of segment types to detect in the video. Valid values are TECHNICAL_CUE and SHOT.</p>
+    #[serde(rename = "SegmentTypes")]
+    pub segment_types: Vec<String>,
+    #[serde(rename = "Video")]
+    pub video: Video,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartSegmentDetectionResponse {
+    /// <p>Unique identifier for the segment detection job. The <code>JobId</code> is returned from <code>StartSegmentDetection</code>. </p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+/// <p>Filters for the shot detection segments returned by <code>GetSegmentDetection</code>. For more information, see <a>StartSegmentDetectionFilters</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartShotDetectionFilter {
+    /// <p>Specifies the minimum confidence that Amazon Rekognition Video must have in order to return a detected segment. Confidence represents how certain Amazon Rekognition is that a segment is correctly identified. 0 is the lowest confidence. 100 is the highest confidence. Amazon Rekognition Video doesn't return any segments with a confidence level lower than this specified value.</p> <p>If you don't specify <code>MinSegmentConfidence</code>, the <code>GetSegmentDetection</code> returns segments with confidence values greater than or equal to 50 percent.</p>
+    #[serde(rename = "MinSegmentConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_segment_confidence: Option<f32>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartStreamProcessorRequest {
@@ -2258,6 +2458,16 @@ pub struct StartStreamProcessorRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartStreamProcessorResponse {}
+
+/// <p>Filters for the technical segments returned by <a>GetSegmentDetection</a>. For more information, see <a>StartSegmentDetectionFilters</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartTechnicalCueDetectionFilter {
+    /// <p>Specifies the minimum confidence that Amazon Rekognition Video must have in order to return a detected segment. Confidence represents how certain Amazon Rekognition is that a segment is correctly identified. 0 is the lowest confidence. 100 is the highest confidence. Amazon Rekognition Video doesn't return any segments with a confidence level lower than this specified value.</p> <p>If you don't specify <code>MinSegmentConfidence</code>, <code>GetSegmentDetection</code> returns segments with confidence values greater than or equal to 50 percent.</p>
+    #[serde(rename = "MinSegmentConfidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_segment_confidence: Option<f32>,
+}
 
 /// <p>Set of optional parameters that let you set the criteria text must meet to be included in your response. <code>WordFilter</code> looks at a word's height, width and minimum confidence. <code>RegionOfInterest</code> lets you set a specific region of the screen to look for text in.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2395,6 +2605,20 @@ pub struct Sunglasses {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<bool>,
+}
+
+/// <p>Information about a technical cue segment. For more information, see <a>SegmentDetection</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TechnicalCueSegment {
+    /// <p>The confidence that Amazon Rekognition Video has in the accuracy of the detected segment.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>The type of the technical cue.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>The dataset used for testing. Optionally, if <code>AutoCreate</code> is set, Amazon Rekognition Custom Labels creates a testing dataset using an 80/20 split of the training dataset.</p>
@@ -2700,7 +2924,7 @@ pub enum CreateProjectError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -2768,7 +2992,7 @@ pub enum CreateProjectVersionError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -2850,7 +3074,7 @@ pub enum CreateStreamProcessorError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3050,7 +3274,7 @@ pub enum DeleteProjectError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -3118,7 +3342,7 @@ pub enum DeleteProjectVersionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -3194,7 +3418,7 @@ pub enum DeleteStreamProcessorError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -4481,6 +4705,84 @@ impl fmt::Display for GetPersonTrackingError {
     }
 }
 impl Error for GetPersonTrackingError {}
+/// Errors returned by GetSegmentDetection
+#[derive(Debug, PartialEq)]
+pub enum GetSegmentDetectionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Pagination token in the request is not valid.</p>
+    InvalidPaginationToken(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The collection specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl GetSegmentDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSegmentDetectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetSegmentDetectionError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(GetSegmentDetectionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(GetSegmentDetectionError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetSegmentDetectionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetSegmentDetectionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetSegmentDetectionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetSegmentDetectionError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSegmentDetectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSegmentDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetSegmentDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetSegmentDetectionError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            GetSegmentDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetSegmentDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSegmentDetectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetSegmentDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSegmentDetectionError {}
 /// Errors returned by GetTextDetection
 #[derive(Debug, PartialEq)]
 pub enum GetTextDetectionError {
@@ -5646,7 +5948,7 @@ pub enum StartProjectVersionError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -5715,6 +6017,98 @@ impl fmt::Display for StartProjectVersionError {
     }
 }
 impl Error for StartProjectVersionError {}
+/// Errors returned by StartSegmentDetection
+#[derive(Debug, PartialEq)]
+pub enum StartSegmentDetectionError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>A <code>ClientRequestToken</code> input parameter was reused with an operation, but at least one of the other input parameters is different from the previous call to the operation.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    InvalidS3Object(String),
+    /// <p>An Amazon Rekognition service limit was exceeded. For example, if you start too many Amazon Rekognition Video jobs concurrently, calls to start operations (<code>StartLabelDetection</code>, for example) will raise a <code>LimitExceededException</code> exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Rekognition service limit. </p>
+    LimitExceeded(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+    /// <p>The file size or duration of the supplied media is too large. The maximum file size is 10GB. The maximum duration is 6 hours. </p>
+    VideoTooLarge(String),
+}
+
+impl StartSegmentDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSegmentDetectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::AccessDenied(err.msg))
+                }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartSegmentDetectionError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StartSegmentDetectionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::InvalidS3Object(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::LimitExceeded(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartSegmentDetectionError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::Throttling(err.msg))
+                }
+                "VideoTooLargeException" => {
+                    return RusotoError::Service(StartSegmentDetectionError::VideoTooLarge(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartSegmentDetectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartSegmentDetectionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartSegmentDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartSegmentDetectionError::Throttling(ref cause) => write!(f, "{}", cause),
+            StartSegmentDetectionError::VideoTooLarge(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartSegmentDetectionError {}
 /// Errors returned by StartStreamProcessor
 #[derive(Debug, PartialEq)]
 pub enum StartStreamProcessorError {
@@ -5726,7 +6120,7 @@ pub enum StartStreamProcessorError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -5890,7 +6284,7 @@ pub enum StopProjectVersionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -5962,7 +6356,7 @@ pub enum StopStreamProcessorError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p><p/></p>
+    /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
@@ -6072,13 +6466,13 @@ pub trait Rekognition {
         input: DeleteFacesRequest,
     ) -> Result<DeleteFacesResponse, RusotoError<DeleteFacesError>>;
 
-    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all versions of the model associated with the project. To delete a version of a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
+    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all models associated with the project. To delete a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
     async fn delete_project(
         &self,
         input: DeleteProjectRequest,
     ) -> Result<DeleteProjectResponse, RusotoError<DeleteProjectError>>;
 
-    /// <p>Deletes a version of a model. </p> <p>You must first stop the model before you can delete it. To check if a model is running, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
+    /// <p>Deletes an Amazon Rekognition Custom Labels model. </p> <p>You can't delete a model if it is running or if it is training. To check the status of a model, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. If the model is training, wait until it finishes.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
     async fn delete_project_version(
         &self,
         input: DeleteProjectVersionRequest,
@@ -6186,13 +6580,19 @@ pub trait Rekognition {
         input: GetPersonTrackingRequest,
     ) -> Result<GetPersonTrackingResponse, RusotoError<GetPersonTrackingError>>;
 
+    /// <p>Gets the segment detection results of a Amazon Rekognition Video analysis started by <a>StartSegmentDetection</a>.</p> <p>Segment detection with Amazon Rekognition Video is an asynchronous operation. You start segment detection by calling <a>StartSegmentDetection</a> which returns a job identifier (<code>JobId</code>). When the segment detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartSegmentDetection</code>. To get the results of the segment detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetSegmentDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartSegmentDetection</code>.</p> <p> <code>GetSegmentDetection</code> returns detected segments in an array (<code>Segments</code>) of <a>SegmentDetection</a> objects. <code>Segments</code> is sorted by the segment types specified in the <code>SegmentTypes</code> input parameter of <code>StartSegmentDetection</code>. Each element of the array includes the detected segment, the precentage confidence in the acuracy of the detected segment, the type of the segment, and the frame in which the segment was detected.</p> <p>Use <code>SelectedSegmentTypes</code> to find out the type of segment detection requested in the call to <code>StartSegmentDetection</code>.</p> <p>Use the <code>MaxResults</code> parameter to limit the number of segment detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetSegmentDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetSegmentDetection</code>.</p> <p>For more information, see Detecting Video Segments in Stored Video in the Amazon Rekognition Developer Guide.</p>
+    async fn get_segment_detection(
+        &self,
+        input: GetSegmentDetectionRequest,
+    ) -> Result<GetSegmentDetectionResponse, RusotoError<GetSegmentDetectionError>>;
+
     /// <p>Gets the text detection results of a Amazon Rekognition Video analysis started by <a>StartTextDetection</a>.</p> <p>Text detection with Amazon Rekognition Video is an asynchronous operation. You start text detection by calling <a>StartTextDetection</a> which returns a job identifier (<code>JobId</code>) When the text detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartTextDetection</code>. To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p> <p> <code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>) sorted by the time the text was detected, up to 50 words per frame of video.</p> <p>Each element of the array includes the detected text, the precentage confidence in the acuracy of the detected text, the time the text was detected, bounding box information for where the text was located, and unique identifiers for words and their lines.</p> <p>Use MaxResults parameter to limit the number of text detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetTextDetection</code>.</p>
     async fn get_text_detection(
         &self,
         input: GetTextDetectionRequest,
     ) -> Result<GetTextDetectionResponse, RusotoError<GetTextDetectionError>>;
 
-    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageId</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     async fn index_faces(
         &self,
         input: IndexFacesRequest,
@@ -6275,6 +6675,12 @@ pub trait Rekognition {
         &self,
         input: StartProjectVersionRequest,
     ) -> Result<StartProjectVersionResponse, RusotoError<StartProjectVersionError>>;
+
+    /// <p>Starts asynchronous detection of segment detection in a stored video.</p> <p>Amazon Rekognition Video can detect segments in a video stored in an Amazon S3 bucket. Use <a>Video</a> to specify the bucket name and the filename of the video. <code>StartSegmentDetection</code> returns a job identifier (<code>JobId</code>) which you use to get the results of the operation. When segment detection is finished, Amazon Rekognition Video publishes a completion status to the Amazon Simple Notification Service topic that you specify in <code>NotificationChannel</code>.</p> <p>You can use the <code>Filters</code> (<a>StartSegmentDetectionFilters</a>) input parameter to specify the minimum detection confidence returned in the response. Within <code>Filters</code>, use <code>ShotFilter</code> (<a>StartShotDetectionFilter</a>) to filter detected shots. Use <code>TechnicalCueFilter</code> (<a>StartTechnicalCueDetectionFilter</a>) to filter technical cues. </p> <p>To get the results of the segment detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <a>GetSegmentDetection</a> and pass the job identifier (<code>JobId</code>) from the initial call to <code>StartSegmentDetection</code>. </p> <p>For more information, see Detecting Video Segments in Stored Video in the Amazon Rekognition Developer Guide.</p>
+    async fn start_segment_detection(
+        &self,
+        input: StartSegmentDetectionRequest,
+    ) -> Result<StartSegmentDetectionResponse, RusotoError<StartSegmentDetectionError>>;
 
     /// <p>Starts processing a stream processor. You create a stream processor by calling <a>CreateStreamProcessor</a>. To tell <code>StartStreamProcessor</code> which stream processor to start, use the value of the <code>Name</code> field specified in the call to <code>CreateStreamProcessor</code>.</p>
     async fn start_stream_processor(
@@ -6533,7 +6939,7 @@ impl Rekognition for RekognitionClient {
         }
     }
 
-    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all versions of the model associated with the project. To delete a version of a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
+    /// <p>Deletes an Amazon Rekognition Custom Labels project. To delete a project you must first delete all models associated with the project. To delete a model, see <a>DeleteProjectVersion</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProject</code> action. </p>
     async fn delete_project(
         &self,
         input: DeleteProjectRequest,
@@ -6560,7 +6966,7 @@ impl Rekognition for RekognitionClient {
         }
     }
 
-    /// <p>Deletes a version of a model. </p> <p>You must first stop the model before you can delete it. To check if a model is running, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
+    /// <p>Deletes an Amazon Rekognition Custom Labels model. </p> <p>You can't delete a model if it is running or if it is training. To check the status of a model, use the <code>Status</code> field returned from <a>DescribeProjectVersions</a>. To stop a running model call <a>StopProjectVersion</a>. If the model is training, wait until it finishes.</p> <p>This operation requires permissions to perform the <code>rekognition:DeleteProjectVersion</code> action. </p>
     async fn delete_project_version(
         &self,
         input: DeleteProjectVersionRequest,
@@ -7060,6 +7466,34 @@ impl Rekognition for RekognitionClient {
         }
     }
 
+    /// <p>Gets the segment detection results of a Amazon Rekognition Video analysis started by <a>StartSegmentDetection</a>.</p> <p>Segment detection with Amazon Rekognition Video is an asynchronous operation. You start segment detection by calling <a>StartSegmentDetection</a> which returns a job identifier (<code>JobId</code>). When the segment detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartSegmentDetection</code>. To get the results of the segment detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetSegmentDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartSegmentDetection</code>.</p> <p> <code>GetSegmentDetection</code> returns detected segments in an array (<code>Segments</code>) of <a>SegmentDetection</a> objects. <code>Segments</code> is sorted by the segment types specified in the <code>SegmentTypes</code> input parameter of <code>StartSegmentDetection</code>. Each element of the array includes the detected segment, the precentage confidence in the acuracy of the detected segment, the type of the segment, and the frame in which the segment was detected.</p> <p>Use <code>SelectedSegmentTypes</code> to find out the type of segment detection requested in the call to <code>StartSegmentDetection</code>.</p> <p>Use the <code>MaxResults</code> parameter to limit the number of segment detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetSegmentDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetSegmentDetection</code>.</p> <p>For more information, see Detecting Video Segments in Stored Video in the Amazon Rekognition Developer Guide.</p>
+    async fn get_segment_detection(
+        &self,
+        input: GetSegmentDetectionRequest,
+    ) -> Result<GetSegmentDetectionResponse, RusotoError<GetSegmentDetectionError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.GetSegmentDetection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSegmentDetectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSegmentDetectionError::from_response(response))
+        }
+    }
+
     /// <p>Gets the text detection results of a Amazon Rekognition Video analysis started by <a>StartTextDetection</a>.</p> <p>Text detection with Amazon Rekognition Video is an asynchronous operation. You start text detection by calling <a>StartTextDetection</a> which returns a job identifier (<code>JobId</code>) When the text detection operation finishes, Amazon Rekognition publishes a completion status to the Amazon Simple Notification Service topic registered in the initial call to <code>StartTextDetection</code>. To get the results of the text detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p> <p> <code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>) sorted by the time the text was detected, up to 50 words per frame of video.</p> <p>Each element of the array includes the detected text, the precentage confidence in the acuracy of the detected text, the time the text was detected, bounding box information for where the text was located, and unique identifiers for words and their lines.</p> <p>Use MaxResults parameter to limit the number of text detections returned. If there are more results than specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation response contains a pagination token for getting the next set of results. To get the next page of results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request parameter with the token value returned from the previous call to <code>GetTextDetection</code>.</p>
     async fn get_text_detection(
         &self,
@@ -7088,7 +7522,7 @@ impl Rekognition for RekognitionClient {
         }
     }
 
-    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageID</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
+    /// <p>Detects faces in the input image and adds them to the specified collection. </p> <p>Amazon Rekognition doesn't save the actual faces that are detected. Instead, the underlying detection algorithm first detects the faces in the input image. For each face, the algorithm extracts facial features into a feature vector, and stores it in the backend database. Amazon Rekognition uses feature vectors when it performs face match and search operations using the <a>SearchFaces</a> and <a>SearchFacesByImage</a> operations.</p> <p>For more information, see Adding Faces to a Collection in the Amazon Rekognition Developer Guide.</p> <p>To get the number of faces in a collection, call <a>DescribeCollection</a>. </p> <p>If you're using version 1.0 of the face detection model, <code>IndexFaces</code> indexes the 15 largest faces in the input image. Later versions of the face detection model index the 100 largest faces in the input image. </p> <p>If you're using version 4 or later of the face model, image orientation information is not returned in the <code>OrientationCorrection</code> field. </p> <p>To determine which version of the model you're using, call <a>DescribeCollection</a> and supply the collection ID. You can also get the model version from the value of <code>FaceModelVersion</code> in the response from <code>IndexFaces</code> </p> <p>For more information, see Model Versioning in the Amazon Rekognition Developer Guide.</p> <p>If you provide the optional <code>ExternalImageId</code> for the input image you provided, Amazon Rekognition associates this ID with all faces that it detects. When you call the <a>ListFaces</a> operation, the response returns the external ID. You can use this external image ID to create a client-side index to associate the faces with each image. You can then use the index to find all faces in an image.</p> <p>You can specify the maximum number of faces to index with the <code>MaxFaces</code> input parameter. This is useful when you want to index the largest faces in an image and don't want to index smaller faces, such as those belonging to people standing in the background.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. By default, <code>IndexFaces</code> chooses the quality bar that's used to filter faces. You can also explicitly choose the quality bar. Use <code>QualityFilter</code>, to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>Information about faces detected in an image, but not indexed, is returned in an array of <a>UnindexedFace</a> objects, <code>UnindexedFaces</code>. Faces aren't indexed for reasons such as:</p> <ul> <li> <p>The number of faces detected exceeds the value of the <code>MaxFaces</code> request parameter.</p> </li> <li> <p>The face is too small compared to the image dimensions.</p> </li> <li> <p>The face is too blurry.</p> </li> <li> <p>The image is too dark.</p> </li> <li> <p>The face has an extreme pose.</p> </li> <li> <p>The face doesn’t have enough detail to be suitable for face search.</p> </li> </ul> <p>In response, the <code>IndexFaces</code> operation returns an array of metadata for all detected faces, <code>FaceRecords</code>. This includes: </p> <ul> <li> <p>The bounding box, <code>BoundingBox</code>, of the detected face. </p> </li> <li> <p>A confidence value, <code>Confidence</code>, which indicates the confidence that the bounding box contains a face.</p> </li> <li> <p>A face ID, <code>FaceId</code>, assigned by the service for each face that's detected and stored.</p> </li> <li> <p>An image ID, <code>ImageId</code>, assigned by the service for the input image.</p> </li> </ul> <p>If you request all facial attributes (by using the <code>detectionAttributes</code> parameter), Amazon Rekognition returns detailed facial attributes, such as facial landmarks (for example, location of eye and mouth) and other facial attributes. If you provide the same image, specify the same collection, and use the same external ID in the <code>IndexFaces</code> operation, Amazon Rekognition doesn't save duplicate face metadata.</p> <p/> <p>The input image is passed either as base64-encoded image bytes, or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>This operation requires permissions to perform the <code>rekognition:IndexFaces</code> action.</p>
     async fn index_faces(
         &self,
         input: IndexFacesRequest,
@@ -7476,6 +7910,34 @@ impl Rekognition for RekognitionClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(StartProjectVersionError::from_response(response))
+        }
+    }
+
+    /// <p>Starts asynchronous detection of segment detection in a stored video.</p> <p>Amazon Rekognition Video can detect segments in a video stored in an Amazon S3 bucket. Use <a>Video</a> to specify the bucket name and the filename of the video. <code>StartSegmentDetection</code> returns a job identifier (<code>JobId</code>) which you use to get the results of the operation. When segment detection is finished, Amazon Rekognition Video publishes a completion status to the Amazon Simple Notification Service topic that you specify in <code>NotificationChannel</code>.</p> <p>You can use the <code>Filters</code> (<a>StartSegmentDetectionFilters</a>) input parameter to specify the minimum detection confidence returned in the response. Within <code>Filters</code>, use <code>ShotFilter</code> (<a>StartShotDetectionFilter</a>) to filter detected shots. Use <code>TechnicalCueFilter</code> (<a>StartTechnicalCueDetectionFilter</a>) to filter technical cues. </p> <p>To get the results of the segment detection operation, first check that the status value published to the Amazon SNS topic is <code>SUCCEEDED</code>. if so, call <a>GetSegmentDetection</a> and pass the job identifier (<code>JobId</code>) from the initial call to <code>StartSegmentDetection</code>. </p> <p>For more information, see Detecting Video Segments in Stored Video in the Amazon Rekognition Developer Guide.</p>
+    async fn start_segment_detection(
+        &self,
+        input: StartSegmentDetectionRequest,
+    ) -> Result<StartSegmentDetectionResponse, RusotoError<StartSegmentDetectionError>> {
+        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "RekognitionService.StartSegmentDetection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartSegmentDetectionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(StartSegmentDetectionError::from_response(response))
         }
     }
 

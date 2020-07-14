@@ -379,6 +379,34 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
+/// <p>Defines a binary column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BinaryColumnStatisticsData {
+    /// <p>Average length of the column.</p>
+    #[serde(rename = "AverageLength")]
+    pub average_length: f64,
+    /// <p>Maximum length of the column.</p>
+    #[serde(rename = "MaximumLength")]
+    pub maximum_length: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
+/// <p>Defines a boolean column statistics.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BooleanColumnStatisticsData {
+    /// <p>Number of false value.</p>
+    #[serde(rename = "NumberOfFalses")]
+    pub number_of_falses: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+    /// <p>Number of true value.</p>
+    #[serde(rename = "NumberOfTrues")]
+    pub number_of_trues: i64,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelMLTaskRunRequest {
@@ -551,6 +579,87 @@ pub struct Column {
     pub type_: Option<String>,
 }
 
+/// <p>Defines a column containing error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ColumnError {
+    /// <p>The name of the column.</p>
+    #[serde(rename = "ColumnName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_name: Option<String>,
+    /// <p>The error message occurred during operation.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<ErrorDetail>,
+}
+
+/// <p>Defines a column statistics.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ColumnStatistics {
+    /// <p>The analyzed time of the column statistics.</p>
+    #[serde(rename = "AnalyzedTime")]
+    pub analyzed_time: f64,
+    /// <p>The name of the column.</p>
+    #[serde(rename = "ColumnName")]
+    pub column_name: String,
+    /// <p>The type of the column.</p>
+    #[serde(rename = "ColumnType")]
+    pub column_type: String,
+    /// <p>The statistics of the column.</p>
+    #[serde(rename = "StatisticsData")]
+    pub statistics_data: ColumnStatisticsData,
+}
+
+/// <p>Defines a column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ColumnStatisticsData {
+    /// <p>Binary Column Statistics Data.</p>
+    #[serde(rename = "BinaryColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub binary_column_statistics_data: Option<BinaryColumnStatisticsData>,
+    /// <p>Boolean Column Statistics Data.</p>
+    #[serde(rename = "BooleanColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub boolean_column_statistics_data: Option<BooleanColumnStatisticsData>,
+    /// <p>Date Column Statistics Data.</p>
+    #[serde(rename = "DateColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_column_statistics_data: Option<DateColumnStatisticsData>,
+    /// <p>Decimal Column Statistics Data.</p>
+    #[serde(rename = "DecimalColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub decimal_column_statistics_data: Option<DecimalColumnStatisticsData>,
+    /// <p>Double Column Statistics Data.</p>
+    #[serde(rename = "DoubleColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub double_column_statistics_data: Option<DoubleColumnStatisticsData>,
+    /// <p>Long Column Statistics Data.</p>
+    #[serde(rename = "LongColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_column_statistics_data: Option<LongColumnStatisticsData>,
+    /// <p>String Column Statistics Data.</p>
+    #[serde(rename = "StringColumnStatisticsData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_column_statistics_data: Option<StringColumnStatisticsData>,
+    /// <p>The name of the column.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+/// <p>Defines a column containing error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ColumnStatisticsError {
+    /// <p>The ColumnStatistics of the column.</p>
+    #[serde(rename = "ColumnStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_statistics: Option<ColumnStatistics>,
+    /// <p>The error message occurred during operation.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<ErrorDetail>,
+}
+
 /// <p>Defines a condition under which a trigger fires.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Condition {
@@ -606,7 +715,7 @@ pub struct Connection {
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
+    /// <p>The type of the connection. Currently, SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -726,7 +835,7 @@ pub struct Crawler {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -909,7 +1018,7 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>The crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -931,7 +1040,7 @@ pub struct CreateCrawlerRequest {
     /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -943,7 +1052,7 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "TablePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
-    /// <p>The tags to use with this crawler request. You can use tags to limit access to the crawler. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    /// <p>The tags to use with this crawler request. You may use tags to limit access to the crawler. For more information about tags in AWS Glue, see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1255,7 +1364,7 @@ pub struct CreateJobResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJsonClassifierRequest {
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     pub json_path: String,
     /// <p>The name of the classifier.</p>
@@ -1598,6 +1707,10 @@ pub struct DataLakePrincipal {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Database {
+    /// <p>The ID of the Data Catalog in which the database resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>Creates a set of default permissions on the table for principals. </p>
     #[serde(rename = "CreateTableDefaultPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1621,6 +1734,23 @@ pub struct Database {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A <code>DatabaseIdentifier</code> structure that describes a target database for resource linking.</p>
+    #[serde(rename = "TargetDatabase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_database: Option<DatabaseIdentifier>,
+}
+
+/// <p>A structure that describes a target database for resource linking.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DatabaseIdentifier {
+    /// <p>The ID of the Data Catalog in which the database resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the catalog database.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
 }
 
 /// <p>The structure used to create or update a database.</p>
@@ -1646,6 +1776,64 @@ pub struct DatabaseInput {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A <code>DatabaseIdentifier</code> structure that describes a target database for resource linking.</p>
+    #[serde(rename = "TargetDatabase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_database: Option<DatabaseIdentifier>,
+}
+
+/// <p>Defines a date column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DateColumnStatisticsData {
+    /// <p>Maximum value of the column.</p>
+    #[serde(rename = "MaximumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_value: Option<f64>,
+    /// <p>Minimum value of the column.</p>
+    #[serde(rename = "MinimumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_value: Option<f64>,
+    /// <p>Number of distinct values.</p>
+    #[serde(rename = "NumberOfDistinctValues")]
+    pub number_of_distinct_values: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
+/// <p>Defines a decimal column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DecimalColumnStatisticsData {
+    /// <p>Maximum value of the column.</p>
+    #[serde(rename = "MaximumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_value: Option<DecimalNumber>,
+    /// <p>Minimum value of the column.</p>
+    #[serde(rename = "MinimumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_value: Option<DecimalNumber>,
+    /// <p>Number of distinct values.</p>
+    #[serde(rename = "NumberOfDistinctValues")]
+    pub number_of_distinct_values: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
+/// <p>Contains a numeric value in decimal format.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DecimalNumber {
+    /// <p>The scale that determines where the decimal point falls in the unscaled value.</p>
+    #[serde(rename = "Scale")]
+    pub scale: i64,
+    /// <p>The unscaled numeric value.</p>
+    #[serde(rename = "UnscaledValue")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub unscaled_value: bytes::Bytes,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1659,6 +1847,53 @@ pub struct DeleteClassifierRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClassifierResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteColumnStatisticsForPartitionRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>Name of the column.</p>
+    #[serde(rename = "ColumnName")]
+    pub column_name: String,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of partition values identifying the partition.</p>
+    #[serde(rename = "PartitionValues")]
+    pub partition_values: Vec<String>,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteColumnStatisticsForPartitionResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteColumnStatisticsForTableRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the column.</p>
+    #[serde(rename = "ColumnName")]
+    pub column_name: String,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteColumnStatisticsForTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1779,6 +2014,10 @@ pub struct DeleteResourcePolicyRequest {
     #[serde(rename = "PolicyHashCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_hash_condition: Option<String>,
+    /// <p>The ARN of the AWS Glue resource for the resource policy to be deleted.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2011,6 +2250,25 @@ pub struct DevEndpointCustomLibraries {
     pub extra_python_libs_s3_path: Option<String>,
 }
 
+/// <p>Defines a double column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DoubleColumnStatisticsData {
+    /// <p>Maximum value of the column.</p>
+    #[serde(rename = "MaximumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_value: Option<f64>,
+    /// <p>Minimum value of the column.</p>
+    #[serde(rename = "MinimumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_value: Option<f64>,
+    /// <p>Number of distinct values.</p>
+    #[serde(rename = "NumberOfDistinctValues")]
+    pub number_of_distinct_values: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
 /// <p>Specifies an Amazon DynamoDB table to crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDBTarget {
@@ -2018,6 +2276,14 @@ pub struct DynamoDBTarget {
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
+    /// <p>Indicates whether to scan all the records, or to sample rows from the table. Scanning all the records can take a long time when the table is not a high throughput table.</p> <p>A value of <code>true</code> means to scan all records, while a value of <code>false</code> means to sample the records. If no value is specified, the value defaults to <code>true</code>.</p>
+    #[serde(rename = "scanAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_all: Option<bool>,
+    /// <p>The percentage of the configured read capacity units to use by the AWS Glue crawler. Read capacity units is a term defined by DynamoDB, and is a numeric value that acts as rate limiter for the number of reads that can be performed on that table per second.</p> <p>The valid values are null or a value between 0.1 to 1.5. A null value is used when user does not provide a value, and defaults to 0.5 of the configured Read Capacity Unit (for provisioned tables), or 0.25 of the max configured Read Capacity Unit (for tables using on-demand mode).</p>
+    #[serde(rename = "scanRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_rate: Option<f64>,
 }
 
 /// <p>An edge represents a directed connection between two AWS Glue components which are part of the workflow the edge belongs to.</p>
@@ -2237,6 +2503,71 @@ pub struct GetClassifiersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetColumnStatisticsForPartitionRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>A list of the column names.</p>
+    #[serde(rename = "ColumnNames")]
+    pub column_names: Vec<String>,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of partition values identifying the partition.</p>
+    #[serde(rename = "PartitionValues")]
+    pub partition_values: Vec<String>,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetColumnStatisticsForPartitionResponse {
+    /// <p>List of ColumnStatistics that failed to be retrieved.</p>
+    #[serde(rename = "ColumnStatisticsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_statistics_list: Option<Vec<ColumnStatistics>>,
+    /// <p>Error occurred during retrieving column statistics data.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ColumnError>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetColumnStatisticsForTableRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>A list of the column names.</p>
+    #[serde(rename = "ColumnNames")]
+    pub column_names: Vec<String>,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetColumnStatisticsForTableResponse {
+    /// <p>List of ColumnStatistics that failed to be retrieved.</p>
+    #[serde(rename = "ColumnStatisticsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub column_statistics_list: Option<Vec<ColumnStatistics>>,
+    /// <p>List of ColumnStatistics that failed to be retrieved.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ColumnError>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -2264,7 +2595,7 @@ pub struct GetConnectionResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConnectionsFilter {
-    /// <p>The type of connections to return. Currently, only JDBC is supported; SFTP is not supported.</p>
+    /// <p>The type of connections to return. Currently, SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -2439,6 +2770,10 @@ pub struct GetDatabasesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p><p>Allows you to specify that you want to list the databases shared with your account. The allowable values are <code>FOREIGN</code> or <code>ALL</code>. </p> <ul> <li> <p>If set to <code>FOREIGN</code>, will list the databases shared with your account. </p> </li> <li> <p>If set to <code>ALL</code>, will list the databases shared with your account, as well as the databases in yor local account. </p> </li> </ul></p>
+    #[serde(rename = "ResourceShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_share_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2979,7 +3314,38 @@ pub struct GetPlanResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct GetResourcePolicyRequest {}
+pub struct GetResourcePoliciesRequest {
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetResourcePoliciesResponse {
+    /// <p>A list of the individual resource policies and the account-level resource policy.</p>
+    #[serde(rename = "GetResourcePoliciesResponseList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub get_resource_policies_response_list: Option<Vec<GluePolicy>>,
+    /// <p>A continuation token, if the returned list does not contain the last resource policy available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetResourcePolicyRequest {
+    /// <p>The ARN of the AWS Glue resource for the resource policy to be retrieved. For more information about AWS Glue resource ARNs, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a> </p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3265,7 +3631,7 @@ pub struct GetUserDefinedFunctionsRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the catalog database where the functions are located.</p>
+    /// <p>The name of the catalog database where the functions are located. If none is provided, functions from all the databases across the catalog will be returned.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
@@ -3393,6 +3759,28 @@ pub struct GetWorkflowRunsResponse {
     pub runs: Option<Vec<WorkflowRun>>,
 }
 
+/// <p>A structure for returning a resource policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GluePolicy {
+    /// <p>The date and time at which the policy was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>Contains the hash value associated with this policy.</p>
+    #[serde(rename = "PolicyHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_hash: Option<String>,
+    /// <p>Contains the requested policy document, in JSON format.</p>
+    #[serde(rename = "PolicyInJson")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_in_json: Option<String>,
+    /// <p>The date and time at which the policy was last updated.</p>
+    #[serde(rename = "UpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<f64>,
+}
+
 /// <p>The database and table in the AWS Glue Data Catalog that is used for input or output data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GlueTable {
@@ -3423,11 +3811,11 @@ pub struct GrokClassifier {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Optional custom grok patterns defined by this classifier. For more information, see custom patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
+    /// <p>Optional custom grok patterns defined by this classifier. For more information, see custom patterns in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
     #[serde(rename = "CustomPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    /// <p>The grok pattern applied to a data store by this classifier. For more information, see built-in patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
+    /// <p>The grok pattern applied to a data store by this classifier. For more information, see built-in patterns in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
     #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
     /// <p>The time that this classifier was last updated.</p>
@@ -3477,7 +3865,7 @@ pub struct JdbcTarget {
     #[serde(rename = "ConnectionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_name: Option<String>,
-    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
+    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
@@ -3811,7 +4199,7 @@ pub struct JsonClassifier {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     pub json_path: String,
     /// <p>The time that this classifier was last updated.</p>
@@ -4072,6 +4460,25 @@ pub struct Location {
     pub s3: Option<Vec<CodeGenNodeArg>>,
 }
 
+/// <p>Defines a long column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LongColumnStatisticsData {
+    /// <p>Maximum value of the column.</p>
+    #[serde(rename = "MaximumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_value: Option<i64>,
+    /// <p>Minimum value of the column.</p>
+    #[serde(rename = "MinimumValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_value: Option<i64>,
+    /// <p>Number of distinct values.</p>
+    #[serde(rename = "NumberOfDistinctValues")]
+    pub number_of_distinct_values: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
 /// <p>A structure for a machine learning transform.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4233,6 +4640,10 @@ pub struct Order {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Partition {
+    /// <p>The ID of the Data Catalog in which the partition resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The time at which the partition was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4409,6 +4820,10 @@ pub struct PutDataCatalogEncryptionSettingsResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourcePolicyRequest {
+    /// <p>Allows you to specify if you want to use both resource-level and account/catalog-level resource policies. A resource-level policy is a policy attached to an individual resource such as a database or a table.</p> <p>The default value of <code>NO</code> indicates that resource-level policies cannot co-exist with an account-level policy. A value of <code>YES</code> means the use of both resource-level and account/catalog-level resource policies is allowed.</p>
+    #[serde(rename = "EnableHybrid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_hybrid: Option<String>,
     /// <p>A value of <code>MUST_EXIST</code> is used to update a policy. A value of <code>NOT_EXIST</code> is used to create a new policy. If a value of <code>NONE</code> or a null value is used, the call will not depend on the existence of a policy.</p>
     #[serde(rename = "PolicyExistsCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4420,6 +4835,10 @@ pub struct PutResourcePolicyRequest {
     /// <p>Contains the policy document to set, in JSON format.</p>
     #[serde(rename = "PolicyInJson")]
     pub policy_in_json: String,
+    /// <p>The ARN of the AWS Glue resource for the resource policy to be set. For more information about AWS Glue resource ARNs, see the <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a> </p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -4499,7 +4918,7 @@ pub struct S3Encryption {
 /// <p>Specifies a data store in Amazon Simple Storage Service (Amazon S3).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Target {
-    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
+    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
@@ -4513,7 +4932,7 @@ pub struct S3Target {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Schedule {
-    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -4568,6 +4987,10 @@ pub struct SearchTablesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p><p>Allows you to specify that you want to search the tables shared with your account. The allowable values are <code>FOREIGN</code> or <code>ALL</code>. </p> <ul> <li> <p>If set to <code>FOREIGN</code>, will search the tables shared with your account. </p> </li> <li> <p>If set to <code>ALL</code>, will search the tables shared with your account, as well as the tables in yor local account. </p> </li> </ul></p>
+    #[serde(rename = "ResourceShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_share_type: Option<String>,
     /// <p>A string used for a text search.</p> <p>Specifying a value in quotes filters based on an exact match to the value.</p>
     #[serde(rename = "SearchText")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4966,10 +5389,31 @@ pub struct StorageDescriptor {
     pub stored_as_sub_directories: Option<bool>,
 }
 
+/// <p>Defines a string column statistics data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StringColumnStatisticsData {
+    /// <p>Average value of the column.</p>
+    #[serde(rename = "AverageLength")]
+    pub average_length: f64,
+    /// <p>Maximum value of the column.</p>
+    #[serde(rename = "MaximumLength")]
+    pub maximum_length: i64,
+    /// <p>Number of distinct values.</p>
+    #[serde(rename = "NumberOfDistinctValues")]
+    pub number_of_distinct_values: i64,
+    /// <p>Number of nulls.</p>
+    #[serde(rename = "NumberOfNulls")]
+    pub number_of_nulls: i64,
+}
+
 /// <p>Represents a collection of related data organized in columns and rows.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Table {
+    /// <p>The ID of the Data Catalog in which the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The time when the table definition was created in the Data Catalog.</p>
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5025,6 +5469,10 @@ pub struct Table {
     #[serde(rename = "TableType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_type: Option<String>,
+    /// <p>A <code>TableIdentifier</code> structure that describes a target table for resource linking.</p>
+    #[serde(rename = "TargetTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_table: Option<TableIdentifier>,
     /// <p>The last time that the table was updated.</p>
     #[serde(rename = "UpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5051,6 +5499,23 @@ pub struct TableError {
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
+}
+
+/// <p>A structure that describes a target table for resource linking.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TableIdentifier {
+    /// <p>The ID of the Data Catalog in which the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the catalog database that contains the target table.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
+    /// <p>The name of the target table.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>A structure used to define a table.</p>
@@ -5096,6 +5561,10 @@ pub struct TableInput {
     #[serde(rename = "TableType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_type: Option<String>,
+    /// <p>A <code>TableIdentifier</code> structure that describes a target table for resource linking.</p>
+    #[serde(rename = "TargetTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_table: Option<TableIdentifier>,
     /// <p>If the table is a view, the expanded text of the view; otherwise <code>null</code>.</p>
     #[serde(rename = "ViewExpandedText")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5445,6 +5914,63 @@ pub struct UpdateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateColumnStatisticsForPartitionRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>A list of the column statistics.</p>
+    #[serde(rename = "ColumnStatisticsList")]
+    pub column_statistics_list: Vec<ColumnStatistics>,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of partition values identifying the partition.</p>
+    #[serde(rename = "PartitionValues")]
+    pub partition_values: Vec<String>,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateColumnStatisticsForPartitionResponse {
+    /// <p>Error occurred during updating column statistics data.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ColumnStatisticsError>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateColumnStatisticsForTableRequest {
+    /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>A list of the column statistics.</p>
+    #[serde(rename = "ColumnStatisticsList")]
+    pub column_statistics_list: Vec<ColumnStatistics>,
+    /// <p>The name of the catalog database where the partitions reside.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the partitions' table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateColumnStatisticsForTableResponse {
+    /// <p>List of ColumnStatisticsErrors.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ColumnStatisticsError>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConnectionRequest {
     /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -5469,7 +5995,7 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>The crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -5492,7 +6018,7 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -5520,7 +6046,7 @@ pub struct UpdateCrawlerScheduleRequest {
     /// <p>The name of the crawler whose schedule to update.</p>
     #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
-    /// <p>The updated <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>The updated <code>cron</code> expression used to specify the schedule (see <a href="https://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -5667,7 +6193,7 @@ pub struct UpdateJobResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJsonClassifierRequest {
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub json_path: Option<String>,
@@ -5869,6 +6395,10 @@ pub struct UpdateXMLClassifierRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserDefinedFunction {
+    /// <p>The ID of the Data Catalog in which the function resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The Java class that contains the function code.</p>
     #[serde(rename = "ClassName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5877,6 +6407,10 @@ pub struct UserDefinedFunction {
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
+    /// <p>The name of the catalog database that contains the function.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
     /// <p>The name of the function.</p>
     #[serde(rename = "FunctionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7629,6 +8163,156 @@ impl fmt::Display for DeleteClassifierError {
     }
 }
 impl Error for DeleteClassifierError {}
+/// Errors returned by DeleteColumnStatisticsForPartition
+#[derive(Debug, PartialEq)]
+pub enum DeleteColumnStatisticsForPartitionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl DeleteColumnStatisticsForPartitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteColumnStatisticsForPartitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForPartitionError::EntityNotFound(err.msg),
+                    )
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForPartitionError::GlueEncryption(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForPartitionError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForPartitionError::InvalidInput(err.msg),
+                    )
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForPartitionError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteColumnStatisticsForPartitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteColumnStatisticsForPartitionError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForPartitionError::GlueEncryption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForPartitionError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForPartitionError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForPartitionError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteColumnStatisticsForPartitionError {}
+/// Errors returned by DeleteColumnStatisticsForTable
+#[derive(Debug, PartialEq)]
+pub enum DeleteColumnStatisticsForTableError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl DeleteColumnStatisticsForTableError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteColumnStatisticsForTableError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForTableError::EntityNotFound(err.msg),
+                    )
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForTableError::GlueEncryption(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForTableError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteColumnStatisticsForTableError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        DeleteColumnStatisticsForTableError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteColumnStatisticsForTableError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteColumnStatisticsForTableError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForTableError::GlueEncryption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForTableError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteColumnStatisticsForTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteColumnStatisticsForTableError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteColumnStatisticsForTableError {}
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
@@ -8425,6 +9109,146 @@ impl fmt::Display for GetClassifiersError {
     }
 }
 impl Error for GetClassifiersError {}
+/// Errors returned by GetColumnStatisticsForPartition
+#[derive(Debug, PartialEq)]
+pub enum GetColumnStatisticsForPartitionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetColumnStatisticsForPartitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetColumnStatisticsForPartitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForPartitionError::EntityNotFound(err.msg),
+                    )
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForPartitionError::GlueEncryption(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForPartitionError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForPartitionError::InvalidInput(err.msg),
+                    )
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForPartitionError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetColumnStatisticsForPartitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetColumnStatisticsForPartitionError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetColumnStatisticsForPartitionError::GlueEncryption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetColumnStatisticsForPartitionError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetColumnStatisticsForPartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetColumnStatisticsForPartitionError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetColumnStatisticsForPartitionError {}
+/// Errors returned by GetColumnStatisticsForTable
+#[derive(Debug, PartialEq)]
+pub enum GetColumnStatisticsForTableError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetColumnStatisticsForTableError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetColumnStatisticsForTableError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetColumnStatisticsForTableError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(GetColumnStatisticsForTableError::GlueEncryption(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetColumnStatisticsForTableError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetColumnStatisticsForTableError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        GetColumnStatisticsForTableError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetColumnStatisticsForTableError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetColumnStatisticsForTableError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetColumnStatisticsForTableError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetColumnStatisticsForTableError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetColumnStatisticsForTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetColumnStatisticsForTableError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetColumnStatisticsForTableError {}
 /// Errors returned by GetConnection
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionError {
@@ -9543,6 +10367,56 @@ impl fmt::Display for GetPlanError {
     }
 }
 impl Error for GetPlanError {}
+/// Errors returned by GetResourcePolicies
+#[derive(Debug, PartialEq)]
+pub enum GetResourcePoliciesError {
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetResourcePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePoliciesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(GetResourcePoliciesError::GlueEncryption(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetResourcePoliciesError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetResourcePoliciesError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetResourcePoliciesError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetResourcePoliciesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetResourcePoliciesError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetResourcePoliciesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetResourcePoliciesError {}
 /// Errors returned by GetResourcePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetResourcePolicyError {
@@ -11895,6 +12769,156 @@ impl fmt::Display for UpdateClassifierError {
     }
 }
 impl Error for UpdateClassifierError {}
+/// Errors returned by UpdateColumnStatisticsForPartition
+#[derive(Debug, PartialEq)]
+pub enum UpdateColumnStatisticsForPartitionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl UpdateColumnStatisticsForPartitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateColumnStatisticsForPartitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForPartitionError::EntityNotFound(err.msg),
+                    )
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForPartitionError::GlueEncryption(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForPartitionError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForPartitionError::InvalidInput(err.msg),
+                    )
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForPartitionError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateColumnStatisticsForPartitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateColumnStatisticsForPartitionError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForPartitionError::GlueEncryption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForPartitionError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForPartitionError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForPartitionError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateColumnStatisticsForPartitionError {}
+/// Errors returned by UpdateColumnStatisticsForTable
+#[derive(Debug, PartialEq)]
+pub enum UpdateColumnStatisticsForTableError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl UpdateColumnStatisticsForTableError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateColumnStatisticsForTableError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForTableError::EntityNotFound(err.msg),
+                    )
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForTableError::GlueEncryption(err.msg),
+                    )
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForTableError::InternalService(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateColumnStatisticsForTableError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        UpdateColumnStatisticsForTableError::OperationTimeout(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateColumnStatisticsForTableError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateColumnStatisticsForTableError::EntityNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForTableError::GlueEncryption(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForTableError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateColumnStatisticsForTableError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateColumnStatisticsForTableError::OperationTimeout(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateColumnStatisticsForTableError {}
 /// Errors returned by UpdateConnection
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectionError {
@@ -12738,6 +13762,24 @@ pub trait Glue {
         input: DeleteClassifierRequest,
     ) -> Result<DeleteClassifierResponse, RusotoError<DeleteClassifierError>>;
 
+    /// <p>Delete the partition column statistics of a column.</p>
+    async fn delete_column_statistics_for_partition(
+        &self,
+        input: DeleteColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        DeleteColumnStatisticsForPartitionResponse,
+        RusotoError<DeleteColumnStatisticsForPartitionError>,
+    >;
+
+    /// <p>Retrieves table statistics of columns.</p>
+    async fn delete_column_statistics_for_table(
+        &self,
+        input: DeleteColumnStatisticsForTableRequest,
+    ) -> Result<
+        DeleteColumnStatisticsForTableResponse,
+        RusotoError<DeleteColumnStatisticsForTableError>,
+    >;
+
     /// <p>Deletes a connection from the Data Catalog.</p>
     async fn delete_connection(
         &self,
@@ -12839,6 +13881,21 @@ pub trait Glue {
         &self,
         input: GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, RusotoError<GetClassifiersError>>;
+
+    /// <p>Retrieves partition statistics of columns.</p>
+    async fn get_column_statistics_for_partition(
+        &self,
+        input: GetColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        GetColumnStatisticsForPartitionResponse,
+        RusotoError<GetColumnStatisticsForPartitionError>,
+    >;
+
+    /// <p>Retrieves table statistics of columns.</p>
+    async fn get_column_statistics_for_table(
+        &self,
+        input: GetColumnStatisticsForTableRequest,
+    ) -> Result<GetColumnStatisticsForTableResponse, RusotoError<GetColumnStatisticsForTableError>>;
 
     /// <p>Retrieves a connection definition from the Data Catalog.</p>
     async fn get_connection(
@@ -12987,9 +14044,16 @@ pub trait Glue {
         input: GetPlanRequest,
     ) -> Result<GetPlanResponse, RusotoError<GetPlanError>>;
 
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    async fn get_resource_policies(
+        &self,
+        input: GetResourcePoliciesRequest,
+    ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>>;
+
     /// <p>Retrieves a specified resource policy.</p>
     async fn get_resource_policy(
         &self,
+        input: GetResourcePolicyRequest,
     ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>>;
 
     /// <p>Retrieves a specified security configuration.</p>
@@ -13255,6 +14319,24 @@ pub trait Glue {
         &self,
         input: UpdateClassifierRequest,
     ) -> Result<UpdateClassifierResponse, RusotoError<UpdateClassifierError>>;
+
+    /// <p>Creates or updates partition statistics of columns.</p>
+    async fn update_column_statistics_for_partition(
+        &self,
+        input: UpdateColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        UpdateColumnStatisticsForPartitionResponse,
+        RusotoError<UpdateColumnStatisticsForPartitionError>,
+    >;
+
+    /// <p>Creates or updates table statistics of columns.</p>
+    async fn update_column_statistics_for_table(
+        &self,
+        input: UpdateColumnStatisticsForTableRequest,
+    ) -> Result<
+        UpdateColumnStatisticsForTableResponse,
+        RusotoError<UpdateColumnStatisticsForTableError>,
+    >;
 
     /// <p>Updates a connection definition in the Data Catalog.</p>
     async fn update_connection(
@@ -14143,6 +15225,70 @@ impl Glue for GlueClient {
         }
     }
 
+    /// <p>Delete the partition column statistics of a column.</p>
+    async fn delete_column_statistics_for_partition(
+        &self,
+        input: DeleteColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        DeleteColumnStatisticsForPartitionResponse,
+        RusotoError<DeleteColumnStatisticsForPartitionError>,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteColumnStatisticsForPartition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteColumnStatisticsForPartitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteColumnStatisticsForPartitionError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Retrieves table statistics of columns.</p>
+    async fn delete_column_statistics_for_table(
+        &self,
+        input: DeleteColumnStatisticsForTableRequest,
+    ) -> Result<
+        DeleteColumnStatisticsForTableResponse,
+        RusotoError<DeleteColumnStatisticsForTableError>,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteColumnStatisticsForTable");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteColumnStatisticsForTableResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteColumnStatisticsForTableError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a connection from the Data Catalog.</p>
     async fn delete_connection(
         &self,
@@ -14609,6 +15755,68 @@ impl Glue for GlueClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetClassifiersError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves partition statistics of columns.</p>
+    async fn get_column_statistics_for_partition(
+        &self,
+        input: GetColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        GetColumnStatisticsForPartitionResponse,
+        RusotoError<GetColumnStatisticsForPartitionError>,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetColumnStatisticsForPartition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetColumnStatisticsForPartitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetColumnStatisticsForPartitionError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Retrieves table statistics of columns.</p>
+    async fn get_column_statistics_for_table(
+        &self,
+        input: GetColumnStatisticsForTableRequest,
+    ) -> Result<GetColumnStatisticsForTableResponse, RusotoError<GetColumnStatisticsForTableError>>
+    {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetColumnStatisticsForTable");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetColumnStatisticsForTableResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetColumnStatisticsForTableError::from_response(response))
         }
     }
 
@@ -15268,15 +16476,45 @@ impl Glue for GlueClient {
         }
     }
 
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    async fn get_resource_policies(
+        &self,
+        input: GetResourcePoliciesRequest,
+    ) -> Result<GetResourcePoliciesResponse, RusotoError<GetResourcePoliciesError>> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetResourcePolicies");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetResourcePoliciesResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetResourcePoliciesError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves a specified resource policy.</p>
     async fn get_resource_policy(
         &self,
+        input: GetResourcePolicyRequest,
     ) -> Result<GetResourcePolicyResponse, RusotoError<GetResourcePolicyError>> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetResourcePolicy");
-        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
 
         let mut response = self
             .client
@@ -16487,6 +17725,70 @@ impl Glue for GlueClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateClassifierError::from_response(response))
+        }
+    }
+
+    /// <p>Creates or updates partition statistics of columns.</p>
+    async fn update_column_statistics_for_partition(
+        &self,
+        input: UpdateColumnStatisticsForPartitionRequest,
+    ) -> Result<
+        UpdateColumnStatisticsForPartitionResponse,
+        RusotoError<UpdateColumnStatisticsForPartitionError>,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.UpdateColumnStatisticsForPartition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateColumnStatisticsForPartitionResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateColumnStatisticsForPartitionError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Creates or updates table statistics of columns.</p>
+    async fn update_column_statistics_for_table(
+        &self,
+        input: UpdateColumnStatisticsForTableRequest,
+    ) -> Result<
+        UpdateColumnStatisticsForTableResponse,
+        RusotoError<UpdateColumnStatisticsForTableError>,
+    > {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.UpdateColumnStatisticsForTable");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateColumnStatisticsForTableResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateColumnStatisticsForTableError::from_response(response))
         }
     }
 

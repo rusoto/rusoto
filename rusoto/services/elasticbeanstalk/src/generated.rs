@@ -849,6 +849,36 @@ impl ApplyEnvironmentManagedActionResultDeserializer {
         )
     }
 }
+/// <p>Request to add or change the operations role used by an environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateEnvironmentOperationsRoleMessage {
+    /// <p>The name of the environment to which to set the operations role.</p>
+    pub environment_name: String,
+    /// <p>The Amazon Resource Name (ARN) of an existing IAM role to be used as the environment's operations role.</p>
+    pub operations_role: String,
+}
+
+/// Serialize `AssociateEnvironmentOperationsRoleMessage` contents to a `SignedRequest`.
+struct AssociateEnvironmentOperationsRoleMessageSerializer;
+impl AssociateEnvironmentOperationsRoleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AssociateEnvironmentOperationsRoleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EnvironmentName"),
+            &obj.environment_name,
+        );
+        params.put(
+            &format!("{}{}", prefix, "OperationsRole"),
+            &obj.operations_role,
+        );
+    }
+}
+
 /// <p>Describes an Auto Scaling launch configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -2086,11 +2116,13 @@ pub struct CreateEnvironmentMessage {
     pub environment_name: Option<String>,
     /// <p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name parameter. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
     pub group_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an existing IAM role to be used as the environment's operations role. If specified, Elastic Beanstalk uses the operations role for permissions to downstream services during this call and during subsequent calls acting on this environment. To specify an operations role, you must have the <code>iam:PassRole</code> permission for the role. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    pub operations_role: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk sets the specified configuration options to the requested value in the configuration set for the new environment. These override the values obtained from the solution stack or the configuration template.</p>
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     /// <p>A list of custom user-defined configuration options to remove from the configuration set for this new environment.</p>
     pub options_to_remove: Option<Vec<OptionSpecification>>,
-    /// <p><p>The Amazon Resource Name (ARN) of the custom platform to use with the environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html"> Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the custom platform to use with the environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html">Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
     pub platform_arn: Option<String>,
     /// <p><p>The name of an Elastic Beanstalk solution stack (platform version) to use with the environment. If specified, Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack. For a list of current solution stacks, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html">Elastic Beanstalk Supported Platforms</a> in the <i>AWS Elastic Beanstalk Platforms</i> guide.</p> <note> <p>If you specify <code>SolutionStackName</code>, don&#39;t specify <code>PlatformArn</code> or <code>TemplateName</code>.</p> </note></p>
     pub solution_stack_name: Option<String>,
@@ -2128,6 +2160,9 @@ impl CreateEnvironmentMessageSerializer {
         }
         if let Some(ref field_value) = obj.group_name {
             params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.operations_role {
+            params.put(&format!("{}{}", prefix, "OperationsRole"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -3393,6 +3428,34 @@ impl DescriptionDeserializer {
         Ok(obj)
     }
 }
+/// <p>Request to disassociate the operations role from an environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateEnvironmentOperationsRoleMessage {
+    /// <p>The name of the environment from which to disassociate the operations role.</p>
+    pub environment_name: String,
+}
+
+/// Serialize `DisassociateEnvironmentOperationsRoleMessage` contents to a `SignedRequest`.
+struct DisassociateEnvironmentOperationsRoleMessageSerializer;
+impl DisassociateEnvironmentOperationsRoleMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DisassociateEnvironmentOperationsRoleMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EnvironmentName"),
+            &obj.environment_name,
+        );
+    }
+}
+
 #[allow(dead_code)]
 struct Ec2InstanceIdDeserializer;
 impl Ec2InstanceIdDeserializer {
@@ -3459,6 +3522,8 @@ pub struct EnvironmentDescription {
     pub health: Option<String>,
     /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
     pub health_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the environment's operations role. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    pub operations_role: Option<String>,
     /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The description of the AWS resources used by this environment.</p>
@@ -3546,6 +3611,12 @@ impl EnvironmentDescriptionDeserializer {
                 "HealthStatus" => {
                     obj.health_status = Some(EnvironmentHealthStatusDeserializer::deserialize(
                         "HealthStatus",
+                        stack,
+                    )?);
+                }
+                "OperationsRole" => {
+                    obj.operations_role = Some(OperationsRoleDeserializer::deserialize(
+                        "OperationsRole",
                         stack,
                     )?);
                 }
@@ -5405,6 +5476,18 @@ impl OperatingSystemNameDeserializer {
 #[allow(dead_code)]
 struct OperatingSystemVersionDeserializer;
 impl OperatingSystemVersionDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[allow(dead_code)]
+struct OperationsRoleDeserializer;
+impl OperationsRoleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
@@ -7743,9 +7826,9 @@ impl UpdateEnvironmentMessageSerializer {
 pub struct UpdateTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk resource.</p>
     pub resource_arn: String,
-    /// <p>A list of tags to add or update.</p> <p>If a key of an existing tag is added, the tag's value is updated.</p>
+    /// <p>A list of tags to add or update. If a key of an existing tag is added, the tag's value is updated.</p> <p>Specify at least one of these parameters: <code>TagsToAdd</code>, <code>TagsToRemove</code>.</p>
     pub tags_to_add: Option<Vec<Tag>>,
-    /// <p>A list of tag keys to remove.</p> <p>If a tag key doesn't exist, it is silently ignored.</p>
+    /// <p>A list of tag keys to remove. If a tag key doesn't exist, it is silently ignored.</p> <p>Specify at least one of these parameters: <code>TagsToAdd</code>, <code>TagsToRemove</code>.</p>
     pub tags_to_remove: Option<Vec<String>>,
 }
 
@@ -8099,6 +8182,56 @@ impl fmt::Display for ApplyEnvironmentManagedActionError {
     }
 }
 impl Error for ApplyEnvironmentManagedActionError {}
+/// Errors returned by AssociateEnvironmentOperationsRole
+#[derive(Debug, PartialEq)]
+pub enum AssociateEnvironmentOperationsRoleError {
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+    InsufficientPrivileges(String),
+}
+
+impl AssociateEnvironmentOperationsRoleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateEnvironmentOperationsRoleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return RusotoError::Service(
+                            AssociateEnvironmentOperationsRoleError::InsufficientPrivileges(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for AssociateEnvironmentOperationsRoleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateEnvironmentOperationsRoleError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateEnvironmentOperationsRoleError {}
 /// Errors returned by CheckDNSAvailability
 #[derive(Debug, PartialEq)]
 pub enum CheckDNSAvailabilityError {}
@@ -9467,6 +9600,56 @@ impl fmt::Display for DescribePlatformVersionError {
     }
 }
 impl Error for DescribePlatformVersionError {}
+/// Errors returned by DisassociateEnvironmentOperationsRole
+#[derive(Debug, PartialEq)]
+pub enum DisassociateEnvironmentOperationsRoleError {
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+    InsufficientPrivileges(String),
+}
+
+impl DisassociateEnvironmentOperationsRoleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateEnvironmentOperationsRoleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return RusotoError::Service(
+                            DisassociateEnvironmentOperationsRoleError::InsufficientPrivileges(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisassociateEnvironmentOperationsRoleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateEnvironmentOperationsRoleError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateEnvironmentOperationsRoleError {}
 /// Errors returned by ListAvailableSolutionStacks
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableSolutionStacksError {}
@@ -10262,6 +10445,12 @@ pub trait ElasticBeanstalk {
         input: ApplyEnvironmentManagedActionRequest,
     ) -> Result<ApplyEnvironmentManagedActionResult, RusotoError<ApplyEnvironmentManagedActionError>>;
 
+    /// <p>Add or change the operations role used by an environment. After this call is made, Elastic Beanstalk uses the associated operations role for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn associate_environment_operations_role(
+        &self,
+        input: AssociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<AssociateEnvironmentOperationsRoleError>>;
+
     /// <p>Checks if the specified CNAME is available.</p>
     async fn check_dns_availability(
         &self,
@@ -10424,6 +10613,12 @@ pub trait ElasticBeanstalk {
         &self,
         input: DescribePlatformVersionRequest,
     ) -> Result<DescribePlatformVersionResult, RusotoError<DescribePlatformVersionError>>;
+
+    /// <p>Disassociate the operations role from an environment. After this call is made, Elastic Beanstalk uses the caller's permissions for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn disassociate_environment_operations_role(
+        &self,
+        input: DisassociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<DisassociateEnvironmentOperationsRoleError>>;
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     async fn list_available_solution_stacks(
@@ -10650,6 +10845,36 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         }
         // parse non-payload
         Ok(result)
+    }
+
+    /// <p>Add or change the operations role used by an environment. After this call is made, Elastic Beanstalk uses the associated operations role for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn associate_environment_operations_role(
+        &self,
+        input: AssociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<AssociateEnvironmentOperationsRoleError>> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AssociateEnvironmentOperationsRole");
+        params.put("Version", "2010-12-01");
+        AssociateEnvironmentOperationsRoleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(AssociateEnvironmentOperationsRoleError::from_response(
+                response,
+            ));
+        }
+
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Checks if the specified CNAME is available.</p>
@@ -11838,6 +12063,36 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         }
         // parse non-payload
         Ok(result)
+    }
+
+    /// <p>Disassociate the operations role from an environment. After this call is made, Elastic Beanstalk uses the caller's permissions for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn disassociate_environment_operations_role(
+        &self,
+        input: DisassociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<DisassociateEnvironmentOperationsRoleError>> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisassociateEnvironmentOperationsRole");
+        params.put("Version", "2010-12-01");
+        DisassociateEnvironmentOperationsRoleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(DisassociateEnvironmentOperationsRoleError::from_response(
+                response,
+            ));
+        }
+
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>

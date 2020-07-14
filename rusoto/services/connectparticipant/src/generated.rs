@@ -567,7 +567,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.participant_token);
+        request.add_header("X-Amz-Bearer", &input.participant_token.to_string());
 
         let mut response = self
             .client
@@ -599,7 +599,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -631,7 +631,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -663,7 +663,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -695,7 +695,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client

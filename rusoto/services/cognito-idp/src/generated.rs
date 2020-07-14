@@ -5187,6 +5187,8 @@ pub enum AdminLinkProviderForUserError {
     InternalError(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    LimitExceeded(String),
     /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
@@ -5213,6 +5215,11 @@ impl AdminLinkProviderForUserError {
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AdminLinkProviderForUserError::LimitExceeded(
                         err.msg,
                     ))
                 }
@@ -5250,6 +5257,7 @@ impl fmt::Display for AdminLinkProviderForUserError {
             AdminLinkProviderForUserError::AliasExists(ref cause) => write!(f, "{}", cause),
             AdminLinkProviderForUserError::InternalError(ref cause) => write!(f, "{}", cause),
             AdminLinkProviderForUserError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AdminLinkProviderForUserError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             AdminLinkProviderForUserError::NotAuthorized(ref cause) => write!(f, "{}", cause),
             AdminLinkProviderForUserError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             AdminLinkProviderForUserError::TooManyRequests(ref cause) => write!(f, "{}", cause),

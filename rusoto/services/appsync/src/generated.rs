@@ -66,7 +66,7 @@ pub struct ApiCache {
     #[serde(rename = "ttl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ttl: Option<i64>,
-    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -164,7 +164,7 @@ pub struct CreateApiCacheRequest {
     /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
     #[serde(rename = "ttl")]
     pub ttl: i64,
-    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -1191,7 +1191,7 @@ pub struct RdsHttpEndpointConfig {
     #[serde(rename = "databaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>Amazon RDS cluster identifier.</p>
+    /// <p>Amazon RDS cluster ARN.</p>
     #[serde(rename = "dbClusterIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub db_cluster_identifier: Option<String>,
@@ -1371,7 +1371,7 @@ pub struct UpdateApiCacheRequest {
     /// <p>TTL in seconds for cache entries.</p> <p>Valid values are between 1 and 3600 seconds.</p>
     #[serde(rename = "ttl")]
     pub ttl: i64,
-    /// <p><p>The cache instance type.</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
+    /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are avaible, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }

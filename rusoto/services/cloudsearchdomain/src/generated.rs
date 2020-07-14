@@ -629,7 +629,7 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         request.set_endpoint_prefix("cloudsearchdomain".to_string());
         let encoded = Some(input.documents.to_owned());
         request.set_payload(encoded);
-        request.add_header("Content-Type", &input.content_type);
+        request.add_header("Content-Type", &input.content_type.to_string());
         let mut params = Params::new();
         params.put("format", "sdk");
         request.set_params(params);

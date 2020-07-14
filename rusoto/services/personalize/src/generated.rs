@@ -122,6 +122,10 @@ pub struct BatchInferenceJob {
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter used on the batch inference job.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The Amazon S3 path that leads to the input data used to generate the batch inference job.</p>
     #[serde(rename = "jobInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,6 +344,10 @@ pub struct ContinuousHyperParameterRange {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchInferenceJobRequest {
+    /// <p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The Amazon S3 path that leads to the input file to base your recommendations on. The input material must be in JSON format.</p>
     #[serde(rename = "jobInput")]
     pub job_input: BatchInferenceJobInput,
@@ -492,6 +500,29 @@ pub struct CreateEventTrackerResponse {
     #[serde(rename = "trackingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracking_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFilterRequest {
+    /// <p>The ARN of the dataset group that the filter will belong to.</p>
+    #[serde(rename = "datasetGroupArn")]
+    pub dataset_group_arn: String,
+    /// <p>The filter expression that designates the interaction types that the filter will filter out. A filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. To filter out all items with any interactions history, set <code>"*"</code> as the EVENT_TYPE. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterExpression")]
+    pub filter_expression: String,
+    /// <p>The name of the filter to create.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFilterResponse {
+    /// <p>The ARN of the new filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -954,6 +985,14 @@ pub struct DeleteEventTrackerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFilterRequest {
+    /// <p>The ARN of the filter to delete.</p>
+    #[serde(rename = "filterArn")]
+    pub filter_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the schema to delete.</p>
     #[serde(rename = "schemaArn")]
@@ -1102,6 +1141,23 @@ pub struct DescribeFeatureTransformationResponse {
     #[serde(rename = "featureTransformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub feature_transformation: Option<FeatureTransformation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFilterRequest {
+    /// <p>The ARN of the filter to describe.</p>
+    #[serde(rename = "filterArn")]
+    pub filter_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFilterResponse {
+    /// <p>The filter's details.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Filter>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1261,6 +1317,78 @@ pub struct FeatureTransformation {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// <p><p>The status of the feature transformation.</p> <p>A feature transformation can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Contains information on a recommendation filter, including its ARN, status, and filter expression.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Filter {
+    /// <p>The time at which the filter was created.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The ARN of the dataset group to which the filter belongs.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>If the filter failed, the reason for its failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The time at which the filter was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the filter.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>A short summary of a filter's attributes.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FilterSummary {
+    /// <p>The time at which the filter was created.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The ARN of the dataset group to which the filter belongs.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>If the filter failed, the reason for the failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+    /// <p>The time at which the filter was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the filter.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1539,6 +1667,36 @@ pub struct ListEventTrackersResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_trackers: Option<Vec<EventTrackerSummary>>,
     /// <p>A token for getting the next set of event trackers (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFiltersRequest {
+    /// <p>The ARN of the dataset group that contains the filters.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>The maximum number of filters to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token returned from the previous call to <code>ListFilters</code> for getting the next set of filters (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFiltersResponse {
+    /// <p>A list of returned filters.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<FilterSummary>>,
+    /// <p>A token for getting the next set of filters (if they exist).</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2314,6 +2472,54 @@ impl fmt::Display for CreateEventTrackerError {
     }
 }
 impl Error for CreateEventTrackerError {}
+/// Errors returned by CreateFilter
+#[derive(Debug, PartialEq)]
+pub enum CreateFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The limit on the number of requests per second has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateFilterError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFilterError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateFilterError::ResourceAlreadyExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFilterError {}
 /// Errors returned by CreateSchema
 #[derive(Debug, PartialEq)]
 pub enum CreateSchemaError {
@@ -2624,6 +2830,42 @@ impl fmt::Display for DeleteEventTrackerError {
     }
 }
 impl Error for DeleteEventTrackerError {}
+/// Errors returned by DeleteFilter
+#[derive(Debug, PartialEq)]
+pub enum DeleteFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteFilterError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFilterError {}
 /// Errors returned by DeleteSchema
 #[derive(Debug, PartialEq)]
 pub enum DeleteSchemaError {
@@ -3016,6 +3258,42 @@ impl fmt::Display for DescribeFeatureTransformationError {
     }
 }
 impl Error for DescribeFeatureTransformationError {}
+/// Errors returned by DescribeFilter
+#[derive(Debug, PartialEq)]
+pub enum DescribeFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeFilterError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFilterError {}
 /// Errors returned by DescribeRecipe
 #[derive(Debug, PartialEq)]
 pub enum DescribeRecipeError {
@@ -3420,6 +3698,42 @@ impl fmt::Display for ListEventTrackersError {
     }
 }
 impl Error for ListEventTrackersError {}
+/// Errors returned by ListFilters
+#[derive(Debug, PartialEq)]
+pub enum ListFiltersError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The token is not valid.</p>
+    InvalidNextToken(String),
+}
+
+impl ListFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFiltersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListFiltersError::InvalidInput(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListFiltersError::InvalidNextToken(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFiltersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFiltersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListFiltersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFiltersError {}
 /// Errors returned by ListRecipes
 #[derive(Debug, PartialEq)]
 pub enum ListRecipesError {
@@ -3643,6 +3957,12 @@ pub trait Personalize {
         input: CreateEventTrackerRequest,
     ) -> Result<CreateEventTrackerResponse, RusotoError<CreateEventTrackerError>>;
 
+    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    async fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>>;
+
     /// <p><p>Creates an Amazon Personalize schema from the specified schema string. The schema you create must be in Avro JSON format.</p> <p>Amazon Personalize recognizes three schema variants. Each schema is associated with a dataset type and has a set of required field and keywords. You specify a schema when you call <a>CreateDataset</a>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSchemas</a> </p> </li> <li> <p> <a>DescribeSchema</a> </p> </li> <li> <p> <a>DeleteSchema</a> </p> </li> </ul></p>
     async fn create_schema(
         &self,
@@ -3684,6 +4004,12 @@ pub trait Personalize {
         &self,
         input: DeleteEventTrackerRequest,
     ) -> Result<(), RusotoError<DeleteEventTrackerError>>;
+
+    /// <p>Deletes a filter.</p>
+    async fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> Result<(), RusotoError<DeleteFilterError>>;
 
     /// <p>Deletes a schema. Before deleting a schema, you must delete all datasets referencing the schema. For more information on schemas, see <a>CreateSchema</a>.</p>
     async fn delete_schema(
@@ -3747,6 +4073,12 @@ pub trait Personalize {
         DescribeFeatureTransformationResponse,
         RusotoError<DescribeFeatureTransformationError>,
     >;
+
+    /// <p>Describes a filter's properties.</p>
+    async fn describe_filter(
+        &self,
+        input: DescribeFilterRequest,
+    ) -> Result<DescribeFilterResponse, RusotoError<DescribeFilterError>>;
 
     /// <p>Describes a recipe.</p> <p>A recipe contains three items:</p> <ul> <li> <p>An algorithm that trains a model.</p> </li> <li> <p>Hyperparameters that govern the training.</p> </li> <li> <p>Feature transformation information for modifying the input data before training.</p> </li> </ul> <p>Amazon Personalize provides a set of predefined recipes. You specify a recipe when you create a solution with the <a>CreateSolution</a> API. <code>CreateSolution</code> trains a model by using the algorithm in the specified recipe and a training dataset. The solution, when deployed as a campaign, can provide recommendations using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p>
     async fn describe_recipe(
@@ -3813,6 +4145,12 @@ pub trait Personalize {
         &self,
         input: ListEventTrackersRequest,
     ) -> Result<ListEventTrackersResponse, RusotoError<ListEventTrackersError>>;
+
+    /// <p>Lists all filters that belong to a given dataset group.</p>
+    async fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>>;
 
     /// <p>Returns a list of available recipes. The response provides the properties for each recipe, including the recipe's Amazon Resource Name (ARN).</p>
     async fn list_recipes(
@@ -4050,6 +4388,33 @@ impl Personalize for PersonalizeClient {
         }
     }
 
+    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    async fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>> {
+        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonPersonalize.CreateFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<CreateFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFilterError::from_response(response))
+        }
+    }
+
     /// <p><p>Creates an Amazon Personalize schema from the specified schema string. The schema you create must be in Avro JSON format.</p> <p>Amazon Personalize recognizes three schema variants. Each schema is associated with a dataset type and has a set of required field and keywords. You specify a schema when you call <a>CreateDataset</a>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSchemas</a> </p> </li> <li> <p> <a>DescribeSchema</a> </p> </li> <li> <p> <a>DeleteSchema</a> </p> </li> </ul></p>
     async fn create_schema(
         &self,
@@ -4237,6 +4602,33 @@ impl Personalize for PersonalizeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEventTrackerError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a filter.</p>
+    async fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> Result<(), RusotoError<DeleteFilterError>> {
+        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonPersonalize.DeleteFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFilterError::from_response(response))
         }
     }
 
@@ -4524,6 +4916,33 @@ impl Personalize for PersonalizeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeFeatureTransformationError::from_response(response))
+        }
+    }
+
+    /// <p>Describes a filter's properties.</p>
+    async fn describe_filter(
+        &self,
+        input: DescribeFilterRequest,
+    ) -> Result<DescribeFilterResponse, RusotoError<DescribeFilterError>> {
+        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonPersonalize.DescribeFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<DescribeFilterResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFilterError::from_response(response))
         }
     }
 
@@ -4828,6 +5247,33 @@ impl Personalize for PersonalizeClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(ListEventTrackersError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all filters that belong to a given dataset group.</p>
+    async fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>> {
+        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonPersonalize.ListFilters");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response).deserialize::<ListFiltersResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFiltersError::from_response(response))
         }
     }
 

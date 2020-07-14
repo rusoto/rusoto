@@ -329,7 +329,7 @@ pub enum RegisterUsageError {
     InvalidPublicKeyVersion(String),
     /// <p>RegisterUsage must be called in the same AWS Region the ECS task was launched in. This prevents a container from hardcoding a Region (e.g. withRegion(“us-east-1”) when calling RegisterUsage.</p>
     InvalidRegion(String),
-    /// <p>AWS Marketplace does not support metering usage from the underlying platform. Currently, only Amazon ECS is supported.</p>
+    /// <p>AWS Marketplace does not support metering usage from the underlying platform. Currently, Amazon ECS, Amazon EKS, and AWS Fargate are supported.</p>
     PlatformNotSupported(String),
     /// <p>The calls to the API are throttled.</p>
     Throttling(String),

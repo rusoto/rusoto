@@ -273,7 +273,7 @@ pub struct ClassifierMetadata {
     #[serde(rename = "NumberOfLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_labels: Option<i64>,
-    /// <p>The number of documents in the input data that were used to test the classifier. Typically this is 10 to 20 percent of the input documents.</p>
+    /// <p>The number of documents in the input data that were used to test the classifier. Typically this is 10 to 20 percent of the input documents, up to 10,000 documents.</p>
     #[serde(rename = "NumberOfTestDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_test_documents: Option<i64>,
@@ -639,9 +639,14 @@ pub struct DetectDominantLanguageResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
+    /// <p>The Amazon Resource Name of an endpoint that is associated with a custom entity recognition model. Provide an endpoint if you want to detect entities by using your own custom model instead of the default model that is used by Amazon Comprehend.</p> <p>If you specify an endpoint, Amazon Comprehend uses the language of your custom model, and it ignores any language code that you provide in your request.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p> <p>If your request includes the endpoint for a custom entity recognition model, Amazon Comprehend uses the language of your custom model, and it ignores any language code that you specify here.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
@@ -650,7 +655,7 @@ pub struct DetectEntitiesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
-    /// <p>A collection of entities identified in the input text. For each entity, the response provides the entity text, entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection. For a list of entity types, see <a>how-entities</a>. </p>
+    /// <p>A collection of entities identified in the input text. For each entity, the response provides the entity text, entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection. </p> <p>If your request uses a custom entity recognition model, Amazon Comprehend detects the entities that the model is trained to recognize. Otherwise, it detects the default entity types. For a list of default entity types, see <a>how-entities</a>.</p>
     #[serde(rename = "Entities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entities: Option<Vec<Entity>>,
@@ -746,11 +751,11 @@ pub struct DocumentClassificationJobFilter {
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
-    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time_after: Option<f64>,
-    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in ascending order, oldest to newest.</p>
     #[serde(rename = "SubmitTimeBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time_before: Option<f64>,
@@ -2784,7 +2789,7 @@ pub enum ClassifyDocumentError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
@@ -2838,9 +2843,9 @@ pub enum CreateDocumentClassifierError {
     InvalidRequest(String),
     /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
     KmsKeyValidation(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -2926,13 +2931,13 @@ pub enum CreateEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3002,9 +3007,9 @@ pub enum CreateEntityRecognizerError {
     InvalidRequest(String),
     /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
     KmsKeyValidation(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3086,11 +3091,11 @@ pub enum DeleteDocumentClassifierError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3158,7 +3163,7 @@ pub enum DeleteEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
@@ -3212,11 +3217,11 @@ pub enum DeleteEntityRecognizerError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3866,6 +3871,8 @@ pub enum DetectEntitiesError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
+    ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
@@ -3881,6 +3888,9 @@ impl DetectEntitiesError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectEntitiesError::InvalidRequest(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DetectEntitiesError::ResourceUnavailable(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectEntitiesError::TextSizeLimitExceeded(
@@ -3903,6 +3913,7 @@ impl fmt::Display for DetectEntitiesError {
         match *self {
             DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
@@ -4624,7 +4635,7 @@ pub enum StartDocumentClassificationJobError {
     KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -4776,7 +4787,7 @@ pub enum StartEntitiesDetectionJobError {
     KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -5454,13 +5465,13 @@ pub enum UpdateEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -5554,7 +5565,7 @@ pub trait Comprehend {
         input: ClassifyDocumentRequest,
     ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>;
 
-    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
@@ -6066,7 +6077,7 @@ impl Comprehend for ComprehendClient {
         }
     }
 
-    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,

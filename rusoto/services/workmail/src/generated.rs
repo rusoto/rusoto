@@ -309,6 +309,21 @@ pub struct DeleteResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRetentionPolicyRequest {
+    /// <p>The retention policy ID.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteRetentionPolicyResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
     /// <p>The organization that contains the user to be deleted.</p>
     #[serde(rename = "OrganizationId")]
@@ -558,6 +573,21 @@ pub struct DisassociateMemberFromGroupRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMemberFromGroupResponse {}
 
+/// <p>The configuration applied to an organization's folders by its retention policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FolderConfiguration {
+    /// <p>The action to take on the folder contents at the end of the folder configuration period.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>The folder name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The period of time at which the folder configuration action is applied.</p>
+    #[serde(rename = "Period")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period: Option<i64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccessControlEffectRequest {
@@ -586,6 +616,35 @@ pub struct GetAccessControlEffectResponse {
     #[serde(rename = "MatchedRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub matched_rules: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDefaultRetentionPolicyRequest {
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDefaultRetentionPolicyResponse {
+    /// <p>The retention policy description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The retention policy folder configurations.</p>
+    #[serde(rename = "FolderConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_configurations: Option<Vec<FolderConfiguration>>,
+    /// <p>The retention policy ID.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The retention policy name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1049,6 +1108,32 @@ pub struct PutMailboxPermissionsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutMailboxPermissionsResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutRetentionPolicyRequest {
+    /// <p>The retention policy description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The retention policy folder configurations.</p>
+    #[serde(rename = "FolderConfigurations")]
+    pub folder_configurations: Vec<FolderConfiguration>,
+    /// <p>The retention policy ID.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The retention policy name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The organization ID.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutRetentionPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2000,6 +2085,54 @@ impl fmt::Display for DeleteResourceError {
     }
 }
 impl Error for DeleteResourceError {}
+/// Errors returned by DeleteRetentionPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteRetentionPolicyError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl DeleteRetentionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRetentionPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteRetentionPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRetentionPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteRetentionPolicyError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteRetentionPolicyError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteRetentionPolicyError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -2550,6 +2683,64 @@ impl fmt::Display for GetAccessControlEffectError {
     }
 }
 impl Error for GetAccessControlEffectError {}
+/// Errors returned by GetDefaultRetentionPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetDefaultRetentionPolicyError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl GetDefaultRetentionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDefaultRetentionPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetDefaultRetentionPolicyError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetDefaultRetentionPolicyError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        GetDefaultRetentionPolicyError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(GetDefaultRetentionPolicyError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDefaultRetentionPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDefaultRetentionPolicyError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetDefaultRetentionPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDefaultRetentionPolicyError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDefaultRetentionPolicyError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDefaultRetentionPolicyError {}
 /// Errors returned by GetMailboxDetails
 #[derive(Debug, PartialEq)]
 pub enum GetMailboxDetailsError {
@@ -3178,6 +3369,58 @@ impl fmt::Display for PutMailboxPermissionsError {
     }
 }
 impl Error for PutMailboxPermissionsError {}
+/// Errors returned by PutRetentionPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutRetentionPolicyError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl PutRetentionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(PutRetentionPolicyError::InvalidParameter(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(PutRetentionPolicyError::LimitExceeded(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(PutRetentionPolicyError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(PutRetentionPolicyError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutRetentionPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutRetentionPolicyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::OrganizationNotFound(ref cause) => write!(f, "{}", cause),
+            PutRetentionPolicyError::OrganizationState(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutRetentionPolicyError {}
 /// Errors returned by RegisterToWorkMail
 #[derive(Debug, PartialEq)]
 pub enum RegisterToWorkMailError {
@@ -3771,6 +4014,12 @@ pub trait Workmail {
         input: DeleteResourceRequest,
     ) -> Result<DeleteResourceResponse, RusotoError<DeleteResourceError>>;
 
+    /// <p>Deletes the specified retention policy from the specified organization.</p>
+    async fn delete_retention_policy(
+        &self,
+        input: DeleteRetentionPolicyRequest,
+    ) -> Result<DeleteRetentionPolicyResponse, RusotoError<DeleteRetentionPolicyError>>;
+
     /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
     async fn delete_user(
         &self,
@@ -3827,6 +4076,12 @@ pub trait Workmail {
         &self,
         input: GetAccessControlEffectRequest,
     ) -> Result<GetAccessControlEffectResponse, RusotoError<GetAccessControlEffectError>>;
+
+    /// <p>Gets the default retention policy details for the specified organization.</p>
+    async fn get_default_retention_policy(
+        &self,
+        input: GetDefaultRetentionPolicyRequest,
+    ) -> Result<GetDefaultRetentionPolicyResponse, RusotoError<GetDefaultRetentionPolicyError>>;
 
     /// <p>Requests a user's mailbox details for a specified organization and user.</p>
     async fn get_mailbox_details(
@@ -3905,6 +4160,12 @@ pub trait Workmail {
         &self,
         input: PutMailboxPermissionsRequest,
     ) -> Result<PutMailboxPermissionsResponse, RusotoError<PutMailboxPermissionsError>>;
+
+    /// <p>Puts a retention policy to the specified organization.</p>
+    async fn put_retention_policy(
+        &self,
+        input: PutRetentionPolicyRequest,
+    ) -> Result<PutRetentionPolicyResponse, RusotoError<PutRetentionPolicyError>>;
 
     /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
     async fn register_to_work_mail(
@@ -4293,6 +4554,34 @@ impl Workmail for WorkmailClient {
         }
     }
 
+    /// <p>Deletes the specified retention policy from the specified organization.</p>
+    async fn delete_retention_policy(
+        &self,
+        input: DeleteRetentionPolicyRequest,
+    ) -> Result<DeleteRetentionPolicyResponse, RusotoError<DeleteRetentionPolicyError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.DeleteRetentionPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteRetentionPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteRetentionPolicyError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
     async fn delete_user(
         &self,
@@ -4551,6 +4840,35 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(GetAccessControlEffectError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the default retention policy details for the specified organization.</p>
+    async fn get_default_retention_policy(
+        &self,
+        input: GetDefaultRetentionPolicyRequest,
+    ) -> Result<GetDefaultRetentionPolicyResponse, RusotoError<GetDefaultRetentionPolicyError>>
+    {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.GetDefaultRetentionPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetDefaultRetentionPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetDefaultRetentionPolicyError::from_response(response))
         }
     }
 
@@ -4911,6 +5229,34 @@ impl Workmail for WorkmailClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PutMailboxPermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Puts a retention policy to the specified organization.</p>
+    async fn put_retention_policy(
+        &self,
+        input: PutRetentionPolicyRequest,
+    ) -> Result<PutRetentionPolicyResponse, RusotoError<PutRetentionPolicyError>> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.PutRetentionPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutRetentionPolicyResponse, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutRetentionPolicyError::from_response(response))
         }
     }
 

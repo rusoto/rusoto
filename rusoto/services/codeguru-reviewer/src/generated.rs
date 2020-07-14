@@ -46,11 +46,11 @@ pub struct AssociateRepositoryResponse {
     pub repository_association: Option<RepositoryAssociation>,
 }
 
-/// <p>Information about an AWS CodeCommit repository.</p>
+/// <p>Information about an AWS CodeCommit repository. The CodeCommit repository must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeCommitRepository {
-    /// <p>The name of the AWS CodeCommit repository.</p>
+    /// <p>The name of the AWS CodeCommit repository. For more information, see <a href="https://docs.aws.amazon.com/codecommit/latest/APIReference/API_GetRepository.html#CodeCommit-GetRepository-request-repositoryName">repositoryName</a> in the <i>AWS CodeCommit API Reference</i>.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -59,7 +59,7 @@ pub struct CodeCommitRepository {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeReview {
-    /// <p> The Amazon Resource Name (ARN) of the code review to describe. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_review_arn: Option<String>,
@@ -79,11 +79,11 @@ pub struct CodeReview {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> The owner of the repository. </p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub or Bitbucket repository, this is the username for the account that owns the repository.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p> The provider type of the repository association. </p>
+    /// <p> The type of repository that contains the reviewed code (for example, GitHub or Bitbucket). </p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
@@ -99,7 +99,7 @@ pub struct CodeReview {
     #[serde(rename = "SourceCodeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_type: Option<SourceCodeType>,
-    /// <p> The state of the code review. </p>
+    /// <p><p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -117,7 +117,7 @@ pub struct CodeReview {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeReviewSummary {
-    /// <p> The Amazon Resource Name (ARN) of the code review to describe. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_review_arn: Option<String>,
@@ -137,7 +137,7 @@ pub struct CodeReviewSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> The owner of the repository. </p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub or Bitbucket repository, this is the username for the account that owns the repository.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -153,7 +153,7 @@ pub struct CodeReviewSummary {
     #[serde(rename = "RepositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    /// <p> The state of the code review. </p>
+    /// <p><p> The state of the code review. </p> <p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -167,11 +167,11 @@ pub struct CodeReviewSummary {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommitDiffSourceCodeType {
-    /// <p> Destination Commit SHA </p>
+    /// <p> The SHA of the destination commit. </p>
     #[serde(rename = "DestinationCommit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_commit: Option<String>,
-    /// <p> Source Commit SHA. </p>
+    /// <p> The SHA of the source commit. </p>
     #[serde(rename = "SourceCommit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_commit: Option<String>,
@@ -180,7 +180,7 @@ pub struct CommitDiffSourceCodeType {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCodeReviewRequest {
-    /// <p> The Amazon Resource Name (ARN) of the code review to describe. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     pub code_review_arn: String,
 }
@@ -197,13 +197,13 @@ pub struct DescribeCodeReviewResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecommendationFeedbackRequest {
-    /// <p> The Amazon Resource Name (ARN) that identifies the code review. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     pub code_review_arn: String,
     /// <p> The recommendation ID that can be used to track the provided recommendations and then to collect the feedback. </p>
     #[serde(rename = "RecommendationId")]
     pub recommendation_id: String,
-    /// <p> Optional parameter to describe the feedback for a given user. If this is not supplied, it defaults to the user making the request. </p>
+    /// <p> Optional parameter to describe the feedback for a given user. If this is not supplied, it defaults to the user making the request. </p> <p> The <code>UserId</code> is an IAM principal that can be specified as an AWS account ID or an Amazon Resource Name (ARN). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#Principal_specifying"> Specifying a Principal</a> in the <i>AWS Identity and Access Management User Guide</i>. </p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -221,7 +221,7 @@ pub struct DescribeRecommendationFeedbackResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRepositoryAssociationRequest {
-    /// <p>The Amazon Resource Name (ARN) identifying the association. You can retrieve this ARN by calling <code>ListRepositories</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> object. You can retrieve this ARN by calling <code>ListRepositories</code>.</p>
     #[serde(rename = "AssociationArn")]
     pub association_arn: String,
 }
@@ -238,7 +238,7 @@ pub struct DescribeRepositoryAssociationResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRepositoryRequest {
-    /// <p>The Amazon Resource Name (ARN) identifying the association.</p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> object. </p>
     #[serde(rename = "AssociationArn")]
     pub association_arn: String,
 }
@@ -263,7 +263,7 @@ pub struct ListCodeReviewsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> List of provider types for filtering that needs to be applied before displaying the result. For example, "providerTypes=[GitHub]" will list code reviews from GitHub. </p>
+    /// <p> List of provider types for filtering that needs to be applied before displaying the result. For example, <code>providerTypes=[GitHub]</code> lists code reviews from GitHub. </p>
     #[serde(rename = "ProviderTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_types: Option<Vec<String>>,
@@ -271,7 +271,7 @@ pub struct ListCodeReviewsRequest {
     #[serde(rename = "RepositoryNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_names: Option<Vec<String>>,
-    /// <p> List of states for filtering that needs to be applied before displaying the result. For example, "states=[Pending]" will list code reviews in the Pending state. </p>
+    /// <p><p> List of states for filtering that needs to be applied before displaying the result. For example, <code>states=[Pending]</code> lists code reviews in the Pending state. </p> <p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub states: Option<Vec<String>>,
@@ -296,22 +296,22 @@ pub struct ListCodeReviewsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecommendationFeedbackRequest {
-    /// <p> The Amazon Resource Name (ARN) that identifies the code review. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     pub code_review_arn: String,
     /// <p> The maximum number of results that are returned per call. The default is 100. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> If nextToken is returned, there are more results available. The value of nextToken is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. </p>
+    /// <p> If <code>nextToken</code> is returned, there are more results available. The value of nextToken is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> Filter on recommendationIds that need to be applied before displaying the result. This can be used to query all the recommendation feedback for a given recommendation. </p>
+    /// <p> Used to query the recommendation feedback for a given recommendation. </p>
     #[serde(rename = "RecommendationIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recommendation_ids: Option<Vec<String>>,
-    /// <p> Filter on userIds that need to be applied before displaying the result. This can be used to query all the recommendation feedback for a code review from a given user. </p>
+    /// <p> An AWS user's account ID or Amazon Resource Name (ARN). Use this ID to query the recommendation feedback for a code review from that user. </p> <p> The <code>UserId</code> is an IAM principal that can be specified as an AWS account ID or an Amazon Resource Name (ARN). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#Principal_specifying"> Specifying a Principal</a> in the <i>AWS Identity and Access Management User Guide</i>. </p>
     #[serde(rename = "UserIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
@@ -324,7 +324,7 @@ pub struct ListRecommendationFeedbackResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> Recommendation feedback summaries corresponding to the code reivew ARN. </p>
+    /// <p> Recommendation feedback summaries corresponding to the code review ARN. </p>
     #[serde(rename = "RecommendationFeedbackSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recommendation_feedback_summaries: Option<Vec<RecommendationFeedbackSummary>>,
@@ -333,7 +333,7 @@ pub struct ListRecommendationFeedbackResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecommendationsRequest {
-    /// <p> The Amazon Resource Name (ARN) of the code review to describe. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     pub code_review_arn: String,
     /// <p> The maximum number of results that are returned per call. The default is 100. </p>
@@ -362,7 +362,7 @@ pub struct ListRecommendationsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoryAssociationsRequest {
-    /// <p>The maximum number of repository association results returned by <code>ListRepositoryAssociations</code> in paginated output. When this parameter is used, <code>ListRepositoryAssociations</code> only returns <code>maxResults</code> results in a single page with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRepositoryAssociations</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 25. If this parameter is not used, <code>ListRepositoryAssociations</code> returns up to 25 results and a <code>nextToken</code> value if applicable. </p>
+    /// <p>The maximum number of repository association results returned by <code>ListRepositoryAssociations</code> in paginated output. When this parameter is used, <code>ListRepositoryAssociations</code> only returns <code>maxResults</code> results in a single page with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListRepositoryAssociations</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, <code>ListRepositoryAssociations</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -374,7 +374,7 @@ pub struct ListRepositoryAssociationsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>List of owners to use as a filter. For GitHub, this is name of the GitHub account that was used to associate the repository. For AWS CodeCommit, it is the name of the CodeCommit account that was used to associate the repository.</p>
+    /// <p>List of owners to use as a filter. For AWS CodeCommit, it is the name of the CodeCommit account that was used to associate the repository. For other repository source providers, such as Bitbucket, this is name of the account that was used to associate the repository. </p>
     #[serde(rename = "Owners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owners: Option<Vec<String>>,
@@ -382,7 +382,7 @@ pub struct ListRepositoryAssociationsRequest {
     #[serde(rename = "ProviderTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_types: Option<Vec<String>>,
-    /// <p>List of states to use as a filter.</p>
+    /// <p><p>List of repository association states to use as a filter.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code> or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> </ul></p>
     #[serde(rename = "States")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub states: Option<Vec<String>>,
@@ -409,7 +409,7 @@ pub struct Metrics {
     #[serde(rename = "FindingsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub findings_count: Option<i64>,
-    /// <p> Lines of code metered in the code review. </p>
+    /// <p> Lines of code metered in the code review. For the initial code review pull request and all subsequent revisions, this includes all lines of code in the files added to the pull request. In subsequent revisions, for files that already existed in the pull request, this includes only the changed lines of code. In both cases, this does not include non-code lines such as comments and import statements. For example, if you submit a pull request containing 5 files, each with 500 lines of code, and in a subsequent revision you added a new file with 200 lines of code, and also modified a total of 25 lines across the initial 5 files, <code>MeteredLinesOfCodeCount</code> includes the first 5 files (5 * 500 = 2,500 lines), the new file (200 lines) and the 25 changed lines of code for a total of 2,725 lines of code. </p>
     #[serde(rename = "MeteredLinesOfCodeCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metered_lines_of_code_count: Option<i64>,
@@ -423,7 +423,7 @@ pub struct MetricsSummary {
     #[serde(rename = "FindingsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub findings_count: Option<i64>,
-    /// <p> Lines of code metered in the code review. </p>
+    /// <p> Lines of code metered in the code review. For the initial code review pull request and all subsequent revisions, this includes all lines of code in the files added to the pull request. In subsequent revisions, for files that already existed in the pull request, this includes only the changed lines of code. In both cases, this does not include non-code lines such as comments and import statements. For example, if you submit a pull request containing 5 files, each with 500 lines of code, and in a subsequent revision you added a new file with 200 lines of code, and also modified a total of 25 lines across the initial 5 files, <code>MeteredLinesOfCodeCount</code> includes the first 5 files (5 * 500 = 2,500 lines), the new file (200 lines) and the 25 changed lines of code for a total of 2,725 lines of code. </p>
     #[serde(rename = "MeteredLinesOfCodeCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metered_lines_of_code_count: Option<i64>,
@@ -432,7 +432,7 @@ pub struct MetricsSummary {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRecommendationFeedbackRequest {
-    /// <p> The Amazon Resource Name (ARN) that identifies the code review. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     pub code_review_arn: String,
     /// <p> List for storing reactions. Reactions are utf-8 text code for emojis. If you send an empty list it clears all your feedback. </p>
@@ -451,7 +451,7 @@ pub struct PutRecommendationFeedbackResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendationFeedback {
-    /// <p> The Amazon Resource Name (ARN) that identifies the code review. </p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReview.html"> <code>CodeReview</code> </a> object. </p>
     #[serde(rename = "CodeReviewArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_review_arn: Option<String>,
@@ -471,7 +471,7 @@ pub struct RecommendationFeedback {
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recommendation_id: Option<String>,
-    /// <p> The user principal that made the API call. </p>
+    /// <p> The ID of the user that made the API call. </p> <p> The <code>UserId</code> is an IAM principal that can be specified as an AWS account ID or an Amazon Resource Name (ARN). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#Principal_specifying"> Specifying a Principal</a> in the <i>AWS Identity and Access Management User Guide</i>. </p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -489,7 +489,7 @@ pub struct RecommendationFeedbackSummary {
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recommendation_id: Option<String>,
-    /// <p> The identifier for the user that gave the feedback. </p>
+    /// <p> The ID of the user that gave the feedback. </p> <p> The <code>UserId</code> is an IAM principal that can be specified as an AWS account ID or an Amazon Resource Name (ARN). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html#Principal_specifying"> Specifying a Principal</a> in the <i>AWS Identity and Access Management User Guide</i>. </p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -503,7 +503,7 @@ pub struct RecommendationSummary {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Last line where the recommendation is applicable in the source commit or source branch. For a single line comment the start line and end line values will be the same. </p>
+    /// <p> Last line where the recommendation is applicable in the source commit or source branch. For a single line comment the start line and end line values are the same. </p>
     #[serde(rename = "EndLine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_line: Option<i64>,
@@ -521,11 +521,11 @@ pub struct RecommendationSummary {
     pub start_line: Option<i64>,
 }
 
-/// <p>Information about a repository.</p>
+/// <p> Information about an associated AWS CodeCommit repository or an associated repository that is managed by AWS CodeStar Connections (for example, Bitbucket). This <code>Repository</code> object is not used if your source code is in an associated GitHub repository. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Repository {
-    /// <p> Information about a Bitbucket Cloud repository. </p>
+    /// <p> Information about a Bitbucket repository. </p>
     #[serde(rename = "Bitbucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitbucket: Option<ThirdPartySourceRepository>,
@@ -533,9 +533,13 @@ pub struct Repository {
     #[serde(rename = "CodeCommit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_commit: Option<CodeCommitRepository>,
+    /// <p> Information about a GitHub Enterprise Server repository. </p>
+    #[serde(rename = "GitHubEnterpriseServer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_hub_enterprise_server: Option<ThirdPartySourceRepository>,
 }
 
-/// <p>Information about a repository association.</p>
+/// <p>Information about a repository association. The <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_DescribeRepositoryAssociation.html"> <code>DescribeRepositoryAssociation</code> </a> operation returns a <code>RepositoryAssociation</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryAssociation {
@@ -547,7 +551,7 @@ pub struct RepositoryAssociation {
     #[serde(rename = "AssociationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) identifying the repository connection. </p>
+    /// <p> The Amazon Resource Name (ARN) of an AWS CodeStar Connections connection. Its format is <code>arn:aws:codestar-connections:region-id:aws-account_id:connection/connection-id</code>. For more information, see <a href="https://docs.aws.amazon.com/codestar-connections/latest/APIReference/API_Connection.html">Connection</a> in the <i>AWS CodeStar Connections API Reference</i>. </p>
     #[serde(rename = "ConnectionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_arn: Option<String>,
@@ -563,7 +567,7 @@ pub struct RepositoryAssociation {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub or Bitbucket repository, this is the username for the account that owns the repository.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -571,7 +575,7 @@ pub struct RepositoryAssociation {
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
-    /// <p>The state of the repository association.</p>
+    /// <p><p>The state of the repository association.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code> or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -581,19 +585,19 @@ pub struct RepositoryAssociation {
     pub state_reason: Option<String>,
 }
 
-/// <p>Information about a repository association.</p>
+/// <p>Summary information about a repository association. The <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_ListRepositoryAssociations.html"> <code>ListRepositoryAssociations</code> </a> operation returns a list of <code>RepositoryAssociationSummary</code> objects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryAssociationSummary {
-    /// <p>The Amazon Resource Name (ARN) identifying the repository association.</p>
+    /// <p>The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> object. </p>
     #[serde(rename = "AssociationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_arn: Option<String>,
-    /// <p>The repository association ID.</p>
+    /// <p> The repository association ID. </p>
     #[serde(rename = "AssociationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) identifying the repository connection. </p>
+    /// <p> The Amazon Resource Name (ARN) of an AWS CodeStar Connections connection. Its format is <code>arn:aws:codestar-connections:region-id:aws-account_id:connection/connection-id</code>. For more information, see <a href="https://docs.aws.amazon.com/codestar-connections/latest/APIReference/API_Connection.html">Connection</a> in the <i>AWS CodeStar Connections API Reference</i>. </p>
     #[serde(rename = "ConnectionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_arn: Option<String>,
@@ -605,7 +609,7 @@ pub struct RepositoryAssociationSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository association.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub or Bitbucket repository, this is the username for the account that owns the repository.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -613,7 +617,7 @@ pub struct RepositoryAssociationSummary {
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
-    /// <p><p>The state of the repository association.</p> <dl> <dt>Associated</dt> <dd> <p>Amazon CodeGuru Reviewer is associated with the repository. </p> </dd> <dt>Associating</dt> <dd> <p>The association is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The association failed. </p> </dd> <dt>Disassociating</dt> <dd> <p>Amazon CodeGuru Reviewer is in the process of disassociating with the repository. </p> </dd> </dl></p>
+    /// <p><p>The state of the repository association.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code> or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -629,17 +633,17 @@ pub struct SourceCodeType {
     pub commit_diff: Option<CommitDiffSourceCodeType>,
 }
 
-/// <p> Information about a third party source repository connected through CodeStar Connections. </p>
+/// <p> Information about a third-party source repository connected to CodeGuru Reviewer. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ThirdPartySourceRepository {
-    /// <p> The Amazon Resource Name (ARN) identifying the repository connection. </p>
+    /// <p> The Amazon Resource Name (ARN) of an AWS CodeStar Connections connection. Its format is <code>arn:aws:codestar-connections:region-id:aws-account_id:connection/connection-id</code>. For more information, see <a href="https://docs.aws.amazon.com/codestar-connections/latest/APIReference/API_Connection.html">Connection</a> in the <i>AWS CodeStar Connections API Reference</i>. </p>
     #[serde(rename = "ConnectionArn")]
     pub connection_arn: String,
     /// <p> The name of the third party source repository. </p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p> The username of the owner of the repository. </p>
+    /// <p> The owner of the repository. For a GitHub, GitHub Enterprise, or Bitbucket repository, this is the username for the account that owns the repository. </p>
     #[serde(rename = "Owner")]
     pub owner: String,
 }
@@ -1167,13 +1171,13 @@ impl Error for PutRecommendationFeedbackError {}
 /// Trait representing the capabilities of the CodeGuruReviewer API. CodeGuruReviewer clients implement this trait.
 #[async_trait]
 pub trait CodeGuruReviewer {
-    /// <p>Associates an AWS CodeCommit repository with Amazon CodeGuru Reviewer. When you associate an AWS CodeCommit repository with Amazon CodeGuru Reviewer, Amazon CodeGuru Reviewer will provide recommendations for each pull request raised within the repository. You can view recommendations in the AWS CodeCommit repository.</p> <p>You can associate a GitHub repository using the Amazon CodeGuru Reviewer console.</p>
+    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p> Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/reviewer-ug/step-one.html#select-repository-source-provider">Connect to a repository source provider</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
     async fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
     ) -> Result<AssociateRepositoryResponse, RusotoError<AssociateRepositoryError>>;
 
-    /// <p> Returns the metadaata associated with the code review along with its status.</p>
+    /// <p> Returns the metadata associated with the code review along with its status.</p>
     async fn describe_code_review(
         &self,
         input: DescribeCodeReviewRequest,
@@ -1188,7 +1192,7 @@ pub trait CodeGuruReviewer {
         RusotoError<DescribeRecommendationFeedbackError>,
     >;
 
-    /// <p>Describes a repository association.</p>
+    /// <p> Returns a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> object that contains information about the requested repository association. </p>
     async fn describe_repository_association(
         &self,
         input: DescribeRepositoryAssociationRequest,
@@ -1209,7 +1213,7 @@ pub trait CodeGuruReviewer {
         input: ListCodeReviewsRequest,
     ) -> Result<ListCodeReviewsResponse, RusotoError<ListCodeReviewsError>>;
 
-    /// <p> Lists the customer feedback for a CodeGuru Reviewer recommendation for all users. This API will be used from the console to extract the previously given feedback by the user to pre-populate the feedback emojis for all recommendations. </p>
+    /// <p> Returns a list of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RecommendationFeedbackSummary.html"> <code>RecommendationFeedbackSummary</code> </a> objects that contain customer recommendation feedback for all CodeGuru Reviewer users. </p>
     async fn list_recommendation_feedback(
         &self,
         input: ListRecommendationFeedbackRequest,
@@ -1221,13 +1225,13 @@ pub trait CodeGuruReviewer {
         input: ListRecommendationsRequest,
     ) -> Result<ListRecommendationsResponse, RusotoError<ListRecommendationsError>>;
 
-    /// <p>Lists repository associations. You can optionally filter on one or more of the following recommendation properties: provider types, states, names, and owners.</p>
+    /// <p> Returns a list of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html"> <code>RepositoryAssociationSummary</code> </a> objects that contain summary information about a repository association. You can filter the returned list by <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-ProviderType"> <code>ProviderType</code> </a>, <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-Name"> <code>Name</code> </a>, <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-State"> <code>State</code> </a>, and <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-Owner"> <code>Owner</code> </a>. </p>
     async fn list_repository_associations(
         &self,
         input: ListRepositoryAssociationsRequest,
     ) -> Result<ListRepositoryAssociationsResponse, RusotoError<ListRepositoryAssociationsError>>;
 
-    /// <p> Stores customer feedback for a CodeGuru-Reviewer recommendation. When this API is called again with different reactions the previous feedback is overwritten. </p>
+    /// <p> Stores customer feedback for a CodeGuru Reviewer recommendation. When this API is called again with different reactions the previous feedback is overwritten. </p>
     async fn put_recommendation_feedback(
         &self,
         input: PutRecommendationFeedbackRequest,
@@ -1273,7 +1277,7 @@ impl CodeGuruReviewerClient {
 
 #[async_trait]
 impl CodeGuruReviewer for CodeGuruReviewerClient {
-    /// <p>Associates an AWS CodeCommit repository with Amazon CodeGuru Reviewer. When you associate an AWS CodeCommit repository with Amazon CodeGuru Reviewer, Amazon CodeGuru Reviewer will provide recommendations for each pull request raised within the repository. You can view recommendations in the AWS CodeCommit repository.</p> <p>You can associate a GitHub repository using the Amazon CodeGuru Reviewer console.</p>
+    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p> Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/reviewer-ug/step-one.html#select-repository-source-provider">Connect to a repository source provider</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
     async fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
@@ -1304,7 +1308,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p> Returns the metadaata associated with the code review along with its status.</p>
+    /// <p> Returns the metadata associated with the code review along with its status.</p>
     async fn describe_code_review(
         &self,
         input: DescribeCodeReviewRequest,
@@ -1376,7 +1380,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p>Describes a repository association.</p>
+    /// <p> Returns a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> object that contains information about the requested repository association. </p>
     async fn describe_repository_association(
         &self,
         input: DescribeRepositoryAssociationRequest,
@@ -1494,7 +1498,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p> Lists the customer feedback for a CodeGuru Reviewer recommendation for all users. This API will be used from the console to extract the previously given feedback by the user to pre-populate the feedback emojis for all recommendations. </p>
+    /// <p> Returns a list of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RecommendationFeedbackSummary.html"> <code>RecommendationFeedbackSummary</code> </a> objects that contain customer recommendation feedback for all CodeGuru Reviewer users. </p>
     async fn list_recommendation_feedback(
         &self,
         input: ListRecommendationFeedbackRequest,
@@ -1585,7 +1589,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p>Lists repository associations. You can optionally filter on one or more of the following recommendation properties: provider types, states, names, and owners.</p>
+    /// <p> Returns a list of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html"> <code>RepositoryAssociationSummary</code> </a> objects that contain summary information about a repository association. You can filter the returned list by <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-ProviderType"> <code>ProviderType</code> </a>, <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-Name"> <code>Name</code> </a>, <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-State"> <code>State</code> </a>, and <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociationSummary.html#reviewer-Type-RepositoryAssociationSummary-Owner"> <code>Owner</code> </a>. </p>
     async fn list_repository_associations(
         &self,
         input: ListRepositoryAssociationsRequest,
@@ -1643,7 +1647,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p> Stores customer feedback for a CodeGuru-Reviewer recommendation. When this API is called again with different reactions the previous feedback is overwritten. </p>
+    /// <p> Stores customer feedback for a CodeGuru Reviewer recommendation. When this API is called again with different reactions the previous feedback is overwritten. </p>
     async fn put_recommendation_feedback(
         &self,
         input: PutRecommendationFeedbackRequest,

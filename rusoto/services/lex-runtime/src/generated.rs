@@ -927,7 +927,7 @@ impl LexRuntime for LexRuntimeClient {
         if let Some(ref accept) = input.accept {
             request.add_header("Accept", &accept.to_string());
         }
-        request.add_header("Content-Type", &input.content_type);
+        request.add_header("Content-Type", &input.content_type.to_string());
 
         if let Some(ref request_attributes) = input.request_attributes {
             request.add_header(

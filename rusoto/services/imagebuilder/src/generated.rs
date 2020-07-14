@@ -61,6 +61,10 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> The KMS key identifier used to encrypt the distributed image. </p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p> Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances. </p>
     #[serde(rename = "launchPermission")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -454,6 +458,10 @@ pub struct CreateImageRecipeRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The working directory to be used during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -548,6 +556,10 @@ pub struct CreateInfrastructureConfigurationRequest {
     /// <p>The name of the infrastructure configuration. </p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1222,6 +1234,10 @@ pub struct ImageRecipe {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+    /// <p>The working directory to be used during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
 }
 
 /// <p>A summary of an image recipe.</p>
@@ -1469,6 +1485,10 @@ pub struct InfrastructureConfiguration {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs of the infrastructure configuration.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1515,6 +1535,10 @@ pub struct InfrastructureConfigurationSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags attached to the image created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The tags of the infrastructure configuration.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1542,7 +1566,7 @@ pub struct InstanceBlockDeviceMapping {
     pub virtual_name: Option<String>,
 }
 
-/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI.</p>
+/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI. To make an AMI public, set the launch permission authorized accounts to <code>all</code>. See the examples for making an AMI public at <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LaunchPermissionConfiguration {
     /// <p>The name of the group. </p>
@@ -2191,6 +2215,10 @@ pub struct UpdateInfrastructureConfigurationRequest {
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2327,6 +2355,8 @@ pub enum CreateComponentError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2370,6 +2400,11 @@ impl CreateComponentError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateComponentError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateComponentError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateComponentError::ServiceUnavailable(err.msg))
                 }
@@ -2393,6 +2428,7 @@ impl fmt::Display for CreateComponentError {
             CreateComponentError::InvalidVersionNumber(ref cause) => write!(f, "{}", cause),
             CreateComponentError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateComponentError::Service(ref cause) => write!(f, "{}", cause),
+            CreateComponentError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateComponentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2419,6 +2455,8 @@ pub enum CreateDistributionConfigurationError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2474,6 +2512,11 @@ impl CreateDistributionConfigurationError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateDistributionConfigurationError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         CreateDistributionConfigurationError::ServiceUnavailable(err.msg),
@@ -2511,6 +2554,9 @@ impl fmt::Display for CreateDistributionConfigurationError {
                 write!(f, "{}", cause)
             }
             CreateDistributionConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDistributionConfigurationError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateDistributionConfigurationError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -2535,6 +2581,8 @@ pub enum CreateImageError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2566,6 +2614,9 @@ impl CreateImageError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImageError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImageError::ServiceQuotaExceeded(err.msg))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImageError::ServiceUnavailable(err.msg))
                 }
@@ -2587,6 +2638,7 @@ impl fmt::Display for CreateImageError {
             CreateImageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             CreateImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImageError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImageError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2611,6 +2663,8 @@ pub enum CreateImagePipelineError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2649,6 +2703,11 @@ impl CreateImagePipelineError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImagePipelineError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImagePipelineError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImagePipelineError::ServiceUnavailable(
                         err.msg,
@@ -2675,6 +2734,7 @@ impl fmt::Display for CreateImagePipelineError {
             CreateImagePipelineError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImagePipelineError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2701,6 +2761,8 @@ pub enum CreateImageRecipeError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2744,6 +2806,11 @@ impl CreateImageRecipeError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImageRecipeError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImageRecipeError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImageRecipeError::ServiceUnavailable(
                         err.msg,
@@ -2771,6 +2838,7 @@ impl fmt::Display for CreateImageRecipeError {
             CreateImageRecipeError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImageRecipeError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2795,6 +2863,8 @@ pub enum CreateInfrastructureConfigurationError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2847,6 +2917,11 @@ impl CreateInfrastructureConfigurationError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateInfrastructureConfigurationError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         CreateInfrastructureConfigurationError::ServiceUnavailable(err.msg),
@@ -2881,6 +2956,9 @@ impl fmt::Display for CreateInfrastructureConfigurationError {
                 write!(f, "{}", cause)
             }
             CreateInfrastructureConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInfrastructureConfigurationError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateInfrastructureConfigurationError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -5661,7 +5739,7 @@ pub trait ImageBuilder {
         RusotoError<ListDistributionConfigurationsError>,
     >;
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p> Returns a list of image build versions. </p>
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
@@ -5685,7 +5763,7 @@ pub trait ImageBuilder {
         input: ListImageRecipesRequest,
     ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>;
 
-    /// <p> Returns the list of image build versions for the specified semantic version. </p>
+    /// <p> Returns the list of images that you have access to. </p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -6647,7 +6725,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p> Returns a list of image build versions. </p>
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
@@ -6767,7 +6845,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns the list of image build versions for the specified semantic version. </p>
+    /// <p> Returns the list of images that you have access to. </p>
     async fn list_images(
         &self,
         input: ListImagesRequest,

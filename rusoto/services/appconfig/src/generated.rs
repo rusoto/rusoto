@@ -171,7 +171,8 @@ pub struct CreateConfigurationProfileRequest {
     pub name: String,
     /// <p>The ARN of an IAM role with permission to access the configuration at the specified LocationUri.</p>
     #[serde(rename = "RetrievalRoleArn")]
-    pub retrieval_role_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retrieval_role_arn: Option<String>,
     /// <p>Metadata to assign to the configuration profile. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,6 +241,36 @@ pub struct CreateEnvironmentRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The content of the configuration or the configuration data.</p>
+    #[serde(rename = "Content")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub content: bytes::Bytes,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    #[serde(rename = "ContentType")]
+    pub content_type: String,
+    /// <p>A description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An optional locking token used to prevent race conditions from overwriting configuration updates when creating a new version. To ensure your data is not overwritten when creating multiple hosted configuration versions in rapid succession, specify the version of the latest hosted configuration version.</p>
+    #[serde(rename = "LatestVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version_number: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The ID of the application to delete.</p>
     #[serde(rename = "ApplicationId")]
@@ -274,6 +305,20 @@ pub struct DeleteEnvironmentRequest {
     /// <p>The ID of the environment you want to delete.</p>
     #[serde(rename = "EnvironmentId")]
     pub environment_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The versions number to delete.</p>
+    #[serde(rename = "VersionNumber")]
+    pub version_number: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -605,6 +650,75 @@ pub struct GetEnvironmentRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The version.</p>
+    #[serde(rename = "VersionNumber")]
+    pub version_number: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostedConfigurationVersion {
+    /// <p>The application ID.</p>
+    pub application_id: Option<String>,
+    /// <p>The configuration profile ID.</p>
+    pub configuration_profile_id: Option<String>,
+    /// <p>The content of the configuration or the configuration data.</p>
+    pub content: Option<bytes::Bytes>,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    pub content_type: Option<String>,
+    /// <p>A description of the configuration.</p>
+    pub description: Option<String>,
+    /// <p>The configuration version.</p>
+    pub version_number: Option<i64>,
+}
+
+/// <p>Information about the configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HostedConfigurationVersionSummary {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_profile_id: Option<String>,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>A description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The configuration version.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HostedConfigurationVersions {
+    /// <p>The elements from this collection.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<HostedConfigurationVersionSummary>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
@@ -675,6 +789,25 @@ pub struct ListEnvironmentsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
     /// <p>A token to start the list. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListHostedConfigurationVersionsRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1059,6 +1192,88 @@ impl fmt::Display for CreateEnvironmentError {
     }
 }
 impl Error for CreateEnvironmentError {}
+/// Errors returned by CreateHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The configuration size is too large.</p>
+    PayloadTooLarge(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of hosted configuration versions exceeds the limit for the AppConfig configuration store. Delete one or more versions and try again.</p>
+    ServiceQuotaExceeded(String),
+}
+
+impl CreateHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateHostedConfigurationVersionError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "PayloadTooLargeException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::PayloadTooLarge(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateHostedConfigurationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateHostedConfigurationVersionError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::PayloadTooLarge(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateHostedConfigurationVersionError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1251,6 +1466,60 @@ impl fmt::Display for DeleteEnvironmentError {
     }
 }
 impl Error for DeleteEnvironmentError {}
+/// Errors returned by DeleteHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DeleteHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteHostedConfigurationVersionError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteHostedConfigurationVersionError {}
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
@@ -1511,6 +1780,58 @@ impl fmt::Display for GetEnvironmentError {
     }
 }
 impl Error for GetEnvironmentError {}
+/// Errors returned by GetHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum GetHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        GetHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetHostedConfigurationVersionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetHostedConfigurationVersionError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
@@ -1717,6 +2038,60 @@ impl fmt::Display for ListEnvironmentsError {
     }
 }
 impl Error for ListEnvironmentsError {}
+/// Errors returned by ListHostedConfigurationVersions
+#[derive(Debug, PartialEq)]
+pub enum ListHostedConfigurationVersionsError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListHostedConfigurationVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListHostedConfigurationVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListHostedConfigurationVersionsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ListHostedConfigurationVersionsError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListHostedConfigurationVersionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListHostedConfigurationVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListHostedConfigurationVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListHostedConfigurationVersionsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListHostedConfigurationVersionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListHostedConfigurationVersionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2188,6 +2563,12 @@ pub trait AppConfig {
         input: CreateEnvironmentRequest,
     ) -> Result<Environment, RusotoError<CreateEnvironmentError>>;
 
+    /// <p>Create a new configuration in the AppConfig configuration store.</p>
+    async fn create_hosted_configuration_version(
+        &self,
+        input: CreateHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<CreateHostedConfigurationVersionError>>;
+
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
     async fn delete_application(
         &self,
@@ -2211,6 +2592,12 @@ pub trait AppConfig {
         &self,
         input: DeleteEnvironmentRequest,
     ) -> Result<(), RusotoError<DeleteEnvironmentError>>;
+
+    /// <p>Delete a version of a configuration from the AppConfig configuration store.</p>
+    async fn delete_hosted_configuration_version(
+        &self,
+        input: DeleteHostedConfigurationVersionRequest,
+    ) -> Result<(), RusotoError<DeleteHostedConfigurationVersionError>>;
 
     /// <p>Retrieve information about an application.</p>
     async fn get_application(
@@ -2248,6 +2635,12 @@ pub trait AppConfig {
         input: GetEnvironmentRequest,
     ) -> Result<Environment, RusotoError<GetEnvironmentError>>;
 
+    /// <p>Get information about a specific configuration version.</p>
+    async fn get_hosted_configuration_version(
+        &self,
+        input: GetHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<GetHostedConfigurationVersionError>>;
+
     /// <p>List all applications in your AWS account.</p>
     async fn list_applications(
         &self,
@@ -2277,6 +2670,12 @@ pub trait AppConfig {
         &self,
         input: ListEnvironmentsRequest,
     ) -> Result<Environments, RusotoError<ListEnvironmentsError>>;
+
+    /// <p>View a list of configurations stored in the AppConfig configuration store by version.</p>
+    async fn list_hosted_configuration_versions(
+        &self,
+        input: ListHostedConfigurationVersionsRequest,
+    ) -> Result<HostedConfigurationVersions, RusotoError<ListHostedConfigurationVersionsError>>;
 
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
     async fn list_tags_for_resource(
@@ -2504,6 +2903,71 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>Create a new configuration in the AppConfig configuration store.</p>
+    async fn create_hosted_configuration_version(
+        &self,
+        input: CreateHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<CreateHostedConfigurationVersionError>>
+    {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
+
+        let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(input.content.to_owned());
+        request.set_payload(encoded);
+        request.add_header("Content-Type", &input.content_type.to_string());
+
+        if let Some(ref description) = input.description {
+            request.add_header("Description", &description.to_string());
+        }
+
+        if let Some(ref latest_version_number) = input.latest_version_number {
+            request.add_header("Latest-Version-Number", &latest_version_number.to_string());
+        }
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = HostedConfigurationVersion::default();
+            result.content = Some(response.body);
+
+            if let Some(application_id) = response.headers.get("Application-Id") {
+                let value = application_id.to_owned();
+                result.application_id = Some(value)
+            };
+            if let Some(configuration_profile_id) = response.headers.get("Configuration-Profile-Id")
+            {
+                let value = configuration_profile_id.to_owned();
+                result.configuration_profile_id = Some(value)
+            };
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(description) = response.headers.get("Description") {
+                let value = description.to_owned();
+                result.description = Some(value)
+            };
+            if let Some(version_number) = response.headers.get("Version-Number") {
+                let value = version_number.to_owned();
+                result.version_number = Some(value.parse::<i64>().unwrap())
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateHostedConfigurationVersionError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
     async fn delete_application(
         &self,
@@ -2619,6 +3083,34 @@ impl AppConfig for AppConfigClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteEnvironmentError::from_response(response))
+        }
+    }
+
+    /// <p>Delete a version of a configuration from the AppConfig configuration store.</p>
+    async fn delete_hosted_configuration_version(
+        &self,
+        input: DeleteHostedConfigurationVersionRequest,
+    ) -> Result<(), RusotoError<DeleteHostedConfigurationVersionError>> {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
+
+        let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteHostedConfigurationVersionError::from_response(
+                response,
+            ))
         }
     }
 
@@ -2820,6 +3312,56 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>Get information about a specific configuration version.</p>
+    async fn get_hosted_configuration_version(
+        &self,
+        input: GetHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<GetHostedConfigurationVersionError>> {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
+
+        let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = HostedConfigurationVersion::default();
+            result.content = Some(response.body);
+
+            if let Some(application_id) = response.headers.get("Application-Id") {
+                let value = application_id.to_owned();
+                result.application_id = Some(value)
+            };
+            if let Some(configuration_profile_id) = response.headers.get("Configuration-Profile-Id")
+            {
+                let value = configuration_profile_id.to_owned();
+                result.configuration_profile_id = Some(value)
+            };
+            if let Some(content_type) = response.headers.get("Content-Type") {
+                let value = content_type.to_owned();
+                result.content_type = Some(value)
+            };
+            if let Some(description) = response.headers.get("Description") {
+                let value = description.to_owned();
+                result.description = Some(value)
+            };
+            if let Some(version_number) = response.headers.get("Version-Number") {
+                let value = version_number.to_owned();
+                result.version_number = Some(value.parse::<i64>().unwrap())
+            };
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetHostedConfigurationVersionError::from_response(response))
+        }
+    }
+
     /// <p>List all applications in your AWS account.</p>
     async fn list_applications(
         &self,
@@ -3007,6 +3549,45 @@ impl AppConfig for AppConfigClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListEnvironmentsError::from_response(response))
+        }
+    }
+
+    /// <p>View a list of configurations stored in the AppConfig configuration store by version.</p>
+    async fn list_hosted_configuration_versions(
+        &self,
+        input: ListHostedConfigurationVersionsRequest,
+    ) -> Result<HostedConfigurationVersions, RusotoError<ListHostedConfigurationVersionsError>>
+    {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
+
+        let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max_results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next_token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<HostedConfigurationVersions, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListHostedConfigurationVersionsError::from_response(
+                response,
+            ))
         }
     }
 

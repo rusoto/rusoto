@@ -5931,7 +5931,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("Authentication", &input.authentication_token);
+        request.add_header("Authentication", &input.authentication_token.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.limit {
             params.put("limit", x);
@@ -6028,7 +6028,7 @@ impl Workdocs for WorkdocsClient {
         let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("Authentication", &input.authentication_token);
+        request.add_header("Authentication", &input.authentication_token.to_string());
 
         let mut response = self
             .client

@@ -438,6 +438,10 @@ pub struct Comment {
     #[serde(rename = "authorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author_arn: Option<String>,
+    /// <p>The emoji reactions to a comment, if any, submitted by the user whose credentials are associated with the call to the API.</p>
+    #[serde(rename = "callerReactions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caller_reactions: Option<Vec<String>>,
     /// <p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -466,6 +470,10 @@ pub struct Comment {
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
+    /// <p>A string to integer map that represents the number of individual users who have responded to a comment with the specified reactions.</p>
+    #[serde(rename = "reactionCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_counts: Option<::std::collections::HashMap<String, i64>>,
 }
 
 /// <p>Returns information about comments on the comparison between two commits.</p>
@@ -655,7 +663,7 @@ pub struct ConflictResolution {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApprovalRuleTemplateInput {
-    /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleTemplateContent")]
     pub approval_rule_template_content: String,
     /// <p>The description of the approval rule template. Consider providing a description that explains what this template does and when it might be appropriate to associate it with repositories.</p>
@@ -761,7 +769,7 @@ pub struct CreateCommitOutput {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestApprovalRuleInput {
-    /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleContent")]
     pub approval_rule_content: String,
     /// <p>The name for the approval rule.</p>
@@ -1386,6 +1394,38 @@ pub struct GetCommentOutput {
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<Comment>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCommentReactionsInput {
+    /// <p>The ID of the comment for which you want to get reactions information.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+    /// <p>A non-zero, non-negative integer used to limit the number of returned results. The default is the same as the allowed maximum, 1,000.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that, when provided in a request, returns the next batch of the results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Optional. The Amazon Resource Name (ARN) of the user or identity for which you want to get reaction information.</p>
+    #[serde(rename = "reactionUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_user_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCommentReactionsOutput {
+    /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of reactions to the specified comment.</p>
+    #[serde(rename = "reactionsForComment")]
+    pub reactions_for_comment: Vec<ReactionForComment>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2853,6 +2893,17 @@ pub struct PullRequestTarget {
     pub source_reference: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutCommentReactionInput {
+    /// <p>The ID of the comment to which you want to add or update a reaction.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+    /// <p>The emoji reaction you want to add or update. To remove a reaction, provide a value of blank or null. You can also provide the value of none. For information about emoji reaction values supported in AWS CodeCommit, see the <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-commit-comment.html#emoji-reaction-table">AWS CodeCommit User Guide</a>.</p>
+    #[serde(rename = "reactionValue")]
+    pub reaction_value: String,
+}
+
 /// <p>Information about a file added or updated as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2955,6 +3006,42 @@ pub struct PutRepositoryTriggersOutput {
     #[serde(rename = "configurationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_id: Option<String>,
+}
+
+/// <p>Information about the reaction values provided by users on a comment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReactionForComment {
+    /// <p>The reaction for a specified comment.</p>
+    #[serde(rename = "reaction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction: Option<ReactionValueFormats>,
+    /// <p>The Amazon Resource Names (ARNs) of users who have provided reactions to the comment.</p>
+    #[serde(rename = "reactionUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_users: Option<Vec<String>>,
+    /// <p>A numerical count of users who reacted with the specified emoji whose identities have been subsequently deleted from IAM. While these IAM users or roles no longer exist, the reactions might still appear in total reaction counts.</p>
+    #[serde(rename = "reactionsFromDeletedUsersCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reactions_from_deleted_users_count: Option<i64>,
+}
+
+/// <p>Information about the values for reactions to a comment. AWS CodeCommit supports a limited set of reactions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReactionValueFormats {
+    /// <p>The Emoji Version 1.0 graphic of the reaction. These graphics are interpreted slightly differently on different operating systems.</p>
+    #[serde(rename = "emoji")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emoji: Option<String>,
+    /// <p>The emoji short code for the reaction. Short codes are interpreted slightly differently on different operating systems. </p>
+    #[serde(rename = "shortCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub short_code: Option<String>,
+    /// <p>The Unicode codepoint for the reaction.</p>
+    #[serde(rename = "unicode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unicode: Option<String>,
 }
 
 /// <p>Information about a replacement content entry in the conflict of a merge or pull request operation.</p>
@@ -3309,7 +3396,7 @@ pub struct UpdatePullRequestApprovalRuleContentInput {
     #[serde(rename = "existingRuleContentSha256")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub existing_rule_content_sha_256: Option<String>,
-    /// <p><p>The updated content for the approval rule.</p> <note> <p>When you update the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The updated content for the approval rule.</p> <note> <p>When you update the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "newRuleContent")]
     pub new_rule_content: String,
     /// <p>The system-generated ID of the pull request.</p>
@@ -4188,7 +4275,7 @@ impl Error for CreateApprovalRuleTemplateError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
-    /// <p>The specified branch name already exists.</p>
+    /// <p>Cannot create the branch with the specified name because the commit conflicts with an existing branch with the same name. Branch names must be unique.</p>
     BranchNameExists(String),
     /// <p>A branch name is required, but was not specified.</p>
     BranchNameRequired(String),
@@ -6942,6 +7029,16 @@ pub enum GetCommentError {
     CommentDoesNotExist(String),
     /// <p>The comment ID is missing or null. A comment ID is required.</p>
     CommentIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
 }
@@ -6958,6 +7055,25 @@ impl GetCommentError {
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(GetCommentError::CommentIdRequired(err.msg))
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionIntegrityChecksFailed(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyAccessDenied(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyDisabledException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyDisabled(err.msg))
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyNotFound(err.msg))
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyUnavailable(err.msg))
                 }
                 "InvalidCommentIdException" => {
                     return RusotoError::Service(GetCommentError::InvalidCommentId(err.msg))
@@ -6976,11 +7092,94 @@ impl fmt::Display for GetCommentError {
             GetCommentError::CommentDeleted(ref cause) => write!(f, "{}", cause),
             GetCommentError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
             GetCommentError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
             GetCommentError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for GetCommentError {}
+/// Errors returned by GetCommentReactions
+#[derive(Debug, PartialEq)]
+pub enum GetCommentReactionsError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have used the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p>The Amazon Resource Name (ARN) of the user or identity is not valid.</p>
+    InvalidReactionUserArn(String),
+}
+
+impl GetCommentReactionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentReactionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CommentDeletedException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentDeleted(err.msg))
+                }
+                "CommentDoesNotExistException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "CommentIdRequiredException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentIdRequired(
+                        err.msg,
+                    ))
+                }
+                "InvalidCommentIdException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidCommentId(
+                        err.msg,
+                    ))
+                }
+                "InvalidContinuationTokenException" => {
+                    return RusotoError::Service(
+                        GetCommentReactionsError::InvalidContinuationToken(err.msg),
+                    )
+                }
+                "InvalidMaxResultsException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidMaxResults(
+                        err.msg,
+                    ))
+                }
+                "InvalidReactionUserArnException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidReactionUserArn(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCommentReactionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCommentReactionsError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidReactionUserArn(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCommentReactionsError {}
 /// Errors returned by GetCommentsForComparedCommit
 #[derive(Debug, PartialEq)]
 pub enum GetCommentsForComparedCommitError {
@@ -12113,6 +12312,82 @@ impl fmt::Display for PostCommentReplyError {
     }
 }
 impl Error for PostCommentReplyError {}
+/// Errors returned by PutCommentReaction
+#[derive(Debug, PartialEq)]
+pub enum PutCommentReactionError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have used the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// <p>The value of the reaction is not valid. For more information, see the <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit User Guide</a>.</p>
+    InvalidReactionValue(String),
+    /// <p>The number of reactions has been exceeded. Reactions are limited to one reaction per user for each individual comment ID.</p>
+    ReactionLimitExceeded(String),
+    /// <p>A reaction value is required. </p>
+    ReactionValueRequired(String),
+}
+
+impl PutCommentReactionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCommentReactionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CommentDeletedException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentDeleted(err.msg))
+                }
+                "CommentDoesNotExistException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "CommentIdRequiredException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentIdRequired(
+                        err.msg,
+                    ))
+                }
+                "InvalidCommentIdException" => {
+                    return RusotoError::Service(PutCommentReactionError::InvalidCommentId(err.msg))
+                }
+                "InvalidReactionValueException" => {
+                    return RusotoError::Service(PutCommentReactionError::InvalidReactionValue(
+                        err.msg,
+                    ))
+                }
+                "ReactionLimitExceededException" => {
+                    return RusotoError::Service(PutCommentReactionError::ReactionLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ReactionValueRequiredException" => {
+                    return RusotoError::Service(PutCommentReactionError::ReactionValueRequired(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutCommentReactionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutCommentReactionError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::InvalidReactionValue(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::ReactionLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::ReactionValueRequired(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutCommentReactionError {}
 /// Errors returned by PutFile
 #[derive(Debug, PartialEq)]
 pub enum PutFileError {
@@ -14377,19 +14652,25 @@ pub trait CodeCommit {
         input: GetBranchInput,
     ) -> Result<GetBranchOutput, RusotoError<GetBranchError>>;
 
-    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    /// <p><p>Returns the content of a comment made on a change, file, or commit in a repository. </p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comment(
         &self,
         input: GetCommentInput,
     ) -> Result<GetCommentOutput, RusotoError<GetCommentError>>;
 
-    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    /// <p>Returns information about reactions to a specified comment ID. Reactions from users who have been deleted will not be included in the count.</p>
+    async fn get_comment_reactions(
+        &self,
+        input: GetCommentReactionsInput,
+    ) -> Result<GetCommentReactionsOutput, RusotoError<GetCommentReactionsError>>;
+
+    /// <p><p>Returns information about comments made on the comparison between two commits.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_compared_commit(
         &self,
         input: GetCommentsForComparedCommitInput,
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>;
 
-    /// <p>Returns comments made on a pull request.</p>
+    /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_pull_request(
         &self,
         input: GetCommentsForPullRequestInput,
@@ -14574,6 +14855,12 @@ pub trait CodeCommit {
         &self,
         input: PostCommentReplyInput,
     ) -> Result<PostCommentReplyOutput, RusotoError<PostCommentReplyError>>;
+
+    /// <p>Adds or updates a reaction to a specified comment for the user whose identity is used to make the request. You can only add or update a reaction for yourself. You cannot add, modify, or delete a reaction for another user.</p>
+    async fn put_comment_reaction(
+        &self,
+        input: PutCommentReactionInput,
+    ) -> Result<(), RusotoError<PutCommentReactionError>>;
 
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
     async fn put_file(
@@ -15501,7 +15788,7 @@ impl CodeCommit for CodeCommitClient {
         }
     }
 
-    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    /// <p><p>Returns the content of a comment made on a change, file, or commit in a repository. </p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comment(
         &self,
         input: GetCommentInput,
@@ -15528,7 +15815,35 @@ impl CodeCommit for CodeCommitClient {
         }
     }
 
-    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    /// <p>Returns information about reactions to a specified comment ID. Reactions from users who have been deleted will not be included in the count.</p>
+    async fn get_comment_reactions(
+        &self,
+        input: GetCommentReactionsInput,
+    ) -> Result<GetCommentReactionsOutput, RusotoError<GetCommentReactionsError>> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetCommentReactions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCommentReactionsOutput, _>()
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCommentReactionsError::from_response(response))
+        }
+    }
+
+    /// <p><p>Returns information about comments made on the comparison between two commits.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_compared_commit(
         &self,
         input: GetCommentsForComparedCommitInput,
@@ -15560,7 +15875,7 @@ impl CodeCommit for CodeCommitClient {
         }
     }
 
-    /// <p>Returns comments made on a pull request.</p>
+    /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_pull_request(
         &self,
         input: GetCommentsForPullRequestInput,
@@ -16441,6 +16756,33 @@ impl CodeCommit for CodeCommitClient {
             let try_response = response.buffer().await;
             let response = try_response.map_err(RusotoError::HttpDispatch)?;
             Err(PostCommentReplyError::from_response(response))
+        }
+    }
+
+    /// <p>Adds or updates a reaction to a specified comment for the user whose identity is used to make the request. You can only add or update a reaction for yourself. You cannot add, modify, or delete a reaction for another user.</p>
+    async fn put_comment_reaction(
+        &self,
+        input: PutCommentReactionInput,
+    ) -> Result<(), RusotoError<PutCommentReactionError>> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.PutCommentReaction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            std::mem::drop(response);
+            Ok(())
+        } else {
+            let try_response = response.buffer().await;
+            let response = try_response.map_err(RusotoError::HttpDispatch)?;
+            Err(PutCommentReactionError::from_response(response))
         }
     }
 

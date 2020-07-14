@@ -2084,6 +2084,10 @@ pub struct EncoderSettings {
     #[serde(rename = "CaptionDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_descriptions: Option<Vec<CaptionDescription>>,
+    /// <p>Feature Activations</p>
+    #[serde(rename = "FeatureActivations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature_activations: Option<FeatureActivations>,
     /// <p>Configuration settings that apply to the event as a whole.</p>
     #[serde(rename = "GlobalConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2099,6 +2103,16 @@ pub struct EncoderSettings {
     pub timecode_config: TimecodeConfig,
     #[serde(rename = "VideoDescriptions")]
     pub video_descriptions: Vec<VideoDescription>,
+}
+
+/// <p>Feature Activations</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FeatureActivations {
+    /// <p>Enables the Input Prepare feature. You can create Input Prepare actions in the schedule only if this feature is enabled.
+    /// If you disable the feature on an existing schedule, make sure that you first delete all input prepare actions from the schedule.</p>
+    #[serde(rename = "InputPrepareScheduleActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_prepare_schedule_actions: Option<String>,
 }
 
 /// <p>Fec Output Settings</p>
@@ -3327,6 +3341,22 @@ pub struct InputLossBehavior {
     #[serde(rename = "RepeatFrameMsec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repeat_frame_msec: Option<i64>,
+}
+
+/// <p>Action to prepare an input for a future immediate input switch.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InputPrepareScheduleActionSettings {
+    /// <p>The name of the input attachment that should be prepared by this action. If no name is provided, the action will stop the most recent prepare (if any) when activated.</p>
+    #[serde(rename = "InputAttachmentNameReference")]
+    pub input_attachment_name_reference: String,
+    /// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
+    #[serde(rename = "InputClippingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_clipping_settings: Option<InputClippingSettings>,
+    /// <p>The value for the variable portion of the URL for the dynamic input, for this instance of the input. Each time you use the same dynamic input in an input switch action, you can provide a different value, in order to connect the input to a different content source.</p>
+    #[serde(rename = "UrlPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_path: Option<Vec<String>>,
 }
 
 /// <p>An Input Security Group</p>
@@ -5083,6 +5113,10 @@ pub struct ScheduleActionSettings {
     #[serde(rename = "HlsTimedMetadataSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_timed_metadata_settings: Option<HlsTimedMetadataScheduleActionSettings>,
+    /// <p>Action to prepare an input for a future immediate input switch</p>
+    #[serde(rename = "InputPrepareSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_prepare_settings: Option<InputPrepareScheduleActionSettings>,
     /// <p>Action to switch the input</p>
     #[serde(rename = "InputSwitchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]

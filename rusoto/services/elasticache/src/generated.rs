@@ -372,6 +372,8 @@ impl BooleanOptionalDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheCluster {
+    /// <p>The ARN (Amazon Resource Name) of the cache cluster.</p>
+    pub arn: Option<String>,
     /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable at-rest encryption on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
@@ -435,6 +437,9 @@ impl CacheClusterDeserializer {
     ) -> Result<CacheCluster, XmlParseError> {
         deserialize_elements::<_, CacheCluster, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "AtRestEncryptionEnabled" => {
                     obj.at_rest_encryption_enabled = Some(
                         BooleanOptionalDeserializer::deserialize("AtRestEncryptionEnabled", stack)?,
@@ -1164,6 +1169,8 @@ impl CacheNodeUpdateStatusListDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheParameterGroup {
+    /// <p>The ARN (Amazon Resource Name) of the cache parameter group.</p>
+    pub arn: Option<String>,
     /// <p>The name of the cache parameter group family that this cache parameter group is compatible with.</p> <p>Valid values are: <code>memcached1.4</code> | <code>memcached1.5</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> | <code>redis4.0</code> | <code>redis5.0</code> | </p>
     pub cache_parameter_group_family: Option<String>,
     /// <p>The name of the cache parameter group.</p>
@@ -1184,6 +1191,9 @@ impl CacheParameterGroupDeserializer {
     ) -> Result<CacheParameterGroup, XmlParseError> {
         deserialize_elements::<_, CacheParameterGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "CacheParameterGroupFamily" => {
                     obj.cache_parameter_group_family = Some(StringDeserializer::deserialize(
                         "CacheParameterGroupFamily",
@@ -1410,6 +1420,8 @@ impl CacheParameterGroupsMessageDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheSecurityGroup {
+    /// <p>The ARN (Amazon Resource Name) of the cache security group.</p>
+    pub arn: Option<String>,
     /// <p>The name of the cache security group.</p>
     pub cache_security_group_name: Option<String>,
     /// <p>The description of the cache security group.</p>
@@ -1430,6 +1442,9 @@ impl CacheSecurityGroupDeserializer {
     ) -> Result<CacheSecurityGroup, XmlParseError> {
         deserialize_elements::<_, CacheSecurityGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "CacheSecurityGroupName" => {
                     obj.cache_security_group_name = Some(StringDeserializer::deserialize(
                         "CacheSecurityGroupName",
@@ -1591,6 +1606,8 @@ impl CacheSecurityGroupsDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CacheSubnetGroup {
+    /// <p>The ARN (Amazon Resource Name) of the cache subnet group.</p>
+    pub arn: Option<String>,
     /// <p>The description of the cache subnet group.</p>
     pub cache_subnet_group_description: Option<String>,
     /// <p>The name of the cache subnet group.</p>
@@ -1611,6 +1628,9 @@ impl CacheSubnetGroupDeserializer {
     ) -> Result<CacheSubnetGroup, XmlParseError> {
         deserialize_elements::<_, CacheSubnetGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "CacheSubnetGroupDescription" => {
                     obj.cache_subnet_group_description = Some(StringDeserializer::deserialize(
                         "CacheSubnetGroupDescription",
@@ -1790,7 +1810,7 @@ impl CompleteMigrationResponseDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigureShard {
-    /// <p><p>The number of replicas you want in this node group at the end of this operation. The maximum value for <code>NewReplicaCount</code> is 5. The minimum value depends upon the type of Redis replication group you are working with.</p> <p>The minimum number of replicas in a shard or replication group is:</p> <ul> <li> <p>Redis (cluster mode disabled)</p> <ul> <li> <p>If Multi-AZ with Automatic Failover is enabled: 1</p> </li> <li> <p>If Multi-AZ with Automatic Failover is not enable: 0</p> </li> </ul> </li> <li> <p>Redis (cluster mode enabled): 0 (though you will not be able to failover to a replica if your primary node fails)</p> </li> </ul></p>
+    /// <p><p>The number of replicas you want in this node group at the end of this operation. The maximum value for <code>NewReplicaCount</code> is 5. The minimum value depends upon the type of Redis replication group you are working with.</p> <p>The minimum number of replicas in a shard or replication group is:</p> <ul> <li> <p>Redis (cluster mode disabled)</p> <ul> <li> <p>If Multi-AZ: 1</p> </li> <li> <p>If Multi-AZ: 0</p> </li> </ul> </li> <li> <p>Redis (cluster mode enabled): 0 (though you will not be able to failover to a replica if your primary node fails)</p> </li> </ul></p>
     pub new_replica_count: i64,
     /// <p>The 4-digit id for the node group you are configuring. For Redis (cluster mode disabled) replication groups, the node group id is always 0001. To find a Redis (cluster mode enabled)'s node group's (shard's) id, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/shard-find-id.html">Finding a Shard's Id</a>.</p>
     pub node_group_id: String,
@@ -1917,7 +1937,7 @@ pub struct CreateCacheClusterMessage {
     pub num_cache_nodes: Option<i64>,
     /// <p>The port number on which each of the cache nodes accepts connections.</p>
     pub port: Option<i64>,
-    /// <p>The EC2 Availability Zone in which the cluster is created.</p> <p>All nodes belonging to this Memcached cluster are placed in the preferred Availability Zone. If you want to create your nodes across multiple Availability Zones, use <code>PreferredAvailabilityZones</code>.</p> <p>Default: System chosen Availability Zone.</p>
+    /// <p>The EC2 Availability Zone in which the cluster is created.</p> <p>All nodes belonging to this cluster are placed in the preferred Availability Zone. If you want to create your nodes across multiple Availability Zones, use <code>PreferredAvailabilityZones</code>.</p> <p>Default: System chosen Availability Zone.</p>
     pub preferred_availability_zone: Option<String>,
     /// <p>A list of the Availability Zones in which cache nodes are created. The order of the zones in the list is not important.</p> <p>This option is only supported on Memcached.</p> <note> <p>If you are creating your cluster in an Amazon VPC (recommended) you can only locate nodes in Availability Zones that are associated with the subnets in the selected subnet group.</p> <p>The number of Availability Zones listed must equal the value of <code>NumCacheNodes</code>.</p> </note> <p>If you want all the nodes in the same Availability Zone, use <code>PreferredAvailabilityZone</code> instead, or repeat the Availability Zone multiple times in the list.</p> <p>Default: System chosen Availability Zones.</p>
     pub preferred_availability_zones: Option<Vec<String>>,
@@ -2365,7 +2385,7 @@ pub struct CreateReplicationGroupMessage {
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p>If <code>true</code>, Multi-AZ is enabled for this replication group. If <code>false</code>, Multi-AZ is disabled for this replication group.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
+    /// <p>Specifies whether a read-only replica is automatically promoted to read/write primary if the existing primary fails.</p> <p> <code>AutomaticFailoverEnabled</code> must be enabled for Redis (cluster mode enabled) replication groups.</p> <p>Default: false</p>
     pub automatic_failover_enabled: Option<bool>,
     /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T3 node types:</b> <code>cache.t3.micro</code>, <code>cache.t3.small</code>, <code>cache.t3.medium</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
@@ -2383,6 +2403,8 @@ pub struct CreateReplicationGroupMessage {
     pub global_replication_group_id: Option<String>,
     /// <p>The ID of the KMS key used to encrypt the disk in the cluster.</p>
     pub kms_key_id: Option<String>,
+    /// <p>A flag indicating if you have Multi-AZ enabled to enhance fault tolerance. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html">Minimizing Downtime: Multi-AZ</a>.</p>
+    pub multi_az_enabled: Option<bool>,
     /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following members: <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>, and <code>Slots</code>.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter. However, it is required when seeding a Redis (cluster mode enabled) cluster from a S3 rdb file. You must configure each node group (shard) using this parameter because you must specify the slots for each node group.</p>
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cluster owner.</p> </note></p>
@@ -2487,6 +2509,9 @@ impl CreateReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.multi_az_enabled {
+            params.put(&format!("{}{}", prefix, "MultiAZEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.node_group_configuration {
             NodeGroupConfigurationListSerializer::serialize(
@@ -2805,7 +2830,7 @@ impl DecreaseNodeGroupsInGlobalReplicationGroupResultDeserializer {
 pub struct DecreaseReplicaCountMessage {
     /// <p>If <code>True</code>, the number of replica nodes is decreased immediately. <code>ApplyImmediately=False</code> is not currently supported.</p>
     pub apply_immediately: bool,
-    /// <p><p>The number of read replica nodes you want at the completion of this operation. For Redis (cluster mode disabled) replication groups, this is the number of replica nodes in the replication group. For Redis (cluster mode enabled) replication groups, this is the number of replica nodes in each of the replication group&#39;s node groups.</p> <p>The minimum number of replicas in a shard or replication group is:</p> <ul> <li> <p>Redis (cluster mode disabled)</p> <ul> <li> <p>If Multi-AZ with Automatic Failover is enabled: 1</p> </li> <li> <p>If Multi-AZ with Automatic Failover is not enabled: 0</p> </li> </ul> </li> <li> <p>Redis (cluster mode enabled): 0 (though you will not be able to failover to a replica if your primary node fails)</p> </li> </ul></p>
+    /// <p><p>The number of read replica nodes you want at the completion of this operation. For Redis (cluster mode disabled) replication groups, this is the number of replica nodes in the replication group. For Redis (cluster mode enabled) replication groups, this is the number of replica nodes in each of the replication group&#39;s node groups.</p> <p>The minimum number of replicas in a shard or replication group is:</p> <ul> <li> <p>Redis (cluster mode disabled)</p> <ul> <li> <p>If Multi-AZ is enabled: 1</p> </li> <li> <p>If Multi-AZ is not enabled: 0</p> </li> </ul> </li> <li> <p>Redis (cluster mode enabled): 0 (though you will not be able to failover to a replica if your primary node fails)</p> </li> </ul></p>
     pub new_replica_count: Option<i64>,
     /// <p>A list of <code>ConfigureShard</code> objects that can be used to configure each shard in a Redis (cluster mode enabled) replication group. The <code>ConfigureShard</code> has three members: <code>NewReplicaCount</code>, <code>NodeGroupId</code>, and <code>PreferredAvailabilityZones</code>.</p>
     pub replica_configuration: Option<Vec<ConfigureShard>>,
@@ -4486,6 +4511,8 @@ impl GlobalNodeGroupListDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GlobalReplicationGroup {
+    /// <p>The ARN (Amazon Resource Name) of the global replication group.</p>
+    pub arn: Option<String>,
     /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
@@ -4522,6 +4549,9 @@ impl GlobalReplicationGroupDeserializer {
     ) -> Result<GlobalReplicationGroup, XmlParseError> {
         deserialize_elements::<_, GlobalReplicationGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "AtRestEncryptionEnabled" => {
                     obj.at_rest_encryption_enabled = Some(
                         BooleanOptionalDeserializer::deserialize("AtRestEncryptionEnabled", stack)?,
@@ -5365,7 +5395,7 @@ pub struct ModifyReplicationGroupMessage {
     pub auth_token_update_strategy: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
+    /// <p>Determines whether a read replica is automatically promoted to read/write primary if the existing primary encounters a failure.</p> <p>Valid values: <code>true</code> | <code>false</code> </p>
     pub automatic_failover_enabled: Option<bool>,
     /// <p>A valid cache node type that you want to scale this replication group to.</p>
     pub cache_node_type: Option<String>,
@@ -5375,6 +5405,8 @@ pub struct ModifyReplicationGroupMessage {
     pub cache_security_group_names: Option<Vec<String>>,
     /// <p>The upgraded version of the cache engine to be run on the clusters in the replication group.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing replication group and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
+    /// <p>A flag indicating if you have Multi-AZ enabled to enhance fault tolerance. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html">Minimizing Downtime: Multi-AZ</a>.</p>
+    pub multi_az_enabled: Option<bool>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the replication group owner. </p> </note></p>
     pub notification_topic_arn: Option<String>,
     /// <p>The status of the Amazon SNS notification topic for the replication group. Notifications are sent only if the status is <code>active</code>.</p> <p>Valid values: <code>active</code> | <code>inactive</code> </p>
@@ -5448,6 +5480,9 @@ impl ModifyReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.multi_az_enabled {
+            params.put(&format!("{}{}", prefix, "MultiAZEnabled"), &field_value);
         }
 
         if let Some(ref field_value) = obj.notification_topic_arn {
@@ -5637,6 +5672,18 @@ impl ModifyReplicationGroupShardConfigurationResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
+struct MultiAZStatusDeserializer;
+impl MultiAZStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a collection of cache nodes in a replication group. One node in the node group is the read/write primary node. All the other nodes are read-only Replica nodes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -5651,7 +5698,7 @@ pub struct NodeGroup {
     pub reader_endpoint: Option<Endpoint>,
     /// <p>The keyspace for this node group (shard).</p>
     pub slots: Option<String>,
-    /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, etc.</p>
+    /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, <code>modifying</code>, <code>deleting</code>.</p>
     pub status: Option<String>,
 }
 
@@ -6896,13 +6943,15 @@ impl ReplicaConfigurationListSerializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ReplicationGroup {
+    /// <p>The ARN (Amazon Resource Name) of the replication group.</p>
+    pub arn: Option<String>,
     /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable encryption at-rest on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
     /// <p>The date the auth token was last modified</p>
     pub auth_token_last_modified_date: Option<String>,
-    /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
+    /// <p>Indicates the status of automatic failover for this Redis replication group.</p>
     pub automatic_failover: Option<String>,
     /// <p>The name of the compute and memory capacity node type for each node in the replication group.</p>
     pub cache_node_type: Option<String>,
@@ -6918,6 +6967,8 @@ pub struct ReplicationGroup {
     pub kms_key_id: Option<String>,
     /// <p>The names of all the cache clusters that are part of this replication group.</p>
     pub member_clusters: Option<Vec<String>>,
+    /// <p>A flag indicating if you have Multi-AZ enabled to enhance fault tolerance. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html">Minimizing Downtime: Multi-AZ</a> </p>
+    pub multi_az: Option<String>,
     /// <p>A list of node groups in this replication group. For Redis (cluster mode disabled) replication groups, this is a single-element list. For Redis (cluster mode enabled) replication groups, the list contains an entry for each node group (shard).</p>
     pub node_groups: Option<Vec<NodeGroup>>,
     /// <p>A group of settings to be applied to the replication group, either immediately or during the next maintenance window.</p>
@@ -6946,6 +6997,9 @@ impl ReplicationGroupDeserializer {
     ) -> Result<ReplicationGroup, XmlParseError> {
         deserialize_elements::<_, ReplicationGroup, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "AtRestEncryptionEnabled" => {
                     obj.at_rest_encryption_enabled = Some(
                         BooleanOptionalDeserializer::deserialize("AtRestEncryptionEnabled", stack)?,
@@ -7003,6 +7057,9 @@ impl ReplicationGroupDeserializer {
                     obj.member_clusters.get_or_insert(vec![]).extend(
                         ClusterIdListDeserializer::deserialize("MemberClusters", stack)?,
                     );
+                }
+                "MultiAZ" => {
+                    obj.multi_az = Some(MultiAZStatusDeserializer::deserialize("MultiAZ", stack)?);
                 }
                 "NodeGroups" => {
                     obj.node_groups
@@ -7135,7 +7192,7 @@ impl ReplicationGroupMessageDeserializer {
 pub struct ReplicationGroupPendingModifiedValues {
     /// <p>The auth token status</p>
     pub auth_token_status: Option<String>,
-    /// <p><p>Indicates the status of Multi-AZ with automatic failover for this Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
+    /// <p>Indicates the status of automatic failover for this Redis replication group.</p>
     pub automatic_failover_status: Option<String>,
     /// <p>The primary cluster ID that is applied immediately (if <code>--apply-immediately</code> was specified), or during the next maintenance window.</p>
     pub primary_cluster_id: Option<String>,
@@ -8004,9 +8061,11 @@ impl SlotMigrationDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Snapshot {
+    /// <p>The ARN (Amazon Resource Name) of the snapshot.</p>
+    pub arn: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p>Indicates the status of Multi-AZ with automatic failover for the source Redis replication group.</p> <p>Amazon ElastiCache for Redis does not support Multi-AZ with automatic failover on:</p> <ul> <li> <p>Redis versions earlier than 2.8.6.</p> </li> <li> <p>Redis (cluster mode disabled): T1 node types.</p> </li> <li> <p>Redis (cluster mode enabled): T1 node types.</p> </li> </ul></p>
+    /// <p>Indicates the status of automatic failover for the source Redis replication group.</p>
     pub automatic_failover: Option<String>,
     /// <p>The date and time when the source cluster was created.</p>
     pub cache_cluster_create_time: Option<String>,
@@ -8066,6 +8125,9 @@ impl SnapshotDeserializer {
     ) -> Result<Snapshot, XmlParseError> {
         deserialize_elements::<_, Snapshot, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ARN" => {
+                    obj.arn = Some(StringDeserializer::deserialize("ARN", stack)?);
+                }
                 "AutoMinorVersionUpgrade" => {
                     obj.auto_minor_version_upgrade = Some(BooleanDeserializer::deserialize(
                         "AutoMinorVersionUpgrade",
@@ -13747,7 +13809,7 @@ pub trait ElastiCache {
         input: CreateGlobalReplicationGroupMessage,
     ) -> Result<CreateGlobalReplicationGroupResult, RusotoError<CreateGlobalReplicationGroupError>>;
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. If you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; scaling. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Scaling.html">Scaling ElastiCache for Redis Clusters</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -13924,7 +13986,7 @@ pub trait ElastiCache {
         RusotoError<DisassociateGlobalReplicationGroupError>,
     >;
 
-    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will be come primary, and all other clusters will become secondary.</p>
+    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will become primary, and all other clusters will become secondary.</p>
     async fn failover_global_replication_group(
         &self,
         input: FailoverGlobalReplicationGroupMessage,
@@ -14053,7 +14115,7 @@ pub trait ElastiCache {
         input: StartMigrationMessage,
     ) -> Result<StartMigrationResponse, RusotoError<StartMigrationError>>;
 
-    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
+    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ </a> in the <i>ElastiCache User Guide</i>.</p>
     async fn test_failover(
         &self,
         input: TestFailoverMessage,
@@ -14628,7 +14690,7 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>This API can be used to create a standalone regional replication group or a secondary replication group associated with a Global Datastore.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. If you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; scaling. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Scaling.html">Scaling ElastiCache for Redis Clusters</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     async fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -15885,7 +15947,7 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will be come primary, and all other clusters will become secondary.</p>
+    /// <p>Used to failover the primary region to a selected secondary region. The selected secondary region will become primary, and all other clusters will become secondary.</p>
     async fn failover_global_replication_group(
         &self,
         input: FailoverGlobalReplicationGroupMessage,
@@ -16785,7 +16847,7 @@ impl ElastiCache for ElastiCacheClient {
         Ok(result)
     }
 
-    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
+    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ </a> in the <i>ElastiCache User Guide</i>.</p>
     async fn test_failover(
         &self,
         input: TestFailoverMessage,

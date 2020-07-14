@@ -82,6 +82,31 @@ pub struct AvailabilityZone {
     pub zone_name: Option<String>,
 }
 
+/// <p>Provides details about an auto scaling group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsAutoScalingAutoScalingGroupDetails {
+    /// <p>The datetime when the auto scaling group was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<String>,
+    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before it checks the health status of an EC2 instance that has come into service.</p>
+    #[serde(rename = "HealthCheckGracePeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check_grace_period: Option<i64>,
+    /// <p>The service to use for the health checks.</p>
+    #[serde(rename = "HealthCheckType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check_type: Option<String>,
+    /// <p>The name of the launch configuration.</p>
+    #[serde(rename = "LaunchConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_configuration_name: Option<String>,
+    /// <p>The list of load balancers associated with the group.</p>
+    #[serde(rename = "LoadBalancerNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer_names: Option<Vec<String>>,
+}
+
 /// <p>A distribution configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwsCloudFrontDistributionDetails {
@@ -487,6 +512,81 @@ pub struct AwsEc2SecurityGroupUserIdGroupPair {
     #[serde(rename = "VpcPeeringConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_peering_connection_id: Option<String>,
+}
+
+/// <p>An attachment to an AWS EC2 volume.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2VolumeAttachment {
+    /// <p>The datetime when the attachment initiated.</p>
+    #[serde(rename = "AttachTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attach_time: Option<String>,
+    /// <p>Whether the EBS volume is deleted when the EC2 instance is terminated.</p>
+    #[serde(rename = "DeleteOnTermination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_on_termination: Option<bool>,
+    /// <p>The identifier of the EC2 instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    /// <p>The attachment state of the volume.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Details about an EC2 volume.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2VolumeDetails {
+    /// <p>The volume attachments.</p>
+    #[serde(rename = "Attachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<AwsEc2VolumeAttachment>>,
+    /// <p>The datetime when the volume was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// <p>Whether the volume is encrypted.</p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
+    /// <p>The ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The size of the volume, in GiBs.</p>
+    #[serde(rename = "Size")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+    /// <p>The snapshot from which the volume was created.</p>
+    #[serde(rename = "SnapshotId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snapshot_id: Option<String>,
+    /// <p>The volume state.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Details about an EC2 VPC.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsEc2VpcDetails {
+    /// <p>Information about the IPv4 CIDR blocks associated with the VPC.</p>
+    #[serde(rename = "CidrBlockAssociationSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_block_association_set: Option<Vec<CidrBlockAssociation>>,
+    /// <p>The identifier of the set of Dynamic Host Configuration Protocol (DHCP) options that are associated with the VPC. If the default options are associated with the VPC, then this is default.</p>
+    #[serde(rename = "DhcpOptionsId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dhcp_options_id: Option<String>,
+    /// <p>Information about the IPv6 CIDR blocks associated with the VPC.</p>
+    #[serde(rename = "Ipv6CidrBlockAssociationSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv_6_cidr_block_association_set: Option<Vec<Ipv6CidrBlockAssociation>>,
+    /// <p>The current state of the VPC.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// <p>Information about an Elasticsearch domain.</p>
@@ -1162,6 +1262,10 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "Network")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network: Option<Network>,
+    /// <p>Provides information about a network path that is relevant to a finding. Each entry under <code>NetworkPath</code> represents a component of that path.</p>
+    #[serde(rename = "NetworkPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_path: Option<Vec<NetworkPathComponent>>,
     /// <p>A user-defined note added to a finding.</p>
     #[serde(rename = "Note")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1223,6 +1327,10 @@ pub struct AwsSecurityFinding {
     #[serde(rename = "VerificationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_state: Option<String>,
+    /// <p>Provides a list of vulnerabilities associated with the findings.</p>
+    #[serde(rename = "Vulnerabilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vulnerabilities: Option<Vec<Vulnerability>>,
     /// <p>Provides information about the status of the investigation into a finding.</p>
     #[serde(rename = "Workflow")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1816,6 +1924,23 @@ pub struct BatchUpdateFindingsUnprocessedFinding {
     pub finding_identifier: AwsSecurityFindingIdentifier,
 }
 
+/// <p>An IPv4 CIDR block association.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CidrBlockAssociation {
+    /// <p>The association ID for the IPv4 CIDR block.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>The IPv4 CIDR block.</p>
+    #[serde(rename = "CidrBlock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_block: Option<String>,
+    /// <p>Information about the state of the IPv4 CIDR block.</p>
+    #[serde(rename = "CidrBlockState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_block_state: Option<String>,
+}
+
 /// <p>Contains finding details that are specific to control-based findings. Only returned for findings generated from controls.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Compliance {
@@ -1914,6 +2039,23 @@ pub struct CreateMembersResponse {
     #[serde(rename = "UnprocessedAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_accounts: Option<Vec<SecurityHubResult>>,
+}
+
+/// <p>CVSS scores from the advisory related to the vulnerability.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Cvss {
+    /// <p>The base CVSS score.</p>
+    #[serde(rename = "BaseScore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_score: Option<f64>,
+    /// <p>The base scoring vector for the CVSS score.</p>
+    #[serde(rename = "BaseVector")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_vector: Option<String>,
+    /// <p>The version of CVSS for the CVSS score.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>A date filter for querying findings.</p>
@@ -2500,6 +2642,23 @@ pub struct IpFilter {
     pub cidr: Option<String>,
 }
 
+/// <p>An IPV6 CIDR block association.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Ipv6CidrBlockAssociation {
+    /// <p>The association ID for the IPv6 CIDR block.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>Information about the state of the CIDR block.</p>
+    #[serde(rename = "CidrBlockState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cidr_block_state: Option<String>,
+    /// <p>The IPv6 CIDR block.</p>
+    #[serde(rename = "Ipv6CidrBlock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv_6_cidr_block: Option<String>,
+}
+
 /// <p>A keyword filter for querying findings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeywordFilter {
@@ -2711,6 +2870,10 @@ pub struct Network {
     #[serde(rename = "Direction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direction: Option<String>,
+    /// <p>The range of open ports that is present on the network.</p>
+    #[serde(rename = "OpenPortRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_port_range: Option<PortRange>,
     /// <p>The protocol of network-related information about a finding.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2735,6 +2898,57 @@ pub struct Network {
     #[serde(rename = "SourcePort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_port: Option<i64>,
+}
+
+/// <p>Details about a network path component that occurs before or after the current component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NetworkHeader {
+    /// <p>Information about the destination of the component.</p>
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<NetworkPathComponentDetails>,
+    /// <p>The protocol used for the component.</p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>Information about the origin of the component.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<NetworkPathComponentDetails>,
+}
+
+/// <p>Information about a network path component.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NetworkPathComponent {
+    /// <p>The identifier of a component in the network path.</p>
+    #[serde(rename = "ComponentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub component_id: Option<String>,
+    /// <p>The type of component.</p>
+    #[serde(rename = "ComponentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub component_type: Option<String>,
+    /// <p>Information about the component that comes after the current component in the network path.</p>
+    #[serde(rename = "Egress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress: Option<NetworkHeader>,
+    /// <p>Information about the component that comes before the current node in the network path.</p>
+    #[serde(rename = "Ingress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingress: Option<NetworkHeader>,
+}
+
+/// <p>Information about the destination of the next component in the network path.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NetworkPathComponentDetails {
+    /// <p>The IP addresses of the destination.</p>
+    #[serde(rename = "Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<Vec<String>>,
+    /// <p>A list of port ranges for the destination.</p>
+    #[serde(rename = "PortRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_ranges: Option<Vec<PortRange>>,
 }
 
 /// <p>A user-defined note added to a finding.</p>
@@ -2778,6 +2992,19 @@ pub struct NumberFilter {
     #[serde(rename = "Lte")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lte: Option<f64>,
+}
+
+/// <p>A range of ports.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PortRange {
+    /// <p>The first port in the port range.</p>
+    #[serde(rename = "Begin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin: Option<i64>,
+    /// <p>The last port in the port range.</p>
+    #[serde(rename = "End")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end: Option<i64>,
 }
 
 /// <p>The details of process-related information about a finding.</p>
@@ -2913,6 +3140,10 @@ pub struct Resource {
 /// <p>Additional details about a resource related to a finding.</p> <p>To provide the details, use the object that corresponds to the resource type. For example, if the resource type is <code>AwsEc2Instance</code>, then you use the <code>AwsEc2Instance</code> object to provide the details.</p> <p>If the type-specific object does not contain all of the fields you want to populate, then you use the <code>Other</code> object to populate those additional fields.</p> <p>You also use the <code>Other</code> object to populate the details when the selected type does not have a corresponding object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDetails {
+    /// <p>Details for an autoscaling group.</p>
+    #[serde(rename = "AwsAutoScalingAutoScalingGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_auto_scaling_auto_scaling_group: Option<AwsAutoScalingAutoScalingGroupDetails>,
     /// <p>Details about a CloudFront distribution.</p>
     #[serde(rename = "AwsCloudFrontDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2933,6 +3164,14 @@ pub struct ResourceDetails {
     #[serde(rename = "AwsEc2SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_ec_2_security_group: Option<AwsEc2SecurityGroupDetails>,
+    /// <p>Details for an EC2 volume.</p>
+    #[serde(rename = "AwsEc2Volume")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_volume: Option<AwsEc2VolumeDetails>,
+    /// <p>Details for an EC2 VPC.</p>
+    #[serde(rename = "AwsEc2Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_vpc: Option<AwsEc2VpcDetails>,
     /// <p>Details for an Elasticsearch domain.</p>
     #[serde(rename = "AwsElasticsearchDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3046,6 +3285,31 @@ pub struct SeverityUpdate {
     #[serde(rename = "Product")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<f64>,
+}
+
+/// <p>Information about a software package.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SoftwarePackage {
+    /// <p>The architecture used for the software package.</p>
+    #[serde(rename = "Architecture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architecture: Option<String>,
+    /// <p>The epoch of the software package.</p>
+    #[serde(rename = "Epoch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub epoch: Option<String>,
+    /// <p>The name of the software package.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The release of the software package.</p>
+    #[serde(rename = "Release")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release: Option<String>,
+    /// <p>The version of the software package.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>A collection of finding attributes used to sort findings.</p>
@@ -3316,7 +3580,7 @@ pub struct UpdateStandardsControlRequest {
     #[serde(rename = "ControlStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub control_status: Option<String>,
-    /// <p>A description of the reason why you are disabling a security standard control.</p>
+    /// <p>A description of the reason why you are disabling a security standard control. If you are disabling a control, then this is required.</p>
     #[serde(rename = "DisabledReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled_reason: Option<String>,
@@ -3328,6 +3592,58 @@ pub struct UpdateStandardsControlRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStandardsControlResponse {}
+
+/// <p>A vulnerability associated with a finding.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Vulnerability {
+    /// <p>CVSS scores from the advisory related to the vulnerability.</p>
+    #[serde(rename = "Cvss")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cvss: Option<Vec<Cvss>>,
+    /// <p>The identifier of the vulnerability.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>A list of URLs that provide additional information about the vulnerability.</p>
+    #[serde(rename = "ReferenceUrls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_urls: Option<Vec<String>>,
+    /// <p>List of vulnerabilities that are related to this vulnerability.</p>
+    #[serde(rename = "RelatedVulnerabilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_vulnerabilities: Option<Vec<String>>,
+    /// <p>Information about the vendor that generates the vulnerability report.</p>
+    #[serde(rename = "Vendor")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor: Option<VulnerabilityVendor>,
+    /// <p>List of software packages that have the vulnerability.</p>
+    #[serde(rename = "VulnerablePackages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vulnerable_packages: Option<Vec<SoftwarePackage>>,
+}
+
+/// <p>A vendor that generates a vulnerability report.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VulnerabilityVendor {
+    /// <p>The name of the vendor.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The URL of the vulnerability advisory.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>The datetime when the vulnerability advisory was created.</p>
+    #[serde(rename = "VendorCreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_created_at: Option<String>,
+    /// <p>The severity that the vendor assigned to the vulnerability.</p>
+    #[serde(rename = "VendorSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_severity: Option<String>,
+    /// <p>The datetime when the vulnerability advisory was last updated.</p>
+    #[serde(rename = "VendorUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_updated_at: Option<String>,
+}
 
 /// <p>Details about the action that CloudFront or AWS WAF takes when a web request matches the conditions in the rule. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]

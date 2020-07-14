@@ -590,7 +590,7 @@ pub struct CreateServiceActionInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p><p>The self-service action definition. Can be one of the following:</p> <dl> <dt>Name</dt> <dd> <p>The name of the AWS Systems Manager Document. For example, <code>AWS-RestartEC2Instance</code>.</p> </dd> <dt>Version</dt> <dd> <p>The AWS Systems Manager automation document version. For example, <code>&quot;Version&quot;: &quot;1&quot;</code> </p> </dd> <dt>AssumeRole</dt> <dd> <p>The Amazon Resource Name (ARN) of the role that performs the self-service actions on your behalf. For example, <code>&quot;AssumeRole&quot;: &quot;arn:aws:iam::12345678910:role/ActionRole&quot;</code>.</p> <p>To reuse the provisioned product launch role, set to <code>&quot;AssumeRole&quot;: &quot;LAUNCH<em>ROLE&quot;</code>.</p> </dd> <dt>Parameters</dt> <dd> <p>The list of parameters in JSON format.</p> <p>For example: <code>[{&quot;Name&quot;:&quot;InstanceId&quot;,&quot;Type&quot;:&quot;TARGET&quot;}]</code> or <code>[{&quot;Name&quot;:&quot;InstanceId&quot;,&quot;Type&quot;:&quot;TEXT</em>VALUE&quot;}]</code>.</p> </dd> </dl></p>
+    /// <p><p>The self-service action definition. Can be one of the following:</p> <dl> <dt>Name</dt> <dd> <p>The name of the AWS Systems Manager document (SSM document). For example, <code>AWS-RestartEC2Instance</code>.</p> <p>If you are using a shared SSM document, you must provide the ARN instead of the name.</p> </dd> <dt>Version</dt> <dd> <p>The AWS Systems Manager automation document version. For example, <code>&quot;Version&quot;: &quot;1&quot;</code> </p> </dd> <dt>AssumeRole</dt> <dd> <p>The Amazon Resource Name (ARN) of the role that performs the self-service actions on your behalf. For example, <code>&quot;AssumeRole&quot;: &quot;arn:aws:iam::12345678910:role/ActionRole&quot;</code>.</p> <p>To reuse the provisioned product launch role, set to <code>&quot;AssumeRole&quot;: &quot;LAUNCH<em>ROLE&quot;</code>.</p> </dd> <dt>Parameters</dt> <dd> <p>The list of parameters in JSON format.</p> <p>For example: <code>[{&quot;Name&quot;:&quot;InstanceId&quot;,&quot;Type&quot;:&quot;TARGET&quot;}]</code> or <code>[{&quot;Name&quot;:&quot;InstanceId&quot;,&quot;Type&quot;:&quot;TEXT</em>VALUE&quot;}]</code>.</p> </dd> </dl></p>
     #[serde(rename = "Definition")]
     pub definition: ::std::collections::HashMap<String, String>,
     /// <p>The service action definition type. For example, <code>SSM_AUTOMATION</code>.</p>
@@ -914,7 +914,12 @@ pub struct DescribeProductAsAdminInput {
     pub accept_language: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
-    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The product name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -951,7 +956,12 @@ pub struct DescribeProductInput {
     pub accept_language: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
-    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The product name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -961,6 +971,10 @@ pub struct DescribeProductOutput {
     #[serde(rename = "Budgets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budgets: Option<Vec<BudgetDetail>>,
+    /// <p>Information about the associated launch paths.</p>
+    #[serde(rename = "LaunchPaths")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_paths: Option<Vec<LaunchPath>>,
     /// <p>Summary information about the product view.</p>
     #[serde(rename = "ProductViewSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1067,10 +1081,20 @@ pub struct DescribeProvisioningArtifactInput {
     pub accept_language: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
-    pub product_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The product name.</p>
+    #[serde(rename = "ProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_name: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
-    pub provisioning_artifact_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p>The provisioning artifact name.</p>
+    #[serde(rename = "ProvisioningArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_name: Option<String>,
     /// <p>Indicates whether a verbose level of detail is enabled.</p>
     #[serde(rename = "Verbose")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1453,6 +1477,20 @@ pub struct GetAWSOrganizationsAccessStatusOutput {
     #[serde(rename = "AccessStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_status: Option<String>,
+}
+
+/// <p>A launch path object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LaunchPath {
+    /// <p>The identifier of the launch path.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the launch path.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>Summary information about a product path for a user.</p>
@@ -3530,7 +3568,7 @@ pub struct UpdateProvisionedProductPropertiesInput {
     /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductId")]
     pub provisioned_product_id: String,
-    /// <p>A map that contains the provisioned product properties to be updated.</p> <p>The <code>OWNER</code> key only accepts user ARNs. The owner is the user that is allowed to see, update, terminate, and execute service actions in the provisioned product.</p> <p>The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the <code>ListRecordHistory</code> API. The new owner can describe all past records for the provisioned product using the <code>DescribeRecord</code> API. The previous owner can no longer use <code>DescribeRecord</code>, but can still see the product's history from when he was an owner using <code>ListRecordHistory</code>.</p> <p>If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.</p>
+    /// <p>A map that contains the provisioned product properties to be updated.</p> <p>The <code>OWNER</code> key accepts user ARNs and role ARNs. The owner is the user that is allowed to see, update, terminate, and execute service actions in the provisioned product.</p> <p>The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the <code>ListRecordHistory</code> API. The new owner can describe all past records for the provisioned product using the <code>DescribeRecord</code> API. The previous owner can no longer use <code>DescribeRecord</code>, but can still see the product's history from when he was an owner using <code>ListRecordHistory</code>.</p> <p>If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.</p>
     #[serde(rename = "ProvisionedProductProperties")]
     pub provisioned_product_properties: ::std::collections::HashMap<String, String>,
 }
@@ -5130,6 +5168,8 @@ impl Error for DescribeProductError {}
 /// Errors returned by DescribeProductAsAdmin
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductAsAdminError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -5138,6 +5178,11 @@ impl DescribeProductAsAdminError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProductAsAdminError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(DescribeProductAsAdminError::InvalidParameters(
+                        err.msg,
+                    ))
+                }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProductAsAdminError::ResourceNotFound(
                         err.msg,
@@ -5154,6 +5199,7 @@ impl fmt::Display for DescribeProductAsAdminError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DescribeProductAsAdminError::InvalidParameters(ref cause) => write!(f, "{}", cause),
             DescribeProductAsAdminError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -5282,6 +5328,8 @@ impl Error for DescribeProvisionedProductPlanError {}
 /// Errors returned by DescribeProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisioningArtifactError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -5292,6 +5340,11 @@ impl DescribeProvisioningArtifactError {
     ) -> RusotoError<DescribeProvisioningArtifactError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        DescribeProvisioningArtifactError::InvalidParameters(err.msg),
+                    )
+                }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeProvisioningArtifactError::ResourceNotFound(err.msg),
@@ -5308,6 +5361,9 @@ impl fmt::Display for DescribeProvisioningArtifactError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DescribeProvisioningArtifactError::InvalidParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
             DescribeProvisioningArtifactError::ResourceNotFound(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -7359,7 +7415,7 @@ pub trait ServiceCatalog {
         RusotoError<AssociatePrincipalWithPortfolioError>,
     >;
 
-    /// <p>Associates the specified product with the specified portfolio.</p>
+    /// <p>Associates the specified product with the specified portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn associate_product_with_portfolio(
         &self,
         input: AssociateProductWithPortfolioInput,
@@ -7407,25 +7463,25 @@ pub trait ServiceCatalog {
         input: CopyProductInput,
     ) -> Result<CopyProductOutput, RusotoError<CopyProductError>>;
 
-    /// <p>Creates a constraint.</p>
+    /// <p>Creates a constraint.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_constraint(
         &self,
         input: CreateConstraintInput,
     ) -> Result<CreateConstraintOutput, RusotoError<CreateConstraintError>>;
 
-    /// <p>Creates a portfolio.</p>
+    /// <p>Creates a portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_portfolio(
         &self,
         input: CreatePortfolioInput,
     ) -> Result<CreatePortfolioOutput, RusotoError<CreatePortfolioError>>;
 
-    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p>
     async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
     ) -> Result<CreatePortfolioShareOutput, RusotoError<CreatePortfolioShareError>>;
 
-    /// <p>Creates a product.</p>
+    /// <p>Creates a product.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_product(
         &self,
         input: CreateProductInput,
@@ -7455,25 +7511,25 @@ pub trait ServiceCatalog {
         input: CreateTagOptionInput,
     ) -> Result<CreateTagOptionOutput, RusotoError<CreateTagOptionError>>;
 
-    /// <p>Deletes the specified constraint.</p>
+    /// <p>Deletes the specified constraint.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_constraint(
         &self,
         input: DeleteConstraintInput,
     ) -> Result<DeleteConstraintOutput, RusotoError<DeleteConstraintError>>;
 
-    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
+    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_portfolio(
         &self,
         input: DeletePortfolioInput,
     ) -> Result<DeletePortfolioOutput, RusotoError<DeletePortfolioError>>;
 
-    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
     async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
     ) -> Result<DeletePortfolioShareOutput, RusotoError<DeletePortfolioShareError>>;
 
-    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
+    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_product(
         &self,
         input: DeleteProductInput,
@@ -7515,13 +7571,13 @@ pub trait ServiceCatalog {
         input: DescribeCopyProductStatusInput,
     ) -> Result<DescribeCopyProductStatusOutput, RusotoError<DescribeCopyProductStatusError>>;
 
-    /// <p>Gets information about the specified portfolio.</p>
+    /// <p>Gets information about the specified portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn describe_portfolio(
         &self,
         input: DescribePortfolioInput,
     ) -> Result<DescribePortfolioOutput, RusotoError<DescribePortfolioError>>;
 
-    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization or by a delegated admin.</p>
     async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
@@ -7602,7 +7658,7 @@ pub trait ServiceCatalog {
         input: DescribeTagOptionInput,
     ) -> Result<DescribeTagOptionOutput, RusotoError<DescribeTagOptionError>>;
 
-    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
     async fn disable_aws_organizations_access(
         &self,
     ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>;
@@ -7625,7 +7681,7 @@ pub trait ServiceCatalog {
         RusotoError<DisassociatePrincipalFromPortfolioError>,
     >;
 
-    /// <p>Disassociates the specified product from the specified portfolio. </p>
+    /// <p>Disassociates the specified product from the specified portfolio. </p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn disassociate_product_from_portfolio(
         &self,
         input: DisassociateProductFromPortfolioInput,
@@ -7652,7 +7708,7 @@ pub trait ServiceCatalog {
         RusotoError<DisassociateTagOptionFromResourceError>,
     >;
 
-    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
     async fn enable_aws_organizations_access(
         &self,
     ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>;
@@ -7672,7 +7728,7 @@ pub trait ServiceCatalog {
         RusotoError<ExecuteProvisionedProductServiceActionError>,
     >;
 
-    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization or by a delegated admin.</p>
     async fn get_aws_organizations_access_status(
         &self,
     ) -> Result<
@@ -7704,7 +7760,7 @@ pub trait ServiceCatalog {
         input: ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>>;
 
-    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,
@@ -7713,7 +7769,7 @@ pub trait ServiceCatalog {
         RusotoError<ListOrganizationPortfolioAccessError>,
     >;
 
-    /// <p>Lists the account IDs that have access to the specified portfolio.</p>
+    /// <p>Lists the account IDs that have access to the specified portfolio.</p> <p>A delegated admin can list the accounts that have access to the shared portfolio. Note that if a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_portfolio_access(
         &self,
         input: ListPortfolioAccessInput,
@@ -8032,7 +8088,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Associates the specified product with the specified portfolio.</p>
+    /// <p>Associates the specified product with the specified portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn associate_product_with_portfolio(
         &self,
         input: AssociateProductWithPortfolioInput,
@@ -8231,7 +8287,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Creates a constraint.</p>
+    /// <p>Creates a constraint.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_constraint(
         &self,
         input: CreateConstraintInput,
@@ -8261,7 +8317,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Creates a portfolio.</p>
+    /// <p>Creates a portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_portfolio(
         &self,
         input: CreatePortfolioInput,
@@ -8291,7 +8347,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p>
     async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
@@ -8322,7 +8378,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Creates a product.</p>
+    /// <p>Creates a product.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn create_product(
         &self,
         input: CreateProductInput,
@@ -8474,7 +8530,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Deletes the specified constraint.</p>
+    /// <p>Deletes the specified constraint.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_constraint(
         &self,
         input: DeleteConstraintInput,
@@ -8504,7 +8560,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
+    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_portfolio(
         &self,
         input: DeletePortfolioInput,
@@ -8534,7 +8590,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
     async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
@@ -8565,7 +8621,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
+    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn delete_product(
         &self,
         input: DeleteProductInput,
@@ -8779,7 +8835,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Gets information about the specified portfolio.</p>
+    /// <p>Gets information about the specified portfolio.</p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn describe_portfolio(
         &self,
         input: DescribePortfolioInput,
@@ -8809,7 +8865,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization or by a delegated admin.</p>
     async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
@@ -9187,7 +9243,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
     async fn disable_aws_organizations_access(
         &self,
     ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>
@@ -9287,7 +9343,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Disassociates the specified product from the specified portfolio. </p>
+    /// <p>Disassociates the specified product from the specified portfolio. </p> <p>A delegated admin is authorized to invoke this command.</p>
     async fn disassociate_product_from_portfolio(
         &self,
         input: DisassociateProductFromPortfolioInput,
@@ -9393,7 +9449,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
     async fn enable_aws_organizations_access(
         &self,
     ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>
@@ -9491,7 +9547,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization or by a delegated admin.</p>
     async fn get_aws_organizations_access_status(
         &self,
     ) -> Result<
@@ -9650,7 +9706,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,
@@ -9686,7 +9742,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         }
     }
 
-    /// <p>Lists the account IDs that have access to the specified portfolio.</p>
+    /// <p>Lists the account IDs that have access to the specified portfolio.</p> <p>A delegated admin can list the accounts that have access to the shared portfolio. Note that if a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_portfolio_access(
         &self,
         input: ListPortfolioAccessInput,
