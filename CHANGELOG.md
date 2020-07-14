@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add event-stream protocol support (currently only for JSON APIs, used in `subscribe_to_shard` call in Kinesis)
 - Extract common generated code into utility functions to improve compile times
+- Allow creating a ProfileProvider with only the profile
 
 ## [0.44.0] - 2020-06-01
 
