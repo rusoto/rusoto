@@ -5807,6 +5807,7 @@ impl ImageBuilderClient {
 #[async_trait]
 impl ImageBuilder for ImageBuilderClient {
     /// <p>CancelImageCreation cancels the creation of Image. This operation can only be used on images in a non-terminal state.</p>
+    #[allow(unused_mut)]
     async fn cancel_image_creation(
         &self,
         input: CancelImageCreationRequest,
@@ -5825,7 +5826,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelImageCreationResponse, _>()?;
 
@@ -5837,6 +5838,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Creates a new component that can be used to build, validate, test, and assess your image.</p>
+    #[allow(unused_mut)]
     async fn create_component(
         &self,
         input: CreateComponentRequest,
@@ -5855,7 +5857,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateComponentResponse, _>()?;
 
@@ -5867,6 +5869,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    #[allow(unused_mut)]
     async fn create_distribution_configuration(
         &self,
         input: CreateDistributionConfigurationRequest,
@@ -5888,7 +5891,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDistributionConfigurationResponse, _>()?;
 
@@ -5902,6 +5905,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn create_image(
         &self,
         input: CreateImageRequest,
@@ -5920,7 +5924,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImageResponse, _>()?;
 
@@ -5932,6 +5936,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    #[allow(unused_mut)]
     async fn create_image_pipeline(
         &self,
         input: CreateImagePipelineRequest,
@@ -5950,7 +5955,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImagePipelineResponse, _>()?;
 
@@ -5962,6 +5967,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed. </p>
+    #[allow(unused_mut)]
     async fn create_image_recipe(
         &self,
         input: CreateImageRecipeRequest,
@@ -5980,7 +5986,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImageRecipeResponse, _>()?;
 
@@ -5992,6 +5998,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    #[allow(unused_mut)]
     async fn create_infrastructure_configuration(
         &self,
         input: CreateInfrastructureConfigurationRequest,
@@ -6013,7 +6020,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInfrastructureConfigurationResponse, _>()?;
 
@@ -6027,6 +6034,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes a component build version. </p>
+    #[allow(unused_mut)]
     async fn delete_component(
         &self,
         input: DeleteComponentRequest,
@@ -6049,7 +6057,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteComponentResponse, _>()?;
 
@@ -6061,6 +6069,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes a distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn delete_distribution_configuration(
         &self,
         input: DeleteDistributionConfigurationRequest,
@@ -6086,7 +6095,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDistributionConfigurationResponse, _>()?;
 
@@ -6100,6 +6109,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image. </p>
+    #[allow(unused_mut)]
     async fn delete_image(
         &self,
         input: DeleteImageRequest,
@@ -6119,7 +6129,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImageResponse, _>()?;
 
@@ -6131,6 +6141,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image pipeline. </p>
+    #[allow(unused_mut)]
     async fn delete_image_pipeline(
         &self,
         input: DeleteImagePipelineRequest,
@@ -6150,7 +6161,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImagePipelineResponse, _>()?;
 
@@ -6162,6 +6173,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image recipe. </p>
+    #[allow(unused_mut)]
     async fn delete_image_recipe(
         &self,
         input: DeleteImageRecipeRequest,
@@ -6181,7 +6193,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImageRecipeResponse, _>()?;
 
@@ -6193,6 +6205,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an infrastructure configuration. </p>
+    #[allow(unused_mut)]
     async fn delete_infrastructure_configuration(
         &self,
         input: DeleteInfrastructureConfigurationRequest,
@@ -6218,7 +6231,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInfrastructureConfigurationResponse, _>()?;
 
@@ -6232,6 +6245,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a component object. </p>
+    #[allow(unused_mut)]
     async fn get_component(
         &self,
         input: GetComponentRequest,
@@ -6254,7 +6268,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetComponentResponse, _>()?;
 
@@ -6266,6 +6280,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a component policy. </p>
+    #[allow(unused_mut)]
     async fn get_component_policy(
         &self,
         input: GetComponentPolicyRequest,
@@ -6285,7 +6300,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetComponentPolicyResponse, _>()?;
 
@@ -6297,6 +6312,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn get_distribution_configuration(
         &self,
         input: GetDistributionConfigurationRequest,
@@ -6320,7 +6336,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDistributionConfigurationResponse, _>()?;
 
@@ -6332,6 +6348,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image. </p>
+    #[allow(unused_mut)]
     async fn get_image(
         &self,
         input: GetImageRequest,
@@ -6351,7 +6368,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageResponse, _>()?;
 
@@ -6363,6 +6380,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image pipeline. </p>
+    #[allow(unused_mut)]
     async fn get_image_pipeline(
         &self,
         input: GetImagePipelineRequest,
@@ -6382,7 +6400,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImagePipelineResponse, _>()?;
 
@@ -6394,6 +6412,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image policy. </p>
+    #[allow(unused_mut)]
     async fn get_image_policy(
         &self,
         input: GetImagePolicyRequest,
@@ -6413,7 +6432,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImagePolicyResponse, _>()?;
 
@@ -6425,6 +6444,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image recipe. </p>
+    #[allow(unused_mut)]
     async fn get_image_recipe(
         &self,
         input: GetImageRecipeRequest,
@@ -6444,7 +6464,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageRecipeResponse, _>()?;
 
@@ -6456,6 +6476,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image recipe policy. </p>
+    #[allow(unused_mut)]
     async fn get_image_recipe_policy(
         &self,
         input: GetImageRecipePolicyRequest,
@@ -6475,7 +6496,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageRecipePolicyResponse, _>()?;
 
@@ -6487,6 +6508,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an infrastructure configuration. </p>
+    #[allow(unused_mut)]
     async fn get_infrastructure_configuration(
         &self,
         input: GetInfrastructureConfigurationRequest,
@@ -6512,7 +6534,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInfrastructureConfigurationResponse, _>()?;
 
@@ -6524,6 +6546,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Imports a component and transforms its data into a component document. </p>
+    #[allow(unused_mut)]
     async fn import_component(
         &self,
         input: ImportComponentRequest,
@@ -6542,7 +6565,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ImportComponentResponse, _>()?;
 
@@ -6554,6 +6577,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
+    #[allow(unused_mut)]
     async fn list_component_build_versions(
         &self,
         input: ListComponentBuildVersionsRequest,
@@ -6573,7 +6597,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListComponentBuildVersionsResponse, _>()?;
 
@@ -6585,6 +6609,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Returns the list of component build versions for the specified semantic version. </p>
+    #[allow(unused_mut)]
     async fn list_components(
         &self,
         input: ListComponentsRequest,
@@ -6603,7 +6628,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListComponentsResponse, _>()?;
 
@@ -6615,6 +6640,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of distribution configurations. </p>
+    #[allow(unused_mut)]
     async fn list_distribution_configurations(
         &self,
         input: ListDistributionConfigurationsRequest,
@@ -6636,7 +6662,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDistributionConfigurationsResponse, _>()?;
 
@@ -6648,6 +6674,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of distribution configurations. </p>
+    #[allow(unused_mut)]
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
@@ -6666,7 +6693,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImageBuildVersionsResponse, _>()?;
 
@@ -6678,6 +6705,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of images created by the specified pipeline. </p>
+    #[allow(unused_mut)]
     async fn list_image_pipeline_images(
         &self,
         input: ListImagePipelineImagesRequest,
@@ -6696,7 +6724,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagePipelineImagesResponse, _>()?;
 
@@ -6708,6 +6736,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Returns a list of image pipelines. </p>
+    #[allow(unused_mut)]
     async fn list_image_pipelines(
         &self,
         input: ListImagePipelinesRequest,
@@ -6726,7 +6755,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagePipelinesResponse, _>()?;
 
@@ -6738,6 +6767,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of image recipes. </p>
+    #[allow(unused_mut)]
     async fn list_image_recipes(
         &self,
         input: ListImageRecipesRequest,
@@ -6756,7 +6786,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImageRecipesResponse, _>()?;
 
@@ -6768,6 +6798,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns the list of image build versions for the specified semantic version. </p>
+    #[allow(unused_mut)]
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -6786,7 +6817,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagesResponse, _>()?;
 
@@ -6798,6 +6829,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of infrastructure configurations. </p>
+    #[allow(unused_mut)]
     async fn list_infrastructure_configurations(
         &self,
         input: ListInfrastructureConfigurationsRequest,
@@ -6819,7 +6851,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInfrastructureConfigurationsResponse, _>()?;
 
@@ -6833,6 +6865,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns the list of tags for the specified resource. </p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -6848,7 +6881,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -6860,6 +6893,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_component_policy(
         &self,
         input: PutComponentPolicyRequest,
@@ -6878,7 +6912,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutComponentPolicyResponse, _>()?;
 
@@ -6890,6 +6924,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_image_policy(
         &self,
         input: PutImagePolicyRequest,
@@ -6908,7 +6943,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutImagePolicyResponse, _>()?;
 
@@ -6920,6 +6955,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_image_recipe_policy(
         &self,
         input: PutImageRecipePolicyRequest,
@@ -6938,7 +6974,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutImageRecipePolicyResponse, _>()?;
 
@@ -6950,6 +6986,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Manually triggers a pipeline to create an image. </p>
+    #[allow(unused_mut)]
     async fn start_image_pipeline_execution(
         &self,
         input: StartImagePipelineExecutionRequest,
@@ -6969,7 +7006,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartImagePipelineExecutionResponse, _>()?;
 
@@ -6981,6 +7018,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Adds a tag to a resource. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6999,7 +7037,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -7011,6 +7049,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Removes a tag from a resource. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -7032,7 +7071,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -7044,6 +7083,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    #[allow(unused_mut)]
     async fn update_distribution_configuration(
         &self,
         input: UpdateDistributionConfigurationRequest,
@@ -7065,7 +7105,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDistributionConfigurationResponse, _>()?;
 
@@ -7079,6 +7119,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    #[allow(unused_mut)]
     async fn update_image_pipeline(
         &self,
         input: UpdateImagePipelineRequest,
@@ -7097,7 +7138,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateImagePipelineResponse, _>()?;
 
@@ -7109,6 +7150,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    #[allow(unused_mut)]
     async fn update_infrastructure_configuration(
         &self,
         input: UpdateInfrastructureConfigurationRequest,
@@ -7130,7 +7172,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInfrastructureConfigurationResponse, _>()?;
 

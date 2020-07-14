@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl MigrationHubConfigClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "mgh", &self.region, request_uri);
+        request.set_endpoint_prefix("migrationhub-config".to_string());
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -391,9 +418,7 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         &self,
         input: CreateHomeRegionControlRequest,
     ) -> Result<CreateHomeRegionControlResult, RusotoError<CreateHomeRegionControlError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-        request.set_endpoint_prefix("migrationhub-config".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHubMultiAccountService.CreateHomeRegionControl",
@@ -401,20 +426,13 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHomeRegionControlResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHomeRegionControlError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHomeRegionControlError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateHomeRegionControlResult, _>()
     }
 
     /// <p>This API permits filtering on the <code>ControlId</code> and <code>HomeRegion</code> fields.</p>
@@ -423,9 +441,7 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         input: DescribeHomeRegionControlsRequest,
     ) -> Result<DescribeHomeRegionControlsResult, RusotoError<DescribeHomeRegionControlsError>>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-        request.set_endpoint_prefix("migrationhub-config".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHubMultiAccountService.DescribeHomeRegionControls",
@@ -433,47 +449,31 @@ impl MigrationHubConfig for MigrationHubConfigClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeHomeRegionControlsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeHomeRegionControlsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeHomeRegionControlsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeHomeRegionControlsResult, _>()
     }
 
     /// <p>Returns the calling account’s home region, if configured. This API is used by other AWS services to determine the regional endpoint for calling AWS Application Discovery Service and Migration Hub. You must call <code>GetHomeRegion</code> at least once before you call any other AWS Application Discovery Service and AWS Migration Hub APIs, to obtain the account's Migration Hub home region.</p>
     async fn get_home_region(
         &self,
     ) -> Result<GetHomeRegionResult, RusotoError<GetHomeRegionError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-        request.set_endpoint_prefix("migrationhub-config".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHubMultiAccountService.GetHomeRegion",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetHomeRegionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetHomeRegionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetHomeRegionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetHomeRegionResult, _>()
     }
 }

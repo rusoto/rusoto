@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl DocdbClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2014-10-31");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 /// <p>Represents the input to <a>AddTagsToResource</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -65,11 +89,7 @@ struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents the input to <a>ApplyPendingMaintenanceAction</a>.</p>
@@ -248,11 +268,7 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -260,11 +276,7 @@ struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>A certificate authority (CA) certificate for an AWS account.</p>
@@ -3888,11 +3900,7 @@ struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3900,11 +3908,7 @@ struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5378,11 +5382,7 @@ struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -5486,11 +5486,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p> Detailed information about a subnet. </p>
@@ -5567,11 +5563,7 @@ struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Metadata assigned to an Amazon DocumentDB resource consisting of a key-value pair.</p>
@@ -5872,7 +5864,7 @@ impl AddTagsToResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5940,7 +5932,7 @@ impl ApplyPendingMaintenanceActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6014,7 +6006,7 @@ impl CopyDBClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6113,7 +6105,7 @@ impl CopyDBClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6280,7 +6272,7 @@ impl CreateDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6359,7 +6351,7 @@ impl CreateDBClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6446,7 +6438,7 @@ impl CreateDBClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6616,7 +6608,7 @@ impl CreateDBInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6722,7 +6714,7 @@ impl CreateDBSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6810,7 +6802,7 @@ impl DeleteDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6875,7 +6867,7 @@ impl DeleteDBClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6935,7 +6927,7 @@ impl DeleteDBClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7016,7 +7008,7 @@ impl DeleteDBInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7086,7 +7078,7 @@ impl DeleteDBSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7140,7 +7132,7 @@ impl DescribeCertificatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7190,7 +7182,7 @@ impl DescribeDBClusterParameterGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7240,7 +7232,7 @@ impl DescribeDBClusterParametersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7288,7 +7280,7 @@ impl DescribeDBClusterSnapshotAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7338,7 +7330,7 @@ impl DescribeDBClusterSnapshotsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7384,7 +7376,7 @@ impl DescribeDBClustersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7420,7 +7412,7 @@ impl DescribeDBEngineVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7462,7 +7454,7 @@ impl DescribeDBInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7508,7 +7500,7 @@ impl DescribeDBSubnetGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7548,7 +7540,7 @@ impl DescribeEngineDefaultClusterParametersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7582,7 +7574,7 @@ impl DescribeEventCategoriesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7616,7 +7608,7 @@ impl DescribeEventsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7652,7 +7644,7 @@ impl DescribeOrderableDBInstanceOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7698,7 +7690,7 @@ impl DescribePendingMaintenanceActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7762,7 +7754,7 @@ impl FailoverDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7824,7 +7816,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7946,7 +7938,7 @@ impl ModifyDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8019,7 +8011,7 @@ impl ModifyDBClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8088,7 +8080,7 @@ impl ModifyDBClusterSnapshotAttributeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8242,7 +8234,7 @@ impl ModifyDBInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8346,7 +8338,7 @@ impl ModifyDBSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8409,7 +8401,7 @@ impl RebootDBInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8474,7 +8466,7 @@ impl RemoveTagsFromResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8539,7 +8531,7 @@ impl ResetDBClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8705,7 +8697,7 @@ impl RestoreDBClusterFromSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8914,7 +8906,7 @@ impl RestoreDBClusterToPointInTimeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9014,7 +9006,7 @@ impl StartDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9074,7 +9066,7 @@ impl StopDBClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9402,23 +9394,15 @@ impl Docdb for DocdbClient {
         input: AddTagsToResourceMessage,
     ) -> Result<(), RusotoError<AddTagsToResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddTagsToResource");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("AddTagsToResource");
+        let mut params = params;
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddTagsToResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsToResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -9431,45 +9415,30 @@ impl Docdb for DocdbClient {
     ) -> Result<ApplyPendingMaintenanceActionResult, RusotoError<ApplyPendingMaintenanceActionError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ApplyPendingMaintenanceAction");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ApplyPendingMaintenanceAction");
+        let mut params = params;
         ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ApplyPendingMaintenanceActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ApplyPendingMaintenanceActionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplyPendingMaintenanceActionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
                 "ApplyPendingMaintenanceActionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9480,45 +9449,30 @@ impl Docdb for DocdbClient {
     ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CopyDBClusterParameterGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CopyDBClusterParameterGroup");
+        let mut params = params;
         CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CopyDBClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyDBClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CopyDBClusterParameterGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
                 "CopyDBClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9528,45 +9482,30 @@ impl Docdb for DocdbClient {
         input: CopyDBClusterSnapshotMessage,
     ) -> Result<CopyDBClusterSnapshotResult, RusotoError<CopyDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CopyDBClusterSnapshot");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CopyDBClusterSnapshot");
+        let mut params = params;
         CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CopyDBClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyDBClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CopyDBClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CopyDBClusterSnapshotResultDeserializer::deserialize(
                 "CopyDBClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9576,45 +9515,28 @@ impl Docdb for DocdbClient {
         input: CreateDBClusterMessage,
     ) -> Result<CreateDBClusterResult, RusotoError<CreateDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CreateDBCluster");
+        let mut params = params;
         CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateDBClusterResultDeserializer::deserialize(
-                "CreateDBClusterResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateDBClusterResultDeserializer::deserialize("CreateDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9625,45 +9547,30 @@ impl Docdb for DocdbClient {
     ) -> Result<CreateDBClusterParameterGroupResult, RusotoError<CreateDBClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDBClusterParameterGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CreateDBClusterParameterGroup");
+        let mut params = params;
         CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDBClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDBClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDBClusterParameterGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
                 "CreateDBClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9673,45 +9580,30 @@ impl Docdb for DocdbClient {
         input: CreateDBClusterSnapshotMessage,
     ) -> Result<CreateDBClusterSnapshotResult, RusotoError<CreateDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDBClusterSnapshot");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CreateDBClusterSnapshot");
+        let mut params = params;
         CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDBClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDBClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDBClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateDBClusterSnapshotResultDeserializer::deserialize(
                 "CreateDBClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9721,45 +9613,28 @@ impl Docdb for DocdbClient {
         input: CreateDBInstanceMessage,
     ) -> Result<CreateDBInstanceResult, RusotoError<CreateDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDBInstance");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CreateDBInstance");
+        let mut params = params;
         CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDBInstanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDBInstanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDBInstanceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateDBInstanceResultDeserializer::deserialize(
-                "CreateDBInstanceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateDBInstanceResultDeserializer::deserialize("CreateDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9769,45 +9644,30 @@ impl Docdb for DocdbClient {
         input: CreateDBSubnetGroupMessage,
     ) -> Result<CreateDBSubnetGroupResult, RusotoError<CreateDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDBSubnetGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("CreateDBSubnetGroup");
+        let mut params = params;
         CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDBSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDBSubnetGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDBSubnetGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateDBSubnetGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateDBSubnetGroupResultDeserializer::deserialize(
                 "CreateDBSubnetGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9817,45 +9677,28 @@ impl Docdb for DocdbClient {
         input: DeleteDBClusterMessage,
     ) -> Result<DeleteDBClusterResult, RusotoError<DeleteDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DeleteDBCluster");
+        let mut params = params;
         DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteDBClusterResultDeserializer::deserialize(
-                "DeleteDBClusterResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DeleteDBClusterResultDeserializer::deserialize("DeleteDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9865,23 +9708,15 @@ impl Docdb for DocdbClient {
         input: DeleteDBClusterParameterGroupMessage,
     ) -> Result<(), RusotoError<DeleteDBClusterParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDBClusterParameterGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DeleteDBClusterParameterGroup");
+        let mut params = params;
         DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDBClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDBClusterParameterGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -9893,45 +9728,30 @@ impl Docdb for DocdbClient {
         input: DeleteDBClusterSnapshotMessage,
     ) -> Result<DeleteDBClusterSnapshotResult, RusotoError<DeleteDBClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDBClusterSnapshot");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DeleteDBClusterSnapshot");
+        let mut params = params;
         DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDBClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDBClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteDBClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
                 "DeleteDBClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9941,45 +9761,28 @@ impl Docdb for DocdbClient {
         input: DeleteDBInstanceMessage,
     ) -> Result<DeleteDBInstanceResult, RusotoError<DeleteDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDBInstance");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DeleteDBInstance");
+        let mut params = params;
         DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDBInstanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDBInstanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteDBInstanceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteDBInstanceResultDeserializer::deserialize(
-                "DeleteDBInstanceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DeleteDBInstanceResultDeserializer::deserialize("DeleteDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -9989,23 +9792,15 @@ impl Docdb for DocdbClient {
         input: DeleteDBSubnetGroupMessage,
     ) -> Result<(), RusotoError<DeleteDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDBSubnetGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DeleteDBSubnetGroup");
+        let mut params = params;
         DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDBSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDBSubnetGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10017,45 +9812,28 @@ impl Docdb for DocdbClient {
         input: DescribeCertificatesMessage,
     ) -> Result<CertificateMessage, RusotoError<DescribeCertificatesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeCertificates");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeCertificates");
+        let mut params = params;
         DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeCertificatesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeCertificatesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CertificateMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CertificateMessageDeserializer::deserialize(
-                "DescribeCertificatesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CertificateMessageDeserializer::deserialize("DescribeCertificatesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10066,47 +9844,33 @@ impl Docdb for DocdbClient {
     ) -> Result<DBClusterParameterGroupsMessage, RusotoError<DescribeDBClusterParameterGroupsError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBClusterParameterGroups");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBClusterParameterGroups");
+        let mut params = params;
         DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBClusterParameterGroupsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDBClusterParameterGroupsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterParameterGroupsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterParameterGroupsMessageDeserializer::deserialize(
                 "DescribeDBClusterParameterGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10116,45 +9880,30 @@ impl Docdb for DocdbClient {
         input: DescribeDBClusterParametersMessage,
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBClusterParameters");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBClusterParameters");
+        let mut params = params;
         DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBClusterParametersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBClusterParametersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterParameterGroupDetails::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterParameterGroupDetailsDeserializer::deserialize(
                 "DescribeDBClusterParametersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10167,47 +9916,33 @@ impl Docdb for DocdbClient {
         RusotoError<DescribeDBClusterSnapshotAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBClusterSnapshotAttributes");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBClusterSnapshotAttributes");
+        let mut params = params;
         DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBClusterSnapshotAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDBClusterSnapshotAttributesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeDBClusterSnapshotAttributesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
                 "DescribeDBClusterSnapshotAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10217,45 +9952,30 @@ impl Docdb for DocdbClient {
         input: DescribeDBClusterSnapshotsMessage,
     ) -> Result<DBClusterSnapshotMessage, RusotoError<DescribeDBClusterSnapshotsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBClusterSnapshots");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBClusterSnapshots");
+        let mut params = params;
         DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBClusterSnapshotsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBClusterSnapshotsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterSnapshotMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBClusterSnapshotMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterSnapshotMessageDeserializer::deserialize(
                 "DescribeDBClusterSnapshotsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10265,43 +9985,28 @@ impl Docdb for DocdbClient {
         input: DescribeDBClustersMessage,
     ) -> Result<DBClusterMessage, RusotoError<DescribeDBClustersError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBClusters");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBClusters");
+        let mut params = params;
         DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBClustersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBClustersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DBClusterMessageDeserializer::deserialize("DescribeDBClustersResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10311,45 +10016,30 @@ impl Docdb for DocdbClient {
         input: DescribeDBEngineVersionsMessage,
     ) -> Result<DBEngineVersionMessage, RusotoError<DescribeDBEngineVersionsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBEngineVersions");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBEngineVersions");
+        let mut params = params;
         DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBEngineVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBEngineVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBEngineVersionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBEngineVersionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBEngineVersionMessageDeserializer::deserialize(
                 "DescribeDBEngineVersionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10359,45 +10049,28 @@ impl Docdb for DocdbClient {
         input: DescribeDBInstancesMessage,
     ) -> Result<DBInstanceMessage, RusotoError<DescribeDBInstancesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBInstances");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBInstances");
+        let mut params = params;
         DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBInstanceMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBInstanceMessageDeserializer::deserialize(
-                "DescribeDBInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DBInstanceMessageDeserializer::deserialize("DescribeDBInstancesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10407,45 +10080,30 @@ impl Docdb for DocdbClient {
         input: DescribeDBSubnetGroupsMessage,
     ) -> Result<DBSubnetGroupMessage, RusotoError<DescribeDBSubnetGroupsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDBSubnetGroups");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeDBSubnetGroups");
+        let mut params = params;
         DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDBSubnetGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDBSubnetGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBSubnetGroupMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBSubnetGroupMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBSubnetGroupMessageDeserializer::deserialize(
                 "DescribeDBSubnetGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10458,47 +10116,33 @@ impl Docdb for DocdbClient {
         RusotoError<DescribeEngineDefaultClusterParametersError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEngineDefaultClusterParameters");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeEngineDefaultClusterParameters");
+        let mut params = params;
         DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEngineDefaultClusterParametersError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeEngineDefaultClusterParametersError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeEngineDefaultClusterParametersResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
                 "DescribeEngineDefaultClusterParametersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10508,45 +10152,30 @@ impl Docdb for DocdbClient {
         input: DescribeEventCategoriesMessage,
     ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEventCategories");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeEventCategories");
+        let mut params = params;
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventCategoriesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventCategoriesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventCategoriesMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventCategoriesMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventCategoriesMessageDeserializer::deserialize(
                 "DescribeEventCategoriesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10556,42 +10185,27 @@ impl Docdb for DocdbClient {
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEvents");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeEvents");
+        let mut params = params;
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10604,47 +10218,33 @@ impl Docdb for DocdbClient {
         RusotoError<DescribeOrderableDBInstanceOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeOrderableDBInstanceOptions");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribeOrderableDBInstanceOptions");
+        let mut params = params;
         DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeOrderableDBInstanceOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrderableDBInstanceOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = OrderableDBInstanceOptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
                 "DescribeOrderableDBInstanceOptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10655,47 +10255,33 @@ impl Docdb for DocdbClient {
     ) -> Result<PendingMaintenanceActionsMessage, RusotoError<DescribePendingMaintenanceActionsError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribePendingMaintenanceActions");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("DescribePendingMaintenanceActions");
+        let mut params = params;
         DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribePendingMaintenanceActionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribePendingMaintenanceActionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PendingMaintenanceActionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PendingMaintenanceActionsMessageDeserializer::deserialize(
                 "DescribePendingMaintenanceActionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10705,45 +10291,28 @@ impl Docdb for DocdbClient {
         input: FailoverDBClusterMessage,
     ) -> Result<FailoverDBClusterResult, RusotoError<FailoverDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "FailoverDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("FailoverDBCluster");
+        let mut params = params;
         FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(FailoverDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, FailoverDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = FailoverDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = FailoverDBClusterResultDeserializer::deserialize(
-                "FailoverDBClusterResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                FailoverDBClusterResultDeserializer::deserialize("FailoverDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10753,43 +10322,28 @@ impl Docdb for DocdbClient {
         input: ListTagsForResourceMessage,
     ) -> Result<TagListMessage, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTagsForResource");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ListTagsForResource");
+        let mut params = params;
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TagListMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                TagListMessageDeserializer::deserialize("ListTagsForResourceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10799,45 +10353,28 @@ impl Docdb for DocdbClient {
         input: ModifyDBClusterMessage,
     ) -> Result<ModifyDBClusterResult, RusotoError<ModifyDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ModifyDBCluster");
+        let mut params = params;
         ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyDBClusterResultDeserializer::deserialize(
-                "ModifyDBClusterResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ModifyDBClusterResultDeserializer::deserialize("ModifyDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10848,45 +10385,30 @@ impl Docdb for DocdbClient {
     ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ModifyDBClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyDBClusterParameterGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ModifyDBClusterParameterGroup");
+        let mut params = params;
         ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyDBClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyDBClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterParameterGroupNameMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyDBClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10899,47 +10421,33 @@ impl Docdb for DocdbClient {
         RusotoError<ModifyDBClusterSnapshotAttributeError>,
     > {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyDBClusterSnapshotAttribute");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ModifyDBClusterSnapshotAttribute");
+        let mut params = params;
         ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyDBClusterSnapshotAttributeError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ModifyDBClusterSnapshotAttributeError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyDBClusterSnapshotAttributeResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
                 "ModifyDBClusterSnapshotAttributeResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10949,45 +10457,28 @@ impl Docdb for DocdbClient {
         input: ModifyDBInstanceMessage,
     ) -> Result<ModifyDBInstanceResult, RusotoError<ModifyDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyDBInstance");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ModifyDBInstance");
+        let mut params = params;
         ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyDBInstanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyDBInstanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyDBInstanceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyDBInstanceResultDeserializer::deserialize(
-                "ModifyDBInstanceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ModifyDBInstanceResultDeserializer::deserialize("ModifyDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10997,45 +10488,30 @@ impl Docdb for DocdbClient {
         input: ModifyDBSubnetGroupMessage,
     ) -> Result<ModifyDBSubnetGroupResult, RusotoError<ModifyDBSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyDBSubnetGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ModifyDBSubnetGroup");
+        let mut params = params;
         ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyDBSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyDBSubnetGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyDBSubnetGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyDBSubnetGroupResultDeserializer::deserialize(
                 "ModifyDBSubnetGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11045,45 +10521,28 @@ impl Docdb for DocdbClient {
         input: RebootDBInstanceMessage,
     ) -> Result<RebootDBInstanceResult, RusotoError<RebootDBInstanceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RebootDBInstance");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("RebootDBInstance");
+        let mut params = params;
         RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RebootDBInstanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RebootDBInstanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RebootDBInstanceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RebootDBInstanceResultDeserializer::deserialize(
-                "RebootDBInstanceResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                RebootDBInstanceResultDeserializer::deserialize("RebootDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11093,23 +10552,15 @@ impl Docdb for DocdbClient {
         input: RemoveTagsFromResourceMessage,
     ) -> Result<(), RusotoError<RemoveTagsFromResourceError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemoveTagsFromResource");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("RemoveTagsFromResource");
+        let mut params = params;
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemoveTagsFromResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveTagsFromResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11122,45 +10573,30 @@ impl Docdb for DocdbClient {
     ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ResetDBClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResetDBClusterParameterGroup");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("ResetDBClusterParameterGroup");
+        let mut params = params;
         ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResetDBClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResetDBClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DBClusterParameterGroupNameMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ResetDBClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11171,45 +10607,30 @@ impl Docdb for DocdbClient {
     ) -> Result<RestoreDBClusterFromSnapshotResult, RusotoError<RestoreDBClusterFromSnapshotError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RestoreDBClusterFromSnapshot");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("RestoreDBClusterFromSnapshot");
+        let mut params = params;
         RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreDBClusterFromSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreDBClusterFromSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RestoreDBClusterFromSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
                 "RestoreDBClusterFromSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11220,45 +10641,30 @@ impl Docdb for DocdbClient {
     ) -> Result<RestoreDBClusterToPointInTimeResult, RusotoError<RestoreDBClusterToPointInTimeError>>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RestoreDBClusterToPointInTime");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("RestoreDBClusterToPointInTime");
+        let mut params = params;
         RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreDBClusterToPointInTimeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreDBClusterToPointInTimeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RestoreDBClusterToPointInTimeResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
                 "RestoreDBClusterToPointInTimeResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11268,43 +10674,28 @@ impl Docdb for DocdbClient {
         input: StartDBClusterMessage,
     ) -> Result<StartDBClusterResult, RusotoError<StartDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "StartDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("StartDBCluster");
+        let mut params = params;
         StartDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(StartDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, StartDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = StartDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                StartDBClusterResultDeserializer::deserialize("StartDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11314,43 +10705,28 @@ impl Docdb for DocdbClient {
         input: StopDBClusterMessage,
     ) -> Result<StopDBClusterResult, RusotoError<StopDBClusterError>> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "StopDBCluster");
-        params.put("Version", "2014-10-31");
+        let params = self.new_params("StopDBCluster");
+        let mut params = params;
         StopDBClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(StopDBClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, StopDBClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = StopDBClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                StopDBClusterResultDeserializer::deserialize("StopDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

@@ -1113,6 +1113,7 @@ impl Iot1ClickDevicesClient {
 impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
     /// received a claim code with the device(s).</p>
+    #[allow(unused_mut)]
     async fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
@@ -1130,7 +1131,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClaimDevicesByClaimCodeResponse, _>()?;
 
@@ -1143,6 +1144,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
     /// details of the device.</p>
+    #[allow(unused_mut)]
     async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
@@ -1160,7 +1162,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeviceResponse, _>()?;
 
@@ -1177,6 +1179,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
+    #[allow(unused_mut)]
     async fn finalize_device_claim(
         &self,
         input: FinalizeDeviceClaimRequest,
@@ -1199,7 +1202,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<FinalizeDeviceClaimResponse, _>()?;
 
@@ -1211,6 +1214,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
+    #[allow(unused_mut)]
     async fn get_device_methods(
         &self,
         input: GetDeviceMethodsRequest,
@@ -1228,7 +1232,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeviceMethodsResponse, _>()?;
 
@@ -1245,6 +1249,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
+    #[allow(unused_mut)]
     async fn initiate_device_claim(
         &self,
         input: InitiateDeviceClaimRequest,
@@ -1265,7 +1270,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InitiateDeviceClaimResponse, _>()?;
 
@@ -1278,6 +1283,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Given a device ID, issues a request to invoke a named device method (with possible
     /// parameters). See the "Example POST" code snippet below.</p>
+    #[allow(unused_mut)]
     async fn invoke_device_method(
         &self,
         input: InvokeDeviceMethodRequest,
@@ -1297,7 +1303,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InvokeDeviceMethodResponse, _>()?;
 
@@ -1310,6 +1316,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
     /// array of events for the device.</p>
+    #[allow(unused_mut)]
     async fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -1338,7 +1345,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDeviceEventsResponse, _>()?;
 
@@ -1350,6 +1357,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
@@ -1379,7 +1387,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDevicesResponse, _>()?;
 
@@ -1391,6 +1399,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Lists the tags associated with the specified resource ARN.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1408,7 +1417,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1421,6 +1430,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
     /// resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1440,7 +1450,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1451,6 +1461,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Disassociates a device from your AWS account using its device ID.</p>
+    #[allow(unused_mut)]
     async fn unclaim_device(
         &self,
         input: UnclaimDeviceRequest,
@@ -1468,7 +1479,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UnclaimDeviceResponse, _>()?;
 
@@ -1481,6 +1492,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
     /// resource ARN.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1504,7 +1516,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1516,6 +1528,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using a Boolean value (true or false), this operation
     /// enables or disables the device given a device ID.</p>
+    #[allow(unused_mut)]
     async fn update_device_state(
         &self,
         input: UpdateDeviceStateRequest,
@@ -1535,7 +1548,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeviceStateResponse, _>()?;
 

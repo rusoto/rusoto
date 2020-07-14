@@ -138,6 +138,7 @@ impl PersonalizeEventsClient {
 #[async_trait]
 impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Records user interaction event data.</p>
+    #[allow(unused_mut)]
     async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>> {
         let request_uri = "/events";
 
@@ -154,7 +155,7 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

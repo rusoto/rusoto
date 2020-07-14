@@ -118,6 +118,7 @@ fn payload_body_parser(
     match payload_type {
         ShapeType::Blob if !streaming => {
             format!("
+                let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
@@ -141,6 +142,7 @@ fn payload_body_parser(
         }
         _ => {
             format!("
+                let mut response = response;
                 let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(String::from_utf8_lossy(response.body.as_ref()).into());
@@ -166,57 +168,46 @@ fn xml_body_parser(
         return "unimplemented!()".to_string();
     }
 
-    let let_result = if mutable_result {
-        "let mut result;"
-    } else {
-        "let result;"
-    };
-
     let xml_deserialize = if needs_xml_deserializer(shape) {
         let deserialize = match *result_wrapper {
             Some(ref tag_name) => format!(
-                "start_element(&actual_tag_name, &mut stack)?;
-                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
-                     skip_tree(&mut stack);
-                     end_element(&actual_tag_name, &mut stack)?;",
+                "|actual_tag_name, stack| {{
+                     xml_util::start_element(actual_tag_name, stack)?;
+                     let result = {output_shape}Deserializer::deserialize(\"{tag_name}\", stack)?;
+                     skip_tree(stack);
+                     xml_util::end_element(actual_tag_name, stack)?;
+                     Ok(result)
+                }}",
                 output_shape = output_shape,
                 tag_name = tag_name
             ),
             None => format!(
-                "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
+                "|actual_tag_name, stack| {output_shape}Deserializer::deserialize(actual_tag_name, stack)",
                 output_shape = output_shape
             ),
         };
         format!(
-            "let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {{
-            result = {output_shape}::default();
-        }} else {{
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false)
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            {deserialize}
-        }}",
-            output_shape = output_shape,
+            "let mut response = response;
+            let result = xml_util::parse_response(&mut response, {deserialize}).await?;",
             deserialize = deserialize,
         )
     } else {
         format!(
-            "result = {output_shape}::default();",
+            "let result = {output_shape}::default();",
             output_shape = output_shape,
         )
     };
 
     format!(
-        "{let_result}
-        {xml_deserialize}
+        "{xml_deserialize}
+        {let_result}
         {parse_non_payload} // parse non-payload
         Ok(result)",
-        let_result = let_result,
+        let_result = if mutable_result {
+            "let mut result = result;"
+        } else {
+            ""
+        },
         xml_deserialize = xml_deserialize,
         parse_non_payload = parse_non_payload
     )
@@ -349,12 +340,12 @@ fn generate_map_deserializer(shape: &Shape) -> String {
         "
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == {entry_location} {{
-            start_element({entry_location}, stack)?;
+        while xml_util::peek_at_name(stack)? == {entry_location} {{
+            xml_util::start_element({entry_location}, stack)?;
             let key = {key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack)?;
             let value = {value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack)?;
             obj.insert(key, value);
-            end_element({entry_location}, stack)?;
+            xml_util::end_element({entry_location}, stack)?;
         }}
         ",
         key_tag_name = key.tag_name(),
@@ -373,10 +364,10 @@ fn generate_map_deserializer(shape: &Shape) -> String {
             entries_parser = entries_parser
         ),
         _ => format!(
-            "start_element(tag_name, stack)?;
-                    {entries_parser}
-                    end_element(tag_name, stack)?;
-                    Ok(obj)
+            "xml_util::start_element(tag_name, stack)?;
+            {entries_parser}
+            xml_util::end_element(tag_name, stack)?;
+            Ok(obj)
                     ",
             entries_parser = entries_parser
         ),
@@ -384,29 +375,20 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 }
 
 fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> String {
-    let statement = match shape.shape_type {
-        ShapeType::String if percent_decode => {
-            "rusoto_core::signature::decode_uri(&characters(stack)?)"
-        }
-        ShapeType::String | ShapeType::Timestamp => "characters(stack)?",
-        ShapeType::Integer | ShapeType::Long => {
-            "i64::from_str(characters(stack)?.as_ref()).unwrap()"
-        }
-        ShapeType::Double => "f64::from_str(characters(stack)?.as_ref()).unwrap()",
-        ShapeType::Float => "f32::from_str(characters(stack)?.as_ref()).unwrap()",
-        ShapeType::Blob => "characters(stack)?.into()",
-        ShapeType::Boolean => "bool::from_str(characters(stack)?.as_ref()).unwrap()",
+    let deserialize = match shape.shape_type {
+        ShapeType::String if percent_decode => "|s| Ok(rusoto_core::signature::decode_uri(&s))",
+        ShapeType::String | ShapeType::Timestamp => "Ok",
+        ShapeType::Integer | ShapeType::Long => "|s| Ok(i64::from_str(&s).unwrap())",
+        ShapeType::Double => "|s| Ok(f64::from_str(&s).unwrap())",
+        ShapeType::Float => "|s| Ok(f32::from_str(&s).unwrap())",
+        ShapeType::Blob => "|s| Ok(s.into())",
+        ShapeType::Boolean => "|s| Ok(bool::from_str(&s).unwrap())",
         _ => panic!("Unknown primitive shape type"),
     };
 
     format!(
-        "start_element(tag_name, stack)?;
-        let obj = {statement};
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-        ",
-        statement = statement,
+        "xml_util::deserialize_primitive(tag_name, stack, {deserialize})",
+        deserialize = deserialize,
     )
 }
 
@@ -451,11 +433,11 @@ fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape
 
     if !needs_xml_deserializer || shape.members.as_ref().unwrap().is_empty() {
         return format!(
-            "start_element(tag_name, stack)?;
+            "xml_util::start_element(tag_name, stack)?;
 
             let obj = {name}::default();
 
-            end_element(tag_name, stack)?;
+            xml_util::end_element(tag_name, stack)?;
 
             Ok(obj)
             ",

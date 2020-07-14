@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,19 +33,39 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl SnsClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-03-31");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct AccountDeserializer;
 impl AccountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -102,11 +122,7 @@ struct AttributeNameDeserializer;
 impl AttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -114,11 +130,7 @@ struct AttributeValueDeserializer;
 impl AttributeValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -126,11 +138,7 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>The input for the <code>CheckIfPhoneNumberIsOptedOut</code> action.</p>
@@ -529,11 +537,7 @@ struct EndpointDeserializer;
 impl EndpointDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Input for GetEndpointAttributes action.</p>
@@ -1308,19 +1312,19 @@ impl MapStringToStringDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = StringDeserializer::deserialize("key", stack)?;
             let value = StringDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -1400,11 +1404,7 @@ struct MessageIdDeserializer;
 impl MessageIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1412,11 +1412,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Input for the OptInPhoneNumber action.</p>
@@ -1453,11 +1449,11 @@ impl OptInPhoneNumberResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptInPhoneNumberResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = OptInPhoneNumberResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1467,11 +1463,7 @@ struct PhoneNumberDeserializer;
 impl PhoneNumberDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1535,11 +1527,7 @@ struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Input for Publish action.</p>
@@ -1745,11 +1733,11 @@ impl SetSMSAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetSMSAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetSMSAttributesResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1826,11 +1814,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Input for Subscribe action.</p>
@@ -1964,11 +1948,7 @@ struct SubscriptionARNDeserializer;
 impl SubscriptionARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1979,19 +1959,19 @@ impl SubscriptionAttributesMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = AttributeNameDeserializer::deserialize("key", stack)?;
             let value = AttributeValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -2080,11 +2060,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2164,11 +2140,11 @@ impl TagResourceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagResourceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = TagResourceResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2178,11 +2154,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>
@@ -2214,11 +2186,7 @@ struct TopicARNDeserializer;
 impl TopicARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2229,19 +2197,19 @@ impl TopicAttributesMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = AttributeNameDeserializer::deserialize("key", stack)?;
             let value = AttributeValueDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -2339,11 +2307,11 @@ impl UntagResourceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UntagResourceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UntagResourceResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2400,7 +2368,7 @@ impl AddPermissionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2474,7 +2442,7 @@ impl CheckIfPhoneNumberIsOptedOutError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2564,7 +2532,7 @@ impl ConfirmSubscriptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2633,7 +2601,7 @@ impl CreatePlatformApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2700,7 +2668,7 @@ impl CreatePlatformEndpointError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2803,7 +2771,7 @@ impl CreateTopicError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2869,7 +2837,7 @@ impl DeleteEndpointError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2931,7 +2899,7 @@ impl DeletePlatformApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3019,7 +2987,7 @@ impl DeleteTopicError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3090,7 +3058,7 @@ impl GetEndpointAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3166,7 +3134,7 @@ impl GetPlatformApplicationAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3240,7 +3208,7 @@ impl GetSMSAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3310,7 +3278,7 @@ impl GetSubscriptionAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3385,7 +3353,7 @@ impl GetTopicAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3462,7 +3430,7 @@ impl ListEndpointsByPlatformApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3536,7 +3504,7 @@ impl ListPhoneNumbersOptedOutError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3597,7 +3565,7 @@ impl ListPlatformApplicationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3657,7 +3625,7 @@ impl ListSubscriptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3724,7 +3692,7 @@ impl ListSubscriptionsByTopicError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3799,7 +3767,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3861,7 +3829,7 @@ impl ListTopicsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3928,7 +3896,7 @@ impl OptInPhoneNumberError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4064,7 +4032,7 @@ impl PublishError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4142,7 +4110,7 @@ impl RemovePermissionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4210,7 +4178,7 @@ impl SetEndpointAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4286,7 +4254,7 @@ impl SetPlatformApplicationAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4360,7 +4328,7 @@ impl SetSMSAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4439,7 +4407,7 @@ impl SetSubscriptionAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4517,7 +4485,7 @@ impl SetTopicAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4605,7 +4573,7 @@ impl SubscribeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4697,7 +4665,7 @@ impl TagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4775,7 +4743,7 @@ impl UnsubscribeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4865,7 +4833,7 @@ impl UntagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5137,23 +5105,15 @@ impl Sns for SnsClient {
         input: AddPermissionInput,
     ) -> Result<(), RusotoError<AddPermissionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddPermission");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("AddPermission");
+        let mut params = params;
         AddPermissionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddPermissionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddPermissionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -5166,45 +5126,30 @@ impl Sns for SnsClient {
     ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, RusotoError<CheckIfPhoneNumberIsOptedOutError>>
     {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CheckIfPhoneNumberIsOptedOut");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("CheckIfPhoneNumberIsOptedOut");
+        let mut params = params;
         CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CheckIfPhoneNumberIsOptedOutError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CheckIfPhoneNumberIsOptedOutError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CheckIfPhoneNumberIsOptedOutResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CheckIfPhoneNumberIsOptedOutResponseDeserializer::deserialize(
                 "CheckIfPhoneNumberIsOptedOutResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5214,45 +5159,30 @@ impl Sns for SnsClient {
         input: ConfirmSubscriptionInput,
     ) -> Result<ConfirmSubscriptionResponse, RusotoError<ConfirmSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ConfirmSubscription");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ConfirmSubscription");
+        let mut params = params;
         ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ConfirmSubscriptionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ConfirmSubscriptionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfirmSubscriptionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfirmSubscriptionResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfirmSubscriptionResponseDeserializer::deserialize(
                 "ConfirmSubscriptionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5263,45 +5193,30 @@ impl Sns for SnsClient {
     ) -> Result<CreatePlatformApplicationResponse, RusotoError<CreatePlatformApplicationError>>
     {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreatePlatformApplication");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("CreatePlatformApplication");
+        let mut params = params;
         CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePlatformApplicationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePlatformApplicationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreatePlatformApplicationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreatePlatformApplicationResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreatePlatformApplicationResponseDeserializer::deserialize(
                 "CreatePlatformApplicationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5311,45 +5226,30 @@ impl Sns for SnsClient {
         input: CreatePlatformEndpointInput,
     ) -> Result<CreateEndpointResponse, RusotoError<CreatePlatformEndpointError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreatePlatformEndpoint");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("CreatePlatformEndpoint");
+        let mut params = params;
         CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePlatformEndpointError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePlatformEndpointError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateEndpointResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateEndpointResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateEndpointResponseDeserializer::deserialize(
                 "CreatePlatformEndpointResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5359,42 +5259,27 @@ impl Sns for SnsClient {
         input: CreateTopicInput,
     ) -> Result<CreateTopicResponse, RusotoError<CreateTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateTopic");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("CreateTopic");
+        let mut params = params;
         CreateTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTopicError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTopicError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateTopicResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateTopicResponseDeserializer::deserialize("CreateTopicResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateTopicResponseDeserializer::deserialize("CreateTopicResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5404,23 +5289,15 @@ impl Sns for SnsClient {
         input: DeleteEndpointInput,
     ) -> Result<(), RusotoError<DeleteEndpointError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteEndpoint");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("DeleteEndpoint");
+        let mut params = params;
         DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteEndpointError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEndpointError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -5432,23 +5309,15 @@ impl Sns for SnsClient {
         input: DeletePlatformApplicationInput,
     ) -> Result<(), RusotoError<DeletePlatformApplicationError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeletePlatformApplication");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("DeletePlatformApplication");
+        let mut params = params;
         DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePlatformApplicationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePlatformApplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -5460,23 +5329,15 @@ impl Sns for SnsClient {
         input: DeleteTopicInput,
     ) -> Result<(), RusotoError<DeleteTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteTopic");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("DeleteTopic");
+        let mut params = params;
         DeleteTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTopicError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTopicError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -5488,45 +5349,30 @@ impl Sns for SnsClient {
         input: GetEndpointAttributesInput,
     ) -> Result<GetEndpointAttributesResponse, RusotoError<GetEndpointAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetEndpointAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("GetEndpointAttributes");
+        let mut params = params;
         GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetEndpointAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetEndpointAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetEndpointAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetEndpointAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetEndpointAttributesResponseDeserializer::deserialize(
                 "GetEndpointAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5539,47 +5385,33 @@ impl Sns for SnsClient {
         RusotoError<GetPlatformApplicationAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetPlatformApplicationAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("GetPlatformApplicationAttributes");
+        let mut params = params;
         GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPlatformApplicationAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetPlatformApplicationAttributesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPlatformApplicationAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetPlatformApplicationAttributesResponseDeserializer::deserialize(
                 "GetPlatformApplicationAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5589,45 +5421,28 @@ impl Sns for SnsClient {
         input: GetSMSAttributesInput,
     ) -> Result<GetSMSAttributesResponse, RusotoError<GetSMSAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSMSAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("GetSMSAttributes");
+        let mut params = params;
         GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSMSAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSMSAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSMSAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSMSAttributesResponseDeserializer::deserialize(
-                "GetSMSAttributesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetSMSAttributesResponseDeserializer::deserialize("GetSMSAttributesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5638,45 +5453,30 @@ impl Sns for SnsClient {
     ) -> Result<GetSubscriptionAttributesResponse, RusotoError<GetSubscriptionAttributesError>>
     {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSubscriptionAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("GetSubscriptionAttributes");
+        let mut params = params;
         GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSubscriptionAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSubscriptionAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSubscriptionAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSubscriptionAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetSubscriptionAttributesResponseDeserializer::deserialize(
                 "GetSubscriptionAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5686,45 +5486,30 @@ impl Sns for SnsClient {
         input: GetTopicAttributesInput,
     ) -> Result<GetTopicAttributesResponse, RusotoError<GetTopicAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetTopicAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("GetTopicAttributes");
+        let mut params = params;
         GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTopicAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTopicAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTopicAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTopicAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetTopicAttributesResponseDeserializer::deserialize(
                 "GetTopicAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5737,47 +5522,33 @@ impl Sns for SnsClient {
         RusotoError<ListEndpointsByPlatformApplicationError>,
     > {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListEndpointsByPlatformApplication");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListEndpointsByPlatformApplication");
+        let mut params = params;
         ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListEndpointsByPlatformApplicationError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListEndpointsByPlatformApplicationError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListEndpointsByPlatformApplicationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListEndpointsByPlatformApplicationResponseDeserializer::deserialize(
                 "ListEndpointsByPlatformApplicationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5787,45 +5558,30 @@ impl Sns for SnsClient {
         input: ListPhoneNumbersOptedOutInput,
     ) -> Result<ListPhoneNumbersOptedOutResponse, RusotoError<ListPhoneNumbersOptedOutError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPhoneNumbersOptedOut");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListPhoneNumbersOptedOut");
+        let mut params = params;
         ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPhoneNumbersOptedOutError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPhoneNumbersOptedOutError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPhoneNumbersOptedOutResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPhoneNumbersOptedOutResponseDeserializer::deserialize(
                 "ListPhoneNumbersOptedOutResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5835,45 +5591,30 @@ impl Sns for SnsClient {
         input: ListPlatformApplicationsInput,
     ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPlatformApplications");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListPlatformApplications");
+        let mut params = params;
         ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPlatformApplicationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPlatformApplicationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPlatformApplicationsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPlatformApplicationsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPlatformApplicationsResponseDeserializer::deserialize(
                 "ListPlatformApplicationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5883,45 +5624,30 @@ impl Sns for SnsClient {
         input: ListSubscriptionsInput,
     ) -> Result<ListSubscriptionsResponse, RusotoError<ListSubscriptionsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListSubscriptions");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListSubscriptions");
+        let mut params = params;
         ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListSubscriptionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSubscriptionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListSubscriptionsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListSubscriptionsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSubscriptionsResponseDeserializer::deserialize(
                 "ListSubscriptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5931,45 +5657,30 @@ impl Sns for SnsClient {
         input: ListSubscriptionsByTopicInput,
     ) -> Result<ListSubscriptionsByTopicResponse, RusotoError<ListSubscriptionsByTopicError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListSubscriptionsByTopic");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListSubscriptionsByTopic");
+        let mut params = params;
         ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListSubscriptionsByTopicError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSubscriptionsByTopicError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListSubscriptionsByTopicResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSubscriptionsByTopicResponseDeserializer::deserialize(
                 "ListSubscriptionsByTopicResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -5979,45 +5690,30 @@ impl Sns for SnsClient {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTagsForResource");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListTagsForResource");
+        let mut params = params;
         ListTagsForResourceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTagsForResourceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTagsForResourceResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListTagsForResourceResponseDeserializer::deserialize(
                 "ListTagsForResourceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6027,42 +5723,27 @@ impl Sns for SnsClient {
         input: ListTopicsInput,
     ) -> Result<ListTopicsResponse, RusotoError<ListTopicsError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTopics");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("ListTopics");
+        let mut params = params;
         ListTopicsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTopicsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTopicsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTopicsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListTopicsResponseDeserializer::deserialize("ListTopicsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListTopicsResponseDeserializer::deserialize("ListTopicsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6072,27 +5753,19 @@ impl Sns for SnsClient {
         input: OptInPhoneNumberInput,
     ) -> Result<OptInPhoneNumberResponse, RusotoError<OptInPhoneNumberError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "OptInPhoneNumber");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("OptInPhoneNumber");
+        let mut params = params;
         OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(OptInPhoneNumberError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, OptInPhoneNumberError::from_response)
+            .await?;
 
-        let result;
-        result = OptInPhoneNumberResponse::default();
-        // parse non-payload
+        let result = OptInPhoneNumberResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6102,42 +5775,27 @@ impl Sns for SnsClient {
         input: PublishInput,
     ) -> Result<PublishResponse, RusotoError<PublishError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "Publish");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("Publish");
+        let mut params = params;
         PublishInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PublishError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PublishError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PublishResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PublishResponseDeserializer::deserialize("PublishResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PublishResponseDeserializer::deserialize("PublishResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6147,23 +5805,15 @@ impl Sns for SnsClient {
         input: RemovePermissionInput,
     ) -> Result<(), RusotoError<RemovePermissionError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemovePermission");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("RemovePermission");
+        let mut params = params;
         RemovePermissionInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemovePermissionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemovePermissionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6175,23 +5825,15 @@ impl Sns for SnsClient {
         input: SetEndpointAttributesInput,
     ) -> Result<(), RusotoError<SetEndpointAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetEndpointAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("SetEndpointAttributes");
+        let mut params = params;
         SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetEndpointAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetEndpointAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6203,25 +5845,18 @@ impl Sns for SnsClient {
         input: SetPlatformApplicationAttributesInput,
     ) -> Result<(), RusotoError<SetPlatformApplicationAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetPlatformApplicationAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("SetPlatformApplicationAttributes");
+        let mut params = params;
         SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetPlatformApplicationAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetPlatformApplicationAttributesError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6233,27 +5868,19 @@ impl Sns for SnsClient {
         input: SetSMSAttributesInput,
     ) -> Result<SetSMSAttributesResponse, RusotoError<SetSMSAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetSMSAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("SetSMSAttributes");
+        let mut params = params;
         SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetSMSAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetSMSAttributesError::from_response)
+            .await?;
 
-        let result;
-        result = SetSMSAttributesResponse::default();
-        // parse non-payload
+        let result = SetSMSAttributesResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6263,23 +5890,15 @@ impl Sns for SnsClient {
         input: SetSubscriptionAttributesInput,
     ) -> Result<(), RusotoError<SetSubscriptionAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetSubscriptionAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("SetSubscriptionAttributes");
+        let mut params = params;
         SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetSubscriptionAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetSubscriptionAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6291,23 +5910,15 @@ impl Sns for SnsClient {
         input: SetTopicAttributesInput,
     ) -> Result<(), RusotoError<SetTopicAttributesError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetTopicAttributes");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("SetTopicAttributes");
+        let mut params = params;
         SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetTopicAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetTopicAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6319,42 +5930,27 @@ impl Sns for SnsClient {
         input: SubscribeInput,
     ) -> Result<SubscribeResponse, RusotoError<SubscribeError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "Subscribe");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("Subscribe");
+        let mut params = params;
         SubscribeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SubscribeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SubscribeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SubscribeResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SubscribeResponseDeserializer::deserialize("SubscribeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SubscribeResponseDeserializer::deserialize("SubscribeResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6364,27 +5960,19 @@ impl Sns for SnsClient {
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TagResource");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("TagResource");
+        let mut params = params;
         TagResourceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
 
-        let result;
-        result = TagResourceResponse::default();
-        // parse non-payload
+        let result = TagResourceResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6394,23 +5982,15 @@ impl Sns for SnsClient {
         input: UnsubscribeInput,
     ) -> Result<(), RusotoError<UnsubscribeError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "Unsubscribe");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("Unsubscribe");
+        let mut params = params;
         UnsubscribeInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UnsubscribeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UnsubscribeError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -6422,27 +6002,19 @@ impl Sns for SnsClient {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UntagResource");
-        params.put("Version", "2010-03-31");
+        let params = self.new_params("UntagResource");
+        let mut params = params;
         UntagResourceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
 
-        let result;
-        result = UntagResourceResponse::default();
-        // parse non-payload
+        let result = UntagResourceResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

@@ -779,6 +779,7 @@ impl MarketplaceCatalogClient {
 #[async_trait]
 impl MarketplaceCatalog for MarketplaceCatalogClient {
     /// <p>Used to cancel an open change request. Must be sent before the status of the request changes to <code>APPLYING</code>, the final stage of completing your change request. You can describe a change during the 60-day request history retention period for API calls.</p>
+    #[allow(unused_mut)]
     async fn cancel_change_set(
         &self,
         input: CancelChangeSetRequest,
@@ -802,7 +803,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelChangeSetResponse, _>()?;
 
@@ -814,6 +815,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Provides information about a given change set.</p>
+    #[allow(unused_mut)]
     async fn describe_change_set(
         &self,
         input: DescribeChangeSetRequest,
@@ -836,7 +838,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChangeSetResponse, _>()?;
 
@@ -848,6 +850,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Returns the metadata and content of the entity.</p>
+    #[allow(unused_mut)]
     async fn describe_entity(
         &self,
         input: DescribeEntityRequest,
@@ -870,7 +873,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeEntityResponse, _>()?;
 
@@ -882,6 +885,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Returns the list of change sets owned by the account being used to make the call. You can filter this list by providing any combination of <code>entityId</code>, <code>ChangeSetName</code>, and status. If you provide more than one filter, the API operation applies a logical AND between the filters.</p> <p>You can describe a change during the 60-day request history retention period for API calls.</p>
+    #[allow(unused_mut)]
     async fn list_change_sets(
         &self,
         input: ListChangeSetsRequest,
@@ -901,7 +905,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChangeSetsResponse, _>()?;
 
@@ -913,6 +917,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Provides the list of entities of a given type.</p>
+    #[allow(unused_mut)]
     async fn list_entities(
         &self,
         input: ListEntitiesRequest,
@@ -932,7 +937,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEntitiesResponse, _>()?;
 
@@ -944,6 +949,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>This operation allows you to request changes in your entities.</p>
+    #[allow(unused_mut)]
     async fn start_change_set(
         &self,
         input: StartChangeSetRequest,
@@ -963,7 +969,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartChangeSetResponse, _>()?;
 

@@ -499,6 +499,7 @@ impl SagemakerA2iRuntimeClient {
 #[async_trait]
 impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     /// <p>Deletes the specified human loop for a flow definition.</p>
+    #[allow(unused_mut)]
     async fn delete_human_loop(
         &self,
         input: DeleteHumanLoopRequest,
@@ -519,7 +520,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteHumanLoopResponse, _>()?;
 
@@ -531,6 +532,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Returns information about the specified human loop.</p>
+    #[allow(unused_mut)]
     async fn describe_human_loop(
         &self,
         input: DescribeHumanLoopRequest,
@@ -551,7 +553,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeHumanLoopResponse, _>()?;
 
@@ -563,6 +565,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Returns information about human loops, given the specified parameters. If a human loop was deleted, it will not be included.</p>
+    #[allow(unused_mut)]
     async fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
@@ -599,7 +602,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListHumanLoopsResponse, _>()?;
 
@@ -611,6 +614,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>
+    #[allow(unused_mut)]
     async fn start_human_loop(
         &self,
         input: StartHumanLoopRequest,
@@ -630,7 +634,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartHumanLoopResponse, _>()?;
 
@@ -642,6 +646,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Stops the specified human loop.</p>
+    #[allow(unused_mut)]
     async fn stop_human_loop(
         &self,
         input: StopHumanLoopRequest,
@@ -661,7 +666,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopHumanLoopResponse, _>()?;
 

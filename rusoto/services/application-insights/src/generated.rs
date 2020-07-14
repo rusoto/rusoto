@@ -20,9 +20,40 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ApplicationInsightsClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(
+            http_method,
+            "applicationinsights",
+            &self.region,
+            request_uri,
+        );
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Describes a standalone resource or similarly grouped resources that the application is made up of.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2269,27 +2300,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.CreateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationResponse, _>()
     }
 
     /// <p>Creates a custom component by grouping similar standalone instances to monitor.</p>
@@ -2297,26 +2318,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: CreateComponentRequest,
     ) -> Result<CreateComponentResponse, RusotoError<CreateComponentError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.CreateComponent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateComponentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateComponentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateComponentResponse, _>()
     }
 
     /// <p>Adds an log pattern to a <code>LogPatternSet</code>.</p>
@@ -2324,27 +2336,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: CreateLogPatternRequest,
     ) -> Result<CreateLogPatternResponse, RusotoError<CreateLogPatternError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.CreateLogPattern");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLogPatternError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLogPatternError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateLogPatternResponse, _>()
     }
 
     /// <p>Removes the specified application from monitoring. Does not delete the application.</p>
@@ -2352,27 +2354,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DeleteApplicationRequest,
     ) -> Result<DeleteApplicationResponse, RusotoError<DeleteApplicationError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DeleteApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationResponse, _>()
     }
 
     /// <p>Ungroups a custom component. When you ungroup custom components, all applicable monitors that are set up for the component are removed and the instances revert to their standalone status.</p>
@@ -2380,26 +2372,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DeleteComponentRequest,
     ) -> Result<DeleteComponentResponse, RusotoError<DeleteComponentError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DeleteComponent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteComponentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteComponentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteComponentResponse, _>()
     }
 
     /// <p>Removes the specified log pattern from a <code>LogPatternSet</code>.</p>
@@ -2407,27 +2390,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DeleteLogPatternRequest,
     ) -> Result<DeleteLogPatternResponse, RusotoError<DeleteLogPatternError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DeleteLogPattern");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLogPatternError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLogPatternError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteLogPatternResponse, _>()
     }
 
     /// <p>Describes the application.</p>
@@ -2435,9 +2408,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DescribeApplicationRequest,
     ) -> Result<DescribeApplicationResponse, RusotoError<DescribeApplicationError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.DescribeApplication",
@@ -2445,20 +2416,12 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeApplicationResponse, _>()
     }
 
     /// <p>Describes a component and lists the resources that are grouped together in a component.</p>
@@ -2466,27 +2429,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DescribeComponentRequest,
     ) -> Result<DescribeComponentResponse, RusotoError<DescribeComponentError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DescribeComponent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComponentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeComponentResponse, _>()
     }
 
     /// <p>Describes the monitoring configuration of the component.</p>
@@ -2497,9 +2450,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         DescribeComponentConfigurationResponse,
         RusotoError<DescribeComponentConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.DescribeComponentConfiguration",
@@ -2507,20 +2458,13 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComponentConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComponentConfigurationResponse, _>()
     }
 
     /// <p>Describes the recommended monitoring configuration of the component.</p>
@@ -2531,9 +2475,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         DescribeComponentConfigurationRecommendationResponse,
         RusotoError<DescribeComponentConfigurationRecommendationError>,
     > {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.DescribeComponentConfigurationRecommendation",
@@ -2541,20 +2483,16 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComponentConfigurationRecommendationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComponentConfigurationRecommendationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeComponentConfigurationRecommendationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComponentConfigurationRecommendationResponse, _>()
     }
 
     /// <p>Describe a specific log pattern from a <code>LogPatternSet</code>.</p>
@@ -2562,27 +2500,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DescribeLogPatternRequest,
     ) -> Result<DescribeLogPatternResponse, RusotoError<DescribeLogPatternError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DescribeLogPattern");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeLogPatternError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLogPatternError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeLogPatternResponse, _>()
     }
 
     /// <p>Describes an anomaly or error with the application.</p>
@@ -2590,9 +2518,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DescribeObservationRequest,
     ) -> Result<DescribeObservationResponse, RusotoError<DescribeObservationError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.DescribeObservation",
@@ -2600,20 +2526,12 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeObservationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeObservationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeObservationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeObservationResponse, _>()
     }
 
     /// <p>Describes an application problem.</p>
@@ -2621,26 +2539,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: DescribeProblemRequest,
     ) -> Result<DescribeProblemResponse, RusotoError<DescribeProblemError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.DescribeProblem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeProblemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProblemError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProblemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeProblemResponse, _>()
     }
 
     /// <p>Describes the anomalies or errors associated with the problem.</p>
@@ -2649,9 +2558,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         input: DescribeProblemObservationsRequest,
     ) -> Result<DescribeProblemObservationsResponse, RusotoError<DescribeProblemObservationsError>>
     {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.DescribeProblemObservations",
@@ -2659,20 +2566,13 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProblemObservationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeProblemObservationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeProblemObservationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeProblemObservationsResponse, _>()
     }
 
     /// <p>Lists the IDs of the applications that you are monitoring. </p>
@@ -2680,27 +2580,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListApplicationsRequest,
     ) -> Result<ListApplicationsResponse, RusotoError<ListApplicationsError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.ListApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApplicationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationsResponse, _>()
     }
 
     /// <p>Lists the auto-grouped, standalone, and custom components of the application.</p>
@@ -2708,26 +2598,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListComponentsRequest,
     ) -> Result<ListComponentsResponse, RusotoError<ListComponentsError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.ListComponents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListComponentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComponentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListComponentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListComponentsResponse, _>()
     }
 
     /// <p><p> Lists the INFO, WARN, and ERROR events for periodic configuration updates performed by Application Insights. Examples of events represented are: </p> <ul> <li> <p>INFO: creating a new alarm or updating an alarm threshold.</p> </li> <li> <p>WARN: alarm not created due to insufficient data points used to predict thresholds.</p> </li> <li> <p>ERROR: alarm not created due to permission errors or exceeding quotas. </p> </li> </ul></p>
@@ -2735,9 +2616,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListConfigurationHistoryRequest,
     ) -> Result<ListConfigurationHistoryResponse, RusotoError<ListConfigurationHistoryError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.ListConfigurationHistory",
@@ -2745,20 +2624,13 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListConfigurationHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConfigurationHistoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListConfigurationHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListConfigurationHistoryResponse, _>()
     }
 
     /// <p>Lists the log pattern sets in the specific application.</p>
@@ -2766,27 +2638,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListLogPatternSetsRequest,
     ) -> Result<ListLogPatternSetsResponse, RusotoError<ListLogPatternSetsError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.ListLogPatternSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListLogPatternSetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLogPatternSetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListLogPatternSetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListLogPatternSetsResponse, _>()
     }
 
     /// <p>Lists the log patterns in the specific log <code>LogPatternSet</code>.</p>
@@ -2794,26 +2656,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListLogPatternsRequest,
     ) -> Result<ListLogPatternsResponse, RusotoError<ListLogPatternsError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.ListLogPatterns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListLogPatternsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListLogPatternsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListLogPatternsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListLogPatternsResponse, _>()
     }
 
     /// <p>Lists the problems with your application.</p>
@@ -2821,26 +2674,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListProblemsRequest,
     ) -> Result<ListProblemsResponse, RusotoError<ListProblemsError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.ListProblems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProblemsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProblemsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProblemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListProblemsResponse, _>()
     }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
@@ -2848,9 +2692,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.ListTagsForResource",
@@ -2858,20 +2700,12 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Add one or more tags (keys and values) to a specified application. A <i>tag</i> is a label that you optionally define and associate with an application. Tags can help you categorize and manage application in different ways, such as by purpose, owner, environment, or other criteria. </p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
@@ -2879,26 +2713,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Remove one or more tags (keys and values) from a specified application.</p>
@@ -2906,26 +2731,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates the application.</p>
@@ -2933,27 +2749,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: UpdateApplicationRequest,
     ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.UpdateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateApplicationResponse, _>()
     }
 
     /// <p>Updates the custom component name and/or the list of resources that make up the component.</p>
@@ -2961,26 +2767,17 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: UpdateComponentRequest,
     ) -> Result<UpdateComponentResponse, RusotoError<UpdateComponentError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.UpdateComponent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateComponentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateComponentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateComponentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateComponentResponse, _>()
     }
 
     /// <p>Updates the monitoring configurations for the component. The configuration input parameter is an escaped JSON of the configuration and should match the schema of what is returned by <code>DescribeComponentConfigurationRecommendation</code>. </p>
@@ -2989,9 +2786,7 @@ impl ApplicationInsights for ApplicationInsightsClient {
         input: UpdateComponentConfigurationRequest,
     ) -> Result<UpdateComponentConfigurationResponse, RusotoError<UpdateComponentConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "EC2WindowsBarleyService.UpdateComponentConfiguration",
@@ -2999,20 +2794,13 @@ impl ApplicationInsights for ApplicationInsightsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateComponentConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateComponentConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateComponentConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateComponentConfigurationResponse, _>()
     }
 
     /// <p>Adds a log pattern to a <code>LogPatternSet</code>.</p>
@@ -3020,26 +2808,16 @@ impl ApplicationInsights for ApplicationInsightsClient {
         &self,
         input: UpdateLogPatternRequest,
     ) -> Result<UpdateLogPatternResponse, RusotoError<UpdateLogPatternError>> {
-        let mut request = SignedRequest::new("POST", "applicationinsights", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "EC2WindowsBarleyService.UpdateLogPattern");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLogPatternResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateLogPatternError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateLogPatternError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateLogPatternResponse, _>()
     }
 }

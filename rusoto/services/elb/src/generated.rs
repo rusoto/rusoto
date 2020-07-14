@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl ElbClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2012-06-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 /// <p>Information about the <code>AccessLog</code> attribute.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -116,11 +140,7 @@ struct AccessLogEnabledDeserializer;
 impl AccessLogEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -128,11 +148,7 @@ struct AccessLogIntervalDeserializer;
 impl AccessLogIntervalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -140,11 +156,7 @@ struct AccessLogPrefixDeserializer;
 impl AccessLogPrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -152,11 +164,7 @@ struct AccessPointNameDeserializer;
 impl AccessPointNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -164,11 +172,7 @@ struct AccessPointPortDeserializer;
 impl AccessPointPortDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
@@ -276,11 +280,11 @@ impl AddTagsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddTagsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = AddTagsOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -346,11 +350,7 @@ struct AdditionalAttributeKeyDeserializer;
 impl AdditionalAttributeKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -358,11 +358,7 @@ struct AdditionalAttributeValueDeserializer;
 impl AdditionalAttributeValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -584,11 +580,7 @@ struct AttributeNameDeserializer;
 impl AttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -596,11 +588,7 @@ struct AttributeTypeDeserializer;
 impl AttributeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -608,11 +596,7 @@ struct AttributeValueDeserializer;
 impl AttributeValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -620,11 +604,7 @@ struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -723,11 +703,7 @@ struct CardinalityDeserializer;
 impl CardinalityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for ConfigureHealthCheck.</p>
@@ -851,11 +827,7 @@ struct ConnectionDrainingEnabledDeserializer;
 impl ConnectionDrainingEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -863,11 +835,7 @@ struct ConnectionDrainingTimeoutDeserializer;
 impl ConnectionDrainingTimeoutDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Information about the <code>ConnectionSettings</code> attribute.</p>
@@ -917,11 +885,7 @@ struct CookieExpirationPeriodDeserializer;
 impl CookieExpirationPeriodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -929,11 +893,7 @@ struct CookieNameDeserializer;
 impl CookieNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for CreateLoadBalancer.</p>
@@ -1074,11 +1034,11 @@ impl CreateAppCookieStickinessPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateAppCookieStickinessPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateAppCookieStickinessPolicyOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1131,11 +1091,11 @@ impl CreateLBCookieStickinessPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLBCookieStickinessPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateLBCookieStickinessPolicyOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1184,11 +1144,11 @@ impl CreateLoadBalancerListenerOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLoadBalancerListenerOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateLoadBalancerListenerOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1248,11 +1208,11 @@ impl CreateLoadBalancerPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLoadBalancerPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateLoadBalancerPolicyOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1262,11 +1222,7 @@ struct CreatedTimeDeserializer;
 impl CreatedTimeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Information about the <code>CrossZoneLoadBalancing</code> attribute.</p>
@@ -1317,11 +1273,7 @@ struct CrossZoneLoadBalancingEnabledDeserializer;
 impl CrossZoneLoadBalancingEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1329,11 +1281,7 @@ struct DNSNameDeserializer;
 impl DNSNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1341,11 +1289,7 @@ struct DefaultValueDeserializer;
 impl DefaultValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for DeleteLoadBalancer.</p>
@@ -1385,11 +1329,11 @@ impl DeleteAccessPointOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteAccessPointOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteAccessPointOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1438,11 +1382,11 @@ impl DeleteLoadBalancerListenerOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLoadBalancerListenerOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteLoadBalancerListenerOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1487,11 +1431,11 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLoadBalancerPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteLoadBalancerPolicyOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2019,11 +1963,7 @@ struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>
@@ -2165,11 +2105,7 @@ struct HealthCheckIntervalDeserializer;
 impl HealthCheckIntervalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2177,11 +2113,7 @@ struct HealthCheckTargetDeserializer;
 impl HealthCheckTargetDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2189,11 +2121,7 @@ struct HealthCheckTimeoutDeserializer;
 impl HealthCheckTimeoutDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2201,11 +2129,7 @@ struct HealthyThresholdDeserializer;
 impl HealthyThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2213,11 +2137,7 @@ struct IdleTimeoutDeserializer;
 impl IdleTimeoutDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>The ID of an EC2 instance.</p>
@@ -2270,11 +2190,7 @@ struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2282,11 +2198,7 @@ struct InstancePortDeserializer;
 impl InstancePortDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Information about the state of an EC2 instance.</p>
@@ -2937,11 +2849,7 @@ struct LoadBalancerSchemeDeserializer;
 impl LoadBalancerSchemeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2949,11 +2857,7 @@ struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2961,11 +2865,7 @@ struct MaxDeserializer;
 impl MaxDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for ModifyLoadBalancerAttributes.</p>
@@ -3047,11 +2947,7 @@ struct NameDeserializer;
 impl NameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The policies for a load balancer.</p>
@@ -3356,11 +3252,7 @@ struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3464,11 +3356,7 @@ struct PolicyTypeNameDeserializer;
 impl PolicyTypeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3499,11 +3387,7 @@ struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3511,11 +3395,7 @@ struct ReasonCodeDeserializer;
 impl ReasonCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>
@@ -3687,11 +3567,11 @@ impl RemoveTagsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RemoveTagsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = RemoveTagsOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3701,11 +3581,7 @@ struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3713,11 +3589,7 @@ struct SSLCertificateIdDeserializer;
 impl SSLCertificateIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3725,11 +3597,7 @@ struct SecurityGroupIdDeserializer;
 impl SecurityGroupIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3737,11 +3605,7 @@ struct SecurityGroupNameDeserializer;
 impl SecurityGroupNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3749,11 +3613,7 @@ struct SecurityGroupOwnerAliasDeserializer;
 impl SecurityGroupOwnerAliasDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3839,11 +3699,11 @@ impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetLoadBalancerListenerSSLCertificateOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetLoadBalancerListenerSSLCertificateOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3899,11 +3759,11 @@ impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetLoadBalancerPoliciesForBackendServerOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3958,11 +3818,11 @@ impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetLoadBalancerPoliciesOfListenerOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetLoadBalancerPoliciesOfListenerOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4010,11 +3870,7 @@ struct StateDeserializer;
 impl StateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4022,11 +3878,7 @@ struct SubnetIdDeserializer;
 impl SubnetIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4166,11 +4018,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4243,11 +4091,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4255,11 +4099,7 @@ struct UnhealthyThresholdDeserializer;
 impl UnhealthyThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4267,11 +4107,7 @@ struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by AddTags
@@ -4319,7 +4155,7 @@ impl AddTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4387,7 +4223,7 @@ impl ApplySecurityGroupsToLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4466,7 +4302,7 @@ impl AttachLoadBalancerToSubnetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4517,7 +4353,7 @@ impl ConfigureHealthCheckError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4592,7 +4428,7 @@ impl CreateAppCookieStickinessPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4678,7 +4514,7 @@ impl CreateLBCookieStickinessPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4812,7 +4648,7 @@ impl CreateLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -4909,7 +4745,7 @@ impl CreateLoadBalancerListenersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5001,7 +4837,7 @@ impl CreateLoadBalancerPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5043,7 +4879,7 @@ impl DeleteLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5089,7 +4925,7 @@ impl DeleteLoadBalancerListenersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5146,7 +4982,7 @@ impl DeleteLoadBalancerPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5206,7 +5042,7 @@ impl DeregisterInstancesFromLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5247,7 +5083,7 @@ impl DescribeAccountLimitsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5296,7 +5132,7 @@ impl DescribeInstanceHealthError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5354,7 +5190,7 @@ impl DescribeLoadBalancerAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5414,7 +5250,7 @@ impl DescribeLoadBalancerPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5465,7 +5301,7 @@ impl DescribeLoadBalancerPolicyTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5518,7 +5354,7 @@ impl DescribeLoadBalancersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5563,7 +5399,7 @@ impl DescribeTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5620,7 +5456,7 @@ impl DetachLoadBalancerFromSubnetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5680,7 +5516,7 @@ impl DisableAvailabilityZonesForLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5733,7 +5569,7 @@ impl EnableAvailabilityZonesForLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5801,7 +5637,7 @@ impl ModifyLoadBalancerAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5866,7 +5702,7 @@ impl RegisterInstancesWithLoadBalancerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5915,7 +5751,7 @@ impl RemoveTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -5999,7 +5835,7 @@ impl SetLoadBalancerListenerSSLCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6077,7 +5913,7 @@ impl SetLoadBalancerPoliciesForBackendServerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6160,7 +5996,7 @@ impl SetLoadBalancerPoliciesOfListenerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -6434,27 +6270,19 @@ impl Elb for ElbClient {
         input: AddTagsInput,
     ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddTags");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("AddTags");
+        let mut params = params;
         AddTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsError::from_response)
+            .await?;
 
-        let result;
-        result = AddTagsOutput::default();
-        // parse non-payload
+        let result = AddTagsOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6467,47 +6295,33 @@ impl Elb for ElbClient {
         RusotoError<ApplySecurityGroupsToLoadBalancerError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ApplySecurityGroupsToLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("ApplySecurityGroupsToLoadBalancer");
+        let mut params = params;
         ApplySecurityGroupsToLoadBalancerInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ApplySecurityGroupsToLoadBalancerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ApplySecurityGroupsToLoadBalancerError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplySecurityGroupsToLoadBalancerOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
                 "ApplySecurityGroupsToLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6518,45 +6332,30 @@ impl Elb for ElbClient {
     ) -> Result<AttachLoadBalancerToSubnetsOutput, RusotoError<AttachLoadBalancerToSubnetsError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachLoadBalancerToSubnets");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("AttachLoadBalancerToSubnets");
+        let mut params = params;
         AttachLoadBalancerToSubnetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachLoadBalancerToSubnetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachLoadBalancerToSubnetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AttachLoadBalancerToSubnetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
                 "AttachLoadBalancerToSubnetsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6566,45 +6365,30 @@ impl Elb for ElbClient {
         input: ConfigureHealthCheckInput,
     ) -> Result<ConfigureHealthCheckOutput, RusotoError<ConfigureHealthCheckError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ConfigureHealthCheck");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("ConfigureHealthCheck");
+        let mut params = params;
         ConfigureHealthCheckInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ConfigureHealthCheckError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ConfigureHealthCheckError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigureHealthCheckOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigureHealthCheckOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigureHealthCheckOutputDeserializer::deserialize(
                 "ConfigureHealthCheckResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6617,29 +6401,19 @@ impl Elb for ElbClient {
         RusotoError<CreateAppCookieStickinessPolicyError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateAppCookieStickinessPolicy");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("CreateAppCookieStickinessPolicy");
+        let mut params = params;
         CreateAppCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateAppCookieStickinessPolicyError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAppCookieStickinessPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = CreateAppCookieStickinessPolicyOutput::default();
-        // parse non-payload
+        let result = CreateAppCookieStickinessPolicyOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6652,27 +6426,19 @@ impl Elb for ElbClient {
         RusotoError<CreateLBCookieStickinessPolicyError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLBCookieStickinessPolicy");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("CreateLBCookieStickinessPolicy");
+        let mut params = params;
         CreateLBCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLBCookieStickinessPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLBCookieStickinessPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = CreateLBCookieStickinessPolicyOutput::default();
-        // parse non-payload
+        let result = CreateLBCookieStickinessPolicyOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6682,45 +6448,30 @@ impl Elb for ElbClient {
         input: CreateAccessPointInput,
     ) -> Result<CreateAccessPointOutput, RusotoError<CreateLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("CreateLoadBalancer");
+        let mut params = params;
         CreateAccessPointInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLoadBalancerError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLoadBalancerError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateAccessPointOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateAccessPointOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateAccessPointOutputDeserializer::deserialize(
                 "CreateLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6731,27 +6482,19 @@ impl Elb for ElbClient {
     ) -> Result<CreateLoadBalancerListenerOutput, RusotoError<CreateLoadBalancerListenersError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLoadBalancerListeners");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("CreateLoadBalancerListeners");
+        let mut params = params;
         CreateLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLoadBalancerListenersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLoadBalancerListenersError::from_response)
+            .await?;
 
-        let result;
-        result = CreateLoadBalancerListenerOutput::default();
-        // parse non-payload
+        let result = CreateLoadBalancerListenerOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6761,27 +6504,19 @@ impl Elb for ElbClient {
         input: CreateLoadBalancerPolicyInput,
     ) -> Result<CreateLoadBalancerPolicyOutput, RusotoError<CreateLoadBalancerPolicyError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLoadBalancerPolicy");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("CreateLoadBalancerPolicy");
+        let mut params = params;
         CreateLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLoadBalancerPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLoadBalancerPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = CreateLoadBalancerPolicyOutput::default();
-        // parse non-payload
+        let result = CreateLoadBalancerPolicyOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6791,27 +6526,19 @@ impl Elb for ElbClient {
         input: DeleteAccessPointInput,
     ) -> Result<DeleteAccessPointOutput, RusotoError<DeleteLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DeleteLoadBalancer");
+        let mut params = params;
         DeleteAccessPointInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLoadBalancerError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLoadBalancerError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteAccessPointOutput::default();
-        // parse non-payload
+        let result = DeleteAccessPointOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6822,27 +6549,19 @@ impl Elb for ElbClient {
     ) -> Result<DeleteLoadBalancerListenerOutput, RusotoError<DeleteLoadBalancerListenersError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLoadBalancerListeners");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DeleteLoadBalancerListeners");
+        let mut params = params;
         DeleteLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLoadBalancerListenersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLoadBalancerListenersError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteLoadBalancerListenerOutput::default();
-        // parse non-payload
+        let result = DeleteLoadBalancerListenerOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6852,27 +6571,19 @@ impl Elb for ElbClient {
         input: DeleteLoadBalancerPolicyInput,
     ) -> Result<DeleteLoadBalancerPolicyOutput, RusotoError<DeleteLoadBalancerPolicyError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLoadBalancerPolicy");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DeleteLoadBalancerPolicy");
+        let mut params = params;
         DeleteLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLoadBalancerPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLoadBalancerPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteLoadBalancerPolicyOutput::default();
-        // parse non-payload
+        let result = DeleteLoadBalancerPolicyOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6883,47 +6594,33 @@ impl Elb for ElbClient {
     ) -> Result<DeregisterEndPointsOutput, RusotoError<DeregisterInstancesFromLoadBalancerError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeregisterInstancesFromLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DeregisterInstancesFromLoadBalancer");
+        let mut params = params;
         DeregisterEndPointsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeregisterInstancesFromLoadBalancerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeregisterInstancesFromLoadBalancerError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeregisterEndPointsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeregisterEndPointsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeregisterEndPointsOutputDeserializer::deserialize(
                 "DeregisterInstancesFromLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6933,45 +6630,30 @@ impl Elb for ElbClient {
         input: DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAccountLimits");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeAccountLimits");
+        let mut params = params;
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountLimitsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountLimitsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAccountLimitsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccountLimitsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAccountLimitsOutputDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -6981,45 +6663,30 @@ impl Elb for ElbClient {
         input: DescribeEndPointStateInput,
     ) -> Result<DescribeEndPointStateOutput, RusotoError<DescribeInstanceHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeInstanceHealth");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeInstanceHealth");
+        let mut params = params;
         DescribeEndPointStateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeInstanceHealthError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInstanceHealthError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeEndPointStateOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeEndPointStateOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeEndPointStateOutputDeserializer::deserialize(
                 "DescribeInstanceHealthResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7032,45 +6699,30 @@ impl Elb for ElbClient {
         RusotoError<DescribeLoadBalancerAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancerAttributes");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeLoadBalancerAttributes");
+        let mut params = params;
         DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancerAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoadBalancerAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLoadBalancerAttributesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7081,45 +6733,30 @@ impl Elb for ElbClient {
     ) -> Result<DescribeLoadBalancerPoliciesOutput, RusotoError<DescribeLoadBalancerPoliciesError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancerPolicies");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeLoadBalancerPolicies");
+        let mut params = params;
         DescribeLoadBalancerPoliciesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancerPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoadBalancerPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLoadBalancerPoliciesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7132,47 +6769,30 @@ impl Elb for ElbClient {
         RusotoError<DescribeLoadBalancerPolicyTypesError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancerPolicyTypes");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeLoadBalancerPolicyTypes");
+        let mut params = params;
         DescribeLoadBalancerPolicyTypesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancerPolicyTypesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoadBalancerPolicyTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLoadBalancerPolicyTypesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
                 "DescribeLoadBalancerPolicyTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7182,45 +6802,30 @@ impl Elb for ElbClient {
         input: DescribeAccessPointsInput,
     ) -> Result<DescribeAccessPointsOutput, RusotoError<DescribeLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancers");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeLoadBalancers");
+        let mut params = params;
         DescribeAccessPointsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoadBalancersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAccessPointsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccessPointsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAccessPointsOutputDeserializer::deserialize(
                 "DescribeLoadBalancersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7230,42 +6835,27 @@ impl Elb for ElbClient {
         input: DescribeTagsInput,
     ) -> Result<DescribeTagsOutput, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTags");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DescribeTags");
+        let mut params = params;
         DescribeTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeTagsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeTagsOutputDeserializer::deserialize("DescribeTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7276,45 +6866,30 @@ impl Elb for ElbClient {
     ) -> Result<DetachLoadBalancerFromSubnetsOutput, RusotoError<DetachLoadBalancerFromSubnetsError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachLoadBalancerFromSubnets");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DetachLoadBalancerFromSubnets");
+        let mut params = params;
         DetachLoadBalancerFromSubnetsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachLoadBalancerFromSubnetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachLoadBalancerFromSubnetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DetachLoadBalancerFromSubnetsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
                 "DetachLoadBalancerFromSubnetsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7327,47 +6902,33 @@ impl Elb for ElbClient {
         RusotoError<DisableAvailabilityZonesForLoadBalancerError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableAvailabilityZonesForLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("DisableAvailabilityZonesForLoadBalancer");
+        let mut params = params;
         RemoveAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableAvailabilityZonesForLoadBalancerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisableAvailabilityZonesForLoadBalancerError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RemoveAvailabilityZonesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RemoveAvailabilityZonesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RemoveAvailabilityZonesOutputDeserializer::deserialize(
                 "DisableAvailabilityZonesForLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7378,47 +6939,33 @@ impl Elb for ElbClient {
     ) -> Result<AddAvailabilityZonesOutput, RusotoError<EnableAvailabilityZonesForLoadBalancerError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableAvailabilityZonesForLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("EnableAvailabilityZonesForLoadBalancer");
+        let mut params = params;
         AddAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableAvailabilityZonesForLoadBalancerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                EnableAvailabilityZonesForLoadBalancerError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AddAvailabilityZonesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AddAvailabilityZonesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AddAvailabilityZonesOutputDeserializer::deserialize(
                 "EnableAvailabilityZonesForLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7429,45 +6976,30 @@ impl Elb for ElbClient {
     ) -> Result<ModifyLoadBalancerAttributesOutput, RusotoError<ModifyLoadBalancerAttributesError>>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyLoadBalancerAttributes");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("ModifyLoadBalancerAttributes");
+        let mut params = params;
         ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyLoadBalancerAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyLoadBalancerAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyLoadBalancerAttributesOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
                 "ModifyLoadBalancerAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7477,47 +7009,33 @@ impl Elb for ElbClient {
         input: RegisterEndPointsInput,
     ) -> Result<RegisterEndPointsOutput, RusotoError<RegisterInstancesWithLoadBalancerError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RegisterInstancesWithLoadBalancer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("RegisterInstancesWithLoadBalancer");
+        let mut params = params;
         RegisterEndPointsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RegisterInstancesWithLoadBalancerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RegisterInstancesWithLoadBalancerError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RegisterEndPointsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RegisterEndPointsOutputDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RegisterEndPointsOutputDeserializer::deserialize(
                 "RegisterInstancesWithLoadBalancerResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7527,27 +7045,19 @@ impl Elb for ElbClient {
         input: RemoveTagsInput,
     ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemoveTags");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("RemoveTags");
+        let mut params = params;
         RemoveTagsInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemoveTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveTagsError::from_response)
+            .await?;
 
-        let result;
-        result = RemoveTagsOutput::default();
-        // parse non-payload
+        let result = RemoveTagsOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7560,29 +7070,22 @@ impl Elb for ElbClient {
         RusotoError<SetLoadBalancerListenerSSLCertificateError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetLoadBalancerListenerSSLCertificate");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("SetLoadBalancerListenerSSLCertificate");
+        let mut params = params;
         SetLoadBalancerListenerSSLCertificateInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetLoadBalancerListenerSSLCertificateError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetLoadBalancerListenerSSLCertificateError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = SetLoadBalancerListenerSSLCertificateOutput::default();
-        // parse non-payload
+        let result = SetLoadBalancerListenerSSLCertificateOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7595,29 +7098,22 @@ impl Elb for ElbClient {
         RusotoError<SetLoadBalancerPoliciesForBackendServerError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetLoadBalancerPoliciesForBackendServer");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("SetLoadBalancerPoliciesForBackendServer");
+        let mut params = params;
         SetLoadBalancerPoliciesForBackendServerInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetLoadBalancerPoliciesForBackendServerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetLoadBalancerPoliciesForBackendServerError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = SetLoadBalancerPoliciesForBackendServerOutput::default();
-        // parse non-payload
+        let result = SetLoadBalancerPoliciesForBackendServerOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -7630,29 +7126,22 @@ impl Elb for ElbClient {
         RusotoError<SetLoadBalancerPoliciesOfListenerError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetLoadBalancerPoliciesOfListener");
-        params.put("Version", "2012-06-01");
+        let params = self.new_params("SetLoadBalancerPoliciesOfListener");
+        let mut params = params;
         SetLoadBalancerPoliciesOfListenerInputSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetLoadBalancerPoliciesOfListenerError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetLoadBalancerPoliciesOfListenerError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = SetLoadBalancerPoliciesOfListenerOutput::default();
-        // parse non-payload
+        let result = SetLoadBalancerPoliciesOfListenerOutput::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

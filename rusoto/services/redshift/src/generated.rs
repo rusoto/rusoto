@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl RedshiftClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2012-12-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -717,11 +741,7 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -729,11 +749,7 @@ struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -5404,11 +5420,7 @@ struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5416,11 +5428,7 @@ struct DoubleOptionalDeserializer;
 impl DoubleOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes an Amazon EC2 security group.</p>
@@ -6660,11 +6668,7 @@ struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6672,11 +6676,7 @@ struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes the status of logging for a cluster.</p>
@@ -6745,11 +6745,7 @@ struct LongDeserializer;
 impl LongDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6757,11 +6753,7 @@ struct LongOptionalDeserializer;
 impl LongOptionalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Defines a maintenance track that determines which Amazon Redshift version to apply during a maintenance window. If the value for <code>MaintenanceTrack</code> is <code>current</code>, the cluster is updated to the most recently certified maintenance release. If the value is <code>trailing</code>, the cluster is updated to the previously certified maintenance release. </p>
@@ -6815,11 +6807,7 @@ struct ModeDeserializer;
 impl ModeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -8109,11 +8097,7 @@ struct ParameterApplyTypeDeserializer;
 impl ParameterApplyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8747,11 +8731,7 @@ struct ReservedNodeOfferingTypeDeserializer;
 impl ReservedNodeOfferingTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p><p/></p>
@@ -9921,11 +9901,7 @@ struct ScheduleStateDeserializer;
 impl ScheduleStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
@@ -10069,11 +10045,7 @@ struct ScheduledActionStateDeserializer;
 impl ScheduledActionStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10241,11 +10213,7 @@ struct SensitiveStringDeserializer;
 impl SensitiveStringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a snapshot.</p>
@@ -10911,11 +10879,7 @@ struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -10923,11 +10887,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a subnet.</p>
@@ -11101,11 +11061,7 @@ struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the status of a <a>RestoreTableFromClusterSnapshot</a> operation.</p>
@@ -11292,11 +11248,7 @@ struct TableRestoreStatusTypeDeserializer;
 impl TableRestoreStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A tag consisting of a name/value pair for a resource.</p>
@@ -11678,11 +11630,7 @@ struct UsageLimitBreachActionDeserializer;
 impl UsageLimitBreachActionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -11690,11 +11638,7 @@ struct UsageLimitFeatureTypeDeserializer;
 impl UsageLimitFeatureTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -11702,11 +11646,7 @@ struct UsageLimitLimitTypeDeserializer;
 impl UsageLimitLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -11747,11 +11687,7 @@ struct UsageLimitPeriodDeserializer;
 impl UsageLimitPeriodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -11944,7 +11880,7 @@ impl AcceptReservedNodeExchangeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12011,7 +11947,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12111,7 +12047,7 @@ impl AuthorizeSnapshotAccessError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12174,7 +12110,7 @@ impl BatchDeleteClusterSnapshotsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12219,7 +12155,7 @@ impl BatchModifyClusterSnapshotsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12289,7 +12225,7 @@ impl CancelResizeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12374,7 +12310,7 @@ impl CopyClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12597,7 +12533,7 @@ impl CreateClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12705,7 +12641,7 @@ impl CreateClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12787,7 +12723,7 @@ impl CreateClusterSecurityGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12890,7 +12826,7 @@ impl CreateClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13009,7 +12945,7 @@ impl CreateClusterSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13160,7 +13096,7 @@ impl CreateEventSubscriptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13259,7 +13195,7 @@ impl CreateHsmClientCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13339,7 +13275,7 @@ impl CreateHsmConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13433,7 +13369,7 @@ impl CreateScheduledActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13533,7 +13469,7 @@ impl CreateSnapshotCopyGrantError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13626,7 +13562,7 @@ impl CreateSnapshotScheduleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13694,7 +13630,7 @@ impl CreateTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13784,7 +13720,7 @@ impl CreateUsageLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13868,7 +13804,7 @@ impl DeleteClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13931,7 +13867,7 @@ impl DeleteClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -13993,7 +13929,7 @@ impl DeleteClusterSecurityGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14053,7 +13989,7 @@ impl DeleteClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14122,7 +14058,7 @@ impl DeleteClusterSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14185,7 +14121,7 @@ impl DeleteEventSubscriptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14247,7 +14183,7 @@ impl DeleteHsmClientCertificateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14307,7 +14243,7 @@ impl DeleteHsmConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14365,7 +14301,7 @@ impl DeleteScheduledActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14423,7 +14359,7 @@ impl DeleteSnapshotCopyGrantError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14483,7 +14419,7 @@ impl DeleteSnapshotScheduleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14539,7 +14475,7 @@ impl DeleteTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14591,7 +14527,7 @@ impl DeleteUsageLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14628,7 +14564,7 @@ impl DescribeAccountAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14683,7 +14619,7 @@ impl DescribeClusterDbRevisionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14745,7 +14681,7 @@ impl DescribeClusterParameterGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14796,7 +14732,7 @@ impl DescribeClusterParametersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14855,7 +14791,7 @@ impl DescribeClusterSecurityGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14922,7 +14858,7 @@ impl DescribeClusterSnapshotsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -14983,7 +14919,7 @@ impl DescribeClusterSubnetGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15039,7 +14975,7 @@ impl DescribeClusterTracksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15078,7 +15014,7 @@ impl DescribeClusterVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15127,7 +15063,7 @@ impl DescribeClustersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15166,7 +15102,7 @@ impl DescribeDefaultClusterParametersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15200,7 +15136,7 @@ impl DescribeEventCategoriesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15253,7 +15189,7 @@ impl DescribeEventSubscriptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15292,7 +15228,7 @@ impl DescribeEventsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15347,7 +15283,7 @@ impl DescribeHsmClientCertificatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15405,7 +15341,7 @@ impl DescribeHsmConfigurationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15452,7 +15388,7 @@ impl DescribeLoggingStatusError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15527,7 +15463,7 @@ impl DescribeNodeConfigurationOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15576,7 +15512,7 @@ impl DescribeOrderableClusterOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15640,7 +15576,7 @@ impl DescribeReservedNodeOfferingsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15703,7 +15639,7 @@ impl DescribeReservedNodesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15759,7 +15695,7 @@ impl DescribeResizeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15815,7 +15751,7 @@ impl DescribeScheduledActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15875,7 +15811,7 @@ impl DescribeSnapshotCopyGrantsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15914,7 +15850,7 @@ impl DescribeSnapshotSchedulesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -15948,7 +15884,7 @@ impl DescribeStorageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16003,7 +15939,7 @@ impl DescribeTableRestoreStatusError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16059,7 +15995,7 @@ impl DescribeTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16113,7 +16049,7 @@ impl DescribeUsageLimitsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16160,7 +16096,7 @@ impl DisableLoggingError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16229,7 +16165,7 @@ impl DisableSnapshotCopyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16315,7 +16251,7 @@ impl EnableLoggingError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16450,7 +16386,7 @@ impl EnableSnapshotCopyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16525,7 +16461,7 @@ impl GetClusterCredentialsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16619,7 +16555,7 @@ impl GetReservedNodeExchangeOfferingsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16822,7 +16758,7 @@ impl ModifyClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16920,7 +16856,7 @@ impl ModifyClusterDbRevisionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -16979,7 +16915,7 @@ impl ModifyClusterIamRolesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17037,7 +16973,7 @@ impl ModifyClusterMaintenanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17097,7 +17033,7 @@ impl ModifyClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17166,7 +17102,7 @@ impl ModifyClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17219,7 +17155,7 @@ impl ModifyClusterSnapshotScheduleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17314,7 +17250,7 @@ impl ModifyClusterSubnetGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17443,7 +17379,7 @@ impl ModifyEventSubscriptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17543,7 +17479,7 @@ impl ModifyScheduledActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17637,7 +17573,7 @@ impl ModifySnapshotCopyRetentionPeriodError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17713,7 +17649,7 @@ impl ModifySnapshotScheduleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17777,7 +17713,7 @@ impl ModifyUsageLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17830,7 +17766,7 @@ impl PauseClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17906,7 +17842,7 @@ impl PurchaseReservedNodeOfferingError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -17968,7 +17904,7 @@ impl RebootClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18026,7 +17962,7 @@ impl ResetClusterParameterGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18137,7 +18073,7 @@ impl ResizeClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18409,7 +18345,7 @@ impl RestoreFromClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18532,7 +18468,7 @@ impl RestoreTableFromClusterSnapshotError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18603,7 +18539,7 @@ impl ResumeClusterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18649,7 +18585,7 @@ impl RevokeClusterSecurityGroupIngressError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18721,7 +18657,7 @@ impl RevokeSnapshotAccessError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -18791,7 +18727,7 @@ impl RotateEncryptionKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -19430,45 +19366,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<AcceptReservedNodeExchangeOutputMessage, RusotoError<AcceptReservedNodeExchangeError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AcceptReservedNodeExchange");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("AcceptReservedNodeExchange");
+        let mut params = params;
         AcceptReservedNodeExchangeInputMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AcceptReservedNodeExchangeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AcceptReservedNodeExchangeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AcceptReservedNodeExchangeOutputMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
                 "AcceptReservedNodeExchangeResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19481,47 +19402,33 @@ impl Redshift for RedshiftClient {
         RusotoError<AuthorizeClusterSecurityGroupIngressError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AuthorizeClusterSecurityGroupIngress");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("AuthorizeClusterSecurityGroupIngress");
+        let mut params = params;
         AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AuthorizeClusterSecurityGroupIngressError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AuthorizeClusterSecurityGroupIngressError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AuthorizeClusterSecurityGroupIngressResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
                 "AuthorizeClusterSecurityGroupIngressResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19531,45 +19438,30 @@ impl Redshift for RedshiftClient {
         input: AuthorizeSnapshotAccessMessage,
     ) -> Result<AuthorizeSnapshotAccessResult, RusotoError<AuthorizeSnapshotAccessError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AuthorizeSnapshotAccess");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("AuthorizeSnapshotAccess");
+        let mut params = params;
         AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AuthorizeSnapshotAccessError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AuthorizeSnapshotAccessError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AuthorizeSnapshotAccessResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
                 "AuthorizeSnapshotAccessResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19580,45 +19472,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<BatchDeleteClusterSnapshotsResult, RusotoError<BatchDeleteClusterSnapshotsError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchDeleteClusterSnapshots");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("BatchDeleteClusterSnapshots");
+        let mut params = params;
         BatchDeleteClusterSnapshotsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchDeleteClusterSnapshotsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteClusterSnapshotsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = BatchDeleteClusterSnapshotsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
                 "BatchDeleteClusterSnapshotsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19631,45 +19508,30 @@ impl Redshift for RedshiftClient {
         RusotoError<BatchModifyClusterSnapshotsError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchModifyClusterSnapshots");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("BatchModifyClusterSnapshots");
+        let mut params = params;
         BatchModifyClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchModifyClusterSnapshotsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchModifyClusterSnapshotsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = BatchModifyClusterSnapshotsOutputMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
                 "BatchModifyClusterSnapshotsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19679,43 +19541,28 @@ impl Redshift for RedshiftClient {
         input: CancelResizeMessage,
     ) -> Result<ResizeProgressMessage, RusotoError<CancelResizeError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CancelResize");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CancelResize");
+        let mut params = params;
         CancelResizeMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CancelResizeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CancelResizeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResizeProgressMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ResizeProgressMessageDeserializer::deserialize("CancelResizeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ResizeProgressMessageDeserializer::deserialize("CancelResizeResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19725,45 +19572,30 @@ impl Redshift for RedshiftClient {
         input: CopyClusterSnapshotMessage,
     ) -> Result<CopyClusterSnapshotResult, RusotoError<CopyClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CopyClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CopyClusterSnapshot");
+        let mut params = params;
         CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CopyClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CopyClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CopyClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CopyClusterSnapshotResultDeserializer::deserialize(
                 "CopyClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19773,43 +19605,28 @@ impl Redshift for RedshiftClient {
         input: CreateClusterMessage,
     ) -> Result<CreateClusterResult, RusotoError<CreateClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateCluster");
+        let mut params = params;
         CreateClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                CreateClusterResultDeserializer::deserialize("CreateClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CreateClusterResultDeserializer::deserialize("CreateClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19820,45 +19637,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<CreateClusterParameterGroupResult, RusotoError<CreateClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateClusterParameterGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateClusterParameterGroup");
+        let mut params = params;
         CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateClusterParameterGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateClusterParameterGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateClusterParameterGroupResultDeserializer::deserialize(
                 "CreateClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19869,45 +19671,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<CreateClusterSecurityGroupResult, RusotoError<CreateClusterSecurityGroupError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateClusterSecurityGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateClusterSecurityGroup");
+        let mut params = params;
         CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateClusterSecurityGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterSecurityGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateClusterSecurityGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateClusterSecurityGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateClusterSecurityGroupResultDeserializer::deserialize(
                 "CreateClusterSecurityGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19917,45 +19704,30 @@ impl Redshift for RedshiftClient {
         input: CreateClusterSnapshotMessage,
     ) -> Result<CreateClusterSnapshotResult, RusotoError<CreateClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateClusterSnapshot");
+        let mut params = params;
         CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateClusterSnapshotResultDeserializer::deserialize(
                 "CreateClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -19965,45 +19737,30 @@ impl Redshift for RedshiftClient {
         input: CreateClusterSubnetGroupMessage,
     ) -> Result<CreateClusterSubnetGroupResult, RusotoError<CreateClusterSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateClusterSubnetGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateClusterSubnetGroup");
+        let mut params = params;
         CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateClusterSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateClusterSubnetGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateClusterSubnetGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateClusterSubnetGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateClusterSubnetGroupResultDeserializer::deserialize(
                 "CreateClusterSubnetGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20013,45 +19770,30 @@ impl Redshift for RedshiftClient {
         input: CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateEventSubscription");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateEventSubscription");
+        let mut params = params;
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateEventSubscriptionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEventSubscriptionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateEventSubscriptionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateEventSubscriptionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateEventSubscriptionResultDeserializer::deserialize(
                 "CreateEventSubscriptionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20062,45 +19804,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<CreateHsmClientCertificateResult, RusotoError<CreateHsmClientCertificateError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateHsmClientCertificate");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateHsmClientCertificate");
+        let mut params = params;
         CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateHsmClientCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHsmClientCertificateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateHsmClientCertificateResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateHsmClientCertificateResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateHsmClientCertificateResultDeserializer::deserialize(
                 "CreateHsmClientCertificateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20110,45 +19837,30 @@ impl Redshift for RedshiftClient {
         input: CreateHsmConfigurationMessage,
     ) -> Result<CreateHsmConfigurationResult, RusotoError<CreateHsmConfigurationError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateHsmConfiguration");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateHsmConfiguration");
+        let mut params = params;
         CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateHsmConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHsmConfigurationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateHsmConfigurationResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateHsmConfigurationResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateHsmConfigurationResultDeserializer::deserialize(
                 "CreateHsmConfigurationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20158,45 +19870,28 @@ impl Redshift for RedshiftClient {
         input: CreateScheduledActionMessage,
     ) -> Result<ScheduledAction, RusotoError<CreateScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateScheduledAction");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateScheduledAction");
+        let mut params = params;
         CreateScheduledActionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateScheduledActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateScheduledActionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ScheduledAction::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ScheduledActionDeserializer::deserialize(
-                "CreateScheduledActionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ScheduledActionDeserializer::deserialize("CreateScheduledActionResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20206,45 +19901,30 @@ impl Redshift for RedshiftClient {
         input: CreateSnapshotCopyGrantMessage,
     ) -> Result<CreateSnapshotCopyGrantResult, RusotoError<CreateSnapshotCopyGrantError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateSnapshotCopyGrant");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateSnapshotCopyGrant");
+        let mut params = params;
         CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateSnapshotCopyGrantError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSnapshotCopyGrantError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateSnapshotCopyGrantResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
                 "CreateSnapshotCopyGrantResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20254,45 +19934,28 @@ impl Redshift for RedshiftClient {
         input: CreateSnapshotScheduleMessage,
     ) -> Result<SnapshotSchedule, RusotoError<CreateSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateSnapshotSchedule");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateSnapshotSchedule");
+        let mut params = params;
         CreateSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateSnapshotScheduleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSnapshotScheduleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SnapshotSchedule::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SnapshotScheduleDeserializer::deserialize(
-                "CreateSnapshotScheduleResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                SnapshotScheduleDeserializer::deserialize("CreateSnapshotScheduleResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20302,23 +19965,15 @@ impl Redshift for RedshiftClient {
         input: CreateTagsMessage,
     ) -> Result<(), RusotoError<CreateTagsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateTags");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateTags");
+        let mut params = params;
         CreateTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTagsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20330,42 +19985,27 @@ impl Redshift for RedshiftClient {
         input: CreateUsageLimitMessage,
     ) -> Result<UsageLimit, RusotoError<CreateUsageLimitError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateUsageLimit");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("CreateUsageLimit");
+        let mut params = params;
         CreateUsageLimitMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateUsageLimitError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUsageLimitError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UsageLimit::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UsageLimitDeserializer::deserialize("CreateUsageLimitResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UsageLimitDeserializer::deserialize("CreateUsageLimitResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20375,43 +20015,28 @@ impl Redshift for RedshiftClient {
         input: DeleteClusterMessage,
     ) -> Result<DeleteClusterResult, RusotoError<DeleteClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteCluster");
+        let mut params = params;
         DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DeleteClusterResultDeserializer::deserialize("DeleteClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20421,23 +20046,15 @@ impl Redshift for RedshiftClient {
         input: DeleteClusterParameterGroupMessage,
     ) -> Result<(), RusotoError<DeleteClusterParameterGroupError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteClusterParameterGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteClusterParameterGroup");
+        let mut params = params;
         DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterParameterGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20449,23 +20066,15 @@ impl Redshift for RedshiftClient {
         input: DeleteClusterSecurityGroupMessage,
     ) -> Result<(), RusotoError<DeleteClusterSecurityGroupError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteClusterSecurityGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteClusterSecurityGroup");
+        let mut params = params;
         DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteClusterSecurityGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterSecurityGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20477,45 +20086,30 @@ impl Redshift for RedshiftClient {
         input: DeleteClusterSnapshotMessage,
     ) -> Result<DeleteClusterSnapshotResult, RusotoError<DeleteClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteClusterSnapshot");
+        let mut params = params;
         DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteClusterSnapshotResultDeserializer::deserialize(
                 "DeleteClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20525,23 +20119,15 @@ impl Redshift for RedshiftClient {
         input: DeleteClusterSubnetGroupMessage,
     ) -> Result<(), RusotoError<DeleteClusterSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteClusterSubnetGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteClusterSubnetGroup");
+        let mut params = params;
         DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteClusterSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteClusterSubnetGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20553,23 +20139,15 @@ impl Redshift for RedshiftClient {
         input: DeleteEventSubscriptionMessage,
     ) -> Result<(), RusotoError<DeleteEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteEventSubscription");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteEventSubscription");
+        let mut params = params;
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteEventSubscriptionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEventSubscriptionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20581,23 +20159,15 @@ impl Redshift for RedshiftClient {
         input: DeleteHsmClientCertificateMessage,
     ) -> Result<(), RusotoError<DeleteHsmClientCertificateError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteHsmClientCertificate");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteHsmClientCertificate");
+        let mut params = params;
         DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteHsmClientCertificateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteHsmClientCertificateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20609,23 +20179,15 @@ impl Redshift for RedshiftClient {
         input: DeleteHsmConfigurationMessage,
     ) -> Result<(), RusotoError<DeleteHsmConfigurationError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteHsmConfiguration");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteHsmConfiguration");
+        let mut params = params;
         DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteHsmConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteHsmConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20637,23 +20199,15 @@ impl Redshift for RedshiftClient {
         input: DeleteScheduledActionMessage,
     ) -> Result<(), RusotoError<DeleteScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteScheduledAction");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteScheduledAction");
+        let mut params = params;
         DeleteScheduledActionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteScheduledActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteScheduledActionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20665,23 +20219,15 @@ impl Redshift for RedshiftClient {
         input: DeleteSnapshotCopyGrantMessage,
     ) -> Result<(), RusotoError<DeleteSnapshotCopyGrantError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteSnapshotCopyGrant");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteSnapshotCopyGrant");
+        let mut params = params;
         DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteSnapshotCopyGrantError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSnapshotCopyGrantError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20693,23 +20239,15 @@ impl Redshift for RedshiftClient {
         input: DeleteSnapshotScheduleMessage,
     ) -> Result<(), RusotoError<DeleteSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteSnapshotSchedule");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteSnapshotSchedule");
+        let mut params = params;
         DeleteSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteSnapshotScheduleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSnapshotScheduleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20721,23 +20259,15 @@ impl Redshift for RedshiftClient {
         input: DeleteTagsMessage,
     ) -> Result<(), RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteTags");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteTags");
+        let mut params = params;
         DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTagsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20749,23 +20279,15 @@ impl Redshift for RedshiftClient {
         input: DeleteUsageLimitMessage,
     ) -> Result<(), RusotoError<DeleteUsageLimitError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteUsageLimit");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DeleteUsageLimit");
+        let mut params = params;
         DeleteUsageLimitMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteUsageLimitError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUsageLimitError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20777,45 +20299,30 @@ impl Redshift for RedshiftClient {
         input: DescribeAccountAttributesMessage,
     ) -> Result<AccountAttributeList, RusotoError<DescribeAccountAttributesError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAccountAttributes");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeAccountAttributes");
+        let mut params = params;
         DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AccountAttributeList::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AccountAttributeListDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AccountAttributeListDeserializer::deserialize(
                 "DescribeAccountAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20825,45 +20332,30 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterDbRevisionsMessage,
     ) -> Result<ClusterDbRevisionsMessage, RusotoError<DescribeClusterDbRevisionsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterDbRevisions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterDbRevisions");
+        let mut params = params;
         DescribeClusterDbRevisionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterDbRevisionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterDbRevisionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterDbRevisionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterDbRevisionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterDbRevisionsMessageDeserializer::deserialize(
                 "DescribeClusterDbRevisionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20874,45 +20366,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<ClusterParameterGroupsMessage, RusotoError<DescribeClusterParameterGroupsError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterParameterGroups");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterParameterGroups");
+        let mut params = params;
         DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterParameterGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterParameterGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterParameterGroupsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterParameterGroupsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterParameterGroupsMessageDeserializer::deserialize(
                 "DescribeClusterParameterGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20922,45 +20399,30 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterParametersMessage,
     ) -> Result<ClusterParameterGroupDetails, RusotoError<DescribeClusterParametersError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterParameters");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterParameters");
+        let mut params = params;
         DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterParametersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterParametersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterParameterGroupDetails::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterParameterGroupDetailsDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterParameterGroupDetailsDeserializer::deserialize(
                 "DescribeClusterParametersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -20970,45 +20432,30 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterSecurityGroupsMessage,
     ) -> Result<ClusterSecurityGroupMessage, RusotoError<DescribeClusterSecurityGroupsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterSecurityGroups");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterSecurityGroups");
+        let mut params = params;
         DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterSecurityGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterSecurityGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterSecurityGroupMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterSecurityGroupMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterSecurityGroupMessageDeserializer::deserialize(
                 "DescribeClusterSecurityGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21018,45 +20465,28 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterSnapshotsMessage,
     ) -> Result<SnapshotMessage, RusotoError<DescribeClusterSnapshotsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterSnapshots");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterSnapshots");
+        let mut params = params;
         DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterSnapshotsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterSnapshotsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SnapshotMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SnapshotMessageDeserializer::deserialize(
-                "DescribeClusterSnapshotsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                SnapshotMessageDeserializer::deserialize("DescribeClusterSnapshotsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21066,45 +20496,30 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterSubnetGroupsMessage,
     ) -> Result<ClusterSubnetGroupMessage, RusotoError<DescribeClusterSubnetGroupsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterSubnetGroups");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterSubnetGroups");
+        let mut params = params;
         DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterSubnetGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterSubnetGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterSubnetGroupMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterSubnetGroupMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterSubnetGroupMessageDeserializer::deserialize(
                 "DescribeClusterSubnetGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21114,45 +20529,28 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterTracksMessage,
     ) -> Result<TrackListMessage, RusotoError<DescribeClusterTracksError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterTracks");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterTracks");
+        let mut params = params;
         DescribeClusterTracksMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterTracksError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterTracksError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TrackListMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TrackListMessageDeserializer::deserialize(
-                "DescribeClusterTracksResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                TrackListMessageDeserializer::deserialize("DescribeClusterTracksResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21162,45 +20560,30 @@ impl Redshift for RedshiftClient {
         input: DescribeClusterVersionsMessage,
     ) -> Result<ClusterVersionsMessage, RusotoError<DescribeClusterVersionsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusterVersions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusterVersions");
+        let mut params = params;
         DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClusterVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterVersionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterVersionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterVersionsMessageDeserializer::deserialize(
                 "DescribeClusterVersionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21210,43 +20593,27 @@ impl Redshift for RedshiftClient {
         input: DescribeClustersMessage,
     ) -> Result<ClustersMessage, RusotoError<DescribeClustersError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeClusters");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeClusters");
+        let mut params = params;
         DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeClustersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClustersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClustersMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ClustersMessageDeserializer::deserialize("DescribeClustersResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClustersMessageDeserializer::deserialize("DescribeClustersResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21259,47 +20626,33 @@ impl Redshift for RedshiftClient {
         RusotoError<DescribeDefaultClusterParametersError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeDefaultClusterParameters");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeDefaultClusterParameters");
+        let mut params = params;
         DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeDefaultClusterParametersError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDefaultClusterParametersError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeDefaultClusterParametersResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
                 "DescribeDefaultClusterParametersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21309,45 +20662,30 @@ impl Redshift for RedshiftClient {
         input: DescribeEventCategoriesMessage,
     ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEventCategories");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeEventCategories");
+        let mut params = params;
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventCategoriesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventCategoriesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventCategoriesMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventCategoriesMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventCategoriesMessageDeserializer::deserialize(
                 "DescribeEventCategoriesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21357,45 +20695,30 @@ impl Redshift for RedshiftClient {
         input: DescribeEventSubscriptionsMessage,
     ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEventSubscriptions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeEventSubscriptions");
+        let mut params = params;
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventSubscriptionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventSubscriptionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventSubscriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventSubscriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventSubscriptionsMessageDeserializer::deserialize(
                 "DescribeEventSubscriptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21405,42 +20728,27 @@ impl Redshift for RedshiftClient {
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEvents");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeEvents");
+        let mut params = params;
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21450,45 +20758,30 @@ impl Redshift for RedshiftClient {
         input: DescribeHsmClientCertificatesMessage,
     ) -> Result<HsmClientCertificateMessage, RusotoError<DescribeHsmClientCertificatesError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeHsmClientCertificates");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeHsmClientCertificates");
+        let mut params = params;
         DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeHsmClientCertificatesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeHsmClientCertificatesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = HsmClientCertificateMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = HsmClientCertificateMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = HsmClientCertificateMessageDeserializer::deserialize(
                 "DescribeHsmClientCertificatesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21498,45 +20791,30 @@ impl Redshift for RedshiftClient {
         input: DescribeHsmConfigurationsMessage,
     ) -> Result<HsmConfigurationMessage, RusotoError<DescribeHsmConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeHsmConfigurations");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeHsmConfigurations");
+        let mut params = params;
         DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeHsmConfigurationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeHsmConfigurationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = HsmConfigurationMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = HsmConfigurationMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = HsmConfigurationMessageDeserializer::deserialize(
                 "DescribeHsmConfigurationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21546,43 +20824,28 @@ impl Redshift for RedshiftClient {
         input: DescribeLoggingStatusMessage,
     ) -> Result<LoggingStatus, RusotoError<DescribeLoggingStatusError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoggingStatus");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeLoggingStatus");
+        let mut params = params;
         DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoggingStatusError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoggingStatusError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = LoggingStatus::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                LoggingStatusDeserializer::deserialize("DescribeLoggingStatusResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21593,47 +20856,33 @@ impl Redshift for RedshiftClient {
     ) -> Result<NodeConfigurationOptionsMessage, RusotoError<DescribeNodeConfigurationOptionsError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeNodeConfigurationOptions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeNodeConfigurationOptions");
+        let mut params = params;
         DescribeNodeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeNodeConfigurationOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeNodeConfigurationOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = NodeConfigurationOptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = NodeConfigurationOptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = NodeConfigurationOptionsMessageDeserializer::deserialize(
                 "DescribeNodeConfigurationOptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21644,47 +20893,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<OrderableClusterOptionsMessage, RusotoError<DescribeOrderableClusterOptionsError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeOrderableClusterOptions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeOrderableClusterOptions");
+        let mut params = params;
         DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeOrderableClusterOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeOrderableClusterOptionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = OrderableClusterOptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = OrderableClusterOptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = OrderableClusterOptionsMessageDeserializer::deserialize(
                 "DescribeOrderableClusterOptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21694,45 +20926,30 @@ impl Redshift for RedshiftClient {
         input: DescribeReservedNodeOfferingsMessage,
     ) -> Result<ReservedNodeOfferingsMessage, RusotoError<DescribeReservedNodeOfferingsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeReservedNodeOfferings");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeReservedNodeOfferings");
+        let mut params = params;
         DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeReservedNodeOfferingsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeReservedNodeOfferingsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ReservedNodeOfferingsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ReservedNodeOfferingsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ReservedNodeOfferingsMessageDeserializer::deserialize(
                 "DescribeReservedNodeOfferingsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21742,45 +20959,30 @@ impl Redshift for RedshiftClient {
         input: DescribeReservedNodesMessage,
     ) -> Result<ReservedNodesMessage, RusotoError<DescribeReservedNodesError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeReservedNodes");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeReservedNodes");
+        let mut params = params;
         DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeReservedNodesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeReservedNodesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ReservedNodesMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ReservedNodesMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ReservedNodesMessageDeserializer::deserialize(
                 "DescribeReservedNodesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21790,43 +20992,28 @@ impl Redshift for RedshiftClient {
         input: DescribeResizeMessage,
     ) -> Result<ResizeProgressMessage, RusotoError<DescribeResizeError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeResize");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeResize");
+        let mut params = params;
         DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeResizeError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeResizeError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResizeProgressMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ResizeProgressMessageDeserializer::deserialize("DescribeResizeResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21836,45 +21023,30 @@ impl Redshift for RedshiftClient {
         input: DescribeScheduledActionsMessage,
     ) -> Result<ScheduledActionsMessage, RusotoError<DescribeScheduledActionsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeScheduledActions");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeScheduledActions");
+        let mut params = params;
         DescribeScheduledActionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeScheduledActionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeScheduledActionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ScheduledActionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ScheduledActionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ScheduledActionsMessageDeserializer::deserialize(
                 "DescribeScheduledActionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21884,45 +21056,30 @@ impl Redshift for RedshiftClient {
         input: DescribeSnapshotCopyGrantsMessage,
     ) -> Result<SnapshotCopyGrantMessage, RusotoError<DescribeSnapshotCopyGrantsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeSnapshotCopyGrants");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeSnapshotCopyGrants");
+        let mut params = params;
         DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeSnapshotCopyGrantsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSnapshotCopyGrantsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SnapshotCopyGrantMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SnapshotCopyGrantMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SnapshotCopyGrantMessageDeserializer::deserialize(
                 "DescribeSnapshotCopyGrantsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21933,45 +21090,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<DescribeSnapshotSchedulesOutputMessage, RusotoError<DescribeSnapshotSchedulesError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeSnapshotSchedules");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeSnapshotSchedules");
+        let mut params = params;
         DescribeSnapshotSchedulesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeSnapshotSchedulesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSnapshotSchedulesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeSnapshotSchedulesOutputMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
                 "DescribeSnapshotSchedulesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -21980,45 +21122,27 @@ impl Redshift for RedshiftClient {
         &self,
     ) -> Result<CustomerStorageMessage, RusotoError<DescribeStorageError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeStorage");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeStorage");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeStorageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStorageError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CustomerStorageMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CustomerStorageMessageDeserializer::deserialize(
-                "DescribeStorageResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                CustomerStorageMessageDeserializer::deserialize("DescribeStorageResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22028,45 +21152,30 @@ impl Redshift for RedshiftClient {
         input: DescribeTableRestoreStatusMessage,
     ) -> Result<TableRestoreStatusMessage, RusotoError<DescribeTableRestoreStatusError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTableRestoreStatus");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeTableRestoreStatus");
+        let mut params = params;
         DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTableRestoreStatusError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTableRestoreStatusError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TableRestoreStatusMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TableRestoreStatusMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = TableRestoreStatusMessageDeserializer::deserialize(
                 "DescribeTableRestoreStatusResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22076,45 +21185,28 @@ impl Redshift for RedshiftClient {
         input: DescribeTagsMessage,
     ) -> Result<TaggedResourceListMessage, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTags");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeTags");
+        let mut params = params;
         DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TaggedResourceListMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TaggedResourceListMessageDeserializer::deserialize(
-                "DescribeTagsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                TaggedResourceListMessageDeserializer::deserialize("DescribeTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22124,43 +21216,28 @@ impl Redshift for RedshiftClient {
         input: DescribeUsageLimitsMessage,
     ) -> Result<UsageLimitList, RusotoError<DescribeUsageLimitsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeUsageLimits");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DescribeUsageLimits");
+        let mut params = params;
         DescribeUsageLimitsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeUsageLimitsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeUsageLimitsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UsageLimitList::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                UsageLimitListDeserializer::deserialize("DescribeUsageLimitsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                UsageLimitListDeserializer::deserialize("DescribeUsageLimitsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22170,42 +21247,27 @@ impl Redshift for RedshiftClient {
         input: DisableLoggingMessage,
     ) -> Result<LoggingStatus, RusotoError<DisableLoggingError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableLogging");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DisableLogging");
+        let mut params = params;
         DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableLoggingError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableLoggingError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = LoggingStatus::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = LoggingStatusDeserializer::deserialize("DisableLoggingResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = LoggingStatusDeserializer::deserialize("DisableLoggingResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22215,45 +21277,30 @@ impl Redshift for RedshiftClient {
         input: DisableSnapshotCopyMessage,
     ) -> Result<DisableSnapshotCopyResult, RusotoError<DisableSnapshotCopyError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableSnapshotCopy");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("DisableSnapshotCopy");
+        let mut params = params;
         DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableSnapshotCopyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableSnapshotCopyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DisableSnapshotCopyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DisableSnapshotCopyResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DisableSnapshotCopyResultDeserializer::deserialize(
                 "DisableSnapshotCopyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22263,42 +21310,27 @@ impl Redshift for RedshiftClient {
         input: EnableLoggingMessage,
     ) -> Result<LoggingStatus, RusotoError<EnableLoggingError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableLogging");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("EnableLogging");
+        let mut params = params;
         EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableLoggingError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableLoggingError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = LoggingStatus::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = LoggingStatusDeserializer::deserialize("EnableLoggingResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = LoggingStatusDeserializer::deserialize("EnableLoggingResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22308,45 +21340,30 @@ impl Redshift for RedshiftClient {
         input: EnableSnapshotCopyMessage,
     ) -> Result<EnableSnapshotCopyResult, RusotoError<EnableSnapshotCopyError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableSnapshotCopy");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("EnableSnapshotCopy");
+        let mut params = params;
         EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableSnapshotCopyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableSnapshotCopyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnableSnapshotCopyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnableSnapshotCopyResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnableSnapshotCopyResultDeserializer::deserialize(
                 "EnableSnapshotCopyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22356,45 +21373,28 @@ impl Redshift for RedshiftClient {
         input: GetClusterCredentialsMessage,
     ) -> Result<ClusterCredentials, RusotoError<GetClusterCredentialsError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetClusterCredentials");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("GetClusterCredentials");
+        let mut params = params;
         GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetClusterCredentialsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetClusterCredentialsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterCredentials::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterCredentialsDeserializer::deserialize(
-                "GetClusterCredentialsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ClusterCredentialsDeserializer::deserialize("GetClusterCredentialsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22407,47 +21407,33 @@ impl Redshift for RedshiftClient {
         RusotoError<GetReservedNodeExchangeOfferingsError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetReservedNodeExchangeOfferings");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("GetReservedNodeExchangeOfferings");
+        let mut params = params;
         GetReservedNodeExchangeOfferingsInputMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetReservedNodeExchangeOfferingsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetReservedNodeExchangeOfferingsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetReservedNodeExchangeOfferingsOutputMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
                 "GetReservedNodeExchangeOfferingsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22457,43 +21443,28 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterMessage,
     ) -> Result<ModifyClusterResult, RusotoError<ModifyClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyCluster");
+        let mut params = params;
         ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ModifyClusterResultDeserializer::deserialize("ModifyClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22503,45 +21474,30 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterDbRevisionMessage,
     ) -> Result<ModifyClusterDbRevisionResult, RusotoError<ModifyClusterDbRevisionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterDbRevision");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterDbRevision");
+        let mut params = params;
         ModifyClusterDbRevisionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterDbRevisionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterDbRevisionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterDbRevisionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyClusterDbRevisionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyClusterDbRevisionResultDeserializer::deserialize(
                 "ModifyClusterDbRevisionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22551,45 +21507,30 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterIamRolesMessage,
     ) -> Result<ModifyClusterIamRolesResult, RusotoError<ModifyClusterIamRolesError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterIamRoles");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterIamRoles");
+        let mut params = params;
         ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterIamRolesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterIamRolesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterIamRolesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyClusterIamRolesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyClusterIamRolesResultDeserializer::deserialize(
                 "ModifyClusterIamRolesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22599,45 +21540,30 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterMaintenanceMessage,
     ) -> Result<ModifyClusterMaintenanceResult, RusotoError<ModifyClusterMaintenanceError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterMaintenance");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterMaintenance");
+        let mut params = params;
         ModifyClusterMaintenanceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterMaintenanceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterMaintenanceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterMaintenanceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyClusterMaintenanceResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyClusterMaintenanceResultDeserializer::deserialize(
                 "ModifyClusterMaintenanceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22648,45 +21574,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<ClusterParameterGroupNameMessage, RusotoError<ModifyClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterParameterGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterParameterGroup");
+        let mut params = params;
         ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterParameterGroupNameMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ModifyClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22696,45 +21607,30 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterSnapshotMessage,
     ) -> Result<ModifyClusterSnapshotResult, RusotoError<ModifyClusterSnapshotError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterSnapshot");
+        let mut params = params;
         ModifyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyClusterSnapshotResultDeserializer::deserialize(
                 "ModifyClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22744,23 +21640,15 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterSnapshotScheduleMessage,
     ) -> Result<(), RusotoError<ModifyClusterSnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterSnapshotSchedule");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterSnapshotSchedule");
+        let mut params = params;
         ModifyClusterSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterSnapshotScheduleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterSnapshotScheduleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22772,45 +21660,30 @@ impl Redshift for RedshiftClient {
         input: ModifyClusterSubnetGroupMessage,
     ) -> Result<ModifyClusterSubnetGroupResult, RusotoError<ModifyClusterSubnetGroupError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyClusterSubnetGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyClusterSubnetGroup");
+        let mut params = params;
         ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyClusterSubnetGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterSubnetGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyClusterSubnetGroupResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
                 "ModifyClusterSubnetGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22820,45 +21693,30 @@ impl Redshift for RedshiftClient {
         input: ModifyEventSubscriptionMessage,
     ) -> Result<ModifyEventSubscriptionResult, RusotoError<ModifyEventSubscriptionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyEventSubscription");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyEventSubscription");
+        let mut params = params;
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyEventSubscriptionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyEventSubscriptionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifyEventSubscriptionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifyEventSubscriptionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyEventSubscriptionResultDeserializer::deserialize(
                 "ModifyEventSubscriptionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22868,45 +21726,28 @@ impl Redshift for RedshiftClient {
         input: ModifyScheduledActionMessage,
     ) -> Result<ScheduledAction, RusotoError<ModifyScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyScheduledAction");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyScheduledAction");
+        let mut params = params;
         ModifyScheduledActionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyScheduledActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyScheduledActionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ScheduledAction::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ScheduledActionDeserializer::deserialize(
-                "ModifyScheduledActionResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ScheduledActionDeserializer::deserialize("ModifyScheduledActionResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22919,47 +21760,33 @@ impl Redshift for RedshiftClient {
         RusotoError<ModifySnapshotCopyRetentionPeriodError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifySnapshotCopyRetentionPeriod");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifySnapshotCopyRetentionPeriod");
+        let mut params = params;
         ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifySnapshotCopyRetentionPeriodError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ModifySnapshotCopyRetentionPeriodError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ModifySnapshotCopyRetentionPeriodResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
                 "ModifySnapshotCopyRetentionPeriodResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -22969,45 +21796,28 @@ impl Redshift for RedshiftClient {
         input: ModifySnapshotScheduleMessage,
     ) -> Result<SnapshotSchedule, RusotoError<ModifySnapshotScheduleError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifySnapshotSchedule");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifySnapshotSchedule");
+        let mut params = params;
         ModifySnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifySnapshotScheduleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifySnapshotScheduleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SnapshotSchedule::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SnapshotScheduleDeserializer::deserialize(
-                "ModifySnapshotScheduleResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                SnapshotScheduleDeserializer::deserialize("ModifySnapshotScheduleResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23017,42 +21827,27 @@ impl Redshift for RedshiftClient {
         input: ModifyUsageLimitMessage,
     ) -> Result<UsageLimit, RusotoError<ModifyUsageLimitError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ModifyUsageLimit");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ModifyUsageLimit");
+        let mut params = params;
         ModifyUsageLimitMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ModifyUsageLimitError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyUsageLimitError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UsageLimit::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = UsageLimitDeserializer::deserialize("ModifyUsageLimitResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = UsageLimitDeserializer::deserialize("ModifyUsageLimitResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23062,42 +21857,27 @@ impl Redshift for RedshiftClient {
         input: PauseClusterMessage,
     ) -> Result<PauseClusterResult, RusotoError<PauseClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PauseCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("PauseCluster");
+        let mut params = params;
         PauseClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PauseClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PauseClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PauseClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PauseClusterResultDeserializer::deserialize("PauseClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PauseClusterResultDeserializer::deserialize("PauseClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23108,45 +21888,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<PurchaseReservedNodeOfferingResult, RusotoError<PurchaseReservedNodeOfferingError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PurchaseReservedNodeOffering");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("PurchaseReservedNodeOffering");
+        let mut params = params;
         PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PurchaseReservedNodeOfferingError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PurchaseReservedNodeOfferingError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PurchaseReservedNodeOfferingResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
                 "PurchaseReservedNodeOfferingResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23156,43 +21921,28 @@ impl Redshift for RedshiftClient {
         input: RebootClusterMessage,
     ) -> Result<RebootClusterResult, RusotoError<RebootClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RebootCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RebootCluster");
+        let mut params = params;
         RebootClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RebootClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RebootClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RebootClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                RebootClusterResultDeserializer::deserialize("RebootClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                RebootClusterResultDeserializer::deserialize("RebootClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23203,45 +21953,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<ClusterParameterGroupNameMessage, RusotoError<ResetClusterParameterGroupError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResetClusterParameterGroup");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ResetClusterParameterGroup");
+        let mut params = params;
         ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResetClusterParameterGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResetClusterParameterGroupError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ClusterParameterGroupNameMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ClusterParameterGroupNameMessageDeserializer::deserialize(
                 "ResetClusterParameterGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23251,43 +21986,28 @@ impl Redshift for RedshiftClient {
         input: ResizeClusterMessage,
     ) -> Result<ResizeClusterResult, RusotoError<ResizeClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResizeCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ResizeCluster");
+        let mut params = params;
         ResizeClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResizeClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResizeClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResizeClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ResizeClusterResultDeserializer::deserialize("ResizeClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ResizeClusterResultDeserializer::deserialize("ResizeClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23298,45 +22018,30 @@ impl Redshift for RedshiftClient {
     ) -> Result<RestoreFromClusterSnapshotResult, RusotoError<RestoreFromClusterSnapshotError>>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RestoreFromClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RestoreFromClusterSnapshot");
+        let mut params = params;
         RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreFromClusterSnapshotError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreFromClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RestoreFromClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
                 "RestoreFromClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23349,47 +22054,30 @@ impl Redshift for RedshiftClient {
         RusotoError<RestoreTableFromClusterSnapshotError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RestoreTableFromClusterSnapshot");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RestoreTableFromClusterSnapshot");
+        let mut params = params;
         RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreTableFromClusterSnapshotError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreTableFromClusterSnapshotError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RestoreTableFromClusterSnapshotResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
                 "RestoreTableFromClusterSnapshotResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23399,43 +22087,28 @@ impl Redshift for RedshiftClient {
         input: ResumeClusterMessage,
     ) -> Result<ResumeClusterResult, RusotoError<ResumeClusterError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResumeCluster");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("ResumeCluster");
+        let mut params = params;
         ResumeClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResumeClusterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResumeClusterError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResumeClusterResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ResumeClusterResultDeserializer::deserialize("ResumeClusterResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ResumeClusterResultDeserializer::deserialize("ResumeClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23448,47 +22121,33 @@ impl Redshift for RedshiftClient {
         RusotoError<RevokeClusterSecurityGroupIngressError>,
     > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RevokeClusterSecurityGroupIngress");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RevokeClusterSecurityGroupIngress");
+        let mut params = params;
         RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RevokeClusterSecurityGroupIngressError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RevokeClusterSecurityGroupIngressError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RevokeClusterSecurityGroupIngressResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
                 "RevokeClusterSecurityGroupIngressResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23498,45 +22157,30 @@ impl Redshift for RedshiftClient {
         input: RevokeSnapshotAccessMessage,
     ) -> Result<RevokeSnapshotAccessResult, RusotoError<RevokeSnapshotAccessError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RevokeSnapshotAccess");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RevokeSnapshotAccess");
+        let mut params = params;
         RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RevokeSnapshotAccessError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RevokeSnapshotAccessError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RevokeSnapshotAccessResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RevokeSnapshotAccessResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RevokeSnapshotAccessResultDeserializer::deserialize(
                 "RevokeSnapshotAccessResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -23546,45 +22190,30 @@ impl Redshift for RedshiftClient {
         input: RotateEncryptionKeyMessage,
     ) -> Result<RotateEncryptionKeyResult, RusotoError<RotateEncryptionKeyError>> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RotateEncryptionKey");
-        params.put("Version", "2012-12-01");
+        let params = self.new_params("RotateEncryptionKey");
+        let mut params = params;
         RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RotateEncryptionKeyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RotateEncryptionKeyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RotateEncryptionKeyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RotateEncryptionKeyResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RotateEncryptionKeyResultDeserializer::deserialize(
                 "RotateEncryptionKeyResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

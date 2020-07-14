@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl LightsailClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "lightsail", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Describes an add-on that is enabled for an Amazon Lightsail resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -13680,26 +13706,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: AllocateStaticIpRequest,
     ) -> Result<AllocateStaticIpResult, RusotoError<AllocateStaticIpError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.AllocateStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AllocateStaticIpResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AllocateStaticIpError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AllocateStaticIpError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AllocateStaticIpResult, _>()
     }
 
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13707,26 +13724,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: AttachDiskRequest,
     ) -> Result<AttachDiskResult, RusotoError<AttachDiskError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.AttachDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AttachDiskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachDiskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachDiskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AttachDiskResult, _>()
     }
 
     /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13735,9 +13743,7 @@ impl Lightsail for LightsailClient {
         input: AttachInstancesToLoadBalancerRequest,
     ) -> Result<AttachInstancesToLoadBalancerResult, RusotoError<AttachInstancesToLoadBalancerError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachInstancesToLoadBalancer",
@@ -13745,20 +13751,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachInstancesToLoadBalancerResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachInstancesToLoadBalancerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachInstancesToLoadBalancerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AttachInstancesToLoadBalancerResult, _>()
     }
 
     /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> action with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>AttachLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13769,9 +13768,7 @@ impl Lightsail for LightsailClient {
         AttachLoadBalancerTlsCertificateResult,
         RusotoError<AttachLoadBalancerTlsCertificateError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachLoadBalancerTlsCertificate",
@@ -13779,22 +13776,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AttachLoadBalancerTlsCertificateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachLoadBalancerTlsCertificateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AttachLoadBalancerTlsCertificateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AttachLoadBalancerTlsCertificateResult, _>()
     }
 
     /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
@@ -13802,26 +13793,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: AttachStaticIpRequest,
     ) -> Result<AttachStaticIpResult, RusotoError<AttachStaticIpError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.AttachStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AttachStaticIpResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AttachStaticIpError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachStaticIpError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AttachStaticIpResult, _>()
     }
 
     /// <p>Closes ports for a specific Amazon Lightsail instance.</p> <p>The <code>CloseInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13829,9 +13811,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: CloseInstancePublicPortsRequest,
     ) -> Result<CloseInstancePublicPortsResult, RusotoError<CloseInstancePublicPortsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CloseInstancePublicPorts",
@@ -13839,20 +13819,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CloseInstancePublicPortsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CloseInstancePublicPortsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CloseInstancePublicPortsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CloseInstancePublicPortsResult, _>()
     }
 
     /// <p>Copies a manual snapshot of an instance or disk as another manual snapshot, or copies an automatic snapshot of an instance or disk as a manual snapshot. This operation can also be used to copy a manual or automatic snapshot of an instance or a disk from one AWS Region to another in Amazon Lightsail.</p> <p>When copying a <i>manual snapshot</i>, be sure to define the <code>source region</code>, <code>source snapshot name</code>, and <code>target snapshot name</code> parameters.</p> <p>When copying an <i>automatic snapshot</i>, be sure to define the <code>source region</code>, <code>source resource name</code>, <code>target snapshot name</code>, and either the <code>restore date</code> or the <code>use latest restorable auto snapshot</code> parameters.</p>
@@ -13860,26 +13833,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CopySnapshotRequest,
     ) -> Result<CopySnapshotResult, RusotoError<CopySnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CopySnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CopySnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CopySnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CopySnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CopySnapshotResult, _>()
     }
 
     /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
@@ -13887,9 +13851,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateCloudFormationStackRequest,
     ) -> Result<CreateCloudFormationStackResult, RusotoError<CreateCloudFormationStackError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateCloudFormationStack",
@@ -13897,20 +13859,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateCloudFormationStackResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCloudFormationStackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCloudFormationStackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateCloudFormationStackResult, _>()
     }
 
     /// <p>Creates an email or SMS text message contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
@@ -13918,27 +13873,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateContactMethodRequest,
     ) -> Result<CreateContactMethodResult, RusotoError<CreateContactMethodError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateContactMethod");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateContactMethodResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateContactMethodError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateContactMethodError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateContactMethodResult, _>()
     }
 
     /// <p>Creates a block storage disk that can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13946,26 +13891,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskRequest,
     ) -> Result<CreateDiskResult, RusotoError<CreateDiskError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDiskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDiskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskResult, _>()
     }
 
     /// <p>Creates a block storage disk from a manual or automatic snapshot of a disk. The resulting disk can be attached to an Amazon Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>).</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13973,27 +13909,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskFromSnapshotRequest,
     ) -> Result<CreateDiskFromSnapshotResult, RusotoError<CreateDiskFromSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskFromSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDiskFromSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDiskFromSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDiskFromSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDiskFromSnapshotResult, _>()
     }
 
     /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14001,27 +13928,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskSnapshotRequest,
     ) -> Result<CreateDiskSnapshotResult, RusotoError<CreateDiskSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDiskSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDiskSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDiskSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskSnapshotResult, _>()
     }
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14029,26 +13946,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDomainRequest,
     ) -> Result<CreateDomainResult, RusotoError<CreateDomainError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDomainError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDomainError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainResult, _>()
     }
 
     /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14056,26 +13964,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDomainEntryRequest,
     ) -> Result<CreateDomainEntryResult, RusotoError<CreateDomainEntryError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainEntryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDomainEntryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDomainEntryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDomainEntryResult, _>()
     }
 
     /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14083,27 +13982,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateInstanceSnapshotRequest,
     ) -> Result<CreateInstanceSnapshotResult, RusotoError<CreateInstanceSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInstanceSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInstanceSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateInstanceSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateInstanceSnapshotResult, _>()
     }
 
     /// <p>Creates one or more Amazon Lightsail instances.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14111,26 +14001,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateInstancesRequest,
     ) -> Result<CreateInstancesResult, RusotoError<CreateInstancesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateInstancesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateInstancesResult, _>()
     }
 
     /// <p>Creates one or more new instances from a manual or automatic snapshot of an instance.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14139,9 +14020,7 @@ impl Lightsail for LightsailClient {
         input: CreateInstancesFromSnapshotRequest,
     ) -> Result<CreateInstancesFromSnapshotResult, RusotoError<CreateInstancesFromSnapshotError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateInstancesFromSnapshot",
@@ -14149,20 +14028,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInstancesFromSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInstancesFromSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateInstancesFromSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateInstancesFromSnapshotResult, _>()
     }
 
     /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14170,26 +14042,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateKeyPairRequest,
     ) -> Result<CreateKeyPairResult, RusotoError<CreateKeyPairError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateKeyPairResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateKeyPairError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateKeyPairError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateKeyPairResult, _>()
     }
 
     /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14197,27 +14060,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateLoadBalancerRequest,
     ) -> Result<CreateLoadBalancerResult, RusotoError<CreateLoadBalancerError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.CreateLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLoadBalancerResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLoadBalancerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLoadBalancerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateLoadBalancerResult, _>()
     }
 
     /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>CreateLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14228,9 +14081,7 @@ impl Lightsail for LightsailClient {
         CreateLoadBalancerTlsCertificateResult,
         RusotoError<CreateLoadBalancerTlsCertificateError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateLoadBalancerTlsCertificate",
@@ -14238,22 +14089,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateLoadBalancerTlsCertificateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateLoadBalancerTlsCertificateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateLoadBalancerTlsCertificateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateLoadBalancerTlsCertificateResult, _>()
     }
 
     /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14261,9 +14106,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateRelationalDatabaseRequest,
     ) -> Result<CreateRelationalDatabaseResult, RusotoError<CreateRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabase",
@@ -14271,20 +14114,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateRelationalDatabaseResult, _>()
     }
 
     /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14295,9 +14131,7 @@ impl Lightsail for LightsailClient {
         CreateRelationalDatabaseFromSnapshotResult,
         RusotoError<CreateRelationalDatabaseFromSnapshotError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseFromSnapshot",
@@ -14305,22 +14139,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRelationalDatabaseFromSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRelationalDatabaseFromSnapshotError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateRelationalDatabaseFromSnapshotError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateRelationalDatabaseFromSnapshotResult, _>()
     }
 
     /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14331,9 +14159,7 @@ impl Lightsail for LightsailClient {
         CreateRelationalDatabaseSnapshotResult,
         RusotoError<CreateRelationalDatabaseSnapshotError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseSnapshot",
@@ -14341,22 +14167,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRelationalDatabaseSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRelationalDatabaseSnapshotError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateRelationalDatabaseSnapshotError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateRelationalDatabaseSnapshotResult, _>()
     }
 
     /// <p>Deletes an alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
@@ -14364,26 +14184,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteAlarmRequest,
     ) -> Result<DeleteAlarmResult, RusotoError<DeleteAlarmError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteAlarm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAlarmResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAlarmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAlarmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAlarmResult, _>()
     }
 
     /// <p>Deletes an automatic snapshot of an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
@@ -14391,27 +14202,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteAutoSnapshotRequest,
     ) -> Result<DeleteAutoSnapshotResult, RusotoError<DeleteAutoSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteAutoSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAutoSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAutoSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAutoSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAutoSnapshotResult, _>()
     }
 
     /// <p>Deletes a contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
@@ -14419,27 +14220,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteContactMethodRequest,
     ) -> Result<DeleteContactMethodResult, RusotoError<DeleteContactMethodError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteContactMethod");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteContactMethodResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteContactMethodError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteContactMethodError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteContactMethodResult, _>()
     }
 
     /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14447,26 +14238,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDiskRequest,
     ) -> Result<DeleteDiskResult, RusotoError<DeleteDiskError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDiskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDiskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskResult, _>()
     }
 
     /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14474,27 +14256,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDiskSnapshotRequest,
     ) -> Result<DeleteDiskSnapshotResult, RusotoError<DeleteDiskSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDiskSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDiskSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDiskSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskSnapshotResult, _>()
     }
 
     /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14502,26 +14274,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDomainRequest,
     ) -> Result<DeleteDomainResult, RusotoError<DeleteDomainError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDomainError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDomainError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainResult, _>()
     }
 
     /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14529,26 +14292,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDomainEntryRequest,
     ) -> Result<DeleteDomainEntryResult, RusotoError<DeleteDomainEntryError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainEntryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDomainEntryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDomainEntryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDomainEntryResult, _>()
     }
 
     /// <p>Deletes an Amazon Lightsail instance.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14556,26 +14310,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteInstanceRequest,
     ) -> Result<DeleteInstanceResult, RusotoError<DeleteInstanceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteInstanceResult, _>()
     }
 
     /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14583,27 +14328,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteInstanceSnapshotRequest,
     ) -> Result<DeleteInstanceSnapshotResult, RusotoError<DeleteInstanceSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInstanceSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInstanceSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInstanceSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteInstanceSnapshotResult, _>()
     }
 
     /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>key pair name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14611,26 +14347,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteKeyPairRequest,
     ) -> Result<DeleteKeyPairResult, RusotoError<DeleteKeyPairError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteKeyPairResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteKeyPairError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteKeyPairError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteKeyPairResult, _>()
     }
 
     /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
@@ -14638,27 +14365,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteKnownHostKeysRequest,
     ) -> Result<DeleteKnownHostKeysResult, RusotoError<DeleteKnownHostKeysError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKnownHostKeys");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteKnownHostKeysResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteKnownHostKeysError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteKnownHostKeysError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteKnownHostKeysResult, _>()
     }
 
     /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14666,27 +14383,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteLoadBalancerRequest,
     ) -> Result<DeleteLoadBalancerResult, RusotoError<DeleteLoadBalancerError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLoadBalancerResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLoadBalancerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLoadBalancerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteLoadBalancerResult, _>()
     }
 
     /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>DeleteLoadBalancerTlsCertificate</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14697,9 +14404,7 @@ impl Lightsail for LightsailClient {
         DeleteLoadBalancerTlsCertificateResult,
         RusotoError<DeleteLoadBalancerTlsCertificateError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteLoadBalancerTlsCertificate",
@@ -14707,22 +14412,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteLoadBalancerTlsCertificateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteLoadBalancerTlsCertificateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteLoadBalancerTlsCertificateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteLoadBalancerTlsCertificateResult, _>()
     }
 
     /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14730,9 +14429,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteRelationalDatabaseRequest,
     ) -> Result<DeleteRelationalDatabaseResult, RusotoError<DeleteRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabase",
@@ -14740,20 +14437,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRelationalDatabaseResult, _>()
     }
 
     /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14764,9 +14454,7 @@ impl Lightsail for LightsailClient {
         DeleteRelationalDatabaseSnapshotResult,
         RusotoError<DeleteRelationalDatabaseSnapshotError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabaseSnapshot",
@@ -14774,22 +14462,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRelationalDatabaseSnapshotError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteRelationalDatabaseSnapshotError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
     }
 
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14797,26 +14479,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DetachDiskRequest,
     ) -> Result<DetachDiskResult, RusotoError<DetachDiskError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DetachDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetachDiskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachDiskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachDiskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetachDiskResult, _>()
     }
 
     /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14827,9 +14500,7 @@ impl Lightsail for LightsailClient {
         DetachInstancesFromLoadBalancerResult,
         RusotoError<DetachInstancesFromLoadBalancerError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DetachInstancesFromLoadBalancer",
@@ -14837,22 +14508,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetachInstancesFromLoadBalancerResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachInstancesFromLoadBalancerError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachInstancesFromLoadBalancerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DetachInstancesFromLoadBalancerResult, _>()
     }
 
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
@@ -14860,26 +14522,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: DetachStaticIpRequest,
     ) -> Result<DetachStaticIpResult, RusotoError<DetachStaticIpError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DetachStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetachStaticIpResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetachStaticIpError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachStaticIpError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetachStaticIpResult, _>()
     }
 
     /// <p>Disables an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
@@ -14887,52 +14540,34 @@ impl Lightsail for LightsailClient {
         &self,
         input: DisableAddOnRequest,
     ) -> Result<DisableAddOnResult, RusotoError<DisableAddOnError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DisableAddOn");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DisableAddOnResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisableAddOnError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableAddOnError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DisableAddOnResult, _>()
     }
 
     /// <p>Downloads the default SSH key pair from the user's account.</p>
     async fn download_default_key_pair(
         &self,
     ) -> Result<DownloadDefaultKeyPairResult, RusotoError<DownloadDefaultKeyPairError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.DownloadDefaultKeyPair");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DownloadDefaultKeyPairResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DownloadDefaultKeyPairError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DownloadDefaultKeyPairError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DownloadDefaultKeyPairResult, _>()
     }
 
     /// <p>Enables or modifies an add-on for an Amazon Lightsail resource. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
@@ -14940,26 +14575,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: EnableAddOnRequest,
     ) -> Result<EnableAddOnResult, RusotoError<EnableAddOnError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.EnableAddOn");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<EnableAddOnResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EnableAddOnError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableAddOnError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<EnableAddOnResult, _>()
     }
 
     /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>source snapshot name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
@@ -14967,26 +14593,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: ExportSnapshotRequest,
     ) -> Result<ExportSnapshotResult, RusotoError<ExportSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.ExportSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ExportSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ExportSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ExportSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ExportSnapshotResult, _>()
     }
 
     /// <p>Returns the names of all active (not deleted) resources.</p>
@@ -14994,26 +14611,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetActiveNamesRequest,
     ) -> Result<GetActiveNamesResult, RusotoError<GetActiveNamesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetActiveNames");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetActiveNamesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetActiveNamesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetActiveNamesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetActiveNamesResult, _>()
     }
 
     /// <p>Returns information about the configured alarms. Specify an alarm name in your request to return information about a specific alarm, or specify a monitored resource name to return information about all alarms for a specific resource.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
@@ -15021,26 +14629,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetAlarmsRequest,
     ) -> Result<GetAlarmsResult, RusotoError<GetAlarmsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetAlarms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetAlarmsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAlarmsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAlarmsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAlarmsResult, _>()
     }
 
     /// <p>Returns the available automatic snapshots for an instance or disk. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-configuring-automatic-snapshots">Lightsail Dev Guide</a>.</p>
@@ -15048,26 +14647,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetAutoSnapshotsRequest,
     ) -> Result<GetAutoSnapshotsResult, RusotoError<GetAutoSnapshotsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetAutoSnapshots");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetAutoSnapshotsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAutoSnapshotsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAutoSnapshotsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAutoSnapshotsResult, _>()
     }
 
     /// <p><p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new instance already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p> <note> <p>Use active blueprints when creating new instances. Inactive blueprints are listed to support customers with existing instances and are not necessarily available to create new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases.</p> </note></p>
@@ -15075,26 +14665,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetBlueprintsRequest,
     ) -> Result<GetBlueprintsResult, RusotoError<GetBlueprintsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetBlueprints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBlueprintsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlueprintsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBlueprintsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBlueprintsResult, _>()
     }
 
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
@@ -15102,26 +14683,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetBundlesRequest,
     ) -> Result<GetBundlesResult, RusotoError<GetBundlesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetBundles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBundlesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBundlesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBundlesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBundlesResult, _>()
     }
 
     /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
@@ -15130,9 +14702,7 @@ impl Lightsail for LightsailClient {
         input: GetCloudFormationStackRecordsRequest,
     ) -> Result<GetCloudFormationStackRecordsResult, RusotoError<GetCloudFormationStackRecordsError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetCloudFormationStackRecords",
@@ -15140,20 +14710,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCloudFormationStackRecordsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCloudFormationStackRecordsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCloudFormationStackRecordsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCloudFormationStackRecordsResult, _>()
     }
 
     /// <p>Returns information about the configured contact methods. Specify a protocol in your request to return information about a specific contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
@@ -15161,26 +14724,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetContactMethodsRequest,
     ) -> Result<GetContactMethodsResult, RusotoError<GetContactMethodsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetContactMethods");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetContactMethodsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetContactMethodsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetContactMethodsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetContactMethodsResult, _>()
     }
 
     /// <p>Returns information about a specific block storage disk.</p>
@@ -15188,26 +14742,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDiskRequest,
     ) -> Result<GetDiskResult, RusotoError<GetDiskError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDiskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDiskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDiskResult, _>()
     }
 
     /// <p>Returns information about a specific block storage disk snapshot.</p>
@@ -15215,26 +14760,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDiskSnapshotRequest,
     ) -> Result<GetDiskSnapshotResult, RusotoError<GetDiskSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiskSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDiskSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotResult, _>()
     }
 
     /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p>
@@ -15242,26 +14778,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDiskSnapshotsRequest,
     ) -> Result<GetDiskSnapshotsResult, RusotoError<GetDiskSnapshotsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshots");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiskSnapshotsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDiskSnapshotsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDiskSnapshotsResult, _>()
     }
 
     /// <p>Returns information about all block storage disks in your AWS account and region.</p>
@@ -15269,26 +14796,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDisksRequest,
     ) -> Result<GetDisksResult, RusotoError<GetDisksError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDisksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDisksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDisksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDisksResult, _>()
     }
 
     /// <p>Returns information about a specific domain recordset.</p>
@@ -15296,26 +14814,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDomainRequest,
     ) -> Result<GetDomainResult, RusotoError<GetDomainError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDomainResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDomainError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDomainResult, _>()
     }
 
     /// <p>Returns a list of all domains in the user's account.</p>
@@ -15323,26 +14832,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDomainsRequest,
     ) -> Result<GetDomainsResult, RusotoError<GetDomainsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomains");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDomainsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDomainsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDomainsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDomainsResult, _>()
     }
 
     /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
@@ -15350,9 +14850,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetExportSnapshotRecordsRequest,
     ) -> Result<GetExportSnapshotRecordsResult, RusotoError<GetExportSnapshotRecordsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetExportSnapshotRecords",
@@ -15360,20 +14858,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetExportSnapshotRecordsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExportSnapshotRecordsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetExportSnapshotRecordsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetExportSnapshotRecordsResult, _>()
     }
 
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
@@ -15381,26 +14872,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceRequest,
     ) -> Result<GetInstanceResult, RusotoError<GetInstanceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResult, _>()
     }
 
     /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -15408,9 +14890,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceAccessDetailsRequest,
     ) -> Result<GetInstanceAccessDetailsResult, RusotoError<GetInstanceAccessDetailsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetInstanceAccessDetails",
@@ -15418,20 +14898,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceAccessDetailsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceAccessDetailsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceAccessDetailsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetInstanceAccessDetailsResult, _>()
     }
 
     /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
@@ -15439,27 +14912,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceMetricDataRequest,
     ) -> Result<GetInstanceMetricDataResult, RusotoError<GetInstanceMetricDataError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceMetricData");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceMetricDataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceMetricDataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceMetricDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceMetricDataResult, _>()
     }
 
     /// <p>Returns the firewall port states for a specific Amazon Lightsail instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
@@ -15467,27 +14930,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstancePortStatesRequest,
     ) -> Result<GetInstancePortStatesResult, RusotoError<GetInstancePortStatesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstancePortStates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstancePortStatesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstancePortStatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstancePortStatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstancePortStatesResult, _>()
     }
 
     /// <p>Returns information about a specific instance snapshot.</p>
@@ -15495,27 +14948,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceSnapshotRequest,
     ) -> Result<GetInstanceSnapshotResult, RusotoError<GetInstanceSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceSnapshotResult, _>()
     }
 
     /// <p>Returns all instance snapshots for the user's account.</p>
@@ -15523,27 +14966,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceSnapshotsRequest,
     ) -> Result<GetInstanceSnapshotsResult, RusotoError<GetInstanceSnapshotsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshots");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceSnapshotsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceSnapshotsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceSnapshotsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceSnapshotsResult, _>()
     }
 
     /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
@@ -15551,26 +14984,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceStateRequest,
     ) -> Result<GetInstanceStateResult, RusotoError<GetInstanceStateError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceStateResult, _>()
     }
 
     /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
@@ -15578,26 +15002,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstancesRequest,
     ) -> Result<GetInstancesResult, RusotoError<GetInstancesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInstancesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstancesResult, _>()
     }
 
     /// <p>Returns information about a specific key pair.</p>
@@ -15605,26 +15020,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetKeyPairRequest,
     ) -> Result<GetKeyPairResult, RusotoError<GetKeyPairError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetKeyPairError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetKeyPairError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairResult, _>()
     }
 
     /// <p>Returns information about all key pairs in the user's account.</p>
@@ -15632,26 +15038,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetKeyPairsRequest,
     ) -> Result<GetKeyPairsResult, RusotoError<GetKeyPairsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPairs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetKeyPairsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetKeyPairsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetKeyPairsResult, _>()
     }
 
     /// <p>Returns information about the specified Lightsail load balancer.</p>
@@ -15659,26 +15056,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancerRequest,
     ) -> Result<GetLoadBalancerResult, RusotoError<GetLoadBalancerError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancerResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLoadBalancerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLoadBalancerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancerResult, _>()
     }
 
     /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
@@ -15686,9 +15074,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancerMetricDataRequest,
     ) -> Result<GetLoadBalancerMetricDataResult, RusotoError<GetLoadBalancerMetricDataError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerMetricData",
@@ -15696,20 +15082,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoadBalancerMetricDataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLoadBalancerMetricDataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLoadBalancerMetricDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetLoadBalancerMetricDataResult, _>()
     }
 
     /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
@@ -15720,9 +15099,7 @@ impl Lightsail for LightsailClient {
         GetLoadBalancerTlsCertificatesResult,
         RusotoError<GetLoadBalancerTlsCertificatesError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerTlsCertificates",
@@ -15730,20 +15107,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetLoadBalancerTlsCertificatesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLoadBalancerTlsCertificatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLoadBalancerTlsCertificatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetLoadBalancerTlsCertificatesResult, _>()
     }
 
     /// <p>Returns information about all load balancers in an account.</p>
@@ -15751,26 +15121,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancersRequest,
     ) -> Result<GetLoadBalancersResult, RusotoError<GetLoadBalancersError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetLoadBalancersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetLoadBalancersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetLoadBalancersResult, _>()
     }
 
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
@@ -15778,26 +15139,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationRequest,
     ) -> Result<GetOperationResult, RusotoError<GetOperationError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOperationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOperationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResult, _>()
     }
 
     /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
@@ -15805,26 +15157,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationsRequest,
     ) -> Result<GetOperationsResult, RusotoError<GetOperationsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOperationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOperationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOperationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOperationsResult, _>()
     }
 
     /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
@@ -15832,9 +15175,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationsForResourceRequest,
     ) -> Result<GetOperationsForResourceResult, RusotoError<GetOperationsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetOperationsForResource",
@@ -15842,20 +15183,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOperationsForResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOperationsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOperationsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetOperationsForResourceResult, _>()
     }
 
     /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
@@ -15863,26 +15197,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRegionsRequest,
     ) -> Result<GetRegionsResult, RusotoError<GetRegionsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetRegions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRegionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRegionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRegionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRegionsResult, _>()
     }
 
     /// <p>Returns information about a specific database in Amazon Lightsail.</p>
@@ -15890,27 +15215,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabaseRequest,
     ) -> Result<GetRelationalDatabaseResult, RusotoError<GetRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRelationalDatabaseResult, _>()
     }
 
     /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
@@ -15921,9 +15236,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseBlueprintsResult,
         RusotoError<GetRelationalDatabaseBlueprintsError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBlueprints",
@@ -15931,22 +15244,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseBlueprintsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseBlueprintsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseBlueprintsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseBlueprintsResult, _>()
     }
 
     /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
@@ -15955,9 +15259,7 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseBundlesRequest,
     ) -> Result<GetRelationalDatabaseBundlesResult, RusotoError<GetRelationalDatabaseBundlesError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBundles",
@@ -15965,20 +15267,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseBundlesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseBundlesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseBundlesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseBundlesResult, _>()
     }
 
     /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
@@ -15987,9 +15282,7 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseEventsRequest,
     ) -> Result<GetRelationalDatabaseEventsResult, RusotoError<GetRelationalDatabaseEventsError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseEvents",
@@ -15997,20 +15290,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseEventsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseEventsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseEventsResult, _>()
     }
 
     /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
@@ -16021,9 +15307,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseLogEventsResult,
         RusotoError<GetRelationalDatabaseLogEventsError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogEvents",
@@ -16031,20 +15315,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseLogEventsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseLogEventsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseLogEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseLogEventsResult, _>()
     }
 
     /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
@@ -16055,9 +15332,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseLogStreamsResult,
         RusotoError<GetRelationalDatabaseLogStreamsError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogStreams",
@@ -16065,22 +15340,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseLogStreamsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseLogStreamsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseLogStreamsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseLogStreamsResult, _>()
     }
 
     /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>GetRelationalDatabaseMasterUserPassword</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
@@ -16091,9 +15357,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseMasterUserPasswordResult,
         RusotoError<GetRelationalDatabaseMasterUserPasswordError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMasterUserPassword",
@@ -16101,22 +15365,16 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseMasterUserPasswordResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseMasterUserPasswordError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetRelationalDatabaseMasterUserPasswordError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseMasterUserPasswordResult, _>()
     }
 
     /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
@@ -16127,9 +15385,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseMetricDataResult,
         RusotoError<GetRelationalDatabaseMetricDataError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMetricData",
@@ -16137,22 +15393,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseMetricDataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseMetricDataError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseMetricDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseMetricDataResult, _>()
     }
 
     /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
@@ -16163,9 +15410,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseParametersResult,
         RusotoError<GetRelationalDatabaseParametersError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseParameters",
@@ -16173,22 +15418,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseParametersError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseParametersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseParametersResult, _>()
     }
 
     /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
@@ -16197,9 +15433,7 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseSnapshotRequest,
     ) -> Result<GetRelationalDatabaseSnapshotResult, RusotoError<GetRelationalDatabaseSnapshotError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshot",
@@ -16207,20 +15441,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseSnapshotResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseSnapshotResult, _>()
     }
 
     /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
@@ -16231,9 +15458,7 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseSnapshotsResult,
         RusotoError<GetRelationalDatabaseSnapshotsError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshots",
@@ -16241,20 +15466,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabaseSnapshotsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabaseSnapshotsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabaseSnapshotsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabaseSnapshotsResult, _>()
     }
 
     /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
@@ -16262,27 +15480,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabasesRequest,
     ) -> Result<GetRelationalDatabasesResult, RusotoError<GetRelationalDatabasesError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRelationalDatabasesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRelationalDatabasesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRelationalDatabasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRelationalDatabasesResult, _>()
     }
 
     /// <p>Returns information about a specific static IP.</p>
@@ -16290,26 +15499,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetStaticIpRequest,
     ) -> Result<GetStaticIpResult, RusotoError<GetStaticIpError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetStaticIpError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetStaticIpError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpResult, _>()
     }
 
     /// <p>Returns information about all static IPs in the user's account.</p>
@@ -16317,26 +15517,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetStaticIpsRequest,
     ) -> Result<GetStaticIpsResult, RusotoError<GetStaticIpsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetStaticIpsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetStaticIpsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetStaticIpsResult, _>()
     }
 
     /// <p>Imports a public SSH key from a specific key pair.</p>
@@ -16344,49 +15535,31 @@ impl Lightsail for LightsailClient {
         &self,
         input: ImportKeyPairRequest,
     ) -> Result<ImportKeyPairResult, RusotoError<ImportKeyPairError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.ImportKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ImportKeyPairResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportKeyPairError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportKeyPairError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportKeyPairResult, _>()
     }
 
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     async fn is_vpc_peered(&self) -> Result<IsVpcPeeredResult, RusotoError<IsVpcPeeredError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.IsVpcPeered");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<IsVpcPeeredResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(IsVpcPeeredError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, IsVpcPeeredError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<IsVpcPeeredResult, _>()
     }
 
     /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol.</p> <p>The <code>OpenInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16394,50 +15567,32 @@ impl Lightsail for LightsailClient {
         &self,
         input: OpenInstancePublicPortsRequest,
     ) -> Result<OpenInstancePublicPortsResult, RusotoError<OpenInstancePublicPortsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.OpenInstancePublicPorts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<OpenInstancePublicPortsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(OpenInstancePublicPortsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, OpenInstancePublicPortsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<OpenInstancePublicPortsResult, _>()
     }
 
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     async fn peer_vpc(&self) -> Result<PeerVpcResult, RusotoError<PeerVpcError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.PeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PeerVpcResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PeerVpcError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PeerVpcError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PeerVpcResult, _>()
     }
 
     /// <p>Creates or updates an alarm, and associates it with the specified metric.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p> <p>When this action creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm. The alarm is then evaluated with the updated configuration.</p>
@@ -16445,26 +15600,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: PutAlarmRequest,
     ) -> Result<PutAlarmResult, RusotoError<PutAlarmError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.PutAlarm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutAlarmResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAlarmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAlarmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutAlarmResult, _>()
     }
 
     /// <p>Opens ports for a specific Amazon Lightsail instance, and specifies the IP addresses allowed to connect to the instance through the ports, and the protocol. This action also closes all currently open ports that are not included in the request. Include all of the ports and the protocols you want to open in your <code>PutInstancePublicPorts</code>request. Or use the <code>OpenInstancePublicPorts</code> action to open ports without closing currently open ports.</p> <p>The <code>PutInstancePublicPorts</code> action supports tag-based access control via resource tags applied to the resource identified by <code>instanceName</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16472,27 +15618,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: PutInstancePublicPortsRequest,
     ) -> Result<PutInstancePublicPortsResult, RusotoError<PutInstancePublicPortsError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.PutInstancePublicPorts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutInstancePublicPortsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutInstancePublicPortsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutInstancePublicPortsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutInstancePublicPortsResult, _>()
     }
 
     /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16500,26 +15637,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: RebootInstanceRequest,
     ) -> Result<RebootInstanceResult, RusotoError<RebootInstanceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.RebootInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RebootInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RebootInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RebootInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RebootInstanceResult, _>()
     }
 
     /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16527,9 +15655,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: RebootRelationalDatabaseRequest,
     ) -> Result<RebootRelationalDatabaseResult, RusotoError<RebootRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.RebootRelationalDatabase",
@@ -16537,20 +15663,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RebootRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RebootRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RebootRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RebootRelationalDatabaseResult, _>()
     }
 
     /// <p>Deletes a specific static IP from your account.</p>
@@ -16558,26 +15677,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: ReleaseStaticIpRequest,
     ) -> Result<ReleaseStaticIpResult, RusotoError<ReleaseStaticIpError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.ReleaseStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ReleaseStaticIpResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ReleaseStaticIpError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ReleaseStaticIpError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ReleaseStaticIpResult, _>()
     }
 
     /// <p><p>Sends a verification request to an email contact method to ensure it&#39;s owned by the requester. SMS contact methods don&#39;t need to be verified.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p> <p>A verification request is sent to the contact method when you initially create it. Use this action to send another verification request if a previous verification request was deleted, or has expired.</p> <important> <p>Notifications are not sent to an email contact method until after it is verified, and confirmed as valid.</p> </important></p>
@@ -16586,9 +15696,7 @@ impl Lightsail for LightsailClient {
         input: SendContactMethodVerificationRequest,
     ) -> Result<SendContactMethodVerificationResult, RusotoError<SendContactMethodVerificationError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.SendContactMethodVerification",
@@ -16596,20 +15704,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendContactMethodVerificationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendContactMethodVerificationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendContactMethodVerificationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SendContactMethodVerificationResult, _>()
     }
 
     /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16617,26 +15718,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: StartInstanceRequest,
     ) -> Result<StartInstanceResult, RusotoError<StartInstanceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.StartInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartInstanceResult, _>()
     }
 
     /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16644,27 +15736,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: StartRelationalDatabaseRequest,
     ) -> Result<StartRelationalDatabaseResult, RusotoError<StartRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.StartRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartRelationalDatabaseResult, _>()
     }
 
     /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>instance name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16672,26 +15755,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: StopInstanceRequest,
     ) -> Result<StopInstanceResult, RusotoError<StopInstanceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.StopInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopInstanceResult, _>()
     }
 
     /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16699,27 +15773,18 @@ impl Lightsail for LightsailClient {
         &self,
         input: StopRelationalDatabaseRequest,
     ) -> Result<StopRelationalDatabaseResult, RusotoError<StopRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.StopRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopRelationalDatabaseResult, _>()
     }
 
     /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16727,26 +15792,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResult, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResult, _>()
     }
 
     /// <p>Tests an alarm by displaying a banner on the Amazon Lightsail console. If a notification trigger is configured for the specified alarm, the test also sends a notification to the notification protocol (<code>Email</code> and/or <code>SMS</code>) configured for the alarm.</p> <p>An alarm is used to monitor a single metric for one of your resources. When a metric condition is met, the alarm can notify you by email, SMS text message, and a banner displayed on the Amazon Lightsail console. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
@@ -16754,49 +15810,31 @@ impl Lightsail for LightsailClient {
         &self,
         input: TestAlarmRequest,
     ) -> Result<TestAlarmResult, RusotoError<TestAlarmError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.TestAlarm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TestAlarmResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TestAlarmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TestAlarmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TestAlarmResult, _>()
     }
 
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     async fn unpeer_vpc(&self) -> Result<UnpeerVpcResult, RusotoError<UnpeerVpcError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.UnpeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UnpeerVpcResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UnpeerVpcError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UnpeerVpcError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UnpeerVpcResult, _>()
     }
 
     /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by <code>resource name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16804,26 +15842,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResult, _>()
     }
 
     /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16831,26 +15860,17 @@ impl Lightsail for LightsailClient {
         &self,
         input: UpdateDomainEntryRequest,
     ) -> Result<UpdateDomainEntryResult, RusotoError<UpdateDomainEntryError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Lightsail_20161128.UpdateDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDomainEntryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDomainEntryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDomainEntryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDomainEntryResult, _>()
     }
 
     /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>load balancer name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16859,9 +15879,7 @@ impl Lightsail for LightsailClient {
         input: UpdateLoadBalancerAttributeRequest,
     ) -> Result<UpdateLoadBalancerAttributeResult, RusotoError<UpdateLoadBalancerAttributeError>>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateLoadBalancerAttribute",
@@ -16869,20 +15887,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateLoadBalancerAttributeResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateLoadBalancerAttributeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateLoadBalancerAttributeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateLoadBalancerAttributeResult, _>()
     }
 
     /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16890,9 +15901,7 @@ impl Lightsail for LightsailClient {
         &self,
         input: UpdateRelationalDatabaseRequest,
     ) -> Result<UpdateRelationalDatabaseResult, RusotoError<UpdateRelationalDatabaseError>> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabase",
@@ -16900,20 +15909,13 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRelationalDatabaseResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRelationalDatabaseError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRelationalDatabaseError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateRelationalDatabaseResult, _>()
     }
 
     /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which parameter updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -16924,9 +15926,7 @@ impl Lightsail for LightsailClient {
         UpdateRelationalDatabaseParametersResult,
         RusotoError<UpdateRelationalDatabaseParametersError>,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabaseParameters",
@@ -16934,21 +15934,15 @@ impl Lightsail for LightsailClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRelationalDatabaseParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRelationalDatabaseParametersError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateRelationalDatabaseParametersError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateRelationalDatabaseParametersResult, _>()
     }
 }

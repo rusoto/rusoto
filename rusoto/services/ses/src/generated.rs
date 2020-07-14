@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl SesClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-12-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 /// <p>When included in a receipt rule, this action adds a header to the received email.</p> <p>For information about adding a header using a receipt rule, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-add-header.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -89,11 +113,7 @@ struct AddressDeserializer;
 impl AddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -131,11 +151,7 @@ struct AmazonResourceNameDeserializer;
 impl AmazonResourceNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -143,11 +159,7 @@ struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents the body of the message. You can specify text, HTML, or both. If you use both, then the message should display correctly in the widest variety of email clients.</p>
@@ -262,11 +274,7 @@ struct BounceMessageDeserializer;
 impl BounceMessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -274,11 +282,7 @@ struct BounceSmtpReplyCodeDeserializer;
 impl BounceSmtpReplyCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -286,11 +290,7 @@ struct BounceStatusCodeDeserializer;
 impl BounceStatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p>
@@ -464,11 +464,7 @@ struct BulkEmailStatusDeserializer;
 impl BulkEmailStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -476,11 +472,7 @@ struct CidrDeserializer;
 impl CidrDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a request to create a receipt rule set by cloning an existing one. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -523,11 +515,11 @@ impl CloneReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloneReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CloneReceiptRuleSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -748,11 +740,7 @@ struct ConfigurationSetNameDeserializer;
 impl ConfigurationSetNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -804,11 +792,7 @@ struct CounterDeserializer;
 impl CounterDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Represents a request to create a configuration set event destination. A configuration set event destination, which can be either Amazon CloudWatch or Amazon Kinesis Firehose, describes an AWS service in which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -859,11 +843,11 @@ impl CreateConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetEventDestinationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetEventDestinationResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -906,11 +890,11 @@ impl CreateConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -962,11 +946,11 @@ impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetTrackingOptionsResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1060,11 +1044,11 @@ impl CreateReceiptFilterResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptFilterResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptFilterResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1111,11 +1095,11 @@ impl CreateReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1154,11 +1138,11 @@ impl CreateReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1196,11 +1180,11 @@ impl CreateTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateTemplateResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1210,11 +1194,7 @@ struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1222,11 +1202,7 @@ struct CustomRedirectDomainDeserializer;
 impl CustomRedirectDomainDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about a custom verification email template.</p>
@@ -1320,11 +1296,7 @@ struct DefaultDimensionValueDeserializer;
 impl DefaultDimensionValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a request to delete a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -1374,11 +1346,11 @@ impl DeleteConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetEventDestinationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetEventDestinationResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1420,11 +1392,11 @@ impl DeleteConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1470,11 +1442,11 @@ impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetTrackingOptionsResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1541,11 +1513,11 @@ impl DeleteIdentityPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityPolicyResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1584,11 +1556,11 @@ impl DeleteIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1627,11 +1599,11 @@ impl DeleteReceiptFilterResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptFilterResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptFilterResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1673,11 +1645,11 @@ impl DeleteReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1716,11 +1688,11 @@ impl DeleteReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1758,11 +1730,11 @@ impl DeleteTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTemplateResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2151,11 +2123,7 @@ struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2163,11 +2131,7 @@ struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2178,19 +2142,19 @@ impl DkimAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityDkimAttributes>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityDkimAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -2199,11 +2163,7 @@ struct EnabledDeserializer;
 impl EnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2211,11 +2171,7 @@ struct SesErrorDeserializer;
 impl SesErrorDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about the event destination that the specified email sending events will be published to.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -2334,11 +2290,7 @@ struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2364,11 +2316,7 @@ struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2441,11 +2389,7 @@ struct FailureRedirectionURLDeserializer;
 impl FailureRedirectionURLDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2453,11 +2397,7 @@ struct FromAddressDeserializer;
 impl FromAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a request to return the email sending status for your Amazon SES account in the current AWS Region.</p>
@@ -3016,11 +2956,7 @@ struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3028,11 +2964,7 @@ struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3040,11 +2972,7 @@ struct HtmlPartDeserializer;
 impl HtmlPartDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3052,11 +2980,7 @@ struct IdentityDeserializer;
 impl IdentityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents the DKIM attributes of a verified email address or a domain.</p>
@@ -3304,11 +3228,7 @@ struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p> <p>Event destinations, such as Amazon Kinesis Firehose, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -3439,11 +3359,7 @@ struct LastFreshStartDeserializer;
 impl LastFreshStartDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -3922,19 +3838,19 @@ impl MailFromDomainAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityMailFromDomainAttributes>, XmlParseError>
     {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityMailFromDomainAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -3943,11 +3859,7 @@ struct MailFromDomainNameDeserializer;
 impl MailFromDomainNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3955,11 +3867,7 @@ struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3967,11 +3875,7 @@ struct MaxSendRateDeserializer;
 impl MaxSendRateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 /// <p>Represents the message to be sent, composed of a subject and a body.</p>
@@ -4038,11 +3942,7 @@ struct MessageIdDeserializer;
 impl MessageIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the name and value of a tag that you can provide to <code>SendEmail</code> or <code>SendRawEmail</code> to apply to an email.</p> <p>Message tags, which you use with configuration sets, enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -4085,11 +3985,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4101,19 +3997,19 @@ impl NotificationAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityNotificationAttributes>, XmlParseError>
     {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityNotificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -4122,11 +4018,7 @@ struct NotificationTopicDeserializer;
 impl NotificationTopicDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4134,11 +4026,7 @@ struct PolicyDeserializer;
 impl PolicyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4149,19 +4037,19 @@ impl PolicyMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = PolicyNameDeserializer::deserialize("key", stack)?;
             let value = PolicyDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -4170,11 +4058,7 @@ struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4253,11 +4137,11 @@ impl PutConfigurationSetDeliveryOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutConfigurationSetDeliveryOptionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutConfigurationSetDeliveryOptionsResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4302,11 +4186,11 @@ impl PutIdentityPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutIdentityPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutIdentityPolicyResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4573,11 +4457,7 @@ struct ReceiptFilterNameDeserializer;
 impl ReceiptFilterNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4585,11 +4465,7 @@ struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A receipt IP address filter enables you to specify whether to accept or reject mail originating from an IP address or range of IP addresses.</p> <p>For information about setting up IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p>
@@ -4740,11 +4616,7 @@ struct ReceiptRuleNameDeserializer;
 impl ReceiptRuleNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4799,11 +4671,7 @@ struct ReceiptRuleSetNameDeserializer;
 impl ReceiptRuleSetNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4849,11 +4717,7 @@ struct RecipientDeserializer;
 impl RecipientDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p>
@@ -4944,11 +4808,7 @@ struct RenderedTemplateDeserializer;
 impl RenderedTemplateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents a request to reorder the receipt rules within a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -4992,11 +4852,11 @@ impl ReorderReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReorderReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ReorderReceiptRuleSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5124,11 +4984,7 @@ struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5136,11 +4992,7 @@ struct S3KeyPrefixDeserializer;
 impl S3KeyPrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>When included in a receipt rule, this action publishes a notification to Amazon Simple Notification Service (Amazon SNS). This action includes a complete copy of the email content in the Amazon SNS notifications. Amazon SNS notifications for all other actions simply provide information about the email. They do not include the email content itself.</p> <p>If you own the Amazon SNS topic, you don't need to do anything to give Amazon SES permission to publish emails to it. However, if you don't own the Amazon SNS topic, you need to attach a policy to the topic to give Amazon SES permissions to access it. For information about giving permissions, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> <important> <p>You can only publish emails that are 150 KB or less (including the header) to Amazon SNS. Larger emails will bounce. If you anticipate emails larger than 150 KB, use the S3 action instead.</p> </important> <p>For information about using a receipt rule to publish an Amazon SNS notification, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-sns.html">Amazon SES Developer Guide</a>.</p>
@@ -5200,11 +5052,7 @@ struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p> <p>Event destinations, such as Amazon SNS, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -5889,11 +5737,7 @@ struct SentLast24HoursDeserializer;
 impl SentLast24HoursDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 /// <p>Represents a request to set a receipt rule set as the active receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -5932,11 +5776,11 @@ impl SetActiveReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetActiveReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetActiveReceiptRuleSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5978,11 +5822,11 @@ impl SetIdentityDkimEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityDkimEnabledResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityDkimEnabledResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6031,11 +5875,11 @@ impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityFeedbackForwardingEnabledResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityFeedbackForwardingEnabledResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6087,11 +5931,11 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityHeadersInNotificationsEnabledResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6143,11 +5987,11 @@ impl SetIdentityMailFromDomainResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityMailFromDomainResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityMailFromDomainResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6197,11 +6041,11 @@ impl SetIdentityNotificationTopicResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityNotificationTopicResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetIdentityNotificationTopicResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6248,11 +6092,11 @@ impl SetReceiptRulePositionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetReceiptRulePositionResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetReceiptRulePositionResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6314,11 +6158,7 @@ struct StopScopeDeserializer;
 impl StopScopeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6326,11 +6166,7 @@ struct SubjectDeserializer;
 impl SubjectDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6338,11 +6174,7 @@ struct SubjectPartDeserializer;
 impl SubjectPartDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6350,11 +6182,7 @@ struct SuccessRedirectionURLDeserializer;
 impl SuccessRedirectionURLDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The content of the email, composed of a subject line, an HTML part, and a text-only part.</p>
@@ -6430,11 +6258,7 @@ struct TemplateContentDeserializer;
 impl TemplateContentDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Contains information about an email template.</p>
@@ -6495,11 +6319,7 @@ struct TemplateNameDeserializer;
 impl TemplateNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -6563,11 +6383,7 @@ struct TextPartDeserializer;
 impl TextPartDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6575,11 +6391,7 @@ struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6587,11 +6399,7 @@ struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A domain that is used to redirect email recipients to an Amazon SES-operated domain. This domain captures open and click events generated by Amazon SES emails.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <i>Amazon SES Developer Guide</i>.</p>
@@ -6716,11 +6524,11 @@ impl UpdateConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetEventDestinationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetEventDestinationResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6834,11 +6642,11 @@ impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetTrackingOptionsResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6936,11 +6744,11 @@ impl UpdateReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateReceiptRuleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateReceiptRuleResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6976,11 +6784,11 @@ impl UpdateTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UpdateTemplateResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6994,19 +6802,19 @@ impl VerificationAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityVerificationAttributes>, XmlParseError>
     {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "entry" {
-            start_element("entry", stack)?;
+        while xml_util::peek_at_name(stack)? == "entry" {
+            xml_util::start_element("entry", stack)?;
             let key = IdentityDeserializer::deserialize("key", stack)?;
             let value = IdentityVerificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            end_element("entry", stack)?;
+            xml_util::end_element("entry", stack)?;
         }
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -7015,11 +6823,7 @@ struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7027,11 +6831,7 @@ struct VerificationTokenDeserializer;
 impl VerificationTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7216,11 +7016,11 @@ impl VerifyEmailIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyEmailIdentityResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = VerifyEmailIdentityResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7326,7 +7126,7 @@ impl CloneReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7390,7 +7190,7 @@ impl CreateConfigurationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7483,7 +7283,7 @@ impl CreateConfigurationSetEventDestinationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7562,7 +7362,7 @@ impl CreateConfigurationSetTrackingOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7617,7 +7417,7 @@ impl CreateCustomVerificationEmailTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7671,7 +7471,7 @@ impl CreateReceiptFilterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7758,7 +7558,7 @@ impl CreateReceiptRuleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7815,7 +7615,7 @@ impl CreateReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7874,7 +7674,7 @@ impl CreateTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7922,7 +7722,7 @@ impl DeleteConfigurationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7977,7 +7777,7 @@ impl DeleteConfigurationSetEventDestinationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8037,7 +7837,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8080,7 +7880,7 @@ impl DeleteCustomVerificationEmailTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8114,7 +7914,7 @@ impl DeleteIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8148,7 +7948,7 @@ impl DeleteIdentityPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8182,7 +7982,7 @@ impl DeleteReceiptFilterError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8224,7 +8024,7 @@ impl DeleteReceiptRuleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8268,7 +8068,7 @@ impl DeleteReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8304,7 +8104,7 @@ impl DeleteTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8340,7 +8140,7 @@ impl DeleteVerifiedEmailAddressError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8376,7 +8176,7 @@ impl DescribeActiveReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8420,7 +8220,7 @@ impl DescribeConfigurationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8473,7 +8273,7 @@ impl DescribeReceiptRuleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8518,7 +8318,7 @@ impl DescribeReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8554,7 +8354,7 @@ impl GetAccountSendingEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8593,7 +8393,7 @@ impl GetCustomVerificationEmailTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8629,7 +8429,7 @@ impl GetIdentityDkimAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8665,7 +8465,7 @@ impl GetIdentityMailFromDomainAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8701,7 +8501,7 @@ impl GetIdentityNotificationAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8735,7 +8535,7 @@ impl GetIdentityPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8771,7 +8571,7 @@ impl GetIdentityVerificationAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8805,7 +8605,7 @@ impl GetSendQuotaError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8839,7 +8639,7 @@ impl GetSendStatisticsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8881,7 +8681,7 @@ impl GetTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8917,7 +8717,7 @@ impl ListConfigurationSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8953,7 +8753,7 @@ impl ListCustomVerificationEmailTemplatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8987,7 +8787,7 @@ impl ListIdentitiesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9021,7 +8821,7 @@ impl ListIdentityPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9055,7 +8855,7 @@ impl ListReceiptFiltersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9089,7 +8889,7 @@ impl ListReceiptRuleSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9123,7 +8923,7 @@ impl ListTemplatesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9159,7 +8959,7 @@ impl ListVerifiedEmailAddressesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9214,7 +9014,7 @@ impl PutConfigurationSetDeliveryOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9263,7 +9063,7 @@ impl PutIdentityPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9314,7 +9114,7 @@ impl ReorderReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9359,7 +9159,7 @@ impl SendBounceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9444,7 +9244,7 @@ impl SendBulkTemplatedEmailError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9504,7 +9304,7 @@ impl SendCustomVerificationEmailError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9588,7 +9388,7 @@ impl SendEmailError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9664,7 +9464,7 @@ impl SendRawEmailError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9753,7 +9553,7 @@ impl SendTemplatedEmailError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9806,7 +9606,7 @@ impl SetActiveReceiptRuleSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9842,7 +9642,7 @@ impl SetIdentityDkimEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9878,7 +9678,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9914,7 +9714,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9948,7 +9748,7 @@ impl SetIdentityMailFromDomainError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9984,7 +9784,7 @@ impl SetIdentityNotificationTopicError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10033,7 +9833,7 @@ impl SetReceiptRulePositionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10096,7 +9896,7 @@ impl TestRenderTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10136,7 +9936,7 @@ impl UpdateAccountSendingEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10212,7 +10012,7 @@ impl UpdateConfigurationSetEventDestinationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10267,7 +10067,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10317,7 +10117,7 @@ impl UpdateConfigurationSetSendingEnabledError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10383,7 +10183,7 @@ impl UpdateConfigurationSetTrackingOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10436,7 +10236,7 @@ impl UpdateCustomVerificationEmailTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10517,7 +10317,7 @@ impl UpdateReceiptRuleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10573,7 +10373,7 @@ impl UpdateTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10610,7 +10410,7 @@ impl VerifyDomainDkimError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10644,7 +10444,7 @@ impl VerifyDomainIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10678,7 +10478,7 @@ impl VerifyEmailAddressError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10712,7 +10512,7 @@ impl VerifyEmailIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11234,27 +11034,19 @@ impl Ses for SesClient {
         input: CloneReceiptRuleSetRequest,
     ) -> Result<CloneReceiptRuleSetResponse, RusotoError<CloneReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CloneReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CloneReceiptRuleSet");
+        let mut params = params;
         CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CloneReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CloneReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        result = CloneReceiptRuleSetResponse::default();
-        // parse non-payload
+        let result = CloneReceiptRuleSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11264,27 +11056,19 @@ impl Ses for SesClient {
         input: CreateConfigurationSetRequest,
     ) -> Result<CreateConfigurationSetResponse, RusotoError<CreateConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateConfigurationSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateConfigurationSet");
+        let mut params = params;
         CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateConfigurationSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConfigurationSetError::from_response)
+            .await?;
 
-        let result;
-        result = CreateConfigurationSetResponse::default();
-        // parse non-payload
+        let result = CreateConfigurationSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11297,29 +11081,22 @@ impl Ses for SesClient {
         RusotoError<CreateConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateConfigurationSetEventDestination");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateConfigurationSetEventDestination");
+        let mut params = params;
         CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateConfigurationSetEventDestinationError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateConfigurationSetEventDestinationError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = CreateConfigurationSetEventDestinationResponse::default();
-        // parse non-payload
+        let result = CreateConfigurationSetEventDestinationResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11332,29 +11109,22 @@ impl Ses for SesClient {
         RusotoError<CreateConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateConfigurationSetTrackingOptions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateConfigurationSetTrackingOptions");
+        let mut params = params;
         CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateConfigurationSetTrackingOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateConfigurationSetTrackingOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = CreateConfigurationSetTrackingOptionsResponse::default();
-        // parse non-payload
+        let result = CreateConfigurationSetTrackingOptionsResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11364,25 +11134,18 @@ impl Ses for SesClient {
         input: CreateCustomVerificationEmailTemplateRequest,
     ) -> Result<(), RusotoError<CreateCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateCustomVerificationEmailTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateCustomVerificationEmailTemplate");
+        let mut params = params;
         CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateCustomVerificationEmailTemplateError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateCustomVerificationEmailTemplateError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11394,27 +11157,19 @@ impl Ses for SesClient {
         input: CreateReceiptFilterRequest,
     ) -> Result<CreateReceiptFilterResponse, RusotoError<CreateReceiptFilterError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateReceiptFilter");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateReceiptFilter");
+        let mut params = params;
         CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateReceiptFilterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateReceiptFilterError::from_response)
+            .await?;
 
-        let result;
-        result = CreateReceiptFilterResponse::default();
-        // parse non-payload
+        let result = CreateReceiptFilterResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11424,27 +11179,19 @@ impl Ses for SesClient {
         input: CreateReceiptRuleRequest,
     ) -> Result<CreateReceiptRuleResponse, RusotoError<CreateReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateReceiptRule");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateReceiptRule");
+        let mut params = params;
         CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateReceiptRuleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateReceiptRuleError::from_response)
+            .await?;
 
-        let result;
-        result = CreateReceiptRuleResponse::default();
-        // parse non-payload
+        let result = CreateReceiptRuleResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11454,27 +11201,19 @@ impl Ses for SesClient {
         input: CreateReceiptRuleSetRequest,
     ) -> Result<CreateReceiptRuleSetResponse, RusotoError<CreateReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateReceiptRuleSet");
+        let mut params = params;
         CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        result = CreateReceiptRuleSetResponse::default();
-        // parse non-payload
+        let result = CreateReceiptRuleSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11484,27 +11223,19 @@ impl Ses for SesClient {
         input: CreateTemplateRequest,
     ) -> Result<CreateTemplateResponse, RusotoError<CreateTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateTemplate");
+        let mut params = params;
         CreateTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTemplateError::from_response)
+            .await?;
 
-        let result;
-        result = CreateTemplateResponse::default();
-        // parse non-payload
+        let result = CreateTemplateResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11514,27 +11245,19 @@ impl Ses for SesClient {
         input: DeleteConfigurationSetRequest,
     ) -> Result<DeleteConfigurationSetResponse, RusotoError<DeleteConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteConfigurationSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteConfigurationSet");
+        let mut params = params;
         DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteConfigurationSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationSetError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteConfigurationSetResponse::default();
-        // parse non-payload
+        let result = DeleteConfigurationSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11547,29 +11270,22 @@ impl Ses for SesClient {
         RusotoError<DeleteConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteConfigurationSetEventDestination");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteConfigurationSetEventDestination");
+        let mut params = params;
         DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteConfigurationSetEventDestinationError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteConfigurationSetEventDestinationError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = DeleteConfigurationSetEventDestinationResponse::default();
-        // parse non-payload
+        let result = DeleteConfigurationSetEventDestinationResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11582,29 +11298,22 @@ impl Ses for SesClient {
         RusotoError<DeleteConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteConfigurationSetTrackingOptions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteConfigurationSetTrackingOptions");
+        let mut params = params;
         DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteConfigurationSetTrackingOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteConfigurationSetTrackingOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = DeleteConfigurationSetTrackingOptionsResponse::default();
-        // parse non-payload
+        let result = DeleteConfigurationSetTrackingOptionsResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11614,25 +11323,18 @@ impl Ses for SesClient {
         input: DeleteCustomVerificationEmailTemplateRequest,
     ) -> Result<(), RusotoError<DeleteCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteCustomVerificationEmailTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteCustomVerificationEmailTemplate");
+        let mut params = params;
         DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteCustomVerificationEmailTemplateError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteCustomVerificationEmailTemplateError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11644,27 +11346,19 @@ impl Ses for SesClient {
         input: DeleteIdentityRequest,
     ) -> Result<DeleteIdentityResponse, RusotoError<DeleteIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteIdentity");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteIdentity");
+        let mut params = params;
         DeleteIdentityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteIdentityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteIdentityError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteIdentityResponse::default();
-        // parse non-payload
+        let result = DeleteIdentityResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11674,27 +11368,19 @@ impl Ses for SesClient {
         input: DeleteIdentityPolicyRequest,
     ) -> Result<DeleteIdentityPolicyResponse, RusotoError<DeleteIdentityPolicyError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteIdentityPolicy");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteIdentityPolicy");
+        let mut params = params;
         DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteIdentityPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteIdentityPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteIdentityPolicyResponse::default();
-        // parse non-payload
+        let result = DeleteIdentityPolicyResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11704,27 +11390,19 @@ impl Ses for SesClient {
         input: DeleteReceiptFilterRequest,
     ) -> Result<DeleteReceiptFilterResponse, RusotoError<DeleteReceiptFilterError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteReceiptFilter");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteReceiptFilter");
+        let mut params = params;
         DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteReceiptFilterError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteReceiptFilterError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteReceiptFilterResponse::default();
-        // parse non-payload
+        let result = DeleteReceiptFilterResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11734,27 +11412,19 @@ impl Ses for SesClient {
         input: DeleteReceiptRuleRequest,
     ) -> Result<DeleteReceiptRuleResponse, RusotoError<DeleteReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteReceiptRule");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteReceiptRule");
+        let mut params = params;
         DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteReceiptRuleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteReceiptRuleError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteReceiptRuleResponse::default();
-        // parse non-payload
+        let result = DeleteReceiptRuleResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11764,27 +11434,19 @@ impl Ses for SesClient {
         input: DeleteReceiptRuleSetRequest,
     ) -> Result<DeleteReceiptRuleSetResponse, RusotoError<DeleteReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteReceiptRuleSet");
+        let mut params = params;
         DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteReceiptRuleSetResponse::default();
-        // parse non-payload
+        let result = DeleteReceiptRuleSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11794,27 +11456,19 @@ impl Ses for SesClient {
         input: DeleteTemplateRequest,
     ) -> Result<DeleteTemplateResponse, RusotoError<DeleteTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteTemplate");
+        let mut params = params;
         DeleteTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTemplateError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteTemplateResponse::default();
-        // parse non-payload
+        let result = DeleteTemplateResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11824,23 +11478,15 @@ impl Ses for SesClient {
         input: DeleteVerifiedEmailAddressRequest,
     ) -> Result<(), RusotoError<DeleteVerifiedEmailAddressError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteVerifiedEmailAddress");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteVerifiedEmailAddress");
+        let mut params = params;
         DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteVerifiedEmailAddressError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteVerifiedEmailAddressError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11853,45 +11499,30 @@ impl Ses for SesClient {
     ) -> Result<DescribeActiveReceiptRuleSetResponse, RusotoError<DescribeActiveReceiptRuleSetError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeActiveReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeActiveReceiptRuleSet");
+        let mut params = params;
         DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeActiveReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeActiveReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeActiveReceiptRuleSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
                 "DescribeActiveReceiptRuleSetResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11901,45 +11532,30 @@ impl Ses for SesClient {
         input: DescribeConfigurationSetRequest,
     ) -> Result<DescribeConfigurationSetResponse, RusotoError<DescribeConfigurationSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeConfigurationSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeConfigurationSet");
+        let mut params = params;
         DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeConfigurationSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigurationSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeConfigurationSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeConfigurationSetResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeConfigurationSetResponseDeserializer::deserialize(
                 "DescribeConfigurationSetResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11949,45 +11565,30 @@ impl Ses for SesClient {
         input: DescribeReceiptRuleRequest,
     ) -> Result<DescribeReceiptRuleResponse, RusotoError<DescribeReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeReceiptRule");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeReceiptRule");
+        let mut params = params;
         DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeReceiptRuleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeReceiptRuleError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeReceiptRuleResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeReceiptRuleResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeReceiptRuleResponseDeserializer::deserialize(
                 "DescribeReceiptRuleResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11997,45 +11598,30 @@ impl Ses for SesClient {
         input: DescribeReceiptRuleSetRequest,
     ) -> Result<DescribeReceiptRuleSetResponse, RusotoError<DescribeReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeReceiptRuleSet");
+        let mut params = params;
         DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeReceiptRuleSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
                 "DescribeReceiptRuleSetResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12044,45 +11630,29 @@ impl Ses for SesClient {
         &self,
     ) -> Result<GetAccountSendingEnabledResponse, RusotoError<GetAccountSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAccountSendingEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetAccountSendingEnabled");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccountSendingEnabledError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountSendingEnabledError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccountSendingEnabledResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetAccountSendingEnabledResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetAccountSendingEnabledResponseDeserializer::deserialize(
                 "GetAccountSendingEnabledResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12095,47 +11665,33 @@ impl Ses for SesClient {
         RusotoError<GetCustomVerificationEmailTemplateError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetCustomVerificationEmailTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetCustomVerificationEmailTemplate");
+        let mut params = params;
         GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCustomVerificationEmailTemplateError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetCustomVerificationEmailTemplateError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCustomVerificationEmailTemplateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
                 "GetCustomVerificationEmailTemplateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12146,45 +11702,30 @@ impl Ses for SesClient {
     ) -> Result<GetIdentityDkimAttributesResponse, RusotoError<GetIdentityDkimAttributesError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetIdentityDkimAttributes");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetIdentityDkimAttributes");
+        let mut params = params;
         GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetIdentityDkimAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetIdentityDkimAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetIdentityDkimAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
                 "GetIdentityDkimAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12197,47 +11738,33 @@ impl Ses for SesClient {
         RusotoError<GetIdentityMailFromDomainAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetIdentityMailFromDomainAttributes");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetIdentityMailFromDomainAttributes");
+        let mut params = params;
         GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetIdentityMailFromDomainAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetIdentityMailFromDomainAttributesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetIdentityMailFromDomainAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
                 "GetIdentityMailFromDomainAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12250,47 +11777,33 @@ impl Ses for SesClient {
         RusotoError<GetIdentityNotificationAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetIdentityNotificationAttributes");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetIdentityNotificationAttributes");
+        let mut params = params;
         GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetIdentityNotificationAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetIdentityNotificationAttributesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetIdentityNotificationAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
                 "GetIdentityNotificationAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12300,45 +11813,30 @@ impl Ses for SesClient {
         input: GetIdentityPoliciesRequest,
     ) -> Result<GetIdentityPoliciesResponse, RusotoError<GetIdentityPoliciesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetIdentityPolicies");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetIdentityPolicies");
+        let mut params = params;
         GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetIdentityPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetIdentityPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetIdentityPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetIdentityPoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetIdentityPoliciesResponseDeserializer::deserialize(
                 "GetIdentityPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12351,90 +11849,60 @@ impl Ses for SesClient {
         RusotoError<GetIdentityVerificationAttributesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetIdentityVerificationAttributes");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetIdentityVerificationAttributes");
+        let mut params = params;
         GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetIdentityVerificationAttributesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetIdentityVerificationAttributesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetIdentityVerificationAttributesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
                 "GetIdentityVerificationAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
     /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
     async fn get_send_quota(&self) -> Result<GetSendQuotaResponse, RusotoError<GetSendQuotaError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSendQuota");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetSendQuota");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSendQuotaError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSendQuotaError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSendQuotaResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetSendQuotaResponseDeserializer::deserialize("GetSendQuotaResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12443,45 +11911,29 @@ impl Ses for SesClient {
         &self,
     ) -> Result<GetSendStatisticsResponse, RusotoError<GetSendStatisticsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetSendStatistics");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetSendStatistics");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetSendStatisticsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSendStatisticsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetSendStatisticsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetSendStatisticsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetSendStatisticsResponseDeserializer::deserialize(
                 "GetSendStatisticsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12491,42 +11943,27 @@ impl Ses for SesClient {
         input: GetTemplateRequest,
     ) -> Result<GetTemplateResponse, RusotoError<GetTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("GetTemplate");
+        let mut params = params;
         GetTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTemplateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetTemplateResponseDeserializer::deserialize("GetTemplateResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetTemplateResponseDeserializer::deserialize("GetTemplateResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12536,45 +11973,30 @@ impl Ses for SesClient {
         input: ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, RusotoError<ListConfigurationSetsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListConfigurationSets");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListConfigurationSets");
+        let mut params = params;
         ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListConfigurationSetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListConfigurationSetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListConfigurationSetsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListConfigurationSetsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListConfigurationSetsResponseDeserializer::deserialize(
                 "ListConfigurationSetsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12587,47 +12009,33 @@ impl Ses for SesClient {
         RusotoError<ListCustomVerificationEmailTemplatesError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListCustomVerificationEmailTemplates");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListCustomVerificationEmailTemplates");
+        let mut params = params;
         ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListCustomVerificationEmailTemplatesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListCustomVerificationEmailTemplatesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListCustomVerificationEmailTemplatesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
                 "ListCustomVerificationEmailTemplatesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12637,45 +12045,28 @@ impl Ses for SesClient {
         input: ListIdentitiesRequest,
     ) -> Result<ListIdentitiesResponse, RusotoError<ListIdentitiesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListIdentities");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListIdentities");
+        let mut params = params;
         ListIdentitiesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListIdentitiesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListIdentitiesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListIdentitiesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListIdentitiesResponseDeserializer::deserialize(
-                "ListIdentitiesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListIdentitiesResponseDeserializer::deserialize("ListIdentitiesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12685,45 +12076,30 @@ impl Ses for SesClient {
         input: ListIdentityPoliciesRequest,
     ) -> Result<ListIdentityPoliciesResponse, RusotoError<ListIdentityPoliciesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListIdentityPolicies");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListIdentityPolicies");
+        let mut params = params;
         ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListIdentityPoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListIdentityPoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListIdentityPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListIdentityPoliciesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListIdentityPoliciesResponseDeserializer::deserialize(
                 "ListIdentityPoliciesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12733,45 +12109,30 @@ impl Ses for SesClient {
         input: ListReceiptFiltersRequest,
     ) -> Result<ListReceiptFiltersResponse, RusotoError<ListReceiptFiltersError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListReceiptFilters");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListReceiptFilters");
+        let mut params = params;
         ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListReceiptFiltersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListReceiptFiltersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListReceiptFiltersResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListReceiptFiltersResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListReceiptFiltersResponseDeserializer::deserialize(
                 "ListReceiptFiltersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12781,45 +12142,30 @@ impl Ses for SesClient {
         input: ListReceiptRuleSetsRequest,
     ) -> Result<ListReceiptRuleSetsResponse, RusotoError<ListReceiptRuleSetsError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListReceiptRuleSets");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListReceiptRuleSets");
+        let mut params = params;
         ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListReceiptRuleSetsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListReceiptRuleSetsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListReceiptRuleSetsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListReceiptRuleSetsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListReceiptRuleSetsResponseDeserializer::deserialize(
                 "ListReceiptRuleSetsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12829,43 +12175,28 @@ impl Ses for SesClient {
         input: ListTemplatesRequest,
     ) -> Result<ListTemplatesResponse, RusotoError<ListTemplatesError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTemplates");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListTemplates");
+        let mut params = params;
         ListTemplatesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTemplatesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTemplatesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTemplatesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListTemplatesResponseDeserializer::deserialize("ListTemplatesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListTemplatesResponseDeserializer::deserialize("ListTemplatesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12875,45 +12206,29 @@ impl Ses for SesClient {
     ) -> Result<ListVerifiedEmailAddressesResponse, RusotoError<ListVerifiedEmailAddressesError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListVerifiedEmailAddresses");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListVerifiedEmailAddresses");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListVerifiedEmailAddressesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListVerifiedEmailAddressesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListVerifiedEmailAddressesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
                 "ListVerifiedEmailAddressesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12926,29 +12241,22 @@ impl Ses for SesClient {
         RusotoError<PutConfigurationSetDeliveryOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutConfigurationSetDeliveryOptions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("PutConfigurationSetDeliveryOptions");
+        let mut params = params;
         PutConfigurationSetDeliveryOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutConfigurationSetDeliveryOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                PutConfigurationSetDeliveryOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = PutConfigurationSetDeliveryOptionsResponse::default();
-        // parse non-payload
+        let result = PutConfigurationSetDeliveryOptionsResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12958,27 +12266,19 @@ impl Ses for SesClient {
         input: PutIdentityPolicyRequest,
     ) -> Result<PutIdentityPolicyResponse, RusotoError<PutIdentityPolicyError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutIdentityPolicy");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("PutIdentityPolicy");
+        let mut params = params;
         PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutIdentityPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutIdentityPolicyError::from_response)
+            .await?;
 
-        let result;
-        result = PutIdentityPolicyResponse::default();
-        // parse non-payload
+        let result = PutIdentityPolicyResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12988,27 +12288,19 @@ impl Ses for SesClient {
         input: ReorderReceiptRuleSetRequest,
     ) -> Result<ReorderReceiptRuleSetResponse, RusotoError<ReorderReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ReorderReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ReorderReceiptRuleSet");
+        let mut params = params;
         ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ReorderReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ReorderReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        result = ReorderReceiptRuleSetResponse::default();
-        // parse non-payload
+        let result = ReorderReceiptRuleSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13018,42 +12310,27 @@ impl Ses for SesClient {
         input: SendBounceRequest,
     ) -> Result<SendBounceResponse, RusotoError<SendBounceError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendBounce");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendBounce");
+        let mut params = params;
         SendBounceRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendBounceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendBounceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendBounceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendBounceResponseDeserializer::deserialize("SendBounceResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendBounceResponseDeserializer::deserialize("SendBounceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13063,45 +12340,30 @@ impl Ses for SesClient {
         input: SendBulkTemplatedEmailRequest,
     ) -> Result<SendBulkTemplatedEmailResponse, RusotoError<SendBulkTemplatedEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendBulkTemplatedEmail");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendBulkTemplatedEmail");
+        let mut params = params;
         SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendBulkTemplatedEmailError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendBulkTemplatedEmailError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendBulkTemplatedEmailResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
                 "SendBulkTemplatedEmailResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13112,45 +12374,30 @@ impl Ses for SesClient {
     ) -> Result<SendCustomVerificationEmailResponse, RusotoError<SendCustomVerificationEmailError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendCustomVerificationEmail");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendCustomVerificationEmail");
+        let mut params = params;
         SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendCustomVerificationEmailError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendCustomVerificationEmailError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendCustomVerificationEmailResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendCustomVerificationEmailResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendCustomVerificationEmailResponseDeserializer::deserialize(
                 "SendCustomVerificationEmailResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13160,42 +12407,27 @@ impl Ses for SesClient {
         input: SendEmailRequest,
     ) -> Result<SendEmailResponse, RusotoError<SendEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendEmail");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendEmail");
+        let mut params = params;
         SendEmailRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendEmailError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendEmailError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendEmailResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendEmailResponseDeserializer::deserialize("SendEmailResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendEmailResponseDeserializer::deserialize("SendEmailResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13205,43 +12437,28 @@ impl Ses for SesClient {
         input: SendRawEmailRequest,
     ) -> Result<SendRawEmailResponse, RusotoError<SendRawEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendRawEmail");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendRawEmail");
+        let mut params = params;
         SendRawEmailRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendRawEmailError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendRawEmailError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendRawEmailResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                SendRawEmailResponseDeserializer::deserialize("SendRawEmailResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13251,45 +12468,30 @@ impl Ses for SesClient {
         input: SendTemplatedEmailRequest,
     ) -> Result<SendTemplatedEmailResponse, RusotoError<SendTemplatedEmailError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendTemplatedEmail");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SendTemplatedEmail");
+        let mut params = params;
         SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendTemplatedEmailError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendTemplatedEmailError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendTemplatedEmailResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendTemplatedEmailResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendTemplatedEmailResponseDeserializer::deserialize(
                 "SendTemplatedEmailResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13299,27 +12501,19 @@ impl Ses for SesClient {
         input: SetActiveReceiptRuleSetRequest,
     ) -> Result<SetActiveReceiptRuleSetResponse, RusotoError<SetActiveReceiptRuleSetError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetActiveReceiptRuleSet");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetActiveReceiptRuleSet");
+        let mut params = params;
         SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetActiveReceiptRuleSetError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetActiveReceiptRuleSetError::from_response)
+            .await?;
 
-        let result;
-        result = SetActiveReceiptRuleSetResponse::default();
-        // parse non-payload
+        let result = SetActiveReceiptRuleSetResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13329,27 +12523,19 @@ impl Ses for SesClient {
         input: SetIdentityDkimEnabledRequest,
     ) -> Result<SetIdentityDkimEnabledResponse, RusotoError<SetIdentityDkimEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetIdentityDkimEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetIdentityDkimEnabled");
+        let mut params = params;
         SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetIdentityDkimEnabledError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetIdentityDkimEnabledError::from_response)
+            .await?;
 
-        let result;
-        result = SetIdentityDkimEnabledResponse::default();
-        // parse non-payload
+        let result = SetIdentityDkimEnabledResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13362,29 +12548,22 @@ impl Ses for SesClient {
         RusotoError<SetIdentityFeedbackForwardingEnabledError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetIdentityFeedbackForwardingEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetIdentityFeedbackForwardingEnabled");
+        let mut params = params;
         SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetIdentityFeedbackForwardingEnabledError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetIdentityFeedbackForwardingEnabledError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = SetIdentityFeedbackForwardingEnabledResponse::default();
-        // parse non-payload
+        let result = SetIdentityFeedbackForwardingEnabledResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13397,10 +12576,8 @@ impl Ses for SesClient {
         RusotoError<SetIdentityHeadersInNotificationsEnabledError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetIdentityHeadersInNotificationsEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetIdentityHeadersInNotificationsEnabled");
+        let mut params = params;
         SetIdentityHeadersInNotificationsEnabledRequestSerializer::serialize(
             &mut params,
             "",
@@ -13409,19 +12586,16 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SetIdentityHeadersInNotificationsEnabledError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = SetIdentityHeadersInNotificationsEnabledResponse::default();
-        // parse non-payload
+        let result = SetIdentityHeadersInNotificationsEnabledResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13432,27 +12606,19 @@ impl Ses for SesClient {
     ) -> Result<SetIdentityMailFromDomainResponse, RusotoError<SetIdentityMailFromDomainError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetIdentityMailFromDomain");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetIdentityMailFromDomain");
+        let mut params = params;
         SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetIdentityMailFromDomainError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetIdentityMailFromDomainError::from_response)
+            .await?;
 
-        let result;
-        result = SetIdentityMailFromDomainResponse::default();
-        // parse non-payload
+        let result = SetIdentityMailFromDomainResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13463,27 +12629,19 @@ impl Ses for SesClient {
     ) -> Result<SetIdentityNotificationTopicResponse, RusotoError<SetIdentityNotificationTopicError>>
     {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetIdentityNotificationTopic");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetIdentityNotificationTopic");
+        let mut params = params;
         SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetIdentityNotificationTopicError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetIdentityNotificationTopicError::from_response)
+            .await?;
 
-        let result;
-        result = SetIdentityNotificationTopicResponse::default();
-        // parse non-payload
+        let result = SetIdentityNotificationTopicResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13493,27 +12651,19 @@ impl Ses for SesClient {
         input: SetReceiptRulePositionRequest,
     ) -> Result<SetReceiptRulePositionResponse, RusotoError<SetReceiptRulePositionError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetReceiptRulePosition");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SetReceiptRulePosition");
+        let mut params = params;
         SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetReceiptRulePositionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetReceiptRulePositionError::from_response)
+            .await?;
 
-        let result;
-        result = SetReceiptRulePositionResponse::default();
-        // parse non-payload
+        let result = SetReceiptRulePositionResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13523,45 +12673,30 @@ impl Ses for SesClient {
         input: TestRenderTemplateRequest,
     ) -> Result<TestRenderTemplateResponse, RusotoError<TestRenderTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TestRenderTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("TestRenderTemplate");
+        let mut params = params;
         TestRenderTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TestRenderTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TestRenderTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TestRenderTemplateResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TestRenderTemplateResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = TestRenderTemplateResponseDeserializer::deserialize(
                 "TestRenderTemplateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13571,23 +12706,15 @@ impl Ses for SesClient {
         input: UpdateAccountSendingEnabledRequest,
     ) -> Result<(), RusotoError<UpdateAccountSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateAccountSendingEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateAccountSendingEnabled");
+        let mut params = params;
         UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateAccountSendingEnabledError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAccountSendingEnabledError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13602,29 +12729,22 @@ impl Ses for SesClient {
         RusotoError<UpdateConfigurationSetEventDestinationError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateConfigurationSetEventDestination");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateConfigurationSetEventDestination");
+        let mut params = params;
         UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateConfigurationSetEventDestinationError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateConfigurationSetEventDestinationError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = UpdateConfigurationSetEventDestinationResponse::default();
-        // parse non-payload
+        let result = UpdateConfigurationSetEventDestinationResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13634,10 +12754,8 @@ impl Ses for SesClient {
         input: UpdateConfigurationSetReputationMetricsEnabledRequest,
     ) -> Result<(), RusotoError<UpdateConfigurationSetReputationMetricsEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateConfigurationSetReputationMetricsEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateConfigurationSetReputationMetricsEnabled");
+        let mut params = params;
         UpdateConfigurationSetReputationMetricsEnabledRequestSerializer::serialize(
             &mut params,
             "",
@@ -13646,17 +12764,12 @@ impl Ses for SesClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(
-                UpdateConfigurationSetReputationMetricsEnabledError::from_response(response),
-            );
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateConfigurationSetReputationMetricsEnabledError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13668,25 +12781,18 @@ impl Ses for SesClient {
         input: UpdateConfigurationSetSendingEnabledRequest,
     ) -> Result<(), RusotoError<UpdateConfigurationSetSendingEnabledError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateConfigurationSetSendingEnabled");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateConfigurationSetSendingEnabled");
+        let mut params = params;
         UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateConfigurationSetSendingEnabledError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateConfigurationSetSendingEnabledError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13701,29 +12807,22 @@ impl Ses for SesClient {
         RusotoError<UpdateConfigurationSetTrackingOptionsError>,
     > {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateConfigurationSetTrackingOptions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateConfigurationSetTrackingOptions");
+        let mut params = params;
         UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateConfigurationSetTrackingOptionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateConfigurationSetTrackingOptionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        result = UpdateConfigurationSetTrackingOptionsResponse::default();
-        // parse non-payload
+        let result = UpdateConfigurationSetTrackingOptionsResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13733,25 +12832,18 @@ impl Ses for SesClient {
         input: UpdateCustomVerificationEmailTemplateRequest,
     ) -> Result<(), RusotoError<UpdateCustomVerificationEmailTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateCustomVerificationEmailTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateCustomVerificationEmailTemplate");
+        let mut params = params;
         UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateCustomVerificationEmailTemplateError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateCustomVerificationEmailTemplateError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13763,27 +12855,19 @@ impl Ses for SesClient {
         input: UpdateReceiptRuleRequest,
     ) -> Result<UpdateReceiptRuleResponse, RusotoError<UpdateReceiptRuleError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateReceiptRule");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateReceiptRule");
+        let mut params = params;
         UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateReceiptRuleError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateReceiptRuleError::from_response)
+            .await?;
 
-        let result;
-        result = UpdateReceiptRuleResponse::default();
-        // parse non-payload
+        let result = UpdateReceiptRuleResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13793,27 +12877,19 @@ impl Ses for SesClient {
         input: UpdateTemplateRequest,
     ) -> Result<UpdateTemplateResponse, RusotoError<UpdateTemplateError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateTemplate");
+        let mut params = params;
         UpdateTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTemplateError::from_response)
+            .await?;
 
-        let result;
-        result = UpdateTemplateResponse::default();
-        // parse non-payload
+        let result = UpdateTemplateResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13823,45 +12899,28 @@ impl Ses for SesClient {
         input: VerifyDomainDkimRequest,
     ) -> Result<VerifyDomainDkimResponse, RusotoError<VerifyDomainDkimError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "VerifyDomainDkim");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("VerifyDomainDkim");
+        let mut params = params;
         VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(VerifyDomainDkimError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, VerifyDomainDkimError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = VerifyDomainDkimResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = VerifyDomainDkimResponseDeserializer::deserialize(
-                "VerifyDomainDkimResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                VerifyDomainDkimResponseDeserializer::deserialize("VerifyDomainDkimResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13871,45 +12930,30 @@ impl Ses for SesClient {
         input: VerifyDomainIdentityRequest,
     ) -> Result<VerifyDomainIdentityResponse, RusotoError<VerifyDomainIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "VerifyDomainIdentity");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("VerifyDomainIdentity");
+        let mut params = params;
         VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(VerifyDomainIdentityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, VerifyDomainIdentityError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = VerifyDomainIdentityResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = VerifyDomainIdentityResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = VerifyDomainIdentityResponseDeserializer::deserialize(
                 "VerifyDomainIdentityResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -13919,23 +12963,15 @@ impl Ses for SesClient {
         input: VerifyEmailAddressRequest,
     ) -> Result<(), RusotoError<VerifyEmailAddressError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "VerifyEmailAddress");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("VerifyEmailAddress");
+        let mut params = params;
         VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(VerifyEmailAddressError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, VerifyEmailAddressError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13947,27 +12983,19 @@ impl Ses for SesClient {
         input: VerifyEmailIdentityRequest,
     ) -> Result<VerifyEmailIdentityResponse, RusotoError<VerifyEmailIdentityError>> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "VerifyEmailIdentity");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("VerifyEmailIdentity");
+        let mut params = params;
         VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(VerifyEmailIdentityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, VerifyEmailIdentityError::from_response)
+            .await?;
 
-        let result;
-        result = VerifyEmailIdentityResponse::default();
-        // parse non-payload
+        let result = VerifyEmailIdentityResponse::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

@@ -275,6 +275,7 @@ impl ApiGatewayManagementApiClient {
 #[async_trait]
 impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     /// <p>Delete the connection with the provided id.</p>
+    #[allow(unused_mut)]
     async fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
@@ -293,7 +294,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -304,6 +305,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     }
 
     /// <p>Get information about the connection with the provided id.</p>
+    #[allow(unused_mut)]
     async fn get_connection(
         &self,
         input: GetConnectionRequest,
@@ -322,7 +324,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConnectionResponse, _>()?;
 
@@ -334,6 +336,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     }
 
     /// <p>Sends the provided data to the specified connection.</p>
+    #[allow(unused_mut)]
     async fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
@@ -355,7 +358,7 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

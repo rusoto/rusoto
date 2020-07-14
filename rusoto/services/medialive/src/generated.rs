@@ -9627,6 +9627,7 @@ impl MediaLiveClient {
 #[async_trait]
 impl MediaLive for MediaLiveClient {
     /// <p>Update a channel schedule</p>
+    #[allow(unused_mut)]
     async fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
@@ -9648,7 +9649,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdateScheduleResponse, _>()?;
 
@@ -9660,6 +9661,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Creates a new channel</p>
+    #[allow(unused_mut)]
     async fn create_channel(
         &self,
         input: CreateChannelRequest,
@@ -9678,7 +9680,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateChannelResponse, _>()?;
 
@@ -9690,6 +9692,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Create an input</p>
+    #[allow(unused_mut)]
     async fn create_input(
         &self,
         input: CreateInputRequest,
@@ -9708,7 +9711,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInputResponse, _>()?;
 
@@ -9720,6 +9723,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Creates a Input Security Group</p>
+    #[allow(unused_mut)]
     async fn create_input_security_group(
         &self,
         input: CreateInputSecurityGroupRequest,
@@ -9738,7 +9742,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInputSecurityGroupResponse, _>()?;
 
@@ -9750,6 +9754,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Create a new multiplex.</p>
+    #[allow(unused_mut)]
     async fn create_multiplex(
         &self,
         input: CreateMultiplexRequest,
@@ -9768,7 +9773,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMultiplexResponse, _>()?;
 
@@ -9780,6 +9785,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Create a new program in the multiplex.</p>
+    #[allow(unused_mut)]
     async fn create_multiplex_program(
         &self,
         input: CreateMultiplexProgramRequest,
@@ -9801,7 +9807,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMultiplexProgramResponse, _>()?;
 
@@ -9813,6 +9819,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Create tags for a resource</p>
+    #[allow(unused_mut)]
     async fn create_tags(
         &self,
         input: CreateTagsRequest,
@@ -9834,7 +9841,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -9845,6 +9852,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_channel(
         &self,
         input: DeleteChannelRequest,
@@ -9860,7 +9868,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteChannelResponse, _>()?;
 
@@ -9872,6 +9880,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Deletes the input end point</p>
+    #[allow(unused_mut)]
     async fn delete_input(
         &self,
         input: DeleteInputRequest,
@@ -9887,7 +9896,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInputResponse, _>()?;
 
@@ -9899,6 +9908,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Deletes an Input Security Group</p>
+    #[allow(unused_mut)]
     async fn delete_input_security_group(
         &self,
         input: DeleteInputSecurityGroupRequest,
@@ -9917,7 +9927,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInputSecurityGroupResponse, _>()?;
 
@@ -9929,6 +9939,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Delete a multiplex. The multiplex must be idle.</p>
+    #[allow(unused_mut)]
     async fn delete_multiplex(
         &self,
         input: DeleteMultiplexRequest,
@@ -9947,7 +9958,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMultiplexResponse, _>()?;
 
@@ -9959,6 +9970,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Delete a program from a multiplex.</p>
+    #[allow(unused_mut)]
     async fn delete_multiplex_program(
         &self,
         input: DeleteMultiplexProgramRequest,
@@ -9978,7 +9990,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMultiplexProgramResponse, _>()?;
 
@@ -9990,6 +10002,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Delete an expired reservation.</p>
+    #[allow(unused_mut)]
     async fn delete_reservation(
         &self,
         input: DeleteReservationRequest,
@@ -10008,7 +10021,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteReservationResponse, _>()?;
 
@@ -10020,6 +10033,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Delete all schedule actions on a channel.</p>
+    #[allow(unused_mut)]
     async fn delete_schedule(
         &self,
         input: DeleteScheduleRequest,
@@ -10038,7 +10052,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteScheduleResponse, _>()?;
 
@@ -10050,6 +10064,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Removes tags for a resource</p>
+    #[allow(unused_mut)]
     async fn delete_tags(
         &self,
         input: DeleteTagsRequest,
@@ -10074,7 +10089,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -10085,6 +10100,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Gets details about a channel</p>
+    #[allow(unused_mut)]
     async fn describe_channel(
         &self,
         input: DescribeChannelRequest,
@@ -10100,7 +10116,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChannelResponse, _>()?;
 
@@ -10112,6 +10128,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces details about an input</p>
+    #[allow(unused_mut)]
     async fn describe_input(
         &self,
         input: DescribeInputRequest,
@@ -10127,7 +10144,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeInputResponse, _>()?;
 
@@ -10139,6 +10156,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Gets the details for the input device</p>
+    #[allow(unused_mut)]
     async fn describe_input_device(
         &self,
         input: DescribeInputDeviceRequest,
@@ -10157,7 +10175,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeInputDeviceResponse, _>()?;
 
@@ -10169,6 +10187,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces a summary of an Input Security Group</p>
+    #[allow(unused_mut)]
     async fn describe_input_security_group(
         &self,
         input: DescribeInputSecurityGroupRequest,
@@ -10188,7 +10207,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeInputSecurityGroupResponse, _>()?;
 
@@ -10200,6 +10219,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Gets details about a multiplex.</p>
+    #[allow(unused_mut)]
     async fn describe_multiplex(
         &self,
         input: DescribeMultiplexRequest,
@@ -10218,7 +10238,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeMultiplexResponse, _>()?;
 
@@ -10230,6 +10250,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Get the details for a program in a multiplex.</p>
+    #[allow(unused_mut)]
     async fn describe_multiplex_program(
         &self,
         input: DescribeMultiplexProgramRequest,
@@ -10249,7 +10270,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeMultiplexProgramResponse, _>()?;
 
@@ -10261,6 +10282,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Get details for an offering.</p>
+    #[allow(unused_mut)]
     async fn describe_offering(
         &self,
         input: DescribeOfferingRequest,
@@ -10279,7 +10301,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeOfferingResponse, _>()?;
 
@@ -10291,6 +10313,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Get details for a reservation.</p>
+    #[allow(unused_mut)]
     async fn describe_reservation(
         &self,
         input: DescribeReservationRequest,
@@ -10309,7 +10332,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeReservationResponse, _>()?;
 
@@ -10321,6 +10344,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Get a channel schedule</p>
+    #[allow(unused_mut)]
     async fn describe_schedule(
         &self,
         input: DescribeScheduleRequest,
@@ -10348,7 +10372,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeScheduleResponse, _>()?;
 
@@ -10360,6 +10384,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces list of channels that have been created</p>
+    #[allow(unused_mut)]
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
@@ -10384,7 +10409,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChannelsResponse, _>()?;
 
@@ -10396,6 +10421,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>List input devices</p>
+    #[allow(unused_mut)]
     async fn list_input_devices(
         &self,
         input: ListInputDevicesRequest,
@@ -10420,7 +10446,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInputDevicesResponse, _>()?;
 
@@ -10432,6 +10458,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces a list of Input Security Groups for an account</p>
+    #[allow(unused_mut)]
     async fn list_input_security_groups(
         &self,
         input: ListInputSecurityGroupsRequest,
@@ -10456,7 +10483,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInputSecurityGroupsResponse, _>()?;
 
@@ -10468,6 +10495,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces list of inputs that have been created</p>
+    #[allow(unused_mut)]
     async fn list_inputs(
         &self,
         input: ListInputsRequest,
@@ -10492,7 +10520,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInputsResponse, _>()?;
 
@@ -10504,6 +10532,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>List the programs that currently exist for a specific multiplex.</p>
+    #[allow(unused_mut)]
     async fn list_multiplex_programs(
         &self,
         input: ListMultiplexProgramsRequest,
@@ -10531,7 +10560,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMultiplexProgramsResponse, _>()?;
 
@@ -10543,6 +10572,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Retrieve a list of the existing multiplexes.</p>
+    #[allow(unused_mut)]
     async fn list_multiplexes(
         &self,
         input: ListMultiplexesRequest,
@@ -10567,7 +10597,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMultiplexesResponse, _>()?;
 
@@ -10579,6 +10609,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>List offerings available for purchase.</p>
+    #[allow(unused_mut)]
     async fn list_offerings(
         &self,
         input: ListOfferingsRequest,
@@ -10633,7 +10664,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOfferingsResponse, _>()?;
 
@@ -10645,6 +10676,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>List purchased reservations.</p>
+    #[allow(unused_mut)]
     async fn list_reservations(
         &self,
         input: ListReservationsRequest,
@@ -10693,7 +10725,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListReservationsResponse, _>()?;
 
@@ -10705,6 +10737,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Produces list of tags that have been created for a resource</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -10723,7 +10756,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -10735,6 +10768,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Purchase an offering and create a reservation.</p>
+    #[allow(unused_mut)]
     async fn purchase_offering(
         &self,
         input: PurchaseOfferingRequest,
@@ -10756,7 +10790,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PurchaseOfferingResponse, _>()?;
 
@@ -10768,6 +10802,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Starts an existing channel</p>
+    #[allow(unused_mut)]
     async fn start_channel(
         &self,
         input: StartChannelRequest,
@@ -10786,7 +10821,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartChannelResponse, _>()?;
 
@@ -10798,6 +10833,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Start (run) the multiplex. Starting the multiplex does not start the channels. You must explicitly start each channel.</p>
+    #[allow(unused_mut)]
     async fn start_multiplex(
         &self,
         input: StartMultiplexRequest,
@@ -10816,7 +10852,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartMultiplexResponse, _>()?;
 
@@ -10828,6 +10864,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Stops a running channel</p>
+    #[allow(unused_mut)]
     async fn stop_channel(
         &self,
         input: StopChannelRequest,
@@ -10846,7 +10883,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopChannelResponse, _>()?;
 
@@ -10858,6 +10895,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Stops a running multiplex. If the multiplex isn&#39;t running, this action has no effect.</p>
+    #[allow(unused_mut)]
     async fn stop_multiplex(
         &self,
         input: StopMultiplexRequest,
@@ -10876,7 +10914,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopMultiplexResponse, _>()?;
 
@@ -10888,6 +10926,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Updates a channel.</p>
+    #[allow(unused_mut)]
     async fn update_channel(
         &self,
         input: UpdateChannelRequest,
@@ -10906,7 +10945,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateChannelResponse, _>()?;
 
@@ -10918,6 +10957,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Changes the class of the channel.</p>
+    #[allow(unused_mut)]
     async fn update_channel_class(
         &self,
         input: UpdateChannelClassRequest,
@@ -10939,7 +10979,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateChannelClassResponse, _>()?;
 
@@ -10951,6 +10991,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Updates an input.</p>
+    #[allow(unused_mut)]
     async fn update_input(
         &self,
         input: UpdateInputRequest,
@@ -10969,7 +11010,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInputResponse, _>()?;
 
@@ -10981,6 +11022,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Updates the parameters for the input device.</p>
+    #[allow(unused_mut)]
     async fn update_input_device(
         &self,
         input: UpdateInputDeviceRequest,
@@ -11002,7 +11044,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInputDeviceResponse, _>()?;
 
@@ -11014,6 +11056,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Update an Input Security Group&#39;s Whilelists.</p>
+    #[allow(unused_mut)]
     async fn update_input_security_group(
         &self,
         input: UpdateInputSecurityGroupRequest,
@@ -11035,7 +11078,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInputSecurityGroupResponse, _>()?;
 
@@ -11047,6 +11090,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Updates a multiplex.</p>
+    #[allow(unused_mut)]
     async fn update_multiplex(
         &self,
         input: UpdateMultiplexRequest,
@@ -11068,7 +11112,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMultiplexResponse, _>()?;
 
@@ -11080,6 +11124,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Update a program in a multiplex.</p>
+    #[allow(unused_mut)]
     async fn update_multiplex_program(
         &self,
         input: UpdateMultiplexProgramRequest,
@@ -11102,7 +11147,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMultiplexProgramResponse, _>()?;
 
@@ -11114,6 +11159,7 @@ impl MediaLive for MediaLiveClient {
     }
 
     /// <p>Update reservation.</p>
+    #[allow(unused_mut)]
     async fn update_reservation(
         &self,
         input: UpdateReservationRequest,
@@ -11135,7 +11181,7 @@ impl MediaLive for MediaLiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateReservationResponse, _>()?;
 

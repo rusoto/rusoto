@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree, write_characters_element,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -34,10 +34,24 @@ use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
 use xml;
-use xml::reader::ParserConfig;
 use xml::EventReader;
 use xml::EventWriter;
 
+impl S3Client {
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 use rusoto_core::event_stream::{DeserializeEvent, EventStream};
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config"> Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -89,12 +103,7 @@ impl AbortIncompleteMultipartUploadSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days_after_initiation {
-            writer.write(xml::writer::XmlEvent::start_element("DaysAfterInitiation"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DaysAfterInitiation", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -114,11 +123,11 @@ impl AbortMultipartUploadOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AbortMultipartUploadOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = AbortMultipartUploadOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -156,12 +165,7 @@ impl AccelerateConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -244,12 +248,7 @@ impl AccessControlTranslationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Owner"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.owner
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Owner", &obj.owner.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -259,11 +258,7 @@ struct AccountIdDeserializer;
 impl AccountIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -278,12 +273,7 @@ impl AccountIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -298,12 +288,7 @@ impl AllowQuotedRecordDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -312,11 +297,7 @@ struct AllowedHeaderDeserializer;
 impl AllowedHeaderDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -331,12 +312,7 @@ impl AllowedHeaderSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -392,11 +368,7 @@ struct AllowedMethodDeserializer;
 impl AllowedMethodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -411,12 +383,7 @@ impl AllowedMethodSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -472,11 +439,7 @@ struct AllowedOriginDeserializer;
 impl AllowedOriginDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -491,12 +454,7 @@ impl AllowedOriginSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -596,12 +554,7 @@ impl AnalyticsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -667,12 +620,7 @@ impl AnalyticsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &AnalyticsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         StorageClassAnalysisSerializer::serialize(
             &mut writer,
             "StorageClassAnalysis",
@@ -825,12 +773,7 @@ impl AnalyticsFilterSerializer {
             &AnalyticsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -844,11 +787,7 @@ struct AnalyticsIdDeserializer;
 impl AnalyticsIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -863,12 +802,7 @@ impl AnalyticsIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -936,33 +870,13 @@ impl AnalyticsS3BucketDestinationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.bucket_account_id {
-            writer.write(xml::writer::XmlEvent::start_element("BucketAccountId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BucketAccountId", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Format"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.format
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Format", &obj.format.to_string())?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -973,11 +887,7 @@ struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -992,12 +902,7 @@ impl AnalyticsS3ExportFileFormatSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1010,11 +915,7 @@ impl BodyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1029,12 +930,11 @@ impl BodySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = String::from_utf8(obj.to_vec()).expect("Not a UTF-8 string")
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(
+            writer,
+            name,
+            std::str::from_utf8(obj).expect("Not a UTF-8 string"),
+        )
     }
 }
 
@@ -1075,11 +975,7 @@ struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1094,12 +990,7 @@ impl BucketAccelerateStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1133,11 +1024,7 @@ struct BucketLocationConstraintDeserializer;
 impl BucketLocationConstraintDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1152,12 +1039,7 @@ impl BucketLocationConstraintSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1192,11 +1074,7 @@ struct BucketLogsPermissionDeserializer;
 impl BucketLogsPermissionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1211,12 +1089,7 @@ impl BucketLogsPermissionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1225,11 +1098,7 @@ struct BucketNameDeserializer;
 impl BucketNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1244,12 +1113,7 @@ impl BucketNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1258,11 +1122,7 @@ struct BucketVersioningStatusDeserializer;
 impl BucketVersioningStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1277,12 +1137,7 @@ impl BucketVersioningStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1309,11 +1164,7 @@ struct BytesProcessedDeserializer;
 impl BytesProcessedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1321,11 +1172,7 @@ struct BytesReturnedDeserializer;
 impl BytesReturnedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1333,11 +1180,7 @@ struct BytesScannedDeserializer;
 impl BytesScannedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -1450,12 +1293,7 @@ impl CORSRuleSerializer {
             &ExposeHeadersSerializer::serialize(&mut writer, "ExposeHeader", value)?;
         }
         if let Some(ref value) = obj.max_age_seconds {
-            writer.write(xml::writer::XmlEvent::start_element("MaxAgeSeconds"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MaxAgeSeconds", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1541,62 +1379,25 @@ impl CSVInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.allow_quoted_record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "AllowQuotedRecordDelimiter",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "AllowQuotedRecordDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.comments {
-            writer.write(xml::writer::XmlEvent::start_element("Comments"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comments", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("FieldDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.file_header_info {
-            writer.write(xml::writer::XmlEvent::start_element("FileHeaderInfo"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FileHeaderInfo", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteEscapeCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1631,44 +1432,19 @@ impl CSVOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.field_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("FieldDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteEscapeCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_fields {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteFields"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteFields", &value.to_string())?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1679,11 +1455,7 @@ struct CloudFunctionDeserializer;
 impl CloudFunctionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1698,12 +1470,7 @@ impl CloudFunctionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1776,31 +1543,16 @@ impl CloudFunctionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function {
-            writer.write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CloudFunction", &value.to_string())?;
         }
         if let Some(ref value) = obj.events {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.invocation_role {
-            writer.write(xml::writer::XmlEvent::start_element("InvocationRole"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "InvocationRole", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1811,11 +1563,7 @@ struct CloudFunctionInvocationRoleDeserializer;
 impl CloudFunctionInvocationRoleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1830,12 +1578,7 @@ impl CloudFunctionInvocationRoleSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1844,11 +1587,7 @@ struct CodeDeserializer;
 impl CodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1863,12 +1602,7 @@ impl CommentsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2045,20 +1779,10 @@ impl CompletedPartSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.e_tag {
-            writer.write(xml::writer::XmlEvent::start_element("ETag"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ETag", &value.to_string())?;
         }
         if let Some(ref value) = obj.part_number {
-            writer.write(xml::writer::XmlEvent::start_element("PartNumber"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "PartNumber", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2093,12 +1817,7 @@ impl CompressionTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2156,22 +1875,10 @@ impl ConditionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.http_error_code_returned_equals {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "HttpErrorCodeReturnedEquals",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value.to_string())?;
         }
         if let Some(ref value) = obj.key_prefix_equals {
-            writer.write(xml::writer::XmlEvent::start_element("KeyPrefixEquals"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KeyPrefixEquals", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2190,11 +1897,11 @@ impl ContinuationEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinuationEvent, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ContinuationEvent::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2409,12 +2116,7 @@ impl CreateBucketConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.location_constraint {
-            writer.write(xml::writer::XmlEvent::start_element("LocationConstraint"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "LocationConstraint", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2435,11 +2137,11 @@ impl CreateBucketOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateBucketOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateBucketOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2587,11 +2289,7 @@ struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2599,11 +2297,7 @@ struct DateDeserializer;
 impl DateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2618,12 +2312,7 @@ impl DateSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2632,11 +2321,7 @@ struct DaysDeserializer;
 impl DaysDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -2651,12 +2336,7 @@ impl DaysSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -2665,11 +2345,7 @@ struct DaysAfterInitiationDeserializer;
 impl DaysAfterInitiationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -2684,12 +2360,7 @@ impl DaysAfterInitiationSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -2747,28 +2418,13 @@ impl DefaultRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.mode {
-            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Mode", &value.to_string())?;
         }
         if let Some(ref value) = obj.years {
-            writer.write(xml::writer::XmlEvent::start_element("Years"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Years", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2798,12 +2454,7 @@ impl DeleteSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         ObjectIdentifierListSerializer::serialize(&mut writer, "Object", &obj.objects)?;
         if let Some(ref value) = obj.quiet {
-            writer.write(xml::writer::XmlEvent::start_element("Quiet"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Quiet", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2897,11 +2548,7 @@ struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Information about the delete marker.</p>
@@ -3005,12 +2652,7 @@ impl DeleteMarkerReplicationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3021,11 +2663,7 @@ struct DeleteMarkerReplicationStatusDeserializer;
 impl DeleteMarkerReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3040,12 +2678,7 @@ impl DeleteMarkerReplicationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3054,11 +2687,7 @@ struct DeleteMarkerVersionIdDeserializer;
 impl DeleteMarkerVersionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3107,11 +2736,11 @@ impl DeleteObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3147,11 +2776,11 @@ impl DeleteObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectTaggingOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectTaggingOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3309,11 +2938,7 @@ struct DelimiterDeserializer;
 impl DelimiterDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3328,12 +2953,7 @@ impl DelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3348,12 +2968,7 @@ impl DescriptionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3450,19 +3065,9 @@ impl DestinationSerializer {
             )?;
         }
         if let Some(ref value) = obj.account {
-            writer.write(xml::writer::XmlEvent::start_element("Account"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Account", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.encryption_configuration {
             &EncryptionConfigurationSerializer::serialize(
                 &mut writer,
@@ -3477,12 +3082,7 @@ impl DestinationSerializer {
             &ReplicationTimeSerializer::serialize(&mut writer, "ReplicationTime", value)?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3493,11 +3093,7 @@ struct DisplayNameDeserializer;
 impl DisplayNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3512,12 +3108,7 @@ impl DisplayNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3526,11 +3117,7 @@ struct ETagDeserializer;
 impl ETagDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3545,12 +3132,7 @@ impl ETagSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3559,11 +3141,7 @@ struct EmailAddressDeserializer;
 impl EmailAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3578,12 +3156,7 @@ impl EmailAddressSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3598,12 +3171,7 @@ impl EnableRequestProgressSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -3612,11 +3180,7 @@ struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3631,12 +3195,7 @@ impl EncodingTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3664,27 +3223,12 @@ impl EncryptionSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("EncryptionType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.encryption_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "EncryptionType", &obj.encryption_type.to_string())?;
         if let Some(ref value) = obj.kms_context {
-            writer.write(xml::writer::XmlEvent::start_element("KMSContext"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSContext", &value.to_string())?;
         }
         if let Some(ref value) = obj.kms_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("KMSKeyId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSKeyId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3739,12 +3283,7 @@ impl EncryptionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.replica_kms_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("ReplicaKmsKeyID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplicaKmsKeyID", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3761,12 +3300,7 @@ impl EndSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -3783,11 +3317,11 @@ impl EndEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EndEvent, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = EndEvent::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3878,12 +3412,7 @@ impl ErrorDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3921,11 +3450,7 @@ struct EventDeserializer;
 impl EventDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3940,12 +3465,7 @@ impl EventSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4043,12 +3563,7 @@ impl ExistingObjectReplicationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -4058,11 +3573,7 @@ struct ExistingObjectReplicationStatusDeserializer;
 impl ExistingObjectReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4077,12 +3588,7 @@ impl ExistingObjectReplicationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4091,11 +3597,7 @@ struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4110,12 +3612,7 @@ impl ExpirationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4124,11 +3621,7 @@ struct ExpiredObjectDeleteMarkerDeserializer;
 impl ExpiredObjectDeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -4143,12 +3636,7 @@ impl ExpiredObjectDeleteMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4157,11 +3645,7 @@ struct ExposeHeaderDeserializer;
 impl ExposeHeaderDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4176,12 +3660,7 @@ impl ExposeHeaderSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4243,12 +3722,7 @@ impl ExpressionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4263,12 +3737,7 @@ impl ExpressionTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4283,12 +3752,7 @@ impl FetchOwnerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4303,12 +3767,7 @@ impl FieldDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4323,12 +3782,7 @@ impl FileHeaderInfoSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4379,20 +3833,10 @@ impl FilterRuleSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Name", &value.to_string())?;
         }
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -4450,11 +3894,7 @@ struct FilterRuleNameDeserializer;
 impl FilterRuleNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4469,12 +3909,7 @@ impl FilterRuleNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4483,11 +3918,7 @@ struct FilterRuleValueDeserializer;
 impl FilterRuleValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4502,12 +3933,7 @@ impl FilterRuleValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5524,12 +4950,7 @@ impl GlacierJobParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Tier"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.tier
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Tier", &obj.tier.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5582,12 +5003,7 @@ impl GrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            writer.write(xml::writer::XmlEvent::start_element("Permission"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Permission", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5659,42 +5075,17 @@ impl GranteeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            writer.write(xml::writer::XmlEvent::start_element("DisplayName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DisplayName", &value.to_string())?;
         }
         if let Some(ref value) = obj.email_address {
-            writer.write(xml::writer::XmlEvent::start_element("EmailAddress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "EmailAddress", &value.to_string())?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("xsi:type"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.type_
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "xsi:type", &obj.type_.to_string())?;
         if let Some(ref value) = obj.uri {
-            writer.write(xml::writer::XmlEvent::start_element("URI"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "URI", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5814,11 +5205,11 @@ impl HeadObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = HeadObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5858,11 +5249,7 @@ struct HostNameDeserializer;
 impl HostNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5877,12 +5264,7 @@ impl HostNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5891,11 +5273,7 @@ struct HttpErrorCodeReturnedEqualsDeserializer;
 impl HttpErrorCodeReturnedEqualsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5910,12 +5288,7 @@ impl HttpErrorCodeReturnedEqualsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5924,11 +5297,7 @@ struct HttpRedirectCodeDeserializer;
 impl HttpRedirectCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5943,12 +5312,7 @@ impl HttpRedirectCodeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5957,11 +5321,7 @@ struct IDDeserializer;
 impl IDDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5976,12 +5336,7 @@ impl IDSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6026,12 +5381,7 @@ impl IndexDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Suffix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.suffix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Suffix", &obj.suffix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6041,11 +5391,7 @@ struct InitiatedDeserializer;
 impl InitiatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Container element that identifies who initiated the multipart upload. </p>
@@ -6111,12 +5457,7 @@ impl InputSerializationSerializer {
             &CSVInputSerializer::serialize(&mut writer, "CSV", value)?;
         }
         if let Some(ref value) = obj.compression_type {
-            writer.write(xml::writer::XmlEvent::start_element("CompressionType"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CompressionType", &value.to_string())?;
         }
         if let Some(ref value) = obj.json {
             &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
@@ -6210,26 +5551,13 @@ impl InventoryConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &InventoryFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element(
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(
+            writer,
             "IncludedObjectVersions",
-        ))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.included_object_versions
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("IsEnabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.is_enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+            &obj.included_object_versions.to_string(),
+        )?;
+        write_characters_element(writer, "IsEnabled", &obj.is_enabled.to_string())?;
         if let Some(ref value) = obj.optional_fields {
             &InventoryOptionalFieldsSerializer::serialize(&mut writer, "OptionalFields", value)?;
         }
@@ -6419,12 +5747,7 @@ impl InventoryFilterSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6434,11 +5757,7 @@ struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6453,12 +5772,7 @@ impl InventoryFormatSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6467,11 +5781,7 @@ struct InventoryFrequencyDeserializer;
 impl InventoryFrequencyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6486,12 +5796,7 @@ impl InventoryFrequencySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6500,11 +5805,7 @@ struct InventoryIdDeserializer;
 impl InventoryIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6519,12 +5820,7 @@ impl InventoryIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6533,11 +5829,7 @@ struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6552,12 +5844,7 @@ impl InventoryIncludedObjectVersionsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6566,11 +5853,7 @@ struct InventoryOptionalFieldDeserializer;
 impl InventoryOptionalFieldDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6585,12 +5868,7 @@ impl InventoryOptionalFieldSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6705,35 +5983,15 @@ impl InventoryS3BucketDestinationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.account_id {
-            writer.write(xml::writer::XmlEvent::start_element("AccountId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "AccountId", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.encryption {
             &InventoryEncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Format"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.format
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Format", &obj.format.to_string())?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6781,12 +6039,7 @@ impl InventoryScheduleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Frequency"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.frequency
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Frequency", &obj.frequency.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6796,11 +6049,7 @@ struct IsEnabledDeserializer;
 impl IsEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -6815,12 +6064,7 @@ impl IsEnabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -6829,11 +6073,7 @@ struct IsLatestDeserializer;
 impl IsLatestDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6841,11 +6081,7 @@ struct IsPublicDeserializer;
 impl IsPublicDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6853,11 +6089,7 @@ struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Specifies JSON as object's input serialization format.</p>
@@ -6881,12 +6113,7 @@ impl JSONInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.type_ {
-            writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Type", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6913,12 +6140,7 @@ impl JSONOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6935,12 +6157,7 @@ impl JSONTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6955,12 +6172,7 @@ impl KMSContextSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6969,11 +6181,7 @@ struct KeyCountDeserializer;
 impl KeyCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6981,11 +6189,7 @@ struct KeyMarkerDeserializer;
 impl KeyMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7000,12 +6204,7 @@ impl KeyMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7014,11 +6213,7 @@ struct KeyPrefixEqualsDeserializer;
 impl KeyPrefixEqualsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7033,12 +6228,7 @@ impl KeyPrefixEqualsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7047,11 +6237,7 @@ struct LambdaFunctionArnDeserializer;
 impl LambdaFunctionArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7066,12 +6252,7 @@ impl LambdaFunctionArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7143,19 +6324,13 @@ impl LambdaFunctionConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.lambda_function_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "CloudFunction",
+            &obj.lambda_function_arn.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7214,11 +6389,7 @@ struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Container for lifecycle rules. You can add as many as 1000 rules.</p>
@@ -7302,30 +6473,13 @@ impl LifecycleExpirationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Date", &value.to_string())?;
         }
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.expired_object_delete_marker {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "ExpiredObjectDeleteMarker",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ExpiredObjectDeleteMarker", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7438,12 +6592,7 @@ impl LifecycleRuleSerializer {
             &LifecycleRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -7459,12 +6608,7 @@ impl LifecycleRuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         if let Some(ref value) = obj.transitions {
             &TransitionListSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -7525,12 +6669,7 @@ impl LifecycleRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -7595,12 +6734,7 @@ impl LifecycleRuleFilterSerializer {
             &LifecycleRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8467,11 +7601,7 @@ struct LocationDeserializer;
 impl LocationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8486,12 +7616,7 @@ impl LocationPrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8550,21 +7675,11 @@ impl LoggingEnabledSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("TargetBucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetBucket", &obj.target_bucket.to_string())?;
         if let Some(ref value) = obj.target_grants {
             &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("TargetPrefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetPrefix", &obj.target_prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8580,12 +7695,7 @@ impl MFADeleteSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8594,11 +7704,7 @@ struct MFADeleteStatusDeserializer;
 impl MFADeleteStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8606,11 +7712,7 @@ struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8625,12 +7727,7 @@ impl MarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8639,11 +7736,7 @@ struct MaxAgeSecondsDeserializer;
 impl MaxAgeSecondsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8658,12 +7751,7 @@ impl MaxAgeSecondsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8672,11 +7760,7 @@ struct MaxKeysDeserializer;
 impl MaxKeysDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8691,12 +7775,7 @@ impl MaxKeysSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8705,11 +7784,7 @@ struct MaxPartsDeserializer;
 impl MaxPartsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8724,12 +7799,7 @@ impl MaxPartsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8738,11 +7808,7 @@ struct MaxUploadsDeserializer;
 impl MaxUploadsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8757,12 +7823,7 @@ impl MaxUploadsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8771,11 +7832,7 @@ struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A metadata key-value pair to store with an object.</p>
@@ -8801,20 +7858,10 @@ impl MetadataEntrySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Name", &value.to_string())?;
         }
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8831,12 +7878,7 @@ impl MetadataKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8851,12 +7893,7 @@ impl MetadataValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8912,12 +7949,7 @@ impl MetricsSerializer {
             "EventThreshold",
             &obj.event_threshold,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8971,12 +8003,7 @@ impl MetricsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -9034,12 +8061,7 @@ impl MetricsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &MetricsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9129,12 +8151,7 @@ impl MetricsFilterSerializer {
             &MetricsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -9148,11 +8165,7 @@ struct MetricsIdDeserializer;
 impl MetricsIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9167,12 +8180,7 @@ impl MetricsIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9181,11 +8189,7 @@ struct MetricsStatusDeserializer;
 impl MetricsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9200,12 +8204,7 @@ impl MetricsStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9214,11 +8213,7 @@ struct MinutesDeserializer;
 impl MinutesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -9233,12 +8228,7 @@ impl MinutesSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -9304,11 +8294,7 @@ struct MultipartUploadIdDeserializer;
 impl MultipartUploadIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9323,12 +8309,7 @@ impl MultipartUploadIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9365,11 +8346,7 @@ struct NextKeyMarkerDeserializer;
 impl NextKeyMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9377,11 +8354,7 @@ struct NextMarkerDeserializer;
 impl NextMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9389,11 +8362,7 @@ struct NextPartNumberMarkerDeserializer;
 impl NextPartNumberMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -9401,11 +8370,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9413,11 +8378,7 @@ struct NextUploadIdMarkerDeserializer;
 impl NextUploadIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9425,11 +8386,7 @@ struct NextVersionIdMarkerDeserializer;
 impl NextVersionIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime.</p>
@@ -9479,12 +8436,7 @@ impl NoncurrentVersionExpirationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            writer.write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9545,20 +8497,10 @@ impl NoncurrentVersionTransitionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            writer.write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9847,11 +8789,7 @@ struct NotificationIdDeserializer;
 impl NotificationIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9866,12 +8804,7 @@ impl NotificationIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9942,12 +8875,7 @@ impl ObjectCannedACLSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9973,19 +8901,9 @@ impl ObjectIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
         if let Some(ref value) = obj.version_id {
-            writer.write(xml::writer::XmlEvent::start_element("VersionId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "VersionId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10014,11 +8932,7 @@ struct ObjectKeyDeserializer;
 impl ObjectKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10033,12 +8947,7 @@ impl ObjectKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10124,12 +9033,7 @@ impl ObjectLockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.object_lock_enabled {
-            writer.write(xml::writer::XmlEvent::start_element("ObjectLockEnabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ObjectLockEnabled", &value.to_string())?;
         }
         if let Some(ref value) = obj.rule {
             &ObjectLockRuleSerializer::serialize(&mut writer, "Rule", value)?;
@@ -10143,11 +9047,7 @@ struct ObjectLockEnabledDeserializer;
 impl ObjectLockEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10162,12 +9062,7 @@ impl ObjectLockEnabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10215,12 +9110,7 @@ impl ObjectLockLegalHoldSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10231,11 +9121,7 @@ struct ObjectLockLegalHoldStatusDeserializer;
 impl ObjectLockLegalHoldStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10250,12 +9136,7 @@ impl ObjectLockLegalHoldStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10309,20 +9190,10 @@ impl ObjectLockRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mode {
-            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Mode", &value.to_string())?;
         }
         if let Some(ref value) = obj.retain_until_date {
-            writer.write(xml::writer::XmlEvent::start_element("RetainUntilDate"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RetainUntilDate", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10333,11 +9204,7 @@ struct ObjectLockRetentionModeDeserializer;
 impl ObjectLockRetentionModeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10352,12 +9219,7 @@ impl ObjectLockRetentionModeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10417,11 +9279,7 @@ struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The version of an object.</p>
@@ -10500,11 +9358,7 @@ struct ObjectVersionIdDeserializer;
 impl ObjectVersionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10519,12 +9373,7 @@ impl ObjectVersionIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10561,11 +9410,7 @@ struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the location where the restore job's output is stored.</p>
@@ -10672,20 +9517,10 @@ impl OwnerSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            writer.write(xml::writer::XmlEvent::start_element("DisplayName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DisplayName", &value.to_string())?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10696,11 +9531,7 @@ struct OwnerOverrideDeserializer;
 impl OwnerOverrideDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10715,12 +9546,7 @@ impl OwnerOverrideSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10793,11 +9619,7 @@ struct PartNumberDeserializer;
 impl PartNumberDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -10812,12 +9634,7 @@ impl PartNumberSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -10826,11 +9643,7 @@ struct PartNumberMarkerDeserializer;
 impl PartNumberMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -10845,12 +9658,7 @@ impl PartNumberMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -10887,11 +9695,7 @@ struct PayerDeserializer;
 impl PayerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10906,12 +9710,7 @@ impl PayerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10920,11 +9719,7 @@ struct PermissionDeserializer;
 impl PermissionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10939,12 +9734,7 @@ impl PermissionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10980,11 +9770,7 @@ struct PrefixDeserializer;
 impl PrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10999,12 +9785,7 @@ impl PrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -11013,11 +9794,7 @@ struct PriorityDeserializer;
 impl PriorityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -11032,12 +9809,7 @@ impl PrioritySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -11119,11 +9891,7 @@ struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -11138,12 +9906,7 @@ impl ProtocolSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -11216,38 +9979,16 @@ impl PublicAccessBlockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.block_public_acls {
-            writer.write(xml::writer::XmlEvent::start_element("BlockPublicAcls"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BlockPublicAcls", &value.to_string())?;
         }
         if let Some(ref value) = obj.block_public_policy {
-            writer.write(xml::writer::XmlEvent::start_element("BlockPublicPolicy"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BlockPublicPolicy", &value.to_string())?;
         }
         if let Some(ref value) = obj.ignore_public_acls {
-            writer.write(xml::writer::XmlEvent::start_element("IgnorePublicAcls"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IgnorePublicAcls", &value.to_string())?;
         }
         if let Some(ref value) = obj.restrict_public_buckets {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "RestrictPublicBuckets",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RestrictPublicBuckets", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11474,11 +10215,11 @@ impl PutObjectAclOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectAclOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectAclOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11525,11 +10266,11 @@ impl PutObjectLegalHoldOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLegalHoldOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLegalHoldOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11564,11 +10305,11 @@ impl PutObjectLockConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLockConfigurationOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLockConfigurationOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11617,11 +10358,11 @@ impl PutObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11703,11 +10444,11 @@ impl PutObjectRetentionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectRetentionOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectRetentionOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11745,11 +10486,11 @@ impl PutObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectTaggingOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectTaggingOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11785,11 +10526,7 @@ struct QueueArnDeserializer;
 impl QueueArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -11804,12 +10541,7 @@ impl QueueArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -11875,19 +10607,9 @@ impl QueueConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.queue_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Queue", &obj.queue_arn.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11952,20 +10674,10 @@ impl QueueConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.queue {
-            writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Queue", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12031,12 +10743,7 @@ impl QuietSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -12051,12 +10758,7 @@ impl QuoteCharacterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12071,12 +10773,7 @@ impl QuoteEscapeCharacterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12091,12 +10788,7 @@ impl QuoteFieldsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12111,12 +10803,7 @@ impl RecordDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12219,44 +10906,19 @@ impl RedirectSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.host_name {
-            writer.write(xml::writer::XmlEvent::start_element("HostName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HostName", &value.to_string())?;
         }
         if let Some(ref value) = obj.http_redirect_code {
-            writer.write(xml::writer::XmlEvent::start_element("HttpRedirectCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HttpRedirectCode", &value.to_string())?;
         }
         if let Some(ref value) = obj.protocol {
-            writer.write(xml::writer::XmlEvent::start_element("Protocol"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Protocol", &value.to_string())?;
         }
         if let Some(ref value) = obj.replace_key_prefix_with {
-            writer.write(xml::writer::XmlEvent::start_element("ReplaceKeyPrefixWith"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplaceKeyPrefixWith", &value.to_string())?;
         }
         if let Some(ref value) = obj.replace_key_with {
-            writer.write(xml::writer::XmlEvent::start_element("ReplaceKeyWith"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplaceKeyWith", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12308,19 +10970,9 @@ impl RedirectAllRequestsToSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("HostName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.host_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "HostName", &obj.host_name.to_string())?;
         if let Some(ref value) = obj.protocol {
-            writer.write(xml::writer::XmlEvent::start_element("Protocol"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Protocol", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12331,11 +10983,7 @@ struct ReplaceKeyPrefixWithDeserializer;
 impl ReplaceKeyPrefixWithDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12350,12 +10998,7 @@ impl ReplaceKeyPrefixWithSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12364,11 +11007,7 @@ struct ReplaceKeyWithDeserializer;
 impl ReplaceKeyWithDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12383,12 +11022,7 @@ impl ReplaceKeyWithSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12397,11 +11031,7 @@ struct ReplicaKmsKeyIDDeserializer;
 impl ReplicaKmsKeyIDDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12416,12 +11046,7 @@ impl ReplicaKmsKeyIDSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12476,12 +11101,7 @@ impl ReplicationConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Role"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.role
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Role", &obj.role.to_string())?;
         ReplicationRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12594,20 +11214,10 @@ impl ReplicationRuleSerializer {
             &ReplicationRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.priority {
-            writer.write(xml::writer::XmlEvent::start_element("Priority"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Priority", &value.to_string())?;
         }
         if let Some(ref value) = obj.source_selection_criteria {
             &SourceSelectionCriteriaSerializer::serialize(
@@ -12616,12 +11226,7 @@ impl ReplicationRuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -12679,12 +11284,7 @@ impl ReplicationRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12750,12 +11350,7 @@ impl ReplicationRuleFilterSerializer {
             &ReplicationRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12769,11 +11364,7 @@ struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12788,12 +11379,7 @@ impl ReplicationRuleStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12890,12 +11476,7 @@ impl ReplicationTimeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         ReplicationTimeValueSerializer::serialize(&mut writer, "Time", &obj.time)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12906,11 +11487,7 @@ struct ReplicationTimeStatusDeserializer;
 impl ReplicationTimeStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12925,12 +11502,7 @@ impl ReplicationTimeStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12976,12 +11548,7 @@ impl ReplicationTimeValueSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.minutes {
-            writer.write(xml::writer::XmlEvent::start_element("Minutes"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Minutes", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -13007,12 +11574,7 @@ impl RequestPaymentConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Payer"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.payer
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Payer", &obj.payer.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13038,12 +11600,7 @@ impl RequestProgressSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.enabled {
-            writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Enabled", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -13060,12 +11617,7 @@ impl ResponseCacheControlSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13080,12 +11632,7 @@ impl ResponseContentDispositionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13100,12 +11647,7 @@ impl ResponseContentEncodingSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13120,12 +11662,7 @@ impl ResponseContentLanguageSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13140,12 +11677,7 @@ impl ResponseContentTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13160,12 +11692,7 @@ impl ResponseExpiresSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13185,11 +11712,11 @@ impl RestoreObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = RestoreObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -13240,20 +11767,10 @@ impl RestoreRequestSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.description {
-            writer.write(xml::writer::XmlEvent::start_element("Description"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Description", &value.to_string())?;
         }
         if let Some(ref value) = obj.glacier_job_parameters {
             &GlacierJobParametersSerializer::serialize(&mut writer, "GlacierJobParameters", value)?;
@@ -13265,20 +11782,10 @@ impl RestoreRequestSerializer {
             &SelectParametersSerializer::serialize(&mut writer, "SelectParameters", value)?;
         }
         if let Some(ref value) = obj.tier {
-            writer.write(xml::writer::XmlEvent::start_element("Tier"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Tier", &value.to_string())?;
         }
         if let Some(ref value) = obj.type_ {
-            writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Type", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -13295,12 +11802,7 @@ impl RestoreRequestTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13309,11 +11811,7 @@ struct RoleDeserializer;
 impl RoleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -13328,12 +11826,7 @@ impl RoleSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13527,12 +12020,7 @@ impl RuleSerializer {
             &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -13548,18 +12036,8 @@ impl RuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         if let Some(ref value) = obj.transition {
             &TransitionSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -13699,36 +12177,16 @@ impl S3LocationSerializer {
         if let Some(ref value) = obj.access_control_list {
             &GrantsSerializer::serialize(&mut writer, "AccessControlList", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("BucketName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "BucketName", &obj.bucket_name.to_string())?;
         if let Some(ref value) = obj.canned_acl {
-            writer.write(xml::writer::XmlEvent::start_element("CannedACL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CannedACL", &value.to_string())?;
         }
         if let Some(ref value) = obj.encryption {
             &EncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         if let Some(ref value) = obj.tagging {
             &TaggingSerializer::serialize(&mut writer, "Tagging", value)?;
@@ -13778,12 +12236,7 @@ impl SSEKMSSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("KeyId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "KeyId", &obj.key_id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13793,11 +12246,7 @@ struct SSEKMSKeyIdDeserializer;
 impl SSEKMSKeyIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -13812,12 +12261,7 @@ impl SSEKMSKeyIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13832,11 +12276,11 @@ struct SSES3Deserializer;
 impl SSES3Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSES3, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SSES3::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -13881,20 +12325,10 @@ impl ScanRangeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.end {
-            writer.write(xml::writer::XmlEvent::start_element("End"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "End", &value.to_string())?;
         }
         if let Some(ref value) = obj.start {
-            writer.write(xml::writer::XmlEvent::start_element("Start"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Start", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -14015,18 +12449,8 @@ impl SelectParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Expression"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.expression
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("ExpressionType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.expression_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Expression", &obj.expression.to_string())?;
+        write_characters_element(writer, "ExpressionType", &obj.expression_type.to_string())?;
         InputSerializationSerializer::serialize(
             &mut writer,
             "InputSerialization",
@@ -14046,11 +12470,7 @@ struct ServerSideEncryptionDeserializer;
 impl ServerSideEncryptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14065,12 +12485,7 @@ impl ServerSideEncryptionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14129,19 +12544,9 @@ impl ServerSideEncryptionByDefaultSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.kms_master_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("KMSMasterKeyID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSMasterKeyID", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("SSEAlgorithm"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.sse_algorithm
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14313,11 +12718,7 @@ struct SettingDeserializer;
 impl SettingDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -14332,12 +12733,7 @@ impl SettingSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -14346,11 +12742,7 @@ struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using a customer master key (CMK) stored in AWS Key Management Service (SSE-KMS).</p>
@@ -14455,12 +12847,7 @@ impl SseKmsEncryptedObjectsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14470,11 +12857,7 @@ struct SseKmsEncryptedObjectsStatusDeserializer;
 impl SseKmsEncryptedObjectsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14489,12 +12872,7 @@ impl SseKmsEncryptedObjectsStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14509,12 +12887,7 @@ impl StartSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -14523,11 +12896,7 @@ struct StartAfterDeserializer;
 impl StartAfterDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14542,12 +12911,7 @@ impl StartAfterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14626,11 +12990,7 @@ struct StorageClassDeserializer;
 impl StorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14645,12 +13005,7 @@ impl StorageClassSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14768,12 +13123,11 @@ impl StorageClassAnalysisDataExportSerializer {
             "Destination",
             &obj.destination,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("OutputSchemaVersion"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.output_schema_version
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "OutputSchemaVersion",
+            &obj.output_schema_version.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14783,11 +13137,7 @@ struct StorageClassAnalysisSchemaVersionDeserializer;
 impl StorageClassAnalysisSchemaVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14802,12 +13152,7 @@ impl StorageClassAnalysisSchemaVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14816,11 +13161,7 @@ struct SuffixDeserializer;
 impl SuffixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14835,12 +13176,7 @@ impl SuffixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14887,18 +13223,8 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.value
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Value", &obj.value.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14972,11 +13298,7 @@ struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14991,12 +13313,7 @@ impl TargetBucketSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15053,12 +13370,7 @@ impl TargetGrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            writer.write(xml::writer::XmlEvent::start_element("Permission"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Permission", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15108,11 +13420,7 @@ struct TargetPrefixDeserializer;
 impl TargetPrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15127,12 +13435,7 @@ impl TargetPrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15147,12 +13450,7 @@ impl TierSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15161,11 +13459,7 @@ struct TokenDeserializer;
 impl TokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15180,12 +13474,7 @@ impl TokenSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15194,11 +13483,7 @@ struct TopicArnDeserializer;
 impl TopicArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15213,12 +13498,7 @@ impl TopicArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15284,19 +13564,9 @@ impl TopicConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.topic_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Topic", &obj.topic_arn.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -15361,20 +13631,10 @@ impl TopicConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.topic {
-            writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Topic", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15484,28 +13744,13 @@ impl TransitionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Date", &value.to_string())?;
         }
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15563,11 +13808,7 @@ struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15582,12 +13823,7 @@ impl TransitionStorageClassSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15596,11 +13832,7 @@ struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15615,12 +13847,7 @@ impl TypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15629,11 +13856,7 @@ struct URIDeserializer;
 impl URIDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15648,12 +13871,7 @@ impl URISerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15662,11 +13880,7 @@ struct UploadIdMarkerDeserializer;
 impl UploadIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15681,12 +13895,7 @@ impl UploadIdMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15787,11 +13996,11 @@ impl UploadPartOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UploadPartOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -15846,11 +14055,7 @@ struct ValueDeserializer;
 impl ValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15865,12 +14070,7 @@ impl ValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15879,11 +14079,7 @@ struct VersionIdMarkerDeserializer;
 impl VersionIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15898,12 +14094,7 @@ impl VersionIdMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15930,20 +14121,10 @@ impl VersioningConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mfa_delete {
-            writer.write(xml::writer::XmlEvent::start_element("MfaDelete"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MfaDelete", &value.to_string())?;
         }
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -16000,11 +14181,7 @@ struct YearsDeserializer;
 impl YearsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -16019,12 +14196,7 @@ impl YearsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -19691,29 +17863,18 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AbortMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, AbortMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        result = AbortMultipartUploadOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = AbortMultipartUploadOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -19727,9 +17888,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
@@ -19746,55 +17905,22 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CompleteMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, CompleteMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CompleteMultipartUploadOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CompleteMultipartUploadOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -19808,101 +17934,49 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
         request.add_header("x-amz-copy-source", &input.copy_source);
-
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
-            request.add_header(
-                "x-amz-copy-source-if-match",
-                &copy_source_if_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
-            request.add_header(
-                "x-amz-copy-source-if-modified-since",
-                &copy_source_if_modified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
-            request.add_header(
-                "x-amz-copy-source-if-none-match",
-                &copy_source_if_none_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-            request.add_header(
-                "x-amz-copy-source-if-unmodified-since",
-                &copy_source_if_unmodified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
-        {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-algorithm",
-                &copy_source_sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key",
-                &copy_source_sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-                &copy_source_sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-copy-source-if-match",
+            input.copy_source_if_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-modified-since",
+            input.copy_source_if_modified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-none-match",
+            input.copy_source_if_none_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-unmodified-since",
+            input.copy_source_if_unmodified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-algorithm",
+            input.copy_source_sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key",
+            input.copy_source_sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key-MD5",
+            input.copy_source_sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -19910,165 +17984,79 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref metadata_directive) = input.metadata_directive {
-            request.add_header("x-amz-metadata-directive", &metadata_directive.to_string());
-        }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref tagging_directive) = input.tagging_directive {
-            request.add_header("x-amz-tagging-directive", &tagging_directive.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-metadata-directive",
+            input.metadata_directive.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header("x-amz-tagging-directive", input.tagging_directive.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CopyObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, CopyObjectError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CopyObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
-            let value = copy_source_version_id.to_owned();
-            result.copy_source_version_id = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -20082,36 +18070,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
-
-        if let Some(ref object_lock_enabled_for_bucket) = input.object_lock_enabled_for_bucket {
-            request.add_header(
-                "x-amz-bucket-object-lock-enabled",
-                &object_lock_enabled_for_bucket.to_string(),
-            );
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header(
+            "x-amz-bucket-object-lock-enabled",
+            input.object_lock_enabled_for_bucket.as_ref(),
+        );
 
         if input.create_bucket_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
@@ -20126,21 +18097,12 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateBucketError::from_response)
+            .await?;
 
-        let mut result;
-        result = CreateBucketOutput::default();
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let result = CreateBucketOutput::default();
+        let mut result = result;
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -20154,49 +18116,20 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -20204,157 +18137,76 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
         let mut params = Params::new();
         params.put_key("uploads");
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateMultipartUploadOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-            let value = abort_date.to_owned();
-            result.abort_date = Some(value)
-        };
-        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-            let value = abort_rule_id.to_owned();
-            result.abort_rule_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.abort_date = response.headers.remove("x-amz-abort-date");
+        result.abort_rule_id = response.headers.remove("x-amz-abort-rule-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 
@@ -20369,14 +18221,8 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20398,16 +18244,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketAnalyticsConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20428,14 +18269,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketCorsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20456,14 +18291,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketEncryptionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20485,16 +18314,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketInventoryConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20515,14 +18339,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketLifecycleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20544,16 +18362,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketMetricsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketMetricsConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20574,14 +18387,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20602,14 +18409,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketReplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20630,14 +18431,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketTaggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20658,14 +18453,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketWebsiteError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20681,20 +18470,12 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -20702,29 +18483,17 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteObjectOutput::default();
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = DeleteObjectOutput::default();
+        let mut result = result;
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -20746,21 +18515,12 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteObjectTaggingOutput::default();
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = DeleteObjectTaggingOutput::default();
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -20774,20 +18534,12 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put_key("delete");
         request.set_params(params);
@@ -20797,33 +18549,16 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectsError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteObjectsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -20842,14 +18577,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeletePublicAccessBlockError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20873,34 +18602,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAccelerateConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetBucketAccelerateConfigurationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAccelerateConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAccelerateConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -20920,29 +18633,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketAclError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAclOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -20966,34 +18665,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketAnalyticsConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAnalyticsConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21013,29 +18693,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketCorsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketCorsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21055,30 +18721,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketEncryptionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketEncryptionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketEncryptionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21102,34 +18753,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketInventoryConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketInventoryConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketInventoryConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21149,30 +18781,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLifecycleError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLifecycleOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21195,34 +18812,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLifecycleConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketLifecycleConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLifecycleConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLifecycleConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21242,30 +18840,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLocationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLocationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLocationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21285,29 +18868,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLoggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLoggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLoggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21329,32 +18898,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketMetricsConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketMetricsConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketMetricsConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketMetricsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21374,32 +18926,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketNotificationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketNotificationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = NotificationConfigurationDeprecated::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = NotificationConfigurationDeprecatedDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            NotificationConfigurationDeprecatedDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21420,32 +18955,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketNotificationConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetBucketNotificationConfigurationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = NotificationConfiguration::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21465,15 +18986,10 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketPolicyError::from_response)
+            .await?;
 
+        let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result = GetBucketPolicyOutput::default();
         result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
@@ -21496,30 +19012,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketPolicyStatusError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketPolicyStatusError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketPolicyStatusOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketPolicyStatusOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21539,30 +19040,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketReplicationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketReplicationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21582,32 +19068,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketRequestPaymentError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketRequestPaymentError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketRequestPaymentOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketRequestPaymentOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21627,29 +19096,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21669,30 +19124,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketVersioningError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketVersioningError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketVersioningOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21712,29 +19152,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketWebsiteError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketWebsiteOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21749,50 +19175,24 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
-
-        if let Some(ref if_modified_since) = input.if_modified_since {
-            request.add_header("If-Modified-Since", &if_modified_since.to_string());
-        }
-
-        if let Some(ref if_none_match) = input.if_none_match {
-            request.add_header("If-None-Match", &if_none_match.to_string());
-        }
-
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
-            request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
-        }
-
-        if let Some(ref range) = input.range {
-            request.add_header("Range", &range.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
+        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
+        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
+        request.add_optional_header("Range", input.range.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
             params.put("partNumber", x);
@@ -21821,69 +19221,30 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectError::from_response)
+            .await?;
 
         let mut result = GetObjectOutput::default();
         result.body = Some(response.body);
-        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-            let value = accept_ranges.to_owned();
-            result.accept_ranges = Some(value)
-        };
-        if let Some(cache_control) = response.headers.get("Cache-Control") {
-            let value = cache_control.to_owned();
-            result.cache_control = Some(value)
-        };
-        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-            let value = content_disposition.to_owned();
-            result.content_disposition = Some(value)
-        };
-        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-            let value = content_encoding.to_owned();
-            result.content_encoding = Some(value)
-        };
-        if let Some(content_language) = response.headers.get("Content-Language") {
-            let value = content_language.to_owned();
-            result.content_language = Some(value)
-        };
-        if let Some(content_length) = response.headers.get("Content-Length") {
-            let value = content_length.to_owned();
-            result.content_length = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(content_range) = response.headers.get("Content-Range") {
-            let value = content_range.to_owned();
-            result.content_range = Some(value)
-        };
-        if let Some(content_type) = response.headers.get("Content-Type") {
-            let value = content_type.to_owned();
-            result.content_type = Some(value)
-        };
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(expires) = response.headers.get("Expires") {
-            let value = expires.to_owned();
-            result.expires = Some(value)
-        };
-        if let Some(last_modified) = response.headers.get("Last-Modified") {
-            let value = last_modified.to_owned();
-            result.last_modified = Some(value)
-        };
+        result.accept_ranges = response.headers.remove("accept-ranges");
+        result.cache_control = response.headers.remove("Cache-Control");
+        result.content_disposition = response.headers.remove("Content-Disposition");
+        result.content_encoding = response.headers.remove("Content-Encoding");
+        result.content_language = response.headers.remove("Content-Language");
+        result.content_length = response
+            .headers
+            .remove("Content-Length")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.content_range = response.headers.remove("Content-Range");
+        result.content_type = response.headers.remove("Content-Type");
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.expires = response.headers.remove("Expires");
+        result.last_modified = response.headers.remove("Last-Modified");
         let mut values = ::std::collections::HashMap::new();
         for (key, value) in response.headers.iter() {
             if key.as_str().starts_with("x-amz-meta-") {
@@ -21894,85 +19255,41 @@ impl S3 for S3Client {
             }
         }
         result.metadata = Some(values);
-        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-            let value = missing_meta.to_owned();
-            result.missing_meta = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(object_lock_legal_hold_status) =
-            response.headers.get("x-amz-object-lock-legal-hold")
-        {
-            let value = object_lock_legal_hold_status.to_owned();
-            result.object_lock_legal_hold_status = Some(value)
-        };
-        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-            let value = object_lock_mode.to_owned();
-            result.object_lock_mode = Some(value)
-        };
-        if let Some(object_lock_retain_until_date) =
-            response.headers.get("x-amz-object-lock-retain-until-date")
-        {
-            let value = object_lock_retain_until_date.to_owned();
-            result.object_lock_retain_until_date = Some(value)
-        };
-        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-            let value = parts_count.to_owned();
-            result.parts_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
-            let value = replication_status.to_owned();
-            result.replication_status = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore) = response.headers.get("x-amz-restore") {
-            let value = restore.to_owned();
-            result.restore = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        result.missing_meta = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-missing-meta")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.object_lock_legal_hold_status =
+            response.headers.remove("x-amz-object-lock-legal-hold");
+        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_retain_until_date = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-object-lock-retain-until-date");
+        result.parts_count = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-            let value = storage_class.to_owned();
-            result.storage_class = Some(value)
-        };
-        if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
-            let value = tag_count.to_owned();
-            result.tag_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        };
-        if let Some(website_redirect_location) =
-            response.headers.get("x-amz-website-redirect-location")
-        {
-            let value = website_redirect_location.to_owned();
-            result.website_redirect_location = Some(value)
-        };
+            .remove("x-amz-mp-parts-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.replication_status = response.headers.remove("x-amz-replication-status");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore = response.headers.remove("x-amz-restore");
+        result.sse_customer_algorithm = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.tag_count = response
+            .headers
+            .remove("x-amz-tagging-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.version_id = response.headers.remove("x-amz-version-id");
+        result.website_redirect_location =
+            response.headers.remove("x-amz-website-redirect-location");
         Ok(result)
     }
 
@@ -21986,9 +19303,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -21997,33 +19312,16 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectAclError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectAclOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -22037,9 +19335,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22048,30 +19344,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectLegalHoldError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectLegalHoldError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectLegalHoldOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22092,32 +19373,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectLockConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectLockConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectLockConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectLockConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22132,9 +19396,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22143,30 +19405,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectRetentionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectRetentionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectRetentionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22189,33 +19436,16 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -22229,29 +19459,18 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectTorrentError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectTorrentError::from_response)
+            .await?;
 
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
+        result.request_charged = response.headers.remove("x-amz-request-charged");
         Ok(result)
     }
 
@@ -22270,30 +19489,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetPublicAccessBlockError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPublicAccessBlockOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetPublicAccessBlockOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22309,14 +19513,8 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(HeadBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, HeadBucketError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22332,50 +19530,24 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
-
-        if let Some(ref if_modified_since) = input.if_modified_since {
-            request.add_header("If-Modified-Since", &if_modified_since.to_string());
-        }
-
-        if let Some(ref if_none_match) = input.if_none_match {
-            request.add_header("If-None-Match", &if_none_match.to_string());
-        }
-
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
-            request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
-        }
-
-        if let Some(ref range) = input.range {
-            request.add_header("Range", &range.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
+        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
+        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
+        request.add_optional_header("Range", input.range.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
             params.put("partNumber", x);
@@ -22386,65 +19558,29 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(HeadObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, HeadObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = HeadObjectOutput::default();
-        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-            let value = accept_ranges.to_owned();
-            result.accept_ranges = Some(value)
-        };
-        if let Some(cache_control) = response.headers.get("Cache-Control") {
-            let value = cache_control.to_owned();
-            result.cache_control = Some(value)
-        };
-        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-            let value = content_disposition.to_owned();
-            result.content_disposition = Some(value)
-        };
-        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-            let value = content_encoding.to_owned();
-            result.content_encoding = Some(value)
-        };
-        if let Some(content_language) = response.headers.get("Content-Language") {
-            let value = content_language.to_owned();
-            result.content_language = Some(value)
-        };
-        if let Some(content_length) = response.headers.get("Content-Length") {
-            let value = content_length.to_owned();
-            result.content_length = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(content_type) = response.headers.get("Content-Type") {
-            let value = content_type.to_owned();
-            result.content_type = Some(value)
-        };
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(expires) = response.headers.get("Expires") {
-            let value = expires.to_owned();
-            result.expires = Some(value)
-        };
-        if let Some(last_modified) = response.headers.get("Last-Modified") {
-            let value = last_modified.to_owned();
-            result.last_modified = Some(value)
-        };
+        let result = HeadObjectOutput::default();
+        let mut result = result;
+        result.accept_ranges = response.headers.remove("accept-ranges");
+        result.cache_control = response.headers.remove("Cache-Control");
+        result.content_disposition = response.headers.remove("Content-Disposition");
+        result.content_encoding = response.headers.remove("Content-Encoding");
+        result.content_language = response.headers.remove("Content-Language");
+        result.content_length = response
+            .headers
+            .remove("Content-Length")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.content_type = response.headers.remove("Content-Type");
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.expires = response.headers.remove("Expires");
+        result.last_modified = response.headers.remove("Last-Modified");
         let mut values = ::std::collections::HashMap::new();
         for (key, value) in response.headers.iter() {
             if key.as_str().starts_with("x-amz-meta-") {
@@ -22455,81 +19591,37 @@ impl S3 for S3Client {
             }
         }
         result.metadata = Some(values);
-        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-            let value = missing_meta.to_owned();
-            result.missing_meta = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(object_lock_legal_hold_status) =
-            response.headers.get("x-amz-object-lock-legal-hold")
-        {
-            let value = object_lock_legal_hold_status.to_owned();
-            result.object_lock_legal_hold_status = Some(value)
-        };
-        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-            let value = object_lock_mode.to_owned();
-            result.object_lock_mode = Some(value)
-        };
-        if let Some(object_lock_retain_until_date) =
-            response.headers.get("x-amz-object-lock-retain-until-date")
-        {
-            let value = object_lock_retain_until_date.to_owned();
-            result.object_lock_retain_until_date = Some(value)
-        };
-        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-            let value = parts_count.to_owned();
-            result.parts_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
-            let value = replication_status.to_owned();
-            result.replication_status = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore) = response.headers.get("x-amz-restore") {
-            let value = restore.to_owned();
-            result.restore = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        result.missing_meta = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-missing-meta")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.object_lock_legal_hold_status =
+            response.headers.remove("x-amz-object-lock-legal-hold");
+        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_retain_until_date = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-object-lock-retain-until-date");
+        result.parts_count = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-            let value = storage_class.to_owned();
-            result.storage_class = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        };
-        if let Some(website_redirect_location) =
-            response.headers.get("x-amz-website-redirect-location")
-        {
-            let value = website_redirect_location.to_owned();
-            result.website_redirect_location = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-mp-parts-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.replication_status = response.headers.remove("x-amz-replication-status");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore = response.headers.remove("x-amz-restore");
+        result.sse_customer_algorithm = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.version_id = response.headers.remove("x-amz-version-id");
+        result.website_redirect_location =
+            response.headers.remove("x-amz-website-redirect-location"); // parse non-payload
         Ok(result)
     }
 
@@ -22554,34 +19646,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketAnalyticsConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListBucketAnalyticsConfigurationsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketAnalyticsConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22607,34 +19683,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketInventoryConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListBucketInventoryConfigurationsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketInventoryConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketInventoryConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22660,34 +19720,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketMetricsConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, ListBucketMetricsConfigurationsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketMetricsConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketMetricsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22700,29 +19741,15 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListBucketsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22760,30 +19787,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListMultipartUploadsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListMultipartUploadsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListMultipartUploadsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22821,30 +19833,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectVersionsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectVersionsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectVersionsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22859,9 +19856,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -22881,29 +19876,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22918,9 +19899,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -22947,29 +19926,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectsV2Error::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectsV2Error::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectsV2Output::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22984,9 +19949,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_parts {
             params.put("max-parts", x);
@@ -22998,41 +19961,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPartsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListPartsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPartsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-            let value = abort_date.to_owned();
-            result.abort_date = Some(value)
-        };
-        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-            let value = abort_rule_id.to_owned();
-            result.abort_rule_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.abort_date = response.headers.remove("x-amz-abort-date");
+        result.abort_rule_id = response.headers.remove("x-amz-abort-rule-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -23058,16 +19998,11 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAccelerateConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                PutBucketAccelerateConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23083,33 +20018,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
@@ -23126,14 +20044,8 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketAclError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23162,16 +20074,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketAnalyticsConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23187,9 +20091,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -23203,14 +20105,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketCorsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23226,9 +20122,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -23241,14 +20135,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketEncryptionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23277,16 +20165,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketInventoryConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23302,9 +20182,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -23322,14 +20200,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketLifecycleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23362,16 +20234,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLifecycleConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketLifecycleConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23387,9 +20251,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
@@ -23402,14 +20264,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLoggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketLoggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23438,14 +20294,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketMetricsConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketMetricsConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23461,9 +20311,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -23476,14 +20324,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketNotificationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketNotificationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23511,16 +20353,11 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketNotificationConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                PutBucketNotificationConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23536,31 +20373,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref confirm_remove_self_bucket_access) = input.confirm_remove_self_bucket_access
-        {
-            request.add_header(
-                "x-amz-confirm-remove-self-bucket-access",
-                &confirm_remove_self_bucket_access.to_string(),
-            );
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-confirm-remove-self-bucket-access",
+            input.confirm_remove_self_bucket_access.as_ref(),
+        );
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
         request.set_payload(Some(input.policy.into_bytes()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23576,13 +20401,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref token) = input.token {
-            request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -23596,14 +20416,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketReplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23619,9 +20433,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
@@ -23634,14 +20446,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketRequestPaymentError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketRequestPaymentError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23657,9 +20463,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -23669,14 +20473,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketTaggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23692,13 +20490,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
@@ -23711,14 +20504,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketVersioningError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketVersioningError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23734,9 +20521,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -23749,14 +20534,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketWebsiteError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23772,57 +20551,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_length) = input.content_length {
-            request.add_header("Content-Length", &content_length.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Length", input.content_length.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -23830,149 +20574,74 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
 
         if let Some(__body) = input.body {
             request.set_payload_stream(__body);
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectOutput::default();
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let result = PutObjectOutput::default();
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -23986,37 +20655,17 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24036,21 +20685,12 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectAclError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectAclOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectAclOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24064,13 +20704,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24090,21 +20725,12 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectLegalHoldError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectLegalHoldError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectLegalHoldOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectLegalHoldOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24119,17 +20745,9 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref token) = input.token {
-            request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
@@ -24146,21 +20764,12 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectLockConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectLockConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectLockConfigurationOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectLockConfigurationOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24174,20 +20783,12 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24207,21 +20808,12 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectRetentionError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectRetentionError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectRetentionOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectRetentionOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24235,9 +20827,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24249,21 +20839,12 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectTaggingOutput::default();
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = PutObjectTaggingOutput::default();
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -24277,9 +20858,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -24292,14 +20871,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutPublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutPublicAccessBlockError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -24315,9 +20888,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24337,25 +20908,13 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, RestoreObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = RestoreObjectOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore_output_path) = response.headers.get("x-amz-restore-output-path") {
-            let value = restore_output_path.to_owned();
-            result.restore_output_path = Some(value)
-        }; // parse non-payload
+        let result = RestoreObjectOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore_output_path = response.headers.remove("x-amz-restore-output-path"); // parse non-payload
         Ok(result)
     }
 
@@ -24369,26 +20928,18 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put_key("select");
         params.put("select-type", "2");
@@ -24403,14 +20954,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SelectObjectContentError::from_response(response));
-        }
+            .sign_and_dispatch(request, SelectObjectContentError::from_response)
+            .await?;
 
         unimplemented!()
     }
@@ -24425,38 +20970,21 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_length) = input.content_length {
-            request.add_header("Content-Length", &content_length.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("Content-Length", input.content_length.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
@@ -24466,50 +20994,23 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadPartError::from_response(response));
-        }
+            .sign_and_dispatch(request, UploadPartError::from_response)
+            .await?;
 
-        let mut result;
-        result = UploadPartOutput::default();
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let result = UploadPartOutput::default();
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 
@@ -24524,148 +21025,75 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
         request.add_header("x-amz-copy-source", &input.copy_source);
-
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
-            request.add_header(
-                "x-amz-copy-source-if-match",
-                &copy_source_if_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
-            request.add_header(
-                "x-amz-copy-source-if-modified-since",
-                &copy_source_if_modified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
-            request.add_header(
-                "x-amz-copy-source-if-none-match",
-                &copy_source_if_none_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-            request.add_header(
-                "x-amz-copy-source-if-unmodified-since",
-                &copy_source_if_unmodified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_range) = input.copy_source_range {
-            request.add_header("x-amz-copy-source-range", &copy_source_range.to_string());
-        }
-
-        if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
-        {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-algorithm",
-                &copy_source_sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key",
-                &copy_source_sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-                &copy_source_sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-copy-source-if-match",
+            input.copy_source_if_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-modified-since",
+            input.copy_source_if_modified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-none-match",
+            input.copy_source_if_none_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-unmodified-since",
+            input.copy_source_if_unmodified_since.as_ref(),
+        );
+        request.add_optional_header("x-amz-copy-source-range", input.copy_source_range.as_ref());
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-algorithm",
+            input.copy_source_sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key",
+            input.copy_source_sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key-MD5",
+            input.copy_source_sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadPartCopyError::from_response(response));
-        }
+            .sign_and_dispatch(request, UploadPartCopyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UploadPartCopyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
-            let value = copy_source_version_id.to_owned();
-            result.copy_source_version_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 }

@@ -20,9 +20,40 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CodeStarConnectionsClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(
+            http_method,
+            "codestar-connections",
+            &self.region,
+            request_uri,
+        );
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>The AWS::CodeStarConnections::Connection resource can be used to connect external source providers with services like AWS CodePipeline.</p> <p>Note: A connection created through CloudFormation is in `PENDING` status by default. You can make its status `AVAILABLE` by editing the connection in the CodePipeline console.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -494,9 +525,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: CreateConnectionInput,
     ) -> Result<CreateConnectionOutput, RusotoError<CreateConnectionError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.CreateConnection",
@@ -504,19 +533,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionOutput, _>()
     }
 
     /// <p>The connection to be deleted.</p>
@@ -524,9 +546,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: DeleteConnectionInput,
     ) -> Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.DeleteConnection",
@@ -534,19 +554,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionOutput, _>()
     }
 
     /// <p>Returns the connection ARN and details such as status, owner, and provider type.</p>
@@ -554,9 +567,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: GetConnectionInput,
     ) -> Result<GetConnectionOutput, RusotoError<GetConnectionError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.GetConnection",
@@ -564,19 +575,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionOutput, _>()
     }
 
     /// <p>Lists the connections associated with your account.</p>
@@ -584,9 +588,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: ListConnectionsInput,
     ) -> Result<ListConnectionsOutput, RusotoError<ListConnectionsError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.ListConnections",
@@ -594,19 +596,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListConnectionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListConnectionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListConnectionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListConnectionsOutput, _>()
     }
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
@@ -614,9 +609,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.ListTagsForResource",
@@ -624,20 +617,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
@@ -645,9 +630,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.TagResource",
@@ -655,19 +638,12 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
     }
 
     /// <p>Removes tags from an AWS resource.</p>
@@ -675,9 +651,7 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codestar-connections", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "com.amazonaws.codestar.connections.CodeStar_connections_20191201.UntagResource",
@@ -685,18 +659,11 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
     }
 }

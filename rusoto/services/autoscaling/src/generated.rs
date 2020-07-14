@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl AutoscalingClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2011-01-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct ActivitiesDeserializer;
@@ -305,11 +329,7 @@ struct AsciiStringMaxLen255Deserializer;
 impl AsciiStringMaxLen255Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -317,11 +337,7 @@ struct AssociatePublicIpAddressDeserializer;
 impl AssociatePublicIpAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -368,11 +384,11 @@ impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachLoadBalancerTargetGroupsResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = AttachLoadBalancerTargetGroupsResultType::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -419,11 +435,11 @@ impl AttachLoadBalancersResultTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachLoadBalancersResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = AttachLoadBalancersResultType::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -680,11 +696,7 @@ struct AutoScalingGroupDesiredCapacityDeserializer;
 impl AutoScalingGroupDesiredCapacityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -692,11 +704,7 @@ struct AutoScalingGroupMaxSizeDeserializer;
 impl AutoScalingGroupMaxSizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -704,11 +712,7 @@ struct AutoScalingGroupMinSizeDeserializer;
 impl AutoScalingGroupMinSizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -1174,11 +1178,7 @@ struct BlockDeviceEbsDeleteOnTerminationDeserializer;
 impl BlockDeviceEbsDeleteOnTerminationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1186,11 +1186,7 @@ struct BlockDeviceEbsEncryptedDeserializer;
 impl BlockDeviceEbsEncryptedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1198,11 +1194,7 @@ struct BlockDeviceEbsIopsDeserializer;
 impl BlockDeviceEbsIopsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1210,11 +1202,7 @@ struct BlockDeviceEbsVolumeSizeDeserializer;
 impl BlockDeviceEbsVolumeSizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1222,11 +1210,7 @@ struct BlockDeviceEbsVolumeTypeDeserializer;
 impl BlockDeviceEbsVolumeTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a block device mapping.</p>
@@ -1375,11 +1359,11 @@ impl CompleteLifecycleActionAnswerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CompleteLifecycleActionAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CompleteLifecycleActionAnswer::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1437,11 +1421,7 @@ struct CooldownDeserializer;
 impl CooldownDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -1880,11 +1860,11 @@ impl DeleteLifecycleHookAnswerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLifecycleHookAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteLifecycleHookAnswer::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2844,11 +2824,11 @@ impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachLoadBalancerTargetGroupsResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DetachLoadBalancerTargetGroupsResultType::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2895,11 +2875,11 @@ impl DetachLoadBalancersResultTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachLoadBalancersResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DetachLoadBalancersResultType::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2967,11 +2947,7 @@ struct DisableScaleInDeserializer;
 impl DisableScaleInDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes an Amazon EBS volume. Used in combination with <a>BlockDeviceMapping</a>.</p>
@@ -3079,11 +3055,7 @@ struct EbsOptimizedDeserializer;
 impl EbsOptimizedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -3243,11 +3215,7 @@ struct EstimatedInstanceWarmupDeserializer;
 impl EstimatedInstanceWarmupDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -3467,11 +3435,7 @@ struct GlobalTimeoutDeserializer;
 impl GlobalTimeoutDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3479,11 +3443,7 @@ struct HealthCheckGracePeriodDeserializer;
 impl HealthCheckGracePeriodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3491,11 +3451,7 @@ struct HeartbeatTimeoutDeserializer;
 impl HeartbeatTimeoutDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes an EC2 instance.</p>
@@ -3647,11 +3603,7 @@ struct InstanceProtectedDeserializer;
 impl InstanceProtectedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4153,11 +4105,7 @@ struct LaunchTemplateNameDeserializer;
 impl LaunchTemplateNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes an override for a launch template.</p>
@@ -4300,11 +4248,7 @@ struct LifecycleActionResultDeserializer;
 impl LifecycleActionResultDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or terminates instances. Used in response to <a>DescribeLifecycleHooks</a>.</p>
@@ -4505,11 +4449,7 @@ struct LifecycleStateDeserializer;
 impl LifecycleStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4517,11 +4457,7 @@ struct LifecycleTransitionDeserializer;
 impl LifecycleTransitionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4675,11 +4611,7 @@ struct MaxInstanceLifetimeDeserializer;
 impl MaxInstanceLifetimeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4687,11 +4619,7 @@ struct MaxNumberOfAutoScalingGroupsDeserializer;
 impl MaxNumberOfAutoScalingGroupsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4699,11 +4627,7 @@ struct MaxNumberOfLaunchConfigurationsDeserializer;
 impl MaxNumberOfLaunchConfigurationsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes a metric.</p>
@@ -4808,11 +4732,7 @@ struct MetricDimensionNameDeserializer;
 impl MetricDimensionNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4820,11 +4740,7 @@ struct MetricDimensionValueDeserializer;
 impl MetricDimensionValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4912,11 +4828,7 @@ struct MetricNameDeserializer;
 impl MetricNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4924,11 +4836,7 @@ struct MetricNamespaceDeserializer;
 impl MetricNamespaceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4936,11 +4844,7 @@ struct MetricScaleDeserializer;
 impl MetricScaleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4948,11 +4852,7 @@ struct MetricStatisticDeserializer;
 impl MetricStatisticDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4960,11 +4860,7 @@ struct MetricTypeDeserializer;
 impl MetricTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4972,11 +4868,7 @@ struct MetricUnitDeserializer;
 impl MetricUnitDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4996,11 +4888,7 @@ struct MinAdjustmentMagnitudeDeserializer;
 impl MinAdjustmentMagnitudeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5008,11 +4896,7 @@ struct MinAdjustmentStepDeserializer;
 impl MinAdjustmentStepDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5020,11 +4904,7 @@ struct MixedInstanceSpotPriceDeserializer;
 impl MixedInstanceSpotPriceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level parameter instead of a launch configuration or template. For more information, see <a>CreateAutoScalingGroup</a> and <a>UpdateAutoScalingGroup</a>.</p>
@@ -5099,11 +4979,7 @@ struct MonitoringEnabledDeserializer;
 impl MonitoringEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5111,11 +4987,7 @@ struct NoDeviceDeserializer;
 impl NoDeviceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes a notification.</p>
@@ -5191,11 +5063,7 @@ struct NumberOfAutoScalingGroupsDeserializer;
 impl NumberOfAutoScalingGroupsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5203,11 +5071,7 @@ struct NumberOfLaunchConfigurationsDeserializer;
 impl NumberOfLaunchConfigurationsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5215,11 +5079,7 @@ struct OnDemandBaseCapacityDeserializer;
 impl OnDemandBaseCapacityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5227,11 +5087,7 @@ struct OnDemandPercentageAboveBaseCapacityDeserializer;
 impl OnDemandPercentageAboveBaseCapacityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5339,11 +5195,7 @@ struct PolicyIncrementDeserializer;
 impl PolicyIncrementDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5520,11 +5372,7 @@ struct ProgressDeserializer;
 impl ProgressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5532,11 +5380,7 @@ struct PropagateAtLaunchDeserializer;
 impl PropagateAtLaunchDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -5551,11 +5395,11 @@ impl PutLifecycleHookAnswerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutLifecycleHookAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutLifecycleHookAnswer::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5835,11 +5679,11 @@ impl RecordLifecycleActionHeartbeatAnswerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecordLifecycleActionHeartbeatAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = RecordLifecycleActionHeartbeatAnswer::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5891,11 +5735,7 @@ struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5903,11 +5743,7 @@ struct ScalingActivityStatusCodeDeserializer;
 impl ScalingActivityStatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6069,11 +5905,7 @@ struct ScalingPolicyEnabledDeserializer;
 impl ScalingPolicyEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -6447,11 +6279,11 @@ impl SetInstanceProtectionAnswerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetInstanceProtectionAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SetInstanceProtectionAnswer::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6497,11 +6329,7 @@ struct SpotInstancePoolsDeserializer;
 impl SpotInstancePoolsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6509,11 +6337,7 @@ struct SpotPriceDeserializer;
 impl SpotPriceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p><p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you&#39;ve defined for the alarm. Used in combination with <a>PutScalingPolicy</a>.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>To trigger the adjustment when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>To trigger the adjustment when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can&#39;t overlap or have a gap.</p> </li> <li> <p>At most, one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most, one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can&#39;t be null in the same step adjustment.</p> </li> </ul></p>
@@ -6792,11 +6616,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6804,11 +6624,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7041,11 +6857,7 @@ struct TimestampTypeDeserializer;
 impl TimestampTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -7198,11 +7010,7 @@ struct XmlStringDeserializer;
 impl XmlStringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7210,11 +7018,7 @@ struct XmlStringMaxLen1023Deserializer;
 impl XmlStringMaxLen1023Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7222,11 +7026,7 @@ struct XmlStringMaxLen1600Deserializer;
 impl XmlStringMaxLen1600Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7234,11 +7034,7 @@ struct XmlStringMaxLen19Deserializer;
 impl XmlStringMaxLen19Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7246,11 +7042,7 @@ struct XmlStringMaxLen2047Deserializer;
 impl XmlStringMaxLen2047Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7258,11 +7050,7 @@ struct XmlStringMaxLen255Deserializer;
 impl XmlStringMaxLen255Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7270,11 +7058,7 @@ struct XmlStringMaxLen32Deserializer;
 impl XmlStringMaxLen32Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7282,11 +7066,7 @@ struct XmlStringMaxLen511Deserializer;
 impl XmlStringMaxLen511Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7294,11 +7074,7 @@ struct XmlStringMaxLen64Deserializer;
 impl XmlStringMaxLen64Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7306,11 +7082,7 @@ struct XmlStringUserDataDeserializer;
 impl XmlStringUserDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by AttachInstances
@@ -7351,7 +7123,7 @@ impl AttachInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7409,7 +7181,7 @@ impl AttachLoadBalancerTargetGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7467,7 +7239,7 @@ impl AttachLoadBalancersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7516,7 +7288,7 @@ impl BatchDeleteScheduledActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7584,7 +7356,7 @@ impl BatchPutScheduledUpdateGroupActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7638,7 +7410,7 @@ impl CompleteLifecycleActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7709,7 +7481,7 @@ impl CreateAutoScalingGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7780,7 +7552,7 @@ impl CreateLaunchConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7849,7 +7621,7 @@ impl CreateOrUpdateTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7914,7 +7686,7 @@ impl DeleteAutoScalingGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -7975,7 +7747,7 @@ impl DeleteLaunchConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8022,7 +7794,7 @@ impl DeleteLifecycleHookError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8070,7 +7842,7 @@ impl DeleteNotificationConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8123,7 +7895,7 @@ impl DeletePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8170,7 +7942,7 @@ impl DeleteScheduledActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8223,7 +7995,7 @@ impl DeleteTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8270,7 +8042,7 @@ impl DescribeAccountLimitsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8318,7 +8090,7 @@ impl DescribeAdjustmentTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8373,7 +8145,7 @@ impl DescribeAutoScalingGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8433,7 +8205,7 @@ impl DescribeAutoScalingInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8486,7 +8258,7 @@ impl DescribeAutoScalingNotificationTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8545,7 +8317,7 @@ impl DescribeLaunchConfigurationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8598,7 +8370,7 @@ impl DescribeLifecycleHookTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8646,7 +8418,7 @@ impl DescribeLifecycleHooksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8696,7 +8468,7 @@ impl DescribeLoadBalancerTargetGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8744,7 +8516,7 @@ impl DescribeLoadBalancersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8794,7 +8566,7 @@ impl DescribeMetricCollectionTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8853,7 +8625,7 @@ impl DescribeNotificationConfigurationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8916,7 +8688,7 @@ impl DescribePoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8971,7 +8743,7 @@ impl DescribeScalingActivitiesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9022,7 +8794,7 @@ impl DescribeScalingProcessTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9077,7 +8849,7 @@ impl DescribeScheduledActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9131,7 +8903,7 @@ impl DescribeTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9180,7 +8952,7 @@ impl DescribeTerminationPolicyTypesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9226,7 +8998,7 @@ impl DetachInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9274,7 +9046,7 @@ impl DetachLoadBalancerTargetGroupsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9320,7 +9092,7 @@ impl DetachLoadBalancersError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9366,7 +9138,7 @@ impl DisableMetricsCollectionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9414,7 +9186,7 @@ impl EnableMetricsCollectionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9460,7 +9232,7 @@ impl EnterStandbyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9513,7 +9285,7 @@ impl ExecutePolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9558,7 +9330,7 @@ impl ExitStandbyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9609,7 +9381,7 @@ impl PutLifecycleHookError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9676,7 +9448,7 @@ impl PutNotificationConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9742,7 +9514,7 @@ impl PutScalingPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9810,7 +9582,7 @@ impl PutScheduledUpdateGroupActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9866,7 +9638,7 @@ impl RecordLifecycleActionHeartbeatError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9919,7 +9691,7 @@ impl ResumeProcessesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9973,7 +9745,7 @@ impl SetDesiredCapacityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10020,7 +9792,7 @@ impl SetInstanceHealthError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10073,7 +9845,7 @@ impl SetInstanceProtectionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10127,7 +9899,7 @@ impl SuspendProcessesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10183,7 +9955,7 @@ impl TerminateInstanceInAutoScalingGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10252,7 +10024,7 @@ impl UpdateAutoScalingGroupError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10660,23 +10432,15 @@ impl Autoscaling for AutoscalingClient {
         input: AttachInstancesQuery,
     ) -> Result<(), RusotoError<AttachInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachInstances");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("AttachInstances");
+        let mut params = params;
         AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachInstancesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10691,27 +10455,19 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<AttachLoadBalancerTargetGroupsError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachLoadBalancerTargetGroups");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("AttachLoadBalancerTargetGroups");
+        let mut params = params;
         AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachLoadBalancerTargetGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachLoadBalancerTargetGroupsError::from_response)
+            .await?;
 
-        let result;
-        result = AttachLoadBalancerTargetGroupsResultType::default();
-        // parse non-payload
+        let result = AttachLoadBalancerTargetGroupsResultType::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10721,27 +10477,19 @@ impl Autoscaling for AutoscalingClient {
         input: AttachLoadBalancersType,
     ) -> Result<AttachLoadBalancersResultType, RusotoError<AttachLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AttachLoadBalancers");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("AttachLoadBalancers");
+        let mut params = params;
         AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AttachLoadBalancersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AttachLoadBalancersError::from_response)
+            .await?;
 
-        let result;
-        result = AttachLoadBalancersResultType::default();
-        // parse non-payload
+        let result = AttachLoadBalancersResultType::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10752,45 +10500,30 @@ impl Autoscaling for AutoscalingClient {
     ) -> Result<BatchDeleteScheduledActionAnswer, RusotoError<BatchDeleteScheduledActionError>>
     {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchDeleteScheduledAction");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("BatchDeleteScheduledAction");
+        let mut params = params;
         BatchDeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchDeleteScheduledActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteScheduledActionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = BatchDeleteScheduledActionAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
                 "BatchDeleteScheduledActionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10803,47 +10536,33 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<BatchPutScheduledUpdateGroupActionError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchPutScheduledUpdateGroupAction");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("BatchPutScheduledUpdateGroupAction");
+        let mut params = params;
         BatchPutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchPutScheduledUpdateGroupActionError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchPutScheduledUpdateGroupActionError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = BatchPutScheduledUpdateGroupActionAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
                 "BatchPutScheduledUpdateGroupActionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10853,27 +10572,19 @@ impl Autoscaling for AutoscalingClient {
         input: CompleteLifecycleActionType,
     ) -> Result<CompleteLifecycleActionAnswer, RusotoError<CompleteLifecycleActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CompleteLifecycleAction");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("CompleteLifecycleAction");
+        let mut params = params;
         CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CompleteLifecycleActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CompleteLifecycleActionError::from_response)
+            .await?;
 
-        let result;
-        result = CompleteLifecycleActionAnswer::default();
-        // parse non-payload
+        let result = CompleteLifecycleActionAnswer::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10883,23 +10594,15 @@ impl Autoscaling for AutoscalingClient {
         input: CreateAutoScalingGroupType,
     ) -> Result<(), RusotoError<CreateAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateAutoScalingGroup");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("CreateAutoScalingGroup");
+        let mut params = params;
         CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateAutoScalingGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAutoScalingGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10911,23 +10614,15 @@ impl Autoscaling for AutoscalingClient {
         input: CreateLaunchConfigurationType,
     ) -> Result<(), RusotoError<CreateLaunchConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateLaunchConfiguration");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("CreateLaunchConfiguration");
+        let mut params = params;
         CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateLaunchConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateLaunchConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10939,23 +10634,15 @@ impl Autoscaling for AutoscalingClient {
         input: CreateOrUpdateTagsType,
     ) -> Result<(), RusotoError<CreateOrUpdateTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateOrUpdateTags");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("CreateOrUpdateTags");
+        let mut params = params;
         CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateOrUpdateTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateOrUpdateTagsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10967,23 +10654,15 @@ impl Autoscaling for AutoscalingClient {
         input: DeleteAutoScalingGroupType,
     ) -> Result<(), RusotoError<DeleteAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAutoScalingGroup");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteAutoScalingGroup");
+        let mut params = params;
         DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAutoScalingGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAutoScalingGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10995,23 +10674,15 @@ impl Autoscaling for AutoscalingClient {
         input: LaunchConfigurationNameType,
     ) -> Result<(), RusotoError<DeleteLaunchConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLaunchConfiguration");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteLaunchConfiguration");
+        let mut params = params;
         LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLaunchConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLaunchConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11023,27 +10694,19 @@ impl Autoscaling for AutoscalingClient {
         input: DeleteLifecycleHookType,
     ) -> Result<DeleteLifecycleHookAnswer, RusotoError<DeleteLifecycleHookError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteLifecycleHook");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteLifecycleHook");
+        let mut params = params;
         DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteLifecycleHookError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteLifecycleHookError::from_response)
+            .await?;
 
-        let result;
-        result = DeleteLifecycleHookAnswer::default();
-        // parse non-payload
+        let result = DeleteLifecycleHookAnswer::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11053,25 +10716,15 @@ impl Autoscaling for AutoscalingClient {
         input: DeleteNotificationConfigurationType,
     ) -> Result<(), RusotoError<DeleteNotificationConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteNotificationConfiguration");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteNotificationConfiguration");
+        let mut params = params;
         DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteNotificationConfigurationError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteNotificationConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11083,23 +10736,15 @@ impl Autoscaling for AutoscalingClient {
         input: DeletePolicyType,
     ) -> Result<(), RusotoError<DeletePolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeletePolicy");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeletePolicy");
+        let mut params = params;
         DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11111,23 +10756,15 @@ impl Autoscaling for AutoscalingClient {
         input: DeleteScheduledActionType,
     ) -> Result<(), RusotoError<DeleteScheduledActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteScheduledAction");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteScheduledAction");
+        let mut params = params;
         DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteScheduledActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteScheduledActionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11136,23 +10773,15 @@ impl Autoscaling for AutoscalingClient {
     /// <p>Deletes the specified tags.</p>
     async fn delete_tags(&self, input: DeleteTagsType) -> Result<(), RusotoError<DeleteTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteTags");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DeleteTags");
+        let mut params = params;
         DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTagsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11163,45 +10792,29 @@ impl Autoscaling for AutoscalingClient {
         &self,
     ) -> Result<DescribeAccountLimitsAnswer, RusotoError<DescribeAccountLimitsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAccountLimits");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeAccountLimits");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountLimitsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountLimitsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAccountLimitsAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccountLimitsAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAccountLimitsAnswerDeserializer::deserialize(
                 "DescribeAccountLimitsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11210,45 +10823,29 @@ impl Autoscaling for AutoscalingClient {
         &self,
     ) -> Result<DescribeAdjustmentTypesAnswer, RusotoError<DescribeAdjustmentTypesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAdjustmentTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeAdjustmentTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAdjustmentTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAdjustmentTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAdjustmentTypesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
                 "DescribeAdjustmentTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11258,45 +10855,30 @@ impl Autoscaling for AutoscalingClient {
         input: AutoScalingGroupNamesType,
     ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAutoScalingGroups");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeAutoScalingGroups");
+        let mut params = params;
         AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAutoScalingGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAutoScalingGroupsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AutoScalingGroupsType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AutoScalingGroupsTypeDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AutoScalingGroupsTypeDeserializer::deserialize(
                 "DescribeAutoScalingGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11306,45 +10888,30 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeAutoScalingInstancesType,
     ) -> Result<AutoScalingInstancesType, RusotoError<DescribeAutoScalingInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAutoScalingInstances");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeAutoScalingInstances");
+        let mut params = params;
         DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAutoScalingInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAutoScalingInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AutoScalingInstancesType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = AutoScalingInstancesTypeDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AutoScalingInstancesTypeDeserializer::deserialize(
                 "DescribeAutoScalingInstancesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11356,47 +10923,32 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<DescribeAutoScalingNotificationTypesError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAutoScalingNotificationTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeAutoScalingNotificationTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAutoScalingNotificationTypesError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAutoScalingNotificationTypesError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAutoScalingNotificationTypesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
                 "DescribeAutoScalingNotificationTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11406,45 +10958,30 @@ impl Autoscaling for AutoscalingClient {
         input: LaunchConfigurationNamesType,
     ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLaunchConfigurations");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeLaunchConfigurations");
+        let mut params = params;
         LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLaunchConfigurationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLaunchConfigurationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = LaunchConfigurationsType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = LaunchConfigurationsTypeDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = LaunchConfigurationsTypeDeserializer::deserialize(
                 "DescribeLaunchConfigurationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11454,45 +10991,29 @@ impl Autoscaling for AutoscalingClient {
     ) -> Result<DescribeLifecycleHookTypesAnswer, RusotoError<DescribeLifecycleHookTypesError>>
     {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLifecycleHookTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeLifecycleHookTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLifecycleHookTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLifecycleHookTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLifecycleHookTypesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
                 "DescribeLifecycleHookTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11502,45 +11023,30 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeLifecycleHooksType,
     ) -> Result<DescribeLifecycleHooksAnswer, RusotoError<DescribeLifecycleHooksError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLifecycleHooks");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeLifecycleHooks");
+        let mut params = params;
         DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLifecycleHooksError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLifecycleHooksError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLifecycleHooksAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
                 "DescribeLifecycleHooksResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11553,47 +11059,33 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<DescribeLoadBalancerTargetGroupsError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancerTargetGroups");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeLoadBalancerTargetGroups");
+        let mut params = params;
         DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancerTargetGroupsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeLoadBalancerTargetGroupsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLoadBalancerTargetGroupsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLoadBalancerTargetGroupsResponseDeserializer::deserialize(
                 "DescribeLoadBalancerTargetGroupsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11603,45 +11095,30 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeLoadBalancersRequest,
     ) -> Result<DescribeLoadBalancersResponse, RusotoError<DescribeLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeLoadBalancers");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeLoadBalancers");
+        let mut params = params;
         DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeLoadBalancersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeLoadBalancersError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeLoadBalancersResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeLoadBalancersResponseDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeLoadBalancersResponseDeserializer::deserialize(
                 "DescribeLoadBalancersResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11651,45 +11128,29 @@ impl Autoscaling for AutoscalingClient {
     ) -> Result<DescribeMetricCollectionTypesAnswer, RusotoError<DescribeMetricCollectionTypesError>>
     {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeMetricCollectionTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeMetricCollectionTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeMetricCollectionTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMetricCollectionTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeMetricCollectionTypesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
                 "DescribeMetricCollectionTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11702,47 +11163,33 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<DescribeNotificationConfigurationsError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeNotificationConfigurations");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeNotificationConfigurations");
+        let mut params = params;
         DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeNotificationConfigurationsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeNotificationConfigurationsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeNotificationConfigurationsAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
                 "DescribeNotificationConfigurationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11752,42 +11199,27 @@ impl Autoscaling for AutoscalingClient {
         input: DescribePoliciesType,
     ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribePolicies");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribePolicies");
+        let mut params = params;
         DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribePoliciesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePoliciesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PoliciesType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PoliciesTypeDeserializer::deserialize("DescribePoliciesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11797,45 +11229,28 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeScalingActivitiesType,
     ) -> Result<ActivitiesType, RusotoError<DescribeScalingActivitiesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeScalingActivities");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeScalingActivities");
+        let mut params = params;
         DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeScalingActivitiesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeScalingActivitiesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ActivitiesType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ActivitiesTypeDeserializer::deserialize(
-                "DescribeScalingActivitiesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ActivitiesTypeDeserializer::deserialize("DescribeScalingActivitiesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11844,45 +11259,27 @@ impl Autoscaling for AutoscalingClient {
         &self,
     ) -> Result<ProcessesType, RusotoError<DescribeScalingProcessTypesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeScalingProcessTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeScalingProcessTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeScalingProcessTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeScalingProcessTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ProcessesType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ProcessesTypeDeserializer::deserialize(
-                "DescribeScalingProcessTypesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ProcessesTypeDeserializer::deserialize("DescribeScalingProcessTypesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11892,45 +11289,30 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeScheduledActionsType,
     ) -> Result<ScheduledActionsType, RusotoError<DescribeScheduledActionsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeScheduledActions");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeScheduledActions");
+        let mut params = params;
         DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeScheduledActionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeScheduledActionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ScheduledActionsType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ScheduledActionsTypeDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ScheduledActionsTypeDeserializer::deserialize(
                 "DescribeScheduledActionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11940,42 +11322,27 @@ impl Autoscaling for AutoscalingClient {
         input: DescribeTagsType,
     ) -> Result<TagsType, RusotoError<DescribeTagsError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTags");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeTags");
+        let mut params = params;
         DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TagsType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = TagsTypeDeserializer::deserialize("DescribeTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11987,45 +11354,29 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<DescribeTerminationPolicyTypesError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeTerminationPolicyTypes");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DescribeTerminationPolicyTypes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeTerminationPolicyTypesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTerminationPolicyTypesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeTerminationPolicyTypesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
                 "DescribeTerminationPolicyTypesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12035,45 +11386,28 @@ impl Autoscaling for AutoscalingClient {
         input: DetachInstancesQuery,
     ) -> Result<DetachInstancesAnswer, RusotoError<DetachInstancesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachInstances");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DetachInstances");
+        let mut params = params;
         DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachInstancesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachInstancesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DetachInstancesAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DetachInstancesAnswerDeserializer::deserialize(
-                "DetachInstancesResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DetachInstancesAnswerDeserializer::deserialize("DetachInstancesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12086,27 +11420,19 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<DetachLoadBalancerTargetGroupsError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachLoadBalancerTargetGroups");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DetachLoadBalancerTargetGroups");
+        let mut params = params;
         DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachLoadBalancerTargetGroupsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachLoadBalancerTargetGroupsError::from_response)
+            .await?;
 
-        let result;
-        result = DetachLoadBalancerTargetGroupsResultType::default();
-        // parse non-payload
+        let result = DetachLoadBalancerTargetGroupsResultType::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12116,27 +11442,19 @@ impl Autoscaling for AutoscalingClient {
         input: DetachLoadBalancersType,
     ) -> Result<DetachLoadBalancersResultType, RusotoError<DetachLoadBalancersError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DetachLoadBalancers");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DetachLoadBalancers");
+        let mut params = params;
         DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DetachLoadBalancersError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DetachLoadBalancersError::from_response)
+            .await?;
 
-        let result;
-        result = DetachLoadBalancersResultType::default();
-        // parse non-payload
+        let result = DetachLoadBalancersResultType::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12146,23 +11464,15 @@ impl Autoscaling for AutoscalingClient {
         input: DisableMetricsCollectionQuery,
     ) -> Result<(), RusotoError<DisableMetricsCollectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DisableMetricsCollection");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("DisableMetricsCollection");
+        let mut params = params;
         DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisableMetricsCollectionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DisableMetricsCollectionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12174,23 +11484,15 @@ impl Autoscaling for AutoscalingClient {
         input: EnableMetricsCollectionQuery,
     ) -> Result<(), RusotoError<EnableMetricsCollectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnableMetricsCollection");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("EnableMetricsCollection");
+        let mut params = params;
         EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnableMetricsCollectionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnableMetricsCollectionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12202,42 +11504,27 @@ impl Autoscaling for AutoscalingClient {
         input: EnterStandbyQuery,
     ) -> Result<EnterStandbyAnswer, RusotoError<EnterStandbyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "EnterStandby");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("EnterStandby");
+        let mut params = params;
         EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(EnterStandbyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, EnterStandbyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnterStandbyAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnterStandbyAnswerDeserializer::deserialize("EnterStandbyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12247,23 +11534,15 @@ impl Autoscaling for AutoscalingClient {
         input: ExecutePolicyType,
     ) -> Result<(), RusotoError<ExecutePolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ExecutePolicy");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("ExecutePolicy");
+        let mut params = params;
         ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ExecutePolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ExecutePolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12275,42 +11554,27 @@ impl Autoscaling for AutoscalingClient {
         input: ExitStandbyQuery,
     ) -> Result<ExitStandbyAnswer, RusotoError<ExitStandbyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ExitStandby");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("ExitStandby");
+        let mut params = params;
         ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ExitStandbyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ExitStandbyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ExitStandbyAnswer::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ExitStandbyAnswerDeserializer::deserialize("ExitStandbyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12320,27 +11584,19 @@ impl Autoscaling for AutoscalingClient {
         input: PutLifecycleHookType,
     ) -> Result<PutLifecycleHookAnswer, RusotoError<PutLifecycleHookError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutLifecycleHook");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("PutLifecycleHook");
+        let mut params = params;
         PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutLifecycleHookError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutLifecycleHookError::from_response)
+            .await?;
 
-        let result;
-        result = PutLifecycleHookAnswer::default();
-        // parse non-payload
+        let result = PutLifecycleHookAnswer::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12350,23 +11606,15 @@ impl Autoscaling for AutoscalingClient {
         input: PutNotificationConfigurationType,
     ) -> Result<(), RusotoError<PutNotificationConfigurationError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutNotificationConfiguration");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("PutNotificationConfiguration");
+        let mut params = params;
         PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutNotificationConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutNotificationConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12378,42 +11626,27 @@ impl Autoscaling for AutoscalingClient {
         input: PutScalingPolicyType,
     ) -> Result<PolicyARNType, RusotoError<PutScalingPolicyError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutScalingPolicy");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("PutScalingPolicy");
+        let mut params = params;
         PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutScalingPolicyError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutScalingPolicyError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = PolicyARNType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PolicyARNTypeDeserializer::deserialize("PutScalingPolicyResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12423,23 +11656,15 @@ impl Autoscaling for AutoscalingClient {
         input: PutScheduledUpdateGroupActionType,
     ) -> Result<(), RusotoError<PutScheduledUpdateGroupActionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutScheduledUpdateGroupAction");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("PutScheduledUpdateGroupAction");
+        let mut params = params;
         PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutScheduledUpdateGroupActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutScheduledUpdateGroupActionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12454,27 +11679,19 @@ impl Autoscaling for AutoscalingClient {
         RusotoError<RecordLifecycleActionHeartbeatError>,
     > {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RecordLifecycleActionHeartbeat");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("RecordLifecycleActionHeartbeat");
+        let mut params = params;
         RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RecordLifecycleActionHeartbeatError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RecordLifecycleActionHeartbeatError::from_response)
+            .await?;
 
-        let result;
-        result = RecordLifecycleActionHeartbeatAnswer::default();
-        // parse non-payload
+        let result = RecordLifecycleActionHeartbeatAnswer::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12484,23 +11701,15 @@ impl Autoscaling for AutoscalingClient {
         input: ScalingProcessQuery,
     ) -> Result<(), RusotoError<ResumeProcessesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ResumeProcesses");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("ResumeProcesses");
+        let mut params = params;
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ResumeProcessesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ResumeProcessesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12512,23 +11721,15 @@ impl Autoscaling for AutoscalingClient {
         input: SetDesiredCapacityType,
     ) -> Result<(), RusotoError<SetDesiredCapacityError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetDesiredCapacity");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("SetDesiredCapacity");
+        let mut params = params;
         SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetDesiredCapacityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetDesiredCapacityError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12540,23 +11741,15 @@ impl Autoscaling for AutoscalingClient {
         input: SetInstanceHealthQuery,
     ) -> Result<(), RusotoError<SetInstanceHealthError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetInstanceHealth");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("SetInstanceHealth");
+        let mut params = params;
         SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetInstanceHealthError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetInstanceHealthError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12568,27 +11761,19 @@ impl Autoscaling for AutoscalingClient {
         input: SetInstanceProtectionQuery,
     ) -> Result<SetInstanceProtectionAnswer, RusotoError<SetInstanceProtectionError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetInstanceProtection");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("SetInstanceProtection");
+        let mut params = params;
         SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetInstanceProtectionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetInstanceProtectionError::from_response)
+            .await?;
 
-        let result;
-        result = SetInstanceProtectionAnswer::default();
-        // parse non-payload
+        let result = SetInstanceProtectionAnswer::default();
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12598,23 +11783,15 @@ impl Autoscaling for AutoscalingClient {
         input: ScalingProcessQuery,
     ) -> Result<(), RusotoError<SuspendProcessesError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SuspendProcesses");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("SuspendProcesses");
+        let mut params = params;
         ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SuspendProcessesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SuspendProcessesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12626,47 +11803,33 @@ impl Autoscaling for AutoscalingClient {
         input: TerminateInstanceInAutoScalingGroupType,
     ) -> Result<ActivityType, RusotoError<TerminateInstanceInAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TerminateInstanceInAutoScalingGroup");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("TerminateInstanceInAutoScalingGroup");
+        let mut params = params;
         TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TerminateInstanceInAutoScalingGroupError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                TerminateInstanceInAutoScalingGroupError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ActivityType::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ActivityTypeDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ActivityTypeDeserializer::deserialize(
                 "TerminateInstanceInAutoScalingGroupResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12676,23 +11839,15 @@ impl Autoscaling for AutoscalingClient {
         input: UpdateAutoScalingGroupType,
     ) -> Result<(), RusotoError<UpdateAutoScalingGroupError>> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateAutoScalingGroup");
-        params.put("Version", "2011-01-01");
+        let params = self.new_params("UpdateAutoScalingGroup");
+        let mut params = params;
         UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateAutoScalingGroupError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAutoScalingGroupError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())

@@ -5018,6 +5018,7 @@ impl BackupClient {
 #[async_trait]
 impl Backup for BackupClient {
     /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
+    #[allow(unused_mut)]
     async fn create_backup_plan(
         &self,
         input: CreateBackupPlanInput,
@@ -5036,7 +5037,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupPlanOutput, _>()?;
 
@@ -5048,6 +5049,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
+    #[allow(unused_mut)]
     async fn create_backup_selection(
         &self,
         input: CreateBackupSelectionInput,
@@ -5069,7 +5071,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupSelectionOutput, _>()?;
 
@@ -5081,6 +5083,7 @@ impl Backup for BackupClient {
     }
 
     /// <p><p>Creates a logical container where backups are stored. A <code>CreateBackupVault</code> request includes a name, optionally one or more resource tags, an encryption key, and a request ID.</p> <note> <p>Sensitive data, such as passport numbers, should not be included the name of a backup vault.</p> </note></p>
+    #[allow(unused_mut)]
     async fn create_backup_vault(
         &self,
         input: CreateBackupVaultInput,
@@ -5102,7 +5105,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupVaultOutput, _>()?;
 
@@ -5114,6 +5117,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes a backup plan. A backup plan can only be deleted after all associated selections of resources have been deleted. Deleting a backup plan deletes the current version of a backup plan. Previous versions, if any, will still exist.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_plan(
         &self,
         input: DeleteBackupPlanInput,
@@ -5132,7 +5136,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteBackupPlanOutput, _>()?;
 
@@ -5144,6 +5148,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the resource selection associated with a backup plan that is specified by the <code>SelectionId</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_selection(
         &self,
         input: DeleteBackupSelectionInput,
@@ -5163,7 +5168,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5174,6 +5179,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the backup vault identified by its name. A vault can be deleted only if it is empty.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault(
         &self,
         input: DeleteBackupVaultInput,
@@ -5192,7 +5198,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5203,6 +5209,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the policy document that manages permissions on a backup vault.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault_access_policy(
         &self,
         input: DeleteBackupVaultAccessPolicyInput,
@@ -5221,7 +5228,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5232,6 +5239,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes event notifications for the specified backup vault.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault_notifications(
         &self,
         input: DeleteBackupVaultNotificationsInput,
@@ -5250,7 +5258,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5261,6 +5269,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the recovery point specified by a recovery point ID.</p>
+    #[allow(unused_mut)]
     async fn delete_recovery_point(
         &self,
         input: DeleteRecoveryPointInput,
@@ -5280,7 +5289,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5291,6 +5300,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with creating a backup of a resource.</p>
+    #[allow(unused_mut)]
     async fn describe_backup_job(
         &self,
         input: DescribeBackupJobInput,
@@ -5309,7 +5319,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeBackupJobOutput, _>()?;
 
@@ -5321,6 +5331,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about a backup vault specified by its name.</p>
+    #[allow(unused_mut)]
     async fn describe_backup_vault(
         &self,
         input: DescribeBackupVaultInput,
@@ -5339,7 +5350,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeBackupVaultOutput, _>()?;
 
@@ -5351,6 +5362,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with creating a copy of a resource.</p>
+    #[allow(unused_mut)]
     async fn describe_copy_job(
         &self,
         input: DescribeCopyJobInput,
@@ -5366,7 +5378,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCopyJobOutput, _>()?;
 
@@ -5378,6 +5390,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns information about a saved resource, including the last time it was backed up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
+    #[allow(unused_mut)]
     async fn describe_protected_resource(
         &self,
         input: DescribeProtectedResourceInput,
@@ -5396,7 +5409,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeProtectedResourceOutput, _>()?;
 
@@ -5408,6 +5421,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with a recovery point, including ID, status, encryption, and lifecycle.</p>
+    #[allow(unused_mut)]
     async fn describe_recovery_point(
         &self,
         input: DescribeRecoveryPointInput,
@@ -5427,7 +5441,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRecoveryPointOutput, _>()?;
 
@@ -5439,6 +5453,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    #[allow(unused_mut)]
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>> {
@@ -5453,7 +5468,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRegionSettingsOutput, _>()?;
 
@@ -5465,6 +5480,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with a restore job that is specified by a job ID.</p>
+    #[allow(unused_mut)]
     async fn describe_restore_job(
         &self,
         input: DescribeRestoreJobInput,
@@ -5483,7 +5499,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRestoreJobOutput, _>()?;
 
@@ -5495,6 +5511,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
+    #[allow(unused_mut)]
     async fn export_backup_plan_template(
         &self,
         input: ExportBackupPlanTemplateInput,
@@ -5513,7 +5530,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ExportBackupPlanTemplateOutput, _>()?;
 
@@ -5525,6 +5542,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
@@ -5549,7 +5567,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanOutput, _>()?;
 
@@ -5561,6 +5579,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a valid JSON document specifying a backup plan or an error.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan_from_json(
         &self,
         input: GetBackupPlanFromJSONInput,
@@ -5579,7 +5598,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanFromJSONOutput, _>()?;
 
@@ -5591,6 +5610,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the template specified by its <code>templateId</code> as a backup plan.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan_from_template(
         &self,
         input: GetBackupPlanFromTemplateInput,
@@ -5609,7 +5629,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanFromTemplateOutput, _>()?;
 
@@ -5621,6 +5641,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns selection metadata and a document in JSON format that specifies a list of resources that are associated with a backup plan.</p>
+    #[allow(unused_mut)]
     async fn get_backup_selection(
         &self,
         input: GetBackupSelectionInput,
@@ -5640,7 +5661,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupSelectionOutput, _>()?;
 
@@ -5652,6 +5673,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the access policy document that is associated with the named backup vault.</p>
+    #[allow(unused_mut)]
     async fn get_backup_vault_access_policy(
         &self,
         input: GetBackupVaultAccessPolicyInput,
@@ -5671,7 +5693,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupVaultAccessPolicyOutput, _>()?;
 
@@ -5683,6 +5705,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns event notifications for the specified backup vault.</p>
+    #[allow(unused_mut)]
     async fn get_backup_vault_notifications(
         &self,
         input: GetBackupVaultNotificationsInput,
@@ -5702,7 +5725,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupVaultNotificationsOutput, _>()?;
 
@@ -5714,6 +5737,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a set of metadata key-value pairs that were used to create the backup.</p>
+    #[allow(unused_mut)]
     async fn get_recovery_point_restore_metadata(
         &self,
         input: GetRecoveryPointRestoreMetadataInput,
@@ -5732,7 +5756,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRecoveryPointRestoreMetadataOutput, _>()?;
 
@@ -5746,6 +5770,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the AWS resource types supported by AWS Backup.</p>
+    #[allow(unused_mut)]
     async fn get_supported_resource_types(
         &self,
     ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>> {
@@ -5760,7 +5785,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSupportedResourceTypesOutput, _>()?;
 
@@ -5772,6 +5797,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about your backup jobs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
@@ -5814,7 +5840,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupJobsOutput, _>()?;
 
@@ -5826,6 +5852,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata of your saved backup plan templates, including the template ID, name, and the creation and deletion dates.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plan_templates(
         &self,
         input: ListBackupPlanTemplatesInput,
@@ -5850,7 +5877,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlanTemplatesOutput, _>()?;
 
@@ -5862,6 +5889,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns version metadata of your backup plans, including Amazon Resource Names (ARNs), backup plan IDs, creation and deletion dates, plan names, and version IDs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plan_versions(
         &self,
         input: ListBackupPlanVersionsInput,
@@ -5889,7 +5917,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlanVersionsOutput, _>()?;
 
@@ -5901,6 +5929,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plans(
         &self,
         input: ListBackupPlansInput,
@@ -5928,7 +5957,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlansOutput, _>()?;
 
@@ -5940,6 +5969,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns an array containing metadata of the resources associated with the target backup plan.</p>
+    #[allow(unused_mut)]
     async fn list_backup_selections(
         &self,
         input: ListBackupSelectionsInput,
@@ -5967,7 +5997,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupSelectionsOutput, _>()?;
 
@@ -5979,6 +6009,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a list of recovery point storage containers along with information about them.</p>
+    #[allow(unused_mut)]
     async fn list_backup_vaults(
         &self,
         input: ListBackupVaultsInput,
@@ -6003,7 +6034,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupVaultsOutput, _>()?;
 
@@ -6015,6 +6046,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about your copy jobs.</p>
+    #[allow(unused_mut)]
     async fn list_copy_jobs(
         &self,
         input: ListCopyJobsInput,
@@ -6057,7 +6089,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListCopyJobsOutput, _>()?;
 
@@ -6069,6 +6101,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns an array of resources successfully backed up by AWS Backup, including the time the resource was saved, an Amazon Resource Name (ARN) of the resource, and a resource type.</p>
+    #[allow(unused_mut)]
     async fn list_protected_resources(
         &self,
         input: ListProtectedResourcesInput,
@@ -6093,7 +6126,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProtectedResourcesOutput, _>()?;
 
@@ -6105,6 +6138,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns detailed information about the recovery points stored in a backup vault.</p>
+    #[allow(unused_mut)]
     async fn list_recovery_points_by_backup_vault(
         &self,
         input: ListRecoveryPointsByBackupVaultInput,
@@ -6150,7 +6184,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecoveryPointsByBackupVaultOutput, _>()?;
 
@@ -6164,6 +6198,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns detailed information about recovery points of the type specified by a resource Amazon Resource Name (ARN).</p>
+    #[allow(unused_mut)]
     async fn list_recovery_points_by_resource(
         &self,
         input: ListRecoveryPointsByResourceInput,
@@ -6192,7 +6227,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecoveryPointsByResourceOutput, _>()?;
 
@@ -6204,6 +6239,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a list of jobs that AWS Backup initiated to restore a saved resource, including metadata about the recovery process.</p>
+    #[allow(unused_mut)]
     async fn list_restore_jobs(
         &self,
         input: ListRestoreJobsInput,
@@ -6228,7 +6264,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRestoreJobsOutput, _>()?;
 
@@ -6240,6 +6276,7 @@ impl Backup for BackupClient {
     }
 
     /// <p><p>Returns a list of key-value pairs assigned to a target recovery point, backup plan, or backup vault.</p> <note> <p> <code>ListTags</code> are currently only supported with Amazon EFS backups.</p> </note></p>
+    #[allow(unused_mut)]
     async fn list_tags(
         &self,
         input: ListTagsInput,
@@ -6264,7 +6301,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListTagsOutput, _>()?;
 
@@ -6276,6 +6313,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Sets a resource-based policy that is used to manage access permissions on the target backup vault. Requires a backup vault name and an access policy document in JSON format.</p>
+    #[allow(unused_mut)]
     async fn put_backup_vault_access_policy(
         &self,
         input: PutBackupVaultAccessPolicyInput,
@@ -6297,7 +6335,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6308,6 +6346,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Turns on notifications on a backup vault for the specified topic and events.</p>
+    #[allow(unused_mut)]
     async fn put_backup_vault_notifications(
         &self,
         input: PutBackupVaultNotificationsInput,
@@ -6329,7 +6368,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6340,6 +6379,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Starts a job to create a one-time backup of the specified resource.</p>
+    #[allow(unused_mut)]
     async fn start_backup_job(
         &self,
         input: StartBackupJobInput,
@@ -6358,7 +6398,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartBackupJobOutput, _>()?;
 
@@ -6370,6 +6410,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Starts a job to create a one-time copy of the specified resource.</p>
+    #[allow(unused_mut)]
     async fn start_copy_job(
         &self,
         input: StartCopyJobInput,
@@ -6388,7 +6429,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartCopyJobOutput, _>()?;
 
@@ -6400,6 +6441,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
+    #[allow(unused_mut)]
     async fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
@@ -6418,7 +6460,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartRestoreJobOutput, _>()?;
 
@@ -6430,6 +6472,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Attempts to cancel a job to create a one-time backup of a resource.</p>
+    #[allow(unused_mut)]
     async fn stop_backup_job(
         &self,
         input: StopBackupJobInput,
@@ -6448,7 +6491,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6459,6 +6502,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Assigns a set of key-value pairs to a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN).</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -6477,7 +6521,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6488,6 +6532,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Removes a set of key-value pairs from a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN)</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
@@ -6506,7 +6551,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6517,6 +6562,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
+    #[allow(unused_mut)]
     async fn update_backup_plan(
         &self,
         input: UpdateBackupPlanInput,
@@ -6538,7 +6584,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBackupPlanOutput, _>()?;
 
@@ -6550,6 +6596,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    #[allow(unused_mut)]
     async fn update_recovery_point_lifecycle(
         &self,
         input: UpdateRecoveryPointLifecycleInput,
@@ -6573,7 +6620,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRecoveryPointLifecycleOutput, _>()?;
 
@@ -6585,6 +6632,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Updates the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    #[allow(unused_mut)]
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,
@@ -6603,7 +6651,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

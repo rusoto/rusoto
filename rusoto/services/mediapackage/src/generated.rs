@@ -2561,6 +2561,7 @@ impl MediaPackageClient {
 #[async_trait]
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
+    #[allow(unused_mut)]
     async fn create_channel(
         &self,
         input: CreateChannelRequest,
@@ -2579,7 +2580,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateChannelResponse, _>()?;
 
@@ -2591,6 +2592,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Creates a new HarvestJob record.</p>
+    #[allow(unused_mut)]
     async fn create_harvest_job(
         &self,
         input: CreateHarvestJobRequest,
@@ -2609,7 +2611,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateHarvestJobResponse, _>()?;
 
@@ -2621,6 +2623,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Creates a new OriginEndpoint record.</p>
+    #[allow(unused_mut)]
     async fn create_origin_endpoint(
         &self,
         input: CreateOriginEndpointRequest,
@@ -2639,7 +2642,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateOriginEndpointResponse, _>()?;
 
@@ -2651,6 +2654,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Deletes an existing Channel.</p>
+    #[allow(unused_mut)]
     async fn delete_channel(
         &self,
         input: DeleteChannelRequest,
@@ -2666,7 +2670,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteChannelResponse, _>()?;
 
@@ -2678,6 +2682,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Deletes an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn delete_origin_endpoint(
         &self,
         input: DeleteOriginEndpointRequest,
@@ -2693,7 +2698,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteOriginEndpointResponse, _>()?;
 
@@ -2705,6 +2710,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about a Channel.</p>
+    #[allow(unused_mut)]
     async fn describe_channel(
         &self,
         input: DescribeChannelRequest,
@@ -2720,7 +2726,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChannelResponse, _>()?;
 
@@ -2732,6 +2738,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about an existing HarvestJob.</p>
+    #[allow(unused_mut)]
     async fn describe_harvest_job(
         &self,
         input: DescribeHarvestJobRequest,
@@ -2747,7 +2754,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeHarvestJobResponse, _>()?;
 
@@ -2759,6 +2766,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn describe_origin_endpoint(
         &self,
         input: DescribeOriginEndpointRequest,
@@ -2774,7 +2782,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeOriginEndpointResponse, _>()?;
 
@@ -2786,6 +2794,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of Channels.</p>
+    #[allow(unused_mut)]
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
@@ -2810,7 +2819,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChannelsResponse, _>()?;
 
@@ -2822,6 +2831,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of HarvestJob records.</p>
+    #[allow(unused_mut)]
     async fn list_harvest_jobs(
         &self,
         input: ListHarvestJobsRequest,
@@ -2852,7 +2862,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListHarvestJobsResponse, _>()?;
 
@@ -2864,6 +2874,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
+    #[allow(unused_mut)]
     async fn list_origin_endpoints(
         &self,
         input: ListOriginEndpointsRequest,
@@ -2891,7 +2902,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOriginEndpointsResponse, _>()?;
 
@@ -2902,6 +2913,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2917,7 +2929,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2929,6 +2941,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
+    #[allow(unused_mut)]
     async fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
@@ -2944,7 +2957,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RotateChannelCredentialsResponse, _>()?;
 
@@ -2956,6 +2969,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    #[allow(unused_mut)]
     async fn rotate_ingest_endpoint_credentials(
         &self,
         input: RotateIngestEndpointCredentialsRequest,
@@ -2978,7 +2992,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RotateIngestEndpointCredentialsResponse, _>()?;
 
@@ -2991,6 +3005,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3009,7 +3024,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3019,6 +3034,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3040,7 +3056,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3051,6 +3067,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Updates an existing Channel.</p>
+    #[allow(unused_mut)]
     async fn update_channel(
         &self,
         input: UpdateChannelRequest,
@@ -3069,7 +3086,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateChannelResponse, _>()?;
 
@@ -3081,6 +3098,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Updates an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn update_origin_endpoint(
         &self,
         input: UpdateOriginEndpointRequest,
@@ -3099,7 +3117,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateOriginEndpointResponse, _>()?;
 

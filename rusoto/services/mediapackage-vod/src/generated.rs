@@ -1817,6 +1817,7 @@ impl MediaPackageVodClient {
 #[async_trait]
 impl MediaPackageVod for MediaPackageVodClient {
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn create_asset(
         &self,
         input: CreateAssetRequest,
@@ -1836,7 +1837,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAssetResponse, _>()?;
 
@@ -1848,6 +1849,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn create_packaging_configuration(
         &self,
         input: CreatePackagingConfigurationRequest,
@@ -1868,7 +1870,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackagingConfigurationResponse, _>()?;
 
@@ -1880,6 +1882,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn create_packaging_group(
         &self,
         input: CreatePackagingGroupRequest,
@@ -1899,7 +1902,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackagingGroupResponse, _>()?;
 
@@ -1911,6 +1914,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes an existing MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn delete_asset(
         &self,
         input: DeleteAssetRequest,
@@ -1927,7 +1931,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteAssetResponse, _>()?;
 
@@ -1939,6 +1943,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn delete_packaging_configuration(
         &self,
         input: DeletePackagingConfigurationRequest,
@@ -1956,7 +1961,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackagingConfigurationResponse, _>()?;
 
@@ -1968,6 +1973,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn delete_packaging_group(
         &self,
         input: DeletePackagingGroupRequest,
@@ -1984,7 +1990,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackagingGroupResponse, _>()?;
 
@@ -1996,6 +2002,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn describe_asset(
         &self,
         input: DescribeAssetRequest,
@@ -2011,7 +2018,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAssetResponse, _>()?;
 
@@ -2023,6 +2030,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn describe_packaging_configuration(
         &self,
         input: DescribePackagingConfigurationRequest,
@@ -2041,7 +2049,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagingConfigurationResponse, _>()?;
 
@@ -2053,6 +2061,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn describe_packaging_group(
         &self,
         input: DescribePackagingGroupRequest,
@@ -2068,7 +2077,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagingGroupResponse, _>()?;
 
@@ -2080,6 +2089,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD Asset resources.</p>
+    #[allow(unused_mut)]
     async fn list_assets(
         &self,
         input: ListAssetsRequest,
@@ -2107,7 +2117,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAssetsResponse, _>()?;
 
@@ -2119,6 +2129,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
+    #[allow(unused_mut)]
     async fn list_packaging_configurations(
         &self,
         input: ListPackagingConfigurationsRequest,
@@ -2147,7 +2158,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagingConfigurationsResponse, _>()?;
 
@@ -2159,6 +2170,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
+    #[allow(unused_mut)]
     async fn list_packaging_groups(
         &self,
         input: ListPackagingGroupsRequest,
@@ -2183,7 +2195,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagingGroupsResponse, _>()?;
 
@@ -2195,6 +2207,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>List tags for a given MediaPackage VOD resource</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2210,7 +2223,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2222,6 +2235,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Set tags for a given MediaPackage VOD resource</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2241,7 +2255,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2252,6 +2266,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Delete tags for a given MediaPackage VOD resource</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2274,7 +2289,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

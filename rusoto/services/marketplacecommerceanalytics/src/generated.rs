@@ -20,9 +20,40 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl MarketplaceCommerceAnalyticsClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(
+            http_method,
+            "marketplacecommerceanalytics",
+            &self.region,
+            request_uri,
+        );
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -231,10 +262,7 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         &self,
         input: GenerateDataSetRequest,
     ) -> Result<GenerateDataSetResult, RusotoError<GenerateDataSetError>> {
-        let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.GenerateDataSet",
@@ -242,19 +270,12 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GenerateDataSetResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GenerateDataSetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GenerateDataSetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GenerateDataSetResult, _>()
     }
 
     /// <p>Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD&#39;T&#39;HH-mm-ss&#39;Z&#39;.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
@@ -262,10 +283,7 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         &self,
         input: StartSupportDataExportRequest,
     ) -> Result<StartSupportDataExportResult, RusotoError<StartSupportDataExportError>> {
-        let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.StartSupportDataExport",
@@ -273,19 +291,12 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSupportDataExportResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSupportDataExportError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartSupportDataExportError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartSupportDataExportResult, _>()
     }
 }

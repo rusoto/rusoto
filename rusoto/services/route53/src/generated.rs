@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree, write_characters_element,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -34,10 +34,24 @@ use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
 use xml;
-use xml::reader::ParserConfig;
 use xml::EventReader;
 use xml::EventWriter;
 
+impl Route53Client {
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -75,11 +89,7 @@ struct AccountLimitTypeDeserializer;
 impl AccountLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -94,12 +104,7 @@ impl AccountLimitTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -149,18 +154,8 @@ impl AlarmIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Region"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.region
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        write_characters_element(writer, "Region", &obj.region.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -170,11 +165,7 @@ struct AlarmNameDeserializer;
 impl AlarmNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -189,12 +180,7 @@ impl AlarmNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -203,11 +189,7 @@ struct AliasHealthEnabledDeserializer;
 impl AliasHealthEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -222,12 +204,7 @@ impl AliasHealthEnabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -284,24 +261,13 @@ impl AliasTargetSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("DNSName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.dns_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("EvaluateTargetHealth"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.evaluate_target_health
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("HostedZoneId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.hosted_zone_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "DNSName", &obj.dns_name.to_string())?;
+        write_characters_element(
+            writer,
+            "EvaluateTargetHealth",
+            &obj.evaluate_target_health.to_string(),
+        )?;
+        write_characters_element(writer, "HostedZoneId", &obj.hosted_zone_id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -317,12 +283,7 @@ impl AssociateVPCCommentSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -411,12 +372,7 @@ impl ChangeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Action"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.action
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Action", &obj.action.to_string())?;
         ResourceRecordSetSerializer::serialize(
             &mut writer,
             "ResourceRecordSet",
@@ -437,12 +393,7 @@ impl ChangeActionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -470,12 +421,7 @@ impl ChangeBatchSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         ChangesSerializer::serialize(&mut writer, "Changes", &obj.changes)?;
         if let Some(ref value) = obj.comment {
-            writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comment", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -588,11 +534,7 @@ struct ChangeStatusDeserializer;
 impl ChangeStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>
@@ -644,11 +586,11 @@ impl ChangeTagsForResourceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeTagsForResourceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ChangeTagsForResourceResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -811,11 +753,7 @@ struct CloudWatchLogsLogGroupArnDeserializer;
 impl CloudWatchLogsLogGroupArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -830,12 +768,7 @@ impl CloudWatchLogsLogGroupArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -844,11 +777,7 @@ struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -863,12 +792,7 @@ impl CloudWatchRegionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -877,11 +801,7 @@ struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains the health check request information.</p>
@@ -1458,11 +1378,7 @@ struct DNSNameDeserializer;
 impl DNSNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1477,12 +1393,7 @@ impl DNSNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1491,11 +1402,7 @@ struct DNSRCodeDeserializer;
 impl DNSRCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that lists the name servers in a delegation set, as well as the <code>CallerReference</code> and the <code>ID</code> for the delegation set.</p>
@@ -1600,11 +1507,11 @@ impl DeleteHealthCheckResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteHealthCheckResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteHealthCheckResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1667,11 +1574,11 @@ impl DeleteQueryLoggingConfigResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteQueryLoggingConfigResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteQueryLoggingConfigResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1697,11 +1604,11 @@ impl DeleteReusableDelegationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReusableDelegationSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteReusableDelegationSetResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1727,11 +1634,11 @@ impl DeleteTrafficPolicyInstanceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyInstanceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTrafficPolicyInstanceResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1759,11 +1666,11 @@ impl DeleteTrafficPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteTrafficPolicyResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1808,11 +1715,11 @@ impl DeleteVPCAssociationAuthorizationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVPCAssociationAuthorizationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteVPCAssociationAuthorizationResponse::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1854,11 +1761,7 @@ struct DimensionFieldDeserializer;
 impl DimensionFieldDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1884,11 +1787,7 @@ struct DisabledDeserializer;
 impl DisabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -1903,12 +1802,7 @@ impl DisabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -1923,12 +1817,7 @@ impl DisassociateVPCCommentSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2000,11 +1889,7 @@ struct EnableSNIDeserializer;
 impl EnableSNIDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -2019,12 +1904,7 @@ impl EnableSNISerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -2033,11 +1913,7 @@ struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -2045,11 +1921,7 @@ struct FailureThresholdDeserializer;
 impl FailureThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -2064,12 +1936,7 @@ impl FailureThresholdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -2078,11 +1945,7 @@ struct FullyQualifiedDomainNameDeserializer;
 impl FullyQualifiedDomainNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2097,12 +1960,7 @@ impl FullyQualifiedDomainNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2168,28 +2026,13 @@ impl GeoLocationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.continent_code {
-            writer.write(xml::writer::XmlEvent::start_element("ContinentCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ContinentCode", &value.to_string())?;
         }
         if let Some(ref value) = obj.country_code {
-            writer.write(xml::writer::XmlEvent::start_element("CountryCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CountryCode", &value.to_string())?;
         }
         if let Some(ref value) = obj.subdivision_code {
-            writer.write(xml::writer::XmlEvent::start_element("SubdivisionCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SubdivisionCode", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2200,11 +2043,7 @@ struct GeoLocationContinentCodeDeserializer;
 impl GeoLocationContinentCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2219,12 +2058,7 @@ impl GeoLocationContinentCodeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2233,11 +2067,7 @@ struct GeoLocationContinentNameDeserializer;
 impl GeoLocationContinentNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2245,11 +2075,7 @@ struct GeoLocationCountryCodeDeserializer;
 impl GeoLocationCountryCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2264,12 +2090,7 @@ impl GeoLocationCountryCodeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2278,11 +2099,7 @@ struct GeoLocationCountryNameDeserializer;
 impl GeoLocationCountryNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains the codes and full continent, country, and subdivision names for the specified <code>geolocation</code> code.</p>
@@ -2383,11 +2200,7 @@ struct GeoLocationSubdivisionCodeDeserializer;
 impl GeoLocationSubdivisionCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2402,12 +2215,7 @@ impl GeoLocationSubdivisionCodeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2416,11 +2224,7 @@ struct GeoLocationSubdivisionNameDeserializer;
 impl GeoLocationSubdivisionNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
@@ -3350,122 +3154,48 @@ impl HealthCheckConfigSerializer {
             &ChildHealthCheckListSerializer::serialize(&mut writer, "ChildHealthChecks", value)?;
         }
         if let Some(ref value) = obj.disabled {
-            writer.write(xml::writer::XmlEvent::start_element("Disabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Disabled", &value.to_string())?;
         }
         if let Some(ref value) = obj.enable_sni {
-            writer.write(xml::writer::XmlEvent::start_element("EnableSNI"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "EnableSNI", &value.to_string())?;
         }
         if let Some(ref value) = obj.failure_threshold {
-            writer.write(xml::writer::XmlEvent::start_element("FailureThreshold"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FailureThreshold", &value.to_string())?;
         }
         if let Some(ref value) = obj.fully_qualified_domain_name {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "FullyQualifiedDomainName",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FullyQualifiedDomainName", &value.to_string())?;
         }
         if let Some(ref value) = obj.health_threshold {
-            writer.write(xml::writer::XmlEvent::start_element("HealthThreshold"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HealthThreshold", &value.to_string())?;
         }
         if let Some(ref value) = obj.ip_address {
-            writer.write(xml::writer::XmlEvent::start_element("IPAddress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IPAddress", &value.to_string())?;
         }
         if let Some(ref value) = obj.insufficient_data_health_status {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "InsufficientDataHealthStatus",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "InsufficientDataHealthStatus", &value.to_string())?;
         }
         if let Some(ref value) = obj.inverted {
-            writer.write(xml::writer::XmlEvent::start_element("Inverted"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Inverted", &value.to_string())?;
         }
         if let Some(ref value) = obj.measure_latency {
-            writer.write(xml::writer::XmlEvent::start_element("MeasureLatency"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MeasureLatency", &value.to_string())?;
         }
         if let Some(ref value) = obj.port {
-            writer.write(xml::writer::XmlEvent::start_element("Port"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Port", &value.to_string())?;
         }
         if let Some(ref value) = obj.regions {
             &HealthCheckRegionListSerializer::serialize(&mut writer, "Regions", value)?;
         }
         if let Some(ref value) = obj.request_interval {
-            writer.write(xml::writer::XmlEvent::start_element("RequestInterval"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RequestInterval", &value.to_string())?;
         }
         if let Some(ref value) = obj.resource_path {
-            writer.write(xml::writer::XmlEvent::start_element("ResourcePath"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ResourcePath", &value.to_string())?;
         }
         if let Some(ref value) = obj.search_string {
-            writer.write(xml::writer::XmlEvent::start_element("SearchString"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SearchString", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.type_
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Type", &obj.type_.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3475,11 +3205,7 @@ struct HealthCheckCountDeserializer;
 impl HealthCheckCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -3487,11 +3213,7 @@ struct HealthCheckIdDeserializer;
 impl HealthCheckIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3506,12 +3228,7 @@ impl HealthCheckIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3520,11 +3237,7 @@ struct HealthCheckNonceDeserializer;
 impl HealthCheckNonceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3539,12 +3252,7 @@ impl HealthCheckNonceSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3614,11 +3322,7 @@ struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3633,12 +3337,7 @@ impl HealthCheckRegionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3686,11 +3385,7 @@ struct HealthCheckTypeDeserializer;
 impl HealthCheckTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3705,12 +3400,7 @@ impl HealthCheckTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3719,11 +3409,7 @@ struct HealthCheckVersionDeserializer;
 impl HealthCheckVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -3738,12 +3424,7 @@ impl HealthCheckVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -3770,11 +3451,7 @@ struct HealthThresholdDeserializer;
 impl HealthThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -3789,12 +3466,7 @@ impl HealthThresholdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -3910,20 +3582,10 @@ impl HostedZoneConfigSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.comment {
-            writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comment", &value.to_string())?;
         }
         if let Some(ref value) = obj.private_zone {
-            writer.write(xml::writer::XmlEvent::start_element("PrivateZone"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "PrivateZone", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3934,11 +3596,7 @@ struct HostedZoneCountDeserializer;
 impl HostedZoneCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
@@ -3978,11 +3636,7 @@ struct HostedZoneLimitTypeDeserializer;
 impl HostedZoneLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3997,12 +3651,7 @@ impl HostedZoneLimitTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4011,11 +3660,7 @@ struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -4041,11 +3686,7 @@ struct IPAddressDeserializer;
 impl IPAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4060,12 +3701,7 @@ impl IPAddressSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4074,11 +3710,7 @@ struct IPAddressCidrDeserializer;
 impl IPAddressCidrDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4086,11 +3718,7 @@ struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4105,12 +3733,7 @@ impl InsufficientDataHealthStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4119,11 +3742,7 @@ struct InvertedDeserializer;
 impl InvertedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -4138,12 +3757,7 @@ impl InvertedSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4152,11 +3766,7 @@ struct IsPrivateZoneDeserializer;
 impl IsPrivateZoneDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -4171,12 +3781,7 @@ impl IsPrivateZoneSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4185,11 +3790,7 @@ struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>If a health check or hosted zone was created by another service, <code>LinkedService</code> is a complex type that describes the service that created the resource. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
@@ -5298,12 +4899,7 @@ impl MaxResultsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5312,11 +4908,7 @@ struct MeasureLatencyDeserializer;
 impl MeasureLatencyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -5331,12 +4923,7 @@ impl MeasureLatencySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -5345,11 +4932,7 @@ struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5357,11 +4940,7 @@ struct MetricNameDeserializer;
 impl MetricNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5369,11 +4948,7 @@ struct NameserverDeserializer;
 impl NameserverDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5381,11 +4956,7 @@ struct NamespaceDeserializer;
 impl NamespaceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5393,11 +4964,7 @@ struct NonceDeserializer;
 impl NonceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5412,12 +4979,7 @@ impl NonceSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5426,11 +4988,7 @@ struct PageMarkerDeserializer;
 impl PageMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5445,12 +5003,7 @@ impl PageMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5459,11 +5012,7 @@ struct PageMaxItemsDeserializer;
 impl PageMaxItemsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5478,12 +5027,7 @@ impl PageMaxItemsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5492,11 +5036,7 @@ struct PageTruncatedDeserializer;
 impl PageTruncatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5504,11 +5044,7 @@ struct PaginationTokenDeserializer;
 impl PaginationTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5523,12 +5059,7 @@ impl PaginationTokenSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5537,11 +5068,7 @@ struct PeriodDeserializer;
 impl PeriodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5549,11 +5076,7 @@ struct PortDeserializer;
 impl PortDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5568,12 +5091,7 @@ impl PortSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -5624,11 +5142,7 @@ struct QueryLoggingConfigIdDeserializer;
 impl QueryLoggingConfigIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5643,12 +5157,7 @@ impl QueryLoggingConfigIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5678,11 +5187,7 @@ struct RDataDeserializer;
 impl RDataDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5697,12 +5202,7 @@ impl RDataSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5711,11 +5211,7 @@ struct RRTypeDeserializer;
 impl RRTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5730,12 +5226,7 @@ impl RRTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5765,11 +5256,7 @@ struct RecordDataEntryDeserializer;
 impl RecordDataEntryDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5777,11 +5264,7 @@ struct RequestIntervalDeserializer;
 impl RequestIntervalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5796,12 +5279,7 @@ impl RequestIntervalSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -5816,12 +5294,7 @@ impl ResettableElementNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5850,11 +5323,7 @@ struct ResourceDescriptionDeserializer;
 impl ResourceDescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5869,12 +5338,7 @@ impl ResourceDescriptionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5883,11 +5347,7 @@ struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5902,12 +5362,7 @@ impl ResourceIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5916,11 +5371,7 @@ struct ResourcePathDeserializer;
 impl ResourcePathDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5935,12 +5386,7 @@ impl ResourcePathSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5985,12 +5431,7 @@ impl ResourceRecordSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.value
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Value", &obj.value.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6125,88 +5566,36 @@ impl ResourceRecordSetSerializer {
             &AliasTargetSerializer::serialize(&mut writer, "AliasTarget", value)?;
         }
         if let Some(ref value) = obj.failover {
-            writer.write(xml::writer::XmlEvent::start_element("Failover"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Failover", &value.to_string())?;
         }
         if let Some(ref value) = obj.geo_location {
             &GeoLocationSerializer::serialize(&mut writer, "GeoLocation", value)?;
         }
         if let Some(ref value) = obj.health_check_id {
-            writer.write(xml::writer::XmlEvent::start_element("HealthCheckId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HealthCheckId", &value.to_string())?;
         }
         if let Some(ref value) = obj.multi_value_answer {
-            writer.write(xml::writer::XmlEvent::start_element("MultiValueAnswer"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MultiValueAnswer", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
         if let Some(ref value) = obj.region {
-            writer.write(xml::writer::XmlEvent::start_element("Region"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Region", &value.to_string())?;
         }
         if let Some(ref value) = obj.resource_records {
             &ResourceRecordsSerializer::serialize(&mut writer, "ResourceRecords", value)?;
         }
         if let Some(ref value) = obj.set_identifier {
-            writer.write(xml::writer::XmlEvent::start_element("SetIdentifier"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SetIdentifier", &value.to_string())?;
         }
         if let Some(ref value) = obj.ttl {
-            writer.write(xml::writer::XmlEvent::start_element("TTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "TTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.traffic_policy_instance_id {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "TrafficPolicyInstanceId",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "TrafficPolicyInstanceId", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.type_
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Type", &obj.type_.to_string())?;
         if let Some(ref value) = obj.weight {
-            writer.write(xml::writer::XmlEvent::start_element("Weight"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Weight", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6217,11 +5606,7 @@ struct ResourceRecordSetFailoverDeserializer;
 impl ResourceRecordSetFailoverDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6236,12 +5621,7 @@ impl ResourceRecordSetFailoverSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6250,11 +5630,7 @@ struct ResourceRecordSetIdentifierDeserializer;
 impl ResourceRecordSetIdentifierDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6269,12 +5645,7 @@ impl ResourceRecordSetIdentifierSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6283,11 +5654,7 @@ struct ResourceRecordSetMultiValueAnswerDeserializer;
 impl ResourceRecordSetMultiValueAnswerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -6302,12 +5669,7 @@ impl ResourceRecordSetMultiValueAnswerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -6316,11 +5678,7 @@ struct ResourceRecordSetRegionDeserializer;
 impl ResourceRecordSetRegionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6335,12 +5693,7 @@ impl ResourceRecordSetRegionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6349,11 +5702,7 @@ struct ResourceRecordSetWeightDeserializer;
 impl ResourceRecordSetWeightDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -6368,12 +5717,7 @@ impl ResourceRecordSetWeightSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -6546,11 +5890,7 @@ struct ReusableDelegationSetLimitTypeDeserializer;
 impl ReusableDelegationSetLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6565,12 +5905,7 @@ impl ReusableDelegationSetLimitTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6579,11 +5914,7 @@ struct SearchStringDeserializer;
 impl SearchStringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6598,12 +5929,7 @@ impl SearchStringSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6612,11 +5938,7 @@ struct ServicePrincipalDeserializer;
 impl ServicePrincipalDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6624,11 +5946,7 @@ struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6636,11 +5954,7 @@ struct StatusDeserializer;
 impl StatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains the status that one Amazon Route 53 health checker reports and the time of the health check.</p>
@@ -6688,12 +6002,7 @@ impl SubnetMaskSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6702,11 +6011,7 @@ struct TTLDeserializer;
 impl TTLDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -6721,12 +6026,7 @@ impl TTLSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -6774,20 +6074,10 @@ impl TagSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.key {
-            writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Key", &value.to_string())?;
         }
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6798,11 +6088,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6817,12 +6103,7 @@ impl TagKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6890,11 +6171,7 @@ struct TagResourceIdDeserializer;
 impl TagResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6909,12 +6186,7 @@ impl TagResourceIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6943,11 +6215,7 @@ struct TagResourceTypeDeserializer;
 impl TagResourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6962,12 +6230,7 @@ impl TagResourceTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6976,11 +6239,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6995,12 +6254,7 @@ impl TagValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7080,11 +6334,7 @@ struct ThresholdDeserializer;
 impl ThresholdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -7092,11 +6342,7 @@ struct TimeStampDeserializer;
 impl TimeStampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7180,11 +6426,7 @@ struct TrafficPolicyCommentDeserializer;
 impl TrafficPolicyCommentDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7199,12 +6441,7 @@ impl TrafficPolicyCommentSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7213,11 +6450,7 @@ struct TrafficPolicyDocumentDeserializer;
 impl TrafficPolicyDocumentDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7232,12 +6465,7 @@ impl TrafficPolicyDocumentSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7246,11 +6474,7 @@ struct TrafficPolicyIdDeserializer;
 impl TrafficPolicyIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7265,12 +6489,7 @@ impl TrafficPolicyIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7353,11 +6572,7 @@ struct TrafficPolicyInstanceCountDeserializer;
 impl TrafficPolicyInstanceCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -7365,11 +6580,7 @@ struct TrafficPolicyInstanceIdDeserializer;
 impl TrafficPolicyInstanceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7384,12 +6595,7 @@ impl TrafficPolicyInstanceIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7398,11 +6604,7 @@ struct TrafficPolicyInstanceStateDeserializer;
 impl TrafficPolicyInstanceStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7431,11 +6633,7 @@ struct TrafficPolicyNameDeserializer;
 impl TrafficPolicyNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7450,12 +6648,7 @@ impl TrafficPolicyNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7534,11 +6727,7 @@ struct TrafficPolicyVersionDeserializer;
 impl TrafficPolicyVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -7553,12 +6742,7 @@ impl TrafficPolicyVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -7567,11 +6751,7 @@ struct TrafficPolicyVersionMarkerDeserializer;
 impl TrafficPolicyVersionMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7586,12 +6766,7 @@ impl TrafficPolicyVersionMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7600,11 +6775,7 @@ struct TransportProtocolDeserializer;
 impl TransportProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that contains information about a request to update a health check.</p>
@@ -7953,11 +7124,7 @@ struct UsageCountDeserializer;
 impl UsageCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>(Private hosted zones only) A complex type that contains information about an Amazon VPC.</p>
@@ -8003,20 +7170,10 @@ impl VPCSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.vpc_id {
-            writer.write(xml::writer::XmlEvent::start_element("VPCId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "VPCId", &value.to_string())?;
         }
         if let Some(ref value) = obj.vpc_region {
-            writer.write(xml::writer::XmlEvent::start_element("VPCRegion"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "VPCRegion", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8027,11 +7184,7 @@ struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8046,12 +7199,7 @@ impl VPCIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8060,11 +7208,7 @@ struct VPCRegionDeserializer;
 impl VPCRegionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8079,12 +7223,7 @@ impl VPCRegionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8185,7 +7324,7 @@ impl AssociateVPCWithHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8269,7 +7408,7 @@ impl ChangeResourceRecordSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8349,7 +7488,7 @@ impl ChangeTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8413,7 +7552,7 @@ impl CreateHealthCheckError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8515,7 +7654,7 @@ impl CreateHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8610,7 +7749,7 @@ impl CreateQueryLoggingConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8719,7 +7858,7 @@ impl CreateReusableDelegationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8802,7 +7941,7 @@ impl CreateTrafficPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8891,7 +8030,7 @@ impl CreateTrafficPolicyInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8950,7 +8089,7 @@ impl CreateTrafficPolicyVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9044,7 +8183,7 @@ impl CreateVPCAssociationAuthorizationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9116,7 +8255,7 @@ impl DeleteHealthCheckError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9190,7 +8329,7 @@ impl DeleteHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9256,7 +8395,7 @@ impl DeleteQueryLoggingConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9335,7 +8474,7 @@ impl DeleteReusableDelegationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9409,7 +8548,7 @@ impl DeleteTrafficPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9476,7 +8615,7 @@ impl DeleteTrafficPolicyInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9564,7 +8703,7 @@ impl DeleteVPCAssociationAuthorizationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9658,7 +8797,7 @@ impl DisassociateVPCFromHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9712,7 +8851,7 @@ impl GetAccountLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9763,7 +8902,7 @@ impl GetChangeError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9800,7 +8939,7 @@ impl GetCheckerIpRangesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9849,7 +8988,7 @@ impl GetGeoLocationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9908,7 +9047,7 @@ impl GetHealthCheckError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9946,7 +9085,7 @@ impl GetHealthCheckCountError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10001,7 +9140,7 @@ impl GetHealthCheckLastFailureReasonError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10055,7 +9194,7 @@ impl GetHealthCheckStatusError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10107,7 +9246,7 @@ impl GetHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10152,7 +9291,7 @@ impl GetHostedZoneCountError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10210,7 +9349,7 @@ impl GetHostedZoneLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10265,7 +9404,7 @@ impl GetQueryLoggingConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10330,7 +9469,7 @@ impl GetReusableDelegationSetError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10389,7 +9528,7 @@ impl GetReusableDelegationSetLimitError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10443,7 +9582,7 @@ impl GetTrafficPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10497,7 +9636,7 @@ impl GetTrafficPolicyInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10538,7 +9677,7 @@ impl GetTrafficPolicyInstanceCountError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10580,7 +9719,7 @@ impl ListGeoLocationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10631,7 +9770,7 @@ impl ListHealthChecksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10690,7 +9829,7 @@ impl ListHostedZonesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10743,7 +9882,7 @@ impl ListHostedZonesByNameError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10804,7 +9943,7 @@ impl ListQueryLoggingConfigsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10859,7 +9998,7 @@ impl ListResourceRecordSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10906,7 +10045,7 @@ impl ListReusableDelegationSetsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10978,7 +10117,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11056,7 +10195,7 @@ impl ListTagsForResourcesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11104,7 +10243,7 @@ impl ListTrafficPoliciesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11159,7 +10298,7 @@ impl ListTrafficPolicyInstancesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11226,7 +10365,7 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11300,7 +10439,7 @@ impl ListTrafficPolicyInstancesByPolicyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11361,7 +10500,7 @@ impl ListTrafficPolicyVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11430,7 +10569,7 @@ impl ListVPCAssociationAuthorizationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11489,7 +10628,7 @@ impl TestDNSAnswerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11550,7 +10689,7 @@ impl UpdateHealthCheckError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11603,7 +10742,7 @@ impl UpdateHostedZoneCommentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11668,7 +10807,7 @@ impl UpdateTrafficPolicyCommentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11756,7 +10895,7 @@ impl UpdateTrafficPolicyInstanceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12213,32 +11352,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AssociateVPCWithHostedZoneError::from_response(response));
-        }
+            .sign_and_dispatch(request, AssociateVPCWithHostedZoneError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = AssociateVPCWithHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            AssociateVPCWithHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12270,32 +11392,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ChangeResourceRecordSetsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ChangeResourceRecordSetsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ChangeResourceRecordSetsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ChangeResourceRecordSetsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ChangeResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12327,17 +11432,11 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ChangeTagsForResourceError::from_response(response));
-        }
+            .sign_and_dispatch(request, ChangeTagsForResourceError::from_response)
+            .await?;
 
-        let mut result;
-        result = ChangeTagsForResourceResponse::default();
+        let result = ChangeTagsForResourceResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12362,31 +11461,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateHealthCheckError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateHealthCheckError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateHealthCheckResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12411,31 +11495,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateHostedZoneError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateHostedZoneError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12460,33 +11529,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateQueryLoggingConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateQueryLoggingConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateQueryLoggingConfigResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateQueryLoggingConfigResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12512,33 +11564,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateReusableDelegationSetError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateReusableDelegationSetError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateReusableDelegationSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateReusableDelegationSetResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateReusableDelegationSetResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12563,31 +11598,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTrafficPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateTrafficPolicyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateTrafficPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12613,33 +11633,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTrafficPolicyInstanceError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateTrafficPolicyInstanceError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateTrafficPolicyInstanceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12668,33 +11671,16 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateTrafficPolicyVersionError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateTrafficPolicyVersionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateTrafficPolicyVersionResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        let value = response.headers.get("Location").unwrap().to_owned();
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateTrafficPolicyVersionResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        let value = response.headers.remove("Location").unwrap();
         result.location = value; // parse non-payload
         Ok(result)
     }
@@ -12728,34 +11714,21 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateVPCAssociationAuthorizationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                CreateVPCAssociationAuthorizationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateVPCAssociationAuthorizationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12777,17 +11750,11 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteHealthCheckError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteHealthCheckError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteHealthCheckResponse::default();
+        let result = DeleteHealthCheckResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12806,30 +11773,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteHostedZoneError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteHostedZoneError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                DeleteHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DeleteHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12848,17 +11800,11 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteQueryLoggingConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteQueryLoggingConfigError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteQueryLoggingConfigResponse::default();
+        let result = DeleteQueryLoggingConfigResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12878,17 +11824,11 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteReusableDelegationSetError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteReusableDelegationSetError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteReusableDelegationSetResponse::default();
+        let result = DeleteReusableDelegationSetResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12911,17 +11851,11 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTrafficPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteTrafficPolicyError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteTrafficPolicyResponse::default();
+        let result = DeleteTrafficPolicyResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12941,17 +11875,11 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteTrafficPolicyInstanceError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteTrafficPolicyInstanceError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteTrafficPolicyInstanceResponse::default();
+        let result = DeleteTrafficPolicyInstanceResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -12985,19 +11913,14 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteVPCAssociationAuthorizationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteVPCAssociationAuthorizationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        result = DeleteVPCAssociationAuthorizationResponse::default();
+        let result = DeleteVPCAssociationAuthorizationResponse::default();
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13031,32 +11954,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DisassociateVPCFromHostedZoneError::from_response(response));
-        }
+            .sign_and_dispatch(request, DisassociateVPCFromHostedZoneError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DisassociateVPCFromHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13075,30 +11981,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAccountLimitError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetAccountLimitError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAccountLimitResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetAccountLimitResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetAccountLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13117,29 +12008,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetChangeError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetChangeError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetChangeResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetChangeResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13155,30 +12032,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCheckerIpRangesError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetCheckerIpRangesError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCheckerIpRangesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetCheckerIpRangesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetCheckerIpRangesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13206,29 +12068,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetGeoLocationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetGeoLocationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetGeoLocationResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetGeoLocationResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetGeoLocationResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13250,29 +12098,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHealthCheckError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHealthCheckError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHealthCheckResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13288,30 +12122,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHealthCheckCountError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHealthCheckCountError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHealthCheckCountResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetHealthCheckCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHealthCheckCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13336,34 +12155,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHealthCheckLastFailureReasonError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetHealthCheckLastFailureReasonError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHealthCheckLastFailureReasonResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13385,32 +12185,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHealthCheckStatusError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHealthCheckStatusError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHealthCheckStatusResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetHealthCheckStatusResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHealthCheckStatusResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13429,29 +12212,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHostedZoneError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHostedZoneError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetHostedZoneResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHostedZoneResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13467,30 +12236,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHostedZoneCountError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHostedZoneCountError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHostedZoneCountResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetHostedZoneCountResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHostedZoneCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13506,30 +12260,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetHostedZoneLimitError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetHostedZoneLimitError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetHostedZoneLimitResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetHostedZoneLimitResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetHostedZoneLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13548,32 +12287,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetQueryLoggingConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetQueryLoggingConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetQueryLoggingConfigResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetQueryLoggingConfigResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetQueryLoggingConfigResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13592,32 +12314,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetReusableDelegationSetError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetReusableDelegationSetError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetReusableDelegationSetResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetReusableDelegationSetResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetReusableDelegationSetResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13636,32 +12341,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetReusableDelegationSetLimitError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetReusableDelegationSetLimitError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetReusableDelegationSetLimitResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetReusableDelegationSetLimitResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13684,30 +12372,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTrafficPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetTrafficPolicyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTrafficPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetTrafficPolicyResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetTrafficPolicyResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13726,32 +12399,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTrafficPolicyInstanceError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetTrafficPolicyInstanceError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTrafficPolicyInstanceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetTrafficPolicyInstanceResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13770,32 +12426,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetTrafficPolicyInstanceCountError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetTrafficPolicyInstanceCountError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetTrafficPolicyInstanceCountResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13826,30 +12465,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListGeoLocationsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListGeoLocationsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListGeoLocationsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListGeoLocationsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListGeoLocationsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13874,30 +12498,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListHealthChecksError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListHealthChecksError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListHealthChecksResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListHealthChecksResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListHealthChecksResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13925,30 +12534,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListHostedZonesError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListHostedZonesError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListHostedZonesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListHostedZonesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListHostedZonesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13976,32 +12570,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListHostedZonesByNameError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListHostedZonesByNameError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListHostedZonesByNameResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListHostedZonesByNameResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListHostedZonesByNameResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14029,32 +12606,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListQueryLoggingConfigsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListQueryLoggingConfigsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListQueryLoggingConfigsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListQueryLoggingConfigsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListQueryLoggingConfigsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14091,32 +12651,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListResourceRecordSetsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListResourceRecordSetsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListResourceRecordSetsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListResourceRecordSetsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListResourceRecordSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14142,32 +12685,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListReusableDelegationSetsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListReusableDelegationSetsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListReusableDelegationSetsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListReusableDelegationSetsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListReusableDelegationSetsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14190,30 +12716,15 @@ impl Route53 for Route53Client {
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTagsForResourceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListTagsForResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTagsForResourceResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14244,32 +12755,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourcesError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTagsForResourcesError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTagsForResourcesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListTagsForResourcesResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTagsForResourcesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14294,30 +12788,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTrafficPoliciesError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTrafficPoliciesError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTrafficPoliciesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListTrafficPoliciesResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTrafficPoliciesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14349,32 +12828,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTrafficPolicyInstancesError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTrafficPolicyInstancesError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTrafficPolicyInstancesResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTrafficPolicyInstancesResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14406,34 +12868,21 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListTrafficPolicyInstancesByHostedZoneError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14469,34 +12918,21 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTrafficPolicyInstancesByPolicyError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListTrafficPolicyInstancesByPolicyError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTrafficPolicyInstancesByPolicyResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14525,32 +12961,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTrafficPolicyVersionsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTrafficPolicyVersionsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTrafficPolicyVersionsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListTrafficPolicyVersionsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTrafficPolicyVersionsResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14584,34 +13003,21 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListVPCAssociationAuthorizationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListVPCAssociationAuthorizationsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListVPCAssociationAuthorizationsResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14642,29 +13048,15 @@ impl Route53 for Route53Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TestDNSAnswerError::from_response(response));
-        }
+            .sign_and_dispatch(request, TestDNSAnswerError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = TestDNSAnswerResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = TestDNSAnswerResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            TestDNSAnswerResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14695,30 +13087,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateHealthCheckError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateHealthCheckError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateHealthCheckResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                UpdateHealthCheckResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateHealthCheckResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14746,32 +13123,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateHostedZoneCommentError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateHostedZoneCommentError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateHostedZoneCommentResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateHostedZoneCommentResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateHostedZoneCommentResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14804,32 +13164,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTrafficPolicyCommentError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateTrafficPolicyCommentError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateTrafficPolicyCommentResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateTrafficPolicyCommentResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14858,32 +13201,15 @@ impl Route53 for Route53Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTrafficPolicyInstanceError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateTrafficPolicyInstanceError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateTrafficPolicyInstanceResponse::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }

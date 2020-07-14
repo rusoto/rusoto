@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,8 +33,32 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl SqsClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2012-11-05");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 /// Serialize `AWSAccountIdList` contents to a `SignedRequest`.
 struct AWSAccountIdListSerializer;
@@ -187,11 +211,7 @@ impl BinaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -229,11 +249,7 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p><p/></p>
@@ -1183,12 +1199,12 @@ impl MessageBodyAttributeMapDeserializer {
     ) -> Result<::std::collections::HashMap<String, MessageAttributeValue>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == tag_name {
-            start_element(tag_name, stack)?;
+        while xml_util::peek_at_name(stack)? == tag_name {
+            xml_util::start_element(tag_name, stack)?;
             let key = StringDeserializer::deserialize("Name", stack)?;
             let value = MessageAttributeValueDeserializer::deserialize("Value", stack)?;
             obj.insert(key, value);
-            end_element(tag_name, stack)?;
+            xml_util::end_element(tag_name, stack)?;
         }
 
         Ok(obj)
@@ -1273,12 +1289,12 @@ impl MessageSystemAttributeMapDeserializer {
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "Attribute" {
-            start_element("Attribute", stack)?;
+        while xml_util::peek_at_name(stack)? == "Attribute" {
+            xml_util::start_element("Attribute", stack)?;
             let key = MessageSystemAttributeNameDeserializer::deserialize("Name", stack)?;
             let value = StringDeserializer::deserialize("Value", stack)?;
             obj.insert(key, value);
-            end_element("Attribute", stack)?;
+            xml_util::end_element("Attribute", stack)?;
         }
 
         Ok(obj)
@@ -1289,11 +1305,7 @@ struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The user-specified message system attribute value. For string data types, the <code>Value</code> attribute has the same restrictions on the content as the message body. For more information, see <code> <a>SendMessage</a>.</code> </p> <p> <code>Name</code>, <code>type</code>, <code>value</code> and the message body must not be empty or null.</p>
@@ -1379,12 +1391,12 @@ impl QueueAttributeMapDeserializer {
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "Attribute" {
-            start_element("Attribute", stack)?;
+        while xml_util::peek_at_name(stack)? == "Attribute" {
+            xml_util::start_element("Attribute", stack)?;
             let key = QueueAttributeNameDeserializer::deserialize("Name", stack)?;
             let value = StringDeserializer::deserialize("Value", stack)?;
             obj.insert(key, value);
-            end_element("Attribute", stack)?;
+            xml_util::end_element("Attribute", stack)?;
         }
 
         Ok(obj)
@@ -1412,11 +1424,7 @@ struct QueueAttributeNameDeserializer;
 impl QueueAttributeNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1948,11 +1956,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1990,11 +1994,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2019,12 +2019,12 @@ impl TagMapDeserializer {
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
         let mut obj = ::std::collections::HashMap::new();
 
-        while peek_at_name(stack)? == "Tag" {
-            start_element("Tag", stack)?;
+        while xml_util::peek_at_name(stack)? == "Tag" {
+            xml_util::start_element("Tag", stack)?;
             let key = TagKeyDeserializer::deserialize("Key", stack)?;
             let value = TagValueDeserializer::deserialize("Value", stack)?;
             obj.insert(key, value);
-            end_element("Tag", stack)?;
+            xml_util::end_element("Tag", stack)?;
         }
 
         Ok(obj)
@@ -2075,11 +2075,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2136,7 +2132,7 @@ impl AddPermissionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2189,7 +2185,7 @@ impl ChangeMessageVisibilityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2267,7 +2263,7 @@ impl ChangeMessageVisibilityBatchError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2329,7 +2325,7 @@ impl CreateQueueError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2381,7 +2377,7 @@ impl DeleteMessageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2449,7 +2445,7 @@ impl DeleteMessageBatchError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2490,7 +2486,7 @@ impl DeleteQueueError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2532,7 +2528,7 @@ impl GetQueueAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2576,7 +2572,7 @@ impl GetQueueUrlError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2624,7 +2620,7 @@ impl ListDeadLetterSourceQueuesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2660,7 +2656,7 @@ impl ListQueueTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2694,7 +2690,7 @@ impl ListQueuesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2743,7 +2739,7 @@ impl PurgeQueueError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2788,7 +2784,7 @@ impl ReceiveMessageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2824,7 +2820,7 @@ impl RemovePermissionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2873,7 +2869,7 @@ impl SendMessageError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -2955,7 +2951,7 @@ impl SendMessageBatchError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3006,7 +3002,7 @@ impl SetQueueAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3042,7 +3038,7 @@ impl TagQueueError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3076,7 +3072,7 @@ impl UntagQueueError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -3253,23 +3249,15 @@ impl Sqs for SqsClient {
         input: AddPermissionRequest,
     ) -> Result<(), RusotoError<AddPermissionError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AddPermission");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("AddPermission");
+        let mut params = params;
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AddPermissionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AddPermissionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3281,23 +3269,15 @@ impl Sqs for SqsClient {
         input: ChangeMessageVisibilityRequest,
     ) -> Result<(), RusotoError<ChangeMessageVisibilityError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ChangeMessageVisibility");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ChangeMessageVisibility");
+        let mut params = params;
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ChangeMessageVisibilityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ChangeMessageVisibilityError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3310,45 +3290,30 @@ impl Sqs for SqsClient {
     ) -> Result<ChangeMessageVisibilityBatchResult, RusotoError<ChangeMessageVisibilityBatchError>>
     {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ChangeMessageVisibilityBatch");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ChangeMessageVisibilityBatch");
+        let mut params = params;
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ChangeMessageVisibilityBatchError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ChangeMessageVisibilityBatchError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ChangeMessageVisibilityBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ChangeMessageVisibilityBatchResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ChangeMessageVisibilityBatchResultDeserializer::deserialize(
                 "ChangeMessageVisibilityBatchResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3358,42 +3323,27 @@ impl Sqs for SqsClient {
         input: CreateQueueRequest,
     ) -> Result<CreateQueueResult, RusotoError<CreateQueueError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateQueue");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("CreateQueue");
+        let mut params = params;
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateQueueError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateQueueError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateQueueResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateQueueResultDeserializer::deserialize("CreateQueueResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateQueueResultDeserializer::deserialize("CreateQueueResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3403,23 +3353,15 @@ impl Sqs for SqsClient {
         input: DeleteMessageRequest,
     ) -> Result<(), RusotoError<DeleteMessageError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteMessage");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("DeleteMessage");
+        let mut params = params;
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteMessageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMessageError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3431,45 +3373,30 @@ impl Sqs for SqsClient {
         input: DeleteMessageBatchRequest,
     ) -> Result<DeleteMessageBatchResult, RusotoError<DeleteMessageBatchError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteMessageBatch");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("DeleteMessageBatch");
+        let mut params = params;
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteMessageBatchError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMessageBatchError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteMessageBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeleteMessageBatchResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteMessageBatchResultDeserializer::deserialize(
                 "DeleteMessageBatchResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3479,23 +3406,15 @@ impl Sqs for SqsClient {
         input: DeleteQueueRequest,
     ) -> Result<(), RusotoError<DeleteQueueError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteQueue");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("DeleteQueue");
+        let mut params = params;
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteQueueError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteQueueError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3507,45 +3426,30 @@ impl Sqs for SqsClient {
         input: GetQueueAttributesRequest,
     ) -> Result<GetQueueAttributesResult, RusotoError<GetQueueAttributesError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetQueueAttributes");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("GetQueueAttributes");
+        let mut params = params;
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetQueueAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetQueueAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetQueueAttributesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetQueueAttributesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetQueueAttributesResultDeserializer::deserialize(
                 "GetQueueAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3555,42 +3459,27 @@ impl Sqs for SqsClient {
         input: GetQueueUrlRequest,
     ) -> Result<GetQueueUrlResult, RusotoError<GetQueueUrlError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetQueueUrl");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("GetQueueUrl");
+        let mut params = params;
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetQueueUrlError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetQueueUrlError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetQueueUrlResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetQueueUrlResultDeserializer::deserialize("GetQueueUrlResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3601,45 +3490,30 @@ impl Sqs for SqsClient {
     ) -> Result<ListDeadLetterSourceQueuesResult, RusotoError<ListDeadLetterSourceQueuesError>>
     {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListDeadLetterSourceQueues");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ListDeadLetterSourceQueues");
+        let mut params = params;
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListDeadLetterSourceQueuesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeadLetterSourceQueuesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListDeadLetterSourceQueuesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListDeadLetterSourceQueuesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListDeadLetterSourceQueuesResultDeserializer::deserialize(
                 "ListDeadLetterSourceQueuesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3649,43 +3523,28 @@ impl Sqs for SqsClient {
         input: ListQueueTagsRequest,
     ) -> Result<ListQueueTagsResult, RusotoError<ListQueueTagsError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListQueueTags");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ListQueueTags");
+        let mut params = params;
         ListQueueTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListQueueTagsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListQueueTagsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListQueueTagsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ListQueueTagsResultDeserializer::deserialize("ListQueueTagsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListQueueTagsResultDeserializer::deserialize("ListQueueTagsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3695,42 +3554,27 @@ impl Sqs for SqsClient {
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResult, RusotoError<ListQueuesError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListQueues");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ListQueues");
+        let mut params = params;
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListQueuesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListQueuesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListQueuesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListQueuesResultDeserializer::deserialize("ListQueuesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListQueuesResultDeserializer::deserialize("ListQueuesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3740,23 +3584,15 @@ impl Sqs for SqsClient {
         input: PurgeQueueRequest,
     ) -> Result<(), RusotoError<PurgeQueueError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PurgeQueue");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("PurgeQueue");
+        let mut params = params;
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PurgeQueueError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PurgeQueueError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3768,43 +3604,28 @@ impl Sqs for SqsClient {
         input: ReceiveMessageRequest,
     ) -> Result<ReceiveMessageResult, RusotoError<ReceiveMessageError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ReceiveMessage");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("ReceiveMessage");
+        let mut params = params;
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ReceiveMessageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ReceiveMessageError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ReceiveMessageResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ReceiveMessageResultDeserializer::deserialize("ReceiveMessageResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3814,23 +3635,15 @@ impl Sqs for SqsClient {
         input: RemovePermissionRequest,
     ) -> Result<(), RusotoError<RemovePermissionError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RemovePermission");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("RemovePermission");
+        let mut params = params;
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RemovePermissionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RemovePermissionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3842,42 +3655,27 @@ impl Sqs for SqsClient {
         input: SendMessageRequest,
     ) -> Result<SendMessageResult, RusotoError<SendMessageError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendMessage");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("SendMessage");
+        let mut params = params;
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendMessageError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendMessageError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendMessageResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendMessageResultDeserializer::deserialize("SendMessageResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SendMessageResultDeserializer::deserialize("SendMessageResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3887,45 +3685,28 @@ impl Sqs for SqsClient {
         input: SendMessageBatchRequest,
     ) -> Result<SendMessageBatchResult, RusotoError<SendMessageBatchError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SendMessageBatch");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("SendMessageBatch");
+        let mut params = params;
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SendMessageBatchError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SendMessageBatchError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SendMessageBatchResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SendMessageBatchResultDeserializer::deserialize(
-                "SendMessageBatchResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                SendMessageBatchResultDeserializer::deserialize("SendMessageBatchResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -3935,23 +3716,15 @@ impl Sqs for SqsClient {
         input: SetQueueAttributesRequest,
     ) -> Result<(), RusotoError<SetQueueAttributesError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SetQueueAttributes");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("SetQueueAttributes");
+        let mut params = params;
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SetQueueAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SetQueueAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3960,23 +3733,15 @@ impl Sqs for SqsClient {
     /// <p><p>Add cost allocation tags to the specified Amazon SQS queue. For an overview, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-tags.html">Tagging Your Amazon SQS Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <p>When you use queue tags, keep the following guidelines in mind:</p> <ul> <li> <p>Adding more than 50 tags to a queue isn&#39;t recommended.</p> </li> <li> <p>Tags don&#39;t have any semantic meaning. Amazon SQS interprets tags as character strings.</p> </li> <li> <p>Tags are case-sensitive.</p> </li> <li> <p>A new tag with a key identical to that of an existing tag overwrites the existing tag.</p> </li> </ul> <p>For a full list of tag restrictions, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-limits.html#limits-queues">Limits Related to Queues</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> <note> <p>Cross-account permissions don&#39;t apply to this action. For more information, see <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name">Grant Cross-Account Permissions to a Role and a User Name</a> in the <i>Amazon Simple Queue Service Developer Guide</i>.</p> </note></p>
     async fn tag_queue(&self, input: TagQueueRequest) -> Result<(), RusotoError<TagQueueError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TagQueue");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("TagQueue");
+        let mut params = params;
         TagQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagQueueError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TagQueueError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -3988,23 +3753,15 @@ impl Sqs for SqsClient {
         input: UntagQueueRequest,
     ) -> Result<(), RusotoError<UntagQueueError>> {
         let mut request = SignedRequest::new("POST", "sqs", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UntagQueue");
-        params.put("Version", "2012-11-05");
+        let params = self.new_params("UntagQueue");
+        let mut params = params;
         UntagQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagQueueError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagQueueError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())

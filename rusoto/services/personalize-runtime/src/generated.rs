@@ -228,6 +228,7 @@ impl PersonalizeRuntimeClient {
 #[async_trait]
 impl PersonalizeRuntime for PersonalizeRuntimeClient {
     /// <p><p>Re-ranks a list of recommended items for the given user. The first item in the list is deemed the most likely item to be of interest to the user.</p> <note> <p>The solution backing the campaign must have been created using a recipe of type PERSONALIZED_RANKING.</p> </note></p>
+    #[allow(unused_mut)]
     async fn get_personalized_ranking(
         &self,
         input: GetPersonalizedRankingRequest,
@@ -247,7 +248,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPersonalizedRankingResponse, _>()?;
 
@@ -259,6 +260,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
     }
 
     /// <p><p>Returns a list of recommended items. The required input depends on the recipe type used to create the solution backing the campaign, as follows:</p> <ul> <li> <p>RELATED<em>ITEMS - <code>itemId</code> required, <code>userId</code> not used</p> </li> <li> <p>USER</em>PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p> </li> </ul> <note> <p>Campaigns that are backed by a solution created using a recipe of type PERSONALIZED_RANKING use the API.</p> </note></p>
+    #[allow(unused_mut)]
     async fn get_recommendations(
         &self,
         input: GetRecommendationsRequest,
@@ -278,7 +280,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRecommendationsResponse, _>()?;
 

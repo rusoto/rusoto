@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl DynamoDbStreamsClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "dynamodb", &self.region, request_uri);
+        request.set_endpoint_prefix("streams.dynamodb".to_string());
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -623,26 +650,17 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: DescribeStreamInput,
     ) -> Result<DescribeStreamOutput, RusotoError<DescribeStreamError>> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
-        request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.DescribeStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStreamOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStreamError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStreamError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeStreamOutput, _>()
     }
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
@@ -650,26 +668,17 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: GetRecordsInput,
     ) -> Result<GetRecordsOutput, RusotoError<GetRecordsError>> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
-        request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetRecords");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRecordsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecordsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRecordsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRecordsOutput, _>()
     }
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
@@ -677,26 +686,17 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: GetShardIteratorInput,
     ) -> Result<GetShardIteratorOutput, RusotoError<GetShardIteratorError>> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
-        request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetShardIterator");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetShardIteratorOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetShardIteratorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetShardIteratorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetShardIteratorOutput, _>()
     }
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
@@ -704,25 +704,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: ListStreamsInput,
     ) -> Result<ListStreamsOutput, RusotoError<ListStreamsError>> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
-        request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.ListStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStreamsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStreamsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListStreamsOutput, _>()
     }
 }

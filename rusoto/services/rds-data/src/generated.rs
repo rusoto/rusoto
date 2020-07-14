@@ -955,6 +955,7 @@ impl RdsDataClient {
 #[async_trait]
 impl RdsData for RdsDataClient {
     /// <p><p>Runs a batch SQL statement over an array of data.</p> <p>You can run bulk update and insert operations for multiple records using a DML statement with different parameter sets. Bulk operations can provide a significant performance improvement over individual insert and update operations.</p> <important> <p>If a call isn&#39;t part of a transaction because it doesn&#39;t include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important></p>
+    #[allow(unused_mut)]
     async fn batch_execute_statement(
         &self,
         input: BatchExecuteStatementRequest,
@@ -973,7 +974,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchExecuteStatementResponse, _>()?;
 
@@ -985,6 +986,7 @@ impl RdsData for RdsDataClient {
     }
 
     /// <p><p>Starts a SQL transaction.</p> <pre><code> &lt;important&gt; &lt;p&gt;A transaction can run for a maximum of 24 hours. A transaction is terminated and rolled back automatically after 24 hours.&lt;/p&gt; &lt;p&gt;A transaction times out if no calls use its transaction ID in three minutes. If a transaction times out before it&#39;s committed, it&#39;s rolled back automatically.&lt;/p&gt; &lt;p&gt;DDL statements inside a transaction cause an implicit commit. We recommend that you run each DDL statement in a separate &lt;code&gt;ExecuteStatement&lt;/code&gt; call with &lt;code&gt;continueAfterTimeout&lt;/code&gt; enabled.&lt;/p&gt; &lt;/important&gt; </code></pre></p>
+    #[allow(unused_mut)]
     async fn begin_transaction(
         &self,
         input: BeginTransactionRequest,
@@ -1003,7 +1005,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BeginTransactionResponse, _>()?;
 
@@ -1015,6 +1017,7 @@ impl RdsData for RdsDataClient {
     }
 
     /// <p>Ends a SQL transaction started with the <code>BeginTransaction</code> operation and commits the changes.</p>
+    #[allow(unused_mut)]
     async fn commit_transaction(
         &self,
         input: CommitTransactionRequest,
@@ -1033,7 +1036,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CommitTransactionResponse, _>()?;
 
@@ -1045,6 +1048,7 @@ impl RdsData for RdsDataClient {
     }
 
     /// <p><p>Runs one or more SQL statements.</p> <important> <p>This operation is deprecated. Use the <code>BatchExecuteStatement</code> or <code>ExecuteStatement</code> operation.</p> </important></p>
+    #[allow(unused_mut)]
     async fn execute_sql(
         &self,
         input: ExecuteSqlRequest,
@@ -1063,7 +1067,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ExecuteSqlResponse, _>()?;
 
@@ -1075,6 +1079,7 @@ impl RdsData for RdsDataClient {
     }
 
     /// <p>Runs a SQL statement against a database.</p> <important> <p>If a call isn't part of a transaction because it doesn't include the <code>transactionID</code> parameter, changes that result from the call are committed automatically.</p> </important> <p>The response size limit is 1 MB. If the call returns more than 1 MB of response data, the call is terminated.</p>
+    #[allow(unused_mut)]
     async fn execute_statement(
         &self,
         input: ExecuteStatementRequest,
@@ -1093,7 +1098,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ExecuteStatementResponse, _>()?;
 
@@ -1105,6 +1110,7 @@ impl RdsData for RdsDataClient {
     }
 
     /// <p>Performs a rollback of a transaction. Rolling back a transaction cancels its changes.</p>
+    #[allow(unused_mut)]
     async fn rollback_transaction(
         &self,
         input: RollbackTransactionRequest,
@@ -1123,7 +1129,7 @@ impl RdsData for RdsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RollbackTransactionResponse, _>()?;
 

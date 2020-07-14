@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl SsmClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "ssm", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Information includes the AWS account ID where the current document is shared and the version shared with that account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -15469,26 +15495,17 @@ impl Ssm for SsmClient {
         &self,
         input: AddTagsToResourceRequest,
     ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsToResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsToResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceResult, _>()
     }
 
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
@@ -15496,26 +15513,17 @@ impl Ssm for SsmClient {
         &self,
         input: CancelCommandRequest,
     ) -> Result<CancelCommandResult, RusotoError<CancelCommandError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CancelCommand");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CancelCommandResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelCommandError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CancelCommandError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CancelCommandResult, _>()
     }
 
     /// <p>Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
@@ -15526,29 +15534,21 @@ impl Ssm for SsmClient {
         CancelMaintenanceWindowExecutionResult,
         RusotoError<CancelMaintenanceWindowExecutionError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CancelMaintenanceWindowExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelMaintenanceWindowExecutionError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CancelMaintenanceWindowExecutionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
     }
 
     /// <p><p>Generates an activation code and activation ID you can use to register your on-premises server or virtual machine (VM) with Systems Manager. Registering these machines with Systems Manager makes it possible to manage them using Systems Manager capabilities. You use the activation code and ID when installing SSM Agent on machines in your hybrid environment. For more information about requirements for managing on-premises instances and VMs using Systems Manager, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting up AWS Systems Manager for hybrid environments</a> in the <i>AWS Systems Manager User Guide</i>. </p> <note> <p>On-premises servers or VMs that are registered with Systems Manager and EC2 instances that you manage with Systems Manager are all called <i>managed instances</i>.</p> </note></p>
@@ -15556,26 +15556,17 @@ impl Ssm for SsmClient {
         &self,
         input: CreateActivationRequest,
     ) -> Result<CreateActivationResult, RusotoError<CreateActivationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateActivation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateActivationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateActivationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateActivationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateActivationResult, _>()
     }
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
@@ -15583,26 +15574,17 @@ impl Ssm for SsmClient {
         &self,
         input: CreateAssociationRequest,
     ) -> Result<CreateAssociationResult, RusotoError<CreateAssociationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssociationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateAssociationResult, _>()
     }
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
@@ -15610,27 +15592,18 @@ impl Ssm for SsmClient {
         &self,
         input: CreateAssociationBatchRequest,
     ) -> Result<CreateAssociationBatchResult, RusotoError<CreateAssociationBatchError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociationBatch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAssociationBatchResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssociationBatchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAssociationBatchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAssociationBatchResult, _>()
     }
 
     /// <p>Creates a Systems Manager (SSM) document. An SSM document defines the actions that Systems Manager performs on your managed instances. For more information about SSM documents, including information about supported schemas, features, and syntax, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html">AWS Systems Manager Documents</a> in the <i>AWS Systems Manager User Guide</i>.</p>
@@ -15638,26 +15611,17 @@ impl Ssm for SsmClient {
         &self,
         input: CreateDocumentRequest,
     ) -> Result<CreateDocumentResult, RusotoError<CreateDocumentError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDocumentResult, _>()
     }
 
     /// <p><p>Creates a new maintenance window.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
@@ -15665,27 +15629,18 @@ impl Ssm for SsmClient {
         &self,
         input: CreateMaintenanceWindowRequest,
     ) -> Result<CreateMaintenanceWindowResult, RusotoError<CreateMaintenanceWindowError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMaintenanceWindowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateMaintenanceWindowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateMaintenanceWindowResult, _>()
     }
 
     /// <p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
@@ -15693,26 +15648,17 @@ impl Ssm for SsmClient {
         &self,
         input: CreateOpsItemRequest,
     ) -> Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateOpsItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateOpsItemError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateOpsItemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateOpsItemResponse, _>()
     }
 
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
@@ -15720,27 +15666,17 @@ impl Ssm for SsmClient {
         &self,
         input: CreatePatchBaselineRequest,
     ) -> Result<CreatePatchBaselineResult, RusotoError<CreatePatchBaselineError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreatePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePatchBaselineResult, _>()
     }
 
     /// <p><p>A resource data sync helps you view data from multiple sources in a single location. Systems Manager offers two types of resource data sync: <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p> <p>You can configure Systems Manager Inventory to use the <code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS Regions to a single S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>You can configure Systems Manager Explorer to use the <code>SyncFromSource</code> type to synchronize operational work items (OpsItems) and operational data (OpsData) from multiple AWS Regions to a single S3 bucket. This type can synchronize OpsItems and OpsData from multiple AWS accounts and Regions or <code>EntireOrganization</code> by using AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html">Setting up Systems Manager Explorer to display data from multiple accounts and Regions</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>A resource data sync is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data. To check the status of a sync, use the <a>ListResourceDataSync</a>.</p> <note> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. </p> </note></p>
@@ -15748,27 +15684,18 @@ impl Ssm for SsmClient {
         &self,
         input: CreateResourceDataSyncRequest,
     ) -> Result<CreateResourceDataSyncResult, RusotoError<CreateResourceDataSyncError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.CreateResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResourceDataSyncError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateResourceDataSyncError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateResourceDataSyncResult, _>()
     }
 
     /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
@@ -15776,26 +15703,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteActivationRequest,
     ) -> Result<DeleteActivationResult, RusotoError<DeleteActivationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteActivation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteActivationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteActivationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteActivationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteActivationResult, _>()
     }
 
     /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
@@ -15803,26 +15721,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteAssociationRequest,
     ) -> Result<DeleteAssociationResult, RusotoError<DeleteAssociationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssociationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAssociationResult, _>()
     }
 
     /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
@@ -15830,26 +15739,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteDocumentRequest,
     ) -> Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDocumentResult, _>()
     }
 
     /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
@@ -15857,26 +15757,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteInventoryRequest,
     ) -> Result<DeleteInventoryResult, RusotoError<DeleteInventoryError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInventoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInventoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteInventoryResult, _>()
     }
 
     /// <p>Deletes a maintenance window.</p>
@@ -15884,27 +15775,18 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteMaintenanceWindowRequest,
     ) -> Result<DeleteMaintenanceWindowResult, RusotoError<DeleteMaintenanceWindowError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMaintenanceWindowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMaintenanceWindowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteMaintenanceWindowResult, _>()
     }
 
     /// <p>Delete a parameter from the system.</p>
@@ -15912,26 +15794,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteParameterRequest,
     ) -> Result<DeleteParameterResult, RusotoError<DeleteParameterError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteParameterResult, _>()
     }
 
     /// <p>Delete a list of parameters.</p>
@@ -15939,26 +15812,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteParametersRequest,
     ) -> Result<DeleteParametersResult, RusotoError<DeleteParametersError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteParametersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteParametersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteParametersResult, _>()
     }
 
     /// <p>Deletes a patch baseline.</p>
@@ -15966,27 +15830,17 @@ impl Ssm for SsmClient {
         &self,
         input: DeletePatchBaselineRequest,
     ) -> Result<DeletePatchBaselineResult, RusotoError<DeletePatchBaselineError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeletePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeletePatchBaselineResult, _>()
     }
 
     /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to data on managed instances are no longer synced to or from the target. Deleting a sync configuration does not delete data.</p>
@@ -15994,27 +15848,18 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteResourceDataSyncRequest,
     ) -> Result<DeleteResourceDataSyncResult, RusotoError<DeleteResourceDataSyncError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeleteResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourceDataSyncError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteResourceDataSyncError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteResourceDataSyncResult, _>()
     }
 
     /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
@@ -16022,27 +15867,18 @@ impl Ssm for SsmClient {
         &self,
         input: DeregisterManagedInstanceRequest,
     ) -> Result<DeregisterManagedInstanceResult, RusotoError<DeregisterManagedInstanceError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DeregisterManagedInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterManagedInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterManagedInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterManagedInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeregisterManagedInstanceResult, _>()
     }
 
     /// <p>Removes a patch group from a patch baseline.</p>
@@ -16053,9 +15889,7 @@ impl Ssm for SsmClient {
         DeregisterPatchBaselineForPatchGroupResult,
         RusotoError<DeregisterPatchBaselineForPatchGroupError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterPatchBaselineForPatchGroup",
@@ -16063,22 +15897,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterPatchBaselineForPatchGroupError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeregisterPatchBaselineForPatchGroupError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
     }
 
     /// <p>Removes a target from a maintenance window.</p>
@@ -16089,9 +15917,7 @@ impl Ssm for SsmClient {
         DeregisterTargetFromMaintenanceWindowResult,
         RusotoError<DeregisterTargetFromMaintenanceWindowError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterTargetFromMaintenanceWindow",
@@ -16099,22 +15925,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterTargetFromMaintenanceWindowError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeregisterTargetFromMaintenanceWindowError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
     }
 
     /// <p>Removes a task from a maintenance window.</p>
@@ -16125,9 +15945,7 @@ impl Ssm for SsmClient {
         DeregisterTaskFromMaintenanceWindowResult,
         RusotoError<DeregisterTaskFromMaintenanceWindowError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterTaskFromMaintenanceWindow",
@@ -16135,22 +15953,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterTaskFromMaintenanceWindowError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeregisterTaskFromMaintenanceWindowError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
     }
 
     /// <p>Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.</p>
@@ -16158,27 +15970,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeActivationsRequest,
     ) -> Result<DescribeActivationsResult, RusotoError<DescribeActivationsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeActivations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeActivationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeActivationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeActivationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeActivationsResult, _>()
     }
 
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
@@ -16186,27 +15988,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAssociationRequest,
     ) -> Result<DescribeAssociationResult, RusotoError<DescribeAssociationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAssociationResult, _>()
     }
 
     /// <p>Use this API action to view information about a specific execution of a specific association.</p>
@@ -16217,9 +16009,7 @@ impl Ssm for SsmClient {
         DescribeAssociationExecutionTargetsResult,
         RusotoError<DescribeAssociationExecutionTargetsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeAssociationExecutionTargets",
@@ -16227,22 +16017,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationExecutionTargetsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAssociationExecutionTargetsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
     }
 
     /// <p>Use this API action to view all executions for a specific association ID. </p>
@@ -16251,27 +16035,18 @@ impl Ssm for SsmClient {
         input: DescribeAssociationExecutionsRequest,
     ) -> Result<DescribeAssociationExecutionsResult, RusotoError<DescribeAssociationExecutionsError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeAssociationExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssociationExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssociationExecutionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAssociationExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAssociationExecutionsResult, _>()
     }
 
     /// <p>Provides details about all active and terminated Automation executions.</p>
@@ -16280,27 +16055,18 @@ impl Ssm for SsmClient {
         input: DescribeAutomationExecutionsRequest,
     ) -> Result<DescribeAutomationExecutionsResult, RusotoError<DescribeAutomationExecutionsError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAutomationExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAutomationExecutionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAutomationExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAutomationExecutionsResult, _>()
     }
 
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
@@ -16311,29 +16077,21 @@ impl Ssm for SsmClient {
         DescribeAutomationStepExecutionsResult,
         RusotoError<DescribeAutomationStepExecutionsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationStepExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAutomationStepExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAutomationStepExecutionsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAutomationStepExecutionsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAutomationStepExecutionsResult, _>()
     }
 
     /// <p>Lists all patches eligible to be included in a patch baseline.</p>
@@ -16341,27 +16099,18 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAvailablePatchesRequest,
     ) -> Result<DescribeAvailablePatchesResult, RusotoError<DescribeAvailablePatchesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeAvailablePatches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAvailablePatchesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAvailablePatchesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAvailablePatchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAvailablePatchesResult, _>()
     }
 
     /// <p>Describes the specified Systems Manager document.</p>
@@ -16369,26 +16118,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeDocumentRequest,
     ) -> Result<DescribeDocumentResult, RusotoError<DescribeDocumentError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDocumentResult, _>()
     }
 
     /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
@@ -16397,27 +16137,18 @@ impl Ssm for SsmClient {
         input: DescribeDocumentPermissionRequest,
     ) -> Result<DescribeDocumentPermissionResponse, RusotoError<DescribeDocumentPermissionError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocumentPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentPermissionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentPermissionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDocumentPermissionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDocumentPermissionResponse, _>()
     }
 
     /// <p>All associations for the instance(s).</p>
@@ -16428,9 +16159,7 @@ impl Ssm for SsmClient {
         DescribeEffectiveInstanceAssociationsResult,
         RusotoError<DescribeEffectiveInstanceAssociationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeEffectiveInstanceAssociations",
@@ -16438,22 +16167,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEffectiveInstanceAssociationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeEffectiveInstanceAssociationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
     }
 
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
@@ -16464,9 +16187,7 @@ impl Ssm for SsmClient {
         DescribeEffectivePatchesForPatchBaselineResult,
         RusotoError<DescribeEffectivePatchesForPatchBaselineError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeEffectivePatchesForPatchBaseline",
@@ -16474,20 +16195,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEffectivePatchesForPatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeEffectivePatchesForPatchBaselineError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
     }
 
     /// <p>The status of the associations for the instance(s).</p>
@@ -16498,9 +16215,7 @@ impl Ssm for SsmClient {
         DescribeInstanceAssociationsStatusResult,
         RusotoError<DescribeInstanceAssociationsStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeInstanceAssociationsStatus",
@@ -16508,22 +16223,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstanceAssociationsStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeInstanceAssociationsStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
     }
 
     /// <p><p>Describes one or more of your instances, including information about the operating system platform, the version of SSM Agent installed on the instance, instance status, and so on.</p> <p>If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error.</p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for EC2 instances.</p> </note></p>
@@ -16532,27 +16241,18 @@ impl Ssm for SsmClient {
         input: DescribeInstanceInformationRequest,
     ) -> Result<DescribeInstanceInformationResult, RusotoError<DescribeInstanceInformationError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstanceInformation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstanceInformationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstanceInformationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInstanceInformationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInstanceInformationResult, _>()
     }
 
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
@@ -16561,27 +16261,18 @@ impl Ssm for SsmClient {
         input: DescribeInstancePatchStatesRequest,
     ) -> Result<DescribeInstancePatchStatesResult, RusotoError<DescribeInstancePatchStatesError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatchStates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchStatesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchStatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInstancePatchStatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInstancePatchStatesResult, _>()
     }
 
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
@@ -16592,9 +16283,7 @@ impl Ssm for SsmClient {
         DescribeInstancePatchStatesForPatchGroupResult,
         RusotoError<DescribeInstancePatchStatesForPatchGroupError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeInstancePatchStatesForPatchGroup",
@@ -16602,20 +16291,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchStatesForPatchGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeInstancePatchStatesForPatchGroupError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
     }
 
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
@@ -16623,27 +16308,18 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeInstancePatchesRequest,
     ) -> Result<DescribeInstancePatchesResult, RusotoError<DescribeInstancePatchesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInstancePatchesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInstancePatchesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInstancePatchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInstancePatchesResult, _>()
     }
 
     /// <p>Describes a specific delete inventory operation.</p>
@@ -16652,27 +16328,18 @@ impl Ssm for SsmClient {
         input: DescribeInventoryDeletionsRequest,
     ) -> Result<DescribeInventoryDeletionsResult, RusotoError<DescribeInventoryDeletionsError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeInventoryDeletions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeInventoryDeletionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeInventoryDeletionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInventoryDeletionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeInventoryDeletionsResult, _>()
     }
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.</p>
@@ -16683,9 +16350,7 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionTaskInvocationsResult,
         RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTaskInvocations",
@@ -16693,20 +16358,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
     }
 
     /// <p>For a given maintenance window execution, lists the tasks that were run.</p>
@@ -16717,9 +16378,7 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionTasksResult,
         RusotoError<DescribeMaintenanceWindowExecutionTasksError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTasks",
@@ -16727,22 +16386,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionTasksError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowExecutionTasksError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
     }
 
     /// <p>Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.</p>
@@ -16753,9 +16406,7 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionsResult,
         RusotoError<DescribeMaintenanceWindowExecutionsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutions",
@@ -16763,22 +16414,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowExecutionsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowExecutionsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
     }
 
     /// <p>Retrieves information about upcoming executions of a maintenance window.</p>
@@ -16789,9 +16434,7 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowScheduleResult,
         RusotoError<DescribeMaintenanceWindowScheduleError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowSchedule",
@@ -16799,22 +16442,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowScheduleError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowScheduleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
     }
 
     /// <p>Lists the targets registered with the maintenance window.</p>
@@ -16825,29 +16462,21 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowTargetsResult,
         RusotoError<DescribeMaintenanceWindowTargetsError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowTargetsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowTargetsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
     }
 
     /// <p>Lists the tasks in a maintenance window.</p>
@@ -16858,27 +16487,18 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowTasksResult,
         RusotoError<DescribeMaintenanceWindowTasksError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTasks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowTasksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMaintenanceWindowTasksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
     }
 
     /// <p>Retrieves the maintenance windows in an AWS account.</p>
@@ -16887,27 +16507,18 @@ impl Ssm for SsmClient {
         input: DescribeMaintenanceWindowsRequest,
     ) -> Result<DescribeMaintenanceWindowsResult, RusotoError<DescribeMaintenanceWindowsError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMaintenanceWindowsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowsResult, _>()
     }
 
     /// <p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>
@@ -16918,9 +16529,7 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowsForTargetResult,
         RusotoError<DescribeMaintenanceWindowsForTargetError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowsForTarget",
@@ -16928,22 +16537,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMaintenanceWindowsForTargetError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeMaintenanceWindowsForTargetError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
     }
 
     /// <p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
@@ -16951,27 +16554,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeOpsItemsRequest,
     ) -> Result<DescribeOpsItemsResponse, RusotoError<DescribeOpsItemsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeOpsItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOpsItemsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOpsItemsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeOpsItemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeOpsItemsResponse, _>()
     }
 
     /// <p><p>Get information about a parameter.</p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
@@ -16979,27 +16572,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeParametersRequest,
     ) -> Result<DescribeParametersResult, RusotoError<DescribeParametersError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeParametersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeParametersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeParametersResult, _>()
     }
 
     /// <p>Lists the patch baselines in your AWS account.</p>
@@ -17007,27 +16590,18 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchBaselinesRequest,
     ) -> Result<DescribePatchBaselinesResult, RusotoError<DescribePatchBaselinesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchBaselines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchBaselinesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchBaselinesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePatchBaselinesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePatchBaselinesResult, _>()
     }
 
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
@@ -17035,27 +16609,18 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchGroupStateRequest,
     ) -> Result<DescribePatchGroupStateResult, RusotoError<DescribePatchGroupStateError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroupState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchGroupStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchGroupStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePatchGroupStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePatchGroupStateResult, _>()
     }
 
     /// <p>Lists all patch groups that have been registered with patch baselines.</p>
@@ -17063,27 +16628,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchGroupsRequest,
     ) -> Result<DescribePatchGroupsResult, RusotoError<DescribePatchGroupsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchGroupsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePatchGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribePatchGroupsResult, _>()
     }
 
     /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU </dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>REDHAT</em>ENTERPRISE_LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> </dl></p>
@@ -17091,27 +16646,18 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchPropertiesRequest,
     ) -> Result<DescribePatchPropertiesResult, RusotoError<DescribePatchPropertiesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePatchPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePatchPropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePatchPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePatchPropertiesResult, _>()
     }
 
     /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
@@ -17119,27 +16665,17 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.DescribeSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSessionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSessionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSessionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeSessionsResponse, _>()
     }
 
     /// <p>Get detailed information about a particular Automation execution.</p>
@@ -17147,27 +16683,18 @@ impl Ssm for SsmClient {
         &self,
         input: GetAutomationExecutionRequest,
     ) -> Result<GetAutomationExecutionResult, RusotoError<GetAutomationExecutionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAutomationExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAutomationExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAutomationExecutionResult, _>()
     }
 
     /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>. For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
@@ -17175,27 +16702,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetCalendarStateRequest,
     ) -> Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetCalendarState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCalendarStateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCalendarStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCalendarStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCalendarStateResponse, _>()
     }
 
     /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
@@ -17203,27 +16720,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetCommandInvocationRequest,
     ) -> Result<GetCommandInvocationResult, RusotoError<GetCommandInvocationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetCommandInvocation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommandInvocationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommandInvocationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommandInvocationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommandInvocationResult, _>()
     }
 
     /// <p>Retrieves the Session Manager connection status for an instance to determine whether it is running and ready to receive Session Manager connections.</p>
@@ -17231,27 +16738,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetConnectionStatusRequest,
     ) -> Result<GetConnectionStatusResponse, RusotoError<GetConnectionStatusError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetConnectionStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConnectionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectionStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConnectionStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionStatusResponse, _>()
     }
 
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
@@ -17259,27 +16756,18 @@ impl Ssm for SsmClient {
         &self,
         input: GetDefaultPatchBaselineRequest,
     ) -> Result<GetDefaultPatchBaselineResult, RusotoError<GetDefaultPatchBaselineError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetDefaultPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDefaultPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDefaultPatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDefaultPatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDefaultPatchBaselineResult, _>()
     }
 
     /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
@@ -17290,9 +16778,7 @@ impl Ssm for SsmClient {
         GetDeployablePatchSnapshotForInstanceResult,
         RusotoError<GetDeployablePatchSnapshotForInstanceError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetDeployablePatchSnapshotForInstance",
@@ -17300,22 +16786,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeployablePatchSnapshotForInstanceError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetDeployablePatchSnapshotForInstanceError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
     }
 
     /// <p>Gets the contents of the specified Systems Manager document.</p>
@@ -17323,26 +16803,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetDocumentRequest,
     ) -> Result<GetDocumentResult, RusotoError<GetDocumentError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDocumentResult, _>()
     }
 
     /// <p>Query inventory information.</p>
@@ -17350,26 +16821,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetInventoryRequest,
     ) -> Result<GetInventoryResult, RusotoError<GetInventoryError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInventoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInventoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInventoryResult, _>()
     }
 
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type.</p>
@@ -17377,27 +16839,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetInventorySchemaRequest,
     ) -> Result<GetInventorySchemaResult, RusotoError<GetInventorySchemaError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetInventorySchema");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInventorySchemaResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInventorySchemaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInventorySchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInventorySchemaResult, _>()
     }
 
     /// <p>Retrieves a maintenance window.</p>
@@ -17405,27 +16857,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetMaintenanceWindowRequest,
     ) -> Result<GetMaintenanceWindowResult, RusotoError<GetMaintenanceWindowError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMaintenanceWindowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMaintenanceWindowResult, _>()
     }
 
     /// <p>Retrieves details about a specific a maintenance window execution.</p>
@@ -17434,27 +16876,18 @@ impl Ssm for SsmClient {
         input: GetMaintenanceWindowExecutionRequest,
     ) -> Result<GetMaintenanceWindowExecutionResult, RusotoError<GetMaintenanceWindowExecutionError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMaintenanceWindowExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMaintenanceWindowExecutionResult, _>()
     }
 
     /// <p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>
@@ -17465,9 +16898,7 @@ impl Ssm for SsmClient {
         GetMaintenanceWindowExecutionTaskResult,
         RusotoError<GetMaintenanceWindowExecutionTaskError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTask",
@@ -17475,22 +16906,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionTaskError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetMaintenanceWindowExecutionTaskError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
     }
 
     /// <p>Retrieves information about a specific task running on a specific target.</p>
@@ -17501,9 +16926,7 @@ impl Ssm for SsmClient {
         GetMaintenanceWindowExecutionTaskInvocationResult,
         RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation",
@@ -17511,20 +16934,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowExecutionTaskInvocationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetMaintenanceWindowExecutionTaskInvocationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
     }
 
     /// <p>Lists the tasks in a maintenance window.</p>
@@ -17532,27 +16951,18 @@ impl Ssm for SsmClient {
         &self,
         input: GetMaintenanceWindowTaskRequest,
     ) -> Result<GetMaintenanceWindowTaskResult, RusotoError<GetMaintenanceWindowTaskError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMaintenanceWindowTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMaintenanceWindowTaskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMaintenanceWindowTaskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMaintenanceWindowTaskResult, _>()
     }
 
     /// <p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
@@ -17560,26 +16970,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetOpsItemRequest,
     ) -> Result<GetOpsItemResponse, RusotoError<GetOpsItemError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetOpsItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOpsItemError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOpsItemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOpsItemResponse, _>()
     }
 
     /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
@@ -17587,26 +16988,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetOpsSummaryRequest,
     ) -> Result<GetOpsSummaryResult, RusotoError<GetOpsSummaryError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetOpsSummary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOpsSummaryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOpsSummaryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOpsSummaryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOpsSummaryResult, _>()
     }
 
     /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
@@ -17614,26 +17006,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetParameterRequest,
     ) -> Result<GetParameterResult, RusotoError<GetParameterError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetParameterResult, _>()
     }
 
     /// <p>Query a list of all parameters used by the AWS account.</p>
@@ -17641,27 +17024,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetParameterHistoryRequest,
     ) -> Result<GetParameterHistoryResult, RusotoError<GetParameterHistoryError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetParameterHistory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetParameterHistoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParameterHistoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetParameterHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetParameterHistoryResult, _>()
     }
 
     /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
@@ -17669,26 +17042,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetParametersRequest,
     ) -> Result<GetParametersResult, RusotoError<GetParametersError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetParametersResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParametersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetParametersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetParametersResult, _>()
     }
 
     /// <p><p>Retrieve information about one or more parameters in a specific hierarchy. </p> <note> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> </note></p>
@@ -17696,27 +17060,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetParametersByPathRequest,
     ) -> Result<GetParametersByPathResult, RusotoError<GetParametersByPathError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetParametersByPath");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetParametersByPathResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetParametersByPathError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetParametersByPathError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetParametersByPathResult, _>()
     }
 
     /// <p>Retrieves information about a patch baseline.</p>
@@ -17724,26 +17078,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetPatchBaselineRequest,
     ) -> Result<GetPatchBaselineResult, RusotoError<GetPatchBaselineError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPatchBaselineResult, _>()
     }
 
     /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
@@ -17752,27 +17097,18 @@ impl Ssm for SsmClient {
         input: GetPatchBaselineForPatchGroupRequest,
     ) -> Result<GetPatchBaselineForPatchGroupResult, RusotoError<GetPatchBaselineForPatchGroupError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaselineForPatchGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPatchBaselineForPatchGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPatchBaselineForPatchGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>UpdateServiceSetting</a> API action to change the default setting. Or use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Query the current service setting for the account. </p>
@@ -17780,26 +17116,17 @@ impl Ssm for SsmClient {
         &self,
         input: GetServiceSettingRequest,
     ) -> Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.GetServiceSetting");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceSettingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServiceSettingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetServiceSettingResult, _>()
     }
 
     /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
@@ -17807,27 +17134,17 @@ impl Ssm for SsmClient {
         &self,
         input: LabelParameterVersionRequest,
     ) -> Result<LabelParameterVersionResult, RusotoError<LabelParameterVersionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.LabelParameterVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<LabelParameterVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(LabelParameterVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, LabelParameterVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<LabelParameterVersionResult, _>()
     }
 
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
@@ -17835,27 +17152,18 @@ impl Ssm for SsmClient {
         &self,
         input: ListAssociationVersionsRequest,
     ) -> Result<ListAssociationVersionsResult, RusotoError<ListAssociationVersionsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListAssociationVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssociationVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociationVersionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssociationVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssociationVersionsResult, _>()
     }
 
     /// <p>Returns all State Manager associations in the current AWS account and Region. You can limit the results to a specific State Manager association document or instance by specifying a filter.</p>
@@ -17863,26 +17171,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListAssociationsRequest,
     ) -> Result<ListAssociationsResult, RusotoError<ListAssociationsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListAssociations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssociationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsResult, _>()
     }
 
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user runs SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
@@ -17890,27 +17189,18 @@ impl Ssm for SsmClient {
         &self,
         input: ListCommandInvocationsRequest,
     ) -> Result<ListCommandInvocationsResult, RusotoError<ListCommandInvocationsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListCommandInvocations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCommandInvocationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCommandInvocationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCommandInvocationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListCommandInvocationsResult, _>()
     }
 
     /// <p>Lists the commands requested by users of the AWS account.</p>
@@ -17918,26 +17208,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListCommandsRequest,
     ) -> Result<ListCommandsResult, RusotoError<ListCommandsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListCommands");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListCommandsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCommandsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCommandsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListCommandsResult, _>()
     }
 
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter.</p>
@@ -17945,27 +17226,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListComplianceItemsRequest,
     ) -> Result<ListComplianceItemsResult, RusotoError<ListComplianceItemsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComplianceItemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComplianceItemsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListComplianceItemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListComplianceItemsResult, _>()
     }
 
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify.</p>
@@ -17973,27 +17244,18 @@ impl Ssm for SsmClient {
         &self,
         input: ListComplianceSummariesRequest,
     ) -> Result<ListComplianceSummariesResult, RusotoError<ListComplianceSummariesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceSummaries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListComplianceSummariesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListComplianceSummariesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListComplianceSummariesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListComplianceSummariesResult, _>()
     }
 
     /// <p>List all versions for a document.</p>
@@ -18001,27 +17263,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListDocumentVersionsRequest,
     ) -> Result<ListDocumentVersionsResult, RusotoError<ListDocumentVersionsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListDocumentVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentVersionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDocumentVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDocumentVersionsResult, _>()
     }
 
     /// <p>Returns all Systems Manager (SSM) documents in the current AWS account and Region. You can limit the results of this request by using a filter.</p>
@@ -18029,26 +17281,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListDocumentsRequest,
     ) -> Result<ListDocumentsResult, RusotoError<ListDocumentsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListDocuments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDocumentsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDocumentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDocumentsResult, _>()
     }
 
     /// <p>A list of inventory items returned by the request.</p>
@@ -18056,27 +17299,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListInventoryEntriesRequest,
     ) -> Result<ListInventoryEntriesResult, RusotoError<ListInventoryEntriesError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListInventoryEntries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInventoryEntriesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInventoryEntriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInventoryEntriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInventoryEntriesResult, _>()
     }
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
@@ -18087,29 +17320,18 @@ impl Ssm for SsmClient {
         ListResourceComplianceSummariesResult,
         RusotoError<ListResourceComplianceSummariesError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListResourceComplianceSummaries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceComplianceSummariesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourceComplianceSummariesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListResourceComplianceSummariesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListResourceComplianceSummariesResult, _>()
     }
 
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
@@ -18117,27 +17339,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListResourceDataSyncRequest,
     ) -> Result<ListResourceDataSyncResult, RusotoError<ListResourceDataSyncError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourceDataSyncError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListResourceDataSyncError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListResourceDataSyncResult, _>()
     }
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
@@ -18145,27 +17357,17 @@ impl Ssm for SsmClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResult, _>()
     }
 
     /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
@@ -18173,27 +17375,18 @@ impl Ssm for SsmClient {
         &self,
         input: ModifyDocumentPermissionRequest,
     ) -> Result<ModifyDocumentPermissionResponse, RusotoError<ModifyDocumentPermissionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ModifyDocumentPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyDocumentPermissionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyDocumentPermissionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyDocumentPermissionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyDocumentPermissionResponse, _>()
     }
 
     /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
@@ -18201,27 +17394,17 @@ impl Ssm for SsmClient {
         &self,
         input: PutComplianceItemsRequest,
     ) -> Result<PutComplianceItemsResult, RusotoError<PutComplianceItemsError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.PutComplianceItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutComplianceItemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutComplianceItemsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutComplianceItemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutComplianceItemsResult, _>()
     }
 
     /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
@@ -18229,26 +17412,17 @@ impl Ssm for SsmClient {
         &self,
         input: PutInventoryRequest,
     ) -> Result<PutInventoryResult, RusotoError<PutInventoryError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.PutInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutInventoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutInventoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutInventoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutInventoryResult, _>()
     }
 
     /// <p>Add a parameter to the system.</p>
@@ -18256,26 +17430,17 @@ impl Ssm for SsmClient {
         &self,
         input: PutParameterRequest,
     ) -> Result<PutParameterResult, RusotoError<PutParameterError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.PutParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutParameterResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutParameterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutParameterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutParameterResult, _>()
     }
 
     /// <p>Defines the default patch baseline for the relevant operating system.</p> <p>To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify <code>arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed</code> instead of <code>pb-0574b43a65ea646ed</code>.</p>
@@ -18284,27 +17449,18 @@ impl Ssm for SsmClient {
         input: RegisterDefaultPatchBaselineRequest,
     ) -> Result<RegisterDefaultPatchBaselineResult, RusotoError<RegisterDefaultPatchBaselineError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.RegisterDefaultPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterDefaultPatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterDefaultPatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterDefaultPatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterDefaultPatchBaselineResult, _>()
     }
 
     /// <p>Registers a patch baseline for a patch group.</p>
@@ -18315,9 +17471,7 @@ impl Ssm for SsmClient {
         RegisterPatchBaselineForPatchGroupResult,
         RusotoError<RegisterPatchBaselineForPatchGroupError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterPatchBaselineForPatchGroup",
@@ -18325,22 +17479,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterPatchBaselineForPatchGroupError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RegisterPatchBaselineForPatchGroupError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
     }
 
     /// <p>Registers a target with a maintenance window.</p>
@@ -18351,9 +17499,7 @@ impl Ssm for SsmClient {
         RegisterTargetWithMaintenanceWindowResult,
         RusotoError<RegisterTargetWithMaintenanceWindowError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterTargetWithMaintenanceWindow",
@@ -18361,22 +17507,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterTargetWithMaintenanceWindowError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RegisterTargetWithMaintenanceWindowError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
     }
 
     /// <p>Adds a new task to a maintenance window.</p>
@@ -18387,9 +17527,7 @@ impl Ssm for SsmClient {
         RegisterTaskWithMaintenanceWindowResult,
         RusotoError<RegisterTaskWithMaintenanceWindowError>,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterTaskWithMaintenanceWindow",
@@ -18397,22 +17535,16 @@ impl Ssm for SsmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterTaskWithMaintenanceWindowError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RegisterTaskWithMaintenanceWindowError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
     }
 
     /// <p>Removes tag keys from the specified resource.</p>
@@ -18420,27 +17552,18 @@ impl Ssm for SsmClient {
         &self,
         input: RemoveTagsFromResourceRequest,
     ) -> Result<RemoveTagsFromResourceResult, RusotoError<RemoveTagsFromResourceError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.RemoveTagsFromResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveTagsFromResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsFromResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveTagsFromResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RemoveTagsFromResourceResult, _>()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Use the <a>UpdateServiceSetting</a> API action to change the default setting. </p> <p>Reset the service setting for the account to the default value as provisioned by the AWS service team. </p>
@@ -18448,27 +17571,17 @@ impl Ssm for SsmClient {
         &self,
         input: ResetServiceSettingRequest,
     ) -> Result<ResetServiceSettingResult, RusotoError<ResetServiceSettingError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ResetServiceSetting");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ResetServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResetServiceSettingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ResetServiceSettingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResetServiceSettingResult, _>()
     }
 
     /// <p><p>Reconnects a session to an instance after it has been disconnected. Connections can be resumed for disconnected sessions, but not terminated sessions.</p> <note> <p>This command is primarily for use by client machines to automatically reconnect during intermittent network issues. It is not intended for any other use.</p> </note></p>
@@ -18476,26 +17589,17 @@ impl Ssm for SsmClient {
         &self,
         input: ResumeSessionRequest,
     ) -> Result<ResumeSessionResponse, RusotoError<ResumeSessionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.ResumeSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ResumeSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ResumeSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ResumeSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResumeSessionResponse, _>()
     }
 
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
@@ -18503,27 +17607,17 @@ impl Ssm for SsmClient {
         &self,
         input: SendAutomationSignalRequest,
     ) -> Result<SendAutomationSignalResult, RusotoError<SendAutomationSignalError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.SendAutomationSignal");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendAutomationSignalResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendAutomationSignalError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendAutomationSignalError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendAutomationSignalResult, _>()
     }
 
     /// <p>Runs commands on one or more managed instances.</p>
@@ -18531,26 +17625,17 @@ impl Ssm for SsmClient {
         &self,
         input: SendCommandRequest,
     ) -> Result<SendCommandResult, RusotoError<SendCommandError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.SendCommand");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendCommandError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendCommandError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
     }
 
     /// <p>Use this API action to run an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
@@ -18558,27 +17643,17 @@ impl Ssm for SsmClient {
         &self,
         input: StartAssociationsOnceRequest,
     ) -> Result<StartAssociationsOnceResult, RusotoError<StartAssociationsOnceError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.StartAssociationsOnce");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAssociationsOnceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAssociationsOnceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartAssociationsOnceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartAssociationsOnceResult, _>()
     }
 
     /// <p>Initiates execution of an Automation document.</p>
@@ -18586,27 +17661,18 @@ impl Ssm for SsmClient {
         &self,
         input: StartAutomationExecutionRequest,
     ) -> Result<StartAutomationExecutionResult, RusotoError<StartAutomationExecutionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.StartAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAutomationExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartAutomationExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartAutomationExecutionResult, _>()
     }
 
     /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">Install the Session Manager plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
@@ -18614,26 +17680,17 @@ impl Ssm for SsmClient {
         &self,
         input: StartSessionRequest,
     ) -> Result<StartSessionResponse, RusotoError<StartSessionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.StartSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartSessionResponse, _>()
     }
 
     /// <p>Stop an Automation that is currently running.</p>
@@ -18641,27 +17698,18 @@ impl Ssm for SsmClient {
         &self,
         input: StopAutomationExecutionRequest,
     ) -> Result<StopAutomationExecutionResult, RusotoError<StopAutomationExecutionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.StopAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopAutomationExecutionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopAutomationExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopAutomationExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopAutomationExecutionResult, _>()
     }
 
     /// <p>Permanently ends a session and closes the data connection between the Session Manager client and SSM Agent on the instance. A terminated session cannot be resumed.</p>
@@ -18669,27 +17717,17 @@ impl Ssm for SsmClient {
         &self,
         input: TerminateSessionRequest,
     ) -> Result<TerminateSessionResponse, RusotoError<TerminateSessionError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.TerminateSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TerminateSessionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TerminateSessionResponse, _>()
     }
 
     /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
@@ -18697,26 +17735,17 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateAssociationRequest,
     ) -> Result<UpdateAssociationResult, RusotoError<UpdateAssociationError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateAssociationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssociationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateAssociationResult, _>()
     }
 
     /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
@@ -18724,27 +17753,18 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateAssociationStatusRequest,
     ) -> Result<UpdateAssociationStatusResult, RusotoError<UpdateAssociationStatusError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociationStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateAssociationStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssociationStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAssociationStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateAssociationStatusResult, _>()
     }
 
     /// <p>Updates one or more values for an SSM document.</p>
@@ -18752,26 +17772,17 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateDocumentRequest,
     ) -> Result<UpdateDocumentResult, RusotoError<UpdateDocumentError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDocumentResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDocumentResult, _>()
     }
 
     /// <p>Set the default version of a document. </p>
@@ -18780,27 +17791,18 @@ impl Ssm for SsmClient {
         input: UpdateDocumentDefaultVersionRequest,
     ) -> Result<UpdateDocumentDefaultVersionResult, RusotoError<UpdateDocumentDefaultVersionError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocumentDefaultVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDocumentDefaultVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDocumentDefaultVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDocumentDefaultVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateDocumentDefaultVersionResult, _>()
     }
 
     /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
@@ -18808,27 +17810,18 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateMaintenanceWindowRequest,
     ) -> Result<UpdateMaintenanceWindowResult, RusotoError<UpdateMaintenanceWindowError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateMaintenanceWindowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateMaintenanceWindowResult, _>()
     }
 
     /// <p><p>Modifies the target of an existing maintenance window. You can change the following:</p> <ul> <li> <p>Name</p> </li> <li> <p>Description</p> </li> <li> <p>Owner</p> </li> <li> <p>IDs for an ID target</p> </li> <li> <p>Tags for a Tag target</p> </li> <li> <p>From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see <a>Target</a>.</p> </li> </ul> <note> <p>If a parameter is null, then the corresponding field is not modified.</p> </note></p>
@@ -18837,27 +17830,18 @@ impl Ssm for SsmClient {
         input: UpdateMaintenanceWindowTargetRequest,
     ) -> Result<UpdateMaintenanceWindowTargetResult, RusotoError<UpdateMaintenanceWindowTargetError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowTargetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateMaintenanceWindowTargetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
     }
 
     /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
@@ -18866,27 +17850,18 @@ impl Ssm for SsmClient {
         input: UpdateMaintenanceWindowTaskRequest,
     ) -> Result<UpdateMaintenanceWindowTaskResult, RusotoError<UpdateMaintenanceWindowTaskError>>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMaintenanceWindowTaskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateMaintenanceWindowTaskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
     }
 
     /// <p>Changes the Amazon Identity and Access Management (IAM) role that is assigned to the on-premises instance or virtual machines (VM). IAM roles are first assigned to these hybrid instances during the activation process. For more information, see <a>CreateActivation</a>.</p>
@@ -18894,27 +17869,18 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateManagedInstanceRoleRequest,
     ) -> Result<UpdateManagedInstanceRoleResult, RusotoError<UpdateManagedInstanceRoleError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateManagedInstanceRole");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateManagedInstanceRoleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateManagedInstanceRoleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateManagedInstanceRoleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateManagedInstanceRoleResult, _>()
     }
 
     /// <p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html">Getting started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>
@@ -18922,26 +17888,17 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateOpsItemRequest,
     ) -> Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateOpsItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateOpsItemResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateOpsItemError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateOpsItemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateOpsItemResponse, _>()
     }
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
@@ -18949,27 +17906,17 @@ impl Ssm for SsmClient {
         &self,
         input: UpdatePatchBaselineRequest,
     ) -> Result<UpdatePatchBaselineResult, RusotoError<UpdatePatchBaselineError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdatePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePatchBaselineResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePatchBaselineError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePatchBaselineError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdatePatchBaselineResult, _>()
     }
 
     /// <p><p>Update a resource data sync. After you create a resource data sync for a Region, you can&#39;t change the account options for that sync. For example, if you create a sync in the us-east-2 (Ohio) Region and you choose the Include only the current account option, you can&#39;t edit that sync later and choose the Include all accounts from my AWS Organizations configuration option. Instead, you must delete the first resource data sync, and create a new one.</p> <note> <p>This API action only supports a resource data sync that was created with a SyncFromSource <code>SyncType</code>.</p> </note></p>
@@ -18977,27 +17924,18 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateResourceDataSyncRequest,
     ) -> Result<UpdateResourceDataSyncResult, RusotoError<UpdateResourceDataSyncError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateResourceDataSyncResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResourceDataSyncError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateResourceDataSyncError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateResourceDataSyncResult, _>()
     }
 
     /// <p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of "false". This means the user can't use this feature unless they change the setting to "true" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Update the service setting for the account. </p>
@@ -19005,26 +17943,16 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateServiceSettingRequest,
     ) -> Result<UpdateServiceSettingResult, RusotoError<UpdateServiceSettingError>> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonSSM.UpdateServiceSetting");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateServiceSettingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateServiceSettingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateServiceSettingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateServiceSettingResult, _>()
     }
 }

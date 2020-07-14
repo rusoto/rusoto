@@ -584,6 +584,7 @@ impl IotJobsDataClient {
 #[async_trait]
 impl IotJobsData for IotJobsDataClient {
     /// <p>Gets details of a job execution.</p>
+    #[allow(unused_mut)]
     async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
@@ -614,7 +615,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeJobExecutionResponse, _>()?;
 
@@ -626,6 +627,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
+    #[allow(unused_mut)]
     async fn get_pending_job_executions(
         &self,
         input: GetPendingJobExecutionsRequest,
@@ -643,7 +645,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPendingJobExecutionsResponse, _>()?;
 
@@ -655,6 +657,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
+    #[allow(unused_mut)]
     async fn start_next_pending_job_execution(
         &self,
         input: StartNextPendingJobExecutionRequest,
@@ -678,7 +681,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartNextPendingJobExecutionResponse, _>()?;
 
@@ -690,6 +693,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Updates the status of a job execution.</p>
+    #[allow(unused_mut)]
     async fn update_job_execution(
         &self,
         input: UpdateJobExecutionRequest,
@@ -713,7 +717,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateJobExecutionResponse, _>()?;
 

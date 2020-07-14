@@ -2937,6 +2937,7 @@ impl KafkaClient {
 impl Kafka for KafkaClient {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn create_cluster(
         &self,
         input: CreateClusterRequest,
@@ -2955,7 +2956,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateClusterResponse, _>()?;
 
@@ -2968,6 +2969,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Creates a new MSK configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
@@ -2986,7 +2988,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationResponse, _>()?;
 
@@ -2999,6 +3001,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
@@ -3023,7 +3026,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteClusterResponse, _>()?;
 
@@ -3036,6 +3039,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_cluster(
         &self,
         input: DescribeClusterRequest,
@@ -3054,7 +3058,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeClusterResponse, _>()?;
 
@@ -3067,6 +3071,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of the cluster operation specified by the ARN.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_cluster_operation(
         &self,
         input: DescribeClusterOperationRequest,
@@ -3085,7 +3090,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeClusterOperationResponse, _>()?;
 
@@ -3098,6 +3103,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of this MSK configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
@@ -3113,7 +3119,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeConfigurationResponse, _>()?;
 
@@ -3126,6 +3132,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of this revision of the configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
@@ -3148,7 +3155,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeConfigurationRevisionResponse, _>()?;
 
@@ -3161,6 +3168,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;A list of brokers that a client application can use to bootstrap.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn get_bootstrap_brokers(
         &self,
         input: GetBootstrapBrokersRequest,
@@ -3179,7 +3187,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBootstrapBrokersResponse, _>()?;
 
@@ -3192,6 +3200,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_cluster_operations(
         &self,
         input: ListClusterOperationsRequest,
@@ -3219,7 +3228,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListClusterOperationsResponse, _>()?;
 
@@ -3232,6 +3241,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK clusters in the current Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_clusters(
         &self,
         input: ListClustersRequest,
@@ -3259,7 +3269,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListClustersResponse, _>()?;
 
@@ -3272,6 +3282,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
@@ -3297,7 +3308,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigurationRevisionsResponse, _>()?;
 
@@ -3310,6 +3321,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -3334,7 +3346,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigurationsResponse, _>()?;
 
@@ -3347,6 +3359,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of Kafka versions.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_kafka_versions(
         &self,
         input: ListKafkaVersionsRequest,
@@ -3371,7 +3384,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListKafkaVersionsResponse, _>()?;
 
@@ -3384,6 +3397,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_nodes(
         &self,
         input: ListNodesRequest,
@@ -3411,7 +3425,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListNodesResponse, _>()?;
 
@@ -3424,6 +3438,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3439,7 +3454,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3452,6 +3467,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Adds tags to the specified MSK resource.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3470,7 +3486,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3482,6 +3498,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Removes the tags associated with the keys that are provided in the query.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3503,7 +3520,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3515,6 +3532,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_broker_count(
         &self,
         input: UpdateBrokerCountRequest,
@@ -3536,7 +3554,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBrokerCountResponse, _>()?;
 
@@ -3549,6 +3567,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_broker_storage(
         &self,
         input: UpdateBrokerStorageRequest,
@@ -3570,7 +3589,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBrokerStorageResponse, _>()?;
 
@@ -3583,6 +3602,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the cluster with the configuration that is specified in the request body.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_cluster_configuration(
         &self,
         input: UpdateClusterConfigurationRequest,
@@ -3605,7 +3625,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateClusterConfigurationResponse, _>()?;
 
@@ -3618,6 +3638,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_monitoring(
         &self,
         input: UpdateMonitoringRequest,
@@ -3639,7 +3660,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMonitoringResponse, _>()?;
 

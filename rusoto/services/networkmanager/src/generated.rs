@@ -2915,6 +2915,7 @@ impl NetworkManagerClient {
 #[async_trait]
 impl NetworkManager for NetworkManagerClient {
     /// <p>Associates a customer gateway with a device and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate customer gateways that are connected to a VPN attachment on a transit gateway. The transit gateway must be registered in your global network. When you register a transit gateway, customer gateways that are connected to the transit gateway are automatically included in the global network. To list customer gateways that are connected to a transit gateway, use the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnConnections.html">DescribeVpnConnections</a> EC2 API and filter by <code>transit-gateway-id</code>.</p> <p>You cannot associate a customer gateway with more than one device and link. </p>
+    #[allow(unused_mut)]
     async fn associate_customer_gateway(
         &self,
         input: AssociateCustomerGatewayRequest,
@@ -2936,7 +2937,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateCustomerGatewayResponse, _>()?;
 
@@ -2948,6 +2949,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Associates a link to a device. A device can be associated to multiple links and a link can be associated to multiple devices. The device and link must be in the same global network and the same site.</p>
+    #[allow(unused_mut)]
     async fn associate_link(
         &self,
         input: AssociateLinkRequest,
@@ -2969,7 +2971,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateLinkResponse, _>()?;
 
@@ -2981,6 +2983,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
+    #[allow(unused_mut)]
     async fn create_device(
         &self,
         input: CreateDeviceRequest,
@@ -3002,7 +3005,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeviceResponse, _>()?;
 
@@ -3014,6 +3017,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new, empty global network.</p>
+    #[allow(unused_mut)]
     async fn create_global_network(
         &self,
         input: CreateGlobalNetworkRequest,
@@ -3032,7 +3036,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGlobalNetworkResponse, _>()?;
 
@@ -3044,6 +3048,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new link for a specified site.</p>
+    #[allow(unused_mut)]
     async fn create_link(
         &self,
         input: CreateLinkRequest,
@@ -3065,7 +3070,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateLinkResponse, _>()?;
 
@@ -3077,6 +3082,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new site in a global network.</p>
+    #[allow(unused_mut)]
     async fn create_site(
         &self,
         input: CreateSiteRequest,
@@ -3098,7 +3104,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSiteResponse, _>()?;
 
@@ -3110,6 +3116,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing device. You must first disassociate the device from any links and customer gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_device(
         &self,
         input: DeleteDeviceRequest,
@@ -3130,7 +3137,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDeviceResponse, _>()?;
 
@@ -3142,6 +3149,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing global network. You must first delete all global network objects (devices, links, and sites) and deregister all transit gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_global_network(
         &self,
         input: DeleteGlobalNetworkRequest,
@@ -3161,7 +3169,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGlobalNetworkResponse, _>()?;
 
@@ -3173,6 +3181,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing link. You must first disassociate the link from any devices and customer gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_link(
         &self,
         input: DeleteLinkRequest,
@@ -3193,7 +3202,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteLinkResponse, _>()?;
 
@@ -3205,6 +3214,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing site. The site cannot be associated with any device or link.</p>
+    #[allow(unused_mut)]
     async fn delete_site(
         &self,
         input: DeleteSiteRequest,
@@ -3225,7 +3235,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSiteResponse, _>()?;
 
@@ -3237,6 +3247,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deregisters a transit gateway from your global network. This action does not delete your transit gateway, or modify any of its attachments. This action removes any customer gateway associations.</p>
+    #[allow(unused_mut)]
     async fn deregister_transit_gateway(
         &self,
         input: DeregisterTransitGatewayRequest,
@@ -3253,7 +3264,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeregisterTransitGatewayResponse, _>()?;
 
@@ -3265,6 +3276,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Describes one or more global networks. By default, all global networks are described. To describe the objects in your global network, you must use the appropriate <code>Get*</code> action. For example, to list the transit gateways in your global network, use <a>GetTransitGatewayRegistrations</a>.</p>
+    #[allow(unused_mut)]
     async fn describe_global_networks(
         &self,
         input: DescribeGlobalNetworksRequest,
@@ -3294,7 +3306,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeGlobalNetworksResponse, _>()?;
 
@@ -3306,6 +3318,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Disassociates a customer gateway from a device and a link.</p>
+    #[allow(unused_mut)]
     async fn disassociate_customer_gateway(
         &self,
         input: DisassociateCustomerGatewayRequest,
@@ -3323,7 +3336,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateCustomerGatewayResponse, _>()?;
 
@@ -3335,6 +3348,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Disassociates an existing device from a link. You must first disassociate any customer gateways that are associated with the link.</p>
+    #[allow(unused_mut)]
     async fn disassociate_link(
         &self,
         input: DisassociateLinkRequest,
@@ -3359,7 +3373,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateLinkResponse, _>()?;
 
@@ -3371,6 +3385,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
+    #[allow(unused_mut)]
     async fn get_customer_gateway_associations(
         &self,
         input: GetCustomerGatewayAssociationsRequest,
@@ -3406,7 +3421,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCustomerGatewayAssociationsResponse, _>()?;
 
@@ -3418,6 +3433,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more of your devices in a global network.</p>
+    #[allow(unused_mut)]
     async fn get_devices(
         &self,
         input: GetDevicesRequest,
@@ -3453,7 +3469,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDevicesResponse, _>()?;
 
@@ -3465,6 +3481,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
+    #[allow(unused_mut)]
     async fn get_link_associations(
         &self,
         input: GetLinkAssociationsRequest,
@@ -3498,7 +3515,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLinkAssociationsResponse, _>()?;
 
@@ -3510,6 +3527,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
+    #[allow(unused_mut)]
     async fn get_links(
         &self,
         input: GetLinksRequest,
@@ -3551,7 +3569,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLinksResponse, _>()?;
 
@@ -3563,6 +3581,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more of your sites in a global network.</p>
+    #[allow(unused_mut)]
     async fn get_sites(
         &self,
         input: GetSitesRequest,
@@ -3595,7 +3614,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSitesResponse, _>()?;
 
@@ -3607,6 +3626,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
+    #[allow(unused_mut)]
     async fn get_transit_gateway_registrations(
         &self,
         input: GetTransitGatewayRegistrationsRequest,
@@ -3642,7 +3662,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTransitGatewayRegistrationsResponse, _>()?;
 
@@ -3654,6 +3674,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Lists the tags for a specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3669,7 +3690,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3681,6 +3702,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Registers a transit gateway in your global network. The transit gateway can be in any AWS Region, but it must be owned by the same AWS account that owns the global network. You cannot register a transit gateway in more than one global network.</p>
+    #[allow(unused_mut)]
     async fn register_transit_gateway(
         &self,
         input: RegisterTransitGatewayRequest,
@@ -3702,7 +3724,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterTransitGatewayResponse, _>()?;
 
@@ -3714,6 +3736,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Tags a specified resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3732,7 +3755,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3744,6 +3767,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Removes tags from a specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3766,7 +3790,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -3778,6 +3802,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the details for an existing device. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_device(
         &self,
         input: UpdateDeviceRequest,
@@ -3800,7 +3825,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeviceResponse, _>()?;
 
@@ -3812,6 +3837,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates an existing global network. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_global_network(
         &self,
         input: UpdateGlobalNetworkRequest,
@@ -3833,7 +3859,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGlobalNetworkResponse, _>()?;
 
@@ -3845,6 +3871,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the details for an existing link. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_link(
         &self,
         input: UpdateLinkRequest,
@@ -3867,7 +3894,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLinkResponse, _>()?;
 
@@ -3879,6 +3906,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the information for an existing site. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_site(
         &self,
         input: UpdateSiteRequest,
@@ -3901,7 +3929,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSiteResponse, _>()?;
 

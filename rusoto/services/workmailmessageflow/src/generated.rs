@@ -119,6 +119,7 @@ impl WorkmailMessageFlowClient {
 #[async_trait]
 impl WorkmailMessageFlow for WorkmailMessageFlowClient {
     /// <p>Retrieves the raw content of an in-transit email message, in MIME format. </p>
+    #[allow(unused_mut)]
     async fn get_raw_message_content(
         &self,
         input: GetRawMessageContentRequest,
@@ -135,7 +136,7 @@ impl WorkmailMessageFlow for WorkmailMessageFlowClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetRawMessageContentResponse::default();
             result.message_content = response.body;

@@ -2467,6 +2467,7 @@ impl XRayClient {
 #[async_trait]
 impl XRay for XRayClient {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
+    #[allow(unused_mut)]
     async fn batch_get_traces(
         &self,
         input: BatchGetTracesRequest,
@@ -2485,7 +2486,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchGetTracesResult, _>()?;
 
@@ -2497,6 +2498,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Creates a group resource with a name and a filter expression. </p>
+    #[allow(unused_mut)]
     async fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -2515,7 +2517,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGroupResult, _>()?;
 
@@ -2527,6 +2529,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>
+    #[allow(unused_mut)]
     async fn create_sampling_rule(
         &self,
         input: CreateSamplingRuleRequest,
@@ -2545,7 +2548,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSamplingRuleResult, _>()?;
 
@@ -2557,6 +2560,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Deletes a group resource.</p>
+    #[allow(unused_mut)]
     async fn delete_group(
         &self,
         input: DeleteGroupRequest,
@@ -2575,7 +2579,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGroupResult, _>()?;
 
@@ -2587,6 +2591,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Deletes a sampling rule.</p>
+    #[allow(unused_mut)]
     async fn delete_sampling_rule(
         &self,
         input: DeleteSamplingRuleRequest,
@@ -2605,7 +2610,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSamplingRuleResult, _>()?;
 
@@ -2617,6 +2622,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
+    #[allow(unused_mut)]
     async fn get_encryption_config(
         &self,
     ) -> Result<GetEncryptionConfigResult, RusotoError<GetEncryptionConfigError>> {
@@ -2631,7 +2637,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetEncryptionConfigResult, _>()?;
 
@@ -2643,6 +2649,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves group resource details.</p>
+    #[allow(unused_mut)]
     async fn get_group(
         &self,
         input: GetGroupRequest,
@@ -2661,7 +2668,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetGroupResult, _>()?;
 
@@ -2673,6 +2680,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves all active group details.</p>
+    #[allow(unused_mut)]
     async fn get_groups(
         &self,
         input: GetGroupsRequest,
@@ -2691,7 +2699,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetGroupsResult, _>()?;
 
@@ -2703,6 +2711,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves all sampling rules.</p>
+    #[allow(unused_mut)]
     async fn get_sampling_rules(
         &self,
         input: GetSamplingRulesRequest,
@@ -2721,7 +2730,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSamplingRulesResult, _>()?;
 
@@ -2733,6 +2742,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
+    #[allow(unused_mut)]
     async fn get_sampling_statistic_summaries(
         &self,
         input: GetSamplingStatisticSummariesRequest,
@@ -2752,7 +2762,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSamplingStatisticSummariesResult, _>()?;
 
@@ -2764,6 +2774,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
+    #[allow(unused_mut)]
     async fn get_sampling_targets(
         &self,
         input: GetSamplingTargetsRequest,
@@ -2782,7 +2793,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSamplingTargetsResult, _>()?;
 
@@ -2794,6 +2805,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the <a href="https://docs.aws.amazon.com/xray/index.html">AWS X-Ray SDK</a>. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
+    #[allow(unused_mut)]
     async fn get_service_graph(
         &self,
         input: GetServiceGraphRequest,
@@ -2812,7 +2824,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetServiceGraphResult, _>()?;
 
@@ -2824,6 +2836,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
+    #[allow(unused_mut)]
     async fn get_time_series_service_statistics(
         &self,
         input: GetTimeSeriesServiceStatisticsRequest,
@@ -2845,7 +2858,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTimeSeriesServiceStatisticsResult, _>()?;
 
@@ -2857,6 +2870,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
+    #[allow(unused_mut)]
     async fn get_trace_graph(
         &self,
         input: GetTraceGraphRequest,
@@ -2875,7 +2889,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTraceGraphResult, _>()?;
 
@@ -2887,6 +2901,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Retrieves IDs and annotations for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,
@@ -2905,7 +2920,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTraceSummariesResult, _>()?;
 
@@ -2917,6 +2932,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Updates the encryption configuration for X-Ray data.</p>
+    #[allow(unused_mut)]
     async fn put_encryption_config(
         &self,
         input: PutEncryptionConfigRequest,
@@ -2935,7 +2951,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEncryptionConfigResult, _>()?;
 
@@ -2947,6 +2963,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
+    #[allow(unused_mut)]
     async fn put_telemetry_records(
         &self,
         input: PutTelemetryRecordsRequest,
@@ -2965,7 +2982,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutTelemetryRecordsResult, _>()?;
 
@@ -2977,6 +2994,7 @@ impl XRay for XRayClient {
     }
 
     /// <p><p>Uploads segment documents to AWS X-Ray. The <a href="https://docs.aws.amazon.com/xray/index.html">X-Ray SDK</a> generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn put_trace_segments(
         &self,
         input: PutTraceSegmentsRequest,
@@ -2995,7 +3013,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutTraceSegmentsResult, _>()?;
 
@@ -3007,6 +3025,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Updates a group resource.</p>
+    #[allow(unused_mut)]
     async fn update_group(
         &self,
         input: UpdateGroupRequest,
@@ -3025,7 +3044,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupResult, _>()?;
 
@@ -3037,6 +3056,7 @@ impl XRay for XRayClient {
     }
 
     /// <p>Modifies a sampling rule's configuration.</p>
+    #[allow(unused_mut)]
     async fn update_sampling_rule(
         &self,
         input: UpdateSamplingRuleRequest,
@@ -3055,7 +3075,7 @@ impl XRay for XRayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSamplingRuleResult, _>()?;
 

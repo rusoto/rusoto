@@ -22,17 +22,13 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
             match &member.location.as_ref().unwrap()[..] {
                 "header" => {
                     if shape.required(member_name) {
-                        Some(format!("request.add_header(\"{location_name}\", 
+                        Some(format!("request.add_header(\"{location_name}\",
                                       &input.{field_name});",
                                      location_name = member.location_name.as_ref().unwrap(),
                                      field_name = generate_field_name(member_name)))
                     } else {
-                        Some(format!("
-                        if let Some(ref {field_name}) = 
-                                      input.{field_name} {{
-                                      request.add_header(\"{location_name}\", 
-                                      &{field_name}.to_string());
-                        }}",
+                        Some(format!("request.add_optional_header(\"{location_name}\",
+                                      input.{field_name}.as_ref());",
                                      location_name = member.location_name.as_ref().unwrap(),
                                      field_name = generate_field_name(member_name)))
                     }
@@ -49,7 +45,7 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
                                      field_name = generate_field_name(member_name)))
                     } else {
                         Some(format!("
-                        if let Some(ref {field_name}) = 
+                        if let Some(ref {field_name}) =
                                       input.{field_name} {{
                                           for (header_name, header_value) in {field_name}.iter() {{
                                               let header = format!(\"{location_name}{{}}\", header_name);

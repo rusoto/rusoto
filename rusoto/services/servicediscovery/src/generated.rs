@@ -20,9 +20,36 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ServiceDiscoveryClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "servicediscovery", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2004,9 +2031,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreateHttpNamespaceRequest,
     ) -> Result<CreateHttpNamespaceResponse, RusotoError<CreateHttpNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreateHttpNamespace",
@@ -2014,20 +2039,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHttpNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHttpNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHttpNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateHttpNamespaceResponse, _>()
     }
 
     /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
@@ -2036,9 +2053,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         input: CreatePrivateDnsNamespaceRequest,
     ) -> Result<CreatePrivateDnsNamespaceResponse, RusotoError<CreatePrivateDnsNamespaceError>>
     {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePrivateDnsNamespace",
@@ -2046,20 +2061,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePrivateDnsNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePrivateDnsNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
     }
 
     /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
@@ -2067,9 +2075,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreatePublicDnsNamespaceRequest,
     ) -> Result<CreatePublicDnsNamespaceResponse, RusotoError<CreatePublicDnsNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePublicDnsNamespace",
@@ -2077,20 +2083,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePublicDnsNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePublicDnsNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePublicDnsNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePublicDnsNamespaceResponse, _>()
     }
 
     /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>For public and private DNS namespaces, one of the following combinations of DNS records in Amazon Route 53:</p> <ul> <li> <p>A</p> </li> <li> <p>AAAA</p> </li> <li> <p>A and AAAA</p> </li> <li> <p>SRV</p> </li> <li> <p>CNAME</p> </li> </ul> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_RegisterInstance.html">RegisterInstance</a> request, and AWS Cloud Map uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
@@ -2098,26 +2097,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreateServiceRequest,
     ) -> Result<CreateServiceResponse, RusotoError<CreateServiceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.CreateService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateServiceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateServiceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateServiceResponse, _>()
     }
 
     /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
@@ -2125,9 +2115,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeleteNamespaceRequest,
     ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeleteNamespace",
@@ -2135,19 +2123,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
     }
 
     /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
@@ -2155,26 +2136,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeleteServiceRequest,
     ) -> Result<DeleteServiceResponse, RusotoError<DeleteServiceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.DeleteService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServiceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServiceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteServiceResponse, _>()
     }
 
     /// <p>Deletes the Amazon Route 53 DNS records and health check, if any, that AWS Cloud Map created for the specified instance.</p>
@@ -2182,9 +2154,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeregisterInstanceRequest,
     ) -> Result<DeregisterInstanceResponse, RusotoError<DeregisterInstanceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeregisterInstance",
@@ -2192,20 +2162,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeregisterInstanceResponse, _>()
     }
 
     /// <p>Discovers registered instances for a specified namespace and service. You can use <code>DiscoverInstances</code> to discover instances for any type of namespace. For public and private DNS namespaces, you can also use DNS queries to discover instances.</p>
@@ -2213,9 +2175,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DiscoverInstancesRequest,
     ) -> Result<DiscoverInstancesResponse, RusotoError<DiscoverInstancesError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DiscoverInstances",
@@ -2223,20 +2183,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DiscoverInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DiscoverInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DiscoverInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DiscoverInstancesResponse, _>()
     }
 
     /// <p>Gets information about a specified instance.</p>
@@ -2244,26 +2196,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetInstanceRequest,
     ) -> Result<GetInstanceResponse, RusotoError<GetInstanceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceResponse, _>()
     }
 
     /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
@@ -2271,9 +2214,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetInstancesHealthStatusRequest,
     ) -> Result<GetInstancesHealthStatusResponse, RusotoError<GetInstancesHealthStatusError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.GetInstancesHealthStatus",
@@ -2281,20 +2222,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstancesHealthStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstancesHealthStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstancesHealthStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetInstancesHealthStatusResponse, _>()
     }
 
     /// <p>Gets information about a namespace.</p>
@@ -2302,26 +2236,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetNamespaceRequest,
     ) -> Result<GetNamespaceResponse, RusotoError<GetNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetNamespace");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetNamespaceResponse, _>()
     }
 
     /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_ListOperations.html">ListOperations</a>.</p> </note></p>
@@ -2329,26 +2254,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetOperationRequest,
     ) -> Result<GetOperationResponse, RusotoError<GetOperationError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetOperation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOperationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOperationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOperationResponse, _>()
     }
 
     /// <p>Gets the settings for a specified service.</p>
@@ -2356,26 +2272,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetServiceRequest,
     ) -> Result<GetServiceResponse, RusotoError<GetServiceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServiceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServiceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetServiceResponse, _>()
     }
 
     /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
@@ -2383,26 +2290,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListInstancesRequest,
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesResponse, _>()
     }
 
     /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
@@ -2410,26 +2308,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListNamespacesRequest,
     ) -> Result<ListNamespacesResponse, RusotoError<ListNamespacesError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListNamespaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListNamespacesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNamespacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListNamespacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListNamespacesResponse, _>()
     }
 
     /// <p>Lists operations that match the criteria that you specify.</p>
@@ -2437,26 +2326,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListOperationsRequest,
     ) -> Result<ListOperationsResponse, RusotoError<ListOperationsError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListOperations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListOperationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOperationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOperationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListOperationsResponse, _>()
     }
 
     /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
@@ -2464,26 +2344,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListServicesRequest,
     ) -> Result<ListServicesResponse, RusotoError<ListServicesError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListServices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListServicesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListServicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListServicesResponse, _>()
     }
 
     /// <p>Creates or updates one or more records and, optionally, creates a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, the following occurs:</p> <ul> <li> <p>For each DNS record that you define in the service that is specified by <code>ServiceId</code>, a record is created or updated in the hosted zone that is associated with the corresponding namespace.</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, a health check is created based on the settings in the health check configuration.</p> </li> <li> <p>The health check, if any, is associated with each of the new or updated records.</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_CreateService.html">CreateService</a>.</p> <p>When AWS Cloud Map receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="https://docs.aws.amazon.com/cloud-map/latest/dg/cloud-map-limits.html">AWS Cloud Map Limits</a> in the <i>AWS Cloud Map Developer Guide</i>.</p>
@@ -2491,9 +2362,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: RegisterInstanceRequest,
     ) -> Result<RegisterInstanceResponse, RusotoError<RegisterInstanceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.RegisterInstance",
@@ -2501,20 +2370,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RegisterInstanceResponse, _>()
     }
 
     /// <p>Submits a request to change the health status of a custom health check to healthy or unhealthy.</p> <p>You can use <code>UpdateInstanceCustomHealthStatus</code> to change the status only for custom health checks, which you define using <code>HealthCheckCustomConfig</code> when you create a service. You can't use it to change the status for Route 53 health checks, which you define using <code>HealthCheckConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_HealthCheckCustomConfig.html">HealthCheckCustomConfig</a>.</p>
@@ -2522,9 +2383,7 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: UpdateInstanceCustomHealthStatusRequest,
     ) -> Result<(), RusotoError<UpdateInstanceCustomHealthStatusError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.UpdateInstanceCustomHealthStatus",
@@ -2532,21 +2391,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInstanceCustomHealthStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateInstanceCustomHealthStatusError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> <note> <p>You can't add, update, or delete a <code>HealthCheckCustomConfig</code> configuration.</p> </note> </li> </ul> <p>For public and private DNS namespaces, note the following:</p> <ul> <li> <p>If you omit any existing <code>DnsRecords</code> or <code>HealthCheckConfig</code> configurations from an <code>UpdateService</code> request, the configurations are deleted from the service.</p> </li> <li> <p>If you omit an existing <code>HealthCheckCustomConfig</code> configuration from an <code>UpdateService</code> request, the configuration is not deleted from the service.</p> </li> </ul> <p>When you update settings for a service, AWS Cloud Map also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
@@ -2554,25 +2406,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: UpdateServiceRequest,
     ) -> Result<UpdateServiceResponse, RusotoError<UpdateServiceError>> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.UpdateService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateServiceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateServiceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateServiceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateServiceResponse, _>()
     }
 }

@@ -328,6 +328,7 @@ impl EbsClient {
 #[async_trait]
 impl Ebs for EbsClient {
     /// <p>Returns the data in a block in an Amazon Elastic Block Store snapshot.</p>
+    #[allow(unused_mut)]
     async fn get_snapshot_block(
         &self,
         input: GetSnapshotBlockRequest,
@@ -351,23 +352,17 @@ impl Ebs for EbsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetSnapshotBlockResponse::default();
             result.block_data = Some(response.body);
 
-            if let Some(checksum) = response.headers.get("x-amz-Checksum") {
-                let value = checksum.to_owned();
-                result.checksum = Some(value)
-            };
-            if let Some(checksum_algorithm) = response.headers.get("x-amz-Checksum-Algorithm") {
-                let value = checksum_algorithm.to_owned();
-                result.checksum_algorithm = Some(value)
-            };
-            if let Some(data_length) = response.headers.get("x-amz-Data-Length") {
-                let value = data_length.to_owned();
-                result.data_length = Some(value.parse::<i64>().unwrap())
-            };
+            result.checksum = response.headers.remove("x-amz-Checksum");
+            result.checksum_algorithm = response.headers.remove("x-amz-Checksum-Algorithm");
+            result.data_length = response
+                .headers
+                .remove("x-amz-Data-Length")
+                .map(|value| value.parse::<i64>().unwrap());
 
             Ok(result)
         } else {
@@ -377,6 +372,7 @@ impl Ebs for EbsClient {
     }
 
     /// <p>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
+    #[allow(unused_mut)]
     async fn list_changed_blocks(
         &self,
         input: ListChangedBlocksRequest,
@@ -410,7 +406,7 @@ impl Ebs for EbsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChangedBlocksResponse, _>()?;
 
@@ -422,6 +418,7 @@ impl Ebs for EbsClient {
     }
 
     /// <p>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot.</p>
+    #[allow(unused_mut)]
     async fn list_snapshot_blocks(
         &self,
         input: ListSnapshotBlocksRequest,
@@ -452,7 +449,7 @@ impl Ebs for EbsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSnapshotBlocksResponse, _>()?;
 

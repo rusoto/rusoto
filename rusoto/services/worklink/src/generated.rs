@@ -3086,6 +3086,7 @@ impl WorklinkClient {
 #[async_trait]
 impl Worklink for WorklinkClient {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
+    #[allow(unused_mut)]
     async fn associate_domain(
         &self,
         input: AssociateDomainRequest,
@@ -3104,7 +3105,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateDomainResponse, _>()?;
 
@@ -3116,6 +3117,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
+    #[allow(unused_mut)]
     async fn associate_website_authorization_provider(
         &self,
         input: AssociateWebsiteAuthorizationProviderRequest,
@@ -3137,7 +3139,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>()?;
 
@@ -3151,6 +3153,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
+    #[allow(unused_mut)]
     async fn associate_website_certificate_authority(
         &self,
         input: AssociateWebsiteCertificateAuthorityRequest,
@@ -3172,7 +3175,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3186,6 +3189,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Creates a fleet. A fleet consists of resources and the configuration that delivers associated websites to authorized users who download and set up the Amazon WorkLink app.</p>
+    #[allow(unused_mut)]
     async fn create_fleet(
         &self,
         input: CreateFleetRequest,
@@ -3204,7 +3208,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFleetResponse, _>()?;
 
@@ -3216,6 +3220,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Deletes a fleet. Prevents users from accessing previously associated websites. </p>
+    #[allow(unused_mut)]
     async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
@@ -3234,7 +3239,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFleetResponse, _>()?;
 
@@ -3246,6 +3251,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the configuration for delivering audit streams to the customer account.</p>
+    #[allow(unused_mut)]
     async fn describe_audit_stream_configuration(
         &self,
         input: DescribeAuditStreamConfigurationRequest,
@@ -3267,7 +3273,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAuditStreamConfigurationResponse, _>()?;
 
@@ -3281,6 +3287,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the networking configuration to access the internal websites associated with the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_company_network_configuration(
         &self,
         input: DescribeCompanyNetworkConfigurationRequest,
@@ -3302,7 +3309,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>()?;
 
@@ -3316,6 +3323,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about a user's device.</p>
+    #[allow(unused_mut)]
     async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
@@ -3334,7 +3342,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeviceResponse, _>()?;
 
@@ -3346,6 +3354,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the device policy configuration for the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_device_policy_configuration(
         &self,
         input: DescribeDevicePolicyConfigurationRequest,
@@ -3367,7 +3376,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDevicePolicyConfigurationResponse, _>()?;
 
@@ -3381,6 +3390,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about the domain.</p>
+    #[allow(unused_mut)]
     async fn describe_domain(
         &self,
         input: DescribeDomainRequest,
@@ -3399,7 +3409,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDomainResponse, _>()?;
 
@@ -3411,6 +3421,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
+    #[allow(unused_mut)]
     async fn describe_fleet_metadata(
         &self,
         input: DescribeFleetMetadataRequest,
@@ -3429,7 +3440,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeFleetMetadataResponse, _>()?;
 
@@ -3441,6 +3452,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the identity provider configuration of the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_identity_provider_configuration(
         &self,
         input: DescribeIdentityProviderConfigurationRequest,
@@ -3462,7 +3474,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeIdentityProviderConfigurationResponse, _>()?;
 
@@ -3476,6 +3488,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about the certificate authority.</p>
+    #[allow(unused_mut)]
     async fn describe_website_certificate_authority(
         &self,
         input: DescribeWebsiteCertificateAuthorityRequest,
@@ -3497,7 +3510,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3511,6 +3524,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
+    #[allow(unused_mut)]
     async fn disassociate_domain(
         &self,
         input: DisassociateDomainRequest,
@@ -3529,7 +3543,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateDomainResponse, _>()?;
 
@@ -3541,6 +3555,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
+    #[allow(unused_mut)]
     async fn disassociate_website_authorization_provider(
         &self,
         input: DisassociateWebsiteAuthorizationProviderRequest,
@@ -3562,7 +3577,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>()?;
 
@@ -3574,6 +3589,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Removes a certificate authority (CA).</p>
+    #[allow(unused_mut)]
     async fn disassociate_website_certificate_authority(
         &self,
         input: DisassociateWebsiteCertificateAuthorityRequest,
@@ -3595,7 +3611,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3609,6 +3625,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of devices registered with the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
@@ -3627,7 +3644,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDevicesResponse, _>()?;
 
@@ -3639,6 +3656,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of domains associated to a specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_domains(
         &self,
         input: ListDomainsRequest,
@@ -3657,7 +3675,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainsResponse, _>()?;
 
@@ -3669,6 +3687,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
+    #[allow(unused_mut)]
     async fn list_fleets(
         &self,
         input: ListFleetsRequest,
@@ -3687,7 +3706,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFleetsResponse, _>()?;
 
@@ -3699,6 +3718,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_website_authorization_providers(
         &self,
         input: ListWebsiteAuthorizationProvidersRequest,
@@ -3720,7 +3740,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
 
@@ -3734,6 +3754,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of certificate authorities added for the current account and Region.</p>
+    #[allow(unused_mut)]
     async fn list_website_certificate_authorities(
         &self,
         input: ListWebsiteCertificateAuthoritiesRequest,
@@ -3755,7 +3776,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>()?;
 
@@ -3769,6 +3790,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
+    #[allow(unused_mut)]
     async fn restore_domain_access(
         &self,
         input: RestoreDomainAccessRequest,
@@ -3787,7 +3809,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestoreDomainAccessResponse, _>()?;
 
@@ -3799,6 +3821,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
+    #[allow(unused_mut)]
     async fn revoke_domain_access(
         &self,
         input: RevokeDomainAccessRequest,
@@ -3817,7 +3840,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RevokeDomainAccessResponse, _>()?;
 
@@ -3829,6 +3852,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Signs the user out from all of their devices. The user can sign in again if they have valid credentials.</p>
+    #[allow(unused_mut)]
     async fn sign_out_user(
         &self,
         input: SignOutUserRequest,
@@ -3847,7 +3871,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SignOutUserResponse, _>()?;
 
@@ -3859,6 +3883,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the audit stream configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_audit_stream_configuration(
         &self,
         input: UpdateAuditStreamConfigurationRequest,
@@ -3880,7 +3905,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAuditStreamConfigurationResponse, _>()?;
 
@@ -3892,6 +3917,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the company network configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_company_network_configuration(
         &self,
         input: UpdateCompanyNetworkConfigurationRequest,
@@ -3913,7 +3939,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>()?;
 
@@ -3927,6 +3953,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the device policy configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_device_policy_configuration(
         &self,
         input: UpdateDevicePolicyConfigurationRequest,
@@ -3948,7 +3975,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDevicePolicyConfigurationResponse, _>()?;
 
@@ -3962,6 +3989,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates domain metadata, such as DisplayName.</p>
+    #[allow(unused_mut)]
     async fn update_domain_metadata(
         &self,
         input: UpdateDomainMetadataRequest,
@@ -3980,7 +4008,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDomainMetadataResponse, _>()?;
 
@@ -3992,6 +4020,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates fleet metadata, such as DisplayName.</p>
+    #[allow(unused_mut)]
     async fn update_fleet_metadata(
         &self,
         input: UpdateFleetMetadataRequest,
@@ -4010,7 +4039,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFleetMetadataResponse, _>()?;
 
@@ -4022,6 +4051,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the identity provider configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_identity_provider_configuration(
         &self,
         input: UpdateIdentityProviderConfigurationRequest,
@@ -4043,7 +4073,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIdentityProviderConfigurationResponse, _>()?;
 

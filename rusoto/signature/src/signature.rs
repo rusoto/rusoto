@@ -231,18 +231,17 @@ impl SignedRequest {
     /// Add a value to the array of headers for the specified key.
     /// Headers are kept sorted by key name for use at signing (BTreeMap)
     pub fn add_header<K: ToString>(&mut self, key: K, value: &str) {
-        let key_lower = key.to_string().to_ascii_lowercase();
+        let mut key_lower = key.to_string();
+        key_lower.make_ascii_lowercase();
+
         let value_vec = value.as_bytes().to_vec();
 
-        match self.headers.entry(key_lower) {
-            Entry::Vacant(entry) => {
-                let mut values = Vec::new();
-                values.push(value_vec);
-                entry.insert(values);
-            }
-            Entry::Occupied(entry) => {
-                entry.into_mut().push(value_vec);
-            }
+        self.headers.entry(key_lower).or_default().push(value_vec);
+    }
+
+    pub fn add_optional_header<K: ToString, V: ToString>(&mut self, key: K, value: Option<V>) {
+        if let Some(ref value) = value {
+            self.add_header(key, &value.to_string());
         }
     }
 
@@ -604,11 +603,7 @@ fn sign_string(
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(
-    date: OffsetDateTime,
-    hashed_canonical_request: &str,
-    scope: &str,
-) -> String {
+pub fn string_to_sign(date: OffsetDateTime, hashed_canonical_request: &str, scope: &str) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
         date.format("%Y%m%dT%H%M%SZ"),

@@ -4815,6 +4815,7 @@ impl SesV2Client {
 #[async_trait]
 impl SesV2 for SesV2Client {
     /// <p>Create a configuration set. <i>Configuration sets</i> are groups of rules that you can apply to the emails that you send. You apply a configuration set to an email by specifying the name of the configuration set when you call the Amazon SES API v2. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email. </p>
+    #[allow(unused_mut)]
     async fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
@@ -4834,7 +4835,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetResponse, _>()?;
 
@@ -4846,6 +4847,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Create an event destination. <i>Events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p> <p>A single configuration set can include more than one event destination.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
@@ -4871,7 +4873,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
 
@@ -4885,6 +4887,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Create a new pool of dedicated IP addresses. A pool can include one or more dedicated IP addresses that are associated with your AWS account. You can associate a pool with a configuration set. When you send an email that uses that configuration set, the message is sent from one of the addresses in the associated pool.</p>
+    #[allow(unused_mut)]
     async fn create_dedicated_ip_pool(
         &self,
         input: CreateDedicatedIpPoolRequest,
@@ -4904,7 +4907,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDedicatedIpPoolResponse, _>()?;
 
@@ -4916,6 +4919,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Create a new predictive inbox placement test. Predictive inbox placement tests can help you predict how your messages will be handled by various email providers around the world. When you perform a predictive inbox placement test, you provide a sample message that contains the content that you plan to send to your customers. Amazon SES then sends that message to special email addresses spread across several major email providers. After about 24 hours, the test is complete, and you can use the <code>GetDeliverabilityTestReport</code> operation to view the results of the test.</p>
+    #[allow(unused_mut)]
     async fn create_deliverability_test_report(
         &self,
         input: CreateDeliverabilityTestReportRequest,
@@ -4938,7 +4942,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeliverabilityTestReportResponse, _>()?;
 
@@ -4950,6 +4954,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Starts the process of verifying an email identity. An <i>identity</i> is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.</p> <p>When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain without specifying the <code>DkimSigningAttributes</code> object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the <code>CreateEmailIdentity</code> operation has to include the <code>DkimSigningAttributes</code> object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key that you want to use for DKIM authentication) and a private key.</p>
+    #[allow(unused_mut)]
     async fn create_email_identity(
         &self,
         input: CreateEmailIdentityRequest,
@@ -4969,7 +4974,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateEmailIdentityResponse, _>()?;
 
@@ -4981,6 +4986,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Delete an existing configuration set.</p> <p> <i>Configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
@@ -5001,7 +5007,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetResponse, _>()?;
 
@@ -5013,6 +5019,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Delete an event destination.</p> <p> <i>Events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
@@ -5033,7 +5040,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
 
@@ -5047,6 +5054,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Delete a dedicated IP pool.</p>
+    #[allow(unused_mut)]
     async fn delete_dedicated_ip_pool(
         &self,
         input: DeleteDedicatedIpPoolRequest,
@@ -5067,7 +5075,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDedicatedIpPoolResponse, _>()?;
 
@@ -5079,6 +5087,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Deletes an email identity. An identity can be either an email address or a domain name.</p>
+    #[allow(unused_mut)]
     async fn delete_email_identity(
         &self,
         input: DeleteEmailIdentityRequest,
@@ -5099,7 +5108,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteEmailIdentityResponse, _>()?;
 
@@ -5111,6 +5120,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Removes an email address from the suppression list for your account.</p>
+    #[allow(unused_mut)]
     async fn delete_suppressed_destination(
         &self,
         input: DeleteSuppressedDestinationRequest,
@@ -5132,7 +5142,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSuppressedDestinationResponse, _>()?;
 
@@ -5144,6 +5154,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Obtain information about the email-sending status and capabilities of your Amazon SES account in the current AWS Region.</p>
+    #[allow(unused_mut)]
     async fn get_account(&self) -> Result<GetAccountResponse, RusotoError<GetAccountError>> {
         let request_uri = "/v2/email/account";
 
@@ -5158,7 +5169,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAccountResponse, _>()?;
 
@@ -5170,6 +5181,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve a list of the blacklists that your dedicated IP addresses appear on.</p>
+    #[allow(unused_mut)]
     async fn get_blacklist_reports(
         &self,
         input: GetBlacklistReportsRequest,
@@ -5193,7 +5205,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBlacklistReportsResponse, _>()?;
 
@@ -5205,6 +5217,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Get information about an existing configuration set, including the dedicated IP pool that it's associated with, whether or not it's enabled for sending email, and more.</p> <p> <i>Configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_set(
         &self,
         input: GetConfigurationSetRequest,
@@ -5225,7 +5238,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigurationSetResponse, _>()?;
 
@@ -5237,6 +5250,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve a list of event destinations that are associated with a configuration set.</p> <p> <i>Events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
@@ -5260,7 +5274,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
 
@@ -5274,6 +5288,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Get information about a dedicated IP address, including the name of the dedicated IP pool that it's associated with, as well information about the automatic warm-up process for the address.</p>
+    #[allow(unused_mut)]
     async fn get_dedicated_ip(
         &self,
         input: GetDedicatedIpRequest,
@@ -5291,7 +5306,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDedicatedIpResponse, _>()?;
 
@@ -5303,6 +5318,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>List the dedicated IP addresses that are associated with your AWS account.</p>
+    #[allow(unused_mut)]
     async fn get_dedicated_ips(
         &self,
         input: GetDedicatedIpsRequest,
@@ -5332,7 +5348,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDedicatedIpsResponse, _>()?;
 
@@ -5344,6 +5360,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve information about the status of the Deliverability dashboard for your account. When the Deliverability dashboard is enabled, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon SES and other AWS services. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/ses/pricing/">Amazon SES Pricing</a>.</p>
+    #[allow(unused_mut)]
     async fn get_deliverability_dashboard_options(
         &self,
     ) -> Result<
@@ -5363,7 +5380,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeliverabilityDashboardOptionsResponse, _>()?;
 
@@ -5377,6 +5394,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve the results of a predictive inbox placement test.</p>
+    #[allow(unused_mut)]
     async fn get_deliverability_test_report(
         &self,
         input: GetDeliverabilityTestReportRequest,
@@ -5398,7 +5416,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeliverabilityTestReportResponse, _>()?;
 
@@ -5410,6 +5428,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve all the deliverability data for a specific campaign. This data is available for a campaign only if the campaign sent email by using a domain that the Deliverability dashboard is enabled for.</p>
+    #[allow(unused_mut)]
     async fn get_domain_deliverability_campaign(
         &self,
         input: GetDomainDeliverabilityCampaignRequest,
@@ -5433,7 +5452,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainDeliverabilityCampaignResponse, _>()?;
 
@@ -5447,6 +5466,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve inbox placement and engagement rates for the domains that you use to send email.</p>
+    #[allow(unused_mut)]
     async fn get_domain_statistics_report(
         &self,
         input: GetDomainStatisticsReportRequest,
@@ -5473,7 +5493,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainStatisticsReportResponse, _>()?;
 
@@ -5485,6 +5505,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Provides information about a specific identity, including the identity's verification status, its DKIM authentication status, and its custom Mail-From settings.</p>
+    #[allow(unused_mut)]
     async fn get_email_identity(
         &self,
         input: GetEmailIdentityRequest,
@@ -5505,7 +5526,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetEmailIdentityResponse, _>()?;
 
@@ -5517,6 +5538,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieves information about a specific email address that's on the suppression list for your account.</p>
+    #[allow(unused_mut)]
     async fn get_suppressed_destination(
         &self,
         input: GetSuppressedDestinationRequest,
@@ -5537,7 +5559,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSuppressedDestinationResponse, _>()?;
 
@@ -5549,6 +5571,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>List all of the configuration sets associated with your account in the current region.</p> <p> <i>Configuration sets</i> are groups of rules that you can apply to the emails you send. You apply a configuration set to an email by including a reference to the configuration set in the headers of the email. When you apply a configuration set to an email, all of the rules in that configuration set are applied to the email.</p>
+    #[allow(unused_mut)]
     async fn list_configuration_sets(
         &self,
         input: ListConfigurationSetsRequest,
@@ -5575,7 +5598,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigurationSetsResponse, _>()?;
 
@@ -5587,6 +5610,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>List all of the dedicated IP pools that exist in your AWS account in the current Region.</p>
+    #[allow(unused_mut)]
     async fn list_dedicated_ip_pools(
         &self,
         input: ListDedicatedIpPoolsRequest,
@@ -5613,7 +5637,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDedicatedIpPoolsResponse, _>()?;
 
@@ -5625,6 +5649,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Show a list of the predictive inbox placement tests that you've performed, regardless of their statuses. For predictive inbox placement tests that are complete, you can use the <code>GetDeliverabilityTestReport</code> operation to view the results.</p>
+    #[allow(unused_mut)]
     async fn list_deliverability_test_reports(
         &self,
         input: ListDeliverabilityTestReportsRequest,
@@ -5654,7 +5679,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDeliverabilityTestReportsResponse, _>()?;
 
@@ -5666,6 +5691,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve deliverability data for all the campaigns that used a specific domain to send email during a specified time range. This data is available for a domain only if you enabled the Deliverability dashboard for the domain.</p>
+    #[allow(unused_mut)]
     async fn list_domain_deliverability_campaigns(
         &self,
         input: ListDomainDeliverabilityCampaignsRequest,
@@ -5700,7 +5726,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainDeliverabilityCampaignsResponse, _>()?;
 
@@ -5714,6 +5740,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Returns a list of all of the email identities that are associated with your AWS account. An identity can be either an email address or a domain. This operation returns identities that are verified as well as those that aren't. This operation returns identities that are associated with Amazon SES and Amazon Pinpoint.</p>
+    #[allow(unused_mut)]
     async fn list_email_identities(
         &self,
         input: ListEmailIdentitiesRequest,
@@ -5740,7 +5767,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEmailIdentitiesResponse, _>()?;
 
@@ -5752,6 +5779,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieves a list of email addresses that are on the suppression list for your account.</p>
+    #[allow(unused_mut)]
     async fn list_suppressed_destinations(
         &self,
         input: ListSuppressedDestinationsRequest,
@@ -5790,7 +5818,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSuppressedDestinationsResponse, _>()?;
 
@@ -5802,6 +5830,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Retrieve a list of the tags (keys and values) that are associated with a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource. Each tag consists of a required <i>tag key</i> and an optional associated <i>tag value</i>. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5823,7 +5852,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -5835,6 +5864,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Enable or disable the automatic warm-up feature for dedicated IP addresses.</p>
+    #[allow(unused_mut)]
     async fn put_account_dedicated_ip_warmup_attributes(
         &self,
         input: PutAccountDedicatedIpWarmupAttributesRequest,
@@ -5857,7 +5887,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutAccountDedicatedIpWarmupAttributesResponse, _>()?;
 
@@ -5871,6 +5901,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Enable or disable the ability of your account to send email.</p>
+    #[allow(unused_mut)]
     async fn put_account_sending_attributes(
         &self,
         input: PutAccountSendingAttributesRequest,
@@ -5891,7 +5922,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutAccountSendingAttributesResponse, _>()?;
 
@@ -5903,6 +5934,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Change the settings for the account-level suppression list.</p>
+    #[allow(unused_mut)]
     async fn put_account_suppression_attributes(
         &self,
         input: PutAccountSuppressionAttributesRequest,
@@ -5925,7 +5957,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutAccountSuppressionAttributesResponse, _>()?;
 
@@ -5939,6 +5971,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Associate a configuration set with a dedicated IP pool. You can use dedicated IP pools to create groups of dedicated IP addresses for sending specific types of email.</p>
+    #[allow(unused_mut)]
     async fn put_configuration_set_delivery_options(
         &self,
         input: PutConfigurationSetDeliveryOptionsRequest,
@@ -5964,7 +5997,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutConfigurationSetDeliveryOptionsResponse, _>()?;
 
@@ -5978,6 +6011,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Enable or disable collection of reputation metrics for emails that you send using a particular configuration set in a specific AWS Region.</p>
+    #[allow(unused_mut)]
     async fn put_configuration_set_reputation_options(
         &self,
         input: PutConfigurationSetReputationOptionsRequest,
@@ -6003,7 +6037,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutConfigurationSetReputationOptionsResponse, _>()?;
 
@@ -6017,6 +6051,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Enable or disable email sending for messages that use a particular configuration set in a specific AWS Region.</p>
+    #[allow(unused_mut)]
     async fn put_configuration_set_sending_options(
         &self,
         input: PutConfigurationSetSendingOptionsRequest,
@@ -6042,7 +6077,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutConfigurationSetSendingOptionsResponse, _>()?;
 
@@ -6056,6 +6091,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Specify the account suppression list preferences for a configuration set.</p>
+    #[allow(unused_mut)]
     async fn put_configuration_set_suppression_options(
         &self,
         input: PutConfigurationSetSuppressionOptionsRequest,
@@ -6081,7 +6117,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutConfigurationSetSuppressionOptionsResponse, _>()?;
 
@@ -6095,6 +6131,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Specify a custom domain to use for open and click tracking elements in email that you send.</p>
+    #[allow(unused_mut)]
     async fn put_configuration_set_tracking_options(
         &self,
         input: PutConfigurationSetTrackingOptionsRequest,
@@ -6120,7 +6157,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutConfigurationSetTrackingOptionsResponse, _>()?;
 
@@ -6134,6 +6171,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p><p>Move a dedicated IP address to an existing dedicated IP pool.</p> <note> <p>The dedicated IP address that you specify must already exist, and must be associated with your AWS account. </p> <p>The dedicated IP pool you specify must already exist. You can create a new pool by using the <code>CreateDedicatedIpPool</code> operation.</p> </note></p>
+    #[allow(unused_mut)]
     async fn put_dedicated_ip_in_pool(
         &self,
         input: PutDedicatedIpInPoolRequest,
@@ -6153,7 +6191,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutDedicatedIpInPoolResponse, _>()?;
 
@@ -6165,6 +6203,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p><p/></p>
+    #[allow(unused_mut)]
     async fn put_dedicated_ip_warmup_attributes(
         &self,
         input: PutDedicatedIpWarmupAttributesRequest,
@@ -6187,7 +6226,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutDedicatedIpWarmupAttributesResponse, _>()?;
 
@@ -6199,6 +6238,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Enable or disable the Deliverability dashboard. When you enable the Deliverability dashboard, you gain access to reputation, deliverability, and other metrics for the domains that you use to send email. You also gain the ability to perform predictive inbox placement tests.</p> <p>When you use the Deliverability dashboard, you pay a monthly subscription charge, in addition to any other fees that you accrue by using Amazon SES and other AWS services. For more information about the features and cost of a Deliverability dashboard subscription, see <a href="http://aws.amazon.com/ses/pricing/">Amazon SES Pricing</a>.</p>
+    #[allow(unused_mut)]
     async fn put_deliverability_dashboard_option(
         &self,
         input: PutDeliverabilityDashboardOptionRequest,
@@ -6221,7 +6261,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutDeliverabilityDashboardOptionResponse, _>()?;
 
@@ -6235,6 +6275,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Used to enable or disable DKIM authentication for an email identity.</p>
+    #[allow(unused_mut)]
     async fn put_email_identity_dkim_attributes(
         &self,
         input: PutEmailIdentityDkimAttributesRequest,
@@ -6260,7 +6301,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEmailIdentityDkimAttributesResponse, _>()?;
 
@@ -6272,6 +6313,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p><p>Used to configure or change the DKIM authentication settings for an email domain identity. You can use this operation to do any of the following:</p> <ul> <li> <p>Update the signing attributes for an identity that uses Bring Your Own DKIM (BYODKIM).</p> </li> <li> <p>Change from using no DKIM authentication to using Easy DKIM.</p> </li> <li> <p>Change from using no DKIM authentication to using BYODKIM.</p> </li> <li> <p>Change from using Easy DKIM to using BYODKIM.</p> </li> <li> <p>Change from using BYODKIM to using Easy DKIM.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn put_email_identity_dkim_signing_attributes(
         &self,
         input: PutEmailIdentityDkimSigningAttributesRequest,
@@ -6297,7 +6339,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEmailIdentityDkimSigningAttributesResponse, _>()?;
 
@@ -6311,6 +6353,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Used to enable or disable feedback forwarding for an identity. This setting determines what happens when an identity is used to send an email that results in a bounce or complaint event.</p> <p>If the value is <code>true</code>, you receive email notifications when bounce or complaint events occur. These notifications are sent to the address that you specified in the <code>Return-Path</code> header of the original email.</p> <p>You're required to have a method of tracking bounces and complaints. If you haven't set up another mechanism for receiving bounce or complaint notifications (for example, by setting up an event destination), you receive an email notification when these events occur (even if this setting is disabled).</p>
+    #[allow(unused_mut)]
     async fn put_email_identity_feedback_attributes(
         &self,
         input: PutEmailIdentityFeedbackAttributesRequest,
@@ -6336,7 +6379,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEmailIdentityFeedbackAttributesResponse, _>()?;
 
@@ -6350,6 +6393,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Used to enable or disable the custom Mail-From domain configuration for an email identity.</p>
+    #[allow(unused_mut)]
     async fn put_email_identity_mail_from_attributes(
         &self,
         input: PutEmailIdentityMailFromAttributesRequest,
@@ -6375,7 +6419,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEmailIdentityMailFromAttributesResponse, _>()?;
 
@@ -6389,6 +6433,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Adds an email address to the suppression list for your account.</p>
+    #[allow(unused_mut)]
     async fn put_suppressed_destination(
         &self,
         input: PutSuppressedDestinationRequest,
@@ -6408,7 +6453,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutSuppressedDestinationResponse, _>()?;
 
@@ -6420,6 +6465,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p><p>Sends an email message. You can use the Amazon SES API v2 to send two types of messages:</p> <ul> <li> <p> <b>Simple</b> – A standard email message. When you create this type of message, you specify the sender, the recipient, and the message body, and Amazon SES assembles the message for you.</p> </li> <li> <p> <b>Raw</b> – A raw, MIME-formatted email message. When you send this type of email, you have to specify all of the message headers, as well as the message body. You can use this message type to send messages that contain attachments. The message that you specify has to be a valid MIME message.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn send_email(
         &self,
         input: SendEmailRequest,
@@ -6439,7 +6485,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendEmailResponse, _>()?;
 
@@ -6451,6 +6497,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Add one or more tags (keys and values) to a specified resource. A <i>tag</i> is a label that you optionally define and associate with a resource. Tags can help you categorize and manage resources in different ways, such as by purpose, owner, environment, or other criteria. A resource can have as many as 50 tags.</p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for more specific tag values. A tag value acts as a descriptor within a tag key.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6470,7 +6517,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -6482,6 +6529,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Remove one or more tags (keys and values) from a specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -6506,7 +6554,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -6518,6 +6566,7 @@ impl SesV2 for SesV2Client {
     }
 
     /// <p>Update the configuration of an event destination for a configuration set.</p> <p> <i>Events</i> include message sends, deliveries, opens, clicks, bounces, and complaints. <i>Event destinations</i> are places that you can send information about these events to. For example, you can send event data to Amazon SNS to receive notifications when you receive bounces or complaints, or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for long-term storage.</p>
+    #[allow(unused_mut)]
     async fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
@@ -6540,7 +6589,7 @@ impl SesV2 for SesV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
 

@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl MigrationHubClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "mgh", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>The state of an application discovered through Migration Hub import, the AWS Agentless Discovery Connector, or the AWS Application Discovery Agent.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2235,27 +2261,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: AssociateCreatedArtifactRequest,
     ) -> Result<AssociateCreatedArtifactResult, RusotoError<AssociateCreatedArtifactError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.AssociateCreatedArtifact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateCreatedArtifactResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateCreatedArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateCreatedArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateCreatedArtifactResult, _>()
     }
 
     /// <p>Associates a discovered resource ID from Application Discovery Service with a migration task.</p>
@@ -2264,9 +2281,7 @@ impl MigrationHub for MigrationHubClient {
         input: AssociateDiscoveredResourceRequest,
     ) -> Result<AssociateDiscoveredResourceResult, RusotoError<AssociateDiscoveredResourceError>>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.AssociateDiscoveredResource",
@@ -2274,20 +2289,13 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateDiscoveredResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateDiscoveredResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateDiscoveredResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateDiscoveredResourceResult, _>()
     }
 
     /// <p>Creates a progress update stream which is an AWS resource used for access control as well as a namespace for migration task names that is implicitly linked to your AWS account. It must uniquely identify the migration tool as it is used for all updates made by the tool; however, it does not need to be unique for each AWS account because it is scoped to the AWS account.</p>
@@ -2296,27 +2304,18 @@ impl MigrationHub for MigrationHubClient {
         input: CreateProgressUpdateStreamRequest,
     ) -> Result<CreateProgressUpdateStreamResult, RusotoError<CreateProgressUpdateStreamError>>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.CreateProgressUpdateStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProgressUpdateStreamResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProgressUpdateStreamError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProgressUpdateStreamError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateProgressUpdateStreamResult, _>()
     }
 
     /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs related to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
@@ -2325,27 +2324,18 @@ impl MigrationHub for MigrationHubClient {
         input: DeleteProgressUpdateStreamRequest,
     ) -> Result<DeleteProgressUpdateStreamResult, RusotoError<DeleteProgressUpdateStreamError>>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.DeleteProgressUpdateStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteProgressUpdateStreamResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProgressUpdateStreamError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProgressUpdateStreamError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteProgressUpdateStreamResult, _>()
     }
 
     /// <p>Gets the migration status of an application.</p>
@@ -2353,27 +2343,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DescribeApplicationStateRequest,
     ) -> Result<DescribeApplicationStateResult, RusotoError<DescribeApplicationStateError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.DescribeApplicationState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeApplicationStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeApplicationStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeApplicationStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeApplicationStateResult, _>()
     }
 
     /// <p>Retrieves a list of all attributes associated with a specific migration task.</p>
@@ -2381,27 +2362,17 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DescribeMigrationTaskRequest,
     ) -> Result<DescribeMigrationTaskResult, RusotoError<DescribeMigrationTaskError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.DescribeMigrationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMigrationTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMigrationTaskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMigrationTaskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeMigrationTaskResult, _>()
     }
 
     /// <p><p>Disassociates a created artifact of an AWS resource with a migration task performed by a migration tool that was previously associated. This API has the following traits:</p> <ul> <li> <p>A migration user can call the <code>DisassociateCreatedArtifacts</code> operation to disassociate a created AWS Artifact from a migration task.</p> </li> <li> <p>The created artifact name must be provided in ARN (Amazon Resource Name) format which will contain information about type and region; for example: <code>arn:aws:ec2:us-east-1:488216288981:image/ami-6d0ba87b</code>.</p> </li> <li> <p>Examples of the AWS resource behind the created artifact are, AMI&#39;s, EC2 instance, or RDS instance, etc.</p> </li> </ul></p>
@@ -2410,9 +2381,7 @@ impl MigrationHub for MigrationHubClient {
         input: DisassociateCreatedArtifactRequest,
     ) -> Result<DisassociateCreatedArtifactResult, RusotoError<DisassociateCreatedArtifactError>>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.DisassociateCreatedArtifact",
@@ -2420,20 +2389,13 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateCreatedArtifactResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateCreatedArtifactError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateCreatedArtifactError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateCreatedArtifactResult, _>()
     }
 
     /// <p>Disassociate an Application Discovery Service discovered resource from a migration task.</p>
@@ -2444,9 +2406,7 @@ impl MigrationHub for MigrationHubClient {
         DisassociateDiscoveredResourceResult,
         RusotoError<DisassociateDiscoveredResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.DisassociateDiscoveredResource",
@@ -2454,20 +2414,13 @@ impl MigrationHub for MigrationHubClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateDiscoveredResourceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateDiscoveredResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateDiscoveredResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateDiscoveredResourceResult, _>()
     }
 
     /// <p>Registers a new migration task which represents a server, database, etc., being migrated to AWS by a migration tool.</p> <p>This API is a prerequisite to calling the <code>NotifyMigrationTaskState</code> API as the migration tool must first register the migration task with Migration Hub.</p>
@@ -2475,27 +2428,17 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ImportMigrationTaskRequest,
     ) -> Result<ImportMigrationTaskResult, RusotoError<ImportMigrationTaskError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ImportMigrationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportMigrationTaskResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportMigrationTaskError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportMigrationTaskError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportMigrationTaskResult, _>()
     }
 
     /// <p>Lists all the migration statuses for your applications. If you use the optional <code>ApplicationIds</code> parameter, only the migration statuses for those applications will be returned.</p>
@@ -2503,27 +2446,17 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListApplicationStatesRequest,
     ) -> Result<ListApplicationStatesResult, RusotoError<ListApplicationStatesError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ListApplicationStates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationStatesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationStatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApplicationStatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationStatesResult, _>()
     }
 
     /// <p><p>Lists the created artifacts attached to a given migration task in an update stream. This API has the following traits:</p> <ul> <li> <p>Gets the list of the created artifacts while migration is taking place.</p> </li> <li> <p>Shows the artifacts created by the migration tool that was associated by the <code>AssociateCreatedArtifact</code> API. </p> </li> <li> <p>Lists created artifacts in a paginated interface. </p> </li> </ul></p>
@@ -2531,27 +2464,17 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListCreatedArtifactsRequest,
     ) -> Result<ListCreatedArtifactsResult, RusotoError<ListCreatedArtifactsError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ListCreatedArtifacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListCreatedArtifactsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCreatedArtifactsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCreatedArtifactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListCreatedArtifactsResult, _>()
     }
 
     /// <p>Lists discovered resources associated with the given <code>MigrationTask</code>.</p>
@@ -2559,27 +2482,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResult, RusotoError<ListDiscoveredResourcesError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ListDiscoveredResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDiscoveredResourcesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDiscoveredResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDiscoveredResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDiscoveredResourcesResult, _>()
     }
 
     /// <p><p>Lists all, or filtered by resource name, migration tasks associated with the user account making this call. This API has the following traits:</p> <ul> <li> <p>Can show a summary list of the most recent migration tasks.</p> </li> <li> <p>Can show a summary list of migration tasks associated with a given discovered resource.</p> </li> <li> <p>Lists migration tasks in a paginated interface.</p> </li> </ul></p>
@@ -2587,27 +2501,17 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListMigrationTasksRequest,
     ) -> Result<ListMigrationTasksResult, RusotoError<ListMigrationTasksError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ListMigrationTasks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMigrationTasksResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMigrationTasksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMigrationTasksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListMigrationTasksResult, _>()
     }
 
     /// <p>Lists progress update streams associated with the user account making this call.</p>
@@ -2615,27 +2519,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListProgressUpdateStreamsRequest,
     ) -> Result<ListProgressUpdateStreamsResult, RusotoError<ListProgressUpdateStreamsError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.ListProgressUpdateStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListProgressUpdateStreamsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProgressUpdateStreamsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProgressUpdateStreamsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListProgressUpdateStreamsResult, _>()
     }
 
     /// <p>Sets the migration state of an application. For a given application identified by the value passed to <code>ApplicationId</code>, its status is set or updated by passing one of three values to <code>Status</code>: <code>NOT_STARTED | IN_PROGRESS | COMPLETED</code>.</p>
@@ -2643,27 +2538,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: NotifyApplicationStateRequest,
     ) -> Result<NotifyApplicationStateResult, RusotoError<NotifyApplicationStateError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.NotifyApplicationState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<NotifyApplicationStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(NotifyApplicationStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, NotifyApplicationStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<NotifyApplicationStateResult, _>()
     }
 
     /// <p><p>Notifies Migration Hub of the current status, progress, or other detail regarding a migration task. This API has the following traits:</p> <ul> <li> <p>Migration tools will call the <code>NotifyMigrationTaskState</code> API to share the latest progress and status.</p> </li> <li> <p> <code>MigrationTaskName</code> is used for addressing updates to the correct target.</p> </li> <li> <p> <code>ProgressUpdateStream</code> is used for access control and to provide a namespace for each migration tool.</p> </li> </ul></p>
@@ -2671,27 +2557,18 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: NotifyMigrationTaskStateRequest,
     ) -> Result<NotifyMigrationTaskStateResult, RusotoError<NotifyMigrationTaskStateError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.NotifyMigrationTaskState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<NotifyMigrationTaskStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(NotifyMigrationTaskStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, NotifyMigrationTaskStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<NotifyMigrationTaskStateResult, _>()
     }
 
     /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overriding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <a href="https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList"> <code>ResourceAttributeList</code> </a> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
@@ -2699,26 +2576,16 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: PutResourceAttributesRequest,
     ) -> Result<PutResourceAttributesResult, RusotoError<PutResourceAttributesError>> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSMigrationHub.PutResourceAttributes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutResourceAttributesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResourceAttributesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutResourceAttributesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutResourceAttributesResult, _>()
     }
 }

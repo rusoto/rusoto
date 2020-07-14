@@ -433,6 +433,7 @@ impl SsoOidcClient {
 #[async_trait]
 impl SsoOidc for SsoOidcClient {
     /// <p>Creates and returns an access token for the authorized client. The access token issued will be used to fetch short-term credentials for the assigned roles in the AWS account.</p>
+    #[allow(unused_mut)]
     async fn create_token(
         &self,
         input: CreateTokenRequest,
@@ -452,7 +453,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTokenResponse, _>()?;
 
@@ -464,6 +465,7 @@ impl SsoOidc for SsoOidcClient {
     }
 
     /// <p>Registers a client with AWS SSO. This allows clients to initiate device authorization. The output should be persisted for reuse through many authentication requests.</p>
+    #[allow(unused_mut)]
     async fn register_client(
         &self,
         input: RegisterClientRequest,
@@ -483,7 +485,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterClientResponse, _>()?;
 
@@ -495,6 +497,7 @@ impl SsoOidc for SsoOidcClient {
     }
 
     /// <p>Initiates device authorization by requesting a pair of verification codes from the authorization service.</p>
+    #[allow(unused_mut)]
     async fn start_device_authorization(
         &self,
         input: StartDeviceAuthorizationRequest,
@@ -514,7 +517,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartDeviceAuthorizationResponse, _>()?;
 

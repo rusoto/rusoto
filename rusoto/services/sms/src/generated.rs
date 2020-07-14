@@ -20,9 +20,35 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ServerMigrationServiceClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "sms", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Information about the application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3132,9 +3158,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: CreateAppRequest,
     ) -> Result<CreateAppResponse, RusotoError<CreateAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.CreateApp",
@@ -3142,19 +3166,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResponse, _>()
     }
 
     /// <p>Creates a replication job. The replication job schedules periodic replication runs to replicate your server to AWS. Each replication run creates an Amazon Machine Image (AMI).</p>
@@ -3162,9 +3179,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: CreateReplicationJobRequest,
     ) -> Result<CreateReplicationJobResponse, RusotoError<CreateReplicationJobError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.CreateReplicationJob",
@@ -3172,20 +3187,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateReplicationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateReplicationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateReplicationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateReplicationJobResponse, _>()
     }
 
     /// <p>Deletes an existing application. Optionally deletes the launched stack associated with the application and all AWS SMS replication jobs for servers in the application.</p>
@@ -3193,9 +3201,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DeleteAppRequest,
     ) -> Result<DeleteAppResponse, RusotoError<DeleteAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteApp",
@@ -3203,19 +3209,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteAppResponse, _>()
     }
 
     /// <p>Deletes existing launch configuration for an application.</p>
@@ -3224,9 +3223,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: DeleteAppLaunchConfigurationRequest,
     ) -> Result<DeleteAppLaunchConfigurationResponse, RusotoError<DeleteAppLaunchConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteAppLaunchConfiguration",
@@ -3234,20 +3231,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAppLaunchConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAppLaunchConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAppLaunchConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteAppLaunchConfigurationResponse, _>()
     }
 
     /// <p>Deletes existing replication configuration for an application.</p>
@@ -3258,9 +3248,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         DeleteAppReplicationConfigurationResponse,
         RusotoError<DeleteAppReplicationConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteAppReplicationConfiguration",
@@ -3268,22 +3256,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteAppReplicationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAppReplicationConfigurationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteAppReplicationConfigurationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteAppReplicationConfigurationResponse, _>()
     }
 
     /// <p>Deletes the specified replication job.</p> <p>After you delete a replication job, there are no further replication runs. AWS deletes the contents of the Amazon S3 bucket used to store AWS SMS artifacts. The AMIs created by the replication runs are not deleted.</p>
@@ -3291,9 +3273,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DeleteReplicationJobRequest,
     ) -> Result<DeleteReplicationJobResponse, RusotoError<DeleteReplicationJobError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteReplicationJob",
@@ -3301,49 +3281,32 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteReplicationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteReplicationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteReplicationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteReplicationJobResponse, _>()
     }
 
     /// <p>Deletes all servers from your server catalog.</p>
     async fn delete_server_catalog(
         &self,
     ) -> Result<DeleteServerCatalogResponse, RusotoError<DeleteServerCatalogError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteServerCatalogResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteServerCatalogError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteServerCatalogError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteServerCatalogResponse, _>()
     }
 
     /// <p>Disassociates the specified connector from AWS SMS.</p> <p>After you disassociate a connector, it is no longer available to support replication jobs.</p>
@@ -3351,9 +3314,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DisassociateConnectorRequest,
     ) -> Result<DisassociateConnectorResponse, RusotoError<DisassociateConnectorError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DisassociateConnector",
@@ -3361,20 +3322,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateConnectorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateConnectorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateConnectorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateConnectorResponse, _>()
     }
 
     /// <p>Generates a target change set for a currently launched stack and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
@@ -3382,9 +3336,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GenerateChangeSetRequest,
     ) -> Result<GenerateChangeSetResponse, RusotoError<GenerateChangeSetError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GenerateChangeSet",
@@ -3392,20 +3344,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GenerateChangeSetResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GenerateChangeSetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GenerateChangeSetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GenerateChangeSetResponse, _>()
     }
 
     /// <p>Generates an Amazon CloudFormation template based on the current launch configuration and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.</p>
@@ -3413,9 +3357,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GenerateTemplateRequest,
     ) -> Result<GenerateTemplateResponse, RusotoError<GenerateTemplateError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GenerateTemplate",
@@ -3423,20 +3365,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GenerateTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GenerateTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GenerateTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GenerateTemplateResponse, _>()
     }
 
     /// <p>Retrieve information about an application.</p>
@@ -3444,9 +3378,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetAppRequest,
     ) -> Result<GetAppResponse, RusotoError<GetAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetApp",
@@ -3454,19 +3386,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAppResponse, _>()
     }
 
     /// <p>Retrieves the application launch configuration associated with an application.</p>
@@ -3475,9 +3400,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: GetAppLaunchConfigurationRequest,
     ) -> Result<GetAppLaunchConfigurationResponse, RusotoError<GetAppLaunchConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetAppLaunchConfiguration",
@@ -3485,20 +3408,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAppLaunchConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAppLaunchConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAppLaunchConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAppLaunchConfigurationResponse, _>()
     }
 
     /// <p>Retrieves an application replication configuration associatd with an application.</p>
@@ -3509,9 +3425,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         GetAppReplicationConfigurationResponse,
         RusotoError<GetAppReplicationConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetAppReplicationConfiguration",
@@ -3519,20 +3433,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAppReplicationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAppReplicationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAppReplicationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAppReplicationConfigurationResponse, _>()
     }
 
     /// <p>Describes the connectors registered with the AWS SMS.</p>
@@ -3540,9 +3447,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetConnectorsRequest,
     ) -> Result<GetConnectorsResponse, RusotoError<GetConnectorsError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetConnectors",
@@ -3550,19 +3455,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetConnectorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConnectorsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetConnectorsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetConnectorsResponse, _>()
     }
 
     /// <p>Describes the specified replication job or all of your replication jobs.</p>
@@ -3570,9 +3468,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetReplicationJobsRequest,
     ) -> Result<GetReplicationJobsResponse, RusotoError<GetReplicationJobsError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationJobs",
@@ -3580,20 +3476,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetReplicationJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetReplicationJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetReplicationJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetReplicationJobsResponse, _>()
     }
 
     /// <p>Describes the replication runs for the specified replication job.</p>
@@ -3601,9 +3489,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetReplicationRunsRequest,
     ) -> Result<GetReplicationRunsResponse, RusotoError<GetReplicationRunsError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationRuns",
@@ -3611,20 +3497,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetReplicationRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetReplicationRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetReplicationRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetReplicationRunsResponse, _>()
     }
 
     /// <p>Describes the servers in your server catalog.</p> <p>Before you can describe your servers, you must import them using <a>ImportServerCatalog</a>.</p>
@@ -3632,9 +3510,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetServersRequest,
     ) -> Result<GetServersResponse, RusotoError<GetServersError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetServers",
@@ -3642,48 +3518,31 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetServersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetServersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetServersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetServersResponse, _>()
     }
 
     /// <p>Gathers a complete list of on-premises servers. Connectors must be installed and monitoring all servers that you want to import.</p> <p>This call returns immediately, but might take additional time to retrieve all the servers.</p>
     async fn import_server_catalog(
         &self,
     ) -> Result<ImportServerCatalogResponse, RusotoError<ImportServerCatalogError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.ImportServerCatalog",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportServerCatalogResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportServerCatalogError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportServerCatalogError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportServerCatalogResponse, _>()
     }
 
     /// <p>Launches an application stack.</p>
@@ -3691,9 +3550,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: LaunchAppRequest,
     ) -> Result<LaunchAppResponse, RusotoError<LaunchAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.LaunchApp",
@@ -3701,19 +3558,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<LaunchAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(LaunchAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, LaunchAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<LaunchAppResponse, _>()
     }
 
     /// <p>Returns a list of summaries for all applications.</p>
@@ -3721,9 +3571,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResponse, RusotoError<ListAppsError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.ListApps",
@@ -3731,19 +3579,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAppsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAppsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAppsResponse, _>()
     }
 
     /// <p>Creates a launch configuration for an application.</p>
@@ -3752,9 +3593,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: PutAppLaunchConfigurationRequest,
     ) -> Result<PutAppLaunchConfigurationResponse, RusotoError<PutAppLaunchConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.PutAppLaunchConfiguration",
@@ -3762,20 +3601,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAppLaunchConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAppLaunchConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAppLaunchConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutAppLaunchConfigurationResponse, _>()
     }
 
     /// <p>Creates or updates a replication configuration for an application.</p>
@@ -3786,9 +3618,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         PutAppReplicationConfigurationResponse,
         RusotoError<PutAppReplicationConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.PutAppReplicationConfiguration",
@@ -3796,20 +3626,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAppReplicationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAppReplicationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAppReplicationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutAppReplicationConfigurationResponse, _>()
     }
 
     /// <p>Starts replicating an application.</p>
@@ -3817,9 +3640,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: StartAppReplicationRequest,
     ) -> Result<StartAppReplicationResponse, RusotoError<StartAppReplicationError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StartAppReplication",
@@ -3827,20 +3648,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAppReplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAppReplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartAppReplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartAppReplicationResponse, _>()
     }
 
     /// <p>Starts an on-demand replication run for the specified replication job. This replication run starts immediately. This replication run is in addition to the ones already scheduled.</p> <p>There is a limit on the number of on-demand replications runs you can request in a 24-hour period.</p>
@@ -3849,9 +3662,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: StartOnDemandReplicationRunRequest,
     ) -> Result<StartOnDemandReplicationRunResponse, RusotoError<StartOnDemandReplicationRunError>>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StartOnDemandReplicationRun",
@@ -3859,20 +3670,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartOnDemandReplicationRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartOnDemandReplicationRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartOnDemandReplicationRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartOnDemandReplicationRunResponse, _>()
     }
 
     /// <p>Stops replicating an application.</p>
@@ -3880,9 +3684,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: StopAppReplicationRequest,
     ) -> Result<StopAppReplicationResponse, RusotoError<StopAppReplicationError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StopAppReplication",
@@ -3890,20 +3692,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopAppReplicationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopAppReplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopAppReplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopAppReplicationResponse, _>()
     }
 
     /// <p>Terminates the stack for an application.</p>
@@ -3911,9 +3705,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: TerminateAppRequest,
     ) -> Result<TerminateAppResponse, RusotoError<TerminateAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.TerminateApp",
@@ -3921,19 +3713,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TerminateAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TerminateAppResponse, _>()
     }
 
     /// <p>Updates an application.</p>
@@ -3941,9 +3726,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: UpdateAppRequest,
     ) -> Result<UpdateAppResponse, RusotoError<UpdateAppError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.UpdateApp",
@@ -3951,19 +3734,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateAppResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAppError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAppError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateAppResponse, _>()
     }
 
     /// <p>Updates the specified settings for the specified replication job.</p>
@@ -3971,9 +3747,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: UpdateReplicationJobRequest,
     ) -> Result<UpdateReplicationJobResponse, RusotoError<UpdateReplicationJobError>> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.UpdateReplicationJob",
@@ -3981,19 +3755,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateReplicationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateReplicationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateReplicationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateReplicationJobResponse, _>()
     }
 }

@@ -10494,6 +10494,7 @@ impl ApiGatewayClient {
 #[async_trait]
 impl ApiGateway for ApiGatewayClient {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
@@ -10512,7 +10513,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -10523,6 +10524,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
@@ -10544,7 +10546,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -10556,6 +10558,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_base_path_mapping(
         &self,
         input: CreateBasePathMappingRequest,
@@ -10577,7 +10580,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -10589,6 +10592,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
+    #[allow(unused_mut)]
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -10610,7 +10614,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -10621,6 +10625,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn create_documentation_part(
         &self,
         input: CreateDocumentationPartRequest,
@@ -10642,7 +10647,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -10653,6 +10658,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn create_documentation_version(
         &self,
         input: CreateDocumentationVersionRequest,
@@ -10674,7 +10680,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -10686,6 +10692,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new domain name.</p>
+    #[allow(unused_mut)]
     async fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
@@ -10704,7 +10711,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -10716,6 +10723,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_model(
         &self,
         input: CreateModelRequest,
@@ -10737,7 +10745,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -10748,6 +10756,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn create_request_validator(
         &self,
         input: CreateRequestValidatorRequest,
@@ -10769,7 +10778,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -10781,6 +10790,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_resource(
         &self,
         input: CreateResourceRequest,
@@ -10803,7 +10813,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -10815,6 +10825,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_rest_api(
         &self,
         input: CreateRestApiRequest,
@@ -10833,7 +10844,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -10845,6 +10856,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
+    #[allow(unused_mut)]
     async fn create_stage(
         &self,
         input: CreateStageRequest,
@@ -10866,7 +10878,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -10877,6 +10889,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
+    #[allow(unused_mut)]
     async fn create_usage_plan(
         &self,
         input: CreateUsagePlanRequest,
@@ -10895,7 +10908,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -10907,6 +10920,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
+    #[allow(unused_mut)]
     async fn create_usage_plan_key(
         &self,
         input: CreateUsagePlanKeyRequest,
@@ -10928,7 +10942,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
 
@@ -10940,6 +10954,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    #[allow(unused_mut)]
     async fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
@@ -10958,7 +10973,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
@@ -10970,6 +10985,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
@@ -10985,7 +11001,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -10996,6 +11012,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
@@ -11015,7 +11032,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11026,6 +11043,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_base_path_mapping(
         &self,
         input: DeleteBasePathMappingRequest,
@@ -11045,7 +11063,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11056,6 +11074,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_client_certificate(
         &self,
         input: DeleteClientCertificateRequest,
@@ -11074,7 +11093,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11085,6 +11104,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
@@ -11104,7 +11124,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11114,6 +11134,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn delete_documentation_part(
         &self,
         input: DeleteDocumentationPartRequest,
@@ -11133,7 +11154,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11143,6 +11164,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn delete_documentation_version(
         &self,
         input: DeleteDocumentationVersionRequest,
@@ -11162,7 +11184,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11173,6 +11195,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
@@ -11191,7 +11214,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11202,6 +11225,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
+    #[allow(unused_mut)]
     async fn delete_gateway_response(
         &self,
         input: DeleteGatewayResponseRequest,
@@ -11221,7 +11245,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11232,6 +11256,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a delete integration.</p>
+    #[allow(unused_mut)]
     async fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
@@ -11252,7 +11277,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11263,6 +11288,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a delete integration response.</p>
+    #[allow(unused_mut)]
     async fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
@@ -11278,7 +11304,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11289,6 +11315,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_method(
         &self,
         input: DeleteMethodRequest,
@@ -11309,7 +11336,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11320,6 +11347,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_method_response(
         &self,
         input: DeleteMethodResponseRequest,
@@ -11335,7 +11363,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11346,6 +11374,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a model.</p>
+    #[allow(unused_mut)]
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
@@ -11365,7 +11394,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11376,6 +11405,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn delete_request_validator(
         &self,
         input: DeleteRequestValidatorRequest,
@@ -11395,7 +11425,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11406,6 +11436,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_resource(
         &self,
         input: DeleteResourceRequest,
@@ -11425,7 +11456,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11436,6 +11467,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the specified API.</p>
+    #[allow(unused_mut)]
     async fn delete_rest_api(
         &self,
         input: DeleteRestApiRequest,
@@ -11451,7 +11483,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11462,6 +11494,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_stage(
         &self,
         input: DeleteStageRequest,
@@ -11481,7 +11514,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11492,6 +11525,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
+    #[allow(unused_mut)]
     async fn delete_usage_plan(
         &self,
         input: DeleteUsagePlanRequest,
@@ -11510,7 +11544,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11521,6 +11555,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
+    #[allow(unused_mut)]
     async fn delete_usage_plan_key(
         &self,
         input: DeleteUsagePlanKeyRequest,
@@ -11540,7 +11575,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11551,6 +11586,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    #[allow(unused_mut)]
     async fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
@@ -11566,7 +11602,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11577,6 +11613,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
+    #[allow(unused_mut)]
     async fn flush_stage_authorizers_cache(
         &self,
         input: FlushStageAuthorizersCacheRequest,
@@ -11596,7 +11633,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11607,6 +11644,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Flushes a stage's cache.</p>
+    #[allow(unused_mut)]
     async fn flush_stage_cache(
         &self,
         input: FlushStageCacheRequest,
@@ -11626,7 +11664,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11637,6 +11675,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn generate_client_certificate(
         &self,
         input: GenerateClientCertificateRequest,
@@ -11655,7 +11694,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -11667,6 +11706,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_account(&self) -> Result<Account, RusotoError<GetAccountError>> {
         let request_uri = "/account";
 
@@ -11679,7 +11719,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
@@ -11691,6 +11731,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_api_key(
         &self,
         input: GetApiKeyRequest,
@@ -11712,7 +11753,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -11723,6 +11764,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_api_keys(
         &self,
         input: GetApiKeysRequest,
@@ -11756,7 +11798,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ApiKeys, _>()?;
 
@@ -11768,6 +11810,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
@@ -11787,7 +11830,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -11799,6 +11842,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
@@ -11826,7 +11870,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizers, _>()?;
 
@@ -11838,6 +11882,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_base_path_mapping(
         &self,
         input: GetBasePathMappingRequest,
@@ -11857,7 +11902,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -11869,6 +11914,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_base_path_mappings(
         &self,
         input: GetBasePathMappingsRequest,
@@ -11896,7 +11942,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BasePathMappings, _>()?;
 
@@ -11908,6 +11954,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_client_certificate(
         &self,
         input: GetClientCertificateRequest,
@@ -11926,7 +11973,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -11938,6 +11985,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_client_certificates(
         &self,
         input: GetClientCertificatesRequest,
@@ -11962,7 +12010,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificates, _>()?;
 
@@ -11974,6 +12022,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -12001,7 +12050,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -12013,6 +12062,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
+    #[allow(unused_mut)]
     async fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
@@ -12040,7 +12090,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
@@ -12051,6 +12101,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
@@ -12070,7 +12121,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -12081,6 +12132,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_parts(
         &self,
         input: GetDocumentationPartsRequest,
@@ -12120,7 +12172,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationParts, _>()?;
 
@@ -12131,6 +12183,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
@@ -12150,7 +12203,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -12161,6 +12214,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_versions(
         &self,
         input: GetDocumentationVersionsRequest,
@@ -12188,7 +12242,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersions, _>()?;
 
@@ -12200,6 +12254,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
+    #[allow(unused_mut)]
     async fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
@@ -12218,7 +12273,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -12230,6 +12285,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
@@ -12254,7 +12310,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainNames, _>()?;
 
@@ -12266,6 +12322,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
+    #[allow(unused_mut)]
     async fn get_export(
         &self,
         input: GetExportRequest,
@@ -12280,9 +12337,7 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref accepts) = input.accepts {
-            request.add_header("Accept", &accepts.to_string());
-        }
+        request.add_optional_header("Accept", input.accepts.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.parameters {
             for (key, val) in x.iter() {
@@ -12297,19 +12352,13 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = ExportResponse::default();
             result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.content_disposition = response.headers.remove("Content-Disposition");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -12319,6 +12368,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_gateway_response(
         &self,
         input: GetGatewayResponseRequest,
@@ -12338,7 +12388,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -12350,6 +12400,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    #[allow(unused_mut)]
     async fn get_gateway_responses(
         &self,
         input: GetGatewayResponsesRequest,
@@ -12377,7 +12428,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GatewayResponses, _>()?;
 
@@ -12389,6 +12440,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Get the integration settings.</p>
+    #[allow(unused_mut)]
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
@@ -12409,7 +12461,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -12421,6 +12473,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a get integration response.</p>
+    #[allow(unused_mut)]
     async fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
@@ -12436,7 +12489,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -12448,6 +12501,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_method(
         &self,
         input: GetMethodRequest,
@@ -12468,7 +12522,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -12479,6 +12533,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_method_response(
         &self,
         input: GetMethodResponseRequest,
@@ -12494,7 +12549,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -12506,6 +12561,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_model(&self, input: GetModelRequest) -> Result<Model, RusotoError<GetModelError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
@@ -12528,7 +12584,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -12539,6 +12595,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
+    #[allow(unused_mut)]
     async fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
@@ -12558,7 +12615,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Template, _>()?;
 
@@ -12570,6 +12627,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_models(
         &self,
         input: GetModelsRequest,
@@ -12597,7 +12655,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Models, _>()?;
 
             Ok(result)
@@ -12608,6 +12666,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_request_validator(
         &self,
         input: GetRequestValidatorRequest,
@@ -12627,7 +12686,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -12639,6 +12698,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_request_validators(
         &self,
         input: GetRequestValidatorsRequest,
@@ -12666,7 +12726,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidators, _>()?;
 
@@ -12678,6 +12738,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists information about a resource.</p>
+    #[allow(unused_mut)]
     async fn get_resource(
         &self,
         input: GetResourceRequest,
@@ -12705,7 +12766,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -12717,6 +12778,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_resources(
         &self,
         input: GetResourcesRequest,
@@ -12749,7 +12811,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resources, _>()?;
 
@@ -12761,6 +12823,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
+    #[allow(unused_mut)]
     async fn get_rest_api(
         &self,
         input: GetRestApiRequest,
@@ -12776,7 +12839,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -12788,6 +12851,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
+    #[allow(unused_mut)]
     async fn get_rest_apis(
         &self,
         input: GetRestApisRequest,
@@ -12812,7 +12876,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApis, _>()?;
 
@@ -12824,6 +12888,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
+    #[allow(unused_mut)]
     async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
@@ -12849,19 +12914,13 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = SdkResponse::default();
             result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.content_disposition = response.headers.remove("Content-Disposition");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -12870,6 +12929,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_sdk_type(
         &self,
         input: GetSdkTypeRequest,
@@ -12885,7 +12945,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<SdkType, _>()?;
 
@@ -12896,6 +12956,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_sdk_types(
         &self,
         input: GetSdkTypesRequest,
@@ -12920,7 +12981,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<SdkTypes, _>()?;
 
@@ -12932,6 +12993,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
@@ -12948,7 +13010,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -12959,6 +13021,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_stages(
         &self,
         input: GetStagesRequest,
@@ -12983,7 +13046,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stages, _>()?;
 
             Ok(result)
@@ -12994,6 +13057,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
+    #[allow(unused_mut)]
     async fn get_tags(&self, input: GetTagsRequest) -> Result<Tags, RusotoError<GetTagsError>> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -13015,7 +13079,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Tags, _>()?;
 
             Ok(result)
@@ -13026,6 +13090,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
+    #[allow(unused_mut)]
     async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
@@ -13055,7 +13120,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
             Ok(result)
@@ -13066,6 +13131,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan(
         &self,
         input: GetUsagePlanRequest,
@@ -13084,7 +13150,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -13096,6 +13162,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan_key(
         &self,
         input: GetUsagePlanKeyRequest,
@@ -13115,7 +13182,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
 
@@ -13127,6 +13194,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan_keys(
         &self,
         input: GetUsagePlanKeysRequest,
@@ -13157,7 +13225,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKeys, _>()?;
 
@@ -13169,6 +13237,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets all the usage plans of the caller's account.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plans(
         &self,
         input: GetUsagePlansRequest,
@@ -13196,7 +13265,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlans, _>()?;
 
@@ -13208,6 +13277,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
@@ -13223,7 +13293,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
@@ -13235,6 +13305,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
@@ -13259,7 +13330,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLinks, _>()?;
 
@@ -13271,6 +13342,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
+    #[allow(unused_mut)]
     async fn import_api_keys(
         &self,
         input: ImportApiKeysRequest,
@@ -13297,7 +13369,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ApiKeyIds, _>()?;
 
@@ -13308,6 +13380,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn import_documentation_parts(
         &self,
         input: ImportDocumentationPartsRequest,
@@ -13338,7 +13411,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPartIds, _>()?;
 
@@ -13350,6 +13423,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
+    #[allow(unused_mut)]
     async fn import_rest_api(
         &self,
         input: ImportRestApiRequest,
@@ -13380,7 +13454,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -13392,6 +13466,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn put_gateway_response(
         &self,
         input: PutGatewayResponseRequest,
@@ -13414,7 +13489,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -13426,6 +13501,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Sets up a method's integration.</p>
+    #[allow(unused_mut)]
     async fn put_integration(
         &self,
         input: PutIntegrationRequest,
@@ -13449,7 +13525,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -13461,6 +13537,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a put integration.</p>
+    #[allow(unused_mut)]
     async fn put_integration_response(
         &self,
         input: PutIntegrationResponseRequest,
@@ -13479,7 +13556,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -13491,6 +13568,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn put_method(
         &self,
         input: PutMethodRequest,
@@ -13514,7 +13592,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -13525,6 +13603,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn put_method_response(
         &self,
         input: PutMethodResponseRequest,
@@ -13543,7 +13622,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -13555,6 +13634,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    #[allow(unused_mut)]
     async fn put_rest_api(
         &self,
         input: PutRestApiRequest,
@@ -13587,7 +13667,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -13599,6 +13679,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds or updates a tag on a given resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -13617,7 +13698,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13628,6 +13709,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
+    #[allow(unused_mut)]
     async fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
@@ -13650,7 +13732,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
@@ -13662,6 +13744,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
+    #[allow(unused_mut)]
     async fn test_invoke_method(
         &self,
         input: TestInvokeMethodRequest,
@@ -13685,7 +13768,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TestInvokeMethodResponse, _>()?;
 
@@ -13697,6 +13780,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Removes a tag from a given resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -13718,7 +13802,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13729,6 +13813,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_account(
         &self,
         input: UpdateAccountRequest,
@@ -13747,7 +13832,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
@@ -13759,6 +13844,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
@@ -13777,7 +13863,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -13788,6 +13874,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
@@ -13810,7 +13897,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -13822,6 +13909,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_base_path_mapping(
         &self,
         input: UpdateBasePathMappingRequest,
@@ -13844,7 +13932,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -13856,6 +13944,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_client_certificate(
         &self,
         input: UpdateClientCertificateRequest,
@@ -13877,7 +13966,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -13889,6 +13978,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
@@ -13911,7 +14001,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -13922,6 +14012,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn update_documentation_part(
         &self,
         input: UpdateDocumentationPartRequest,
@@ -13944,7 +14035,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -13955,6 +14046,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn update_documentation_version(
         &self,
         input: UpdateDocumentationVersionRequest,
@@ -13977,7 +14069,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -13989,6 +14081,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
@@ -14010,7 +14103,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -14022,6 +14115,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn update_gateway_response(
         &self,
         input: UpdateGatewayResponseRequest,
@@ -14044,7 +14138,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -14056,6 +14150,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents an update integration.</p>
+    #[allow(unused_mut)]
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
@@ -14079,7 +14174,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -14091,6 +14186,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents an update integration response.</p>
+    #[allow(unused_mut)]
     async fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
@@ -14109,7 +14205,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -14121,6 +14217,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_method(
         &self,
         input: UpdateMethodRequest,
@@ -14144,7 +14241,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -14155,6 +14252,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_method_response(
         &self,
         input: UpdateMethodResponseRequest,
@@ -14173,7 +14271,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -14185,6 +14283,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a model.</p>
+    #[allow(unused_mut)]
     async fn update_model(
         &self,
         input: UpdateModelRequest,
@@ -14207,7 +14306,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -14218,6 +14317,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn update_request_validator(
         &self,
         input: UpdateRequestValidatorRequest,
@@ -14240,7 +14340,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -14252,6 +14352,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_resource(
         &self,
         input: UpdateResourceRequest,
@@ -14274,7 +14375,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -14286,6 +14387,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the specified API.</p>
+    #[allow(unused_mut)]
     async fn update_rest_api(
         &self,
         input: UpdateRestApiRequest,
@@ -14304,7 +14406,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -14316,6 +14418,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_stage(
         &self,
         input: UpdateStageRequest,
@@ -14338,7 +14441,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -14349,6 +14452,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
+    #[allow(unused_mut)]
     async fn update_usage(
         &self,
         input: UpdateUsageRequest,
@@ -14371,7 +14475,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
             Ok(result)
@@ -14382,6 +14486,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a usage plan of a given plan Id.</p>
+    #[allow(unused_mut)]
     async fn update_usage_plan(
         &self,
         input: UpdateUsagePlanRequest,
@@ -14403,7 +14508,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -14415,6 +14520,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    #[allow(unused_mut)]
     async fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
@@ -14433,7 +14539,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
