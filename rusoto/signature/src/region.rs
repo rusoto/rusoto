@@ -261,7 +261,7 @@ impl FromStr for Region {
             "us-gov-west-1" | "usgovwest1" => Ok(Region::UsGovWest1),
             "cn-north-1" | "cnnorth1" => Ok(Region::CnNorth1),
             "cn-northwest-1" | "cnnorthwest1" => Ok(Region::CnNorthwest1),
-            "af-south-1"| "afsouth1" => Ok(Region::AfSouth1),
+            "af-south-1" | "afsouth1" => Ok(Region::AfSouth1),
             s => Err(ParseRegionError::new(s)),
         }
     }
